@@ -179,8 +179,7 @@
           "type": "slider",
           "min": "0",
           "max": "100",
-          "step": "1",
-          "value": "7"
+          "step": "1"
         }
       ],
       "id": "IfP0ArUJVA5OYx8xpTm7p",
@@ -576,8 +575,7 @@
               "type": "slider",
               "max": "200",
               "min": "25",
-              "step": "1",
-              "value": "71"
+              "step": "1"
             }
           ],
           "id": "GWuRhVmtrWYseABugeAve",
@@ -615,8 +613,7 @@
               "type": "slider",
               "max": "20",
               "min": "6",
-              "step": "1",
-              "value": "11"
+              "step": "1"
             }
           ],
           "id": "cW3ziolPvkAy7j8J01yBN",
@@ -1655,8 +1652,7 @@
           "type": "slider",
           "max": "1000",
           "min": "0",
-          "step": "1",
-          "value": "300"
+          "step": "1"
         }
       ],
       "id": "Znjp97a-WeT96pLaYfkWZ",

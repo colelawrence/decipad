@@ -150,7 +150,6 @@ export const starterNotebook: MyValue = [
         max: '30',
         min: '1',
         step: '1',
-        value: '30',
       },
     ],
     id: 'nHLoeAb9CPIPk88Q0j5ej',

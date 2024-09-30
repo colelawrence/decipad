@@ -74,7 +74,6 @@
                   "max": "10000",
                   "min": "0",
                   "step": "100",
-                  "value": "1000",
                   "id": "XydwTHoZjsOTDs2RVX-b9"
                 }
               ],
@@ -112,7 +111,6 @@
                   "max": "100",
                   "min": "0",
                   "step": "1",
-                  "value": "40",
                   "id": "8gVu371XrLTuTKf9uey1Q"
                 }
               ],
@@ -154,7 +152,6 @@
               "max": "30",
               "min": "0",
               "step": "5",
-              "value": "25",
               "id": "dQDbrF91vcH7tOOrMHnd-"
             }
           ],
@@ -1692,7 +1689,6 @@
                   "max": "10",
                   "min": "0",
                   "step": "1",
-                  "value": "5",
                   "id": "-jSDmq06NkBNyrNyLQfQT"
                 }
               ],
@@ -1730,7 +1726,6 @@
                   "max": "100",
                   "min": "0",
                   "step": "1",
-                  "value": "3",
                   "id": "ipy1guEEzFNrnB323e0U7"
                 }
               ],
@@ -1797,7 +1792,6 @@
               "max": "10",
               "min": "0",
               "step": "0.1",
-              "value": "20",
               "id": "LQiW4T0t-Y2R0iM_M21eB"
             }
           ],
@@ -3115,7 +3109,6 @@
               "max": "100",
               "min": "0",
               "step": "1",
-              "value": "20",
               "id": "F6j7didXk5WQ-uM5zn04w"
             }
           ],

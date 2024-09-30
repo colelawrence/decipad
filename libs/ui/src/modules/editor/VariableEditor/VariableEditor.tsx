@@ -1,45 +1,22 @@
 /* eslint decipad/css-prop-named-variable: 0 */
-import type {
-  IdentifiedError,
-  IdentifiedResult,
-  SerializedType,
-} from '@decipad/remote-computer';
+import type { SerializedType } from '@decipad/remote-computer';
 import { useThemeFromStore } from '@decipad/react-contexts';
 import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
-import {
-  Children,
-  ComponentProps,
-  FC,
-  ReactNode,
-  useCallback,
-  useMemo,
-} from 'react';
+import { Children, FC, ReactNode, useCallback, useMemo } from 'react';
 import { useSelected } from 'slate-react';
-import { VariableEditorMenu } from '../VariableEditorMenu/VariableEditorMenu';
-import { All, Ellipsis } from '../../../icons';
 import { DatePickerWrapper, Toggle } from '../../../shared';
 import {
   cssVar,
   grey700,
   p24Medium,
   offBlack,
-  smallestDesktop,
   transparency,
 } from '../../../primitives';
-import {
-  AvailableSwatchColor,
-  getTypeIcon,
-  swatchesThemed,
-} from '../../../utils';
+import { AvailableSwatchColor, swatchesThemed } from '../../../utils';
+import { ElementVariants } from '@decipad/editor-types';
 
 const leftBarSize = 2;
-const smallScreenQuery = `@media (max-width: ${smallestDesktop.portrait.width}px)`;
-
-type Variant = Pick<
-  ComponentProps<typeof VariableEditorMenu>,
-  'variant'
->['variant'];
 
 export const wrapperStyles = ({
   color,
@@ -92,42 +69,6 @@ const headerWrapperStyles = css({
   padding: '0 2px',
 });
 
-const iconWrapperStyles = (variant: Variant) =>
-  css({
-    display: 'grid',
-    alignItems: 'center',
-    height: '20px',
-    width: '20px',
-    flexShrink: 0,
-    ...(variant === 'display' && {
-      position: 'absolute',
-      top: 0,
-      right: 0,
-    }),
-
-    [smallScreenQuery]: {
-      height: '16px',
-      width: '16px',
-    },
-  });
-
-const buttonWrapperStyles = (variant: Variant) =>
-  css({
-    padding: '2px',
-    flexShrink: 0,
-    ':hover': {
-      backgroundColor: cssVar('backgroundDefault'),
-      borderRadius: '50%',
-    },
-    ...(variant === 'display' && {
-      position: 'absolute',
-      top: 0,
-      right: 0,
-      width: '20px',
-      height: '20px',
-    }),
-  });
-
 const variableNameStyles = css({
   alignSelf: 'start',
   flexGrow: 2,
@@ -158,43 +99,32 @@ const hiddenChildrenStyles = css({
   display: 'none',
 });
 
-interface VariableEditorProps
-  extends Omit<ComponentProps<typeof VariableEditorMenu>, 'trigger'> {
+interface VariableEditorProps {
   children?: ReactNode;
   color?: AvailableSwatchColor;
-  readOnly?: boolean;
   type?: SerializedType;
-  onChangeType?: (type: SerializedType | 'smart-selection' | undefined) => void;
+  variant?: ElementVariants;
   value?: string;
-  lineResult?: IdentifiedResult | IdentifiedError;
   onChangeValue?: (
     value: string | undefined // only booleans for now
   ) => void;
-  smartSelection?: boolean;
   insideLayout?: boolean;
 }
 
 export const VariableEditor = ({
   children,
-  readOnly = false,
   color = 'Catskill',
   type,
-  onChangeType = noop,
   value,
-  lineResult,
   onChangeValue = noop,
   variant,
   insideLayout = false,
-  ...menuProps
 }: VariableEditorProps): ReturnType<FC> => {
   const childrenArray = Children.toArray(children);
   const [darkTheme] = useThemeFromStore();
   const baseSwatches = useMemo(() => swatchesThemed(darkTheme), [darkTheme]);
 
-  const Icon = useMemo(() => (type && getTypeIcon(type)) ?? All, [type]);
   const selected = useSelected();
-
-  const resultType = lineResult?.result?.type;
 
   const editor = useCallback(() => {
     if (variant === 'display' || childrenArray.length === 0) {
@@ -253,43 +183,7 @@ export const VariableEditor = ({
             },
           ]}
         >
-          <>
-            <div css={variableNameStyles}>{childrenArray[0]}</div>
-            {variant !== 'display' && (
-              <span
-                contentEditable={false}
-                css={[
-                  iconWrapperStyles(variant),
-                  readOnly && { display: 'none' },
-                ]}
-              >
-                <Icon />
-              </span>
-            )}
-            {isMenuVariant(variant) && (
-              <div
-                contentEditable={false}
-                css={[
-                  iconWrapperStyles(variant),
-                  readOnly && { display: 'none' },
-                ]}
-              >
-                <VariableEditorMenu
-                  {...({ ...menuProps, variant } as ComponentProps<
-                    typeof VariableEditorMenu
-                  >)}
-                  trigger={
-                    <button css={[buttonWrapperStyles(variant)]}>
-                      <Ellipsis />
-                    </button>
-                  }
-                  lineResult={lineResult}
-                  type={variant !== 'display' ? type : resultType}
-                  onChangeType={onChangeType}
-                />
-              </div>
-            )}
-          </>
+          <div css={variableNameStyles}>{childrenArray[0]}</div>
         </div>
 
         {editor}
@@ -297,11 +191,3 @@ export const VariableEditor = ({
     </div>
   );
 };
-
-/**
- * Small helper function
- * Does this variant have a menu (...), on the top right?
- */
-function isMenuVariant(variant: Variant): boolean {
-  return !(variant === 'date' || variant === 'toggle');
-}

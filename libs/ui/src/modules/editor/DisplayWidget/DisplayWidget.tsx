@@ -10,8 +10,7 @@ import { noop } from '@decipad/utils';
 import { CaretDown, CaretUp } from '../../../icons';
 import * as userIcons from '../../../icons/user-icons';
 import { cssVar, p14Regular, p24Medium } from '../../../primitives';
-import { ResultFormatting } from '../../../types';
-import { UserIconKey } from '@decipad/editor-types';
+import { ResultFormatting, UserIconKey } from '@decipad/editor-types';
 import { AvailableSwatchColor } from '../../../utils';
 
 import {

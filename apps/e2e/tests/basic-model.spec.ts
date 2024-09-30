@@ -25,7 +25,7 @@ test('Creating a basic model', async ({ testUser }) => {
     await notebook.addInputWidget('InitialInvestment', '£1000');
     await page.keyboard.press('Enter');
     await notebook.addInputWidget('MonthlyContribution', '£100');
-    await createSliderBelow(page, 'InterestRate', '5%', {
+    await createSliderBelow(page, notebook, 'InterestRate', '5%', {
       min: 0,
       max: 100,
       step: 1,

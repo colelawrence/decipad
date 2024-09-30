@@ -86,7 +86,7 @@ test('check menu blocks', async ({ testUser }) => {
   });
 
   await test.step('creates slider widget', async () => {
-    await createSliderBelow(page, 'FourteenthBlock', '5');
+    await createSliderBelow(page, notebook, 'FourteenthBlock', '5');
   });
 
   await test.step('creates result widget', async () => {

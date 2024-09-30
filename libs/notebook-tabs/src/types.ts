@@ -19,6 +19,9 @@ export interface ObservableRootEditorAnyChangeEvent {
   type: 'any-change';
   op?: TOperation;
 }
+export interface ObservableRootEditorTitleChangeEvent {
+  type: 'title-change';
+}
 export interface ObservableRootEditorRemoveTabEvent {
   type: 'remove-tab';
 }
@@ -40,6 +43,7 @@ export interface ObservableRootEditorRootEvent {
 export type ObservableRootEditorEvent =
   | ObservableRootEditorNewTabEvent
   | ObservableRootEditorAnyChangeEvent
+  | ObservableRootEditorTitleChangeEvent
   | ObservableRootEditorRemoveTabEvent
   | ObservableRootEditorUndoEvent
   | ObservableRootEditorRedoEvent

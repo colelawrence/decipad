@@ -23,6 +23,10 @@ export * from './Floating';
 export { FloatingButton } from './FloatingButton/FloatingButton';
 export { IconButton } from './IconButton/IconButton';
 export { InputField } from './InputField/InputField';
+export {
+  InputFieldHorizontal,
+  InputFieldHorizontalGroup,
+} from './InputFieldHorizontal/InputFieldHorizontal';
 export { Invisible } from './Invisible/Invisible';
 
 export { KeyboardKey } from './KeyboardKey/KeyboardKey';

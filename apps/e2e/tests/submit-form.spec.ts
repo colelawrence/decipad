@@ -99,7 +99,7 @@ test('redirect to workspace if authenticated and can logout @forms', async ({
   const notebookURL = page.url();
 
   await test.step('adds submit form to a notebook', async () => {
-    await createSliderBelow(page, sliderName, originalSliderValue);
+    await createSliderBelow(page, notebook, sliderName, originalSliderValue);
     await notebook.addBlock('submit-form');
 
     await page.getByRole('button', { name: 'Send Submit' }).click();

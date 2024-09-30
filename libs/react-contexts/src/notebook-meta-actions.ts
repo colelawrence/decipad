@@ -1,11 +1,10 @@
+import { EditorSidebarTab } from '@decipad/editor-types';
 import { PlateEditorWithSelectionHelpers } from '@decipad/interfaces';
 import { isE2E } from '@decipad/utils';
 import { TEditor } from '@udecode/plate-common';
 import { BaseRange } from 'slate';
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-
-export type SelectedTab = 'variable' | 'block';
 
 export type SidebarComponent =
   | { type: 'closed' }
@@ -19,7 +18,7 @@ type FormulaHelperType = {
 };
 
 export type SidebarComponentsWithoutClosed =
-  | { type: 'default-sidebar' }
+  | { type: 'default-sidebar'; selectedTab?: EditorSidebarTab }
   | { type: 'ai' }
   | { type: 'publishing' }
   | { type: 'annotations' }

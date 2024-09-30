@@ -1,0 +1,96 @@
+import {
+  ELEMENT_VARIABLE_DEF,
+  MyEditor,
+  VariableDropdownElement,
+} from '@decipad/editor-types';
+import { createMultipleNodeProxyFactory } from '../proxy';
+import {
+  mapVariableProperties,
+  variableActions,
+  setNodeProperty,
+} from './utils';
+import { FC } from 'react';
+import { ProxyFactoryConfig, ProxyFormProps } from './types';
+import { VariableForm } from './VariableForm';
+import { getNumberType, getStringType } from '@decipad/ui';
+import { ProxyDropdownField } from '../proxy-fields';
+import { Number as NumberIcon, TableSmall, Text } from 'libs/ui/src/icons';
+
+type DropdownType = 'number' | 'text' | 'smart-selection';
+
+export const dropdownVariableConfig = {
+  key: 'dropdownVariable' as const,
+  match: { type: ELEMENT_VARIABLE_DEF, variant: 'dropdown' },
+  factory: createMultipleNodeProxyFactory({
+    mapProperties: (node: VariableDropdownElement) => {
+      const [, dropdown] = node.children;
+
+      const dropdownType = ((): DropdownType => {
+        if (dropdown.smartSelection) return 'smart-selection';
+        if (node.coerceToType?.kind === 'number') return 'number';
+        return 'text';
+      })();
+
+      return {
+        ...mapVariableProperties(node),
+        dropdownType,
+      };
+    },
+    actions: {
+      ...variableActions,
+      setDropdownType: (node, editor: MyEditor, dropdownType: DropdownType) => {
+        setNodeProperty(
+          editor,
+          node.children[1],
+          'smartSelection',
+          dropdownType === 'smart-selection'
+        );
+
+        // If setting to smart-selection, leave coerceToType unchanged
+        if (dropdownType !== 'smart-selection') {
+          setNodeProperty(
+            editor,
+            node,
+            'coerceToType',
+            {
+              number: getNumberType(),
+              text: getStringType(),
+            }[dropdownType]
+          );
+        }
+      },
+    },
+  }),
+} satisfies ProxyFactoryConfig<any, any>;
+
+export const DropdownVariableForm: FC<
+  ProxyFormProps<typeof dropdownVariableConfig>
+> = ({ editor, proxy }) => {
+  const { properties, actions } = proxy;
+
+  return (
+    <VariableForm editor={editor} proxy={proxy}>
+      <ProxyDropdownField
+        editor={editor}
+        label="Dropdown type"
+        property={properties.dropdownType}
+        onChange={actions.setDropdownType}
+        options={['number', 'text', 'smart-selection']}
+        labelForValue={(dropdownType) =>
+          ({
+            number: 'Number',
+            text: 'Text',
+            'smart-selection': 'From existing column',
+          }[dropdownType])
+        }
+        iconForValue={(dropdownType) =>
+          ({
+            number: <NumberIcon />,
+            text: <Text />,
+            'smart-selection': <TableSmall />,
+          }[dropdownType])
+        }
+      />
+    </VariableForm>
+  );
+};

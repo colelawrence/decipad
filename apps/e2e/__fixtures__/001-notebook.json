@@ -2372,8 +2372,7 @@
                   "type": "slider",
                   "max": "10",
                   "min": "0",
-                  "step": "1",
-                  "value": "4"
+                  "step": "1"
                 }
               ],
               "id": "TeY_gx-27xvd9LomSGwKw",
@@ -2410,8 +2409,7 @@
                   "type": "slider",
                   "max": "10",
                   "min": "0",
-                  "step": "1",
-                  "value": "5"
+                  "step": "1"
                 }
               ],
               "id": "QjHXvhOY6XP21emoB9eVV",

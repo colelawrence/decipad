@@ -100,7 +100,6 @@
               "max": "100000",
               "min": "0",
               "step": "5000",
-              "value": "45000",
               "id": "j4Ld20SgQ8eRfyPL7xWxl"
             }
           ],
@@ -140,8 +139,7 @@
               "type": "slider",
               "max": "10",
               "min": "0",
-              "step": "0.1",
-              "value": "2"
+              "step": "0.1"
             }
           ],
           "id": "dwYxwo53oWgWPrK--ImvM",
@@ -196,7 +194,6 @@
               "max": "100000",
               "min": "0",
               "step": "5000",
-              "value": "50000",
               "id": "AsQvnG9nZt-75VGyuzv20"
             }
           ],
@@ -236,7 +233,6 @@
               "max": "10",
               "min": "0",
               "step": "1",
-              "value": "4",
               "id": "WzqGjj-GdxAPWj5t-2Du1"
             }
           ],
@@ -279,7 +275,6 @@
           "max": "10",
           "min": "1",
           "step": "1",
-          "value": "3",
           "id": "VAJBIGrr-oRV7Nbst2_hb"
         }
       ],

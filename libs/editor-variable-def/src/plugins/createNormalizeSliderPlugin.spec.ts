@@ -3,17 +3,11 @@ import { normalizeEditor } from '@udecode/plate-common';
 import { createMyPlateEditor, ELEMENT_SLIDER } from '@decipad/editor-types';
 import { createNormalizeSliderPlugin } from './createNormalizeSliderPlugin';
 
-const expectedSliderElement = ({
-  max = '10',
-  min = '0',
-  step = '1',
-  value = '5',
-} = {}) => ({
+const expectedSliderElement = ({ max = '10', min = '0', step = '1' } = {}) => ({
   type: ELEMENT_SLIDER,
   max,
   min,
   step,
-  value,
   children: [{ text: '' }],
 });
 
@@ -48,26 +42,24 @@ it('does not normalize switched min and max', () => {
     expectedSliderElement({
       min: '10',
       max: '0',
-      value: '-5',
       step: '2',
     }) as never,
   ];
   normalizeEditor(editor, { force: true });
   expect(editor.children).toMatchObject([
-    expectedSliderElement({ min: '10', max: '0', value: '-5', step: '2' }),
+    expectedSliderElement({ min: '10', max: '0', step: '2' }),
   ]);
 
   editor.children = [
     expectedSliderElement({
       min: '10',
       max: '0',
-      value: '11',
       step: '12',
     }) as never,
   ];
   normalizeEditor(editor, { force: true });
   expect(editor.children).toMatchObject([
-    expectedSliderElement({ min: '10', max: '0', value: '11', step: '12' }),
+    expectedSliderElement({ min: '10', max: '0', step: '12' }),
   ]);
 });
 

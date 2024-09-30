@@ -344,16 +344,25 @@ export interface ExpressionElement extends BaseElement {
  * Display Element is what we call the Result widget.
  * It can display variables and calculations defined in the document
  */
+export type ResultFormatting =
+  | 'automatic'
+  | 'precise'
+  | 'financial'
+  | 'scientific';
+
 export interface DisplayElement extends BaseElement {
   type: typeof ELEMENT_DISPLAY;
   /** blockId of the calculation/widget it is displaying */
   blockId: string;
+  formatting?: ResultFormatting;
   /**
     varName the last known variable name of the result, this is here
     because calculating it is expensive, so we need to cache it.
   */
   varName?: string;
   children: [EmptyText];
+  icon?: string;
+  color?: string;
 }
 
 /**
@@ -386,7 +395,6 @@ export interface SliderElement extends BaseElement {
   max: string;
   min: string;
   step: string;
-  value: string;
   children: [EmptyText];
 }
 

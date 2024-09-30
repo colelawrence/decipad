@@ -1,5 +1,5 @@
+import { ResultFormatting } from '@decipad/editor-types';
 import { DeciNumberRep } from '@decipad/format';
-import { ResultFormatting } from '../types';
 import { useCallback, useMemo } from 'react';
 
 export const useFormattedResultString = (

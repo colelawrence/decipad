@@ -10,7 +10,7 @@ import { dateFormatForGranularity } from 'libs/ui/src/utils/dateFormatForGranula
 export interface DatePickerWrapperProps {
   granularity?: Time.Specificity;
   value: string;
-  open?: boolean;
+  open?: boolean | null;
   onChange: (value: string) => void;
   customInput?: React.ReactNode;
   children?: React.ReactNode;
@@ -66,7 +66,7 @@ export const DatePickerWrapper = ({
         data-tesid="date-picker"
       >
         <DatePicker
-          open={open}
+          open={open ?? undefined}
           dateFormat={dateFormat || 'yyyy-MM-dd'}
           selected={dateValue}
           onChange={setDateValue}

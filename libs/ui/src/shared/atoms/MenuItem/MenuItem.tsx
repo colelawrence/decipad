@@ -7,12 +7,13 @@ import { componentCssVars, cssVar } from '../../../primitives';
 import { Badge } from '../Badge/Badge';
 import { Tooltip } from '../Tooltip/Tooltip';
 
-const iconWrapperStyles = css({
-  display: 'grid',
-  alignItems: 'center',
-  height: '16px',
-  width: '16px',
-});
+const iconWrapperStyles = (squareIcon: boolean) =>
+  css({
+    display: 'grid',
+    alignItems: 'center',
+    width: squareIcon ? '16px' : undefined,
+    height: '16px',
+  });
 
 const childrenWrapperStyles = css({
   flexGrow: 1,
@@ -46,6 +47,7 @@ const contentStyles = css({
 export type MenuItemProps = {
   readonly children: ReactNode;
   readonly icon?: ReactNode;
+  readonly squareIcon?: boolean;
   readonly disabled?: boolean;
   readonly onPointerMove?: ComponentProps<
     typeof RadixDropdownMenu.Item
@@ -61,6 +63,7 @@ export type MenuItemProps = {
 export const MenuItem: FC<MenuItemProps> = ({
   children,
   icon,
+  squareIcon = true,
   onPointerMove,
   onFocus,
   onSelect,
@@ -98,7 +101,7 @@ export const MenuItem: FC<MenuItemProps> = ({
       css={contentStyles}
       data-testid={testid}
     >
-      {icon != null && <span css={iconWrapperStyles}>{icon}</span>}
+      {icon != null && <span css={iconWrapperStyles(squareIcon)}>{icon}</span>}
       <span
         css={[
           childrenWrapperStyles,

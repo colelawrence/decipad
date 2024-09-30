@@ -1,6 +1,7 @@
 /* eslint-disable playwright/no-wait-for-selector */
 import type { Locator, Page } from '@playwright/test';
 import { Timeouts, cleanText } from '../src';
+import { Notebook } from 'apps/e2e/tests/manager/notebook';
 
 export async function focusTrailingParagraph(page: Page) {
   // Clicking once doesn't always work when running tests at full speed
@@ -64,6 +65,7 @@ export async function createScatterChartBelow(page: Page) {
 
 export async function createSliderBelow(
   page: Page,
+  notebook: Notebook,
   identifier: string,
   value: number | string,
   options?: { min?: number; max?: number; step?: number }
@@ -93,29 +95,22 @@ export async function createSliderBelow(
   await page.keyboard.type(value.toString(), { delay: Timeouts.typing });
 
   if (options) {
-    await page
-      .locator('[data-testid="widget-editor"] button >> nth=-1')
-      .click();
+    await notebook.openSidebar();
+    await page.getByTestId('sidebar-Format').click();
 
     if (options.min) {
-      await page
-        .locator('[role = "menu"] input >> nth=0')
-        .fill(String(options.min));
+      await page.getByLabel('Minimum value').fill(String(options.min));
     }
 
     if (options.max) {
-      await page
-        .locator('[role = "menu"] input >> nth=1')
-        .fill(String(options.max));
+      await page.getByLabel('Maximum value').fill(String(options.max));
     }
 
     if (options.step) {
-      await page
-        .locator('[role = "menu"] input >> nth=2')
-        .fill(String(options.step));
+      await page.getByLabel('Step size').fill(String(options.step));
     }
 
-    await page.keyboard.press('Escape');
+    await page.keyboard.press('Enter');
   }
 }
 

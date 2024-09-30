@@ -103,8 +103,7 @@
               "type": "slider",
               "max": "30",
               "min": "10",
-              "step": "1",
-              "value": "30"
+              "step": "1"
             }
           ],
           "id": "6CwIdFhQkaFmXI25AKmv5",
@@ -144,8 +143,7 @@
                   "type": "slider",
                   "max": "20",
                   "min": "0",
-                  "step": "1",
-                  "value": "20"
+                  "step": "1"
                 }
               ],
               "id": "QZa-iDs9O2aw_ammkDB3G",
@@ -183,8 +181,7 @@
                   "type": "slider",
                   "max": "10",
                   "min": "0",
-                  "step": "1",
-                  "value": "6"
+                  "step": "1"
                 }
               ],
               "id": "iNDcoiy8MB0kgSbbTGfic",

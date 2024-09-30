@@ -10,7 +10,6 @@ export { DropdownOption } from './DropdownOption/DropdownOption';
 export { FilterBubbles } from './FilterBubbles/FilterBubbles';
 export { IconPopover } from './IconPopover/IconPopover';
 export { ImportTableFirstRowControls } from './ImportTableFirstRowControls/ImportTableFirstRowControls';
-export { InputMenuItem } from './InputMenuItem/InputMenuItem';
 export { LiveConnectionPath } from './LiveConnectionPath/LiveConnectionPath';
 export { LiveQueryQuery } from './LiveQueryQuery/LiveQueryQuery';
 export { MenuList } from './MenuList/MenuList';

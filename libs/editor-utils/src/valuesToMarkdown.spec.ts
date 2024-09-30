@@ -616,7 +616,6 @@ describe('valueToMarkup', () => {
             max: '10',
             min: '0',
             step: '1',
-            value: '5',
             children: [
               {
                 text: '',

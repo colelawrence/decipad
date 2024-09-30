@@ -71,7 +71,6 @@ describe('VariableDef slider element', () => {
         {
           id: 'id2',
           type: ELEMENT_SLIDER,
-          value: '5',
           max: '10',
           min: '0',
           step: '0.1',

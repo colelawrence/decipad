@@ -19,6 +19,7 @@ export * from './EditorLayout/EditorLayout';
 export * from './EditorPlaceholder/EditorPlaceholder';
 export * from './DraggableBlock/DraggableBlock';
 export * from './DraggableBlockOverlay/DraggableBlockOverlay';
+export * from './DropdownField/DropdownField';
 export * from './DropLine/BlockDropArea';
 export * from './DropLine/BlockDropLine';
 export * from './EditorBlock/EditorBlock';

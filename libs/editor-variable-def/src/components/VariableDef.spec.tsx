@@ -120,7 +120,6 @@ describe('Variable def slider element', () => {
               max: '10',
               min: '0',
               step: '0.1',
-              value: '5',
               children: [{ text: '' }],
             },
           ],

@@ -38,7 +38,8 @@ const DatePickerStyles: FC = () => {
           width: '100%',
         },
         'div.react-datepicker-popper': {
-          zIndex: 10,
+          // In front of sidebar, which has zIndex: 40
+          zIndex: 50,
           '&[data-placement^=bottom] div.react-datepicker__triangle': {
             display: 'none',
           },

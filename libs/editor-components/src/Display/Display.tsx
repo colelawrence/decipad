@@ -22,7 +22,6 @@ import type { SelectItems, AvailableSwatchColor } from '@decipad/ui';
 import { DisplayWidget, VariableEditor } from '@decipad/ui';
 import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { Number } from 'libs/ui/src/icons';
-import type { ResultFormatting } from 'libs/ui/src/types';
 
 const displayDebounceNamesDefinedMs = 500;
 
@@ -43,25 +42,8 @@ export const Display: PlateComponent = ({ attributes, element, children }) => {
   const editor = useMyEditorRef();
   const path = useNodePath(element);
 
-  const saveIcon = usePathMutatorCallback(
-    editor,
-    path,
-    'icon' as keyof MyNode,
-    'Display'
-  );
-  const saveColor = usePathMutatorCallback(
-    editor,
-    path,
-    'color' as keyof MyNode,
-    'Display'
-  );
-
-  const changeFormatting = usePathMutatorCallback(
-    editor,
-    path,
-    'formatting' as keyof MyNode,
-    'Display'
-  );
+  const saveIcon = usePathMutatorCallback(editor, path, 'icon', 'Display');
+  const saveColor = usePathMutatorCallback(editor, path, 'color', 'Display');
 
   const changeBlockId = usePathMutatorCallback(
     editor,
@@ -184,12 +166,8 @@ export const Display: PlateComponent = ({ attributes, element, children }) => {
     <div {...attributes} contentEditable={false} id={element.id}>
       <DraggableBlock blockKind="interactive" element={element}>
         <VariableEditor
-          onChangeFormatting={changeFormatting}
           variant="display"
-          readOnly={readOnly}
           color={color as AvailableSwatchColor}
-          lineResult={res}
-          formatting={element.formatting as ResultFormatting}
           insideLayout={insideLayout}
         >
           <DisplayWidget
@@ -197,12 +175,12 @@ export const Display: PlateComponent = ({ attributes, element, children }) => {
             onChangeOpen={setOpenMenu}
             onExecute={onExecute}
             allResults={allResults}
-            formatting={element.formatting as ResultFormatting}
+            formatting={element.formatting}
             lineResult={res}
             result={element.varName}
             readOnly={readOnly}
             color={color as AvailableSwatchColor}
-            icon={element.icon as UserIconKey}
+            icon={element.icon as UserIconKey | undefined}
             saveIcon={saveIcon}
             saveColor={saveColor}
           >

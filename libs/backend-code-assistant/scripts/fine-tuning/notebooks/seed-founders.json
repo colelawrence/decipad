@@ -454,8 +454,7 @@
               "type": "slider",
               "max": "10000000",
               "min": "200000",
-              "step": "100000",
-              "value": "5000000"
+              "step": "100000"
             }
           ],
           "id": "FTlehV9v3taJF2ArMx0w7",
@@ -493,8 +492,7 @@
               "type": "slider",
               "max": "40",
               "min": "5",
-              "step": "1",
-              "value": "20"
+              "step": "1"
             }
           ],
           "id": "UVn4tlxsU6V-9JqRy32U6",

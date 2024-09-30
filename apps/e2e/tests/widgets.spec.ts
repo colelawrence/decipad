@@ -95,8 +95,8 @@ test('date widget + date widget read mode', async ({
 });
 
 test('slider Widget', async ({ testUser }) => {
-  const { page } = testUser;
-  await createSliderBelow(page, 'Input3', '$5 per hotdog');
+  const { page, notebook } = testUser;
+  await createSliderBelow(page, notebook, 'Input3', '$5 per hotdog');
   await page.getByRole('slider').click();
   await page.keyboard.press('ArrowRight');
   await expect(page.getByTestId('widget-input')).toContainText('$6 per hotdog');
@@ -238,8 +238,9 @@ test('dropdown widget', async ({ randomFreeUser }) => {
   });
 
   await test.step('Load Drop down with values from table column', async () => {
-    await page.getByRole('button', { name: 'Ellipsis' }).click();
-    await page.getByRole('menuitem', { name: 'Change type' }).click();
+    await notebook.openSidebar();
+    await page.getByTestId('sidebar-Format').click();
+    await page.getByLabel('Dropdown type').click();
     await page.getByRole('menuitem', { name: 'From existing column' }).click();
 
     await writeInTable(page, 'One', 1, 0);

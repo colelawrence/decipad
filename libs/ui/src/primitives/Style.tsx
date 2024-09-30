@@ -438,6 +438,10 @@ export interface ComponentCssVariables {
   ButtonDangerDisabledText: string;
   // ------------- End Buttons ----------------
 
+  // ----------------- Inputs -----------------
+  InputFieldDangerBorder: string;
+  // --------------- End Inputs ---------------
+
   // ---------------- Links -------------------
   LinkDefaultColor: string;
   LinkLighterColor: string;
@@ -586,6 +590,8 @@ export const ComponentColors: Record<'Light' | 'Dark', ComponentCssVariables> =
       ButtonDangerDisabledBackground: red200.hex,
       ButtonDangerDisabledText: white.hex,
 
+      InputFieldDangerBorder: red400.hex,
+
       LinkDefaultColor: blue700.hex,
       LinkLighterColor: blue500.hex,
       LinkDefaultHoverColor: blue700.hex,
@@ -700,6 +706,8 @@ export const ComponentColors: Record<'Light' | 'Dark', ComponentCssVariables> =
       ButtonDangerHoverText: dark100.hex,
       ButtonDangerDisabledBackground: red900.hex,
       ButtonDangerDisabledText: dark500.hex,
+
+      InputFieldDangerBorder: red400.hex,
 
       LinkDefaultColor: blue700.hex,
       LinkLighterColor: blue500.hex,

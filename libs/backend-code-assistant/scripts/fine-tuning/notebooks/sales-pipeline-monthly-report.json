@@ -182,8 +182,7 @@
               "type": "slider",
               "max": "5000000",
               "min": "0",
-              "step": "100000",
-              "value": "2100000"
+              "step": "100000"
             }
           ],
           "id": "zyTjRBRtr8DO0xopHDRQ5",

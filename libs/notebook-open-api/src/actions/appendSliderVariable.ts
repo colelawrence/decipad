@@ -86,7 +86,6 @@ export const appendSliderVariable: Action<'appendSliderVariable'> = {
           min: min.toString(),
           max: max.toString(),
           step: step.toString(),
-          value: initialValue.toString(),
           children: [{ text: '' }],
         },
       ],

@@ -152,8 +152,7 @@
           "type": "slider",
           "max": "30",
           "min": "1",
-          "step": "1",
-          "value": "30"
+          "step": "1"
         }
       ],
       "id": "nHLoeAb9CPIPk88Q0j5ej",

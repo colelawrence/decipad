@@ -4,6 +4,7 @@
 /* eslint-disable no-loop-func */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable no-plusplus */
+import { Subject, filter } from 'rxjs';
 import type {
   EElement,
   ENode,
@@ -23,6 +24,7 @@ import {
   isEditorNormalizing,
   isElement,
   removeNodes,
+  replaceNodeChildren,
 } from '@udecode/plate-common';
 import {
   AnyElement,
@@ -64,9 +66,9 @@ import {
   SUB_EDITOR_OFFSET,
   TITLE_INDEX,
 } from './constants';
+import { useSyncExternalStore } from 'react';
 import type { RootEditorController } from './types';
 import { withoutNormalizingEditors } from './withoutNormalizingEditors';
-import { Subject } from 'rxjs';
 import stringify from 'json-stringify-safe';
 import { nanoid } from 'nanoid';
 import { applyToMirrorAsRoot } from './controller-functions';
@@ -149,6 +151,7 @@ export class EditorController implements RootEditorController {
     titleEditor.apply = (_op) => {
       const op = _op as TOperation;
       if (op.FROM_ROOT) {
+        this.events.next({ type: 'title-change' });
         this.events.next({ type: 'any-change' });
         apply(op);
         return;
@@ -284,6 +287,27 @@ export class EditorController implements RootEditorController {
     }
 
     return title.children[0].text;
+  }
+
+  public useTitle(): string | undefined {
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    return useSyncExternalStore(
+      (listener) => {
+        const sub = this.events
+          .pipe(filter((e) => e.type === 'title-change'))
+          .subscribe(listener);
+
+        return () => sub.unsubscribe();
+      },
+      () => this.getTitle()
+    );
+  }
+
+  public setTitle(title: string) {
+    replaceNodeChildren(this.titleEditor as any, {
+      at: [0],
+      nodes: [{ text: title }],
+    });
   }
 
   // TEditor methods

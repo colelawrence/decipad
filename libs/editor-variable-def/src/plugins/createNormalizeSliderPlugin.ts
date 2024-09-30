@@ -26,16 +26,12 @@ const normalizeSlider =
       return () => setNodes(editor, { step: '1' }, { at: path });
     }
 
-    if (typeof node.value !== 'string' || isNaN(Number(node.value))) {
-      return () => setNodes(editor, { value: '5' }, { at: path });
-    }
-
     return false;
   };
 
 export const createNormalizeSliderPlugin = createNormalizerPluginFactory({
   name: 'NORMALIZE_SLIDER_PLUGIN',
   elementType: ELEMENT_SLIDER,
-  acceptableElementProperties: ['max', 'min', 'step', 'value'],
+  acceptableElementProperties: ['max', 'min', 'step'],
   plugin: normalizeSlider,
 });

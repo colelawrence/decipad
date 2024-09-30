@@ -50,3 +50,5 @@ export type AvailableSwatchColor =
   | 'Rose'
   | 'Perfume'
   | 'Malibu';
+
+export type EditorSidebarTab = 'variable' | 'block' | 'format';

@@ -7,6 +7,7 @@ export * from './BlockSelection/BlockSelectable';
 export * from './CodeLine';
 export * from './Display';
 export * from './EditorSidebar';
+export * from './FormattingTab';
 export * from './hooks';
 export * from './Iframe/Iframe';
 export * from './Import/Import';

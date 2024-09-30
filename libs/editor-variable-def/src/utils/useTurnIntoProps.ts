@@ -1,22 +1,8 @@
-import type { Result } from '@decipad/language-interfaces';
-import type { MyEditor, MyElement } from '@decipad/editor-types';
-import { ELEMENT_VARIABLE_DEF, useMyEditorRef } from '@decipad/editor-types';
-import {
-  createStructuredCodeLine,
-  getNodeEntrySafe,
-  insertNodes,
-  isElementOfType,
-} from '@decipad/editor-utils';
-import { textify } from '@decipad/parse';
-import {
-  findNodePath,
-  focusEditor,
-  getNodeString,
-  removeNodes,
-  setNodes,
-} from '@udecode/plate-common';
+import type { MyElement } from '@decipad/editor-types';
+import { useMyEditorRef } from '@decipad/editor-types';
 import { useMemo } from 'react';
 import { useComputer } from '@decipad/editor-hooks';
+import { convertVariableDefInto } from '@decipad/editor-utils';
 
 export const defaultWidgetConversions: { title: string; value: string }[] = [
   { title: 'Input', value: 'expression' },
@@ -26,60 +12,6 @@ export const defaultWidgetConversions: { title: string; value: string }[] = [
   { title: 'Display', value: 'display' },
   { title: 'Dropdown', value: 'dropdown' },
 ];
-
-export const convertInto =
-  (editor: MyEditor, element: MyElement, result?: Result.Result) =>
-  (value: string) => {
-    const at = findNodePath(editor, element);
-    if (!at) {
-      return;
-    }
-    if (value === 'calculation' && result) {
-      let code: string;
-      try {
-        code = textify(result.value as Result.OneResult, result.type);
-      } catch {
-        return;
-      }
-
-      const entry = getNodeEntrySafe(editor, at);
-      if (entry) {
-        const [node] = entry;
-        if (isElementOfType(node, ELEMENT_VARIABLE_DEF)) {
-          const {
-            id,
-            children: [caption],
-          } = node;
-          const varName = getNodeString(caption);
-
-          removeNodes(editor, { at });
-          insertNodes(
-            editor,
-            [createStructuredCodeLine({ id, varName, code })],
-            {
-              at,
-            }
-          );
-        }
-      }
-    }
-
-    const coercedKind =
-      value === 'toggle'
-        ? 'boolean'
-        : value === 'date'
-        ? 'date'
-        : value === 'dropdown'
-        ? 'string'
-        : 'number';
-
-    setNodes(
-      editor,
-      { variant: value, coerceToType: { kind: coercedKind, date: 'day' } },
-      { at }
-    );
-    focusEditor(editor);
-  };
 
 const turnIntoResultDebounceMs = 500;
 
@@ -94,7 +26,7 @@ export const useTurnIntoProps = (element: MyElement) => {
   );
 
   const onTurnInto = useMemo(
-    () => convertInto(editor, element, result),
+    () => convertVariableDefInto(editor, element, result),
     [editor, element, result]
   );
   const turnInto = useMemo(

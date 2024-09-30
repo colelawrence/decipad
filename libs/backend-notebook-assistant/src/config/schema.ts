@@ -101,7 +101,6 @@ type VariableSliderElement = VariableBaseElement<
     max: string;
     min: string;
     step: string;
-    value: string;
     children: [EmptyText]; // do not use or change
   }`,
 

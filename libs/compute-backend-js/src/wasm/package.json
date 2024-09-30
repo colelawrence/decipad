@@ -1,0 +1,19 @@
+{
+  "name": "compute-backend",
+  "collaborators": [
+    "John Costa <johncosta027@gmail.com>"
+  ],
+  "version": "0.1.0",
+  "files": [
+    "compute_backend_bg.wasm",
+    "compute_backend.js",
+    "compute_backend_bg.js",
+    "compute_backend.d.ts"
+  ],
+  "module": "compute_backend.js",
+  "types": "compute_backend.d.ts",
+  "sideEffects": [
+    "./compute_backend.js",
+    "./snippets/*"
+  ]
+}

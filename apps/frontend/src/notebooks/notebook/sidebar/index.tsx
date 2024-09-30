@@ -2,7 +2,7 @@ import { useActiveEditor } from '@decipad/editor-hooks';
 import type { SidebarComponentsWithoutClosed } from '@decipad/react-contexts';
 import { useNotebookMetaData } from '@decipad/react-contexts';
 import type { FC } from 'react';
-import { Suspense } from 'react';
+import { Suspense, useLayoutEffect, useRef } from 'react';
 
 import Annotations from './Annotations';
 import AssistantChat from './AssistantChat';
@@ -14,8 +14,7 @@ import Publishing from './Publishing';
 import type { SidebarComponentProps } from './types';
 import { useNotebookWithIdState } from '@decipad/notebook-state';
 import FormulaHelper from './FormulaHelper';
-
-type SidebarPropsWithoutEditor = Omit<SidebarComponentProps, 'editor'>;
+import { useFormattingTabForm } from '@decipad/editor-components';
 
 const SidebarComponents: Record<
   SidebarComponentsWithoutClosed['type'],
@@ -34,7 +33,9 @@ const SidebarComponents: Record<
  * Renders the various components on the sidebar
  * Deciding which one to show to the user.
  */
-const Sidebar: FC<SidebarPropsWithoutEditor> = (props) => {
+const Sidebar: FC<
+  Omit<SidebarComponentProps, 'editor' | 'formattingTabForm'>
+> = (props) => {
   const [component, setSidebar] = useNotebookMetaData((s) => [
     s.sidebarComponent,
     s.setSidebar,
@@ -45,6 +46,25 @@ const Sidebar: FC<SidebarPropsWithoutEditor> = (props) => {
   );
 
   const editor = useActiveEditor();
+  const formattingTabForm = useFormattingTabForm(editor);
+
+  /**
+   * If any sidebar is open and a node that has formatting controls becomes
+   * selected, the sidebar switches to EditorSidebar and shows the format tab.
+   */
+  const hasFormattingTab = formattingTabForm !== null;
+  const previousHasFormattingTab = useRef(hasFormattingTab);
+  useLayoutEffect(() => {
+    if (
+      component.type !== 'closed' &&
+      hasFormattingTab &&
+      !previousHasFormattingTab.current
+    ) {
+      setSidebar({ type: 'default-sidebar', selectedTab: 'format' });
+    }
+    previousHasFormattingTab.current = hasFormattingTab;
+  }, [hasFormattingTab, setSidebar, component.type]);
+
   if (
     component.type === 'closed' ||
     component.type === 'navigation-sidebar' ||
@@ -62,7 +82,11 @@ const Sidebar: FC<SidebarPropsWithoutEditor> = (props) => {
   return (
     <>
       <Suspense>
-        <SidebarComp {...props} editor={editor} />
+        <SidebarComp
+          {...props}
+          editor={editor}
+          formattingTabForm={formattingTabForm}
+        />
       </Suspense>
     </>
   );

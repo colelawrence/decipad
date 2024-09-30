@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint decipad/css-prop-named-variable: 0 */
 import { SearchFieldWithDropdown } from 'libs/ui/src/shared/molecules';
-import { Children, FC, useState } from 'react';
+import { FC } from 'react';
 import { Formula, MagnifyingGlass, Sheet, ShowMore } from '../../../icons';
 import {
   SidebarIcon,
@@ -15,13 +15,14 @@ import {
   sidebarContentStyles,
   sidebarWrapperStyles,
 } from './styles';
-import { EditorSidebarProps, SelectedTab } from './types';
+import { EditorSidebarProps } from './types';
 import { css } from '@emotion/react';
 import { deciOverflowYStyles } from 'libs/ui/src/styles/scrollbars';
+import { EditorSidebarTab } from '@decipad/editor-types';
 
-const AVAILABLE_TABS: SelectedTab[] = ['block', 'variable'];
+const AVAILABLE_TABS: EditorSidebarTab[] = ['block', 'variable', 'format'];
 
-const getTriggerMetaForTab = (tab: SelectedTab) => {
+const getTriggerMetaForTab = (tab: EditorSidebarTab) => {
   switch (tab) {
     case 'variable':
       return {
@@ -35,6 +36,12 @@ const getTriggerMetaForTab = (tab: SelectedTab) => {
         label: 'Insert',
         children: <SidebarIcon description={'Insert'} icon={<ShowMore />} />,
       };
+    case 'format':
+      return {
+        tooltip: 'Format selected blocks',
+        label: 'Format',
+        children: <SidebarIcon description={'Format'} icon={<Sheet />} />,
+      };
     default:
       return {
         tooltip: tab,
@@ -45,21 +52,22 @@ const getTriggerMetaForTab = (tab: SelectedTab) => {
 };
 
 export const EditorSidebar: FC<EditorSidebarProps> = ({
+  selectedTab,
+  onSelectTab,
   children,
   search,
   setSearch,
 }) => {
-  const [variable, block] = Children.toArray(children);
-  const [activeTab, setActiveTab] = useState<SelectedTab>('block');
+  const [variable, block, format] = children;
 
   return (
     <div css={sidebarColumnStyles} data-testid="editor-sidebar">
       <TabsRoot
         styles={sidebarWrapperStyles}
-        defaultValue={activeTab}
+        defaultValue={selectedTab}
         onValueChange={(newValue: string) => {
-          if (AVAILABLE_TABS.includes(newValue as SelectedTab)) {
-            setActiveTab(newValue as SelectedTab);
+          if (AVAILABLE_TABS.includes(newValue as EditorSidebarTab)) {
+            onSelectTab(newValue as EditorSidebarTab);
           } else {
             console.warn('Invalid tab value:', newValue);
           }
@@ -89,22 +97,25 @@ export const EditorSidebar: FC<EditorSidebarProps> = ({
             })}
           </TabsList>
 
-          <SearchFieldWithDropdown
-            searchTerm={search}
-            onSearchChange={(newValue) => {
-              setSearch(newValue.toLocaleLowerCase());
-            }}
-            placeholder={
-              activeTab === 'variable'
-                ? 'Search for variables...'
-                : 'Search for blocks...'
-            }
-            icon={<MagnifyingGlass />}
-          />
+          {selectedTab !== 'format' && (
+            <SearchFieldWithDropdown
+              searchTerm={search}
+              onSearchChange={(newValue) => {
+                setSearch(newValue.toLocaleLowerCase());
+              }}
+              placeholder={
+                selectedTab === 'variable'
+                  ? 'Search for variables...'
+                  : 'Search for blocks...'
+              }
+              icon={<MagnifyingGlass />}
+            />
+          )}
 
           <div css={tabWrapperStyles}>
             <TabsContent name="variable">{variable}</TabsContent>
             <TabsContent name="block">{block}</TabsContent>
+            <TabsContent name="format">{format}</TabsContent>
           </div>
         </div>
       </TabsRoot>

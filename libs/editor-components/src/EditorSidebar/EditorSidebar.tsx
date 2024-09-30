@@ -1,6 +1,11 @@
+import { useCallback, useContext, useMemo, useState } from 'react';
 import { ClientEventsContext } from '@decipad/client-events';
 import { useComputer } from '@decipad/editor-hooks';
-import type { MyEditor, SlashCommand } from '@decipad/editor-types';
+import {
+  EditorSidebarTab,
+  type MyEditor,
+  type SlashCommand,
+} from '@decipad/editor-types';
 import { onDragStartSmartRef } from '@decipad/editor-utils';
 import { type AutocompleteName } from '@decipad/language-interfaces';
 import { useNotebookState } from '@decipad/notebook-state';
@@ -12,8 +17,7 @@ import {
   NumberCatalog as UINumberCatalog,
 } from '@decipad/ui';
 import { ErrorBoundary } from '@sentry/react';
-import type { FC } from 'react';
-import { useCallback, useContext, useMemo, useState } from 'react';
+import type { FC, ReactElement } from 'react';
 import { catalogDebounceTimeMs } from '../utils';
 import { catalogItems } from '../utils/catalogItems';
 import { groupByTab } from '../utils/groupByTab';
@@ -25,19 +29,33 @@ import {
   blockSelectionStore,
   useBlockSelectionSelectors,
 } from '@udecode/plate-selection';
+import { FormattingTab } from '../FormattingTab';
+import { assert } from '@decipad/utils';
 
 interface EditorSidebarProps {
   notebookId: string;
   editor: MyEditor;
   controller: EditorController;
+  formattingTabForm: ReactElement | null;
 }
 
 export const EditorSidebar: FC<EditorSidebarProps> = ({
   notebookId,
   editor,
   controller,
+  formattingTabForm,
 }) => {
   const notebookMetaData = useNotebookMetaData();
+  assert(notebookMetaData.sidebarComponent.type === 'default-sidebar');
+  const { selectedTab = 'block' } = notebookMetaData.sidebarComponent;
+  const setSelectedTab = useCallback(
+    (tab: EditorSidebarTab) =>
+      notebookMetaData.setSidebar({
+        type: 'default-sidebar',
+        selectedTab: tab,
+      }),
+    [notebookMetaData]
+  );
 
   const onDragStart = useMemo(() => onDragStartSmartRef(editor), [editor]);
   const onDragEnd = useOnDragEnd();
@@ -123,9 +141,12 @@ export const EditorSidebar: FC<EditorSidebarProps> = ({
     () => groupByTab(filteredTransformedItems),
     [filteredTransformedItems]
   );
+
   return (
     <ErrorBoundary fallback={<></>}>
       <UIEditorSidebar
+        selectedTab={selectedTab}
+        onSelectTab={setSelectedTab}
         items={filteredTransformedItems}
         search={search}
         setSearch={setSearch}
@@ -143,6 +164,7 @@ export const EditorSidebar: FC<EditorSidebarProps> = ({
           onExecute={myOnExec}
           search={search}
         />
+        <FormattingTab form={formattingTabForm} />
       </UIEditorSidebar>
     </ErrorBoundary>
   );

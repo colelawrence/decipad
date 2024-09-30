@@ -59,7 +59,6 @@ describe('inserts slider below', () => {
           max: '10',
           min: '0',
           step: '1',
-          value: '5',
           children: [{ text: '' }],
         } as SliderElement,
       ],

@@ -126,7 +126,6 @@ const getSliderInputElement = () => {
         max: '10',
         min: '0',
         step: '1',
-        value: initialSliderValue,
         children: [{ text: '' }],
       },
     ],

@@ -151,14 +151,6 @@ export const updateSliderVariable: Action<'updateSliderVariable'> = {
           );
         }
 
-        if (value != null) {
-          setNodes<SliderElement>(
-            editor,
-            { value: value.toString() },
-            { at: sliderSliderPath }
-          );
-        }
-
         if (step != null) {
           setNodes<SliderElement>(
             editor,

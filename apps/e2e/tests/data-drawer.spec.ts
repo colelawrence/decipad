@@ -129,6 +129,7 @@ test('number inputs and inline reslults', async ({ testUser }) => {
     await page.keyboard.press('ArrowDown');
 
     await page.keyboard.type('That foo is ');
+    await page.getByTestId('sidebar-Data').click();
     await testUser.notebook.dragMagicNumber('Foo');
 
     await expect(

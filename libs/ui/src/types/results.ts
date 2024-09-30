@@ -3,7 +3,11 @@ import type {
   SerializedType,
   SerializedTypeKind,
 } from '@decipad/remote-computer';
-import { AnyElement, SimpleTableCellType } from '@decipad/editor-types';
+import {
+  AnyElement,
+  ResultFormatting,
+  SimpleTableCellType,
+} from '@decipad/editor-types';
 import { DragEvent, ReactNode, RefObject } from 'react';
 
 export interface DragCellData {
@@ -11,12 +15,6 @@ export interface DragCellData {
   columnName: string;
   cellValue: string;
 }
-
-export type ResultFormatting =
-  | 'automatic'
-  | 'precise'
-  | 'financial'
-  | 'scientific';
 
 export interface CodeResultProps<T extends SerializedTypeKind> {
   readonly type: Result.Result<T>['type'];
