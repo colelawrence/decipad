@@ -15,6 +15,8 @@ import {
   SlashCommandsMenu,
   EditorSidebar as UIEditorSidebar,
   NumberCatalog as UINumberCatalog,
+  p13Medium,
+  cssVar,
 } from '@decipad/ui';
 import { ErrorBoundary } from '@sentry/react';
 import type { FC, ReactElement } from 'react';
@@ -29,6 +31,9 @@ import {
   blockSelectionStore,
   useBlockSelectionSelectors,
 } from '@udecode/plate-selection';
+import { Add } from 'libs/ui/src/icons';
+import styled from '@emotion/styled';
+import { isFlagEnabled } from '@decipad/feature-flags';
 import { FormattingTab } from '../FormattingTab';
 import { assert } from '@decipad/utils';
 
@@ -137,6 +142,30 @@ export const EditorSidebar: FC<EditorSidebarProps> = ({
     [items, search, selectedIds]
   );
 
+  // TODO: remove this all of this when launching left side bar
+  const temporaryNewVariableButton = (
+    <NewVariableButton
+      onClick={() => {
+        setAddVariable();
+        clientEvent({
+          segmentEvent: {
+            type: 'action',
+            action: 'Data Drawer Opened',
+            props: {
+              analytics_source: 'frontend',
+              drawer_trigger: 'sidebar',
+            },
+          },
+        });
+      }}
+    >
+      <NewVariableIcon>
+        <Add />
+      </NewVariableIcon>{' '}
+      New Variable
+    </NewVariableButton>
+  );
+
   const groupedItems = useMemo(
     () => groupByTab(filteredTransformedItems),
     [filteredTransformedItems]
@@ -152,13 +181,19 @@ export const EditorSidebar: FC<EditorSidebarProps> = ({
         setSearch={setSearch}
         {...notebookMetaData}
       >
-        <UINumberCatalog
-          items={groupedItems}
-          onDragStart={onDragStart}
-          onDragEnd={onDragEnd}
-          toggleAddNewVariable={setAddVariable}
-          editVariable={onSetEditingVariable}
-        />
+        {!isFlagEnabled('NAV_SIDEBAR') ? (
+          <div>
+            {temporaryNewVariableButton}
+            <UINumberCatalog
+              items={groupedItems}
+              onDragStart={onDragStart}
+              onDragEnd={onDragEnd}
+              editVariable={onSetEditingVariable}
+            />
+          </div>
+        ) : (
+          <></>
+        )}
         <SlashCommandsMenu
           variant="inline"
           onExecute={myOnExec}
@@ -169,3 +204,28 @@ export const EditorSidebar: FC<EditorSidebarProps> = ({
     </ErrorBoundary>
   );
 };
+
+// TODO: remove this all of this when launching left side bar
+const NewVariableButton = styled.button<{ isBackgroundGrey?: boolean }>(
+  p13Medium,
+  (props) => ({
+    padding: '8px 6px',
+    color: cssVar('textDisabled'),
+    backgroundColor: props.isBackgroundGrey
+      ? cssVar('backgroundAccent')
+      : cssVar('backgroundMain'),
+    bottom: '24px',
+    textAlign: 'left',
+    display: 'flex',
+    width: '100%',
+    position: 'sticky',
+    top: 0,
+    zIndex: '10',
+  })
+);
+
+const NewVariableIcon = styled.div({
+  marginRight: '8px',
+  width: '16px',
+  height: '16px',
+});

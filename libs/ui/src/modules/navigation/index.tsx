@@ -1,6 +1,7 @@
 /* eslint-disable decipad/css-prop-named-variable */
-import { FC, useState } from 'react';
+import { FC, useContext, useState } from 'react';
 import { notebooks as notebooksRouting } from '@decipad/routing';
+import { ClientEventsContext } from '@decipad/client-events';
 import {
   PermissionType,
   useCreateNotebookMutation,
@@ -13,11 +14,17 @@ import {
   Add,
   Ellipsis,
   CaretDown,
-  CaretUp,
+  CaretRight,
   FolderOpen,
+  MagnifyingGlass,
 } from '../../icons';
 import { hexToOpaqueColor } from '../../primitives';
-import { Divider, Spinner, Tooltip } from '../../shared';
+import {
+  Divider,
+  SearchFieldWithDropdown,
+  Spinner,
+  Tooltip,
+} from '../../shared';
 import { Anchor, colorSwatches, DNDItemTypes } from '../../utils';
 import { NavigationList } from '../workspace/NavigationList/NavigationList';
 import { SectionItem } from '../workspace/SectionItem/SectionItem';
@@ -37,17 +44,26 @@ export const NavigationSidebar: FC<NavigationSidebarProps> = ({
   workspaces,
   actions,
   onDuplicate,
+  toggleAddNewVariable,
+  search,
+  setSearch,
 }) => {
   const sectionFromCurrentNotebook = notebooks?.find(
     (nb) => nb.id === notebookId
   )?.sectionId;
+  const [sectionHovered, setSectionHovered] = useState<string | undefined>(
+    undefined
+  );
   const [isCreatingNotebook, setIsCreatingNotebook] = useState(false);
   const [isNavigationExpanded, setIsNavigationExpanded] = useState(true);
+  const [isNotebookDataExpanded, setIsNotebookDataExpanded] = useState(true);
   const [selectedSection, setSelectedSection] = useState<string | undefined>(
     sectionFromCurrentNotebook ?? undefined
   );
   const toast = useToast();
   const navigate = useNavigate();
+  const event = useContext(ClientEventsContext);
+
   const createNotebook = useCreateNotebookMutation()[1];
   const handleCreateNotebook = async () => {
     if (isCreatingNotebook) {
@@ -87,37 +103,64 @@ export const NavigationSidebar: FC<NavigationSidebarProps> = ({
     }
   };
 
-  const noSectionNotebooks =
-    notebooks?.filter((notebook) => !notebook.sectionId) ?? [];
+  const handleCreateVariable = () => {
+    toggleAddNewVariable();
+    event({
+      segmentEvent: {
+        type: 'action',
+        action: 'Data Drawer Opened',
+        props: {
+          analytics_source: 'frontend',
+          drawer_trigger: 'sidebar',
+        },
+      },
+    });
+  };
 
-  const tooltipTrigger = (
+  const noSectionNotebooks =
+    notebooks?.filter(
+      (notebook) => !notebook.sectionId && !notebook.archived
+    ) ?? [];
+
+  const tooltipTriggerNotebook = (
     <Styled.AddButtonWrapper>
-      <Styled.IconWrapper role="button" onClick={handleCreateNotebook}>
-        {isCreatingNotebook ? <Spinner /> : <Add />}
-      </Styled.IconWrapper>
+      <Styled.IconOuterWrapper highlightBackgroundOnHover={true}>
+        <Styled.IconWrapper role="button" onClick={handleCreateNotebook}>
+          {isCreatingNotebook ? <Spinner /> : <Add />}
+        </Styled.IconWrapper>
+      </Styled.IconOuterWrapper>
+    </Styled.AddButtonWrapper>
+  );
+
+  const tooltipTriggerVariable = (
+    <Styled.AddButtonWrapper>
+      <Styled.IconOuterWrapper highlightBackgroundOnHover={true}>
+        <Styled.IconWrapper role="button" onClick={handleCreateVariable}>
+          <Add />
+        </Styled.IconWrapper>
+      </Styled.IconOuterWrapper>
     </Styled.AddButtonWrapper>
   );
 
   return (
     <Styled.NavigationSidebarWrapperStyles data-testid="editor-navigation-bar">
+      <div css={{ padding: '10px 0' }}>
+        <Divider />
+      </div>
       <Styled.NavigationTitleWrapper>
-        <Styled.NavigationTitleInnerWrapper>
-          <Styled.IconWrapper>
-            {isNavigationExpanded && (
-              <CaretDown
-                onClick={() => setIsNavigationExpanded(!isNavigationExpanded)}
-              />
-            )}
-            {!isNavigationExpanded && (
-              <CaretUp
-                onClick={() => setIsNavigationExpanded(!isNavigationExpanded)}
-              />
-            )}
-          </Styled.IconWrapper>
+        <Styled.NavigationTitleInnerWrapper
+          onClick={() => setIsNavigationExpanded(!isNavigationExpanded)}
+        >
+          <Styled.IconOuterWrapper>
+            <Styled.IconWrapper>
+              {isNavigationExpanded && <CaretDown />}
+              {!isNavigationExpanded && <CaretRight />}
+            </Styled.IconWrapper>
+          </Styled.IconOuterWrapper>
           <Styled.NavigationTitle>Navigation</Styled.NavigationTitle>
         </Styled.NavigationTitleInnerWrapper>
-        <Tooltip side="top" hoverOnly trigger={tooltipTrigger}>
-          <Styled.TooltipText>Add Notebook</Styled.TooltipText>
+        <Tooltip side="top" hoverOnly trigger={tooltipTriggerNotebook}>
+          <Styled.TooltipText>New Notebook</Styled.TooltipText>
         </Tooltip>
       </Styled.NavigationTitleWrapper>
       {isNavigationExpanded && (
@@ -126,9 +169,9 @@ export const NavigationSidebar: FC<NavigationSidebarProps> = ({
             sections.map((section) => {
               const notebooksPerSection =
                 notebooks?.filter(
-                  (notebook) => notebook.sectionId === section.id
+                  (notebook) =>
+                    notebook.sectionId === section.id && !notebook.archived
                 ) || [];
-
               return (
                 <SectionItem
                   ident={0}
@@ -146,7 +189,9 @@ export const NavigationSidebar: FC<NavigationSidebarProps> = ({
                   MenuComponent={undefined}
                 >
                   <Styled.ItemWrapper
-                    isSelected={section.id === selectedSection}
+                    onMouseEnter={() => setSectionHovered(section.id)}
+                    onMouseLeave={() => setSectionHovered(undefined)}
+                    isSelected={section.id === sectionHovered}
                     onClick={() => {
                       setSelectedSection(
                         section.id !== selectedSection ? section.id : undefined
@@ -155,8 +200,10 @@ export const NavigationSidebar: FC<NavigationSidebarProps> = ({
                     role="button"
                   >
                     <Styled.IconWrapper color={section.color}>
-                      {section.id !== selectedSection && <Folder />}
-                      {section.id === selectedSection && <FolderOpen />}
+                      {section.id !== selectedSection &&
+                        section.id !== sectionHovered && <Folder />}
+                      {(section.id === selectedSection ||
+                        section.id === sectionHovered) && <FolderOpen />}
                     </Styled.IconWrapper>
                     <Styled.TextWrapper>{section.name}</Styled.TextWrapper>
                   </Styled.ItemWrapper>
@@ -166,19 +213,21 @@ export const NavigationSidebar: FC<NavigationSidebarProps> = ({
                       const href = notebooksRouting({}).notebook({
                         notebook: { id, name },
                       }).$;
+
                       return (
                         <Styled.NotebookWrapper
                           isSelected={notebook.id === notebookId}
+                          key={`notebook-item-${notebook.id}`}
                         >
-                          <Anchor
-                            href={href}
-                            key={`notebook-item-${notebook.id}`}
-                          >
+                          <Anchor href={href}>
                             <Styled.ItemWrapper marginLeft={22}>
                               <Styled.IconWrapper>
                                 <Sheet />
                               </Styled.IconWrapper>
-                              <Styled.TextWrapper>
+                              <Styled.TextWrapper
+                                isSelected={notebook.id === notebookId}
+                                isNested={true}
+                              >
                                 {notebook.name}
                               </Styled.TextWrapper>
                             </Styled.ItemWrapper>
@@ -260,11 +309,37 @@ export const NavigationSidebar: FC<NavigationSidebarProps> = ({
           </Styled.UnsectionedNotebooksWrapper>
         </NavigationList>
       )}
-      <div css={{ padding: '10px 0' }}>
+      <div css={{ padding: '12px 0' }}>
         <Divider />
       </div>
-      <Styled.NavigationTitle>Notebook Data</Styled.NavigationTitle>
-      {numberCatalog}
+      <div css={{ marginBottom: '8px' }}>
+        <SearchFieldWithDropdown
+          searchTerm={search}
+          onSearchChange={(newValue) => {
+            setSearch(newValue.toLocaleLowerCase());
+          }}
+          placeholder="Search"
+          icon={<MagnifyingGlass />}
+          hasGreyBackGround={true}
+        />
+      </div>
+      <Styled.NavigationTitleWrapper>
+        <Styled.NavigationTitleInnerWrapper
+          onClick={() => setIsNotebookDataExpanded(!isNotebookDataExpanded)}
+        >
+          <Styled.IconOuterWrapper>
+            <Styled.IconWrapper>
+              {isNotebookDataExpanded && <CaretDown />}
+              {!isNotebookDataExpanded && <CaretRight />}
+            </Styled.IconWrapper>
+          </Styled.IconOuterWrapper>
+          <Styled.NavigationTitle>Notebook Data</Styled.NavigationTitle>
+        </Styled.NavigationTitleInnerWrapper>
+        <Tooltip side="top" hoverOnly trigger={tooltipTriggerVariable}>
+          <Styled.TooltipText>New Variable</Styled.TooltipText>
+        </Tooltip>
+      </Styled.NavigationTitleWrapper>
+      {isNotebookDataExpanded && numberCatalog}
     </Styled.NavigationSidebarWrapperStyles>
   );
 };

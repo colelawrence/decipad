@@ -97,14 +97,13 @@ const NavigationSidebar: FC<NavigationSidebarProps> = ({
         setSearch={setSearch}
         workspaces={workspaces}
         actions={actions}
+        toggleAddNewVariable={setAddVariable}
       >
         <UINumberCatalog
           items={groupedItems}
           onDragStart={onDragStart}
           onDragEnd={onDragEnd}
-          toggleAddNewVariable={setAddVariable}
           editVariable={setEditingVariable}
-          overrideNewVarButtonBgColour={true}
         />
       </NavigationComponentSidebar>
     </ErrorBoundary>

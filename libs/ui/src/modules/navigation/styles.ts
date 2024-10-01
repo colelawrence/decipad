@@ -2,7 +2,6 @@ import styled from '@emotion/styled';
 import {
   cssVar,
   easingTiming,
-  p14Bold,
   p14Medium,
   p12Medium,
   transparencyHex,
@@ -20,15 +19,27 @@ type ItemWrapperProps = {
   isSelected?: boolean;
 };
 
+type IconWrapperProps = {
+  color?: string;
+};
+
+type IconOuterWrapperProps = {
+  highlightBackgroundOnHover?: boolean;
+};
+
+type TextWrapperProps = {
+  isSelected?: boolean;
+  isNested?: boolean;
+};
+
 export const NavigationSidebarWrapperStyles = styled.div(
   {
     position: 'relative',
     overflowX: 'hidden',
-    width: 320,
     height: '100%',
     display: 'flex',
     flexDirection: 'column',
-    marginLeft: 24,
+    marginLeft: '16px',
   },
   deciOverflowYStyles
 );
@@ -49,6 +60,7 @@ export const NotebookOptionsWrapper = styled.div({
   '& svg': {
     width: '16px',
   },
+  paddingRight: '6px',
 });
 
 export const NotebookWrapper = styled.div<NotebookWrapperProps>((props) => [
@@ -75,7 +87,7 @@ export const ItemWrapper = styled.div<ItemWrapperProps>((props) => [
     justifyItems: 'flex-start',
     alignItems: 'center',
     gridTemplateColumns: '24px auto',
-    padding: 6,
+    padding: '8px 6px',
     gap: 4,
     color: props.isButton ? cssVar('textSubdued') : 'inherit',
 
@@ -93,10 +105,6 @@ export const ItemWrapper = styled.div<ItemWrapperProps>((props) => [
   },
 ]);
 
-type IconWrapperProps = {
-  color?: string;
-};
-
 export const AddButtonWrapper = styled.div({
   '& > [role="button"]:hover': {
     backgroundColor: cssVar('backgroundHeavy'),
@@ -104,14 +112,28 @@ export const AddButtonWrapper = styled.div({
   },
 });
 
+export const IconOuterWrapper = styled.div<IconOuterWrapperProps>((props) => [
+  {
+    color: cssVar('textDisabled'),
+    ':hover': {
+      color: cssVar('textHeavy'),
+    },
+  },
+  props.highlightBackgroundOnHover && {
+    ':hover': {
+      backgroundColor: cssVar('backgroundHeavy'),
+      borderRadius: '6px',
+    },
+  },
+]);
+
 export const IconWrapper = styled.div<IconWrapperProps>((props) => [
   {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    width: 24,
-    height: 24,
-    padding: 3,
+    height: '24px',
+    width: '24px',
 
     '& svg': {
       width: 16,
@@ -134,45 +156,53 @@ export const IconWrapper = styled.div<IconWrapperProps>((props) => [
   },
 ]);
 
-export const TextWrapper = styled.p(p14Medium, {
-  lineHeight: 1,
-  display: 'inline-block',
-  alignItems: 'center',
-  justifyContent: 'flex-start',
-  gap: 4,
-  color: 'inherit',
-  // some things about our font are just weird, you can't fix that
-  paddingTop: 0.5,
-  textOverflow: 'ellipsis',
-  // this is needed to make the text overflow work
-  maxWidth: '164px',
-  whiteSpace: 'nowrap',
-  // just in case...
-  overflow: 'hidden',
+export const TextWrapper = styled.p<TextWrapperProps>((props) => [
+  p14Medium,
+  {
+    lineHeight: 1,
+    display: 'inline-block',
+    alignItems: 'center',
+    justifyContent: 'flex-start',
+    gap: 4,
+    color: 'inherit',
+    // some things about our font are just weird, you can't fix that
+    paddingTop: 0.5,
+    paddingLeft: '6px',
+    textOverflow: 'ellipsis',
+    // this is needed to make the text overflow work
+    maxWidth: props.isNested ? '130px' : '160px',
+    whiteSpace: 'nowrap',
+    // just in case...
+    overflow: 'hidden',
 
-  '& > svg': {
-    width: 16,
-    height: 16,
-    color: cssVar('textSubdued'),
+    '& > svg': {
+      width: 16,
+      height: 16,
+      color: cssVar('textSubdued'),
+    },
   },
-});
+  props.isSelected && {
+    color: cssVar('textTitle'),
+  },
+]);
 
 export const NavigationTitleInnerWrapper = styled.div({
   display: 'flex',
+  cursor: 'pointer',
 });
 
 export const NavigationTitleWrapper = styled.div({
   display: 'flex',
   justifyContent: 'space-between',
+  marginBottom: '8px',
+  alignItems: 'center',
 });
 
 export const NavigationTitle = styled.p([
-  p14Bold,
+  p14Medium,
   {
-    color: cssVar('textHeavy'),
-    lineHeight: '30px',
+    lineHeight: '24px',
     flexShrink: 0,
-    paddingBottom: 8,
     display: 'inline',
   },
 ]);
@@ -181,7 +211,7 @@ export const EllipsisWrapper = styled.div({
   display: 'flex',
   alignItems: 'center',
   // to center vertically the ellipsis
-  height: '36px',
+  height: '40px',
 });
 
 export const UnsectionedNotebooksWrapper = styled.div({

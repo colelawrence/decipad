@@ -3,6 +3,7 @@ import {
   InputField,
   TextareaField,
   sanitizeInput,
+  cssVar,
 } from '@decipad/ui';
 import { css } from '@emotion/react';
 import React from 'react';
@@ -15,6 +16,7 @@ interface BaseProps {
   placeholder: string;
   icon?: React.ReactNode;
   variant?: 'input' | 'textarea';
+  hasGreyBackGround?: boolean;
 }
 
 interface DropdownProps {
@@ -39,6 +41,7 @@ export const SearchFieldWithDropdown: React.FC<
   handleDropdownChange,
   icon,
   variant = 'input',
+  hasGreyBackGround,
 }) => {
   const searchDropdownWrapper = css(
     searchFieldWithContainerStyles,
@@ -46,6 +49,15 @@ export const SearchFieldWithDropdown: React.FC<
       textarea: { resize: 'none' },
       height: '100%',
       alignItems: 'flex-start',
+    },
+    hasGreyBackGround && {
+      backgroundColor: cssVar('backgroundDefault'),
+      borderColor: cssVar('borderDefault'),
+
+      input: {
+        borderColor: cssVar('borderDefault'),
+        backgroundColor: cssVar('backgroundDefault'),
+      },
     }
   );
 

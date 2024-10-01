@@ -17,10 +17,13 @@ import {
 } from './styles';
 import { EditorSidebarProps } from './types';
 import { css } from '@emotion/react';
-import { deciOverflowYStyles } from 'libs/ui/src/styles/scrollbars';
 import { EditorSidebarTab } from '@decipad/editor-types';
+import { deciOverflowYStyles } from 'libs/ui/src/styles/scrollbars';
+import { isFlagEnabled } from '@decipad/feature-flags';
 
-const AVAILABLE_TABS: EditorSidebarTab[] = ['block', 'variable', 'format'];
+const AVAILABLE_TABS: EditorSidebarTab[] = isFlagEnabled('NAV_SIDEBAR')
+  ? ['block', 'format']
+  : ['block', 'variable', 'format'];
 
 const getTriggerMetaForTab = (tab: EditorSidebarTab) => {
   switch (tab) {

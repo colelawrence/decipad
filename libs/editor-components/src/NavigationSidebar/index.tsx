@@ -21,6 +21,7 @@ interface NavigationSidebarProps {
   readonly setSearch: Dispatch<SetStateAction<string>>;
   readonly workspaces: Array<WorkspaceSwitcherWorkspaceFragment>;
   readonly actions: NotebookMetaActionsReturn;
+  readonly toggleAddNewVariable: () => void;
 }
 
 export const NavigationSidebar: FC<NavigationSidebarProps> = ({
@@ -29,6 +30,9 @@ export const NavigationSidebar: FC<NavigationSidebarProps> = ({
   notebookId,
   workspaces,
   actions,
+  search,
+  setSearch,
+  toggleAddNewVariable,
 }) => {
   // todo: this should be a query for only sections
   const [result] = useGetWorkspacesWithSharedNotebooksQuery();
@@ -68,6 +72,9 @@ export const NavigationSidebar: FC<NavigationSidebarProps> = ({
         workspaces={workspaces}
         onDuplicate={onDuplicate}
         actions={actions}
+        toggleAddNewVariable={toggleAddNewVariable}
+        search={search}
+        setSearch={setSearch}
       />
     </ErrorBoundary>
   );
