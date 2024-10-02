@@ -64,6 +64,9 @@ export class Type implements TypeInterface {
 
   tree: Type[] | undefined;
 
+  // trend
+  trendOf: Type | undefined;
+
   // Set to true when the type is still pending inference
   pending = false;
 
@@ -273,7 +276,7 @@ export const symbol = (symbol: string) =>
     t.symbol = symbol;
   });
 
-interface BuildTableArgs {
+export interface BuildTableArgs {
   indexName?: string | null;
   delegatesIndexTo?: string | null;
   columnTypes: Type[];
@@ -297,7 +300,7 @@ export const table = ({
   });
 };
 
-interface BuildTreeArgs {
+export interface BuildTreeArgs {
   columnTypes: Type[];
   columnNames: string[];
 }
@@ -312,6 +315,16 @@ export const tree = ({ columnTypes, columnNames }: BuildTreeArgs) => {
   return produce(new Type(), (t) => {
     t.tree = columnTypes;
     t.columnNames = columnNames;
+  });
+};
+
+export interface BuildTrendArgs {
+  trendOf: Type;
+}
+
+export const trend = ({ trendOf }: BuildTrendArgs) => {
+  return produce(new Type(), (t) => {
+    t.trendOf = trendOf;
   });
 };
 
@@ -387,6 +400,11 @@ export const anything = () =>
 export const date = (specificity: Specificity) =>
   produce(new Type(), (t) => {
     t.date = specificity;
+  });
+
+export const trendOf = (type: Type) =>
+  produce(new Type(), (trendOfType) => {
+    trendOfType.trendOf = type;
   });
 
 export const impossible = (

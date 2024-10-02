@@ -19,6 +19,7 @@ import { Scalar } from '../Value/Scalar';
 import { Range } from '../Value/Range';
 import { Row } from '../Value/Row';
 import { Tree } from '../Value/Tree';
+import { Trend } from '../Value';
 
 // eslint-disable-next-line complexity
 export const resultToValue = (result: Result.Result): Value.Value => {
@@ -162,5 +163,8 @@ export const resultToValue = (result: Result.Result): Value.Value => {
 
     case 'tree':
       return getInstanceof(value, Tree);
+
+    case 'trend':
+      return getInstanceof(value, Trend);
   }
 };

@@ -20,6 +20,7 @@ import { BlockCodeError } from '../BlockCodeError/BlockCodeError';
 import TextResult from '../TextResult/TextResult';
 import { memo, useMemo } from 'react';
 import { isColumn, isTable } from '@decipad/computer-utils';
+import { TrendResult } from '../TrendResult/TrendResult';
 
 // Simple result components
 
@@ -131,6 +132,10 @@ const getResultMatchers = (): ResultMatcher[] => [
   {
     component: InlineTreeResult,
     match: ({ type }) => type.kind === 'tree',
+  },
+  {
+    component: TrendResult,
+    match: ({ type }) => type.kind === 'trend',
   },
 ];
 

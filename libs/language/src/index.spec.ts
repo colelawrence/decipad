@@ -825,6 +825,7 @@ describe('Tables', () => {
           "rowIndexName": null,
           "symbol": null,
           "tree": undefined,
+          "trendOf": undefined,
           "type": "number",
           "unit": null,
           Symbol(immer-draftable): true,
@@ -960,6 +961,7 @@ describe('Tables', () => {
                                   "rowIndexName": null,
                                   "symbol": null,
                                   "tree": undefined,
+                                  "trendOf": undefined,
                                   "type": "number",
                                   "unit": null,
                                   Symbol(immer-draftable): true,
@@ -1009,6 +1011,7 @@ describe('Tables', () => {
                                   "rowIndexName": null,
                                   "symbol": null,
                                   "tree": undefined,
+                                  "trendOf": undefined,
                                   "type": "number",
                                   "unit": [
                                     {
@@ -1087,6 +1090,7 @@ describe('Tables', () => {
                           "rowIndexName": null,
                           "symbol": null,
                           "tree": undefined,
+                          "trendOf": undefined,
                           "type": "number",
                           "unit": [
                             {
@@ -1181,6 +1185,7 @@ describe('Tables', () => {
                                   "rowIndexName": null,
                                   "symbol": null,
                                   "tree": undefined,
+                                  "trendOf": undefined,
                                   "type": "number",
                                   "unit": null,
                                   Symbol(immer-draftable): true,
@@ -1230,6 +1235,7 @@ describe('Tables', () => {
                                   "rowIndexName": null,
                                   "symbol": null,
                                   "tree": undefined,
+                                  "trendOf": undefined,
                                   "type": "number",
                                   "unit": [
                                     {
@@ -1308,6 +1314,7 @@ describe('Tables', () => {
                           "rowIndexName": null,
                           "symbol": null,
                           "tree": undefined,
+                          "trendOf": undefined,
                           "type": "number",
                           "unit": [
                             {
@@ -1375,6 +1382,7 @@ describe('Tables', () => {
               "rowIndexName": null,
               "symbol": null,
               "tree": undefined,
+              "trendOf": undefined,
               "type": null,
               "unit": null,
               Symbol(immer-draftable): true,
@@ -1408,6 +1416,7 @@ describe('Tables', () => {
               "rowIndexName": null,
               "symbol": null,
               "tree": undefined,
+              "trendOf": undefined,
               "type": "number",
               "unit": null,
               Symbol(immer-draftable): true,
@@ -1435,6 +1444,7 @@ describe('Tables', () => {
           "rowIndexName": null,
           "symbol": null,
           "tree": undefined,
+          "trendOf": undefined,
           "type": null,
           "unit": null,
           Symbol(immer-draftable): true,
@@ -1498,6 +1508,7 @@ describe('Tables', () => {
             "rowIndexName": null,
             "symbol": null,
             "tree": undefined,
+            "trendOf": undefined,
             "type": "number",
             "unit": null,
             Symbol(immer-draftable): true,
@@ -1526,6 +1537,7 @@ describe('Tables', () => {
           "rowIndexName": null,
           "symbol": null,
           "tree": undefined,
+          "trendOf": undefined,
           "type": null,
           "unit": null,
           Symbol(immer-draftable): true,
@@ -1662,6 +1674,7 @@ describe('Tables', () => {
                                   "rowIndexName": null,
                                   "symbol": null,
                                   "tree": undefined,
+                                  "trendOf": undefined,
                                   "type": "number",
                                   "unit": null,
                                   Symbol(immer-draftable): true,
@@ -1711,6 +1724,7 @@ describe('Tables', () => {
                                   "rowIndexName": null,
                                   "symbol": null,
                                   "tree": undefined,
+                                  "trendOf": undefined,
                                   "type": "number",
                                   "unit": [
                                     {
@@ -1789,6 +1803,7 @@ describe('Tables', () => {
                           "rowIndexName": null,
                           "symbol": null,
                           "tree": undefined,
+                          "trendOf": undefined,
                           "type": "number",
                           "unit": [
                             {
@@ -1883,6 +1898,7 @@ describe('Tables', () => {
                                   "rowIndexName": null,
                                   "symbol": null,
                                   "tree": undefined,
+                                  "trendOf": undefined,
                                   "type": "number",
                                   "unit": null,
                                   Symbol(immer-draftable): true,
@@ -1932,6 +1948,7 @@ describe('Tables', () => {
                                   "rowIndexName": null,
                                   "symbol": null,
                                   "tree": undefined,
+                                  "trendOf": undefined,
                                   "type": "number",
                                   "unit": [
                                     {
@@ -2010,6 +2027,7 @@ describe('Tables', () => {
                           "rowIndexName": null,
                           "symbol": null,
                           "tree": undefined,
+                          "trendOf": undefined,
                           "type": "number",
                           "unit": [
                             {
@@ -2077,6 +2095,7 @@ describe('Tables', () => {
               "rowIndexName": null,
               "symbol": null,
               "tree": undefined,
+              "trendOf": undefined,
               "type": null,
               "unit": null,
               Symbol(immer-draftable): true,
@@ -2110,6 +2129,7 @@ describe('Tables', () => {
               "rowIndexName": null,
               "symbol": null,
               "tree": undefined,
+              "trendOf": undefined,
               "type": "number",
               "unit": null,
               Symbol(immer-draftable): true,
@@ -2137,6 +2157,7 @@ describe('Tables', () => {
           "rowIndexName": null,
           "symbol": null,
           "tree": undefined,
+          "trendOf": undefined,
           "type": null,
           "unit": null,
           Symbol(immer-draftable): true,
@@ -2463,6 +2484,7 @@ describe('Dates', () => {
           "rowIndexName": null,
           "symbol": null,
           "tree": undefined,
+          "trendOf": undefined,
           "type": null,
           "unit": null,
           Symbol(immer-draftable): true,
@@ -2929,6 +2951,7 @@ describe('number units work together', () => {
             "rowIndexName": null,
             "symbol": null,
             "tree": undefined,
+            "trendOf": undefined,
             "type": "number",
             "unit": [
               {
@@ -3490,6 +3513,7 @@ describe('type coercion', () => {
           "rowIndexName": null,
           "symbol": null,
           "tree": undefined,
+          "trendOf": undefined,
           "type": "number",
           "unit": [
             {
@@ -3626,6 +3650,7 @@ describe('percentages', () => {
           "rowIndexName": null,
           "symbol": null,
           "tree": undefined,
+          "trendOf": undefined,
           "type": "number",
           "unit": null,
           Symbol(immer-draftable): true,
@@ -3670,6 +3695,7 @@ describe('percentages', () => {
           "rowIndexName": null,
           "symbol": null,
           "tree": undefined,
+          "trendOf": undefined,
           "type": "number",
           "unit": null,
           Symbol(immer-draftable): true,
@@ -3714,6 +3740,7 @@ describe('percentages', () => {
           "rowIndexName": null,
           "symbol": null,
           "tree": undefined,
+          "trendOf": undefined,
           "type": "number",
           "unit": null,
           Symbol(immer-draftable): true,
@@ -3759,6 +3786,7 @@ describe('percentages', () => {
           "rowIndexName": null,
           "symbol": null,
           "tree": undefined,
+          "trendOf": undefined,
           "type": "number",
           "unit": null,
           Symbol(immer-draftable): true,
@@ -3855,6 +3883,7 @@ describe('percentages', () => {
           "rowIndexName": null,
           "symbol": null,
           "tree": undefined,
+          "trendOf": undefined,
           "type": "number",
           "unit": null,
           Symbol(immer-draftable): true,
@@ -3912,6 +3941,7 @@ describe('tiered function', () => {
           "rowIndexName": null,
           "symbol": null,
           "tree": undefined,
+          "trendOf": undefined,
           "type": "number",
           "unit": null,
           Symbol(immer-draftable): true,
@@ -3967,6 +3997,7 @@ describe('tiered function', () => {
           "rowIndexName": null,
           "symbol": null,
           "tree": undefined,
+          "trendOf": undefined,
           "type": "number",
           "unit": [
             {
@@ -4041,6 +4072,7 @@ describe('tiered function', () => {
           "rowIndexName": null,
           "symbol": null,
           "tree": undefined,
+          "trendOf": undefined,
           "type": "number",
           "unit": [
             {
@@ -4112,6 +4144,7 @@ describe('tiered function', () => {
           "rowIndexName": null,
           "symbol": null,
           "tree": undefined,
+          "trendOf": undefined,
           "type": "number",
           "unit": [
             {
@@ -4184,6 +4217,7 @@ describe('grammar extensions', () => {
           "rowIndexName": null,
           "symbol": null,
           "tree": undefined,
+          "trendOf": undefined,
           "type": "number",
           "unit": [
             {
@@ -4354,6 +4388,7 @@ describe('lookup syntactic sugar', () => {
               "rowIndexName": null,
               "symbol": null,
               "tree": undefined,
+              "trendOf": undefined,
               "type": "number",
               "unit": null,
               Symbol(immer-draftable): true,
@@ -4387,6 +4422,7 @@ describe('lookup syntactic sugar', () => {
               "rowIndexName": null,
               "symbol": null,
               "tree": undefined,
+              "trendOf": undefined,
               "type": "number",
               "unit": null,
               Symbol(immer-draftable): true,
@@ -4396,6 +4432,7 @@ describe('lookup syntactic sugar', () => {
           "rowIndexName": "Table",
           "symbol": null,
           "tree": undefined,
+          "trendOf": undefined,
           "type": null,
           "unit": null,
           Symbol(immer-draftable): true,
@@ -4488,6 +4525,7 @@ describe('lookup syntactic sugar', () => {
               "rowIndexName": null,
               "symbol": null,
               "tree": undefined,
+              "trendOf": undefined,
               "type": "number",
               "unit": null,
               Symbol(immer-draftable): true,
@@ -4521,6 +4559,7 @@ describe('lookup syntactic sugar', () => {
               "rowIndexName": null,
               "symbol": null,
               "tree": undefined,
+              "trendOf": undefined,
               "type": "number",
               "unit": null,
               Symbol(immer-draftable): true,
@@ -4530,6 +4569,7 @@ describe('lookup syntactic sugar', () => {
           "rowIndexName": "Table",
           "symbol": null,
           "tree": undefined,
+          "trendOf": undefined,
           "type": null,
           "unit": null,
           Symbol(immer-draftable): true,
@@ -4595,6 +4635,7 @@ describe('lookup syntactic sugar', () => {
           "rowIndexName": null,
           "symbol": null,
           "tree": undefined,
+          "trendOf": undefined,
           "type": "number",
           "unit": null,
           Symbol(immer-draftable): true,

@@ -38,6 +38,7 @@ type Kind =
   | 'materialized-table'
   | 'row'
   | 'tree'
+  | 'trend'
   | 'date'
   | 'range'
   | 'pending'

@@ -13,7 +13,6 @@ import { StringValue } from '../Value/String';
 import { BooleanValue } from '../Value/Boolean';
 import { DateValue } from '../Value/Date';
 import { Column } from '../Value/Column';
-import { RuntimeError } from '../RuntimeError';
 
 export type CompareResult = -1 | 0 | 1;
 
@@ -119,9 +118,10 @@ function compareToNumber(a: Comparable, b: Comparable): number | bigint {
     return lengthComparison;
   }
 
-  throw new RuntimeError(
+  console.warn(
     `Don't know how to compare ${a.toString()} (${typeof a}) against ${b.toString()} (${typeof b})`
   );
+  return 1;
 }
 
 const sign = (diff: number | bigint): CompareResult => {

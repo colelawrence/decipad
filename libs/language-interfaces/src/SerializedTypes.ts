@@ -21,6 +21,7 @@ export type SerializedType =
   | String
   | Date
   | Range
+  | Trend
 
   // Oddball
   | Pending
@@ -38,11 +39,13 @@ export type Column = {
   readonly cellCount?: number;
   cellType: SerializedType;
 } & Common;
+
 export type MaterializedColumn = {
   readonly kind: 'materialized-column';
   readonly indexedBy: string | null;
   readonly cellType: SerializedType;
 } & Common;
+
 export type Table = {
   readonly kind: 'table';
   indexName: string | null;
@@ -51,11 +54,13 @@ export type Table = {
   readonly columnNames: string[];
   readonly rowCount?: number;
 } & Common;
+
 export type Tree = {
   readonly kind: 'tree';
   columnTypes: SerializedType[];
   readonly columnNames: string[];
 } & Common;
+
 export type MaterializedTable = {
   readonly kind: 'materialized-table';
   indexName: string | null;
@@ -64,11 +69,17 @@ export type MaterializedTable = {
   readonly columnNames: string[];
   readonly rowCount?: number;
 } & Common;
+
 export type Row = {
   readonly kind: 'row';
   readonly rowIndexName: string | null;
   readonly rowCellTypes: SerializedType[];
   readonly rowCellNames: string[];
+} & Common;
+
+export type Trend = {
+  readonly kind: 'trend';
+  trendOf: SerializedType;
 } & Common;
 
 // Non-groups

@@ -159,6 +159,7 @@ export type ResultType = Result.Result<
   | 'table'
   | 'materialized-table'
   | 'tree'
+  | 'trend'
   | 'row'
   | 'date'
   | 'range'

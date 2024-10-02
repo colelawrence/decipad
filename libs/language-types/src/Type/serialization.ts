@@ -14,6 +14,7 @@ import {
   functionPlaceholder,
   impossible,
   row,
+  trend,
 } from './Type';
 import { InferError } from '../InferError';
 
@@ -119,6 +120,12 @@ export function serializeType(type: Type | SerializedType): SerializedType {
         ast: type.node,
       };
     }
+    if (type.trendOf) {
+      return {
+        kind: 'trend',
+        trendOf: serializeType(type.trendOf),
+      };
+    }
     if (type.errorCause) {
       return {
         kind: 'type-error',
@@ -140,7 +147,7 @@ export function serializeType(type: Type | SerializedType): SerializedType {
   }
 
   /* istanbul ignore next */
-  console.error(type);
+  console.error('panic: serializing invalid type', type);
   throw new Error(`panic: serializing invalid type ${type.type}`);
 }
 
@@ -181,6 +188,11 @@ export function deserializeType(type: Type | SerializedType): Type {
           return tree({
             columnTypes: columnTypes.map((t) => deserializeType(t)),
             columnNames,
+          });
+        }
+        case 'trend': {
+          return trend({
+            trendOf: deserializeType(getDefined(type.trendOf)),
           });
         }
         case 'row':

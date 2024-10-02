@@ -47,6 +47,8 @@ export interface Type {
 
   tree: Type[] | undefined;
 
+  trendOf: Type | undefined;
+
   // Set to true when the type is still pending inference
   pending: boolean;
 

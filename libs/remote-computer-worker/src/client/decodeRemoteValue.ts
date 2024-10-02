@@ -24,6 +24,7 @@ export const decodeRemoteValue = async (
     case 'number':
     case 'row':
     case 'tree':
+    case 'trend':
     case 'range':
     case 'string':
     case 'date':

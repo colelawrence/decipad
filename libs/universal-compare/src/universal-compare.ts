@@ -58,10 +58,10 @@ function compareToNumber(a: Comparable, b: Comparable): number | bigint {
   }
 
   // eslint-disable-next-line no-console
-  console.error(a, b);
-  throw new Error(
+  console.warn(
     `Don't know how to compare ${a?.toString()} (${typeof a}) against ${b?.toString()} (${typeof b})`
   );
+  return 1;
 }
 
 const sign = (diff: number | bigint): CompareResult => {

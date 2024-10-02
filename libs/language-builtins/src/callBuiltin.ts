@@ -20,10 +20,6 @@ import {
 } from './types';
 
 async function shouldAutoconvert(types: Type[]): Promise<boolean> {
-  // console.log(
-  //   'shouldAutoconvert units',
-  //   types.map((t) => [t.unit, t.cellType?.unit?.map((u) => u.unit)])
-  // );
   if (types.length === 1) {
     return false;
   }

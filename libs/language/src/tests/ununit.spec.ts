@@ -34,6 +34,7 @@ it('can un-unit stuff', async () => {
         "rowIndexName": null,
         "symbol": null,
         "tree": undefined,
+        "trendOf": undefined,
         "type": "number",
         "unit": null,
         Symbol(immer-draftable): true,
@@ -79,6 +80,7 @@ it('can un-unit stuff', async () => {
           "rowIndexName": null,
           "symbol": null,
           "tree": undefined,
+          "trendOf": undefined,
           "type": "number",
           "unit": null,
           Symbol(immer-draftable): true,
@@ -123,6 +125,7 @@ it('can un-unit stuff', async () => {
         "rowIndexName": null,
         "symbol": null,
         "tree": undefined,
+        "trendOf": undefined,
         "type": "number",
         "unit": null,
         Symbol(immer-draftable): true,
@@ -172,6 +175,7 @@ it('can un-unit stuff', async () => {
         "rowIndexName": null,
         "symbol": null,
         "tree": undefined,
+        "trendOf": undefined,
         "type": "number",
         "unit": null,
         Symbol(immer-draftable): true,
@@ -266,6 +270,7 @@ it('should throw error when un-uniting non numbers', async () => {
                     "rowIndexName": null,
                     "symbol": null,
                     "tree": undefined,
+                    "trendOf": undefined,
                     "type": "string",
                     "unit": null,
                     Symbol(immer-draftable): true,
@@ -314,6 +319,7 @@ it('should throw error when un-uniting non numbers', async () => {
         "rowIndexName": null,
         "symbol": null,
         "tree": undefined,
+        "trendOf": undefined,
         "type": null,
         "unit": null,
         Symbol(immer-draftable): true,
@@ -356,6 +362,7 @@ it('removes the value and shows only the units', async () => {
         "rowIndexName": null,
         "symbol": null,
         "tree": undefined,
+        "trendOf": undefined,
         "type": "number",
         "unit": [
           {
@@ -418,6 +425,7 @@ it('removes the value and shows only the units', async () => {
           "rowIndexName": null,
           "symbol": null,
           "tree": undefined,
+          "trendOf": undefined,
           "type": "number",
           "unit": [
             {
@@ -513,6 +521,7 @@ it('removes the value and shows only the units', async () => {
         "rowIndexName": null,
         "symbol": null,
         "tree": undefined,
+        "trendOf": undefined,
         "type": "number",
         "unit": [
           {
@@ -579,6 +588,7 @@ it('removes the value and shows only the units', async () => {
         "rowIndexName": null,
         "symbol": null,
         "tree": undefined,
+        "trendOf": undefined,
         "type": "number",
         "unit": [
           {

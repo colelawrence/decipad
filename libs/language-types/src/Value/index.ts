@@ -21,6 +21,7 @@ export * from './String';
 export * from './Table';
 export * from './TableValue';
 export * from './Tree';
+export * from './Trend';
 export * from './Function';
 export * from './Unknown';
 export * from './ValueGenerator';

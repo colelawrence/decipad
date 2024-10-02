@@ -4,5 +4,6 @@ export * from './LowLevelMinimalTensor';
 export * from './MinimalTensor';
 export * from './TableValue';
 export * from './Tree';
+export * from './Trend';
 export * from './Value';
 export * from './ValueGenerator';

@@ -38,6 +38,7 @@ export function traverseType(
 
     case 'table':
     case 'tree':
+    case 'trend':
     case 'materialized-table':
     case 'row':
     case 'function': {

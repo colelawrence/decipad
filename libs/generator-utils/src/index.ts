@@ -15,6 +15,7 @@ export * from './maxOf';
 export * from './memoizing';
 export * from './observe';
 export * from './one';
+export * from './reduce';
 export * from './queuedGen';
 export * from './trace';
 export * from './transform';

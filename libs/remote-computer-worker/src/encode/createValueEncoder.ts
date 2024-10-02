@@ -33,6 +33,7 @@ export const createValueEncoder = (remoteValueStore: RemoteValueStore) => {
       case 'number':
       case 'row':
       case 'tree':
+      case 'trend':
       case 'range':
       case 'string':
       case 'date':

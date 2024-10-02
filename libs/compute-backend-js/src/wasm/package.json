@@ -1,5 +1,6 @@
 {
   "name": "compute-backend",
+  "type": "module",
   "collaborators": [
     "John Costa <johncosta027@gmail.com>"
   ],
@@ -10,7 +11,7 @@
     "compute_backend_bg.js",
     "compute_backend.d.ts"
   ],
-  "module": "compute_backend.js",
+  "main": "compute_backend.js",
   "types": "compute_backend.d.ts",
   "sideEffects": [
     "./compute_backend.js",

@@ -28,6 +28,7 @@ export type ResultTree = Value.Tree;
 export type ResultMaterializedTable = ResultMaterializedColumn[];
 export type ResultUnknown = symbol;
 export type ResultFunction = Value.FunctionValue;
+export type ResultTrend = Value.TrendValue;
 
 // trees
 export type ResultTreeGroup = {
@@ -45,7 +46,8 @@ export type OneMaterializedResult =
   | ResultRow
   | ResultMaterializedTable
   | ResultUnknown
-  | ResultFunction;
+  | ResultFunction
+  | ResultTrend;
 
 export type OneResult =
   | ResultNumber
@@ -60,7 +62,8 @@ export type OneResult =
   | ResultTree
   | ResultMaterializedTable
   | ResultUnknown
-  | ResultFunction;
+  | ResultFunction
+  | ResultTrend;
 
 export interface ResultMetadataColumn {
   labels?: Promise<Array<Array<string>>> | undefined;
@@ -96,6 +99,8 @@ export type Result<T extends SerializedTypeKind = SerializedTypeKind> = {
     ? ResultRow
     : T extends 'tree'
     ? ResultTree
+    : T extends 'trend'
+    ? ResultTrend
     : T extends 'function'
     ? ResultFunction
     : T extends 'type-error'

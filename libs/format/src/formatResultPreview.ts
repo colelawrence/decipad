@@ -65,6 +65,9 @@ export function formatResultPreview({ type, value }: Result.Result): string {
     case 'tree':
       return 'tree';
 
+    case 'trend':
+      return 'trend';
+
     case 'type-error': {
       return Format.formatError('en-US', type.errorCause);
     }

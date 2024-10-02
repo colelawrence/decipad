@@ -652,6 +652,7 @@ ${'' /* Get capital needed */}
             "rowIndexName": null,
             "symbol": null,
             "tree": undefined,
+            "trendOf": undefined,
             "type": "number",
             "unit": [
               {
@@ -704,6 +705,7 @@ ${'' /* Get capital needed */}
             "rowIndexName": null,
             "symbol": null,
             "tree": undefined,
+            "trendOf": undefined,
             "type": "number",
             "unit": [
               {
@@ -756,6 +758,7 @@ ${'' /* Get capital needed */}
             "rowIndexName": null,
             "symbol": null,
             "tree": undefined,
+            "trendOf": undefined,
             "type": "number",
             "unit": [
               {
@@ -808,6 +811,7 @@ ${'' /* Get capital needed */}
             "rowIndexName": null,
             "symbol": null,
             "tree": undefined,
+            "trendOf": undefined,
             "type": "number",
             "unit": [
               {
@@ -860,6 +864,7 @@ ${'' /* Get capital needed */}
             "rowIndexName": null,
             "symbol": null,
             "tree": undefined,
+            "trendOf": undefined,
             "type": "number",
             "unit": [
               {
@@ -912,6 +917,7 @@ ${'' /* Get capital needed */}
             "rowIndexName": null,
             "symbol": null,
             "tree": undefined,
+            "trendOf": undefined,
             "type": "number",
             "unit": [
               {
@@ -964,6 +970,7 @@ ${'' /* Get capital needed */}
             "rowIndexName": null,
             "symbol": null,
             "tree": undefined,
+            "trendOf": undefined,
             "type": "number",
             "unit": null,
             Symbol(immer-draftable): true,
@@ -997,6 +1004,7 @@ ${'' /* Get capital needed */}
             "rowIndexName": null,
             "symbol": null,
             "tree": undefined,
+            "trendOf": undefined,
             "type": "number",
             "unit": null,
             Symbol(immer-draftable): true,
@@ -1030,6 +1038,7 @@ ${'' /* Get capital needed */}
             "rowIndexName": null,
             "symbol": null,
             "tree": undefined,
+            "trendOf": undefined,
             "type": "number",
             "unit": null,
             Symbol(immer-draftable): true,
@@ -1698,6 +1707,7 @@ ${'' /* Get capital needed */}
                 "rowIndexName": null,
                 "symbol": null,
                 "tree": undefined,
+                "trendOf": undefined,
                 "type": null,
                 "unit": null,
                 Symbol(immer-draftable): true,
@@ -1731,6 +1741,7 @@ ${'' /* Get capital needed */}
                 "rowIndexName": null,
                 "symbol": null,
                 "tree": undefined,
+                "trendOf": undefined,
                 "type": "number",
                 "unit": null,
                 Symbol(immer-draftable): true,
@@ -1758,6 +1769,7 @@ ${'' /* Get capital needed */}
             "rowIndexName": null,
             "symbol": null,
             "tree": undefined,
+            "trendOf": undefined,
             "type": null,
             "unit": null,
             Symbol(immer-draftable): true,
@@ -1858,6 +1870,7 @@ describe('column assignment integration', () => {
               "rowIndexName": null,
               "symbol": null,
               "tree": undefined,
+              "trendOf": undefined,
               "type": "number",
               "unit": null,
               Symbol(immer-draftable): true,
@@ -1891,6 +1904,7 @@ describe('column assignment integration', () => {
               "rowIndexName": null,
               "symbol": null,
               "tree": undefined,
+              "trendOf": undefined,
               "type": "number",
               "unit": null,
               Symbol(immer-draftable): true,
@@ -1918,6 +1932,7 @@ describe('column assignment integration', () => {
           "rowIndexName": null,
           "symbol": null,
           "tree": undefined,
+          "trendOf": undefined,
           "type": null,
           "unit": null,
           Symbol(immer-draftable): true,
@@ -2027,6 +2042,7 @@ describe('column assignment integration', () => {
           "rowIndexName": null,
           "symbol": null,
           "tree": undefined,
+          "trendOf": undefined,
           "type": "number",
           "unit": null,
           Symbol(immer-draftable): true,
@@ -2088,6 +2104,7 @@ describe('previous', () => {
             "rowIndexName": null,
             "symbol": null,
             "tree": undefined,
+            "trendOf": undefined,
             "type": "number",
             "unit": null,
             Symbol(immer-draftable): true,
@@ -2116,6 +2133,7 @@ describe('previous', () => {
           "rowIndexName": null,
           "symbol": null,
           "tree": undefined,
+          "trendOf": undefined,
           "type": null,
           "unit": null,
           Symbol(immer-draftable): true,
@@ -2189,6 +2207,7 @@ describe('previous', () => {
             "rowIndexName": null,
             "symbol": null,
             "tree": undefined,
+            "trendOf": undefined,
             "type": "number",
             "unit": null,
             Symbol(immer-draftable): true,
@@ -2217,6 +2236,7 @@ describe('previous', () => {
           "rowIndexName": null,
           "symbol": null,
           "tree": undefined,
+          "trendOf": undefined,
           "type": null,
           "unit": null,
           Symbol(immer-draftable): true,
@@ -2290,6 +2310,7 @@ describe('previous', () => {
             "rowIndexName": null,
             "symbol": null,
             "tree": undefined,
+            "trendOf": undefined,
             "type": "number",
             "unit": null,
             Symbol(immer-draftable): true,
@@ -2318,6 +2339,7 @@ describe('previous', () => {
           "rowIndexName": null,
           "symbol": null,
           "tree": undefined,
+          "trendOf": undefined,
           "type": null,
           "unit": null,
           Symbol(immer-draftable): true,
@@ -2395,6 +2417,7 @@ describe('multi-dim ops', () => {
             "rowIndexName": null,
             "symbol": null,
             "tree": undefined,
+            "trendOf": undefined,
             "type": "number",
             "unit": [
               {
@@ -2456,6 +2479,7 @@ describe('multi-dim ops', () => {
           "rowIndexName": null,
           "symbol": null,
           "tree": undefined,
+          "trendOf": undefined,
           "type": null,
           "unit": null,
           Symbol(immer-draftable): true,
@@ -2543,6 +2567,7 @@ describe('multi-dim ops', () => {
               "rowIndexName": null,
               "symbol": null,
               "tree": undefined,
+              "trendOf": undefined,
               "type": "number",
               "unit": [
                 {
@@ -2590,6 +2615,7 @@ describe('multi-dim ops', () => {
             "rowIndexName": null,
             "symbol": null,
             "tree": undefined,
+            "trendOf": undefined,
             "type": null,
             "unit": null,
             Symbol(immer-draftable): true,
@@ -2618,6 +2644,7 @@ describe('multi-dim ops', () => {
           "rowIndexName": null,
           "symbol": null,
           "tree": undefined,
+          "trendOf": undefined,
           "type": null,
           "unit": null,
           Symbol(immer-draftable): true,

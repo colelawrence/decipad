@@ -15,6 +15,7 @@ import { encodeTable } from './encodeTable';
 import { encodeTree } from './encodeTree';
 import type { RecursiveEncoder } from './types';
 import { recursiveEncodeColumn } from './recursiveEncodeColumn';
+import { encodeTrend } from './encodeTrend';
 
 const recNoop = (_: Result.Result, __: DataView, offset: number) => offset;
 
@@ -120,6 +121,7 @@ export const recursiveEncoders: Record<
   'materialized-table': async (result, buffer, _offset) =>
     encodeTable(result, buffer, _offset, recursiveEncoders),
   tree: encodeTree,
+  trend: encodeTrend,
 };
 
 const noop = () => 0;
@@ -165,6 +167,8 @@ const encoders: Record<
     ),
   tree: (result, buffer, offset) =>
     recursiveEncoders.tree(result, buffer, offset, recursiveEncoders),
+  trend: (result, buffer, offset) =>
+    recursiveEncoders.trend(result, buffer, offset, recursiveEncoders),
 };
 
 export const valueEncoder = (type: SerializedType) => {

@@ -44,6 +44,13 @@ export function __wbgtest_console_warn(args: Array<any>): void;
 export function __wbgtest_console_error(args: Array<any>): void;
 /**
 */
+export enum ComputeErrors {
+  IncorrectType = 0,
+  UnknownId = 1,
+  InferError = 2,
+}
+/**
+*/
 export enum Kind {
   Number = 0,
   String = 1,
@@ -51,18 +58,11 @@ export enum Kind {
   Date = 3,
   Error = 4,
 }
-/**
-*/
-export enum ComputeErrors {
-  IncorrectType = 0,
-  UnknownId = 1,
-  InferError = 2,
-}
 export type DeciType = { type: "number" } | { type: "string" } | { type: "boolean" } | { type: "column" } | { type: "table" } | { type: "date"; specificity: DateSpecificity } | { type: "error" };
 
 export type DateSpecificity = "none" | "year" | "quarter" | "month" | "day" | "hour" | "minute" | "second" | "millisecond";
 
-export type ResultType = "Boolean" | "Fraction" | "String" | "Column" | "Date" | "Table" | "Range" | "Row" | "TypeError" | "Pending" | "ArbitraryFraction" | "Tree" | "Undefined";
+export type ResultType = "Boolean" | "Fraction" | "String" | "Column" | "Date" | "Table" | "Range" | "Row" | "TypeError" | "Pending" | "ArbitraryFraction" | "Tree" | "Function" | "Undefined";
 
 export type Importer = { type: "csv"; isFirstHeaderRow: boolean };
 

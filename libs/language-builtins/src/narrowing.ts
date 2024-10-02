@@ -128,7 +128,12 @@ export async function narrowTypes(
         });
       }
 
-      case 'tree':
+      case 'tree': {
+        throw new Error('trees cannot be narrowed');
+      }
+      case 'trend': {
+        throw new Error('trends cannot be narrowed');
+      }
       case 'materialized-table':
       case 'table': {
         throw new Error('tables cannot be narrowed');
