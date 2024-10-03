@@ -19,7 +19,7 @@ import {
   cssVar,
 } from '@decipad/ui';
 import { ErrorBoundary } from '@sentry/react';
-import type { FC, ReactElement } from 'react';
+import type { FC } from 'react';
 import { catalogDebounceTimeMs } from '../utils';
 import { catalogItems } from '../utils/catalogItems';
 import { groupByTab } from '../utils/groupByTab';
@@ -41,14 +41,12 @@ interface EditorSidebarProps {
   notebookId: string;
   editor: MyEditor;
   controller: EditorController;
-  formattingTabForm: ReactElement | null;
 }
 
 export const EditorSidebar: FC<EditorSidebarProps> = ({
   notebookId,
   editor,
   controller,
-  formattingTabForm,
 }) => {
   const notebookMetaData = useNotebookMetaData();
   assert(notebookMetaData.sidebarComponent.type === 'default-sidebar');
@@ -199,7 +197,7 @@ export const EditorSidebar: FC<EditorSidebarProps> = ({
           onExecute={myOnExec}
           search={search}
         />
-        <FormattingTab form={formattingTabForm} />
+        <FormattingTab editor={editor} />
       </UIEditorSidebar>
     </ErrorBoundary>
   );

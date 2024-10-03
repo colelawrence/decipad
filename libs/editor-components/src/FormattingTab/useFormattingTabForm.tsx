@@ -15,9 +15,7 @@ const proxyFactoryMatchesNode = (
   node: MyNode
 ) => match(node, null as any, predicate);
 
-export const useFormattingTabForm = (
-  editor?: MyEditor
-): ReactElement | null => {
+export const useFormattingTabForm = (editor: MyEditor): ReactElement | null => {
   const selectedBlockIds = Array.from(
     useBlockSelectionSelectors().selectedIds()
   ) as string[];
@@ -25,7 +23,7 @@ export const useFormattingTabForm = (
   const selectedNodes = useExternalEditorChange(
     editor,
     useCallback(
-      () => editor && getSelectedNodes(editor, selectedBlockIds),
+      () => getSelectedNodes(editor, selectedBlockIds),
       [editor, selectedBlockIds]
     )
   );
@@ -35,8 +33,6 @@ export const useFormattingTabForm = (
    * nodes that have forms (i.e. nodes that don't have forms are ignored).
    */
   return useMemo(() => {
-    if (!editor) return null;
-
     const selectedNodesWithProxies = (selectedNodes ?? []).filter((node) =>
       proxyFactories.some((factory) => proxyFactoryMatchesNode(factory, node))
     );

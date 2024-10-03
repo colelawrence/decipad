@@ -1,3 +1,4 @@
+export * from './useEditElement';
 export * from './useElementAbove';
 export * from './useEnsureValidVariableName';
 export * from './useGlobalParentNode';

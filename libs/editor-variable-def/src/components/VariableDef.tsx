@@ -8,6 +8,7 @@ import { assertElementType, mutateText } from '@decipad/editor-utils';
 import {
   useEditorStylesContext,
   useInsideLayoutContext,
+  useIsEditorReadOnly,
 } from '@decipad/react-contexts';
 import { VariableEditor } from '@decipad/ui';
 import { findNodePath, getNodeString } from '@udecode/plate-common';
@@ -15,6 +16,7 @@ import type { AvailableSwatchColor } from 'libs/ui/src/utils';
 import { useCallback } from 'react';
 import { useTurnIntoProps } from '../utils/useTurnIntoProps';
 import { VariableEditorContextProvider } from './VariableEditorContext';
+import { useEditElement } from '@decipad/editor-hooks';
 
 export const VariableDef: PlateComponent = ({
   attributes,
@@ -24,7 +26,9 @@ export const VariableDef: PlateComponent = ({
   assertElementType(element, ELEMENT_VARIABLE_DEF);
 
   const editor = useMyEditorRef();
+  const readOnly = useIsEditorReadOnly();
   const insideLayout = useInsideLayoutContext();
+  const onEdit = useEditElement(element);
 
   const inferredType = useTextTypeInference(element);
 
@@ -69,9 +73,11 @@ export const VariableDef: PlateComponent = ({
         <VariableEditor
           variant={element.variant}
           color={color as AvailableSwatchColor}
+          readOnly={readOnly}
           type={element.coerceToType ?? inferredType}
           value={getNodeString(element.children[1])}
           onChangeValue={onChangeValue}
+          onClickEdit={onEdit}
           insideLayout={insideLayout}
         >
           {children}

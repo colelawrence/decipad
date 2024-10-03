@@ -12,9 +12,12 @@ import {
   p24Medium,
   offBlack,
   transparency,
+  smallScreenQuery,
+  shortAnimationDuration,
 } from '../../../primitives';
 import { AvailableSwatchColor, swatchesThemed } from '../../../utils';
 import { ElementVariants } from '@decipad/editor-types';
+import { Settings2 } from 'libs/ui/src/icons';
 
 const leftBarSize = 2;
 
@@ -49,6 +52,12 @@ export const wrapperStyles = ({
      0px 2px 8px ${transparency(offBlack, 0.02).rgba},
      -${leftBarSize}px 0px ${color}`,
     marginLeft: `${leftBarSize}px`,
+
+    '--variable-editor-hover': 0,
+
+    '&:hover': {
+      '--variable-editor-hover': 1,
+    },
   });
 };
 
@@ -68,6 +77,42 @@ const headerWrapperStyles = css({
   gap: '4px',
   padding: '0 2px',
 });
+
+const iconWrapperStyles = (variant: ElementVariants) =>
+  css({
+    display: 'grid',
+    alignItems: 'center',
+    height: '20px',
+    width: '20px',
+    flexShrink: 0,
+    ...(variant === 'display' && {
+      position: 'absolute',
+      top: 0,
+      right: 0,
+    }),
+
+    [smallScreenQuery]: {
+      height: '16px',
+      width: '16px',
+    },
+  });
+
+const buttonWrapperStyles = (variant: ElementVariants) =>
+  css({
+    padding: '2px',
+    flexShrink: 0,
+    ':hover': {
+      backgroundColor: cssVar('backgroundDefault'),
+      borderRadius: '50%',
+    },
+    ...(variant === 'display' && {
+      position: 'absolute',
+      top: 0,
+      right: 0,
+      width: '20px',
+      height: '20px',
+    }),
+  });
 
 const variableNameStyles = css({
   alignSelf: 'start',
@@ -102,21 +147,25 @@ const hiddenChildrenStyles = css({
 interface VariableEditorProps {
   children?: ReactNode;
   color?: AvailableSwatchColor;
+  readOnly?: boolean;
   type?: SerializedType;
   variant?: ElementVariants;
   value?: string;
   onChangeValue?: (
     value: string | undefined // only booleans for now
   ) => void;
+  onClickEdit?: () => void;
   insideLayout?: boolean;
 }
 
 export const VariableEditor = ({
   children,
+  readOnly = false,
   color = 'Catskill',
   type,
   value,
   onChangeValue = noop,
+  onClickEdit,
   variant,
   insideLayout = false,
 }: VariableEditorProps): ReturnType<FC> => {
@@ -184,6 +233,30 @@ export const VariableEditor = ({
           ]}
         >
           <div css={variableNameStyles}>{childrenArray[0]}</div>
+
+          {variant && !readOnly && onClickEdit && (
+            <div
+              contentEditable={false}
+              css={[
+                iconWrapperStyles(variant),
+                {
+                  // Always visible on devices that cannot hover
+                  '@media (hover: hover)': {
+                    opacity: 'var(--variable-editor-hover)',
+                    transition: `opacity ${shortAnimationDuration}`,
+                  },
+                },
+              ]}
+            >
+              <button
+                type="button"
+                css={buttonWrapperStyles(variant)}
+                onClick={onClickEdit}
+              >
+                <Settings2 />
+              </button>
+            </div>
+          )}
         </div>
 
         {editor}

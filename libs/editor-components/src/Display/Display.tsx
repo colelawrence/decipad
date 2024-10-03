@@ -5,6 +5,7 @@ import {
   useNodePath,
   usePathMutatorCallback,
   useComputer,
+  useEditElement,
 } from '@decipad/editor-hooks';
 import type {
   PlateComponent,
@@ -38,6 +39,7 @@ export const Display: PlateComponent = ({ attributes, element, children }) => {
   const userEvents = useContext(ClientEventsContext);
   const readOnly = useIsEditorReadOnly();
   const insideLayout = useInsideLayoutContext();
+  const onEdit = useEditElement(element);
 
   const editor = useMyEditorRef();
   const path = useNodePath(element);
@@ -168,7 +170,9 @@ export const Display: PlateComponent = ({ attributes, element, children }) => {
         <VariableEditor
           variant="display"
           color={color as AvailableSwatchColor}
+          readOnly={readOnly}
           insideLayout={insideLayout}
+          onClickEdit={onEdit}
         >
           <DisplayWidget
             openMenu={openMenu}

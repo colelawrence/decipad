@@ -1,11 +1,14 @@
-import { ReactElement } from 'react';
 import { NotebookFormatting } from './NotebookFormatting';
+import { MyEditor } from '@decipad/editor-types';
+import { useFormattingTabForm } from './useFormattingTabForm';
 
 export interface FormattingTabProps {
-  form: ReactElement | null;
+  editor: MyEditor;
 }
 
-export const FormattingTab = ({ form }: FormattingTabProps) => {
+export const FormattingTab = ({ editor }: FormattingTabProps) => {
+  const form = useFormattingTabForm(editor);
+
   // Default to NotebookFormatting if no other form is visible
   return form ?? <NotebookFormatting />;
 };
