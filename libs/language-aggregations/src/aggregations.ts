@@ -132,6 +132,13 @@ const aggregationTypes: { [type: string]: AggregationType[] } = {
       expression: (colRef) => `count(${colRef})`,
     },
   ],
+  trend: [
+    {
+      id: 'number:sum',
+      name: 'Sum',
+      expression: (colRef) => `sum(${colRef})`,
+    },
+  ],
 };
 
 const typeById = once(() => {

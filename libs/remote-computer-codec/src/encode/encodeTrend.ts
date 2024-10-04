@@ -1,4 +1,8 @@
-import type { Result, SerializedType } from '@decipad/language-interfaces';
+import {
+  Unknown,
+  type Result,
+  type SerializedType,
+} from '@decipad/language-interfaces';
 // eslint-disable-next-line no-restricted-imports
 import { Value } from '@decipad/language-types';
 import type { RecursiveEncoder } from './types';
@@ -16,6 +20,13 @@ export const encodeTrend = async (
     throw new TypeError('Trend: Expected trend type');
   }
   let offset = _offset;
+  if (value === Unknown) {
+    buffer.setUint8(offset, 0);
+    offset += 1;
+    return offset;
+  }
+  buffer.setUint8(offset, 1);
+  offset += 1;
   if (!Value.isTrendValue(value)) {
     throw new TypeError('Trend: Expected trend value');
   }

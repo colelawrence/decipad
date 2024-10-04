@@ -2029,7 +2029,7 @@ describe('column assignment integration', () => {
           "functionScopeDepth": undefined,
           "functionness": false,
           "indexName": null,
-          "indexedBy": null,
+          "indexedBy": "T1",
           "node": null,
           "nothingness": false,
           "numberError": null,

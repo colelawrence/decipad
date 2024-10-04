@@ -1,4 +1,4 @@
-import { Result } from '@decipad/language-interfaces';
+import { Result, Unknown } from '@decipad/language-interfaces';
 import { RecursiveDecoder } from './types';
 // eslint-disable-next-line no-restricted-imports
 import { Value } from '@decipad/language-types';
@@ -15,6 +15,12 @@ export const decodeTrend: RecursiveDecoder = async (
     throw new TypeError('Trend: Expected trend type');
   }
   let offset = _offset;
+
+  const hasValue = buffer.getUint8(offset);
+  offset += 1;
+  if (hasValue === 0) {
+    return [Unknown, offset];
+  }
 
   const hasFirst = buffer.getUint8(offset) !== 0;
   offset += 1;

@@ -29,3 +29,10 @@ export class Trend implements Value.Value {
 }
 
 export const isTrendValue = (v: unknown): v is Trend => v instanceof Trend;
+
+export const getTrendValue = (v: unknown): Trend | undefined => {
+  if (v instanceof Trend) {
+    return v;
+  }
+  return undefined;
+};

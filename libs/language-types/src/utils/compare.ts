@@ -118,9 +118,6 @@ function compareToNumber(a: Comparable, b: Comparable): number | bigint {
     return lengthComparison;
   }
 
-  console.warn(
-    `Don't know how to compare ${a.toString()} (${typeof a}) against ${b.toString()} (${typeof b})`
-  );
   return 1;
 }
 

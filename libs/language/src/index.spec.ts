@@ -812,7 +812,7 @@ describe('Tables', () => {
           "functionScopeDepth": undefined,
           "functionness": false,
           "indexName": null,
-          "indexedBy": null,
+          "indexedBy": "Table",
           "node": null,
           "nothingness": false,
           "numberError": null,

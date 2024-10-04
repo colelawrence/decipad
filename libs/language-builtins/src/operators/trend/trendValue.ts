@@ -50,25 +50,38 @@ const getTableColumn = (table: Result.OneResult, columnIndex: number) => {
 };
 
 const compareNumberColumns =
-  async (
+  (
     columnA: Result.ResultGenerator,
     columnB: Result.ResultGenerator
-  ): Promise<Result.ResultGenerator> =>
+  ): Result.ResultGenerator =>
   (start = 0, end = Infinity) =>
     map(zip(columnA(start, end), columnB(start, end)), ([a, b]) =>
       compareNumbers(a, b)
     );
 
-const compareColumns = async (
+// const ensureSame =
+//   (columnA: Result.ResultGenerator, columnB: Result.ResultGenerator) =>
+//   (start = 0, end = Infinity) =>
+//     map(zip(columnA(start, end), columnB(start, end)), ([a, b], index) => {
+//       if (compare(a as Comparable, b as Comparable) !== 0) {
+//         throw new RuntimeError(
+//           `mismatch value ( ${String(a)} / ${String(b)}) at row index ${index}`
+//         );
+//       }
+//       return a;
+//     });
+
+const compareColumns = (
   columnType: Type,
   columnA: Result.ResultGenerator,
   columnB: Result.ResultGenerator
-): Promise<Result.ResultGenerator> => {
+): Result.ResultGenerator => {
   if (columnType.type === 'number') {
-    console.log('compareNumberColumns');
     return compareNumberColumns(columnA, columnB);
   }
-  return columnB;
+  return columnA;
+  // TODO: endure the values are the exact same
+  // return ensureSame(columnA, columnB);
 };
 
 const compareTables = async (

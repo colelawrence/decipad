@@ -74,6 +74,7 @@ export interface Type {
   isScalar(type: PrimitiveTypeName): Promise<Type>;
   isColumn(): Promise<Type>;
   isTree(): Promise<Type>;
+  isTrend(): Promise<Type>;
   isFunction(): Promise<Type>;
   isTable(): Promise<Type>;
   isTableOrRow(): Promise<Type>;

@@ -169,6 +169,10 @@ export class Type implements TypeInterface {
     return isTree(this);
   }
 
+  async isTrend(): Promise<Type> {
+    return isTrend(this);
+  }
+
   async isFunction(): Promise<Type> {
     return isFunction(this);
   }
@@ -511,6 +515,14 @@ export const isTree = checker(async (me: Type) => {
     return me;
   } else {
     return me.expected('tree');
+  }
+});
+
+export const isTrend = checker(async (me: Type) => {
+  if (me.trendOf != null) {
+    return me;
+  } else {
+    return me.expected('trend');
   }
 });
 
