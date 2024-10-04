@@ -158,21 +158,26 @@ const ConcreteIntegration: FC<IntegrationProps> = ({ workspaceId, editor }) => {
     onExecute((v) => [...v, { status: 'run' }]);
     setLoading(true);
 
-    runner.import().then((res) => {
-      setLoading(false);
+    runner
+      .import()
+      .then((res) => {
+        setLoading(false);
 
-      if (res instanceof Error) {
-        onExecute((v) => [...v, { status: 'error', err: blockId }]);
-        return;
-      }
+        if (res instanceof Error) {
+          onExecute((v) => [...v, { status: 'error', err: res.message }]);
+          return;
+        }
 
-      if (res) {
-        queries.incrementUsageWithBackend(workspaceId);
-      }
+        if (res) {
+          queries.incrementUsageWithBackend(workspaceId);
+        }
 
-      onExecute((v) => [...v, { status: 'success', ok: true }]);
-    });
-  }, [blockId, queries, reachedLimit, runner, workspaceId]);
+        onExecute((v) => [...v, { status: 'success', ok: true }]);
+      })
+      .catch((err) => {
+        onExecute((v) => [...v, { status: 'error', err: err.message }]);
+      });
+  }, [queries, reachedLimit, runner, workspaceId]);
 
   const screen = useIntegrationScreenFactory(
     workspaceId,

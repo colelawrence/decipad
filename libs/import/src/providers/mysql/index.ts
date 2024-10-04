@@ -57,11 +57,11 @@ export const mysql: Provider = {
     const fetchRes = await fetchQuery(getUrl(params), options.query);
     if (fetchRes == null || fetchRes.type === 'error') {
       throw new Error(
-        `An error has occured whilst fetching\n${JSON.stringify(
-          fetchRes,
-          null,
-          2
-        )}`
+        `An error has occured whilst fetching: \n${
+          fetchRes?.error || fetchRes?.message
+            ? `${fetchRes.error ?? ''}: ${fetchRes?.message ?? ''}`
+            : JSON.stringify(fetchRes, null, 2)
+        }`
       );
     }
 
