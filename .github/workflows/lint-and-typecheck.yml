@@ -9,7 +9,7 @@ on:
 jobs:
   build:
     name: 📋 Lint & Typecheck
-    timeout-minutes: 45
+    timeout-minutes: 60
     runs-on: ubuntu-latest
     concurrency:
       group: lint-typecheck-${{ github.head_ref }}
