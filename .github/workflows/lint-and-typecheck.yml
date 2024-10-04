@@ -62,10 +62,7 @@ jobs:
         if: steps.cache-check.outputs.restored != 'true'
 
       - name: Lint
-        run:
-          npx nx affected --target=lint --parallel=2 --skip-nx-cache
-          # Runs command only for nx tasks on affected files based on file changes:
-          # npx nx run-many --target=lint --parallel=2 --skip-nx-cache
+        run: npx nx affected --target=lint --parallel=2
 
       - name: Typecheck
         run: yarn typecheck

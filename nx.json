@@ -1,7 +1,5 @@
 {
-  "affected": {
-    "defaultBase": "main"
-  },
+  "affected": { "defaultBase": "main" },
   "npmScope": "decipad",
   "tasksRunnerOptions": {
     "default": {
@@ -12,7 +10,6 @@
           "test",
           "e2e",
           "build-storybook",
-          "deploy",
           "depcheck"
         ],
         "runtimeCacheInputs": [
@@ -65,18 +62,15 @@
           "echo WORKSPACE_FREE_PLAN=$WORKSPACE_FREE_PLAN",
           "echo WORKSPACE_PRO_PLAN=$WORKSPACE_PRO_PLAN"
         ],
-        "parallel": 12
+        "parallel": 12,
+        "accessToken": "ODYzMjhhZjAtMTNiZS00YWVjLWE3M2ItN2VmYjZkNTc3MTFlfHJlYWQtd3JpdGU="
       }
     }
   },
   "defaultProject": "frontend",
   "targetDefaults": {
-    "lint": {
-      "inputs": ["default"]
-    },
-    "build": {
-      "inputs": ["production", "^production"]
-    },
+    "lint": { "inputs": ["default"] },
+    "build": { "inputs": ["production", "^production"] },
     "test": {
       "inputs": ["default", "^production", "{workspaceRoot}/jest.preset.js"]
     },
