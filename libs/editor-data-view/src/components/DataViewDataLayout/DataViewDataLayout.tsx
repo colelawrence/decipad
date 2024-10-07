@@ -1,7 +1,12 @@
 import type { FC, ReactNode } from 'react';
 import { useEffect, useMemo, useState } from 'react';
 import { css } from '@emotion/react';
-import { DataViewRow, PaginationControl, p13Medium } from '@decipad/ui';
+import {
+  DataViewRow,
+  PaginationControl,
+  p13Medium,
+  PendingResult,
+} from '@decipad/ui';
 import type { DataViewElement, DataViewFilter } from '@decipad/editor-types';
 import type { AggregationKind, Column } from '../../types';
 import { treeToTable } from '../../utils/treeToTable';
@@ -10,6 +15,7 @@ import { DataViewDataGroupElement } from '../DataViewDataGroup';
 import { SmartCell } from '../SmartCell';
 import { getAggregationShortName } from '../../../../language-aggregations/src/aggregations';
 import { DataViewTableHeader } from '../DataViewTableHeader/DataViewTableHeader';
+import { Unknown } from '@decipad/language-interfaces';
 
 export interface DataViewLayoutProps {
   element: DataViewElement;
@@ -106,6 +112,10 @@ export const DataViewDataLayout: FC<DataViewLayoutProps> = ({
     () => (groups ? Math.ceil(groups.length / MAX_PAGE_SIZE) : 0),
     [groups]
   );
+
+  if (!table.length && columns.length > 0) {
+    return <PendingResult type={{ kind: 'pending' }} value={Unknown} />;
+  }
 
   return (
     <>

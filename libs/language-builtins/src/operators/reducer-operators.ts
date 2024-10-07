@@ -97,6 +97,9 @@ export const reducerOperators: { [fname: string]: BuiltinSpec } = {
     },
     async functor([type]) {
       const cellType = await (await type.isColumn()).reduced();
+      if (cellType.pending) {
+        return cellType;
+      }
       return Type.either(cellType.isScalar('number'), cellType.isTrend());
     },
     explanation: 'Adds all the elements of a column.`',

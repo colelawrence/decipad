@@ -82,3 +82,4 @@ export * from './ColumnDndPreview/ColumnDndPreview';
 export * from './EditorIcon/EditorIcon';
 export * from './BlockContextualActions/BlockContextualActions';
 export * from './VariableTypeMenu';
+export * from './PendingResult/PendingResult';

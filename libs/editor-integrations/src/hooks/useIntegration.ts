@@ -39,6 +39,21 @@ export const useIntegration = (
     runner.setName(varName);
   }, [runner, varName]);
 
+  // first result is unknown
+  const pushedUnknown = useRef(false);
+  useEffect(() => {
+    if (!pushedUnknown.current) {
+      pushedUnknown.current = true;
+      pushResultToComputer(computer, element.id ?? '', varName, {
+        type: {
+          kind: 'pending',
+        },
+        value: Unknown,
+        meta: undefined,
+      });
+    }
+  }, [computer, element.id, varName]);
+
   useEffect(() => {
     (async () => {
       if (gen < 0) {

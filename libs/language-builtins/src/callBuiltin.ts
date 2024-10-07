@@ -44,7 +44,8 @@ const createLowerDimFn =
   ): Promise<ValueTypes.Value> => {
     if (
       !builtin.likesUnknowns &&
-      argsLowerDims.some((d) => d === Value.UnknownValue)
+      (typesLowerDims.some((t) => t.pending) ||
+        argsLowerDims.some((d) => d === Value.UnknownValue))
     ) {
       return Value.UnknownValue;
     }
