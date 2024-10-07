@@ -59,4 +59,6 @@ export interface IntegrationBlock<
   timeOfLastRun: string | undefined | null;
 
   integrationType: Extract<IntegrationTypes, { type: T }>;
+
+  hideResult?: boolean;
 }

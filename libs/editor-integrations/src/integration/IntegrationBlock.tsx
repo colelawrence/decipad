@@ -1,6 +1,10 @@
-import { getNodeString, getPreviousNode } from '@udecode/plate-common';
+import {
+  getNodeString,
+  getPreviousNode,
+  setNodes,
+} from '@udecode/plate-common';
 import type { ComponentProps } from 'react';
-import { useCallback, useState, useEffect } from 'react';
+import { useCallback, useEffect } from 'react';
 import { useClientEvents } from '@decipad/client-events';
 import {
   DraggableBlock,
@@ -26,7 +30,6 @@ import {
   useNotebookMetaData,
   useResourceUsage,
 } from '@decipad/react-contexts';
-import { removeFocusFromAllBecauseSlate } from '@decipad/react-utils';
 import { Result, getExprRef } from '@decipad/remote-computer';
 import {
   AnimatedIcon,
@@ -54,7 +57,6 @@ export const IntegrationBlock: PlateComponent = ({
 }) => {
   assertElementType(element, ELEMENT_INTEGRATION);
 
-  const [showData, setShowData] = useState(true);
   const { onRefresh, loading, error } = useIntegration(element);
 
   // error handling
@@ -193,17 +195,26 @@ export const IntegrationBlock: PlateComponent = ({
             disabled: queries.hasReachedLimit,
           },
           {
-            children: showData ? <icons.Hide /> : <icons.Show />,
-            onClick: () => {
-              setShowData(!showData);
-              removeFocusFromAllBecauseSlate();
+            children: element.hideResult ? <icons.Show /> : <icons.Hide />,
+            onClick: (ev) => {
+              ev.preventDefault();
+              ev.stopPropagation();
+              if (path) {
+                setNodes(
+                  editor,
+                  { hideResult: !element.hideResult },
+                  { at: path }
+                );
+              }
             },
-            tooltip: `${showData ? 'Hide' : 'Show'} table`,
+            tooltip: `${element.hideResult ? 'Show' : 'Hide'} table`,
           },
         ]}
         result={result}
         resultPreview={
-          result != null ? <CodeResult {...result} isLiveResult /> : null
+          result != null && !element.hideResult ? (
+            <CodeResult {...result} isLiveResult />
+          ) : null
         }
       >
         {children}
