@@ -5,13 +5,7 @@
     "default": {
       "runner": "nx-cloud",
       "options": {
-        "cacheableOperations": [
-          "lint",
-          "test",
-          "e2e",
-          "build-storybook",
-          "depcheck"
-        ],
+        "cacheableOperations": ["lint", "test", "depcheck"],
         "runtimeCacheInputs": [
           "node -v",
           "echo DEPLOY_NAME=$DEPLOY_NAME",

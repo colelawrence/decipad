@@ -70,7 +70,7 @@ jobs:
           NODE_OPTIONS: '--enable-source-maps --max_old_space_size=16384'
 
       - name: Depcheck
-        run: yarn depcheck
+        run: npx nx affected --target=depcheck --parallel=2
         env:
           NODE_OPTIONS: '--max_old_space_size=32768'
 
