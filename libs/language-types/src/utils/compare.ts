@@ -2,11 +2,10 @@
 // eslint-disable-next-line no-restricted-imports
 import type { DeciNumberInput } from '@decipad/number';
 import type DeciNumber from '@decipad/number';
-import { N, isDeciNumberInput } from '@decipad/number';
+import { N, ZERO, isDeciNumberInput } from '@decipad/number';
 import { zip } from '@decipad/utils';
 import type { DeepReadonly } from 'utility-types';
-import type { Value } from '@decipad/language-interfaces';
-import { Unknown } from '@decipad/language-interfaces';
+import { Value, Unknown } from '@decipad/language-interfaces';
 import { UnknownValue } from '../Value/Unknown';
 import { NumberValue } from '../Value/Number';
 import { StringValue } from '../Value/String';
@@ -116,6 +115,15 @@ function compareToNumber(a: Comparable, b: Comparable): number | bigint {
     }
 
     return lengthComparison;
+  }
+
+  if (Value.isTrendValue(a) && Value.isTrendValue(b)) {
+    return (
+      (a.diff?.compare(b.diff ?? ZERO) ||
+        a.first?.compare(b.last ?? ZERO) ||
+        a.first?.compare(b.last ?? ZERO)) ??
+      1
+    );
   }
 
   return 1;

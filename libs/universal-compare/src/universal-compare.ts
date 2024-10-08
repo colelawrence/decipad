@@ -1,8 +1,9 @@
 // eslint-disable-next-line no-restricted-imports
 import type { DeciNumberInput } from '@decipad/number';
 import type DeciNumber from '@decipad/number';
-import { isDeciNumberInput, N } from '@decipad/number';
+import { isDeciNumberInput, N, ZERO } from '@decipad/number';
 import { zip } from '@decipad/utils';
+import { Value } from '@decipad/language-interfaces';
 
 export type CompareResult = -1 | 0 | 1;
 
@@ -17,9 +18,11 @@ export type Comparable =
   | DeciNumberInput
   // eslint-disable-next-line @typescript-eslint/ban-types
   | Function
+  | Value.TrendValue
   | ReadonlyArray<Comparable>;
 
 /** Returns the sign of a comparison between two things, whatever they may be */
+// eslint-disable-next-line complexity
 function compareToNumber(a: Comparable, b: Comparable): number | bigint {
   if (isDeciNumberInput(a) && isDeciNumberInput(b)) {
     return N(a).compare(N(b));
@@ -55,6 +58,14 @@ function compareToNumber(a: Comparable, b: Comparable): number | bigint {
   }
   if (typeof a === 'symbol' || typeof b === 'symbol') {
     return compareToNumber(a?.toString(), b?.toString());
+  }
+  if (Value.isTrendValue(a) && Value.isTrendValue(b)) {
+    return (
+      (a.diff?.compare(b.diff ?? ZERO) ||
+        a.first?.compare(b.last ?? ZERO) ||
+        a.first?.compare(b.last ?? ZERO)) ??
+      1
+    );
   }
 
   return 1;
