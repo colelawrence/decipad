@@ -127,21 +127,25 @@ export class BlockProcessor {
         return;
       }
 
+      const dirtyOnes = [
+        ...this.DirtyBlocksSet.values(),
+      ] as Iterable<AnyElement>;
+      this.DirtyBlocksSet.clear();
+      const removedOnes = [...this.RemovedNodes];
+      this.RemovedNodes = [];
+
       const changedProgram = await editorToProgram(
         this.rootEditor,
-        this.DirtyBlocksSet.values() as Iterable<AnyElement>,
+        dirtyOnes,
         this.Computer
       );
 
       await this.Computer.pushComputeDelta({
         program: {
           upsert: changedProgram,
-          remove: this.RemovedNodes,
+          remove: removedOnes,
         },
       });
-
-      this.DirtyBlocksSet.clear();
-      this.RemovedNodes = [];
     });
   }
 
