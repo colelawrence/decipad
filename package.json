@@ -103,7 +103,7 @@
     "@babel/preset-react": "^7.24.7",
     "@chakra-ui/css-reset": "2.3.0",
     "@codemirror/lang-javascript": "^6.2.0",
-    "@codemirror/lang-sql": "^6.7.0",
+    "@codemirror/lang-sql": "^6.8.0",
     "@decipad/safejs": "^1.0.2",
     "@emotion/babel-plugin": "^11.12.0",
     "@emotion/cache": "11.13.1",

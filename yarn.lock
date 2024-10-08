@@ -4127,10 +4127,10 @@
     "@lezer/common" "^1.0.0"
     "@lezer/javascript" "^1.0.0"
 
-"@codemirror/lang-sql@^6.7.0":
-  version "6.7.0"
-  resolved "https://registry.yarnpkg.com/@codemirror/lang-sql/-/lang-sql-6.7.0.tgz#a87fb9b458ae0ad1d8647c0234accca0ef11bb78"
-  integrity sha512-KMXp6rtyPYz6RaElvkh/77ClEAoQoHRPZo0zutRRialeFs/B/X8YaUJBCnAV2zqyeJPLZ4hgo48mG8TKoNXfZA==
+"@codemirror/lang-sql@^6.8.0":
+  version "6.8.0"
+  resolved "https://registry.yarnpkg.com/@codemirror/lang-sql/-/lang-sql-6.8.0.tgz#1ae68ad49f378605ff88a4cc428ba667ce056068"
+  integrity sha512-aGLmY4OwGqN3TdSx3h6QeA1NrvaYtF7kkoWR/+W7/JzB0gQtJ+VJxewlnE3+VImhA4WVlhmkJr109PefOOhjLg==
   dependencies:
     "@codemirror/autocomplete" "^6.0.0"
     "@codemirror/language" "^6.0.0"
