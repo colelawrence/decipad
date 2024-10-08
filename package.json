@@ -470,7 +470,7 @@
     "@types/webpack": "5.28.0",
     "@typescript-eslint/eslint-plugin": "7.18.0",
     "@typescript-eslint/parser": "7.18.0",
-    "@vitejs/plugin-react-swc": "^3.5.0",
+    "@vitejs/plugin-react-swc": "^3.7.1",
     "@vitest/web-worker": "^1.6.0",
     "ascii-table": "^0.0.9",
     "chokidar-cli": "3.0.0",

@@ -11190,7 +11190,7 @@
     "@swc/core-win32-ia32-msvc" "1.3.101"
     "@swc/core-win32-x64-msvc" "1.3.101"
 
-"@swc/core@^1.3.96", "@swc/core@^1.5.22", "@swc/core@^1.7.0":
+"@swc/core@^1.5.22", "@swc/core@^1.7.0", "@swc/core@^1.7.26":
   version "1.7.26"
   resolved "https://registry.yarnpkg.com/@swc/core/-/core-1.7.26.tgz#beda9b82063fcec7b56c958804a4d175aecf9a9d"
   integrity sha512-f5uYFf+TmMQyYIoxkn/evWhNGuUzC730dFwAKGwBVHHVoPyak1/GvJUm6i1SKl+2Hrj9oN0i3WSoWWZ4pgI8lw==
@@ -12994,12 +12994,12 @@
   resolved "https://registry.yarnpkg.com/@viselect/vanilla/-/vanilla-3.1.0.tgz#66ef6eaa383a053c24bd2f6d8db1691f5b32e6bb"
   integrity sha512-B0cvgsHandCXXsqp3O09HKR6buJa6kGpzu/Y9gQOiKcE26mbfRlZIGKBcYEdOELmRa+QrzG6ydegjNET/htsGg==
 
-"@vitejs/plugin-react-swc@^3.5.0":
-  version "3.5.0"
-  resolved "https://registry.yarnpkg.com/@vitejs/plugin-react-swc/-/plugin-react-swc-3.5.0.tgz#1fadff5148003e8091168c431e44c850f9a39e74"
-  integrity sha512-1PrOvAaDpqlCV+Up8RkAh9qaiUjoDUcjtttyhXDKw53XA6Ve16SOp6cCOpRs8Dj8DqUQs6eTW5YkLcLJjrXAig==
+"@vitejs/plugin-react-swc@^3.7.1":
+  version "3.7.1"
+  resolved "https://registry.yarnpkg.com/@vitejs/plugin-react-swc/-/plugin-react-swc-3.7.1.tgz#bc5af48ef35c525d623fa14177c912cbaa86a846"
+  integrity sha512-vgWOY0i1EROUK0Ctg1hwhtC3SdcDjZcdit4Ups4aPkDcB1jYhmo+RMYWY87cmXMhvtD5uf8lV89j2w16vkdSVg==
   dependencies:
-    "@swc/core" "^1.3.96"
+    "@swc/core" "^1.7.26"
 
 "@vitest/coverage-v8@^1.6.0":
   version "1.6.0"
