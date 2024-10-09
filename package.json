@@ -479,7 +479,7 @@
     "data-urls": "5.0.0",
     "debug": "^4.3.4",
     "dependency-cruiser": "^16.4.0",
-    "diff": "5.2.0",
+    "diff": "7.0.0",
     "esbuild": "0.24.0",
     "eslint": "8.57.0",
     "eslint-config-airbnb-base": "^15.0.0",
