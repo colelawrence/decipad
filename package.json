@@ -301,7 +301,7 @@
     "lodash.unzip": "^3.4.0",
     "lodash.zip": "^4.2.0",
     "lru-cache": "^10.4.3",
-    "lucide-react": "0.441.0",
+    "lucide-react": "0.451.0",
     "luxon": "3.5.0",
     "mailersend": "^2.3.0",
     "md5": "^2.3.0",
