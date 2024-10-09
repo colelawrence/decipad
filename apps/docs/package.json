@@ -15,7 +15,7 @@
     "@docusaurus/utils-validation": "3.1.1",
     "@docusaurus/theme-common": "3.1.1",
     "docusaurus-plugin-segment": "1.0.4",
-    "@sindresorhus/is": "6.3.0"
+    "@sindresorhus/is": "7.0.1"
   },
   "devDependencies": {
     "@docusaurus/module-type-aliases": "3.1.1",
@@ -26,7 +26,7 @@
     "node": ">=18.0"
   },
   "resolutions": {
-    "@sindresorhus/is": "6.3.0",
+    "@sindresorhus/is": "7.0.1",
     "react-router": "6.26.2"
   }
 }
