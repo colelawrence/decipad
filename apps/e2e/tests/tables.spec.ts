@@ -873,23 +873,24 @@ test('table categories', async ({ testUser }) => {
     ).toBeVisible();
   }
 
-  // check new table with categories was added
-  await page.reload();
-  await notebook.waitForEditorToLoad();
-  await testUser.notebook.closeSidebar();
+  await expect(async () => {
+    // check new table with categories was added
+    await page.reload();
+    await notebook.waitForEditorToLoad();
+    await testUser.notebook.closeSidebar();
 
-  // eslint-disable-next-line playwright/no-wait-for-timeout
-  await page.waitForTimeout(Timeouts.computerDelay);
-
-  // check both tables still have categories
-  for (const option of dropdownOptions) {
-    await expect(
-      table.getByRole('button', { name: new RegExp(option) }).first()
-    ).toBeVisible();
-    await expect(
-      tableCopy.getByRole('button', { name: new RegExp(option) }).first()
-    ).toBeVisible();
-  }
+    // eslint-disable-next-line playwright/no-wait-for-timeout
+    await page.waitForTimeout(Timeouts.computerDelay);
+    // check both tables still have categories
+    for (const option of dropdownOptions) {
+      await expect(
+        table.getByRole('button', { name: new RegExp(option) }).first()
+      ).toBeVisible();
+      await expect(
+        tableCopy.getByRole('button', { name: new RegExp(option) }).first()
+      ).toBeVisible();
+    }
+  }).toPass();
 });
 
 test('table smart row', async ({ testUser }) => {

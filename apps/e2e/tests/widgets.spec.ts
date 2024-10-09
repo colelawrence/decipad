@@ -248,11 +248,14 @@ test('dropdown widget', async ({ randomFreeUser }) => {
     await writeInTable(page, 'Three', 3, 0);
 
     await page.locator('[aria-roledescription="dropdown-open"]').click();
-    expect(await notebook.getDropdownOptions()).toEqual([
-      'Table.Column1',
-      'Table.Column2',
-      'Table.Column3',
-    ]);
+
+    await expect(async () => {
+      expect(await notebook.getDropdownOptions()).toEqual([
+        'Table.Column1',
+        'Table.Column2',
+        'Table.Column3',
+      ]);
+    }).toPass();
 
     await page
       .locator('[aria-roledescription="dropdownOption"] >> nth=0')
