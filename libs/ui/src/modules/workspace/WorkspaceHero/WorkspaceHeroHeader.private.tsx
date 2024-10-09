@@ -1,17 +1,19 @@
-import { useCanUseDom } from '@decipad/react-utils';
+import { useCanUseDom, usePromise } from '@decipad/react-utils';
 import { docs } from '@decipad/routing';
 import styled from '@emotion/styled';
 import { useSession } from 'next-auth/react';
-import { useContext } from 'react';
+import { useCallback, useContext, useEffect, useState } from 'react';
 import { Button, SearchBar, HelpMenu } from '../../../shared';
 import { Add, Users } from '../../../icons';
 import { ClientEventsContext } from '@decipad/client-events';
 import { cssVar } from '../../../primitives';
 import { PermissionType } from 'libs/ui/src/types';
+import { useToast } from '@decipad/toast';
+import { captureException } from '@sentry/browser';
 
 type WorkspaceHeroHeaderProps = {
   membersHref?: string;
-  onCreateNotebook?: () => void;
+  onCreateNotebook?: () => Promise<void>;
   permissionType?: PermissionType | null;
 };
 
@@ -20,9 +22,28 @@ export const WorkspaceHeroHeader: React.FC<WorkspaceHeroHeaderProps> = ({
   onCreateNotebook,
   permissionType,
 }) => {
+  const [createNotebookPromise, setCreateNotebookPromise] = useState<
+    Promise<unknown> | undefined
+  >();
   const { status: sessionStatus } = useSession();
   const canUseDom = useCanUseDom();
   const clientEvent = useContext(ClientEventsContext);
+
+  const innerCreateNotebook = useCallback(() => {
+    setCreateNotebookPromise(onCreateNotebook?.());
+  }, [onCreateNotebook]);
+
+  const [, loading, error] = usePromise(createNotebookPromise);
+
+  const toast = useToast();
+  useEffect(() => {
+    if (error) {
+      console.error(error);
+      captureException(error);
+      toast.error('Failed to create notebook');
+    }
+  });
+
   return (
     <Container>
       <SearchBarRestyle>
@@ -64,8 +85,9 @@ export const WorkspaceHeroHeader: React.FC<WorkspaceHeroHeaderProps> = ({
 
         <Button
           type="primaryBrand"
-          onClick={onCreateNotebook}
+          onClick={innerCreateNotebook}
           testId="new-notebook"
+          disabled={loading}
         >
           <TextWithIcon>
             <Add />

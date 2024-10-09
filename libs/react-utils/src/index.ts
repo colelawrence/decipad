@@ -16,6 +16,7 @@ export * from './useIsHovering';
 export * from './useLocalStorage';
 export * from './useMemoPath';
 export * from './usePagination';
+export * from './usePromise';
 export * from './useResolved';
 export * from './useStableCallback';
 export * from './lazyLoad';

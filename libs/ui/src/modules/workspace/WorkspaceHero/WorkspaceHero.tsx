@@ -22,7 +22,7 @@ type WorkspaceHeroProps = {
   membersHref?: string;
   creditsHref?: string;
   permissionType?: PermissionType | null;
-  onCreateNotebook?: () => void;
+  onCreateNotebook?: () => Promise<void>;
 
   hasReachedAiLimit: boolean;
   aiCreditsLeft: number;
