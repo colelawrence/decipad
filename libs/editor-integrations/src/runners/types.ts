@@ -214,6 +214,49 @@ export class CSVRunner extends GenericContainerRunner implements GenericRunner {
   }
 }
 
+const getVariablesFromComputer = (computer: Computer): Record<string, any> => {
+  const notebookResults = computer.results$.get();
+  const resultMap: Record<string, any> = {};
+
+  for (const res of Object.values(notebookResults.blockResults)) {
+    if (res.type === 'identified-error') {
+      continue;
+    }
+
+    const varName = computer.getSymbolDefinedInBlock(res.id);
+    if (varName == null) {
+      continue;
+    }
+
+    switch (res.result.type.kind) {
+      case 'string':
+      case 'boolean': {
+        resultMap[varName] = res.result.value?.valueOf();
+        break;
+      }
+      case 'number': {
+        const [, valOf] = safeNumberForPrecision(
+          res.result.value as DeciNumber
+        );
+        resultMap[varName] = valOf;
+        break;
+      }
+      case 'date': {
+        if (typeof res.result.value !== 'bigint') {
+          break;
+        }
+        const date = new Date(Number(res.result.value));
+        resultMap[varName] = date;
+      }
+    }
+  }
+
+  return resultMap;
+};
+
+// Matches on {{var_name}} etc.
+export const varIdentifierRegex = /{{\s*([_$a-z][_$a-z0-9]*)\s*}}/gi;
+
 export class LegacyRunner
   extends GenericContainerRunner
   implements GenericRunner
@@ -310,11 +353,56 @@ export class LegacyRunner
     const worker = await this.getWorker();
 
     return new Promise<string | Error | undefined>((resolve, _reject) => {
+      const computer = getNotebookStore(this.padId!).getState().computer!;
+      const variables = getVariablesFromComputer(computer);
+
+      const identifiers = [...this.query.matchAll(varIdentifierRegex)];
+
+      const newQuery = identifiers.reduceRight((query, identifier) => {
+        const offset = identifier.index;
+        if (offset === undefined) {
+          return query;
+        }
+        const variableName = identifier[1];
+        const variable = variables[variableName];
+        if (!variable) {
+          throw new Error(`Variable ${variable} is not defined.`);
+        }
+        const fullMatch = identifier[0];
+
+        let variableString: string;
+        switch (typeof variable) {
+          case 'string': {
+            variableString = `'${variable.replace(/'/g, "''")}'`;
+            break;
+          }
+          case 'number':
+          case 'boolean': {
+            variableString = variable.toString();
+            break;
+          }
+          case 'object': {
+            if ((variable as any) instanceof Date) {
+              variableString = `'${(variable as Date).toISOString()}'`;
+              break;
+            }
+
+            throw new Error(`Variable ${variableName} has wrong type.`);
+          }
+          default: {
+            throw new Error(`Variable ${variableName} has wrong type.`);
+          }
+        }
+
+        return `${query.slice(0, offset)}${variableString}${query.slice(
+          offset + fullMatch.length
+        )}`;
+      }, this.query);
+
       const unsubPromise = worker.subscribe(
         {
           useFirstRowAsHeader: this.getIsFirstRowHeader(),
-          query: this.query,
-
+          query: newQuery,
           url: this.url,
           columnTypeCoercions: this.getSubscribeTypes(),
           proxy: this.proxy,
@@ -332,7 +420,6 @@ export class LegacyRunner
           if (res.loading == null || res.loading || !res.result) {
             return;
           }
-          const computer = getNotebookStore(this.padId!).getState().computer!;
 
           this.setLatestResult(res.result);
           await pushResultToComputer(computer, this.id, this.name, res.result);
@@ -375,36 +462,7 @@ export class CodeRunner
   }
 
   private getComputerVariables(): Record<string, any> {
-    const notebookResults = this.computer.results$.get();
-    const resultMap: Record<string, any> = {};
-
-    for (const res of Object.values(notebookResults.blockResults)) {
-      if (res.type === 'identified-error') {
-        continue;
-      }
-
-      const varName = this.computer.getSymbolDefinedInBlock(res.id);
-      if (varName == null) {
-        continue;
-      }
-
-      switch (res.result.type.kind) {
-        case 'string':
-        case 'boolean': {
-          resultMap[varName] = res.result.value?.valueOf();
-          break;
-        }
-        case 'number': {
-          const [, valOf] = safeNumberForPrecision(
-            res.result.value as DeciNumber
-          );
-          resultMap[varName] = valOf;
-          break;
-        }
-      }
-    }
-
-    return resultMap;
+    return getVariablesFromComputer(this.computer);
   }
 
   public async import(): Promise<string | Error | undefined> {

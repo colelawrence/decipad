@@ -8,7 +8,7 @@ import { Play } from 'libs/ui/src/icons';
 import { useNavigate } from 'react-router-dom';
 import { workspaces } from '@decipad/routing';
 import { assertInstanceOf } from '@decipad/utils';
-import { LegacyRunner } from '../../runners/types';
+import { LegacyRunner, varIdentifierRegex } from '../../runners/types';
 import { useWorkspaceConnections } from '../../hooks/useWorkspaceConnections';
 
 const SQL: Array<ExternalProvider> = ['mysql', 'postgresql'];
@@ -27,6 +27,8 @@ export const SQLConnection: FC<ConnectionProps> = ({
   const conn = useWorkspaceConnections(workspaceId, SQL);
   const { queries } = useResourceUsage();
   const [query, setQuery] = useState(runner.getQuery());
+  // Use this later for UI
+  const [_, setVarIdentifiers] = useState<RegExpMatchArray[]>([]);
   const { info, onExecute } = useExecutionContext();
 
   return (
@@ -59,6 +61,8 @@ export const SQLConnection: FC<ConnectionProps> = ({
       <CodeEditor
         code={query}
         setCode={(q) => {
+          const identifiers = q.matchAll(varIdentifierRegex);
+          setVarIdentifiers([...identifiers]);
           runner.setQuery(q);
           setQuery(q);
         }}
