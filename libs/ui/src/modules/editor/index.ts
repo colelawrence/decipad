@@ -14,6 +14,7 @@ export * from './WidgetDisplay/WidgetDisplay';
 export * from './Expression/Expression';
 export * from './Slider/Slider';
 export * from './VariableEditor/VariableEditor';
+export * from './Metric/Metric';
 export * from './EditorPlaceholder/EditorPlaceholder';
 export * from './EditorLayout/EditorLayout';
 export * from './EditorPlaceholder/EditorPlaceholder';

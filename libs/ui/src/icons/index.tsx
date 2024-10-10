@@ -17,6 +17,7 @@ export { ArrowDown } from './ArrowDown';
 export { ArrowRight } from './ArrowRight';
 export { ArrowRight2 } from './ArrowRight2';
 export { ArrowUp } from './ArrowUp';
+export { ArrowUp2 } from './ArrowUp2';
 export { ArrowVertical } from './ArrowVertical';
 export { Ascending } from './Ascending';
 export { BarChart } from './BarChart';

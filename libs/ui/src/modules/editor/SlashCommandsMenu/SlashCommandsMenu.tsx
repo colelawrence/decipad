@@ -33,6 +33,7 @@ import {
   CommandToggle,
 } from '../../../icons/command-icons';
 import { InlineMenu } from '../InlineMenu/InlineMenu';
+import { isFlagEnabled } from '@decipad/feature-flags';
 
 const integrationCmd = {
   command: 'open-integration',
@@ -288,6 +289,25 @@ const widgetGroup = {
       enabled: true,
       extraSearchTerms: ['display', 'result', 'show'],
     },
+    ...(isFlagEnabled('METRIC_BLOCK')
+      ? [
+          {
+            command: 'metric',
+            title: 'Metric',
+            description: 'Show or compare a value', // TODO
+            icon: <CommandResult />, // TODO
+            enabled: true,
+            extraSearchTerms: [
+              'metric',
+              'result',
+              'trend',
+              'display',
+              'show',
+              'compare',
+            ], // TODO
+          },
+        ]
+      : []),
   ],
 };
 

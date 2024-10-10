@@ -539,6 +539,11 @@ export interface ComponentCssVariables {
   // -------------- Data Drawer ---------------
   DataDrawerUnitColour: string;
   // ------------ End Data Drawer -------------
+
+  // ----------------- Trends -----------------
+  TrendUpGreenColor: string;
+  TrendDownRedColor: string;
+  // --------------- End Trends ---------------
 }
 
 /**
@@ -663,6 +668,9 @@ export const ComponentColors: Record<'Light' | 'Dark', ComponentCssVariables> =
       RequiresPremiumText: blackWhiteBlack.hex,
 
       DataDrawerUnitColour: blue600.rgb,
+
+      TrendUpGreenColor: brand700.hex,
+      TrendDownRedColor: red600.hex,
     },
     Dark: {
       ButtonPrimaryDefaultBackground: purple300.hex,
@@ -780,6 +788,9 @@ export const ComponentColors: Record<'Light' | 'Dark', ComponentCssVariables> =
       RequiresPremiumText: blackWhiteBlack.hex,
 
       DataDrawerUnitColour: blue600.rgb,
+
+      TrendUpGreenColor: brand600.hex,
+      TrendDownRedColor: red500.hex,
     },
   } as const;
 

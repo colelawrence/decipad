@@ -81,6 +81,7 @@ import {
   ELEMENT_INTEGRATION,
   ELEMENT_LAYOUT,
   ELEMENT_LIVE_CONNECTION,
+  ELEMENT_METRIC,
 } from './element-kinds';
 import { UNCOLUMNABLE_KINDS } from './uncolumnable-kinds';
 import {
@@ -365,6 +366,12 @@ export interface DisplayElement extends BaseElement {
   color?: string;
 }
 
+export interface MetricElement extends BaseElement {
+  type: typeof ELEMENT_METRIC;
+  children: [EmptyText];
+  color?: string;
+}
+
 /**
  * Math Element is used for displaying math formulas
  * It's only function is to display the formula
@@ -455,6 +462,7 @@ export type InteractiveElement =
   | PlotElement
   | MathElement
   | DisplayElement
+  | MetricElement
   | DeprecatedInputElement
   | ExpressionElement
   | VariableDefinitionElement
@@ -706,6 +714,7 @@ export type BlockElement =
   | TableCellElement
   | ExpressionElement
   | DisplayElement
+  | MetricElement
   | CaptionElement
   | SliderElement
   | DataViewElement
@@ -838,6 +847,7 @@ export const topLevelBlockKinds: string[] = [
   ELEMENT_DRAW,
   ELEMENT_INTEGRATION,
   ELEMENT_DISPLAY,
+  ELEMENT_METRIC,
   ELEMENT_IFRAME,
   ELEMENT_MEDIA_EMBED,
   ELEMENT_SUBMIT_FORM,

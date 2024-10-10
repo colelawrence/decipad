@@ -30,6 +30,7 @@ import {
   insertDropdownBelow,
   insertInputBelow,
   insertSliderInputBelow,
+  insertMetricBelow,
 } from './input';
 import { insertPlotBelow } from './plot';
 import { insertTableBelow } from './table';
@@ -92,6 +93,9 @@ export const execute = async ({
         break;
       case 'display':
         insertDisplayBelow(editor, path);
+        break;
+      case 'metric':
+        insertMetricBelow(editor, path);
         break;
       case 'dropdown':
         insertDropdownBelow(editor, path, getAvailableIdentifier);

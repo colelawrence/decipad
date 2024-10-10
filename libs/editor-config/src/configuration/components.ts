@@ -21,6 +21,7 @@ import {
   Strikethrough,
   SubmitForm,
   Title,
+  Metric,
   Underline,
   UnorderedList,
 } from '@decipad/editor-components';
@@ -47,6 +48,7 @@ import {
   ELEMENT_OL,
   ELEMENT_PARAGRAPH,
   ELEMENT_SUBMIT_FORM,
+  ELEMENT_METRIC,
   ELEMENT_UL,
   MARK_BOLD,
   MARK_CODE,
@@ -90,6 +92,7 @@ export const components = {
   [ELEMENT_LINK]: Link,
 
   [ELEMENT_DISPLAY]: Display,
+  [ELEMENT_METRIC]: Metric,
 
   // Deprecated
   [ELEMENT_LIVE_CONNECTION]: CrashingLiveConnection,

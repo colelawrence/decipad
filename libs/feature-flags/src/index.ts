@@ -28,6 +28,8 @@ export const availableFlags = [
   'DATA_DRAWER',
 
   'NAV_SIDEBAR',
+
+  'METRIC_BLOCK',
 ] as const;
 
 export type Flag = typeof availableFlags[number];

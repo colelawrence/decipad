@@ -7,6 +7,7 @@ export type SlashCommand =
   | 'datepicker'
   | 'slider'
   | 'display'
+  | 'metric'
   | 'dropdown'
   | 'table'
   | 'data-view'

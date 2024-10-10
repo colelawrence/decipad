@@ -124,6 +124,7 @@ export const DraggableBlock = ({
   insideLayout = false,
   hasPadding = false,
   fullWidth = false,
+  fullHeight = false,
   isCentered = false,
   hasPreviousSibling,
 
@@ -157,6 +158,7 @@ export const DraggableBlock = ({
       isHidden={isHidden}
       blockKind={blockKind}
       fullWidth={fullWidth}
+      fullHeight={fullHeight}
       ref={blockRef}
       {...props}
     >
@@ -187,6 +189,7 @@ export const DraggableBlock = ({
               borderRadius: '0.5rem',
             },
           },
+          fullHeight && { height: '100%' },
         ]}
       >
         <div
@@ -283,15 +286,15 @@ export const DraggableBlock = ({
             show={showLine}
             hasPreviousSibling={hasPreviousSibling}
           />
-          <div css={selectedBlockStyles(menuOpen)}>{children}</div>
+          <div css={selectedBlockStyles(menuOpen, fullHeight)}>{children}</div>
         </div>
       </div>
     </EditorBlock>
   );
 };
 
-const selectedBlockStyles = (menuOpen: boolean) =>
-  css(
+const selectedBlockStyles = (menuOpen: boolean, fullHeight: boolean) =>
+  css([
     menuOpen && {
       'blockquote, h2, h3, .block-p': {
         backgroundColor: cssVar('backgroundDefault'),
@@ -316,5 +319,6 @@ const selectedBlockStyles = (menuOpen: boolean) =>
         boxShadow: `0px 0px 0px 100vmin ${cssVar('backgroundDefault')}`,
         clipPath: 'inset(-2px -8px -2px -8px round 8px)',
       },
-    }
-  );
+    },
+    fullHeight && { height: '100%' },
+  ]);

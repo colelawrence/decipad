@@ -8,6 +8,7 @@ export type BlockContextualActionsProps = {
     icon: ReactNode;
     onClick: () => void;
   }[];
+  readonly fullHeight?: boolean;
 };
 
 const variants = {
@@ -24,6 +25,7 @@ const variants = {
 export const BlockContextualActions: React.FC<BlockContextualActionsProps> = ({
   children,
   contextualActions,
+  fullHeight,
 }) => {
   const [hovering, setHovering] = useState(false);
 
@@ -34,6 +36,7 @@ export const BlockContextualActions: React.FC<BlockContextualActionsProps> = ({
     <Styled.BlockWrapper
       onMouseEnter={() => setHovering(true)}
       onMouseLeave={() => setHovering(false)}
+      fullHeight={fullHeight}
     >
       <Styled.ButtonsWrapper>
         {contextualActions.map(({ id, icon, onClick }) => (

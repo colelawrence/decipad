@@ -28,6 +28,7 @@ import {
   createLinkPlugin,
   createMarksPlugins,
   createMediaEmbedPlugin,
+  createMetricPlugin,
   createMigrateStructuredInputs,
   createMigrateTableDropdownToId,
   createNavigationPlugin,
@@ -118,6 +119,7 @@ export const plugins = ({
       createDividerPlugin(),
 
       createDisplayPlugin(),
+      createMetricPlugin(),
       createIframePlugin(),
       createIntegrationPlugin(),
       createCrossBlockSelection(),

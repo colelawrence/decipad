@@ -35,6 +35,7 @@ export const ELEMENT_STRUCTURED_IN_CHILD = 'structured_input_child';
 export const ELEMENT_MATH = 'math';
 
 export const ELEMENT_DISPLAY = 'display';
+export const ELEMENT_METRIC = 'metric';
 
 // Interactive
 export const DEPRECATED_ELEMENT_INPUT = 'input';

@@ -80,6 +80,7 @@ export interface EditorBlockProps {
   readonly children: ReactNode;
   readonly isHidden?: boolean;
   readonly fullWidth?: boolean;
+  readonly fullHeight?: boolean;
   // This component is one of the main points of contact when integrating between editor and UI. As
   // such, we'll allow it to receive an arbitrary amount of props in order to facilitate said
   // integration.
@@ -112,7 +113,7 @@ const fullWidthStyles = css({
 export const EditorBlock: React.FC<EditorBlockProps> = forwardRef<
   HTMLDivElement,
   EditorBlockProps
->(({ blockKind, children, isHidden, fullWidth, ...props }, ref) => {
+>(({ blockKind, children, isHidden, fullWidth, fullHeight, ...props }, ref) => {
   const readOnly = useIsEditorReadOnly();
 
   return (
@@ -129,6 +130,7 @@ export const EditorBlock: React.FC<EditorBlockProps> = forwardRef<
         },
         spacingStyles,
         fullWidth && fullWidthStyles,
+        fullHeight && { height: '100%' },
       ]}
       data-type={blockKind}
       ref={ref}

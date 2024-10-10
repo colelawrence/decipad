@@ -4,6 +4,7 @@ import type {
   DropdownElement,
   ElementVariants,
   MyEditor,
+  MetricElement,
   VariableDefinitionElement,
   VariableDropdownElement,
   VariableSliderElement,
@@ -14,6 +15,7 @@ import {
   ELEMENT_DROPDOWN,
   ELEMENT_EXPRESSION,
   ELEMENT_SLIDER,
+  ELEMENT_METRIC,
   ELEMENT_VARIABLE_DEF,
 } from '@decipad/editor-types';
 import type { GetAvailableIdentifier } from '@decipad/editor-utils';
@@ -150,19 +152,34 @@ export const insertSliderInputBelow = (
   );
 };
 
-const getDisplayElement = () => {
+const getDisplayElement = (): DisplayElement => {
   return {
     id: nanoid(),
     blockId: '',
     type: ELEMENT_DISPLAY,
     children: [{ text: '' }],
-  } as DisplayElement;
+  };
 };
 
 export const insertDisplayBelow = (editor: MyEditor, path: Path): void => {
   const display = getDisplayElement();
   display.varName = 'Result';
   insertNodes(editor, [display], {
+    at: requirePathBelowBlock(editor, path),
+  });
+};
+
+const getMetricElement = (): MetricElement => {
+  return {
+    id: nanoid(),
+    type: ELEMENT_METRIC,
+    children: [{ text: '' }],
+  };
+};
+
+export const insertMetricBelow = (editor: MyEditor, path: Path): void => {
+  const metric = getMetricElement();
+  insertNodes(editor, [metric], {
     at: requirePathBelowBlock(editor, path),
   });
 };

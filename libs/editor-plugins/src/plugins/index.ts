@@ -45,6 +45,7 @@ export * from './SoftBreakPlugin';
 export * from './StructuredKeyboard';
 export * from './SyntaxErrorHighlight';
 export * from './TrailingParagraph';
+export * from './Metric';
 export * from './TypeErrorHighlight';
 export * from './UserEvent';
 export * from './CreateCrossBlockSelection';

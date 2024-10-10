@@ -80,10 +80,16 @@ import { dndStore, useDnd } from '../utils/useDnd';
 import { DraggableBlockOverlay } from './DraggableBlockOverlay';
 import { useBlockActions } from './hooks';
 
-const DraggableBlockStyled = styled.div<{ blockHighlighted: boolean }>({
+const DraggableBlockStyled = styled.div<{
+  blockHighlighted: boolean;
+  fullHeight?: boolean;
+}>(({ fullHeight }) => ({
+  height: fullHeight ? '100%' : undefined,
+
   '> div': {
     position: 'relative',
     borderRadius: 8,
+    height: fullHeight ? '100%' : undefined,
     // comment this out for now, because it's causing issues
     // ...(blockHighlighted
     //   ? {
@@ -98,7 +104,7 @@ const DraggableBlockStyled = styled.div<{ blockHighlighted: boolean }>({
     //     }
     //   : {}),
   },
-});
+}));
 
 interface AIPanel {
   text: string;
@@ -117,7 +123,6 @@ type DraggableBlockProps = {
   readonly id?: string; // element id for variable def
   readonly onceDeleted?: () => void;
   readonly hasPreviousSibling?: boolean; // used for code line blocks
-  readonly fullWidth?: boolean;
   readonly onDownloadChart?: () => void;
   readonly contextualActions?: BlockContextualActionsProps['contextualActions'];
   readonly isCommentable?: boolean;
@@ -128,6 +133,8 @@ type DraggableBlockProps = {
   | 'onTurnInto'
   | 'turnInto'
   | 'isCentered'
+  | 'fullWidth'
+  | 'fullHeight'
   | 'isDownloadable'
   | 'onDownload'
 >;
@@ -157,6 +164,7 @@ export const DraggableBlock: React.FC<DraggableBlockProps> = forwardRef<
       isCommentable: isCommentableProp = true,
       dependencyId,
       fullWidth = false,
+      fullHeight = false,
       onDownloadChart,
       contextualActions: contextualActionsProp = [],
       ...props
@@ -404,6 +412,7 @@ export const DraggableBlock: React.FC<DraggableBlockProps> = forwardRef<
           {...props}
           isHidden={element.isHidden}
           fullWidth={fullWidth}
+          fullHeight={fullHeight}
           ref={ref}
           onAnnotation={handleAnnotation}
           contentEditable={
@@ -411,7 +420,10 @@ export const DraggableBlock: React.FC<DraggableBlockProps> = forwardRef<
           }
           annotationsHovered={blockHighlighted}
         >
-          <BlockContextualActions contextualActions={contextualActions}>
+          <BlockContextualActions
+            contextualActions={contextualActions}
+            fullHeight={fullHeight}
+          >
             <BlockErrorBoundary element={element}>
               {children}
             </BlockErrorBoundary>
@@ -477,13 +489,18 @@ export const DraggableBlock: React.FC<DraggableBlockProps> = forwardRef<
           insideLayout={insideLayout}
           hasPadding={hasPadding}
           fullWidth={fullWidth}
+          fullHeight={fullHeight}
         >
           <DraggableBlockStyled
             blockHighlighted={blockHighlighted}
             data-testid="draggable-block"
+            fullHeight={fullHeight}
           >
             <BlockSelectable element={element}>
-              <BlockContextualActions contextualActions={contextualActions}>
+              <BlockContextualActions
+                contextualActions={contextualActions}
+                fullHeight={fullHeight}
+              >
                 <BlockErrorBoundary element={element}>
                   <div ref={previewHtmlRef}>{children}</div>
                 </BlockErrorBoundary>

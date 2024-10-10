@@ -3,17 +3,20 @@ import { motion } from 'framer-motion';
 import { cssVar } from 'libs/ui/src/primitives';
 import { hideOnPrint } from 'libs/ui/src/styles/editor-layout';
 
-export const BlockWrapper = styled.div({
-  position: 'relative',
+export const BlockWrapper = styled.div<{ fullHeight?: boolean }>(
+  ({ fullHeight }) => ({
+    position: 'relative',
+    height: fullHeight ? '100%' : undefined,
 
-  '&::before': {
-    content: '""',
-    position: 'absolute',
-    width: 32,
-    height: '100%',
-    right: -36,
-  },
-});
+    '&::before': {
+      content: '""',
+      position: 'absolute',
+      width: 32,
+      height: '100%',
+      right: -36,
+    },
+  })
+);
 
 export const ButtonsWrapper = styled.div(hideOnPrint, {
   position: 'absolute',

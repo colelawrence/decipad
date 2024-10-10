@@ -1,16 +1,9 @@
+/* eslint decipad/css-prop-named-variable: 0 */
 import { FC } from 'react';
 import { CodeResult } from '..';
 import { CodeResultProps } from '../../../types';
 import { ZERO } from '@decipad/number';
-import { css } from '@emotion/react';
-
-const negativeIndicator = css({
-  color: 'red',
-});
-
-const positiveIndicator = css({
-  color: 'green',
-});
+import { componentCssVars } from 'libs/ui/src/primitives';
 
 const TrendIndicator = ({
   type: { trendOf },
@@ -23,15 +16,18 @@ const TrendIndicator = ({
   if (diff.isZero()) {
     return <>&mdash;</>;
   }
-  const compare = diff.compare(ZERO);
+
+  const positive = diff.compare(ZERO) > 0;
+
+  const trendColor = componentCssVars(
+    positive ? 'TrendUpGreenColor' : 'TrendDownRedColor'
+  );
+
+  const arrow = positive ? '\u2191' : '\u2193';
 
   return (
     <span data-highlight-changes>
-      {compare > 0 ? (
-        <span css={positiveIndicator}>&uarr;</span>
-      ) : (
-        <span css={negativeIndicator}>&darr;</span>
-      )}
+      <span css={{ color: trendColor }}>{arrow}</span>
     </span>
   );
 };
