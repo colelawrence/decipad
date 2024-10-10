@@ -29,7 +29,7 @@ conv = "0.3.3"
 criterion = { version = "0.5.1", optional = true}
 flamegraph = "0.6.5"
 getrandom = { version = "0.2", features = ["js"] }
-rayon = { version = "1.5", default-features = false, optional = true}
+rayon = { version = "1.10.0", default-features = false, optional = true}
 num-bigint = "0.4.6"
 num-integer = "0.1.46"
 rand-unique = "0.2.2"
@@ -43,7 +43,7 @@ lazy_static = "1.5.0"
 fraction = "0.15.3"
 
 [target.'cfg(target_arch = "wasm32")'.dependencies]
-rayon = {version = "1.5", default-features = false, optional = true}
+rayon = {version = "1.10.0", default-features = false, optional = true}
 
 [target.'cfg(not(target_arch = "wasm32"))'.dependencies]
 criterion = {version = "0.5.1"}
