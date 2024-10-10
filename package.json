@@ -553,7 +553,7 @@
     "graphql": "^16.9.0",
     "phin": "3.7.1",
     "got": "14.4.1",
-    "jose": "4.15.7",
+    "jose": "5.9.3",
     "ws": "8.18.0",
     "webpack-dev-middleware": "5.3.4",
     "nth-check": "2.1.1",
