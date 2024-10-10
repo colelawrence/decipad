@@ -498,7 +498,7 @@
     "fast-check": "3.22.0",
     "geometry-polyfill": "1.0.7",
     "husky": "9.1.1",
-    "jsdom": "^24.1.0",
+    "jsdom": "^25.0.1",
     "lines-and-columns": "^2.0.4",
     "lint-staged": "15.2.7",
     "node-watch": "0.7.3",
