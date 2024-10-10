@@ -10,7 +10,7 @@ import { noop } from '@decipad/utils';
 import { CaretDown, CaretUp } from '../../../icons';
 import * as userIcons from '../../../icons/user-icons';
 import { cssVar, p14Regular, p24Medium } from '../../../primitives';
-import { ResultFormatting, UserIconKey } from '@decipad/editor-types';
+import { NumberFormatting, UserIconKey } from '@decipad/editor-types';
 import { AvailableSwatchColor } from '../../../utils';
 
 import {
@@ -77,7 +77,7 @@ interface DisplayWidgetDropdownProps {
   readonly openMenu: boolean;
   readonly onChangeOpen: (arg0: boolean) => void;
   readonly lineResult?: IdentifiedResult | IdentifiedError;
-  readonly formatting?: ResultFormatting;
+  readonly formatting?: NumberFormatting;
   readonly result?: string;
   readonly readOnly: boolean;
   readonly children: ReactNode;
@@ -93,7 +93,7 @@ export const DisplayWidget: FC<DisplayWidgetDropdownProps> = ({
   openMenu,
   onChangeOpen,
   lineResult,
-  formatting = 'automatic',
+  formatting,
   result = 'Result',
   readOnly,
   children,

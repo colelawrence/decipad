@@ -1,0 +1,5 @@
+mutation UpdateNotebookNumberFormatting($id: ID!, $numberFormatting: String!) {
+  updatePad(id: $id, pad: { numberFormatting: $numberFormatting }) {
+    ...EditorNotebook
+  }
+}

@@ -5,7 +5,7 @@ import type {
 } from '@decipad/remote-computer';
 import {
   AnyElement,
-  ResultFormatting,
+  NumberFormatting,
   SimpleTableCellType,
 } from '@decipad/editor-types';
 import { DragEvent, ReactNode, RefObject } from 'react';
@@ -29,7 +29,7 @@ export interface CodeResultProps<T extends SerializedTypeKind> {
   ) => (e: DragEvent<HTMLDivElement>) => void;
   readonly onDragEnd?: (e: DragEvent<HTMLDivElement>) => void;
   readonly tooltip?: boolean;
-  readonly formatting?: ResultFormatting;
+  readonly formatting?: NumberFormatting;
   readonly isLiveResult?: boolean;
   readonly isResultPreview?: boolean;
   readonly isNotEditable?: boolean;

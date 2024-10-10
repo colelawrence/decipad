@@ -2,13 +2,13 @@ import {
   ELEMENT_DISPLAY,
   DisplayElement,
   MyEditor,
-  ResultFormatting,
+  NumberFormatting,
 } from '@decipad/editor-types';
 import { createMultipleNodeProxyFactory, withDefault } from '../proxy';
 import { setNodeProperty } from './utils';
 import { ProxyFactoryConfig, ProxyFormProps } from './types';
 import { FC } from 'react';
-import { ProxyFormWrapper } from './ProxyFormWrapper';
+import { FormWrapper } from '../FormWrapper';
 import {
   ProxyDropdownField,
   ProxyColorDropdownField,
@@ -25,7 +25,7 @@ export const resultConfig = {
       color: (node.color ?? 'auto') as ColorSwatchOrAuto,
     }),
     actions: {
-      setFormatting: (node, editor: MyEditor, formatting: ResultFormatting) =>
+      setFormatting: (node, editor: MyEditor, formatting: NumberFormatting) =>
         setNodeProperty(editor, node, 'formatting', formatting),
       setColor: (
         node: DisplayElement,
@@ -46,8 +46,8 @@ export const ResultForm: FC<ProxyFormProps<typeof resultConfig>> = ({
   editor,
   proxy: { properties, actions },
 }) => (
-  <ProxyFormWrapper>
-    <ProxyDropdownField<ResultFormatting>
+  <FormWrapper>
+    <ProxyDropdownField<NumberFormatting>
       editor={editor}
       label="Number format"
       property={withDefault(properties.formatting, 'automatic')}
@@ -62,5 +62,5 @@ export const ResultForm: FC<ProxyFormProps<typeof resultConfig>> = ({
       property={properties.color}
       onChange={actions.setColor}
     />
-  </ProxyFormWrapper>
+  </FormWrapper>
 );

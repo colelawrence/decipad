@@ -7,6 +7,6 @@ const wrapperStyles = css({
   gap: '16px',
 });
 
-export const ProxyFormWrapper = ({ children }: { children: ReactNode }) => {
+export const FormWrapper = ({ children }: { children: ReactNode }) => {
   return <div css={wrapperStyles}>{children}</div>;
 };

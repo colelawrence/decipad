@@ -19,6 +19,7 @@ import {
   useUpdatePadPermissionMutation,
   useCreateNotebookSnapshotMutation,
   useSetNotebookPublishStateMutation,
+  useUpdateNotebookNumberFormattingMutation,
 } from '@decipad/graphql-client';
 import type EditorIcon from '../EditorIcon';
 import type { TColorStatus } from '@decipad/ui';
@@ -28,6 +29,7 @@ import {
 } from 'apps/frontend/src/utils';
 import { useExternalDataSources } from './useExternalDataSources';
 import type { ExternalDataSourcesContextValue } from '@decipad/interfaces';
+import { NumberFormatting } from '@decipad/editor-types';
 
 type Icon = ComponentProps<typeof EditorIcon>['icon'];
 type IconColor = ComponentProps<typeof EditorIcon>['color'];
@@ -63,6 +65,7 @@ interface UseNotebookStateAndActionsResult {
   isPublic: boolean;
   icon: Icon | undefined;
   iconColor: IconColor;
+  numberFormatting: NumberFormatting | undefined;
   hasLocalChanges: BehaviorSubject<boolean> | undefined;
   isSavedRemotely: BehaviorSubject<boolean> | undefined;
   connectionParams?: NotebookConnectionParams;
@@ -76,6 +79,7 @@ interface UseNotebookStateAndActionsResult {
   removeLocalChanges: () => Promise<void>;
   updateIcon: (icon: Icon) => void;
   updateIconColor: (icon: IconColor) => void;
+  setNumberFormatting: (formatting: NumberFormatting | undefined) => void;
   setNotebookPublic: (isPublic: boolean) => void;
   inviteEditorByEmail: (
     email: string,
@@ -121,6 +125,10 @@ export const useNotebookStateAndActions = ({
   const [cacheIcon, setCacheIcon] = useState(icon);
   const [cacheIconColor, setCacheIconColor] = useState(iconColor);
 
+  const numberFormatting = (notebook?.numberFormatting || undefined) as
+    | NumberFormatting
+    | undefined;
+
   const hasLocalChanges = useMemo(() => docsync?.hasLocalChanges(), [docsync]);
   const isSavedRemotely = useMemo(() => docsync?.isSavedRemotely(), [docsync]);
   const isReadOnly = useMemo(
@@ -148,6 +156,8 @@ export const useNotebookStateAndActions = ({
   const [, updatePadPermission] = useUpdatePadPermissionMutation();
   const [, unsharePadWithUser] = useUnsharePadWithUserMutation();
   const [, createSnapshot] = useCreateNotebookSnapshotMutation();
+  const [, updateNotebookNumberFormatting] =
+    useUpdateNotebookNumberFormattingMutation();
 
   const onCreateSnapshot = useCallback(() => {
     createSnapshot({
@@ -275,6 +285,16 @@ export const useNotebookStateAndActions = ({
     [event, icon, notebook?.icon, notebookId, remoteUpdateNotebookIcon, toast]
   );
 
+  const setNumberFormatting = useCallback(
+    async (formatting: NumberFormatting | undefined) => {
+      await updateNotebookNumberFormatting({
+        id: notebookId,
+        numberFormatting: formatting || '',
+      });
+    },
+    [notebookId, updateNotebookNumberFormatting]
+  );
+
   // -------- publishing -------------
 
   const setNotebookPublic = useCallback(
@@ -337,6 +357,7 @@ export const useNotebookStateAndActions = ({
     isPublic,
     icon: cacheIcon,
     iconColor: cacheIconColor,
+    numberFormatting,
     hasLocalChanges,
     isSavedRemotely,
     connectionParams: notebook?.padConnectionParams,
@@ -348,6 +369,7 @@ export const useNotebookStateAndActions = ({
     setNotebookPublic,
     updateIcon,
     updateIconColor,
+    setNumberFormatting,
     createdAt: new Date(notebook?.createdAt),
     changeEditorAccess,
     inviteEditorByEmail,

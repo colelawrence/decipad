@@ -1,10 +1,10 @@
-import { ResultFormatting } from '@decipad/editor-types';
+import { NumberFormatting } from '@decipad/editor-types';
 import { DeciNumberRep } from '@decipad/format';
 import { useCallback, useMemo } from 'react';
 
 export const useFormattedResultString = (
   value: DeciNumberRep,
-  formatting: ResultFormatting
+  formatting: NumberFormatting
 ) => {
   const unit = useMemo(
     () => value.partsOf.find((part) => part.type === 'unit')?.value || '',
@@ -62,11 +62,5 @@ export const useFormattedResultString = (
     [getFormattedResultString, formatting, formatOptions, automaticString]
   );
 
-  return [
-    resultString,
-    automaticString,
-    preciseString,
-    financialString,
-    scientificString,
-  ] as const;
+  return resultString;
 };

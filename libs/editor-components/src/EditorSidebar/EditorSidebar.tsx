@@ -36,17 +36,20 @@ import styled from '@emotion/styled';
 import { isFlagEnabled } from '@decipad/feature-flags';
 import { FormattingTab } from '../FormattingTab';
 import { assert } from '@decipad/utils';
+import { FormattingTabProps } from '../FormattingTab/FormattingTab';
 
 interface EditorSidebarProps {
   notebookId: string;
   editor: MyEditor;
   controller: EditorController;
+  formattingTabProps: Omit<FormattingTabProps, 'editor'>;
 }
 
 export const EditorSidebar: FC<EditorSidebarProps> = ({
   notebookId,
   editor,
   controller,
+  formattingTabProps,
 }) => {
   const notebookMetaData = useNotebookMetaData();
   assert(notebookMetaData.sidebarComponent.type === 'default-sidebar');
@@ -197,7 +200,7 @@ export const EditorSidebar: FC<EditorSidebarProps> = ({
           onExecute={myOnExec}
           search={search}
         />
-        <FormattingTab editor={editor} />
+        <FormattingTab editor={editor} {...formattingTabProps} />
       </UIEditorSidebar>
     </ErrorBoundary>
   );

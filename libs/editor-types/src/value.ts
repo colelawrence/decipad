@@ -99,6 +99,12 @@ import { ElementKind, markKinds } from '.';
 
 export type SeriesType = 'date' | 'number';
 
+export type NumberFormatting =
+  | 'automatic'
+  | 'precise'
+  | 'financial'
+  | 'scientific';
+
 /**
  * Used throughout the table header menu
  * @field value is the name of the dropdown
@@ -345,17 +351,11 @@ export interface ExpressionElement extends BaseElement {
  * Display Element is what we call the Result widget.
  * It can display variables and calculations defined in the document
  */
-export type ResultFormatting =
-  | 'automatic'
-  | 'precise'
-  | 'financial'
-  | 'scientific';
-
 export interface DisplayElement extends BaseElement {
   type: typeof ELEMENT_DISPLAY;
   /** blockId of the calculation/widget it is displaying */
   blockId: string;
-  formatting?: ResultFormatting;
+  formatting?: NumberFormatting;
   /**
     varName the last known variable name of the result, this is here
     because calculating it is expensive, so we need to cache it.

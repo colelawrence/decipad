@@ -29,6 +29,7 @@ fragment EditorNotebook on Pad {
   name
   myPermissionType
   icon
+  numberFormatting
   status
   isPublic
   createdAt

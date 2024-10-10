@@ -1,8 +1,29 @@
 import { useEditorController } from '@decipad/notebook-state';
 import { useWriteOnBlur } from './proxy-fields/ProxyStringField';
-import { InputField } from '@decipad/ui';
+import { DropdownField, InputField, MenuItem } from '@decipad/ui';
+import { NumberFormatting } from '@decipad/editor-types';
+import { FormWrapper } from './FormWrapper';
 
-export const NotebookFormatting = () => {
+export interface NotebookFormattingProps {
+  numberFormatting: NumberFormatting | undefined;
+  setNumberFormatting: (formatting: NumberFormatting | undefined) => void;
+}
+
+const numberFormattingLabels: Record<NumberFormatting, string> = {
+  automatic: 'Automatic',
+  precise: 'Precise',
+  financial: 'Financial',
+  scientific: 'Scientific',
+};
+
+const numberFormattingOptions = Object.keys(
+  numberFormattingLabels
+) as NumberFormatting[];
+
+export const NotebookFormatting = ({
+  numberFormatting = 'automatic',
+  setNumberFormatting,
+}: NotebookFormattingProps) => {
   const editorController = useEditorController();
   const title = editorController.useTitle();
 
@@ -12,16 +33,32 @@ export const NotebookFormatting = () => {
   );
 
   return (
-    <InputField
-      type="text"
-      size="small"
-      label="Notebook title"
-      value={value}
-      // placeholder={varies ? 'Multiple' : ''}
-      onChange={(newValue) => setValue(newValue)}
-      onFocus={onFocus}
-      onBlur={onBlur}
-      onEnter={onSubmit}
-    />
+    <FormWrapper>
+      <InputField
+        type="text"
+        size="small"
+        label="Notebook title"
+        value={value}
+        onChange={(newValue) => setValue(newValue)}
+        onFocus={onFocus}
+        onBlur={onBlur}
+        onEnter={onSubmit}
+      />
+
+      <DropdownField
+        label="Number formatting"
+        triggerText={numberFormattingLabels[numberFormatting]}
+      >
+        {numberFormattingOptions.map((option) => (
+          <MenuItem
+            key={option}
+            onSelect={() => setNumberFormatting(option)}
+            selected={option === numberFormatting}
+          >
+            {numberFormattingLabels[option]}
+          </MenuItem>
+        ))}
+      </DropdownField>
+    </FormWrapper>
   );
 };

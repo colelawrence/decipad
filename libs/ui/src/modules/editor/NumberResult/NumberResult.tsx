@@ -6,14 +6,17 @@ import { useFormattedResultString } from '../../../hooks';
 import { Tooltip } from '../../../shared';
 import { characterLimitStyles } from '../../../styles/results';
 import { CodeResultProps } from '../../../types';
+import { useEditorStylesContext } from '@decipad/react-contexts';
 
 const InternalNumberResult: FC<CodeResultProps<'number'>> = ({
   type,
   value,
-  formatting = 'automatic',
+  formatting,
   tooltip = true,
   variant = 'block',
 }) => {
+  const { numberFormatting: defaultFormatting } = useEditorStylesContext();
+
   const formatted = useMemo(
     () =>
       formatNumber(
@@ -33,7 +36,10 @@ const InternalNumberResult: FC<CodeResultProps<'number'>> = ({
     (part) => part.type === 'currency'
   )?.value;
 
-  const [resultString] = useFormattedResultString(formatted, formatting);
+  const resultString = useFormattedResultString(
+    formatted,
+    formatting ?? defaultFormatting
+  );
 
   const displayString =
     type.numberFormat === 'percentage' ? formatted.asString : resultString;

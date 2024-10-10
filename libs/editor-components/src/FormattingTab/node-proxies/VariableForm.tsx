@@ -1,6 +1,6 @@
 import { FC, ReactNode } from 'react';
 import { ProxyFormProps } from './types';
-import { ProxyFormWrapper } from './ProxyFormWrapper';
+import { FormWrapper } from '../FormWrapper';
 import {
   ProxyStringField,
   ProxyDropdownField,
@@ -11,7 +11,7 @@ import { genericVariableConfig } from './genericVariable';
 export const VariableForm: FC<
   ProxyFormProps<typeof genericVariableConfig> & { children?: ReactNode }
 > = ({ editor, proxy: { properties, actions, nodes }, children }) => (
-  <ProxyFormWrapper>
+  <FormWrapper>
     <ProxyStringField
       editor={editor}
       label="Variable name"
@@ -45,5 +45,5 @@ export const VariableForm: FC<
       property={properties.color}
       onChange={actions.setColor}
     />
-  </ProxyFormWrapper>
+  </FormWrapper>
 );

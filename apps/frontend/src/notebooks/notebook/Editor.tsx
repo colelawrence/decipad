@@ -1,10 +1,11 @@
 import type { FC } from 'react';
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 import type { DocSyncEditor } from '@decipad/docsync';
 import { Notebook as NotebookEditor } from '@decipad/notebook';
 import { useNotebookRoute } from '@decipad/routing';
 import {
   EditorStylesContext,
+  EditorStylesContextValue,
   ExternalDataSourcesContextProvider,
 } from '@decipad/react-contexts';
 import { EditorIcon, GlobalThemeStyles } from '@decipad/ui';
@@ -58,9 +59,17 @@ const AppEditor: FC<EditorProps> = ({ notebookId, docsync }) => {
     }, 0);
   }, [actions.notebook?.name]);
 
+  const editorStyles: EditorStylesContextValue = useMemo(
+    () => ({
+      color: actions.iconColor,
+      numberFormatting: actions.numberFormatting ?? 'automatic',
+    }),
+    [actions.iconColor, actions.numberFormatting]
+  );
+
   return (
     <ExternalDataSourcesContextProvider provider={actions.externalData}>
-      <EditorStylesContext.Provider value={{ color: actions.iconColor }}>
+      <EditorStylesContext.Provider value={editorStyles}>
         <GlobalThemeStyles color={actions.iconColor} />
         {!isEmbed && (
           <EditorIcon

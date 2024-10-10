@@ -335,6 +335,7 @@ extend type Mutation {
 input PadInput {
   name: String
   icon: String
+  numberFormatting: String
   status: String
   archived: Boolean
   section_id: String
@@ -377,6 +378,7 @@ type Pad {
   userConsentToFeatureOnGallery: Boolean
 
   icon: String
+  numberFormatting: String
   status: String
   archived: Boolean
 
