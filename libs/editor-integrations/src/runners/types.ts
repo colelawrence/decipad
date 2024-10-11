@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 /* eslint-disable prefer-destructuring */
 import {
   ImportElementSource,
@@ -6,7 +7,7 @@ import {
 } from '@decipad/editor-types';
 import { codePlaceholder } from '@decipad/frontend-config';
 import { importFromJSONAndCoercions } from '@decipad/import';
-import { Result } from '@decipad/language-interfaces';
+import { Result, SerializedType } from '@decipad/language-interfaces';
 import { SafeJs } from '@decipad/safejs';
 import { hydrateType, safeNumberForPrecision } from '@decipad/remote-computer';
 import { BackendUrl, assertInstanceOf } from '@decipad/utils';
@@ -16,6 +17,7 @@ import { getNotebookStore } from '@decipad/notebook-state';
 import { LiveConnectionWorker } from '@decipad/live-connect';
 import { pushResultToComputer } from '@decipad/computer-utils';
 import { dateSpecificityToWasm } from '@decipad/compute-backend-js';
+import { applyToTemplate } from '../utils/applyToTemplate';
 
 type TypeArray = Array<SimpleTableCellType | undefined>;
 
@@ -214,9 +216,11 @@ export class CSVRunner extends GenericContainerRunner implements GenericRunner {
   }
 }
 
-const getVariablesFromComputer = (computer: Computer): Record<string, any> => {
+const getVariablesFromComputer = (
+  computer: Computer
+): Record<string, [SerializedType, unknown]> => {
   const notebookResults = computer.results$.get();
-  const resultMap: Record<string, any> = {};
+  const resultMap: Record<string, [SerializedType, unknown]> = {};
 
   for (const res of Object.values(notebookResults.blockResults)) {
     if (res.type === 'identified-error') {
@@ -231,14 +235,14 @@ const getVariablesFromComputer = (computer: Computer): Record<string, any> => {
     switch (res.result.type.kind) {
       case 'string':
       case 'boolean': {
-        resultMap[varName] = res.result.value?.valueOf();
+        resultMap[varName] = [res.result.type, res.result.value?.valueOf()];
         break;
       }
       case 'number': {
         const [, valOf] = safeNumberForPrecision(
           res.result.value as DeciNumber
         );
-        resultMap[varName] = valOf;
+        resultMap[varName] = [res.result.type, valOf.valueOf()];
         break;
       }
       case 'date': {
@@ -246,7 +250,7 @@ const getVariablesFromComputer = (computer: Computer): Record<string, any> => {
           break;
         }
         const date = new Date(Number(res.result.value));
-        resultMap[varName] = date;
+        resultMap[varName] = [res.result.type, date];
       }
     }
   }
@@ -352,52 +356,11 @@ export class LegacyRunner
   public async import(): Promise<string | Error | undefined> {
     const worker = await this.getWorker();
 
-    return new Promise<string | Error | undefined>((resolve, _reject) => {
+    return new Promise<string | Error | undefined>((resolve) => {
       const computer = getNotebookStore(this.padId!).getState().computer!;
       const variables = getVariablesFromComputer(computer);
 
-      const identifiers = [...this.query.matchAll(varIdentifierRegex)];
-
-      const newQuery = identifiers.reduceRight((query, identifier) => {
-        const offset = identifier.index;
-        if (offset === undefined) {
-          return query;
-        }
-        const variableName = identifier[1];
-        const variable = variables[variableName];
-        if (!variable) {
-          throw new Error(`Variable ${variable} is not defined.`);
-        }
-        const fullMatch = identifier[0];
-
-        let variableString: string;
-        switch (typeof variable) {
-          case 'string': {
-            variableString = `'${variable.replace(/'/g, "''")}'`;
-            break;
-          }
-          case 'number':
-          case 'boolean': {
-            variableString = variable.toString();
-            break;
-          }
-          case 'object': {
-            if ((variable as any) instanceof Date) {
-              variableString = `'${(variable as Date).toISOString()}'`;
-              break;
-            }
-
-            throw new Error(`Variable ${variableName} has wrong type.`);
-          }
-          default: {
-            throw new Error(`Variable ${variableName} has wrong type.`);
-          }
-        }
-
-        return `${query.slice(0, offset)}${variableString}${query.slice(
-          offset + fullMatch.length
-        )}`;
-      }, this.query);
+      const newQuery = applyToTemplate(this.query, variables);
 
       const unsubPromise = worker.subscribe(
         {
@@ -413,6 +376,7 @@ export class LegacyRunner
           pollIntervalSeconds: -1, // disable polling
         },
         async (error, __, res) => {
+          console.log('LegacyRunner: subscription response', { error, res });
           if (error) {
             (await unsubPromise)();
             return resolve(error);
@@ -422,6 +386,11 @@ export class LegacyRunner
           }
 
           this.setLatestResult(res.result);
+          console.log(
+            'LegacyRunner: pushing result to computer for block id',
+            this.id,
+            res.result
+          );
           await pushResultToComputer(computer, this.id, this.name, res.result);
 
           resolve(this.id);
@@ -462,7 +431,11 @@ export class CodeRunner
   }
 
   private getComputerVariables(): Record<string, any> {
-    return getVariablesFromComputer(this.computer);
+    return Object.fromEntries(
+      Object.entries(getVariablesFromComputer(this.computer)).map(
+        ([key, [, value]]) => [key, value]
+      )
+    );
   }
 
   public async import(): Promise<string | Error | undefined> {
@@ -484,6 +457,7 @@ export class CodeRunner
       this.setLatestResult(result);
       return this.id;
     } catch (err: unknown) {
+      console.error('Error on code import:', err);
       assertInstanceOf(err, Error);
       return err;
     }
