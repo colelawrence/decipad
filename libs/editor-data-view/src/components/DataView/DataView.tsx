@@ -1,6 +1,7 @@
 import { DraggableBlock } from '@decipad/editor-components';
 import {
   useComputer,
+  useIsBeingComputed,
   useNodePath,
   usePathMutatorCallback,
 } from '@decipad/editor-hooks';
@@ -33,6 +34,7 @@ export const DataView: PlateComponent<{ variableName: string }> = ({
   assertElementType(element, ELEMENT_DATA_VIEW);
   const editor = useMyEditorRef();
   const computer = useComputer();
+  const computing = useIsBeingComputed(element.id ?? '');
 
   const path = useNodePath(element);
   const saveIcon = usePathMutatorCallback(editor, path, 'icon', 'DataView');
@@ -168,6 +170,7 @@ export const DataView: PlateComponent<{ variableName: string }> = ({
           alternateRotation={element.alternateRotation ?? false}
           onChangeAlternateRotation={saveAlternateRotation}
           data={data}
+          computing={computing}
         >
           {children}
           <VoidBlock>

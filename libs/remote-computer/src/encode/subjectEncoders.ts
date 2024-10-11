@@ -25,4 +25,5 @@ export const subjectEncoders: SubjectEncoders = {
   blockToMathML$: identity,
   expressionResultFromText$: encodeRootResult,
   blockResultFromText$: encodeRootResult,
+  computing$: identity,
 };

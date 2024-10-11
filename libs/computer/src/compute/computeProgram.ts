@@ -63,93 +63,97 @@ const internalComputeStatement = async (
     }
   }
 
-  const statement = block.args[0];
+  try {
+    const statement = block.args[0];
 
-  realm.interpreterRealm.statementId = getExprRef(blockId);
-  const [valueType, usedNames] = await inferWhileRetrievingNames(
-    realm.interpreterRealm,
-    block
-  );
-
-  const getUsedNames = (): (readonly [string, string])[] | undefined =>
-    usedNames?.map(
-      (names): readonly [string, string] =>
-        names.map(
-          (name) => computer.latestExprRefToVarNameMap.get(name) ?? name
-        ) as [string, string]
+    realm.interpreterRealm.statementId = getExprRef(blockId);
+    const [valueType, usedNames] = await inferWhileRetrievingNames(
+      realm.interpreterRealm,
+      block
     );
 
-  if (valueType.pending) {
-    value = Value.UnknownValue;
-  } else if (!isErrorType(valueType) || isFunctionType(valueType)) {
-    realm.interpreterRealm.statementId = getExprRef(blockId);
-    try {
-      value = await evaluateStatement(realm.interpreterRealm, statement);
-    } catch (err) {
-      // early return with error
-      return [
-        {
-          type: 'computer-result',
-          id: blockId,
-          epoch: realm.epoch,
-          result: serializeComputeResult(
-            t.impossible((err as Error).message),
-            Value.UnknownValue,
-            undefined
-          ),
-          visibleVariables: getVisibleVariables(
-            program,
-            blockId,
-            realm.inferContext,
-            computer.latestExprRefToVarNameMap
-          ),
-          usedNames: getUsedNames(),
-        },
-        undefined,
-        valueType,
-      ];
-    }
-  } else {
-    value = Value.UnknownValue;
-  }
+    const getUsedNames = (): (readonly [string, string])[] | undefined =>
+      usedNames?.map(
+        (names): readonly [string, string] =>
+          names.map(
+            (name) => computer.latestExprRefToVarNameMap.get(name) ?? name
+          ) as [string, string]
+      );
 
-  const data = await value?.getData();
-
-  const variableName =
-    statement.type === 'assign' || statement.type === 'table'
-      ? statement.args[0].args[0]
-      : undefined;
-
-  const result: IdentifiedResult = {
-    type: 'computer-result',
-    id: blockId,
-    epoch: realm.epoch,
-    get result() {
-      return serializeComputeResult(
-        ...massageComputeResult(
-          realm,
-          interimValueStack,
-          interimTypeStack,
+    if (valueType.pending) {
+      value = Value.UnknownValue;
+    } else if (!isErrorType(valueType) || isFunctionType(valueType)) {
+      realm.interpreterRealm.statementId = getExprRef(blockId);
+      try {
+        value = await evaluateStatement(realm.interpreterRealm, statement);
+      } catch (err) {
+        // early return with error
+        return [
+          {
+            type: 'computer-result',
+            id: blockId,
+            epoch: realm.epoch,
+            result: serializeComputeResult(
+              t.impossible((err as Error).message),
+              Value.UnknownValue,
+              undefined
+            ),
+            visibleVariables: getVisibleVariables(
+              program,
+              blockId,
+              realm.inferContext,
+              computer.latestExprRefToVarNameMap
+            ),
+            usedNames: getUsedNames(),
+          },
+          undefined,
           valueType,
-          variableName,
-          statement,
-          value ?? UnknownValue,
-          data
-        )
-      );
-    },
-    get visibleVariables() {
-      return getVisibleVariables(
-        program,
-        blockId,
-        realm.inferContext,
-        computer.latestExprRefToVarNameMap
-      );
-    },
-    usedNames: getUsedNames(),
-  };
+        ];
+      }
+    } else {
+      value = Value.UnknownValue;
+    }
 
-  return [result, value, valueType];
+    const data = await value?.getData();
+
+    const variableName =
+      statement.type === 'assign' || statement.type === 'table'
+        ? statement.args[0].args[0]
+        : undefined;
+
+    const result: IdentifiedResult = {
+      type: 'computer-result',
+      id: blockId,
+      epoch: realm.epoch,
+      get result() {
+        return serializeComputeResult(
+          ...massageComputeResult(
+            realm,
+            interimValueStack,
+            interimTypeStack,
+            valueType,
+            variableName,
+            statement,
+            value ?? UnknownValue,
+            data
+          )
+        );
+      },
+      get visibleVariables() {
+        return getVisibleVariables(
+          program,
+          blockId,
+          realm.inferContext,
+          computer.latestExprRefToVarNameMap
+        );
+      },
+      usedNames: getUsedNames(),
+    };
+
+    return [result, value, valueType];
+  } finally {
+    computer.computing.next([blockId, false]);
+  }
 };
 
 const computeStatement = async (

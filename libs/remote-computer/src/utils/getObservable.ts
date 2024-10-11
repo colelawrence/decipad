@@ -28,6 +28,7 @@ export const getObservable = <TMethodName extends TCommonSubjectName>(
     case 'getVarResult$':
     case 'getVarBlockId$':
     case 'getNamesDefined$':
+    case 'computing$':
     case 'results$': {
       const listenerMethodName = methodName as ListenerMethodName;
       const listener = computer[listenerMethodName] as ListenerHelper<

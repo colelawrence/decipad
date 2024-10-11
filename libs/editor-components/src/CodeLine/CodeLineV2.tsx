@@ -2,6 +2,7 @@ import {
   useComputer,
   useEnsureValidVariableName,
   useGeneratedName,
+  useIsBeingComputed,
   useNodePath,
   useNodeText,
   usePathMutatorCallback,
@@ -83,6 +84,7 @@ export const CodeLineV2: PlateComponent = ({
   assertElementType(element, ELEMENT_CODE_LINE_V2);
 
   const computer = useComputer();
+  const computing = useIsBeingComputed(element.id ?? '');
   const editor = useMyEditorRef();
   const sourceCode = getCodeLineSource(element.children[1]);
 
@@ -171,6 +173,7 @@ export const CodeLineV2: PlateComponent = ({
     >
       <CodeLineStructured
         highlight={selected}
+        computing={computing}
         result={lineResult?.result}
         syntaxError={syntaxError}
         onDragStartInlineResult={handleDragStartInlineResult}

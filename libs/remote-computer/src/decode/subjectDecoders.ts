@@ -16,6 +16,7 @@ const noopDecoder: SubjectDecoder<
   | 'getSetOfNamesDefined$'
   | 'getParseableTypeInBlock$'
   | 'blockToMathML$'
+  | 'computing$'
 > = (_context, value) => value;
 
 export const subjectDecoders: SubjectDecoders = {
@@ -37,4 +38,5 @@ export const subjectDecoders: SubjectDecoders = {
   blockToMathML$: noopDecoder,
   expressionResultFromText$: decodeRootResult,
   blockResultFromText$: decodeRootResult,
+  computing$: noopDecoder,
 };

@@ -22,7 +22,8 @@ export type ListenerMethodName =
   | 'getVarResult$'
   | 'getVarBlockId$'
   | 'getNamesDefined$'
-  | 'results$';
+  | 'results$'
+  | 'computing$';
 
 export type TListenerSubscriptionParams<
   TMethodName extends ListenerMethodName

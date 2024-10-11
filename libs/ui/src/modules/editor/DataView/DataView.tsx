@@ -4,7 +4,7 @@ import { useIsEditorReadOnly } from '@decipad/react-contexts';
 import type { AutocompleteName } from '@decipad/language-interfaces';
 import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
-import { Invisible, SegmentButtons, Spinner } from 'libs/ui/src/shared';
+import { Invisible, Loading, SegmentButtons } from '../../../shared';
 import { slimBlockWidth } from 'libs/ui/src/styles/editor-layout';
 import { Children, FC, ReactNode } from 'react';
 import { Move, Transpose } from '../../../icons';
@@ -77,6 +77,13 @@ const dataViewTableOverflowStyles = css({
   minWidth: `calc((100vw - 700px) / 2)`,
 });
 
+export const loadingIconStyles = css({
+  minHeight: '19px',
+  margin: 'auto',
+  display: 'grid',
+  '> svg': { height: '16px', display: 'block', margin: '0 auto' },
+});
+
 interface DataViewProps {
   readonly availableVariableNames: AutocompleteName[];
   readonly variableName: string;
@@ -92,6 +99,7 @@ interface DataViewProps {
   readonly onChangeAlternateRotation: (alternateRotation: boolean) => void;
   children: ReactNode;
   data: ReactNode;
+  computing?: boolean;
 }
 
 export const DataView: FC<DataViewProps> = ({
@@ -100,6 +108,7 @@ export const DataView: FC<DataViewProps> = ({
   icon,
   color,
   empty,
+  computing,
 
   onChangeVariableName = noop,
   onChangeIcon = noop,
@@ -189,8 +198,15 @@ export const DataView: FC<DataViewProps> = ({
           caption={caption}
         />
 
+        {computing ? (
+          <div css={loadingIconStyles}>
+            <Loading />
+          </div>
+        ) : null}
+
         <div css={dataViewTableWrapperStyles} contentEditable={false}>
           <div css={dataViewTableOverflowStyles} contentEditable={false} />
+
           <div css={tableScroll}>
             {data ? (
               <table
@@ -209,8 +225,6 @@ export const DataView: FC<DataViewProps> = ({
                 </thead>
                 <tbody aria-roledescription="data view data">{data}</tbody>
               </table>
-            ) : variableName ? (
-              <Spinner />
             ) : null}
             {variableName && addNewColumnComponent}
           </div>

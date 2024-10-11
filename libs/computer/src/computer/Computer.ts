@@ -4,6 +4,7 @@ import { BehaviorSubject, firstValueFrom, Subject } from 'rxjs';
 import {
   concatMap,
   distinctUntilChanged,
+  filter,
   map,
   switchMap,
 } from 'rxjs/operators';
@@ -93,6 +94,7 @@ import {
 } from '@decipad/compute-backend-js';
 import { ResultGenerator } from 'libs/language-interfaces/src/Result';
 import { SerializedResult } from 'libs/compute-backend-js/src/serializableResult';
+import { ComputingBlockState } from '../internalTypes';
 
 export { getUsedIdentifiers } from './getUsedIdentifiers';
 export type { TokenPos } from './getUsedIdentifiers';
@@ -121,7 +123,10 @@ export class Computer implements ComputerInterface {
   private readonly computeRequests = new Subject<ComputeDeltaRequestWithDone>();
   private resultStreams = new ResultStreams(this);
   public readonly results = this.resultStreams.global;
-  private flushedSubject = new BehaviorSubject<boolean>(true);
+  public readonly computing = new BehaviorSubject<
+    ComputingBlockState | undefined
+  >(undefined);
+  private readonly flushedSubject = new BehaviorSubject<boolean>(true);
 
   private deltaQueue = fnQueue({
     onError: (err) => {
@@ -308,6 +313,14 @@ export class Computer implements ComputerInterface {
   private wireRequestsToResults() {
     this.computeRequests
       .pipe(
+        map((req) => {
+          for (const upsert of req.program?.upsert ?? []) {
+            if (upsert.type === 'identified-block') {
+              this.computing.next([upsert.id, true]);
+            }
+          }
+          return req;
+        }),
         // Compute me some computes!
         concatMap(async ({ done, error, ...req }) => {
           try {
@@ -358,6 +371,37 @@ export class Computer implements ComputerInterface {
   getVarBlockId(varName: string): string | undefined {
     return this.getVarBlock(varName)?.id;
   }
+
+  computing$ = listenerHelper<
+    ComputingBlockState | undefined,
+    [blockId?: string],
+    ComputingBlockState | undefined
+  >(
+    (blockId) => {
+      if (blockId) {
+        const observable = this.computing.pipe(
+          filter((v) => v?.[0] === blockId)
+        );
+        const subject = new BehaviorSubject<ComputingBlockState | undefined>(
+          undefined
+        );
+        const sub = observable.subscribe(subject);
+        const oldUnsubscribe = subject.unsubscribe.bind(subject);
+        subject.unsubscribe = () => {
+          sub.unsubscribe();
+          oldUnsubscribe();
+        };
+        return subject;
+      }
+      return this.computing;
+    },
+    (state, blockId) => {
+      if (!blockId) {
+        return state;
+      }
+      return state?.[0] === blockId ? state : undefined;
+    }
+  );
 
   results$ = listenerHelper(this.results, identity);
 

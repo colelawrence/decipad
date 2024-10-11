@@ -76,6 +76,12 @@ export interface Computer {
   releaseExternalData(id: string): Promise<void>;
 
   // --------------- streams --------------//
+  // --- computing
+  computing$: ListenerHelper<
+    [_blockId?: string | null | undefined],
+    [blockId: string, computing: boolean] | undefined
+  >;
+
   // --- results
   results$: ListenerHelper<[], NotebookResults>;
   getBlockIdResult$: ListenerHelper<

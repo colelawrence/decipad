@@ -5,3 +5,5 @@ export type VarNameToBlockMap = Map<string, ProgramBlock>;
 export type ReadOnlyVarNameToBlockMap = ReadonlyMap<string, ProgramBlock>;
 
 export type BlockDependentsMap = Map<string, string[]>;
+
+export type ComputingBlockState = [blockId: string, computing: boolean];

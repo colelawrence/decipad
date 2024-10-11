@@ -426,6 +426,13 @@ export const createRemoteComputerClientFromWorker = (
       (args) => args.join(',')
     );
 
+    computing$ = remoteListenerHelper(
+      'computing$',
+      subscriptionCentral,
+      undefined,
+      (args) => args.join(',')
+    );
+
     results$ = listenerHelper(this.results, identity);
 
     getAllColumns$ = remoteListenerHelper(

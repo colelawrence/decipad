@@ -10,6 +10,7 @@ import { CodeError } from '../CodeError/CodeError';
 import { useResultInfo } from '../CodeLine/CodeLine';
 import { StructuredInputLines } from '../StructuredInputLines/StructuredInputLines';
 import { TableButton } from '../TableButton/TableButton';
+import { Loading } from '../../../shared';
 import {
   canGrabStyles,
   codeContainerStyles,
@@ -19,6 +20,14 @@ import {
   inlineStyles,
   variableNameContainerStyles,
 } from './styles';
+import { css } from '@emotion/react';
+
+export const loadingIconStyles = css({
+  minHeight: '19px',
+  margin: 'auto',
+  display: 'grid',
+  '> svg': { height: '16px', display: 'block', margin: '0 auto' },
+});
 
 interface CodeLineStructuredProps {
   readonly highlight?: boolean;
@@ -34,11 +43,13 @@ interface CodeLineStructuredProps {
   readonly unitPicker: ReactNode;
   readonly readOnly?: boolean;
   readonly insideLayout?: boolean;
+  readonly computing?: boolean;
 }
 
 export const CodeLineStructured = ({
   highlight = false,
   result,
+  computing = false,
   syntaxError,
   onDragStartInlineResult,
   onDragStartCell,
@@ -89,6 +100,12 @@ export const CodeLineStructured = ({
       </div>
     );
   };
+
+  const loading = computing ? (
+    <div css={loadingIconStyles}>
+      <Loading />
+    </div>
+  ) : null;
 
   return (
     <StructuredInputLines highlight={highlight} fadeLines={!insideLayout}>
@@ -145,6 +162,7 @@ export const CodeLineStructured = ({
               setGrabbing(false);
             }}
           >
+            {loading}
             {inline}
           </div>
           <div
