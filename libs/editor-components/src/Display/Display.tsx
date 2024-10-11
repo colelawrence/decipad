@@ -79,6 +79,7 @@ export const Display: PlateComponent = ({ attributes, element, children }) => {
                 kind === 'string' ||
                 kind === 'number' ||
                 kind === 'boolean' ||
+                kind === 'trend' ||
                 kind === 'type-error'
               ) ||
               name.autocompleteGroup !== 'variable'
