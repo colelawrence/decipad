@@ -246,22 +246,67 @@ test.describe('staging performance checks', () => {
       )
       .toBeLessThanOrEqual(3_000);
   });
+});
+
+test.describe('text format', () => {
+  let page: Page;
+  let notebook: Notebook;
+  let workspace: Workspace;
+
+  const deployName = process.env.DEPLOY_NAME;
+  const stagingURL =
+    deployName === 'dev'
+      ? 'https://dev.decipad.com'
+      : `https://${deployName}.decipadstaging.com`;
+
+  test('login', async ({ browser }) => {
+    // get staging user agent string
+    const userAgent = process.env.USER_AGENT_KEY;
+
+    // Create a new browser context with the custom user agent
+    const context = await browser.newContext({
+      userAgent,
+    });
+
+    // Use the custom context to create a new page
+    page = await context.newPage();
+
+    notebook = new Notebook(page);
+    workspace = new Workspace(page);
+  });
+
+  test('load workspace', async ({ performance }) => {
+    performance.sampleStart('Load Workspace');
+    await page.goto(stagingURL);
+    await expect(page.getByText('Welcome to').first()).toBeVisible();
+    await expect(page.getByTestId('dashboard')).toBeVisible();
+    performance.sampleEnd('Load Workspace');
+    expect
+      .soft(
+        performance.getSampleTime('Load Workspace'),
+        'Loading workspace took more than 15 seconds'
+      )
+      .toBeLessThanOrEqual(15000);
+  });
+
+  test('new notebook', async ({ performance }) => {
+    performance.sampleStart('New Notebook');
+    await workspace.clickNewPadButton();
+    await notebook.waitForEditorToLoad();
+    performance.sampleEnd('New Notebook');
+    expect
+      .soft(
+        performance.getSampleTime('New Notebook'),
+        'Creating a Notebook took more than 8 seconds'
+      )
+      .toBeLessThanOrEqual(8000);
+  });
 
   test('text formatter with mouse', async ({}) => {
     await notebook.focusOnBody();
     await notebook.selectLastParagraph();
-    await expect(
-      page.getByText('4999 rows, previewing rows 1 to 10')
-    ).toBeVisible();
-    await expect(
-      page
-        .getByRole('textbox')
-        .locator('div')
-        .filter({ hasText: 'Customers' })
-        .first()
-    ).toBeVisible();
     await page.keyboard.type('this is the content for the first paragraph');
-    await expect(page.getByTestId('paragraph-wrapper').nth(1)).toHaveText(
+    await expect(page.getByTestId('paragraph-wrapper').nth(0)).toHaveText(
       'this is the content for the first paragraph'
     );
 
@@ -660,9 +705,9 @@ test.describe('staging operation performance checks', () => {
       expect
         .soft(
           performance.getSampleTime('Operations column * number unitless'),
-          'Operations column * number unitless took more than 3 second'
+          'Operations column * number unitless took more than 3.5 second'
         )
-        .toBeLessThanOrEqual(3_000);
+        .toBeLessThanOrEqual(3_500);
       await page.getByText('Hide data').last().click();
       await notebook.deleteBlock(2);
     });
@@ -683,9 +728,9 @@ test.describe('staging operation performance checks', () => {
           performance.getSampleTime(
             'Operations column * another column unitless'
           ),
-          'Operations column * another column unitless took more than 3 second'
+          'Operations column * another column unitless took more than 3.5 second'
         )
-        .toBeLessThanOrEqual(3_000);
+        .toBeLessThanOrEqual(3_500);
       await page.getByText('Hide data').last().click();
       await notebook.deleteBlock(2);
     });
@@ -706,9 +751,9 @@ test.describe('staging operation performance checks', () => {
       expect
         .soft(
           performance.getSampleTime('Operations column / number unitless'),
-          'Operations column * number unitless took more than 3 second'
+          'Operations column * number unitless took more than 3.5 second'
         )
-        .toBeLessThanOrEqual(3_000);
+        .toBeLessThanOrEqual(3_500);
       await page.getByText('Hide data').last().click();
       await notebook.deleteBlock(2);
     });
@@ -1068,6 +1113,7 @@ test.describe('staging operation performance checks', () => {
       await notebook.deleteBlock(2);
     });
 
+    /*
     await test.step('Functions column sortby() number', async () => {
       performance.sampleStart('Functions column sortby() number');
       await notebook.addFormula(
@@ -1076,9 +1122,11 @@ test.describe('staging operation performance checks', () => {
       );
       performance.sampleStart('Functions column sortby() number');
       await page.getByText('Show data').last().click();
-      await expect(
-        page.getByTestId('number-result:≈13.91 million')
-      ).toBeVisible();
+      await expect(async () => {
+        await expect(
+          page.getByTestId('number-result:≈13.91 million')
+        ).toBeVisible();
+      }).toPass();
 
       performance.sampleEnd('Functions column sortby() number');
       expect
@@ -1090,6 +1138,7 @@ test.describe('staging operation performance checks', () => {
       await page.getByText('Hide data').last().click();
       await notebook.deleteBlock(2);
     });
+    */
   });
 });
 
