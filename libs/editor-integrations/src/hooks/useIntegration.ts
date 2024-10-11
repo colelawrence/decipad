@@ -1,9 +1,9 @@
 import { IntegrationTypes } from '@decipad/editor-types';
-import { Result, Unknown } from '@decipad/language-interfaces';
 import { getNodeString } from '@udecode/plate-common';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useRunner } from '../runners';
 import { useComputer } from '@decipad/editor-hooks';
+import { Result, Unknown } from '@decipad/language-interfaces';
 import { pushResultToComputer } from '@decipad/computer-utils';
 
 type UseIntegraionReturn = {
@@ -11,6 +11,22 @@ type UseIntegraionReturn = {
   loading: boolean;
   error?: Error;
 };
+
+const PENDING_RESULT: Result.Result = {
+  type: { kind: 'pending' },
+  value: Unknown,
+  meta: undefined,
+};
+
+const WAIT_FOR_RESULT_MS = 3000;
+
+const TRY_STAGE_IDLE = 0;
+const TRY_STAGE_WAITING_FOR_TRIED_CACHE = 1;
+const TRY_STAGE_WAITED_FOR_TRIED_CACHE = 2;
+const TRY_STAGE_WAITING_A_BIT_MORE = 3;
+const TRY_STAGE_WAITED_A_BIT_MORE = 4;
+const TRY_STAGE_REFRESHING = 5;
+const TRY_STAGE_HAVE_RELEVANT_RESULT = 100;
 
 export const useIntegration = (
   element: IntegrationTypes.IntegrationBlock
@@ -20,7 +36,6 @@ export const useIntegration = (
 
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<Error | undefined>();
-  const pushedCache = useRef(false);
   const [gen, setGen] = useState(-1);
 
   const varName = useMemo(
@@ -39,39 +54,9 @@ export const useIntegration = (
     runner.setName(varName);
   }, [runner, varName]);
 
-  // first result is unknown
-  const pushedUnknown = useRef(false);
+  // push cache if no result has come in yet
+  const pushedCache = useRef(false);
   useEffect(() => {
-    if (!pushedUnknown.current) {
-      pushedUnknown.current = true;
-      pushResultToComputer(computer, element.id ?? '', varName, {
-        type: {
-          kind: 'pending',
-        },
-        value: Unknown,
-        meta: undefined,
-      });
-    }
-  }, [computer, element.id, varName]);
-
-  useEffect(() => {
-    (async () => {
-      if (gen < 0) {
-        return;
-      }
-      setLoading(true);
-      const res = await runner.import();
-      if (typeof res === 'string') {
-        setLoading(false);
-      } else if (res) {
-        setError(res);
-        setLoading(false);
-      }
-    })();
-  }, [runner, gen]);
-
-  useEffect(() => {
-    // push cache if no result has come in yet
     (async () => {
       if (
         !error &&
@@ -91,44 +76,82 @@ export const useIntegration = (
   }, [error, computer, computerResult, element.id, varName]);
 
   useEffect(() => {
-    // push error result if there an error
-    if (error) {
-      const errorResult: Result.Result = {
-        type: {
-          kind: 'type-error',
-          errorCause: {
-            errType: 'free-form',
-            message: error.message,
-          },
-        },
-        value: Unknown,
-      };
-      pushResultToComputer(computer, element.id ?? '', varName, errorResult);
-    }
-  }, [computer, element.id, error, varName]);
+    (async () => {
+      if (gen < 0) {
+        return;
+      }
+      setLoading(true);
+      try {
+        const res = await runner.import();
+        if (typeof res === 'string') {
+          setLoading(false);
+          setError(undefined);
+        } else if (res) {
+          setError(res);
+        }
+      } catch (err) {
+        console.error('useIntegration: Caught error', err);
+        setError(err as Error);
+      } finally {
+        setLoading(false);
+      }
+    })();
+  }, [runner, gen]);
 
   const refresh = useCallback(() => {
     setGen((g) => g + 1);
   }, []);
 
+  const haveRelevantResult = useCallback(
+    () =>
+      computerResult != null &&
+      computerResult.type === 'computer-result' &&
+      computerResult.result.type.kind !== 'pending',
+    [computerResult]
+  );
+
+  const [tryStage, setTryStage] = useState(TRY_STAGE_IDLE);
+
   useEffect(() => {
-    if (gen >= 0) {
-      return;
+    if (haveRelevantResult()) {
+      setTryStage(TRY_STAGE_HAVE_RELEVANT_RESULT);
     }
-    // check if we need a refresh
-    let canceled = false;
+  }, [haveRelevantResult]);
 
-    (async () => {
-      await computer.waitForTriedCache();
-      if (!canceled && !computerResult && gen < 0) {
+  useEffect(() => {
+    if (tryStage === TRY_STAGE_IDLE && !haveRelevantResult()) {
+      setTryStage(TRY_STAGE_WAITING_FOR_TRIED_CACHE);
+      computer.waitForTriedCache().then(() => {
+        setTryStage(TRY_STAGE_WAITED_FOR_TRIED_CACHE);
+      });
+    }
+  }, [computer, haveRelevantResult, tryStage]);
+
+  useEffect(() => {
+    if (
+      tryStage === TRY_STAGE_WAITED_FOR_TRIED_CACHE &&
+      !haveRelevantResult()
+    ) {
+      setTryStage(TRY_STAGE_WAITING_A_BIT_MORE);
+      setTimeout(() => {
+        setTryStage(TRY_STAGE_WAITED_A_BIT_MORE);
+      }, WAIT_FOR_RESULT_MS);
+    }
+  }, [haveRelevantResult, tryStage]);
+
+  useEffect(() => {
+    if (tryStage === TRY_STAGE_WAITED_A_BIT_MORE && !haveRelevantResult()) {
+      setTryStage(TRY_STAGE_REFRESHING);
+      pushResultToComputer(
+        computer,
+        element.id ?? '',
+        varName,
+        PENDING_RESULT
+      ).finally(() => {
         refresh();
-      }
-    })();
-
-    return () => {
-      canceled = true;
-    };
-  }, [computer, computerResult, gen, refresh]);
+      });
+    }
+  }, [computer, element.id, haveRelevantResult, refresh, tryStage, varName]);
 
   return {
     onRefresh: refresh,
