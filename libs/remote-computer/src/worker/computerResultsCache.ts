@@ -91,6 +91,10 @@ export const createComputerResultsCache = (
       const cachedResults = await cache.get(notebookId);
       if (cachedResults != null && !emittedFirstResults) {
         debug('Results cache: emitting first results', cachedResults);
+        console.log(
+          'Results cache: emitting first results from local cache',
+          cachedResults
+        );
         latestCachedResults = cachedResults;
         computer.results.next(cachedResults);
       } else {

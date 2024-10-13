@@ -35,7 +35,7 @@ export const encodeTrend = async (
   offset += 1;
 
   if (value.first != null) {
-    offset = await encoders.number(
+    offset = await encoders[type.trendOf.kind](
       { type: type.trendOf, value: value.first, meta },
       buffer,
       offset,
@@ -47,7 +47,7 @@ export const encodeTrend = async (
   offset += 1;
 
   if (value.last != null) {
-    offset = await encoders.number(
+    offset = await encoders[type.trendOf.kind](
       { type: type.trendOf, value: value.last, meta },
       buffer,
       offset,
@@ -59,7 +59,7 @@ export const encodeTrend = async (
   offset += 1;
 
   if (value.diff != null) {
-    offset = await encoders.number(
+    offset = await encoders[type.trendOf.kind](
       { type: type.trendOf, value: value.diff, meta },
       buffer,
       offset,

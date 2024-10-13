@@ -638,6 +638,9 @@ export const createRemoteComputerClientFromWorker = (
         );
         if (!this.#gotFirstResults && remoteNotebookResults) {
           debug('Remote computer cache: fetched notebook cache, applying it');
+          console.log(
+            'Remote computer cache: fetched notebook cache, applying it'
+          );
           this.results.next(remoteNotebookResults);
         } else if (!remoteNotebookResults) {
           console.warn(
