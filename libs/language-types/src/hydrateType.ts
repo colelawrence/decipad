@@ -43,6 +43,11 @@ export const hydrateType = (type: SerializedType): SerializedType => {
         ...type,
         rangeOf: hydrateType(type.rangeOf),
       };
+    case 'trend':
+      return {
+        ...type,
+        trendOf: hydrateType(type.trendOf),
+      };
     default:
       return type;
   }

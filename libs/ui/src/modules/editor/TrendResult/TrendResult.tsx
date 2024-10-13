@@ -1,23 +1,39 @@
 /* eslint decipad/css-prop-named-variable: 0 */
-import { FC } from 'react';
+import { FC, useMemo } from 'react';
+import { css } from '@emotion/react';
+import { formatResult } from '@decipad/format';
 import { CodeResult } from '..';
 import { CodeResultProps } from '../../../types';
-import { ZERO } from '@decipad/number';
-import { componentCssVars } from 'libs/ui/src/primitives';
+import { N, ZERO } from '@decipad/number';
+import {
+  componentCssVars,
+  cssVar,
+  p13Bold,
+  p8Regular,
+} from 'libs/ui/src/primitives';
+import { Tooltip } from '../../../shared/atoms';
+
+const ONE_HUNDRED = N(100);
+
+const arrowStyles = css(p13Bold);
+
+const percentageStyles = css(p8Regular, {
+  color: cssVar('textSubdued'),
+});
 
 const TrendIndicator = ({
   type: { trendOf },
-  value: { diff },
+  value: { diff = ZERO, first = ZERO, last = ZERO },
 }: CodeResultProps<'trend'>) => {
-  if (trendOf.kind !== 'number' || diff == null) {
-    return null;
-  }
+  const positive = useMemo(() => diff.compare(ZERO) > 0, [diff]);
+  const percentage = useMemo(
+    () => diff.div(first).abs().mul(ONE_HUNDRED).round(0),
+    [diff, first]
+  );
 
   if (diff.isZero()) {
     return <>&mdash;</>;
   }
-
-  const positive = diff.compare(ZERO) > 0;
 
   const trendColor = componentCssVars(
     positive ? 'TrendUpGreenColor' : 'TrendDownRedColor'
@@ -25,10 +41,24 @@ const TrendIndicator = ({
 
   const arrow = positive ? '\u2191' : '\u2193';
 
-  return (
+  const result = (
     <span data-highlight-changes>
-      <span css={{ color: trendColor }}>{arrow}</span>
+      <span css={[arrowStyles, { color: trendColor }]}>{arrow}</span>
+      <span css={percentageStyles}>{percentage.toString()}%</span>
     </span>
+  );
+
+  const tooltipContent = (
+    <span>
+      {formatResult('en-US', first, trendOf)} &rarr;{' '}
+      {formatResult('en-US', last, trendOf)}
+    </span>
+  );
+
+  return (
+    <Tooltip trigger={result} stopClickPropagation>
+      {tooltipContent}
+    </Tooltip>
   );
 };
 
@@ -42,17 +72,9 @@ export const TrendResult = (
     variant,
     element,
   } = props;
-  const { first, last } = value;
+  const { last } = value;
   return (
     <div>
-      <CodeResult
-        type={trendOf}
-        value={first}
-        meta={meta}
-        variant={variant}
-        element={element}
-      />{' '}
-      &rarr;{' '}
       <CodeResult
         type={trendOf}
         value={last}
