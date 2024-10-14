@@ -1,4 +1,5 @@
-import { thirdParty } from '@decipad/backend-config';
+/* eslint-disable @typescript-eslint/no-unused-vars  */
+/* eslint-disable unused-imports/no-unused-vars */ import { thirdParty } from '@decipad/backend-config';
 import Boom from '@hapi/boom';
 import axios from 'axios';
 import handle from '../handle';
@@ -24,7 +25,7 @@ export const handler = handle(async (event) => {
   let requestBody: RequestBody;
   try {
     requestBody = JSON.parse(requestBodyString);
-  } catch (e) {
+  } catch (_e) {
     throw Boom.badData('Request body is not valid JSON');
   }
   if (

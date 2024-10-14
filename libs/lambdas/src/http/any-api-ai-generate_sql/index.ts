@@ -9,6 +9,7 @@ import handle from '../handle';
 import type { ExternalDataSourceRecord } from '../../types';
 import { getSchemaString } from './getSchemaString';
 import { resourceusage } from '@decipad/services';
+import { captureException } from '@decipad/backend-trace';
 
 const openai = new OpenAI({
   apiKey: thirdParty().openai.apiKey,
@@ -40,6 +41,7 @@ export const handler = handle(async (event) => {
       Buffer.from(rawRequestBody, 'base64').toString('utf8')
     );
   } catch (e) {
+    await captureException(e as Error);
     throw Boom.internal('Request body not valid JSON.');
   }
 

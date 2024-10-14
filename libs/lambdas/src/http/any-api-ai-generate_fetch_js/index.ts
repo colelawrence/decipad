@@ -1,4 +1,5 @@
-import { OpenAI } from 'openai';
+/* eslint-disable @typescript-eslint/no-unused-vars  */
+/* eslint-disable unused-imports/no-unused-vars */ import { OpenAI } from 'openai';
 import Boom from '@hapi/boom';
 import { thirdParty } from '@decipad/backend-config';
 import { expectAuthenticated } from '@decipad/services/authentication';
@@ -33,7 +34,7 @@ export const handler = handle(async (event) => {
   let requestBody: RequestBody;
   try {
     requestBody = JSON.parse(requestBodyString);
-  } catch (e) {
+  } catch (_e) {
     throw Boom.badData('Request body is not valid JSON');
   }
   if (

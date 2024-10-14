@@ -6,6 +6,7 @@ import { resource } from '@decipad/backend-resources';
 import handle from '../handle';
 
 import type { ThreadCreateParams } from 'openai/resources/beta/threads/threads';
+import { captureException } from '@decipad/backend-trace';
 
 const notebooks = resource('notebook');
 
@@ -46,6 +47,7 @@ export const handler = handle(async (event) => {
       body: JSON.stringify({ threadId: thread.id }),
     };
   } catch (e) {
+    await captureException(e as Error);
     throw Boom.internal('Unable to create thread');
   }
 });

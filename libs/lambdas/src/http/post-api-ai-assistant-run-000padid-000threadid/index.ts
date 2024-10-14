@@ -10,6 +10,7 @@ import { getComputer } from '@decipad/computer';
 import { verbalizeDoc } from '@decipad/doc-verbalizer';
 import handle from '../handle';
 import { ASSISTANT_SYSTEM_PROMPT } from './constants';
+import { captureException } from '@decipad/backend-trace';
 
 const notebooks = resource('notebook');
 
@@ -52,6 +53,7 @@ export const handler = handle(async (event) => {
 
     verbalizedDoc = verbalized.map((v) => v.verbalized).join('\n');
   } catch (e) {
+    await captureException(e as Error);
     throw Boom.internal('Unable to parse document contents');
   }
 
@@ -74,6 +76,7 @@ export const handler = handle(async (event) => {
       body: JSON.stringify({ runId: run.id }),
     };
   } catch (e) {
+    await captureException(e as Error);
     throw Boom.internal('Unable to create run');
   }
 });

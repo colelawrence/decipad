@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unused-vars  */
+/* eslint-disable unused-imports/no-unused-vars */
 import { server } from '@decipad/backend-notebook';
 import type {
   APIGatewayProxyHandlerV2,
@@ -6,7 +8,9 @@ import type {
 import { notAcceptable } from '@hapi/boom';
 import handle from '../handle';
 
-const parseBody = (event: APIGatewayProxyEventV2): Record<string, unknown> => {
+const parseBody = async (
+  event: APIGatewayProxyEventV2
+): Promise<Record<string, unknown>> => {
   if (event.body) {
     const body = (
       event.isBase64Encoded
@@ -19,7 +23,7 @@ const parseBody = (event: APIGatewayProxyEventV2): Record<string, unknown> => {
     let parsedBody;
     try {
       parsedBody = JSON.parse(body);
-    } catch (err) {
+    } catch (_e) {
       throw notAcceptable('Error parsing JSON body');
     }
     if (parsedBody && typeof parsedBody !== 'object') {

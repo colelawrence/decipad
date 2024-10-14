@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unused-vars  */
+/* eslint-disable unused-imports/no-unused-vars */
 import { OpenAI } from 'openai';
 import Boom from '@hapi/boom';
 import { thirdParty } from '@decipad/backend-config';
@@ -44,7 +46,7 @@ export const handler = handle(async (event) => {
   let requestBody: RequestBody;
   try {
     requestBody = JSON.parse(requestBodyString);
-  } catch (e) {
+  } catch (_err) {
     throw Boom.badData('Request body is not valid JSON');
   }
 
@@ -151,6 +153,7 @@ export const handler = handle(async (event) => {
   try {
     parsedArgs = JSON.parse(argString as string);
   } catch (e) {
+    await captureException(e as Error);
     const err = new Error(
       `Badly formed ChatGPT response to submit_completion (not parseable JSON): \n\n${argString}`
     );

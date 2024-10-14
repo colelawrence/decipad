@@ -9,6 +9,7 @@ import handle from '../handle';
 import type { RequestPayload } from './types';
 import { timeout } from '@decipad/utils';
 import type { Run } from 'openai/resources/beta/threads/runs/runs';
+import { captureException } from '@decipad/backend-trace';
 
 const notebooks = resource('notebook');
 
@@ -85,6 +86,7 @@ export const handler = handle(async (event) => {
         }),
       };
     } catch (e) {
+      await captureException(e as Error);
       throw Boom.internal('Unable to get run');
     }
   }
@@ -101,6 +103,7 @@ export const handler = handle(async (event) => {
         body: 'Run cancelled',
       };
     } catch (e) {
+      await captureException(e as Error);
       throw Boom.internal('Unable to cancel run');
     }
   }
@@ -139,6 +142,7 @@ export const handler = handle(async (event) => {
           body: 'Outputs submitted',
         };
       } catch (e) {
+        await captureException(e as Error);
         throw Boom.internal('Unable to submit outputs to run');
       }
     } else {

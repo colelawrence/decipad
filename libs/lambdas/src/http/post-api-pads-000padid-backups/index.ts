@@ -5,6 +5,7 @@ import handle from '../handle';
 import { s3 as s3Config } from '@decipad/backend-config';
 import tables from '@decipad/tables';
 import { nanoid } from 'nanoid';
+import { captureException } from '@decipad/backend-trace';
 
 const notebooks = resource('notebook');
 
@@ -48,6 +49,7 @@ export const handler = handle(async (event, user) => {
   try {
     document = JSON.parse(requestBodyString);
   } catch (e) {
+    await captureException(e as Error);
     throw Boom.internal('Request body not valid JSON.');
   }
 

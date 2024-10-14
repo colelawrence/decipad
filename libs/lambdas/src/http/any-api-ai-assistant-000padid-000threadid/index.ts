@@ -7,6 +7,7 @@ import { resource } from '@decipad/backend-resources';
 import handle from '../handle';
 
 import type { RequestPayload } from './types';
+import { captureException } from '@decipad/backend-trace';
 
 const notebooks = resource('notebook');
 
@@ -54,6 +55,7 @@ export const handler = handle(async (event) => {
         body: JSON.stringify(messages),
       };
     } catch (e) {
+      await captureException(e as Error);
       throw Boom.internal('Unable to get messages');
     }
   }
@@ -71,6 +73,7 @@ export const handler = handle(async (event) => {
         body: 'Thread deleted',
       };
     } catch (e) {
+      await captureException(e as Error);
       throw Boom.internal('Unable to delete thread');
     }
   }
@@ -107,6 +110,7 @@ export const handler = handle(async (event) => {
           body: 'Message added',
         };
       } catch (e) {
+        await captureException(e as Error);
         throw Boom.internal('Unable to add message to thread');
       }
     } else {

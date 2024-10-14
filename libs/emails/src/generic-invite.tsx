@@ -9,10 +9,10 @@ const genericInvite: EmailGenerator<{
   resource: { type: string; humanName: string };
   resourceName: string;
   inviteAcceptLink: string;
-}> = ({ from, to, resource, resourceName, inviteAcceptLink }) => ({
+}> = async ({ from, to, resource, resourceName, inviteAcceptLink }) => ({
   subject: `Decipad: ${from.name} invites you to a ${resource.humanName}`,
 
-  body: render(
+  body: await render(
     <GenericInvite
       resourceType={resource.humanName}
       resourceName={resourceName}

@@ -1,10 +1,12 @@
-import { OpenAI } from 'openai';
+/* eslint-disable @typescript-eslint/no-unused-vars  */
+/* eslint-disable unused-imports/no-unused-vars */ import { OpenAI } from 'openai';
 import Boom from '@hapi/boom';
 import { thirdParty } from '@decipad/backend-config';
 import { expectAuthenticated } from '@decipad/services/authentication';
 import handle from '../handle';
 import type { ChatCompletion } from 'openai/resources';
 import { resourceusage } from '@decipad/services';
+import { captureException } from '@decipad/backend-trace';
 
 const openai = new OpenAI({
   apiKey: thirdParty().openai.apiKey,
@@ -33,7 +35,7 @@ export const handler = handle(async (event) => {
   let requestBody: RequestBody;
   try {
     requestBody = JSON.parse(requestBodyString);
-  } catch (e) {
+  } catch (_e) {
     throw Boom.badData('Request body is not valid JSON');
   }
   if (
@@ -87,6 +89,7 @@ User paragraph: ${requestBody.paragraph}`,
       presence_penalty: 0.0,
     });
   } catch (e) {
+    await captureException(e as Error);
     throw Boom.internal('OpenAI request failed', e);
   }
   const newParagraph = completion.choices[0].message.content;

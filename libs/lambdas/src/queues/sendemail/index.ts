@@ -30,7 +30,7 @@ async function handleSendEmail(
     throw new Error(`Could not find template with name ${templateName}`);
   }
 
-  const { subject, body } = template(params as any);
+  const { subject, body } = await template(params as any);
 
   try {
     await sendEmail({
