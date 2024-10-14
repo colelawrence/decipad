@@ -394,7 +394,7 @@
     "workbox-routing": "^7.0.0",
     "workbox-webpack-plugin": "7.1.0",
     "y-protocols": "1.0.5",
-    "yaml": "^2.4.0",
+    "yaml": "^2.6.0",
     "yarn": "^1.22.21",
     "yjs": "13.6.12",
     "zod": "^3.23.0",
