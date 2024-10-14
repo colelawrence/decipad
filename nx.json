@@ -1,5 +1,7 @@
 {
-  "affected": { "defaultBase": "main" },
+  "affected": {
+    "defaultBase": "main"
+  },
   "npmScope": "decipad",
   "tasksRunnerOptions": {
     "default": {
@@ -63,8 +65,12 @@
   },
   "defaultProject": "frontend",
   "targetDefaults": {
-    "lint": { "inputs": ["default"] },
-    "build": { "inputs": ["production", "^production"] },
+    "lint": {
+      "inputs": ["default"]
+    },
+    "build": {
+      "inputs": ["production", "^production"]
+    },
     "test": {
       "inputs": ["default", "^production", "{workspaceRoot}/jest.preset.js"]
     },
@@ -79,7 +85,12 @@
   },
   "$schema": "./node_modules/nx/schemas/nx-schema.json",
   "namedInputs": {
-    "default": ["{projectRoot}/**/*", "sharedGlobals", "projectSpecificFiles"],
+    "default": [
+      "{workspaceRoot}/package.json",
+      "{projectRoot}/**/*",
+      "sharedGlobals",
+      "projectSpecificFiles"
+    ],
     "sharedGlobals": [
       "{workspaceRoot}/workspace.json",
       "{workspaceRoot}/tsconfig.json",

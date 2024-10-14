@@ -1,3 +1,4 @@
+/* eslint-disable playwright/prefer-web-first-assertions */
 /* eslint-disable playwright/no-skipped-test */
 import { expect, test } from './manager/decipad-tests';
 
