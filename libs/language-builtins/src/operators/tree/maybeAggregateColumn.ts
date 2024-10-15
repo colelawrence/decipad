@@ -52,15 +52,17 @@ export const maybeAggregateColumn = async (
     if (resultType.errorCause) {
       throw resultType.errorCause;
     }
+    const value = await (
+      await ctx.callValue(
+        body,
+        argNames,
+        [columnValue, fullColumnValue].slice(0, argCount)
+      )
+    ).getData();
+
     return {
       type: serializeType(resultType),
-      value: await (
-        await ctx.callValue(
-          body,
-          argNames,
-          [columnValue, fullColumnValue].slice(0, argCount)
-        )
-      ).getData(),
+      value,
       meta: undefined,
     };
   }

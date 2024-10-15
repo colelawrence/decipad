@@ -40,7 +40,6 @@ export const DataViewTableHeader: FC<DataViewTableHeaderProps> = ({
   aggregationType,
   aggregationResult,
   aggregationExpression,
-  replicaCount,
 }) => {
   const editor = useMyEditorRef();
   const handleCollapseGroupButtonPress = useEventNoEffect(
@@ -108,18 +107,16 @@ export const DataViewTableHeader: FC<DataViewTableHeaderProps> = ({
           )}
         </>
       </div>
-      {aggregationType &&
-        (!collapsible || !groupIsExpanded) &&
-        replicaCount > 1 && (
-          <div css={groupAggregationWrapper}>
-            <GroupAggregation
-              aggregationType={aggregationType}
-              element={element}
-              aggregationResult={aggregationResult}
-              aggregationExpression={aggregationExpression}
-            />
-          </div>
-        )}
+      {aggregationType && (!collapsible || !groupIsExpanded) ? (
+        <div css={groupAggregationWrapper}>
+          <GroupAggregation
+            aggregationType={aggregationType}
+            element={element}
+            aggregationResult={aggregationResult}
+            aggregationExpression={aggregationExpression}
+          />
+        </div>
+      ) : null}
     </DataViewTableHeaderUI>
   );
 };

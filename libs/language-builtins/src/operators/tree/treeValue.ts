@@ -37,7 +37,7 @@ export const treeValue: FullBuiltinSpec['fnValuesNoAutomap'] = async (
   [tableType, filters, roundings, aggregations],
   ctx
 ) => {
-  return makeTreeValue(
+  const treeValue = await makeTreeValue(
     ctx,
     Unknown,
     undefined,
@@ -47,4 +47,6 @@ export const treeValue: FullBuiltinSpec['fnValuesNoAutomap'] = async (
     roundings,
     aggregations
   );
+
+  return treeValue;
 };

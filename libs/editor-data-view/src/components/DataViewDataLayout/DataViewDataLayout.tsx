@@ -84,7 +84,6 @@ export const DataViewDataLayout: FC<DataViewLayoutProps> = ({
         {
           elementType: 'group',
           children: pageGroups,
-          replicaCount: 1,
           aggregationResult: undefined,
           aggregationExpression: undefined,
         },

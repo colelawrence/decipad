@@ -680,6 +680,7 @@ test('Paste table from Wikipedia', async ({ randomFreeUser }) => {
         .locator('output')
         .filter({ hasText: 'Count true:' })
         .getByTestId('number-result:1')
+        .last()
     ).toBeVisible();
   });
 

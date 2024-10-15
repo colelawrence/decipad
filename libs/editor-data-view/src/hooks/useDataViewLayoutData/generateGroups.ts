@@ -83,7 +83,6 @@ export const generateGroups = async ({
         isExpanded,
         hideSmartRow,
         preventExpansion,
-        replicaCount: child.originalCardinality,
         aggregations: aggregations.slice(1),
         roundings: roundings.slice(1),
         filters: filters.slice(1),

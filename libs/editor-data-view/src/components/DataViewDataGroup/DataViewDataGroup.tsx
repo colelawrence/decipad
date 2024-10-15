@@ -58,7 +58,6 @@ export const DataViewDataGroupElement: FC<DataViewDataGroupElementProps> = ({
       aggregationType={aggregationType}
       aggregationResult={element.aggregationResult}
       aggregationExpression={element.aggregationExpression}
-      replicaCount={element.replicaCount}
     />
   ) : (
     <SmartCell

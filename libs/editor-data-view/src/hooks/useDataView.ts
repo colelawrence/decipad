@@ -50,6 +50,7 @@ export const useDataView = ({
 }: UseDataViewProps): UseDataViewReturnType => {
   const computer = useComputer();
   const result = computer.getBlockIdResult$.use(`${element.id}_shadow`);
+
   const error =
     result?.error?.message ??
     (result?.result?.type.kind === 'type-error'

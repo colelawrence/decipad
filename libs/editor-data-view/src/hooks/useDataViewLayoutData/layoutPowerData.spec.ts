@@ -119,7 +119,6 @@ describe('layoutPowerData', () => {
           "collapsible": false,
           "elementType": "group",
           "id": "/a32fd8b31587b9c6354faa86e12756d2e7aca860346be182aacebb91f0b58026",
-          "replicaCount": 1,
           "type": {
             "kind": "string",
           },
@@ -225,7 +224,6 @@ describe('layoutPowerData', () => {
           "collapsible": false,
           "elementType": "group",
           "id": "/a32fd8b31587b9c6354faa86e12756d2e7aca860346be182aacebb91f0b58026",
-          "replicaCount": 1,
           "type": {
             "kind": "string",
           },
@@ -312,7 +310,6 @@ describe('layoutPowerData', () => {
           "collapsible": true,
           "elementType": "group",
           "id": "/ab2343f77c33a58d1431ce0434a21d3d385f00b3308206522aaef176e539a7cc",
-          "replicaCount": 2,
           "type": {
             "kind": "string",
           },
@@ -324,12 +321,23 @@ describe('layoutPowerData', () => {
           "children": [
             {
               "aggregationExpression": "sum((filter(filter(TableName, TableName.Column1 == "B"), (filter(TableName, TableName.Column1 == "B")).Column2 == 2)).Column2)",
-              "aggregationResult": undefined,
+              "aggregationResult": {
+                "meta": undefined,
+                "type": {
+                  "kind": "number",
+                  "unit": null,
+                },
+                "value": DeciNumber {
+                  "d": 1n,
+                  "infinite": false,
+                  "n": 2n,
+                  "s": 1n,
+                },
+              },
               "children": [],
               "collapsible": false,
               "elementType": "group",
               "id": "/e6058265454b52c33d07e0394ea71bcebe74c4c386cf92d36494fa1c23fbfed9/b0bc58bdde052273dc781192e21d2539e3dc453f1364463569428c0590b16f32",
-              "replicaCount": 1,
               "type": {
                 "kind": "number",
                 "unit": null,
@@ -345,7 +353,6 @@ describe('layoutPowerData', () => {
           "collapsible": false,
           "elementType": "group",
           "id": "/e6058265454b52c33d07e0394ea71bcebe74c4c386cf92d36494fa1c23fbfed9",
-          "replicaCount": 1,
           "type": {
             "kind": "string",
           },

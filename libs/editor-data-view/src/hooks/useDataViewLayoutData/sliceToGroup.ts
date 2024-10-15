@@ -24,7 +24,6 @@ interface SliceToGroupProps {
   hideSmartRow: boolean;
   groupId: string;
   preventExpansion: boolean;
-  replicaCount: number;
   indent?: number;
   expandedGroups?: string[];
   aggregationExpression?: string;
@@ -48,7 +47,6 @@ export const sliceToGroup = async ({
   hideSmartRow,
   groupId,
   preventExpansion,
-  replicaCount,
   indent = 0,
   expandedGroups,
   aggregationExpression,
@@ -96,7 +94,10 @@ export const sliceToGroup = async ({
     ...(isExpanded || !collapsible ? newGroups : []),
   ].filter(Boolean) as DataGroup[];
 
-  const aggregationResult = indent > 0 ? tree.value.rootAggregation : undefined;
+  const aggregationResult =
+    indent > 0
+      ? previousColumns[previousColumns.length - 1]?.aggregation
+      : undefined;
 
   return {
     elementType: 'group',
@@ -105,7 +106,6 @@ export const sliceToGroup = async ({
     type,
     children,
     collapsible,
-    replicaCount,
     aggregationResult,
     aggregationExpression,
   };

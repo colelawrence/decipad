@@ -49,6 +49,21 @@ export const makeRecursiveTreeValue = async (
       Value.MappedColumn.fromColumnValueAndMap(column, firstColumnSortMap)
     )
   );
+
+  const columns = await Promise.all(
+    table.columnNames.map(async (columnName, columnIndex) => ({
+      name: columnName,
+      aggregation: await maybeAggregateColumn(
+        ctx,
+        fullTable,
+        columnName,
+        sortedColumns[columnIndex],
+        tableType?.columnTypes?.[columnIndex],
+        aggregations
+      ),
+    }))
+  );
+
   const [firstSortedColumn, ...restSortedColumns] = sortedColumns;
 
   // Calculate the slices map for the first column
@@ -123,19 +138,7 @@ export const makeRecursiveTreeValue = async (
     rootAggregation,
     children,
     // each tree contains the column values (properly sliced) and their aggregation
-    await Promise.all(
-      table.columnNames.map(async (columnName, columnIndex) => ({
-        name: columnName,
-        aggregation: await maybeAggregateColumn(
-          ctx,
-          fullTable,
-          columnName,
-          sortedColumns[columnIndex],
-          tableType?.columnTypes?.[columnIndex],
-          aggregations
-        ),
-      }))
-    ),
+    columns,
     originalCardinality
   );
 };

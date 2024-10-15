@@ -33,7 +33,6 @@ export interface HeaderProps {
   aggregationType?: string;
   aggregationResult: Result.Result | undefined;
   aggregationExpression: string | undefined;
-  replicaCount: number;
 }
 
 export interface SmartRowColumn {
@@ -61,7 +60,6 @@ export interface DataGroupElement {
   global?: boolean;
   aggregationResult: Result.Result | undefined;
   aggregationExpression: string | undefined;
-  replicaCount: number;
 }
 
 export type DataGroup = DataGroupElement | SmartRowElement;
