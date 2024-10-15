@@ -66,7 +66,9 @@ export const createDatabaseClient = (
         host: url.hostname,
         port: !url.port ? undefined : Number(url.port),
         database: url.pathname.substring(1),
-        ssl: !process.env.CI,
+        ssl: {
+          rejectUnauthorized: false,
+        },
       },
     };
     return [knex(clientConfig), clientConfig];
