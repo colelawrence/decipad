@@ -27009,10 +27009,10 @@ renderkid@^3.0.0:
     lodash "^4.17.21"
     strip-ansi "^6.0.1"
 
-replicate@^0.32.0:
-  version "0.32.0"
-  resolved "https://registry.yarnpkg.com/replicate/-/replicate-0.32.0.tgz#d35821571fb465d10554233d226fdeb2ddc9d8f4"
-  integrity sha512-XOJBnV/FpRsz/r7DEj8KL4pdDk9BpptkljGOhKmjlZGdNcBvt532GxxmjT4ZaqdExg7STxrh1JHhI91zg+CZTw==
+replicate@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/replicate/-/replicate-1.0.0.tgz#b4835ae4829492751c2f0268d3b1290d471e27fa"
+  integrity sha512-NmaQFbqua1H+YnulcTiRrJA+H5ZjYjLQ/uwhKgsJjwJ3uf7KLH2yuuQF90Xz4EB88vE+Dhrk/BtYNOZkJoHf1g==
   optionalDependencies:
     readable-stream ">=4.0.0"
 
