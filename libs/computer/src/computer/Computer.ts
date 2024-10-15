@@ -335,6 +335,9 @@ export class Computer implements ComputerInterface {
       .subscribe(({ done, result }) => {
         if (result) {
           this.resultStreams.pushResults(result);
+          for (const blockId of Object.keys(result?.blockResults)) {
+            this.computing.next([blockId, false]);
+          }
         }
         if (done) {
           done();

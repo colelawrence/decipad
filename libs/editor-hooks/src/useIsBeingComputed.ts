@@ -1,6 +1,13 @@
+import { useDebounce } from 'use-debounce';
 import { useComputer } from './useComputer';
 
-export const useIsBeingComputed = (blockId: string): boolean => {
+export const useIsBeingComputed = (
+  blockId: string,
+  debounceDelay = 500
+): boolean => {
   const computer = useComputer();
-  return computer.computing$.use(blockId)?.[1] ?? false;
+  return useDebounce(
+    computer.computing$.use(blockId)?.[1] ?? false,
+    debounceDelay
+  )[0];
 };
