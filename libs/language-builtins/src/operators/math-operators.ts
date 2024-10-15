@@ -12,8 +12,10 @@ import {
   buildType as t,
   serializeType,
   resultToValue,
+  getResultGenerator,
 } from '@decipad/language-types';
 import type { Value as ValueTypes } from '@decipad/language-interfaces';
+import { map } from '@decipad/generator-utils';
 import { FullBuiltinSpec, type BuiltinSpec, type Functor } from '../types';
 import { coerceToFraction } from '../utils/coerceToFraction';
 import { binopFunctor } from '../utils/binopFunctor';
@@ -98,18 +100,63 @@ const min: FullBuiltinSpec['fnValues'] = createWasmEvaluator(
   }
 );
 
-const average: FullBuiltinSpec['fnValues'] = createWasmEvaluator(
+const trendColumnAverage =
+  (
+    averageEval: NonNullable<FullBuiltinSpec['fnValues']>
+  ): NonNullable<FullBuiltinSpec['fnValues']> =>
+  async ([value], [type], ...rest): Promise<ValueTypes.Value> => {
+    const gen = getResultGenerator(await value.getData());
+    const firstElementColumn = Value.LeanColumn.fromGeneratorAndType(
+      (start = 0, end = Infinity) =>
+        map(gen(start, end), (v) => getDefined(Value.getTrendValue(v)?.first)),
+      serializeType(type),
+      undefined
+    );
+
+    const firstAverage = await averageEval(
+      [firstElementColumn],
+      [getDefined(type.cellType?.trendOf)],
+      ...rest
+    );
+
+    const lastElementColumn = Value.LeanColumn.fromGeneratorAndType(
+      (start = 0, end = Infinity) =>
+        map(gen(start, end), (v) => getDefined(Value.getTrendValue(v)?.last)),
+      serializeType(type),
+      undefined
+    );
+
+    const lastAverage = await averageEval(
+      [lastElementColumn],
+      [getDefined(type.cellType?.trendOf)],
+      ...rest
+    );
+
+    return Value.Trend.from(
+      coerceToFraction(await firstAverage.getData()),
+      coerceToFraction(await lastAverage.getData())
+    );
+  };
+
+const average: NonNullable<FullBuiltinSpec['fnValues']> = createWasmEvaluator(
   (id) => computeBackendSingleton.computeBackend.average(id),
   (res) => Value.Scalar.fromValue(res.value as DeciNumber),
-  async ([value]: ValueTypes.Value[]): Promise<ValueTypes.Value> => {
+  async (
+    [value]: ValueTypes.Value[],
+    [valueType],
+    ...rest
+  ): Promise<ValueTypes.Value> => {
+    if (valueType.cellType?.trendOf) {
+      return trendColumnAverage(average)([value], [valueType], ...rest);
+    }
     let acc = ZERO;
     if (!Value.isColumnLike(value)) {
       return Promise.resolve(value);
     }
     let count = 0n;
-    for await (const val of value.values()) {
+    for await (const val of getResultGenerator(await value.getData())()) {
       count += 1n;
-      acc = acc.add(coerceToFraction(await val.getData()));
+      acc = acc.add(coerceToFraction(val));
     }
     return Value.Scalar.fromValue(acc.div(N(count)));
   }

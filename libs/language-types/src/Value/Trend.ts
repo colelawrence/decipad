@@ -22,7 +22,7 @@ export class Trend implements Value.Value {
   static from(
     first: DeciNumber | undefined,
     last: DeciNumber | undefined,
-    diff: DeciNumber | undefined
+    diff: DeciNumber | undefined = first && last ? last.sub(first) : undefined
   ) {
     return new Trend(first, last, diff);
   }

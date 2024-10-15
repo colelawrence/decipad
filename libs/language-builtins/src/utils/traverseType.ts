@@ -35,10 +35,15 @@ export function traverseType(
         t.cellType = traverseType(cellType, fn);
       });
     }
+    case 'trend': {
+      const { trendOf } = type;
+      return produce(type, (t) => {
+        t.trendOf = traverseType(trendOf, fn);
+      });
+    }
 
     case 'table':
     case 'tree':
-    case 'trend':
     case 'materialized-table':
     case 'row':
     case 'function': {

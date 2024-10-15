@@ -138,6 +138,11 @@ const aggregationTypes: { [type: string]: AggregationType[] } = {
       name: 'Sum',
       expression: (colRef) => `sum(${colRef})`,
     },
+    {
+      id: 'number:average',
+      name: 'Average',
+      expression: (colRef) => `avg(${colRef})`,
+    },
   ],
 };
 
