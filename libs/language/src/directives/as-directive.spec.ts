@@ -16,11 +16,12 @@ import {
   prop,
 } from '@decipad/language-utils';
 import { date } from '../date';
-import { getType, getValue } from './as-directive';
+import { as } from './as-directive';
 import { testGetType, testGetValue } from './testUtils';
 import { ScopedRealm, makeInferContext, runASTAndGetContext } from '..';
 
 setupDeciNumberSnapshotSerializer();
+const { getType, getValue } = as;
 
 const year = u('years');
 

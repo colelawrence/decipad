@@ -20,7 +20,7 @@ export type BinopPrimitiveEval = (
   n1: Result.OneResult,
   n2: Result.OneResult,
   types: Type[]
-) => PromiseOrType<DeciNumberBase | boolean | string>;
+) => PromiseOrType<DeciNumberBase | boolean | string | ValueTypes.TrendValue>;
 
 interface BinopNumericBuiltinProps {
   primitiveEval: BinopPrimitiveEval;
@@ -122,10 +122,17 @@ export const binopBuiltin = (
   const applyValues = async (
     [n1, n2]: ValueTypes.Value[],
     types: Type[]
-  ): Promise<ValueTypes.Value> =>
-    Value.Scalar.fromValue(
-      await primitiveEval(await n1.getData(), await n2.getData(), types)
+  ): Promise<ValueTypes.Value> => {
+    const result = await primitiveEval(
+      await n1.getData(),
+      await n2.getData(),
+      types
     );
+    if (Value.isTrendValue(result)) {
+      return result;
+    }
+    return Value.Scalar.fromValue(result);
+  };
 
   return [
     {

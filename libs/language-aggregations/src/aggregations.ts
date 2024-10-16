@@ -139,6 +139,13 @@ const aggregationTypes: { [type: string]: AggregationType[] } = {
       expression: (colRef) => `sum(${colRef})`,
     },
     {
+      id: 'number:percent-of-total',
+      name: '% of total',
+      shortName: 'Percent',
+      expression: (colDef, totalAggregationExpressions) =>
+        `sum(${colDef}) / (${totalAggregationExpressions.sum}) in %`,
+    },
+    {
       id: 'number:average',
       name: 'Average',
       expression: (colRef) => `avg(${colRef})`,
