@@ -13,7 +13,7 @@ pagination_prev: null
 `sum(Table.Column)` <br />
 `total(Table.Column)`
 
-This formula gives you the sum of all numbers in a list or a table column. You can use `total()`as an alternative syntax:
+Calculates the sum of all numbers in a list or a table column. You can use `total()` as an alternative syntax:
 
 ### Example
 

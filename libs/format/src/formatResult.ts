@@ -8,7 +8,7 @@ import type {
   Type,
 } from '@decipad/language-interfaces';
 // eslint-disable-next-line no-restricted-imports
-import { Time, Unit, serializeType } from '@decipad/language-types';
+import { Time, Unit, Value, serializeType } from '@decipad/language-types';
 import { formatType } from './formatType';
 
 export type FormatResult = (
@@ -96,6 +96,19 @@ export const formatResult: FormatResult = (
       )
       .join(',\n');
     return `{\n${cols}\n}`;
+  }
+
+  if (type.kind === 'trend') {
+    const trendValue = Value.getTrendValue(result);
+    return `trend<first=${recurse(
+      locale,
+      trendValue?.first,
+      type.trendOf
+    )}, last=${recurse(locale, trendValue?.last, type.trendOf)}, diff=${recurse(
+      locale,
+      trendValue?.diff,
+      type.trendOf
+    )}>`;
   }
 
   return [color(util.inspect(result)), formatType(locale, type)].join(' ');
