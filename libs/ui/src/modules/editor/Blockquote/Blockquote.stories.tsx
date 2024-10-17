@@ -1,5 +1,5 @@
 import { Meta, StoryFn } from '@storybook/react';
-import { Blockquote } from './Blockquote';
+import { Blockquote, BlockquoteProps } from './Blockquote';
 
 const args = {
   children:
@@ -12,6 +12,6 @@ export default {
   args,
 } as Meta;
 
-export const Normal: StoryFn<typeof args> = (props) => (
+export const Normal: StoryFn<typeof args> = (props: BlockquoteProps) => (
   <Blockquote {...props} />
 );

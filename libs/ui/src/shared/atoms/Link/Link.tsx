@@ -42,7 +42,7 @@ const styleColors: Record<LinkColor, SerializedStyles> = {
 
 const LinkSlot = createPrimitiveElement('a');
 
-interface LinkProps
+export interface LinkProps
   extends Omit<ComponentProps<typeof LinkSlot>, 'contentEditable'> {
   color?: LinkColor;
   noUnderline?: boolean;

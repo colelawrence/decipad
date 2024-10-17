@@ -1,5 +1,5 @@
 import { Meta, StoryFn } from '@storybook/react';
-import { Bold } from './Bold';
+import { Bold, BoldProps } from './Bold';
 
 export default {
   title: 'Atoms / Editor / Text / Mark / Bold',
@@ -8,7 +8,7 @@ export default {
     children: 'bold',
   },
   decorators: [
-    (St) => (
+    (St: StoryFn) => (
       <div>
         This is <St /> text.
       </div>
@@ -16,6 +16,6 @@ export default {
   ],
 } as Meta;
 
-export const Normal: StoryFn<{ children: string }> = (args) => (
+export const Normal: StoryFn<{ children: string }> = (args: BoldProps) => (
   <Bold {...args} />
 );

@@ -41,7 +41,7 @@ const iconStyles = css(p14Regular, {
   opacity: '90%',
 });
 
-type EditorIconProps = {
+export type EditorIconProps = {
   readonly icon: UserIconKey;
   readonly color: AvailableSwatchColor;
   readonly onChangeIcon?: (newIcon: UserIconKey) => void;

@@ -1,5 +1,5 @@
 import { Meta, StoryFn } from '@storybook/react';
-import { WorkspaceItem } from './WorkspaceItem';
+import { WorkspaceItem, WorkspaceItemProps } from './WorkspaceItem';
 import { noop } from '@decipad/utils';
 
 const args = {
@@ -16,6 +16,6 @@ export default {
   args,
 } as Meta;
 
-export const Normal: StoryFn<typeof args> = (currentArgs) => (
-  <WorkspaceItem {...currentArgs} />
-);
+export const Normal: StoryFn<typeof args> = (
+  currentArgs: WorkspaceItemProps
+) => <WorkspaceItem {...currentArgs} />;

@@ -3,7 +3,7 @@ import { Meta, StoryFn } from '@storybook/react';
 import { MenuList } from '../../molecules';
 import { circleIcon } from '../../../storybook-utils';
 import { MenuItem } from '../index';
-import { TriggerMenuItem } from './TriggerMenuItem';
+import { TriggerMenuItem, TriggerMenuItemProps } from './TriggerMenuItem';
 
 interface Args {
   children: string;
@@ -17,14 +17,14 @@ export default {
   },
 } as Meta<Args>;
 
-export const TextOnly: StoryFn<Args> = (args) => (
+export const TextOnly: StoryFn<Args> = (args: TriggerMenuItemProps) => (
   <MenuList root open>
     <MenuList itemTrigger={<TriggerMenuItem {...args} />}>
       <MenuItem {...args} />
     </MenuList>
   </MenuList>
 );
-export const Icon: StoryFn<Args> = (args) => (
+export const Icon: StoryFn<Args> = (args: TriggerMenuItemProps) => (
   <MenuList root open>
     <MenuList itemTrigger={<TriggerMenuItem icon={circleIcon} {...args} />}>
       <MenuItem {...args} />

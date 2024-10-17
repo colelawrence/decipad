@@ -392,7 +392,7 @@ const groups = [
   writingGroup,
 ];
 
-type SlashCommandsMenuProps = Pick<
+export type SlashCommandsMenuProps = Pick<
   ComponentProps<typeof InlineMenu>,
   'onExecute' | 'search' | 'variant'
 > & {

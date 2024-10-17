@@ -1,4 +1,5 @@
 import { Meta, StoryFn } from '@storybook/react';
+import { CodeResultProps } from '../../../types';
 import { WithCodeProps, withCode } from '../../../storybook-utils';
 import { RowResult } from './RowResult';
 
@@ -18,6 +19,8 @@ export default {
   decorators: [withCode(code)],
 } as Meta;
 
-export const Normal: StoryFn<WithCodeProps<'row'>> = (props) => {
+export const Normal: StoryFn<WithCodeProps<'row'>> = (
+  props: CodeResultProps<'row'>
+) => {
   return <RowResult {...props} />;
 };

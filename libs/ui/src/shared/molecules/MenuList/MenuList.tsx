@@ -75,7 +75,7 @@ export interface MenuItemMenuListProps {
   readonly itemTrigger: ReactNode;
 }
 
-type MenuListProps = (
+export type MenuListProps = (
   | RootMenuListProps
   | DropdownRootMenuListProps
   | MenuItemMenuListProps

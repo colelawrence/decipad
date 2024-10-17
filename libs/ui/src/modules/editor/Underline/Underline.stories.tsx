@@ -1,5 +1,5 @@
 import { Meta, StoryFn } from '@storybook/react';
-import { Underline } from './Underline';
+import { Underline, UnderlineProps } from './Underline';
 
 export default {
   title: 'Atoms / Editor / Text / Mark / Underline',
@@ -8,7 +8,7 @@ export default {
     children: 'there will be 175 zettabytes of data',
   },
   decorators: [
-    (St) => (
+    (St: StoryFn) => (
       <div>
         Today, people and businesses have access to more data and information
         than ever before. By 2025, <St />.
@@ -17,6 +17,6 @@ export default {
   ],
 } as Meta;
 
-export const Normal: StoryFn<{ children: string }> = (args) => (
+export const Normal: StoryFn<{ children: string }> = (args: UnderlineProps) => (
   <Underline {...args} />
 );

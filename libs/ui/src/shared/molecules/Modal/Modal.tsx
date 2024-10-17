@@ -5,7 +5,7 @@ import * as Dialog from '@radix-ui/react-dialog';
 import { Close } from 'libs/ui/src/icons';
 import * as Styled from './styles';
 
-type ModalContentProps = {
+export type ModalContentProps = {
   readonly children?: ReactNode | ReactNode[];
   readonly title?: string;
   readonly testId?: string;

@@ -13,10 +13,12 @@ const defaultStyles = css(
   }
 );
 
-export const Badge: FC<{ styles?: SerializedStyles; children: ReactNode }> = ({
-  children,
-  styles: extraStyles,
-}) => {
+export interface BadgeProps {
+  styles?: SerializedStyles;
+  children: ReactNode;
+}
+
+export const Badge: FC<BadgeProps> = ({ children, styles: extraStyles }) => {
   const styles = [defaultStyles, extraStyles];
   return <span css={styles}>{children}</span>;
 };

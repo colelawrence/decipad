@@ -14,7 +14,7 @@ const leafStylesByTokenType = {
 
 export type TokenType = keyof typeof leafStylesByTokenType;
 
-interface CodeSyntaxProps {
+export interface CodeSyntaxProps {
   variant: TokenType;
   children?: ReactNode;
 }

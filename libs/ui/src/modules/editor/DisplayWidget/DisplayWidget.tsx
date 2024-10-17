@@ -73,7 +73,7 @@ const charLimit = css({
   whiteSpace: 'nowrap',
 });
 
-interface DisplayWidgetDropdownProps {
+export interface DisplayWidgetDropdownProps {
   readonly openMenu: boolean;
   readonly onChangeOpen: (arg0: boolean) => void;
   readonly lineResult?: IdentifiedResult | IdentifiedError;

@@ -1,5 +1,5 @@
 import { Meta, StoryFn } from '@storybook/react';
-import { Slider } from './Slider';
+import { Slider, SliderProps } from './Slider';
 
 const args = {
   max: 10,
@@ -14,4 +14,6 @@ export default {
   args,
 } as Meta;
 
-export const Normal: StoryFn<typeof args> = (props) => <Slider {...props} />;
+export const Normal: StoryFn<typeof args> = (props: SliderProps) => (
+  <Slider {...props} />
+);

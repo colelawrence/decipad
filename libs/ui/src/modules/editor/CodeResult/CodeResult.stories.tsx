@@ -9,10 +9,10 @@ export default {
   decorators: [withCode('["Lorem", "Ipsum", "Dolor", "Sit", "Amet"]')],
 } as Meta;
 
-export const Inline: StoryFn<ComponentProps<typeof CodeResult>> = (props) => (
-  <CodeResult {...props} variant="inline" />
-);
+export const Inline: StoryFn<ComponentProps<typeof CodeResult>> = (
+  props: ComponentProps<typeof CodeResult>
+) => <CodeResult {...props} variant="inline" />;
 
-export const Block: StoryFn<ComponentProps<typeof CodeResult>> = (props) => (
-  <CodeResult {...props} variant="block" />
-);
+export const Block: StoryFn<ComponentProps<typeof CodeResult>> = (
+  props: ComponentProps<typeof CodeResult>
+) => <CodeResult {...props} variant="block" />;

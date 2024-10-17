@@ -24,7 +24,7 @@ const anchorStyles = css(notebookNameStyles, {
   cursor: 'pointer',
 });
 
-interface NotebookPathProps {
+export interface NotebookPathProps {
   notebookName: string;
   href?: string;
   target?: string;

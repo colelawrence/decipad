@@ -7,7 +7,7 @@ import { Warning } from '../../../icons';
 import { CodeVariable } from '../CodeVariable/CodeVariable';
 import { cssVar } from '../../../primitives';
 
-type SmartRefProps = {
+export type SmartRefProps = {
   readonly symbolName?: string;
   readonly defBlockId?: string;
   readonly errorMessage?: string;

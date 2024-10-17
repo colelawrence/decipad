@@ -3,7 +3,7 @@ import { css, SerializedStyles } from '@emotion/react';
 import { FC, ReactNode } from 'react';
 import { cssVar, p12Medium } from '../../../primitives';
 
-interface FilterBubblesProps {
+export interface FilterBubblesProps {
   icon: ReactNode;
   description: string;
   iconStyles?: SerializedStyles;

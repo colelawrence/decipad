@@ -1,6 +1,6 @@
 import { Meta, StoryFn } from '@storybook/react';
 import { Warning } from '../../../icons';
-import { FilterBubbles } from './FilterBubbles';
+import { FilterBubbles, FilterBubblesProps } from './FilterBubbles';
 
 const args = {
   icon: <Warning />,
@@ -12,6 +12,6 @@ export default {
   component: FilterBubbles,
 } as Meta<typeof args>;
 
-export const Normal: StoryFn<typeof args> = (props) => (
+export const Normal: StoryFn<typeof args> = (props: FilterBubblesProps) => (
   <FilterBubbles {...props} />
 );

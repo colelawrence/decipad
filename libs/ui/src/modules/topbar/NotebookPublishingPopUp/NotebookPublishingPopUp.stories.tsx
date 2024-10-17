@@ -38,14 +38,14 @@ export default {
   },
 } as Meta<typeof args>;
 
-export const Unpublished: StoryFn<typeof args> = (props) => (
-  <NotebookPublishingPopUp {...props} />
-);
+export const Unpublished: StoryFn<typeof args> = (
+  props: NotebookSharingPopUpProps
+) => <NotebookPublishingPopUp {...props} />;
 
-export const Published: StoryFn<typeof args> = (props) => (
-  <NotebookPublishingPopUp {...props} />
-);
+export const Published: StoryFn<typeof args> = (
+  props: NotebookSharingPopUpProps
+) => <NotebookPublishingPopUp {...props} />;
 
-export const Republish: StoryFn<typeof args> = (props) => (
-  <NotebookPublishingPopUp {...props} />
-);
+export const Republish: StoryFn<typeof args> = (
+  props: NotebookSharingPopUpProps
+) => <NotebookPublishingPopUp {...props} />;

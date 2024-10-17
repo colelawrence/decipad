@@ -1,7 +1,11 @@
 import { Meta, StoryFn } from '@storybook/react';
 import { MenuItem, TriggerMenuItem } from '../../atoms';
 import { circleIcon } from '../../../storybook-utils';
-import { MenuList } from './MenuList';
+import {
+  MenuList,
+  DropdownRootMenuListProps,
+  RootMenuListProps,
+} from './MenuList';
 
 const args = { open: true };
 
@@ -27,14 +31,16 @@ const children = [
   </MenuList>,
 ];
 
-export const Normal: StoryFn<typeof args> = (props) => {
+export const Normal: StoryFn<typeof args> = (props: RootMenuListProps) => {
   return (
     <MenuList {...props} root>
       {children}
     </MenuList>
   );
 };
-export const Dropdown: StoryFn<typeof args> = (props) => {
+export const Dropdown: StoryFn<typeof args> = (
+  props: DropdownRootMenuListProps
+) => {
   return (
     <MenuList {...props} root dropdown trigger={<button>anchor</button>}>
       {children}

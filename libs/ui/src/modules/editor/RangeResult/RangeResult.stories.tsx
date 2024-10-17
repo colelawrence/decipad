@@ -2,6 +2,7 @@ import { Meta, StoryFn } from '@storybook/react';
 import { ComponentProps } from 'react';
 import { withCode } from '../../../storybook-utils';
 import { RangeResult } from './RangeResult';
+import { CodeResultProps } from '../../../types';
 
 export default {
   title: 'Organisms / Editor / Results / Range',
@@ -9,6 +10,6 @@ export default {
   decorators: [withCode('range(1 .. 10)')],
 } as Meta;
 
-export const Normal: StoryFn<ComponentProps<typeof RangeResult>> = (props) => (
-  <RangeResult {...props} />
-);
+export const Normal: StoryFn<ComponentProps<typeof RangeResult>> = (
+  props: CodeResultProps<'range'>
+) => <RangeResult {...props} />;

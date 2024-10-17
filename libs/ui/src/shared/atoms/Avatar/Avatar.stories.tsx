@@ -1,5 +1,5 @@
 import { Meta, StoryFn } from '@storybook/react';
-import { Avatar } from './Avatar';
+import { Avatar, AvatarProps } from './Avatar';
 
 const args = {
   name: 'John Doe',
@@ -12,4 +12,6 @@ export default {
   args,
 } as Meta;
 
-export const Initial: StoryFn<typeof args> = (props) => <Avatar {...props} />;
+export const Initial: StoryFn<typeof args> = (props: AvatarProps) => (
+  <Avatar {...props} />
+);

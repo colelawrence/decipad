@@ -10,7 +10,7 @@ import { codeBlock, results } from '../../../styles';
 import { getTypeIcon } from '../../../utils';
 import { Loading } from 'libs/ui/src/shared';
 
-interface CodeVariableProps {
+export interface CodeVariableProps {
   readonly children?: ReactNode;
   readonly onClick?: () => void;
   readonly provideVariableDefLink?: boolean;

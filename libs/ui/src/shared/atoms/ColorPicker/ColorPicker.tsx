@@ -24,7 +24,7 @@ const iconWrapperStyles = css({
   padding: '7px',
 });
 
-type ColorPickerProps = {
+export type ColorPickerProps = {
   readonly color: OpaqueColor;
   readonly selected: boolean;
 };

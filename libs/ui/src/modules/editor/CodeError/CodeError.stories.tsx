@@ -1,5 +1,5 @@
 import { Meta, StoryFn } from '@storybook/react';
-import { CodeError } from './CodeError';
+import { CodeError, CodeErrorProps } from './CodeError';
 
 const args = {
   message: 'This operation requires compatible units',
@@ -12,7 +12,9 @@ export default {
   args,
 } as Meta;
 
-export const Normal: StoryFn<typeof args> = (props) => <CodeError {...props} />;
-export const Smol: StoryFn<typeof args> = (props) => (
+export const Normal: StoryFn<typeof args> = (props: CodeErrorProps) => (
+  <CodeError {...props} />
+);
+export const Smol: StoryFn<typeof args> = (props: CodeErrorProps) => (
   <CodeError {...props} variant="smol" />
 );

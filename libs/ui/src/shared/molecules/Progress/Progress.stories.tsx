@@ -12,6 +12,6 @@ export default {
   args,
 } as Meta;
 
-export const Normal: StoryFn<ProgressProps> = (props) => (
+export const Normal: StoryFn<ProgressProps> = (props: ProgressProps) => (
   <Progress {...props} />
 );

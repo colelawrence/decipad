@@ -5,7 +5,10 @@ import { ComponentProps } from 'react';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { p16Regular } from '../../../primitives';
-import { DragAndDropImportNotebook } from './DragAndDropImportNotebook';
+import {
+  DragAndDropImportNotebook,
+  DragAndDropImportNotebookProps,
+} from './DragAndDropImportNotebook';
 
 export default {
   title: 'Organisms / UI / Workspace / Drag Import Notebook',
@@ -14,7 +17,7 @@ export default {
 
 export const Normal: StoryFn<
   ComponentProps<typeof DragAndDropImportNotebook>
-> = (props) => (
+> = (props: DragAndDropImportNotebookProps) => (
   <DndProvider backend={HTML5Backend}>
     <DragAndDropImportNotebook {...props} onImport={() => {}}>
       <span css={css(p16Regular)}>drop here</span>

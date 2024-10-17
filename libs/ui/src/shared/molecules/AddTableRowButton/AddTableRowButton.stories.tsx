@@ -1,6 +1,6 @@
 import { Meta, StoryFn } from '@storybook/react';
 import { ComponentProps } from 'react';
-import { AddTableRowButton } from './AddTableRowButton';
+import { AddTableRowButton, AddTableRowButtonProps } from './AddTableRowButton';
 
 export default {
   title: 'Molecules / Editor / Table / Add Row Button',
@@ -11,5 +11,5 @@ export default {
 } as Meta;
 
 export const Normal: StoryFn<ComponentProps<typeof AddTableRowButton>> = (
-  args
+  args: AddTableRowButtonProps
 ) => <AddTableRowButton {...args} />;

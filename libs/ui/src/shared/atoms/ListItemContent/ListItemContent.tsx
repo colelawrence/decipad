@@ -5,7 +5,7 @@ import { blockAlignment } from '../../../styles';
 
 const styles = css(blockAlignment.list.typography);
 
-type ListItemContentProps = {
+export type ListItemContentProps = {
   readonly children?: ReactNode;
 };
 export const ListItemContent = ({

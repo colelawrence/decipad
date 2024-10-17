@@ -9,7 +9,6 @@ import { useCallback, useEffect } from 'react';
 import { getNewIntegration } from '../utils';
 import { GenericContainerRunner } from '../runners';
 import { useAddAttachmentToNotebookMutation } from '@decipad/graphql-client';
-import assert from 'assert';
 
 /**
  * Returns the attachment ID from a file handle
@@ -19,12 +18,14 @@ import assert from 'assert';
  */
 const getAttachmentId = (url: string) => {
   const splitValues = url.split('/');
-  assert(splitValues.length > 0);
 
-  const attachmentId = splitValues.at(-1);
-  assert(attachmentId != null);
+  if (splitValues.length > 0) {
+    const attachmentId = splitValues.at(-1);
 
-  return attachmentId;
+    return attachmentId;
+  }
+
+  return null;
 };
 
 const useOnBeforeCreateIntegration = (notebookId: string) => {
@@ -37,24 +38,28 @@ const useOnBeforeCreateIntegration = (notebookId: string) => {
       switch (block.integrationType.type) {
         case 'csv': {
           const attachmentId = getAttachmentId(block.integrationType.csvUrl);
-          const res = await addAttachmentToNotebook({
-            attachmentId,
-            notebookId,
-          });
+          if (attachmentId) {
+            const res = await addAttachmentToNotebook({
+              attachmentId,
+              notebookId,
+            });
 
-          if (res.data?.addAttachmentToPad == null) {
-            return block;
+            if (res.data?.addAttachmentToPad == null) {
+              return block;
+            }
+
+            const newBlock: IntegrationTypes.IntegrationBlock = {
+              ...block,
+              integrationType: {
+                ...block.integrationType,
+                csvUrl: res.data.addAttachmentToPad.url,
+              },
+            };
+
+            return newBlock;
           }
 
-          const newBlock: IntegrationTypes.IntegrationBlock = {
-            ...block,
-            integrationType: {
-              ...block.integrationType,
-              csvUrl: res.data.addAttachmentToPad.url,
-            },
-          };
-
-          return newBlock;
+          return block;
         }
         default: {
           return block;

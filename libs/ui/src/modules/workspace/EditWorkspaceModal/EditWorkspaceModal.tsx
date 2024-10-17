@@ -9,7 +9,7 @@ import { Users } from '../../../icons';
 import { Modal } from '../../../shared';
 import { p13Medium, p13Regular } from '../../../primitives';
 
-type EditWorkspaceModalProps = {
+export type EditWorkspaceModalProps = {
   readonly name: string;
 
   readonly allowDelete?: boolean;

@@ -1,5 +1,5 @@
 import { Meta, StoryFn } from '@storybook/react';
-import { Italic } from './Italic';
+import { Italic, ItalicProps } from './Italic';
 
 export default {
   title: 'Atoms / Editor / Text / Mark / Italic',
@@ -8,7 +8,7 @@ export default {
     children: 'Just start writing',
   },
   decorators: [
-    (St) => (
+    (St: StoryFn) => (
       <div>
         You can quickly create data-driven documents with greater readability
         and understanding. <St />.
@@ -17,6 +17,6 @@ export default {
   ],
 } as Meta;
 
-export const Normal: StoryFn<{ children: string }> = (args) => (
+export const Normal: StoryFn<{ children: string }> = (args: ItalicProps) => (
   <Italic {...args} />
 );

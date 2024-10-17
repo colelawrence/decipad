@@ -3,7 +3,7 @@ import { ReactNode } from 'react';
 
 const styles = css({ fontStyle: 'italic' });
 
-interface ItalicProps {
+export interface ItalicProps {
   readonly children: ReactNode;
 }
 export const Italic = ({ children }: ItalicProps): ReturnType<React.FC> => {

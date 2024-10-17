@@ -28,7 +28,7 @@ const styles = (baseSwatches: Swatch) => {
   });
 };
 
-interface HighlightProps {
+export interface HighlightProps {
   readonly children: ReactNode;
 }
 export const Highlight = ({

@@ -2,11 +2,10 @@
 import { Result } from '@decipad/remote-computer';
 import { noop } from '@decipad/utils';
 import { Meta, StoryFn } from '@storybook/react';
-import { ComponentProps } from 'react';
 import { withCode } from '../../../storybook-utils';
-import { DisplayWidget } from './DisplayWidget';
+import { DisplayWidget, DisplayWidgetDropdownProps } from './DisplayWidget';
 
-const args: ComponentProps<typeof DisplayWidget> = {
+const args: DisplayWidgetDropdownProps = {
   openMenu: true,
   onChangeOpen: noop,
   result: 'Result',
@@ -22,9 +21,12 @@ export default {
   args,
 } as Meta;
 
-export const Normal: StoryFn<
-  ComponentProps<typeof DisplayWidget> & Result.Result
-> = ({ type, value, meta, ...props }) => {
+export const Normal: StoryFn<DisplayWidgetDropdownProps & Result.Result> = ({
+  type,
+  value,
+  meta,
+  ...props
+}: DisplayWidgetDropdownProps & Result.Result) => {
   return (
     <div css={{ maxWidth: 300, maxHeight: 200, padding: 32 }}>
       <DisplayWidget

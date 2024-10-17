@@ -1,5 +1,5 @@
 import { Meta, StoryFn } from '@storybook/react';
-import { VerifyEmail } from './VerifyEmail';
+import { VerifyEmail, VerifyEmailProps } from './VerifyEmail';
 
 const args = {
   email: 'foobar@decipad.com',
@@ -11,6 +11,6 @@ export default {
   args,
 } as Meta;
 
-export const Normal: StoryFn<typeof args> = (props) => (
+export const Normal: StoryFn<typeof args> = (props: VerifyEmailProps) => (
   <VerifyEmail {...props} />
 );

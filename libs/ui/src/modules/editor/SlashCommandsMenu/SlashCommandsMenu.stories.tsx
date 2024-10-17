@@ -1,5 +1,5 @@
 import { Meta, StoryFn } from '@storybook/react';
-import { SlashCommandsMenu } from './SlashCommandsMenu';
+import { SlashCommandsMenu, SlashCommandsMenuProps } from './SlashCommandsMenu';
 
 const args = {
   search: '',
@@ -11,6 +11,6 @@ export default {
   args,
 } as Meta;
 
-export const Normal: StoryFn<typeof args> = (props) => (
+export const Normal: StoryFn<typeof args> = (props: SlashCommandsMenuProps) => (
   <SlashCommandsMenu {...props} />
 );

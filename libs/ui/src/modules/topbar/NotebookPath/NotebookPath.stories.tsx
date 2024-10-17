@@ -1,5 +1,5 @@
 import { Meta, StoryFn } from '@storybook/react';
-import { NotebookPath } from './NotebookPath';
+import { NotebookPath, NotebookPathProps } from './NotebookPath';
 
 const args = {
   workspace: {
@@ -15,6 +15,6 @@ export default {
   args,
 } as Meta;
 
-export const Normal: StoryFn<typeof args> = (props) => (
+export const Normal: StoryFn<typeof args> = (props: NotebookPathProps) => (
   <NotebookPath {...props} />
 );

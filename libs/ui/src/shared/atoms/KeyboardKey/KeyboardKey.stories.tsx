@@ -10,7 +10,7 @@ export default {
   component: KeyboardKey,
   args,
   decorators: [
-    (Key) => (
+    (Key: StoryFn) => (
       <div>
         Press <Key /> for 👋.
       </div>

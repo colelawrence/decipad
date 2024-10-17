@@ -23,7 +23,7 @@ const ToastButton = ({ status, text }: ToastButtonProps) => {
   return <button onClick={() => toast(text, status)}>Click me</button>;
 };
 
-export const Info: StoryFn<typeof args> = (props) => {
+export const Info: StoryFn<typeof args> = (props: ToastButtonProps) => {
   return (
     <ToastDisplay>
       <ToastButton {...props} status="info" />
@@ -31,7 +31,7 @@ export const Info: StoryFn<typeof args> = (props) => {
   );
 };
 
-export const Success: StoryFn<typeof args> = (props) => {
+export const Success: StoryFn<typeof args> = (props: ToastButtonProps) => {
   return (
     <ToastDisplay>
       <ToastButton {...props} status="success" />
@@ -39,7 +39,7 @@ export const Success: StoryFn<typeof args> = (props) => {
   );
 };
 
-export const Error: StoryFn<typeof args> = (props) => {
+export const Error: StoryFn<typeof args> = (props: ToastButtonProps) => {
   return (
     <ToastDisplay>
       <ToastButton {...props} status="error" />
@@ -47,7 +47,7 @@ export const Error: StoryFn<typeof args> = (props) => {
   );
 };
 
-export const Warning: StoryFn<typeof args> = (props) => {
+export const Warning: StoryFn<typeof args> = (props: ToastButtonProps) => {
   return (
     <ToastDisplay>
       <ToastButton {...props} status="warning" />

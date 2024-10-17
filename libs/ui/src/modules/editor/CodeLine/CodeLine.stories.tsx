@@ -1,9 +1,8 @@
 import { Result } from '@decipad/remote-computer';
 import { docs } from '@decipad/routing';
 import { Meta, StoryFn } from '@storybook/react';
-import { ComponentProps } from 'react';
 import { withCode } from '../../../storybook-utils';
-import { CodeLine } from './CodeLine';
+import { CodeLine, CodeLineProps } from './CodeLine';
 
 export default {
   title: 'Organisms / Editor / Code / Line',
@@ -14,24 +13,33 @@ export default {
   },
 } as Meta;
 
-export const Normal: StoryFn<
-  ComponentProps<typeof CodeLine> & Result.Result
-> = ({ type, value, meta, ...props }) => (
+export const Normal: StoryFn<CodeLineProps & Result.Result> = ({
+  type,
+  value,
+  meta,
+  ...props
+}: CodeLineProps & Result.Result) => (
   <CodeLine {...props} result={{ type, value, meta }} />
 );
 
-export const WithHighlightedLine: StoryFn<
-  ComponentProps<typeof CodeLine> & Result.Result
-> = ({ type, value, meta, ...props }) => (
+export const WithHighlightedLine: StoryFn<CodeLineProps & Result.Result> = ({
+  type,
+  value,
+  meta,
+  ...props
+}: CodeLineProps & Result.Result) => (
   <CodeLine {...props} result={{ type, value, meta }} />
 );
 WithHighlightedLine.args = {
   highlight: true,
 };
 
-export const WithExpandedResult: StoryFn<
-  ComponentProps<typeof CodeLine> & Result.Result
-> = ({ type, value, meta, ...props }) => (
+export const WithExpandedResult: StoryFn<CodeLineProps & Result.Result> = ({
+  type,
+  value,
+  meta,
+  ...props
+}: CodeLineProps & Result.Result) => (
   <CodeLine {...props} result={{ type, value, meta }} />
 );
 WithExpandedResult.decorators = [withCode('[1, 2, 3]')];
@@ -39,9 +47,12 @@ WithExpandedResult.args = {
   children: '[1, 2, 3]',
 };
 
-export const WithError: StoryFn<
-  ComponentProps<typeof CodeLine> & Result.Result
-> = ({ type, value, meta, ...props }) => (
+export const WithError: StoryFn<CodeLineProps & Result.Result> = ({
+  type,
+  value,
+  meta,
+  ...props
+}: CodeLineProps & Result.Result) => (
   <CodeLine {...props} result={{ type, value, meta }} />
 );
 WithError.args = {
@@ -49,9 +60,9 @@ WithError.args = {
   syntaxError: { message: 'Syntax Error', url: docs({}).$ },
 };
 
-export const WithPlaceholder: StoryFn<
-  ComponentProps<typeof CodeLine> & Result.Result
-> = (props) => <CodeLine {...props} />;
+export const WithPlaceholder: StoryFn<CodeLineProps & Result.Result> = (
+  props: CodeLineProps & Result.Result
+) => <CodeLine {...props} />;
 WithPlaceholder.args = {
   children: '',
   isEmpty: true,

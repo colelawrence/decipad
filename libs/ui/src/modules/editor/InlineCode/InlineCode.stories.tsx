@@ -1,5 +1,5 @@
 import { Meta, StoryFn } from '@storybook/react';
-import { InlineCode } from './InlineCode';
+import { InlineCode, InlineCodeProps } from './InlineCode';
 
 export default {
   title: 'Atoms / Editor / Text / Mark / Code',
@@ -8,7 +8,7 @@ export default {
     children: 'Decipad',
   },
   decorators: [
-    (St) => (
+    (St: StoryFn) => (
       <div>
         Today, when you enter <St /> you can create a notebook and just start
         writing with text, data, and numbers together.
@@ -17,6 +17,6 @@ export default {
   ],
 } as Meta;
 
-export const Normal: StoryFn<{ children: string }> = (args) => (
-  <InlineCode {...args} />
-);
+export const Normal: StoryFn<{ children: string }> = (
+  args: InlineCodeProps
+) => <InlineCode {...args} />;

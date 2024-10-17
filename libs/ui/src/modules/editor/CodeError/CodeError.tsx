@@ -38,7 +38,7 @@ const urlStyles = css({
   textDecoration: 'underline',
 });
 
-interface CodeErrorProps {
+export interface CodeErrorProps {
   message: string;
   url?: string;
   detailMessage?: string;

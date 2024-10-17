@@ -14,7 +14,7 @@ export default {
   args,
 } as Meta;
 
-export const Normal: StoryFn<typeof args> = ({ text }) => (
+export const Normal: StoryFn<typeof args> = ({ text }: typeof args) => (
   <Label
     renderContent={(id) => (
       <input

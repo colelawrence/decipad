@@ -72,7 +72,7 @@ const initialTextStyles = css({
   color: cssVar('textDefault'),
 });
 
-type AvatarProps = {
+export type AvatarProps = {
   readonly name: string;
   readonly roundedSquare?: boolean;
   readonly hoverSelector?: string;

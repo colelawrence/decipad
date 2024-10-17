@@ -1,6 +1,6 @@
 import { noop } from '@decipad/utils';
 import { Meta, StoryFn } from '@storybook/react';
-import { ModalForm } from './ModalForm';
+import { ModalForm, ModalFormProps } from './ModalForm';
 
 const args = {
   onSubmit: noop,
@@ -15,4 +15,6 @@ export default {
   args,
 } as Meta;
 
-export const Normal: StoryFn<typeof args> = (props) => <ModalForm {...props} />;
+export const Normal: StoryFn<typeof args> = (props: ModalFormProps) => (
+  <ModalForm {...props} />
+);

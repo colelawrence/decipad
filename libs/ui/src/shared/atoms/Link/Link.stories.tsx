@@ -1,5 +1,5 @@
 import { Meta, StoryFn } from '@storybook/react';
-import { Link } from './Link';
+import { Link, LinkProps } from './Link';
 
 const args = {
   children: 'Discord',
@@ -11,7 +11,7 @@ export default {
   component: Link,
   args,
   decorators: [
-    (St) => (
+    (St: StoryFn) => (
       <div>
         We hope to see you on <St /> 👋.
       </div>
@@ -19,4 +19,6 @@ export default {
   ],
 } as Meta;
 
-export const Normal: StoryFn<typeof args> = (props) => <Link {...props} />;
+export const Normal: StoryFn<typeof args> = (props: LinkProps) => (
+  <Link {...props} />
+);

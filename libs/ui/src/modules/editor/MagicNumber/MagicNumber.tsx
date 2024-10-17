@@ -14,7 +14,7 @@ import {
 import { useEventNoEffect } from '../../../utils/useEventNoEffect';
 import { Loading, Tooltip } from '../../../shared';
 
-type MagicNumberProps = {
+export type MagicNumberProps = {
   readonly tempId?: string;
   readonly result?: Result.Result | undefined;
   readonly loadingState?: boolean;

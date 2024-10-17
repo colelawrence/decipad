@@ -2,7 +2,7 @@
 import { css } from '@emotion/react';
 import { Meta, StoryFn } from '@storybook/react';
 import { cssVar } from '../../../primitives';
-import { Tooltip } from './Tooltip';
+import { Tooltip, TooltipProps } from './Tooltip';
 
 const args = {
   children: 'Tooltip text',
@@ -14,7 +14,7 @@ export default {
   args,
 } as Meta;
 
-export const Normal: StoryFn<typeof args> = (props) => (
+export const Normal: StoryFn<typeof args> = (props: TooltipProps) => (
   <Tooltip
     {...props}
     trigger={
@@ -30,7 +30,7 @@ export const Normal: StoryFn<typeof args> = (props) => (
   />
 );
 
-export const Small: StoryFn<typeof args> = (props) => (
+export const Small: StoryFn<typeof args> = (props: TooltipProps) => (
   <Tooltip
     {...props}
     variant="small"

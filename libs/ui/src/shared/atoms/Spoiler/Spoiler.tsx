@@ -18,7 +18,7 @@ const milkIsSpoiledStyles = css({
   cursor: 'text',
 });
 
-interface SpoilerProps {
+export interface SpoilerProps {
   readonly children: ReactNode;
 }
 export const Spoiler = ({ children }: SpoilerProps): ReturnType<React.FC> => {

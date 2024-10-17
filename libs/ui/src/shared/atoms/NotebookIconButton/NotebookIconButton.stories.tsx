@@ -1,7 +1,7 @@
 import { Meta, StoryFn } from '@storybook/react';
 import { ComponentProps } from 'react';
 import { Rocket } from '../../../icons/user-icons';
-import { NotebookIconButton } from './NotebookIconButton';
+import { NotebookIconButton, IconButtonProps } from './NotebookIconButton';
 
 const args: ComponentProps<typeof NotebookIconButton> = {
   children: <Rocket />,
@@ -19,6 +19,6 @@ export default {
   },
 } as Meta<typeof args>;
 
-export const Normal: StoryFn<typeof args> = (props) => (
+export const Normal: StoryFn<typeof args> = (props: IconButtonProps) => (
   <NotebookIconButton {...props} />
 );

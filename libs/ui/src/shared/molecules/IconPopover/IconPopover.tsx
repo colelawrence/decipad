@@ -49,7 +49,7 @@ const iconsWrapper = css(
   deciOverflowXStyles
 );
 
-type IconPopoverProps = {
+export type IconPopoverProps = {
   readonly iconOnly?: boolean;
   readonly color: AvailableSwatchColor;
   readonly trigger: JSX.Element;

@@ -1,5 +1,5 @@
 import { Meta, StoryFn } from '@storybook/react';
-import { Badge } from './Badge';
+import { Badge, BadgeProps } from './Badge';
 
 const args = {
   children: 'Decipad',
@@ -10,4 +10,6 @@ export default {
   args,
 } as Meta;
 
-export const Normal: StoryFn<typeof args> = (props) => <Badge {...props} />;
+export const Normal: StoryFn<typeof args> = (props: BadgeProps) => (
+  <Badge {...props} />
+);

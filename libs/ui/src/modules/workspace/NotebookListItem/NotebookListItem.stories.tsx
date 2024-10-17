@@ -2,7 +2,7 @@ import { Meta, StoryFn } from '@storybook/react';
 import { ComponentProps } from 'react';
 import { AvailableColorStatus, TColorStatus } from '../../../utils';
 import { AvailableSwatchColor, swatchNames } from '../../../utils/swatches';
-import { NotebookListItem } from './NotebookListItem';
+import { NotebookListItem, NotebookListItemProps } from './NotebookListItem';
 import { UserIconKey } from '@decipad/editor-types';
 
 const asyncNoop = async () => null as any;
@@ -49,7 +49,7 @@ export default {
     },
   },
   decorators: [
-    (St) => (
+    (St: StoryFn) => (
       <div style={{ margin: '5px' }}>
         <St />
       </div>
@@ -58,6 +58,6 @@ export default {
   args,
 } as Meta<typeof args>;
 
-export const Normal: StoryFn<typeof args> = (props) => (
+export const Normal: StoryFn<typeof args> = (props: NotebookListItemProps) => (
   <NotebookListItem {...props} id="nb" />
 );

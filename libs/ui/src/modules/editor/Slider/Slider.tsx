@@ -61,7 +61,7 @@ const thumbStyles = css({
   display: 'block',
 });
 
-interface SliderProps {
+export interface SliderProps {
   readonly onChange?: (value: number) => void;
   readonly onFocus?: InputHTMLAttributes<HTMLInputElement>['onFocus'];
   readonly max?: number;

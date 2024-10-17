@@ -9,7 +9,11 @@ const buttonWrapperStyles = css({
   textDecoration: 'none',
 });
 
-export const VerifyEmail = ({ email }: { email: string }): ReturnType<FC> => {
+export interface VerifyEmailProps {
+  email: string;
+}
+
+export const VerifyEmail = ({ email }: VerifyEmailProps): ReturnType<FC> => {
   return (
     <LoginBox>
       <AuthContent

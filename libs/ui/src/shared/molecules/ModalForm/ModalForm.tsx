@@ -3,7 +3,7 @@ import { noop } from '@decipad/utils';
 import { useState } from 'react';
 import { Button, InputField, TextareaField } from '../../atoms';
 
-type ModalFormProps = {
+export type ModalFormProps = {
   readonly onSubmit: (label: string) => void;
   readonly title: string;
   readonly label?: string;

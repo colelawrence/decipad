@@ -23,7 +23,7 @@ const iconSize = css({
   },
 });
 
-type IconButtonProps = {
+export type IconButtonProps = {
   readonly onClick?: () => void;
   readonly children: ReactNode;
   readonly isDefaultBackground: boolean;

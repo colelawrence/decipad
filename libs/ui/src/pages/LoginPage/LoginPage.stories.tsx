@@ -11,6 +11,6 @@ export default {
   },
 } as Meta;
 
-export const Normal: StoryFn<LoginPageProps> = (args) => (
+export const Normal: StoryFn<LoginPageProps> = (args: LoginPageProps) => (
   <LoginPage {...args} />
 );

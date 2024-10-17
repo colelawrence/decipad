@@ -1,5 +1,5 @@
 import { Meta, StoryFn } from '@storybook/react';
-import { Modal } from './Modal';
+import { Modal, ModalContentProps } from './Modal';
 
 const args = {
   children: 'Content',
@@ -11,8 +11,10 @@ export default {
   args,
 } as Meta;
 
-export const Normal: StoryFn<typeof args> = (props) => <Modal {...props} />;
-
-export const NormalWithTitle: StoryFn<typeof args> = (props) => (
-  <Modal title="Modal Title" {...props} />
+export const Normal: StoryFn<typeof args> = (props: ModalContentProps) => (
+  <Modal {...props} />
 );
+
+export const NormalWithTitle: StoryFn<typeof args> = (
+  props: ModalContentProps
+) => <Modal title="Modal Title" {...props} />;

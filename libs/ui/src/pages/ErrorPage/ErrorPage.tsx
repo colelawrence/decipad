@@ -55,7 +55,7 @@ const message = (errorCode: ErrorPageProps['wellKnown']): string => {
   }
 };
 
-interface ErrorPageProps {
+export interface ErrorPageProps {
   readonly Heading: 'h1';
   readonly messages?: string[];
   readonly wellKnown?: '403' | '404' | '500' | '508';

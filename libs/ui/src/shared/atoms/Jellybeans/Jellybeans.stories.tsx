@@ -17,7 +17,7 @@ export default {
   args,
 } as Meta<JellyBrainsProps>;
 
-const Template: StoryFn<JellyBrainsProps> = (props) => (
+const Template: StoryFn<JellyBrainsProps> = (props: JellyBrainsProps) => (
   <JellyBeans {...props} />
 );
 

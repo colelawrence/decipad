@@ -6,7 +6,7 @@ import { TextAndIconButton } from '../../../shared/atoms/TextAndIconButton/TextA
 import { Refresh } from '../../../icons';
 import { GoogleConnectButton } from '../GoogleConnectButton/GoogleConnectButton';
 
-interface LiveErrorProps {
+export interface LiveErrorProps {
   error: Error;
   errorURL?: string;
   onRetry?: () => void;

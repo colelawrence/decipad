@@ -17,7 +17,9 @@ export default {
   args,
 } as Meta<InputFieldHorizontalProps>;
 
-export const Normal: StoryFn<typeof args> = (props) => (
+export const Normal: StoryFn<typeof args> = (
+  props: InputFieldHorizontalProps
+) => (
   <InputFieldHorizontalGroup>
     <InputFieldHorizontal {...props} />
   </InputFieldHorizontalGroup>

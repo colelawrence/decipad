@@ -28,7 +28,7 @@ const iconWrapperStyles = css({
   width: '16px',
 });
 
-interface AddTableRowButtonProps {
+export interface AddTableRowButtonProps {
   readonly onAddRow?: () => void;
   readonly mouseOver?: boolean;
 }

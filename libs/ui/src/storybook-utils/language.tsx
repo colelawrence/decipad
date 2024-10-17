@@ -1,5 +1,5 @@
 import { Result, SerializedTypeKind } from '@decipad/remote-computer';
-import { Decorator } from '@storybook/react';
+import { Decorator, StoryContext, StoryFn } from '@storybook/react';
 import { useEffect, useState } from 'react';
 import { runCode } from '../test-utils';
 
@@ -9,7 +9,7 @@ export type WithCodeProps<T extends SerializedTypeKind> = Result.Result<T>;
 
 export const withCode: CodeDecoratorFactory =
   (code: string, asResult = false) =>
-  (Story, context) => {
+  (Story: StoryFn, context: StoryContext) => {
     const [resultProps, setResultProps] = useState<Result.Result | null>(null);
 
     useEffect(() => {

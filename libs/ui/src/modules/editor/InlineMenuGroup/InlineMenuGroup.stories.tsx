@@ -15,7 +15,10 @@ export default {
   decorators: [inMenu],
 } as Meta;
 
-export const Normal: StoryFn<typeof args> = ({ numberOfItems, ...props }) => (
+export const Normal: StoryFn<typeof args> = ({
+  numberOfItems,
+  ...props
+}: typeof args) => (
   <InlineMenuGroup {...props}>
     {Array(numberOfItems)
       .fill(null)

@@ -1,5 +1,5 @@
 import { Meta, StoryFn } from '@storybook/react';
-import { ListItemContent } from './ListItemContent';
+import { ListItemContent, ListItemContentProps } from './ListItemContent';
 
 const args = {
   children: 'Item',
@@ -11,10 +11,10 @@ export default {
   args,
 } as Meta;
 
-export const Normal: StoryFn<typeof args> = (props) => (
+export const Normal: StoryFn<typeof args> = (props: ListItemContentProps) => (
   <ListItemContent {...props} />
 );
 
-export const Active: StoryFn<typeof args> = (props) => (
+export const Active: StoryFn<typeof args> = (props: ListItemContentProps) => (
   <ListItemContent {...props} />
 );

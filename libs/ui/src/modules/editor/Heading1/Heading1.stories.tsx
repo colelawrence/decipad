@@ -1,5 +1,5 @@
 import { Meta, StoryFn } from '@storybook/react';
-import { Heading1 } from './Heading1';
+import { Heading1, Heading1Props } from './Heading1';
 
 const args = { children: 'What’s possible?' };
 
@@ -9,10 +9,10 @@ export default {
   args,
 } as Meta;
 
-export const Normal: StoryFn<typeof args> = (props) => (
-  <Heading1 id="1" {...props} />
+export const Normal: StoryFn<typeof args> = (props: Heading1Props) => (
+  <Heading1 {...props} />
 );
 
-export const Active: StoryFn<typeof args> = (props) => (
-  <Heading1 id="1" {...props} />
+export const Active: StoryFn<typeof args> = (props: Heading1Props) => (
+  <Heading1 {...props} />
 );

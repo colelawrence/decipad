@@ -17,7 +17,7 @@ export default {
   args,
 } as Meta;
 
-export const Normal: StoryFn<typeof args> = (props) => (
+export const Normal: StoryFn<typeof args> = (props: typeof args) => (
   <Layout>
     {Array.from({ length: props.numberOfColumns }).map((_, i) => (
       <span key={i}>{lorem}</span>

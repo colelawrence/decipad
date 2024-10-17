@@ -37,7 +37,7 @@ const iconWrapperStyles = css({
   mixBlendMode: 'luminosity',
 });
 
-interface CalloutProps {
+export interface CalloutProps {
   readonly children: ReactNode;
   readonly icon?: UserIconKey;
   readonly color?: AvailableSwatchColor;

@@ -2,6 +2,7 @@ import { Meta, StoryFn } from '@storybook/react';
 import { ComponentProps } from 'react';
 import { plotParams } from '../PlotParams/test-helpers';
 import { PlotBlock } from './PlotBlock';
+import { PlotBlockProps } from './types';
 
 const plotResult: ComponentProps<typeof PlotBlock>['result'] = {
   data: {
@@ -33,6 +34,6 @@ const withMessageArgs = {
   errorMessage: 'Something awful just happened',
 };
 export const WithErrorMessage: StoryFn<typeof withMessageArgs> = (
-  extraProps
+  extraProps: PlotBlockProps
 ) => <PlotBlock {...props} {...extraProps} />;
 WithErrorMessage.args = withMessageArgs;

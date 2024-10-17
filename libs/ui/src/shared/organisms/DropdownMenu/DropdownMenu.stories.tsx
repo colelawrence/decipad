@@ -25,7 +25,7 @@ export default {
   args,
 } as Meta;
 
-export const Normal: StoryFn<typeof args> = (props) => (
+export const Normal: StoryFn<typeof args> = (props: DropdownMenuProps) => (
   <DropdownMenu {...props}>
     <></>
   </DropdownMenu>

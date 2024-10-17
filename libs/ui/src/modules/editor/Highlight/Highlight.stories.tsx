@@ -1,5 +1,5 @@
 import { Meta, StoryFn } from '@storybook/react';
-import { Highlight } from './Highlight';
+import { Highlight, HighlightProps } from './Highlight';
 
 export default {
   title: 'Atoms / Editor / Text / Mark / Highlight',
@@ -8,7 +8,7 @@ export default {
     children: '~20% global adoption',
   },
   decorators: [
-    (St) => (
+    (St: StoryFn) => (
       <div>
         Spreadsheets are more accessible with <St />, but they come with
         inherent problems. Have you ever used spreadsheets? Or, tried to read
@@ -19,6 +19,6 @@ export default {
   ],
 } as Meta;
 
-export const Normal: StoryFn<{ children: string }> = (args) => (
+export const Normal: StoryFn<{ children: string }> = (args: HighlightProps) => (
   <Highlight {...args} />
 );

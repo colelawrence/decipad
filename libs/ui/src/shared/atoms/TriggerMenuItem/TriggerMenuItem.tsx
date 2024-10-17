@@ -28,7 +28,7 @@ const selectedPreviewStyles = css({
   },
 });
 
-interface TriggerMenuItemProps {
+export interface TriggerMenuItemProps {
   readonly children: ReactNode;
   readonly icon?: ReactNode;
   readonly selected?: boolean;

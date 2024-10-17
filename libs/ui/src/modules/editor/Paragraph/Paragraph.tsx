@@ -29,7 +29,7 @@ const styles = css(blockAlignment.paragraph.typography, placeholderStyles, {
   wordBreak: 'break-word',
 });
 
-interface ParagraphProps {
+export interface ParagraphProps {
   readonly children: ReactNode;
   /**
    * Note: Since this is not a plain-text element like an `<input>`,

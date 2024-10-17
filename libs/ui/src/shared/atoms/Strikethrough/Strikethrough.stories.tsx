@@ -1,5 +1,5 @@
 import { Meta, StoryFn } from '@storybook/react';
-import { Strikethrough } from './Strikethrough';
+import { Strikethrough, StrikethroughProps } from './Strikethrough';
 
 export default {
   title: 'Atoms / Editor / Text / Mark / Strikethrough',
@@ -8,7 +8,7 @@ export default {
     children: 'Excel',
   },
   decorators: [
-    (St) => (
+    (St: StoryFn) => (
       <div>
         “I am most excited about the role <St /> Decipad is playing in the
         future of work,” says Avi Eyal, Managing Partner at Entrée Capital.
@@ -17,6 +17,6 @@ export default {
   ],
 } as Meta;
 
-export const Normal: StoryFn<{ children: string }> = (args) => (
-  <Strikethrough {...args} />
-);
+export const Normal: StoryFn<{ children: string }> = (
+  args: StrikethroughProps
+) => <Strikethrough {...args} />;

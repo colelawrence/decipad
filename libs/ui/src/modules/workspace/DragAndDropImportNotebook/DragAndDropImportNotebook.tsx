@@ -65,7 +65,7 @@ const dndAreaStyles = css({
   zIndex: 1000,
 });
 
-interface DragAndDropImportNotebookProps {
+export interface DragAndDropImportNotebookProps {
   readonly onImport: (source: string) => void;
   readonly enabled?: boolean;
   readonly children?: ReactNode;

@@ -44,7 +44,7 @@ const BulletIcon = ({ depth }: BulletIconProps) => {
   return <Bullet />;
 };
 
-type UnorderedListProps = {
+export type UnorderedListProps = {
   readonly children?: ReactNode;
 };
 export const UnorderedList = ({

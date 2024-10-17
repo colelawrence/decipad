@@ -29,7 +29,7 @@ export const loadingIconStyles = css({
   '> svg': { height: '16px', display: 'block', margin: '0 auto' },
 });
 
-interface CodeLineStructuredProps {
+export interface CodeLineStructuredProps {
   readonly highlight?: boolean;
   readonly result?: Result.Result;
   readonly syntaxError?: ComponentProps<typeof CodeError>;

@@ -1,7 +1,7 @@
 import { Meta, StoryFn } from '@storybook/react';
 import { ComponentProps } from 'react';
 import { baseSwatches } from '../../../utils';
-import { ColorPicker } from './ColorPicker';
+import { ColorPicker, ColorPickerProps } from './ColorPicker';
 
 const args: ComponentProps<typeof ColorPicker> = {
   color: baseSwatches.Catskill,
@@ -12,7 +12,7 @@ export default {
   title: 'Atoms / UI / Color Picker',
   component: ColorPicker,
   decorators: [
-    (St) => (
+    (St: StoryFn) => (
       <div style={{ margin: '5px' }}>
         <St />
       </div>
@@ -21,7 +21,7 @@ export default {
   args,
 } as Meta<typeof args>;
 
-export const Normal: StoryFn<typeof args> = (props) => (
+export const Normal: StoryFn<typeof args> = (props: ColorPickerProps) => (
   <>
     <ColorPicker {...props} color={baseSwatches.Malibu} />
     <ColorPicker {...props} color={baseSwatches.Sun} />
@@ -32,7 +32,7 @@ export const Normal: StoryFn<typeof args> = (props) => (
   </>
 );
 
-export const Selected: StoryFn<typeof args> = (props) => (
+export const Selected: StoryFn<typeof args> = (props: ColorPickerProps) => (
   <>
     <ColorPicker {...props} selected={true} color={baseSwatches.Malibu} />
     <ColorPicker {...props} selected={true} color={baseSwatches.Sun} />

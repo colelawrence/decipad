@@ -64,7 +64,7 @@ const inlineStyles = css({
 const titleStyles = css(p14Medium, { color: cssVar('textTitle') });
 const descriptionStyles = css(p12Regular);
 
-interface InlineMenuItemProps {
+export interface InlineMenuItemProps {
   readonly icon: ReactNode;
   readonly title: string;
   readonly description: string;

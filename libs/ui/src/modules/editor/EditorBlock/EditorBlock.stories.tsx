@@ -1,6 +1,6 @@
 import { ArgTypes, Meta, StoryFn } from '@storybook/react';
 import { blockAlignment } from '../../../styles';
-import { EditorBlock } from './EditorBlock';
+import { EditorBlock, EditorBlockProps } from './EditorBlock';
 
 interface Args {
   blockKind: keyof typeof blockAlignment;
@@ -19,6 +19,6 @@ export default {
   argTypes,
 } as Meta;
 
-export const Normal: StoryFn<Args> = (props) => (
+export const Normal: StoryFn<Args> = (props: EditorBlockProps) => (
   <EditorBlock {...props}>content</EditorBlock>
 );

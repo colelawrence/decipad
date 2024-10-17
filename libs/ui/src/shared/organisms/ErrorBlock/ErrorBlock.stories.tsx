@@ -13,6 +13,6 @@ export default {
   },
 } as Meta<ErrorBlockProps>;
 
-export const Normal: StoryFn<ErrorBlockProps> = (args) => (
+export const Normal: StoryFn<ErrorBlockProps> = (args: ErrorBlockProps) => (
   <ErrorBlock {...args} />
 );

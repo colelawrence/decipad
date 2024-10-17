@@ -1,12 +1,12 @@
 import { Meta, StoryFn } from '@storybook/react';
 import { ComponentProps } from 'react';
-import { SmartRef } from './SmartRef';
+import { SmartRef, SmartRefProps } from './SmartRef';
 
 export default {
   title: 'Atoms / Editor / Bubble / Smart Ref',
   component: SmartRef,
   decorators: [
-    (St) => (
+    (St: StoryFn) => (
       <code style={{ margin: '5px' }}>
         <St /> + 100
       </code>
@@ -14,9 +14,9 @@ export default {
   ],
 } as Meta;
 
-export const Normal: StoryFn<ComponentProps<typeof SmartRef>> = (props) => (
-  <SmartRef symbolName={'Ounces'} {...props} />
-);
+export const Normal: StoryFn<ComponentProps<typeof SmartRef>> = (
+  props: SmartRefProps
+) => <SmartRef symbolName={'Ounces'} {...props} />;
 
 export const NotInitialised: StoryFn<ComponentProps<typeof SmartRef>> = () => (
   <SmartRef isInitialized={false} />

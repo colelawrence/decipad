@@ -53,7 +53,7 @@ const identifierStyles = css(p12Medium, {
   overflow: 'hidden',
 });
 
-interface AutoCompleteMenuItemProps {
+export interface AutoCompleteMenuItemProps {
   readonly item: AutocompleteName;
 
   /**

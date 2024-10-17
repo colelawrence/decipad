@@ -1,5 +1,5 @@
 import { Meta, StoryFn } from '@storybook/react';
-import { Expression } from './Expression';
+import { Expression, VariableEditorProps } from './Expression';
 
 const args = {
   children: <span>children here</span>,
@@ -15,14 +15,16 @@ export default {
   component: Expression,
 } as Meta<typeof args>;
 
-export const Normal: StoryFn<typeof args> = (props) => (
+export const Normal: StoryFn<typeof args> = (props: VariableEditorProps) => (
   <Expression {...props} />
 );
 Normal.args = {
   children: <span>1 m/s</span>,
 };
 
-export const Error: StoryFn<typeof args> = (props) => <Expression {...props} />;
+export const Error: StoryFn<typeof args> = (props: VariableEditorProps) => (
+  <Expression {...props} />
+);
 Error.args = {
   children: <span>Boinkster</span>,
   error: {
@@ -31,9 +33,9 @@ Error.args = {
   },
 };
 
-export const Placeholder: StoryFn<typeof args> = (props) => (
-  <Expression {...props} />
-);
+export const Placeholder: StoryFn<typeof args> = (
+  props: VariableEditorProps
+) => <Expression {...props} />;
 Placeholder.args = {
   placeholder: 'Your value here',
 };

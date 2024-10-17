@@ -1,5 +1,5 @@
 import { Meta, StoryFn } from '@storybook/react';
-import { Button } from './Button';
+import { Button, ButtonProps } from './Button';
 
 export default {
   title: 'Atoms / UI / Button',
@@ -41,4 +41,6 @@ interface Args {
   disabled: boolean;
 }
 
-export const Normal: StoryFn<Args> = (props) => <Button {...props} />;
+export const Normal: StoryFn<Args> = (props: ButtonProps) => (
+  <Button {...props} />
+);

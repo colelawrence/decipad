@@ -11,7 +11,7 @@ const meta: Meta<typeof ImageDisplay> = {
 
 export default meta;
 
-const Template: StoryFn<ImageDisplayProps> = (args) => (
+const Template: StoryFn<ImageDisplayProps> = (args: ImageDisplayProps) => (
   <ImageDisplay {...args} />
 );
 

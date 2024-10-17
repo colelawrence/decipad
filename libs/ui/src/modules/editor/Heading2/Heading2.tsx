@@ -7,7 +7,7 @@ const styles = css(blockAlignment.heading2.typography, {
   wordBreak: 'break-word',
 });
 
-interface Heading2Props {
+export interface Heading2Props {
   readonly children: ReactNode;
   readonly id: string;
 }

@@ -12,7 +12,9 @@ export default {
   args,
 } as Meta;
 
-export const Normal: StoryFn<typeof args> = ({ numberOfItems }) => (
+export const Normal: StoryFn<typeof args> = ({
+  numberOfItems,
+}: typeof args) => (
   <OrderedList>
     {Array(numberOfItems)
       .fill(null)

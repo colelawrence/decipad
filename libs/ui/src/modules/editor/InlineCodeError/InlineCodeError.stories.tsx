@@ -1,6 +1,6 @@
 import { Result } from '@decipad/remote-computer';
 import { Meta, StoryFn } from '@storybook/react';
-import { InlineCodeError } from './InlineCodeError';
+import { InlineCodeError, InlineCodeErrorProps } from './InlineCodeError';
 
 const args = {
   type: {
@@ -16,6 +16,6 @@ export default {
   args,
 } as Meta;
 
-export const Normal: StoryFn<typeof args> = (props) => (
+export const Normal: StoryFn<typeof args> = (props: InlineCodeErrorProps) => (
   <InlineCodeError {...props} />
 );

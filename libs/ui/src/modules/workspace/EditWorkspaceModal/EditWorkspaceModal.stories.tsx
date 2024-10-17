@@ -1,5 +1,8 @@
 import { Meta, StoryFn } from '@storybook/react';
-import { EditWorkspaceModal } from './EditWorkspaceModal';
+import {
+  EditWorkspaceModal,
+  EditWorkspaceModalProps,
+} from './EditWorkspaceModal';
 import { noop } from '@decipad/utils';
 
 const args = {
@@ -13,6 +16,6 @@ export default {
   args,
 } as Meta;
 
-export const Normal: StoryFn<typeof args> = (props) => (
-  <EditWorkspaceModal {...props} onClose={noop} membersHref="" />
-);
+export const Normal: StoryFn<typeof args> = (
+  props: EditWorkspaceModalProps
+) => <EditWorkspaceModal {...props} onClose={noop} membersHref="" />;

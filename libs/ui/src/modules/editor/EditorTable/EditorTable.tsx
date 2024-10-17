@@ -145,7 +145,7 @@ const mouseOverAddColumnButtonStyles = css({
 
 const toggleTableStyles = css({ height: 'initial', overflow: 'auto' });
 
-interface EditorTableProps {
+export interface EditorTableProps {
   readonly id?: string;
   readonly icon: UserIconKey;
   readonly color: AvailableSwatchColor;

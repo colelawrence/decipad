@@ -9,18 +9,18 @@ export default {
   },
 } as Meta;
 
-export const Normal: StoryFn<CellInputProps> = (args) => (
+export const Normal: StoryFn<CellInputProps> = (args: CellInputProps) => (
   <CellInput {...args} />
 );
 
-export const HeadingVariant: StoryFn<CellInputProps> = (args) => (
-  <CellInput variant="heading" {...args} />
-);
+export const HeadingVariant: StoryFn<CellInputProps> = (
+  args: CellInputProps
+) => <CellInput variant="heading" {...args} />;
 
-export const HeaderVariant: StoryFn<CellInputProps> = (args) => (
-  <CellInput variant="header" {...args} />
-);
+export const HeaderVariant: StoryFn<CellInputProps> = (
+  args: CellInputProps
+) => <CellInput variant="header" {...args} />;
 
-export const DataVariant: StoryFn<CellInputProps> = (args) => (
+export const DataVariant: StoryFn<CellInputProps> = (args: CellInputProps) => (
   <CellInput variant="data" {...args} />
 );

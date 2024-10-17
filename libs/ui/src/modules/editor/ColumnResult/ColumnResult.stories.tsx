@@ -2,6 +2,7 @@ import { Meta, StoryFn } from '@storybook/react';
 import { ComponentProps } from 'react';
 import { withCode } from '../../../storybook-utils';
 import { ColumnResult } from './ColumnResult';
+import { CodeResultProps } from '../../../types';
 
 export default {
   title: 'Organisms / Editor / Results / Column',
@@ -9,6 +10,8 @@ export default {
   decorators: [withCode('[1, 2, 3]')],
 } as Meta;
 
-export const Normal: StoryFn<ComponentProps<typeof ColumnResult>> = (props) => {
+export const Normal: StoryFn<ComponentProps<typeof ColumnResult>> = (
+  props: CodeResultProps<'materialized-column'> | CodeResultProps<'column'>
+) => {
   return <ColumnResult {...props} />;
 };

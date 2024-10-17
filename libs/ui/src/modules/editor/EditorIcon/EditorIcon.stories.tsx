@@ -1,8 +1,7 @@
 import { Meta, StoryFn } from '@storybook/react';
-import { ComponentProps } from 'react';
-import { EditorIcon } from './EditorIcon';
+import { EditorIcon, EditorIconProps } from './EditorIcon';
 
-const args: ComponentProps<typeof EditorIcon> = {
+const args: EditorIconProps = {
   color: 'Sun',
   icon: 'Spider',
 };
@@ -13,6 +12,6 @@ export default {
   args,
 } as Meta<typeof args>;
 
-export const Normal: StoryFn<typeof args> = (props) => (
+export const Normal: StoryFn<typeof args> = (props: EditorIconProps) => (
   <EditorIcon {...props} />
 );

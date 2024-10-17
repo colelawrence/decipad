@@ -9,6 +9,7 @@ import { NotebookPath } from '../NotebookPath/NotebookPath';
 import { NotebookPublishingPopUp } from '../NotebookPublishingPopUp/NotebookPublishingPopUp';
 import { NotebookStatusDropdown } from '../NotebookStatus/NotebookStatusDropdown';
 import { UndoButtons } from './UndoButtons';
+import { TopbarGenericProps } from './types';
 
 const notebookId = 'notebookId';
 const notebookName = 'my notebook';
@@ -140,22 +141,24 @@ export default {
   args,
 } as Meta;
 
-export const Writer: StoryFn<typeof args> = (props) => (
+export const Writer: StoryFn<typeof args> = (props: TopbarGenericProps) => (
   <NotebookTopbar {...props} />
 );
 
-export const GPTGenerated: StoryFn<typeof args> = (props) => (
+export const GPTGenerated: StoryFn<typeof args> = (
+  props: TopbarGenericProps
+) => (
   <NotebookTopbar
     {...props}
     access={{ ...props.access, isGPTGenerated: true }}
   />
 );
 
-export const Embed: StoryFn<typeof args> = (props) => (
+export const Embed: StoryFn<typeof args> = (props: TopbarGenericProps) => (
   <NotebookTopbar {...props} isEmbed={true} />
 );
 
-export const Reader: StoryFn<typeof args> = (props) => (
+export const Reader: StoryFn<typeof args> = (props: TopbarGenericProps) => (
   <NotebookTopbar
     {...props}
     access={{ ...props.access, permissionType: 'READ' }}

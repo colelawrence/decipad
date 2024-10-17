@@ -1,9 +1,11 @@
 import { Result } from '@decipad/remote-computer';
 import { docs } from '@decipad/routing';
 import { Meta, StoryFn } from '@storybook/react';
-import { ComponentProps } from 'react';
 import { withCode } from '../../../storybook-utils';
-import { CodeLineStructured } from './CodeLineStructured';
+import {
+  CodeLineStructured,
+  CodeLineStructuredProps,
+} from './CodeLineStructured';
 
 export default {
   title: 'Organisms / Editor / Code / Structured Line',
@@ -15,15 +17,23 @@ export default {
   },
 } as Meta;
 
-export const Normal: StoryFn<
-  ComponentProps<typeof CodeLineStructured> & Result.Result
-> = ({ type, value, meta, ...props }) => (
+export const Normal: StoryFn<CodeLineStructuredProps & Result.Result> = ({
+  type,
+  value,
+  meta,
+  ...props
+}: CodeLineStructuredProps & Result.Result) => (
   <CodeLineStructured {...props} result={{ type, value, meta }} />
 );
 
 export const WithHighlightedLine: StoryFn<
-  ComponentProps<typeof CodeLineStructured> & Result.Result
-> = ({ type, value, meta, ...props }) => (
+  CodeLineStructuredProps & Result.Result
+> = ({
+  type,
+  value,
+  meta,
+  ...props
+}: CodeLineStructuredProps & Result.Result) => (
   <CodeLineStructured {...props} result={{ type, value, meta }} />
 );
 WithHighlightedLine.args = {
@@ -31,8 +41,13 @@ WithHighlightedLine.args = {
 };
 
 export const WithExpandedResult: StoryFn<
-  ComponentProps<typeof CodeLineStructured> & Result.Result
-> = ({ type, value, meta, ...props }) => (
+  CodeLineStructuredProps & Result.Result
+> = ({
+  type,
+  value,
+  meta,
+  ...props
+}: CodeLineStructuredProps & Result.Result) => (
   <CodeLineStructured {...props} result={{ type, value, meta }} />
 );
 WithExpandedResult.decorators = [withCode('[1, 2, 3]')];
@@ -41,9 +56,12 @@ WithExpandedResult.args = {
   codeChild: '[1, 2, 3]',
 };
 
-export const WithError: StoryFn<
-  ComponentProps<typeof CodeLineStructured> & Result.Result
-> = ({ type, value, meta, ...props }) => (
+export const WithError: StoryFn<CodeLineStructuredProps & Result.Result> = ({
+  type,
+  value,
+  meta,
+  ...props
+}: CodeLineStructuredProps & Result.Result) => (
   <CodeLineStructured {...props} result={{ type, value, meta }} />
 );
 WithError.args = {
@@ -53,8 +71,10 @@ WithError.args = {
 };
 
 export const WithPlaceholder: StoryFn<
-  ComponentProps<typeof CodeLineStructured> & Result.Result
-> = (props) => <CodeLineStructured {...props} />;
+  CodeLineStructuredProps & Result.Result
+> = (props: CodeLineStructuredProps & Result.Result) => (
+  <CodeLineStructured {...props} />
+);
 WithPlaceholder.args = {
   variableNameChild: 'Distance',
   codeChild: '',

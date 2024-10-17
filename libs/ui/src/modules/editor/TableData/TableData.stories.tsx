@@ -1,5 +1,5 @@
 import { Meta, StoryFn } from '@storybook/react';
-import { TableData } from './TableData';
+import { TableData, TableDataProps } from './TableData';
 
 export default {
   title: 'Atoms / Editor / Table / Data',
@@ -9,6 +9,6 @@ export default {
   },
 } as Meta;
 
-export const WithRowNumber: StoryFn<typeof TableData> = (args) => (
-  <TableData {...(args as any)} />
-);
+export const WithRowNumber: StoryFn<typeof TableData> = (
+  args: TableDataProps
+) => <TableData {...(args as any)} />;

@@ -2,7 +2,7 @@ import { Meta, StoryFn } from '@storybook/react';
 import { ComponentProps } from 'react';
 import { CaretDown } from '../../../icons';
 import { getNumberType } from '../../../utils';
-import { TableHeader } from './TableHeader';
+import { TableHeader, TableHeaderProps } from './TableHeader';
 
 const args: ComponentProps<typeof TableHeader> = {
   children: 'Column title',
@@ -14,15 +14,17 @@ export default {
   args,
 } as Meta;
 
-export const Normal: StoryFn<typeof args> = (props) => (
+export const Normal: StoryFn<typeof args> = (props: TableHeaderProps) => (
   <TableHeader {...props} />
 );
 
-export const AnotherType: StoryFn<typeof args> = (props) => (
+export const AnotherType: StoryFn<typeof args> = (props: TableHeaderProps) => (
   <TableHeader {...props} type={getNumberType()} />
 );
 
-export const WithRightSlotIcon: StoryFn<typeof args> = (props) => (
+export const WithRightSlotIcon: StoryFn<typeof args> = (
+  props: TableHeaderProps
+) => (
   <TableHeader
     {...props}
     menu={
@@ -33,6 +35,6 @@ export const WithRightSlotIcon: StoryFn<typeof args> = (props) => (
   />
 );
 
-export const Highlighted: StoryFn<typeof args> = (props) => (
+export const Highlighted: StoryFn<typeof args> = (props: TableHeaderProps) => (
   <TableHeader {...props} highlight />
 );

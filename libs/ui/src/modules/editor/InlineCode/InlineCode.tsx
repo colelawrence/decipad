@@ -8,7 +8,7 @@ const styles = css(codeBlock.variableStyles, {
   borderRadius: '4px',
 });
 
-interface InlineCodeProps {
+export interface InlineCodeProps {
   readonly children: ReactNode;
 }
 export const InlineCode = ({

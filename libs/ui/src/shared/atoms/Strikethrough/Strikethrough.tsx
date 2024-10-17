@@ -3,7 +3,7 @@ import { ReactNode } from 'react';
 
 const styles = css({ textDecoration: 'line-through' });
 
-interface StrikethroughProps {
+export interface StrikethroughProps {
   readonly children: ReactNode;
 }
 export const Strikethrough = ({

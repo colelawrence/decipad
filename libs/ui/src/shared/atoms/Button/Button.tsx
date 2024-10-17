@@ -205,7 +205,7 @@ export const sizeStyles: Record<NonNullable<ButtonProps['size']>, CSSObject> = {
 export const enabledStyles = css({ cursor: 'pointer' });
 export const disabledStyles = css({ cursor: 'not-allowed' });
 
-type ButtonProps = {
+export type ButtonProps = {
   readonly type?:
     | 'minimal'
     | 'primary'

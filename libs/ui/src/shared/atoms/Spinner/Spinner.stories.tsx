@@ -6,4 +6,4 @@ export default {
   component: Spinner,
 } as Meta;
 
-export const Normal: StoryFn = (props) => <Spinner {...props} />;
+export const Normal: StoryFn = () => <Spinner />;

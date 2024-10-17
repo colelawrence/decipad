@@ -61,7 +61,7 @@ const errorContainerStyles = css({
   justifySelf: 'center',
 });
 
-interface VariableEditorProps {
+export interface VariableEditorProps {
   type?: SerializedType;
   error?: ComponentProps<typeof CodeError>;
   focused?: boolean;

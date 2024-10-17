@@ -1,5 +1,5 @@
 import { Meta, StoryFn } from '@storybook/react';
-import { BlockDragHandle } from './BlockDragHandle';
+import { BlockDragHandle, BlockDragHandleProps } from './BlockDragHandle';
 
 const argTypes = {
   onChangeMenuOpen: { action: 'Menu open state would change to' },
@@ -12,9 +12,9 @@ export default {
   argTypes,
 } as Meta;
 
-export const MenuClosed: StoryFn = (props) => (
+export const MenuClosed: StoryFn = (props: BlockDragHandleProps) => (
   <BlockDragHandle {...props} menuOpen={false} />
 );
-export const MenuOpen: StoryFn = (props) => (
+export const MenuOpen: StoryFn = (props: BlockDragHandleProps) => (
   <BlockDragHandle {...props} menuOpen />
 );

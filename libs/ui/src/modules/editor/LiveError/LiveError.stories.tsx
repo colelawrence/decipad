@@ -1,5 +1,5 @@
 import { Meta, StoryFn } from '@storybook/react';
-import { LiveError } from './LiveError';
+import { LiveError, LiveErrorProps } from './LiveError';
 
 const args = {
   error: {
@@ -16,7 +16,9 @@ export default {
   args,
 } as Meta;
 
-export const Normal: StoryFn<typeof args> = (props) => <LiveError {...props} />;
+export const Normal: StoryFn<typeof args> = (props: LiveErrorProps) => (
+  <LiveError {...props} />
+);
 export const ConnectionError: StoryFn<typeof args> = () => (
   <LiveError error={new Error('Failed to fetch the thing')} />
 );

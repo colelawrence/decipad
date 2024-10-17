@@ -62,7 +62,7 @@ const clickableStyles = css({
   cursor: 'pointer',
 });
 
-interface TooltipProps {
+export interface TooltipProps {
   readonly children?: React.ReactNode;
   readonly trigger?: React.ReactNode;
 

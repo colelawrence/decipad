@@ -6,7 +6,7 @@ import { CodeError } from '../CodeError/CodeError';
 import { CodeResultProps } from '../../../types';
 import { formatError } from '@decipad/format';
 
-type InlineCodeErrorProps = CodeResultProps<'type-error'> & {
+export type InlineCodeErrorProps = CodeResultProps<'type-error'> & {
   element?: AnyElement;
 };
 

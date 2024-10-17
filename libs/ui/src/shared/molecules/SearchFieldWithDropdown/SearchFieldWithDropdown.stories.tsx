@@ -10,9 +10,9 @@ export default {
   component: SearchFieldWithDropdown,
 } as Meta;
 
-const Template: StoryFn<SearchFieldWithDropdownProps> = (args) => (
-  <SearchFieldWithDropdown {...args} />
-);
+const Template: StoryFn<SearchFieldWithDropdownProps> = (
+  args: SearchFieldWithDropdownProps
+) => <SearchFieldWithDropdown {...args} />;
 
 export const Default = Template.bind({});
 Default.args = {

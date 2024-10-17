@@ -1,6 +1,7 @@
 import { Meta, StoryFn } from '@storybook/react';
 import { ComponentProps } from 'react';
 import { ColorStatus } from './ColorStatus';
+import { ColorStatusProps } from './ColorStatusProps';
 
 const args: ComponentProps<typeof ColorStatus> = {
   name: 'draft',
@@ -11,7 +12,7 @@ export default {
   title: 'Atoms / UI / Color Status',
   component: ColorStatus,
   decorators: [
-    (St) => (
+    (St: StoryFn) => (
       <div style={{ margin: '5px' }}>
         <St />
       </div>
@@ -20,7 +21,7 @@ export default {
   args,
 } as Meta<typeof args>;
 
-export const Normal: StoryFn<typeof args> = (props) => (
+export const Normal: StoryFn<typeof args> = (props: ColorStatusProps) => (
   <>
     <ColorStatus {...props} name={'draft'} />
     <ColorStatus {...props} name={'review'} />
@@ -28,7 +29,7 @@ export const Normal: StoryFn<typeof args> = (props) => (
   </>
 );
 
-export const Selected: StoryFn<typeof args> = (props) => (
+export const Selected: StoryFn<typeof args> = (props: ColorStatusProps) => (
   <>
     <ColorStatus {...props} selected={true} name={'draft'} />
     <ColorStatus {...props} selected={true} name={'review'} />

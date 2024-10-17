@@ -40,7 +40,7 @@ const meta: Meta<typeof ImageGallery> = {
 };
 
 export default meta;
-const Template: StoryFn<ImageGalleryProps> = (args) => (
+const Template: StoryFn<ImageGalleryProps> = (args: ImageGalleryProps) => (
   <ImageGallery {...args} />
 );
 

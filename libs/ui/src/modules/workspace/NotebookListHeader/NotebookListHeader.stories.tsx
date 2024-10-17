@@ -1,5 +1,8 @@
 import { Meta, StoryFn } from '@storybook/react';
-import { NotebookListHeader } from './NotebookListHeader';
+import {
+  NotebookListHeader,
+  NotebookListHeaderProps,
+} from './NotebookListHeader';
 
 export default {
   title: 'Molecules / UI / Notebook List / Header',
@@ -9,8 +12,8 @@ export default {
   },
 } as Meta;
 
-export const Normal: StoryFn<{ numberOfNotebooks?: number }> = (args) => (
-  <NotebookListHeader Heading="h1" {...args} />
-);
+export const Normal: StoryFn<{ numberOfNotebooks?: number }> = (
+  args: NotebookListHeaderProps
+) => <NotebookListHeader {...args} />;
 
 export const Loading: StoryFn = () => <NotebookListHeader Heading="h1" />;

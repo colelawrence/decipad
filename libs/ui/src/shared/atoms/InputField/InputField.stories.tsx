@@ -12,6 +12,6 @@ export default {
   args,
 } as Meta<InputFieldProps>;
 
-export const Normal: StoryFn<typeof args> = (props) => (
+export const Normal: StoryFn<typeof args> = (props: InputFieldProps) => (
   <InputField {...props} />
 );

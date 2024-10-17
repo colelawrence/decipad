@@ -122,7 +122,7 @@ const plusStyle = css(handleButtonStyle, {
   },
 });
 
-interface BlockDragHandleProps {
+export interface BlockDragHandleProps {
   readonly children?: ReactNode;
   readonly menuOpen?: boolean;
   readonly dependenciesForBlock?: BlockDependents[];

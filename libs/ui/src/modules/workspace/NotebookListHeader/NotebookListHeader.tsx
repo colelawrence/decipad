@@ -14,7 +14,7 @@ const notebookListHeaderWrapperStyles = css({
   alignItems: 'center',
 });
 
-interface NotebookListHeaderProps {
+export interface NotebookListHeaderProps {
   readonly Heading: 'h1';
   readonly numberOfNotebooks?: number;
 }

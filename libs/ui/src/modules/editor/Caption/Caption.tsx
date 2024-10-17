@@ -29,7 +29,7 @@ import { IconPopover } from '../../../shared';
 import { AvailableSwatchColor } from '../../../utils';
 import { Close, Sparkles } from '../../../icons';
 
-interface CaptionProps
+export interface CaptionProps
   extends Pick<
     ComponentProps<typeof IconPopover>,
     'onChangeColor' | 'onChangeIcon'

@@ -1,6 +1,6 @@
 import { Meta, StoryFn } from '@storybook/react';
 import { ComponentProps } from 'react';
-import { EditorTable } from './EditorTable';
+import { EditorTable, EditorTableProps } from './EditorTable';
 
 export default {
   title: 'Organisms / Editor / Table',
@@ -21,6 +21,6 @@ export default {
   },
 } as Meta;
 
-export const Normal: StoryFn<ComponentProps<typeof EditorTable>> = (args) => (
-  <EditorTable {...args} />
-);
+export const Normal: StoryFn<ComponentProps<typeof EditorTable>> = (
+  args: EditorTableProps
+) => <EditorTable {...args} />;

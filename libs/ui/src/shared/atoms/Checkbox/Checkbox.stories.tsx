@@ -10,4 +10,6 @@ export default {
   },
 } as Meta;
 
-export const Normal: StoryFn<CheckboxProps> = (args) => <Checkbox {...args} />;
+export const Normal: StoryFn<CheckboxProps> = (args: CheckboxProps) => (
+  <Checkbox {...args} />
+);

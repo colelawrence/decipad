@@ -1,6 +1,9 @@
 import { Meta, StoryFn } from '@storybook/react';
 import { inMenu } from '../../../storybook-utils';
-import { AutoCompleteMenuItem } from './AutoCompleteMenuItem';
+import {
+  AutoCompleteMenuItem,
+  AutoCompleteMenuItemProps,
+} from './AutoCompleteMenuItem';
 import { ComponentProps } from 'react';
 
 const args: ComponentProps<typeof AutoCompleteMenuItem> = {
@@ -18,10 +21,10 @@ export default {
   decorators: [inMenu],
 } as Meta;
 
-export const Normal: StoryFn<typeof args> = (props) => (
-  <AutoCompleteMenuItem {...props} />
-);
+export const Normal: StoryFn<typeof args> = (
+  props: AutoCompleteMenuItemProps
+) => <AutoCompleteMenuItem {...props} />;
 
-export const Active: StoryFn<typeof args> = (props) => (
-  <AutoCompleteMenuItem focused={true} {...props} />
-);
+export const Active: StoryFn<typeof args> = (
+  props: AutoCompleteMenuItemProps
+) => <AutoCompleteMenuItem focused={true} {...props} />;

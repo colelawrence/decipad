@@ -16,7 +16,7 @@ type WithTabs = Readonly<{
   onTabClick: (_: Stages) => void;
 }>;
 
-type IntegrationModalProps = Readonly<{
+export type IntegrationModalProps = Readonly<{
   children: ReactNode;
 
   // To be displayed at the top of the modal.

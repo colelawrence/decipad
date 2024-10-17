@@ -1,6 +1,6 @@
 import { Meta, StoryFn } from '@storybook/react';
 import { ComponentProps } from 'react';
-import { NotebookAvatars } from './NotebookAvatars';
+import { NotebookAvatars, NotebookAvatarsProps } from './NotebookAvatars';
 
 const args: ComponentProps<typeof NotebookAvatars> = {
   invitedUsers: [
@@ -31,6 +31,6 @@ export default {
   args,
 } as Meta;
 
-export const Normal: StoryFn<typeof args> = (props) => (
+export const Normal: StoryFn<typeof args> = (props: NotebookAvatarsProps) => (
   <NotebookAvatars {...props} />
 );

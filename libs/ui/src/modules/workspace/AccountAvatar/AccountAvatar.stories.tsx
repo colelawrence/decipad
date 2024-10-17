@@ -1,5 +1,5 @@
 import { Meta, StoryFn } from '@storybook/react';
-import { AccountAvatar } from './AccountAvatar';
+import { AccountAvatar, AccountAvatarProps } from './AccountAvatar';
 
 export default {
   title: 'Molecules /  UI / Avatar',
@@ -9,6 +9,6 @@ export default {
   },
 } as Meta;
 
-export const Normal: StoryFn<{ menuOpen: boolean }> = ({ menuOpen }) => (
-  <AccountAvatar name="John Doe" menuOpen={menuOpen} />
-);
+export const Normal: StoryFn<{ menuOpen: boolean }> = ({
+  menuOpen,
+}: AccountAvatarProps) => <AccountAvatar name="John Doe" menuOpen={menuOpen} />;

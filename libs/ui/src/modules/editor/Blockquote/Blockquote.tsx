@@ -16,7 +16,7 @@ const styles = css(
   }
 );
 
-interface BlockquoteProps {
+export interface BlockquoteProps {
   readonly children: ReactNode;
 }
 

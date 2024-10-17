@@ -8,7 +8,7 @@ const styles = css(p16Bold, {
   lineHeight: 'inherit',
 });
 
-interface BoldProps {
+export interface BoldProps {
   readonly children: ReactNode;
 }
 export const Bold = ({ children }: BoldProps): ReturnType<React.FC> => {

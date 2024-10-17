@@ -1,7 +1,10 @@
 import { Meta, StoryFn } from '@storybook/react';
 import { ComponentProps } from 'react';
 import { DatabaseConnectionScreen as UIDatabaseConnection } from '.';
-import { WrapperIntegrationModalDialog } from './WrapperIntegrationModalDialog';
+import {
+  WrapperIntegrationModalDialog,
+  IntegrationModalProps,
+} from './WrapperIntegrationModalDialog';
 
 export default {
   title: 'Organisms / UI / Integrations / Integrations Modal',
@@ -30,13 +33,13 @@ export default {
 
 export const Normal: StoryFn<
   ComponentProps<typeof WrapperIntegrationModalDialog>
-> = (props) => {
+> = (props: IntegrationModalProps) => {
   return <WrapperIntegrationModalDialog {...props} />;
 };
 
 export const DatabaseConnectionScreen: StoryFn<
   ComponentProps<typeof WrapperIntegrationModalDialog>
-> = (props) => {
+> = (props: IntegrationModalProps) => {
   return (
     <WrapperIntegrationModalDialog {...props}>
       <UIDatabaseConnection workspaceId="workspace_id" />
@@ -46,7 +49,7 @@ export const DatabaseConnectionScreen: StoryFn<
 
 export const DatabaseConnectionScreenError: StoryFn<
   ComponentProps<typeof WrapperIntegrationModalDialog>
-> = (props) => {
+> = (props: IntegrationModalProps) => {
   return (
     <WrapperIntegrationModalDialog {...props}>
       <UIDatabaseConnection workspaceId="workspaceid" />

@@ -32,7 +32,8 @@ const hiddenFocusedStyle = css({
   filter: 'unset',
 });
 
-interface DraggableBlockProps extends ComponentProps<typeof EditorBlock> {
+export interface DraggableBlockProps
+  extends ComponentProps<typeof EditorBlock> {
   readonly isSelected?: boolean;
   readonly isHidden?: boolean;
   readonly isBeingDragged?: boolean;

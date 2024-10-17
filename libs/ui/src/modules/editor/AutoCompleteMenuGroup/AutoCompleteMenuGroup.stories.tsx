@@ -2,6 +2,14 @@ import { Meta, StoryFn } from '@storybook/react';
 import { AutoCompleteMenuItem } from '../AutoCompleteMenuItem/AutoCompleteMenuItem';
 import { inMenu } from '../../../storybook-utils';
 import { AutoCompleteMenuGroup } from './AutoCompleteMenuGroup';
+import { ReactNode } from 'react';
+
+interface ArgsProps {
+  readonly title: string;
+  readonly numberOfItems: number;
+  readonly isOnlyGroup?: boolean;
+  readonly children?: ReactNode;
+}
 
 const args = {
   title: 'Title',
@@ -15,7 +23,10 @@ export default {
   decorators: [inMenu],
 } as Meta;
 
-export const Normal: StoryFn<typeof args> = ({ numberOfItems, ...props }) => (
+export const Normal: StoryFn<typeof args> = ({
+  numberOfItems,
+  ...props
+}: ArgsProps) => (
   <AutoCompleteMenuGroup {...props}>
     {Array(numberOfItems)
       .fill(null)

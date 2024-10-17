@@ -12,6 +12,6 @@ export default {
   args,
 } as Meta<AuthContentProps>;
 
-export const Normal: StoryFn<typeof args> = (props) => (
+export const Normal: StoryFn<typeof args> = (props: AuthContentProps) => (
   <AuthContent {...props} />
 );

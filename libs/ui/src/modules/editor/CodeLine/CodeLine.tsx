@@ -197,7 +197,7 @@ const grabbingStyles = css({
   cursor: 'grabbing',
 });
 
-interface CodeLineProps {
+export interface CodeLineProps {
   readonly variant?: 'table' | 'standalone' | 'inline';
   readonly children: ReactNode;
   readonly highlight?: boolean;
