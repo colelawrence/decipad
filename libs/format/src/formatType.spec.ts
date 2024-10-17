@@ -119,7 +119,9 @@ it('can be stringified in basic form', () => {
       columnNames: ['Col1', 'Col2'],
     })
   );
-  expect(Format.formatTypeToBasicString(locale, table)).toEqual('table');
+  expect(Format.formatTypeToBasicString(locale, table)).toEqual(
+    'table<Col1:meters, Col2:string>'
+  );
 
   const row = serializeType(
     t.row([t.number([meter]), t.string()], ['Col1', 'Col2'])
@@ -127,7 +129,7 @@ it('can be stringified in basic form', () => {
   expect(Format.formatTypeToBasicString(locale, row)).toEqual('row');
 
   const col = serializeType(t.column(t.string()));
-  expect(Format.formatTypeToBasicString(locale, col)).toEqual('column');
+  expect(Format.formatTypeToBasicString(locale, col)).toEqual('column<string>');
 
   expect(() =>
     Format.formatTypeToBasicString(

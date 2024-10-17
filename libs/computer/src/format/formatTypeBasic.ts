@@ -12,6 +12,20 @@ export const formatTypeToBasicString = (
       return type.unit ? formatUnit(locale, type.unit) : 'number';
     case 'date':
       return `date(${type.date})`;
+    case 'column':
+      return type.cellType.kind === 'anything'
+        ? 'column'
+        : `column<${formatTypeToBasicString(locale, type.cellType)}>`;
+    case 'table':
+      return `table<${type.columnNames
+        .map(
+          (colName, colIndex) =>
+            `${colName}:${formatTypeToBasicString(
+              locale,
+              type.columnTypes[colIndex]
+            )}`
+        )
+        .join(', ')}>`;
     default:
       return type.kind;
   }
