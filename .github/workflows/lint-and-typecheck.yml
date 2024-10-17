@@ -62,15 +62,19 @@ jobs:
         if: steps.cache-check.outputs.restored != 'true'
 
       - name: Lint
+        env:
+          NX_CLOUD_AUTH_TOKEN: ${{ secrets.NX_CLOUD_AUTH_TOKEN }}
         run: npx nx affected --target=lint --parallel=2
 
       - name: Typecheck
         run: yarn typecheck
         env:
+          NX_CLOUD_AUTH_TOKEN: ${{ secrets.NX_CLOUD_AUTH_TOKEN }}
           NODE_OPTIONS: '--enable-source-maps --max_old_space_size=16384'
 
       - name: Depcheck
         env:
+          NX_CLOUD_AUTH_TOKEN: ${{ secrets.NX_CLOUD_AUTH_TOKEN }}
           NODE_OPTIONS: '--max_old_space_size=32768'
         run: npx nx affected --target=depcheck --parallel=2
 

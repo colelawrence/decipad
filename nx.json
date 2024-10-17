@@ -5,7 +5,7 @@
   "npmScope": "decipad",
   "tasksRunnerOptions": {
     "default": {
-      "runner": "nx-cloud",
+      "runner": "nx/tasks-runners/default",
       "options": {
         "cacheableOperations": ["lint", "depcheck"],
         "runtimeCacheInputs": [
@@ -58,8 +58,7 @@
           "echo WORKSPACE_FREE_PLAN=$WORKSPACE_FREE_PLAN",
           "echo WORKSPACE_PRO_PLAN=$WORKSPACE_PRO_PLAN"
         ],
-        "parallel": 12,
-        "accessToken": "ODYzMjhhZjAtMTNiZS00YWVjLWE3M2ItN2VmYjZkNTc3MTFlfHJlYWQtd3JpdGU="
+        "parallel": 12
       }
     }
   },
