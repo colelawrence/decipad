@@ -1,3 +1,5 @@
+/* eslint-disable no-console */
+/* eslint-disable playwright/no-conditional-in-test */
 import type { Page } from './manager/decipad-tests';
 import { expect, test } from './manager/decipad-tests';
 import {
@@ -8,6 +10,8 @@ import {
 } from '../utils/src';
 import os from 'node:os';
 import type { User } from './manager/test-users';
+import fs from 'fs';
+import path from 'path';
 
 const executeCode = (user: User, page: Page, sourcecode: string, x: number) =>
   test.step(`Executing ${x}`, async () => {
@@ -71,7 +75,7 @@ const executeCode = (user: User, page: Page, sourcecode: string, x: number) =>
     await expect(page.getByTitle('Error')).toBeHidden();
   });
 
-test('Make sure our js code templates work', async ({ randomFreeUser }) => {
+test('make sure our js code templates work', async ({ randomFreeUser }) => {
   const { page, notebook, workspace } = randomFreeUser;
 
   await workspace.createNewNotebook();
@@ -106,7 +110,7 @@ test('Make sure our js code templates work', async ({ randomFreeUser }) => {
   });
 });
 
-test('More JS codeblock checks', async ({ randomFreeUser }) => {
+test('more JS codeblock checks', async ({ randomFreeUser }) => {
   const { page, notebook, workspace } = randomFreeUser;
 
   await workspace.createNewNotebook();
@@ -216,7 +220,7 @@ test('screenshots the import menu', async ({ randomFreeUser }) => {
   await page.keyboard.press('Backspace');
 });
 
-test('Checks the ability to change the unit of a response', async ({
+test('checks the ability to change the unit of a response', async ({
   randomFreeUser,
 }) => {
   const { page, notebook, workspace } = randomFreeUser;
@@ -275,7 +279,7 @@ test('Checks the ability to change the unit of a response', async ({
   await page.waitForTimeout(Timeouts.liveBlockDelay);
 });
 
-test('Check sql integrations is working correctly', async ({ testUser }) => {
+test('check sql integrations is working correctly', async ({ testUser }) => {
   test.slow();
   let notebookURL: string;
 
@@ -397,7 +401,7 @@ test('Check sql integrations is working correctly', async ({ testUser }) => {
   await expect(testUser.page.getByText('exprRef')).toBeHidden();
 });
 
-test('Checks google sheet integrations with link works', async ({
+test('checks google sheet integrations with link works', async ({
   testUser,
 }) => {
   test.slow();
@@ -432,4 +436,142 @@ test('Checks google sheet integrations with link works', async ({
       testUser.page.getByText('11 rows, previewing rows 1 to 10')
     ).toBeVisible();
   });
+});
+
+test('checks bigquery sql integrations works', async ({ testUser }) => {
+  test.slow();
+  let notebookURL: string;
+
+  await test.step('create integration', async () => {
+    await testUser.notebook.addBlock('open-integration');
+    notebookURL = testUser.page.url();
+    await testUser.page.getByTestId('select-integration:SQL').click();
+    await testUser.page.getByText('Select SQL Connection').click();
+    await testUser.page.getByRole('menuitem', { name: /SQL/ }).click();
+    await testUser.page
+      .getByRole('button', { name: 'Add a New Connection' })
+      .click();
+    await testUser.page
+      .getByRole('tab', { name: 'Advanced Configuration' })
+      .click();
+    await testUser.page.getByText(/mysql/).click();
+    await testUser.page.getByRole('menuitem', { name: /bigquery/ }).click();
+
+    await testUser.page.locator('#upload-json-credentials').click();
+
+    const base64Data = process.env.GOOGLE_BIGQUERY_CREDENTIALS as string;
+
+    const jsonString = Buffer.from(base64Data, 'base64').toString('utf-8');
+    const tempFilePath = path.join(__dirname, 'temp-file.json');
+    await fs.writeFileSync(tempFilePath, jsonString, 'utf8');
+    // Check if the file was written successfully
+    if (fs.existsSync(tempFilePath)) {
+      console.log('File created successfully');
+    } else {
+      console.error('File was not created');
+      return;
+    }
+    console.log('Decoded JSON String:', jsonString);
+    console.log('Temp file path:', tempFilePath);
+
+    void (async () => {
+      await testUser.page.locator('#upload-json-credentials').click();
+
+      await testUser.page
+        .locator('#upload-json-credentials')
+        .setInputFiles(tempFilePath);
+
+      fs.unlinkSync(tempFilePath);
+    })();
+
+    await testUser.page.getByPlaceholder('SQL #').fill('Bigquery Intergration');
+    await testUser.page
+      .getByRole('button', { name: 'Test Connection' })
+      .click();
+
+    await expect(testUser.page.getByText('Connection Worked')).toBeVisible();
+    await testUser.page.getByTestId('add-conn-button').click();
+    await expect(
+      testUser.page.getByText('Successfully added connection').first(),
+      'Adding SQL connection success message didnt show up'
+    ).toBeVisible();
+  });
+
+  await test.step('write query', async () => {
+    await testUser.page.goto(notebookURL);
+    await testUser.notebook.waitForEditorToLoad();
+    await testUser.notebook.addBlock('open-integration');
+    await testUser.page.getByTestId('select-integration:SQL').click();
+    await testUser.page.getByText('Select SQL Connection').click();
+    await testUser.page.getByText('BigQuery Intergration').first().click();
+    await testUser.page.getByTestId('code-mirror').click();
+
+    await testUser.page.keyboard.type(
+      `
+      -- This query shows a list of the daily top Google Search terms.
+SELECT
+   refresh_date AS Day,
+   term AS Top_Term,
+       -- These search terms are in the top 25 in the US each day.
+   rank,
+FROM \`bigquery-public-data.google_trends.top_terms\`
+WHERE
+   rank = 1
+       -- Choose only the top term each day.
+   AND refresh_date BETWEEN '2024-09-19' AND '2024-10-02'
+       -- Filter to the last 2 weeks.
+GROUP BY Day, Top_Term, rank
+ORDER BY Day DESC
+   -- Show the days in reverse chronological order.
+      `
+    );
+
+    await testUser.page.getByRole('button', { name: 'Play Run' }).click();
+    await testUser.page.getByRole('tab', { name: 'Preview' }).click();
+  });
+
+  await test.step('check table data', async () => {
+    await Promise.all([
+      expect(
+        testUser.page.locator('div').filter({ hasText: /^Pete Rose$/ })
+      ).toBeVisible(),
+      expect(
+        testUser.page.locator('div').filter({ hasText: /^Kris Kristofferson$/ })
+      ).toBeVisible(),
+      expect(
+        testUser.page.locator('div').filter({ hasText: /^Alabama football$/ })
+      ).toBeVisible(),
+      expect(
+        testUser.page.locator('div').filter({ hasText: /^Cowboys vs Giants$/ })
+      ).toBeVisible(),
+      expect(
+        testUser.page.getByText('14 rows, previewing rows 1 to 10')
+      ).toBeVisible(),
+    ]);
+
+    await testUser.page
+      .getByTestId(/Go to page/)
+      .nth(1)
+      .click();
+
+    await Promise.all([
+      expect(
+        testUser.page.locator('div').filter({ hasText: /^Nebraska football$/ })
+      ).toBeVisible(),
+      expect(
+        testUser.page.locator('div').filter({ hasText: /^Cowboys vs Giants$/ })
+      ).toBeHidden(),
+      expect(
+        testUser.page.getByText('14 rows, previewing rows 11 to 14')
+      ).toBeVisible(),
+    ]);
+  });
+
+  await testUser.page.getByTestId('integration-modal-continue').click();
+
+  await expect(testUser.page.getByText('MySQL')).toBeVisible();
+
+  await expect(
+    testUser.page.getByText('14 rows, previewing rows 1 to 10')
+  ).toBeVisible({ timeout: 90_000 });
 });

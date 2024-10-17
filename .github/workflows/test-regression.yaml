@@ -49,6 +49,7 @@ jobs:
           TESTMAIL_APIKEY: '${{secrets.TESTMAIL_APIKEY}}'
           TESTMAIL_NAMESPACE: '${{secrets.TESTMAIL_NAMESPACE}}'
           USER_AGENT_KEY: '${{secrets.USER_AGENT_KEY}}'
+          GOOGLE_BIGQUERY_CREDENTIALS: '${{secrets.GOOGLE_BIGQUERY_CREDENTIALS}}'
           DECI_VERBOSE: false
         run: ./scripts/e2e-regression.sh
 
