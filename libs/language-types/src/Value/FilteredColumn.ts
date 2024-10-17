@@ -6,6 +6,7 @@ import { isColumnLike } from './ColumnLike';
 import { columnValueToResultValue } from '../utils/columnValueToResultValue';
 import { getLabelIndex } from '../Dimension/getLabelIndex';
 import { lowLevelGet } from './lowLevelGet';
+import { lowLowLevelGet } from './lowLowLevelGet';
 
 export class FilteredColumn
   extends FilteredColumnBase<Value.Value>
@@ -32,6 +33,13 @@ export class FilteredColumn
 
   async lowLevelGet(...keys: number[]) {
     return lowLevelGet(await this.atIndex(keys[0]), keys.slice(1));
+  }
+
+  async lowLowLevelGet(...keys: number[]) {
+    return lowLowLevelGet(
+      await (await this.atIndex(keys[0]))?.getData(),
+      keys.slice(1)
+    );
   }
 
   async dimensions() {

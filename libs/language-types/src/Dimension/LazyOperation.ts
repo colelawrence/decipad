@@ -101,6 +101,10 @@ const LazyOperation = implementColumnLike(
 
       return this.op(operationArgs);
     }
+
+    async lowLowLevelGet(...keys: number[]): Promise<Result.OneResult> {
+      return (await this.lowLevelGet(...keys)).getData();
+    }
   }
 );
 

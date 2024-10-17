@@ -3,7 +3,6 @@ import type { PromiseOrType } from '@decipad/utils';
 import type { Dimension, Result } from '@decipad/language-interfaces';
 import { materializeOneResult } from './materializeOneResult';
 import type { MinimalTensor } from '../Value/MinimalTensor';
-import { isLowLevelMinimalTensor } from './isLowLevelMinimalTensor';
 import { getDimensionLength } from './getDimensionLength';
 
 const recurseProjection = async (
@@ -32,11 +31,7 @@ const recurseProjection = async (
       }
     };
   } else {
-    return materializeOneResult(
-      isLowLevelMinimalTensor(hc)
-        ? hc.lowLowLevelGet(..._currentCoordinates)
-        : (await hc.lowLevelGet(..._currentCoordinates)).getData()
-    );
+    return materializeOneResult(hc.lowLowLevelGet(..._currentCoordinates));
   }
 };
 

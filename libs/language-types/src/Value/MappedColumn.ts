@@ -8,6 +8,7 @@ import { columnValueToResultValue } from '../utils/columnValueToResultValue';
 import { getLabelIndex } from '../Dimension/getLabelIndex';
 import { columnValueToValueGeneratorFunction } from './columnValueToValueGeneratorFunction';
 import { lowLevelGet } from './lowLevelGet';
+import { lowLowLevelGet } from './lowLowLevelGet';
 
 export class MappedColumn
   extends MappedColumnBase<Value.Value, Value.ColumnLikeValue>
@@ -30,6 +31,13 @@ export class MappedColumn
 
   async lowLevelGet(...keys: number[]) {
     return lowLevelGet(await this.atIndex(keys[0]), keys.slice(1));
+  }
+
+  async lowLowLevelGet(...keys: number[]) {
+    return lowLowLevelGet(
+      await (await this.atIndex(keys[0]))?.getData(),
+      keys.slice(1)
+    );
   }
 
   async dimensions() {

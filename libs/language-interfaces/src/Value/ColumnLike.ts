@@ -6,6 +6,7 @@ import type { Dimension } from '../Dimension';
 export interface ColumnLikeValue extends Value, ColumnLike<Value> {
   getData(): Promise<OneResult>;
   lowLevelGet(...keys: number[]): Promise<Value>;
+  lowLowLevelGet(...keys: number[]): Promise<OneResult>;
 
   /** Useful when filtering or sorting.
    * By default the identity function is used and no index changes are assumed to exist */

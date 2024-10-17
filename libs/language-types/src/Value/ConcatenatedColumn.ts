@@ -6,6 +6,7 @@ import { implementColumnLike } from '../utils/implementColumnLike';
 import type { MinimalTensor } from './MinimalTensor';
 import { lowLevelGet } from './lowLevelGet';
 import type { Dimension, Value, Result } from '@decipad/language-interfaces';
+import { lowLowLevelGet } from './lowLowLevelGet';
 
 const ConcatenatedColumn = implementColumnLike(
   class ConcatenatedColumn implements MinimalTensor {
@@ -53,6 +54,17 @@ const ConcatenatedColumn = implementColumnLike(
         : this.column2.atIndex(firstKey - col1RowCount));
 
       return lowLevelGet(item, restKeys);
+    }
+
+    async lowLowLevelGet(...keys: number[]): Promise<Result.OneResult> {
+      const [firstKey, ...restKeys] = keys;
+      const col1RowCount = await this.column1.rowCount();
+
+      const item = await (firstKey < col1RowCount
+        ? this.column1.atIndex(firstKey)
+        : this.column2.atIndex(firstKey - col1RowCount));
+
+      return lowLowLevelGet(await item?.getData(), restKeys);
     }
 
     async indexToLabelIndex(concatenatedIndex: number) {

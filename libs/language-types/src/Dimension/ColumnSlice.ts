@@ -5,6 +5,7 @@ import { lowLevelGet } from '../Value/lowLevelGet';
 import { implementColumnLike } from '../utils';
 import { getLabelIndex } from './getLabelIndex';
 import { getDimensionLength } from '../utils/getDimensionLength';
+import { lowLowLevelGet } from '../Value/lowLowLevelGet';
 
 const ColumnSlice = implementColumnLike(
   class _ColumnSlice implements MinimalTensor {
@@ -55,6 +56,22 @@ const ColumnSlice = implementColumnLike(
         throw new Error(`panic: index ${firstKey} out of bounds`);
       }
       return lowLevelGet(this.sourceColumn, [
+        firstKey + this.begin,
+        ...restKeys,
+      ]);
+    }
+
+    async lowLowLevelGet(...keys: number[]) {
+      const [firstKey, ...restKeys] = keys;
+
+      if (
+        firstKey < 0 ||
+        firstKey >
+          (await getDimensionLength(this._dimensions[0].dimensionLength))
+      ) {
+        throw new Error(`panic: index ${firstKey} out of bounds`);
+      }
+      return lowLowLevelGet(await this.sourceColumn.getData(), [
         firstKey + this.begin,
         ...restKeys,
       ]);

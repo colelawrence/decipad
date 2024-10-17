@@ -10,6 +10,7 @@ import { getResultGenerator } from '../utils/getResultGenerator';
 import { lowLevelGet } from './lowLevelGet';
 import { typedResultToValue } from '../utils/typedResultToValue';
 import type { Type } from '../Type/Type';
+import { lowLowLevelGet } from './lowLowLevelGet';
 
 export class ColumnGenerator implements Value.ColumnLikeValue {
   private _typedResultToValue: Promise<
@@ -50,6 +51,13 @@ export class ColumnGenerator implements Value.ColumnLikeValue {
 
   async lowLevelGet(...keys: number[]): Promise<Value.Value> {
     return lowLevelGet(await this.atIndex(keys[0]), keys.slice(1));
+  }
+
+  async lowLowLevelGet(...keys: number[]): Promise<Result.OneResult> {
+    return lowLowLevelGet(
+      await (await this.atIndex(keys[0]))?.getData(),
+      keys.slice(1)
+    );
   }
 
   async dimensions(): Promise<Dimension[]> {

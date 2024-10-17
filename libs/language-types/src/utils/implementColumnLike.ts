@@ -45,5 +45,9 @@ export function implementColumnLike<T extends Class<Value.MinimalTensor>>(
       }
       return this.dataCache;
     }
+
+    async lowLowLevelGet(...keys: number[]): Promise<Result.OneResult> {
+      return (await this.lowLevelGet(...keys)).getData();
+    }
   };
 }

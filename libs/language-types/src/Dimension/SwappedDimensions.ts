@@ -4,7 +4,6 @@ import type { Value, Dimension } from '@decipad/language-interfaces';
 import { implementColumnLike } from '../utils';
 import type { MinimalTensor } from '../Value';
 import { chooseFirst, undoChooseFirst } from './chooseFirst';
-import { isLowLevelMinimalTensor } from '../utils/isLowLevelMinimalTensor';
 
 /**
  * Swaps a dimension like so (pseudocode):
@@ -62,15 +61,9 @@ const SwappedDimensions = implementColumnLike(
     }
 
     async lowLowLevelGet(...indices: number[]) {
-      return isLowLevelMinimalTensor(this.unswappedHC)
-        ? this.unswappedHC.lowLowLevelGet(
-            ...undoChooseFirst(this.dominantDimensionIndex, indices)
-          )
-        : (
-            await this.unswappedHC.lowLevelGet(
-              ...undoChooseFirst(this.dominantDimensionIndex, indices)
-            )
-          ).getData();
+      return this.unswappedHC.lowLowLevelGet(
+        ...undoChooseFirst(this.dominantDimensionIndex, indices)
+      );
     }
   }
 );

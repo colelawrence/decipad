@@ -42,6 +42,10 @@ export class Column extends ColumnBase {
     return lowLevelGet(await this.atIndex(keys[0]), keys.slice(1));
   }
 
+  async lowLowLevelGet(...keys: number[]): Promise<Result.OneResult> {
+    return (await this.lowLevelGet(...keys)).getData();
+  }
+
   /**
    * Create a column from the values inside. Empty columns return a special value.
    */

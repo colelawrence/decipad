@@ -1,7 +1,6 @@
 import { getDefined } from '@decipad/utils';
 import type { Result, Value } from '@decipad/language-interfaces';
 import { values } from '../utils/values';
-import { isLowLevelMinimalTensor } from '../utils/isLowLevelMinimalTensor';
 import { getDimensionLength } from '../utils/getDimensionLength';
 import { projectHypercube } from '../utils/projectHypercube';
 
@@ -45,9 +44,7 @@ class LazyAtIndex implements TLazyAtIndex {
   }
 
   async lowLowLevelGet(...indices: number[]): Promise<Result.OneResult> {
-    return isLowLevelMinimalTensor(this.innerHC)
-      ? this.innerHC.lowLowLevelGet(this.index, ...indices)
-      : (await this.innerHC.lowLevelGet(this.index, ...indices)).getData();
+    return this.innerHC.lowLowLevelGet(this.index, ...indices);
   }
 
   values(start = 0, end = Infinity): AsyncGenerator<Value.Value> {

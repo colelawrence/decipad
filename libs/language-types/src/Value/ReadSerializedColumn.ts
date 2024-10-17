@@ -19,6 +19,7 @@ import { typedResultToValue } from '../utils/typedResultToValue';
 import { deserializeType } from '../Type';
 import { lowLevelGet } from './lowLevelGet';
 import { getResultGenerator } from '../utils/getResultGenerator';
+import { lowLowLevelGet } from './lowLowLevelGet';
 
 export type ReadSerializedColumnDecoder<
   T extends Result.OneResult = Result.OneResult
@@ -85,6 +86,13 @@ export class ReadSerializedColumn<T extends Result.OneResult>
 
   async lowLevelGet(...keys: number[]): Promise<Value.Value> {
     return lowLevelGet(await this.atIndex(keys[0]), keys.slice(1));
+  }
+
+  async lowLowLevelGet(...keys: number[]): Promise<Result.OneResult> {
+    return lowLowLevelGet(
+      await (await this.atIndex(keys[0]))?.getData(),
+      keys.slice(1)
+    );
   }
 
   async dimensions(): Promise<Dimension[]> {

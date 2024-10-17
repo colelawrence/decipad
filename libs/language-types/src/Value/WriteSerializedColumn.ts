@@ -42,6 +42,9 @@ export class WriteSerializedColumn<T extends Result.OneResult>
   async lowLevelGet(...keys: number[]) {
     return this.source.lowLevelGet(...keys);
   }
+  async lowLowLevelGet(...keys: number[]) {
+    return this.source.lowLowLevelGet(...keys);
+  }
   async dimensions() {
     return this.source.dimensions();
   }
