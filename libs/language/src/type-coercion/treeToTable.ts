@@ -76,15 +76,6 @@ const concatenateColumnsArray = (
   return cols;
 };
 
-const shouldExpand = (col: Value.Tree | undefined): boolean => {
-  const columns = col?.columns.slice(1);
-  return (
-    columns != null &&
-    columns.length > 0 &&
-    columns.every((column) => column.aggregation == null)
-  );
-};
-
 const treeToColumnsValue = async (
   sourceType: Type,
   sourceValue: Value.Tree,
@@ -97,7 +88,6 @@ const treeToColumnsValue = async (
       sourceType.tree = getDefined(sourceType.tree).slice(1);
       sourceType.columnNames = getDefined(sourceType.columnNames).slice(1);
     });
-    // eslint-disable-next-line no-await-in-loop
     nextColumns = concatenateColumnsArray(
       nextColumns,
       // eslint-disable-next-line no-await-in-loop
@@ -111,7 +101,7 @@ const treeToColumnsValue = async (
   const rootValue = rootAggregation?.value ?? sourceValue.root;
   const firstNextColumn = nextColumns[0];
   thisColumn.push(rootValue);
-  if (firstNextColumn && shouldExpand(sourceValue)) {
+  if (firstNextColumn) {
     while (firstNextColumn.length > thisColumn.length) {
       thisColumn.push(rootValue);
     }
