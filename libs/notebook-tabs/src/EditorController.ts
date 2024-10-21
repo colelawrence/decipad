@@ -77,6 +77,8 @@ const isTesting = !!(
   process.env.JEST_WORKER_ID || process.env.VITEST_WORKER_ID
 );
 
+const logsColor = 'color: green;';
+
 const getOffsetIndex = (index: number) => index - SUB_EDITOR_OFFSET;
 
 /**
@@ -180,6 +182,8 @@ export class EditorController implements RootEditorController {
     );
 
     const tryApplyingOpToMirror = (op: TOperation) => {
+      // eslint-disable-next-line no-console
+      console.debug(`%c${op.type}`, logsColor, op);
       try {
         apply(op);
       } catch (err) {

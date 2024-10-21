@@ -40,7 +40,6 @@ import {
   createNormalizeRichTextBlockPlugin,
   createNormalizeTextPlugin,
   createNormalizeVoidPlugin,
-  createOperationsBlackboxPlugin,
   createPersistSelectionPlugin,
   createPlotPlugin,
   createPreventInvalidSelectionPlugin,
@@ -212,7 +211,6 @@ export const plugins = ({
 
       // error handling
       createEditorApplyErrorReporterPlugin(),
-      createOperationsBlackboxPlugin(),
 
       // deserializers
       createDeserializeDocxPlugin(),

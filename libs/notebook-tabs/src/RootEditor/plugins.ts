@@ -31,10 +31,10 @@ import {
   isEditor,
   isElement,
 } from '@udecode/plate-common';
-import { isFirstOfOldNodes } from './utils';
-import { DATA_TAB_INDEX, FIRST_TAB_INDEX } from '../constants';
 import { getExprRef, isExprRef } from '@decipad/computer';
 import { generatedNames } from '@decipad/utils';
+import { isFirstOfOldNodes } from './utils';
+import { DATA_TAB_INDEX, FIRST_TAB_INDEX } from '../constants';
 
 type NormalizePlugin = (entry: TNodeEntry) => boolean;
 type CurriedNormalizePlugin = (editor: TEditor) => NormalizePlugin;

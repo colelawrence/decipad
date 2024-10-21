@@ -3,7 +3,7 @@ import type { Result } from '@decipad/language-interfaces';
 import { AnyElement } from '@decipad/editor-types';
 import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
-import { FC, ReactNode } from 'react';
+import { FC, ReactNode, useMemo } from 'react';
 
 import { CodeResult } from '../CodeResult/CodeResult';
 import { cssVar } from '../../../primitives';
@@ -98,6 +98,10 @@ export const MagicNumber = ({
 }: MagicNumberProps): ReturnType<React.FC> => {
   const hasResult = !!result && !loadingState;
   const noEffectOnClick = useEventNoEffect(onClick);
+  const resultSmallString = useMemo(
+    () => resultToSmallString(result?.value),
+    [result]
+  );
 
   return (
     <span
@@ -107,7 +111,7 @@ export const MagicNumber = ({
       id={tempId}
       data-testid="magic-number"
     >
-      <span title={resultToSmallString(result?.value)} contentEditable={false}>
+      <span title={resultSmallString} contentEditable={false}>
         <IntrospectMagicNumber
           isReference={isReference}
           expression={expression}
@@ -119,7 +123,7 @@ export const MagicNumber = ({
                 highlightStyles(isReference, readOnly),
                 { color: cssVar('themeTextSubdued') },
               ]}
-              data-testid={`code-result:${resultToSmallString(result?.value)}`}
+              data-testid={`code-result:${resultSmallString}`}
             >
               <CodeResult
                 expanded

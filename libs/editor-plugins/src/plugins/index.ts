@@ -33,7 +33,6 @@ export * from './NormalizePlainTextBlock';
 export * from './NormalizeRichTextBlock';
 export * from './NormalizeText';
 export * from './NormalizeVoidPlugin';
-export * from './OperationsBlackboxPlugin';
 export * from './PersistSelection';
 export * from './Plot';
 export * from './PreventInvalidSelection';
