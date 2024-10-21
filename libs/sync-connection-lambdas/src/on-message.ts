@@ -25,6 +25,8 @@ type SyncConnectionRecord = ConnectionRecord & {
   protocol: number;
 };
 
+const CREATE_ASYNC_EVENT_FROM_UPDATE_PROBABILITY = 0.2;
+
 const isSyncProtocolConnection = (
   conn: ConnectionRecord
 ): conn is SyncConnectionRecord => typeof conn.protocol === 'number';
@@ -88,7 +90,7 @@ async function maybeStoreMessage(
             seq: `${Date.now()}:${nanoid()}`,
             data: Buffer.from(update).toString('base64'),
           },
-          0.1
+          CREATE_ASYNC_EVENT_FROM_UPDATE_PROBABILITY
         );
       }
     }

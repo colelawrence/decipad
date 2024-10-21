@@ -8,7 +8,7 @@ const parseId = (id: string): string => {
   return id.split('/').filter(Boolean)[1];
 };
 
-const minWaitingTimeMs = 1000 * 60 * 30;
+const minWaitingTimeMs = 1000 * 60;
 const processingNotebookIds = new Map<string, number>();
 
 const shouldProcessNotebook = (notebookId: string) => {
