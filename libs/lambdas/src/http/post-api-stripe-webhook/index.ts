@@ -23,13 +23,25 @@ export const handler = handle(async (event: APIGatewayProxyEventV2) => {
   }
 
   const sig = event.headers['stripe-signature'];
-  let stripeEvent: Stripe.Event;
+  if (!sig) {
+    throw Boom.badRequest('Missing stripe-signature header');
+  }
+
+  if (!webhookSecret) {
+    throw Boom.internal('Missing webhook secret configuration');
+  }
+
+  // eslint-disable-next-line prefer-destructuring
+  let body: string | Buffer = event.body;
+  if (event.isBase64Encoded) {
+    body = Buffer.from(body, 'base64');
+  }
 
   try {
-    stripeEvent = stripe.webhooks.constructEvent(
-      event.body,
-      sig || '',
-      webhookSecret || ''
+    const stripeEvent = stripe.webhooks.constructEvent(
+      body,
+      sig,
+      webhookSecret
     );
 
     switch (stripeEvent.type) {
@@ -44,7 +56,11 @@ export const handler = handle(async (event: APIGatewayProxyEventV2) => {
       default:
         throw Boom.teapot(`webhook ignored: ${stripeEvent.type}`);
     }
-  } catch (err: any) {
-    throw Boom.forbidden(`Webhook Error: ${err.message}`);
+  } catch (err) {
+    console.error(err);
+    if (err instanceof stripe.errors.StripeSignatureVerificationError) {
+      throw Boom.badRequest('Invalid signature');
+    }
+    throw err;
   }
 });
