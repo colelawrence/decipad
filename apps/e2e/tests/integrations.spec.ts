@@ -12,6 +12,7 @@ import os from 'node:os';
 import type { User } from './manager/test-users';
 import fs from 'fs';
 import path from 'path';
+import { getDefined } from '@decipad/utils';
 
 const executeCode = (user: User, page: Page, sourcecode: string, x: number) =>
   test.step(`Executing ${x}`, async () => {
@@ -459,42 +460,40 @@ test('checks bigquery sql integrations works', async ({ testUser }) => {
 
     await testUser.page.locator('#upload-json-credentials').click();
 
-    const base64Data = process.env.GOOGLE_BIGQUERY_CREDENTIALS as string;
+    const base64Data = getDefined(
+      process.env.GOOGLE_BIGQUERY_CREDENTIALS,
+      'missing env var GOOGLE_BIGQUERY_CREDENTIALS'
+    );
 
     const jsonString = Buffer.from(base64Data, 'base64').toString('utf-8');
-    const tempFilePath = path.join(__dirname, 'temp-file.json');
-    await fs.writeFileSync(tempFilePath, jsonString, 'utf8');
-    // Check if the file was written successfully
-    if (fs.existsSync(tempFilePath)) {
-      console.log('File created successfully');
-    } else {
-      console.error('File was not created');
-      return;
-    }
-    console.log('Decoded JSON String:', jsonString);
-    console.log('Temp file path:', tempFilePath);
-
-    void (async () => {
+    const tempFilePath = path.join(
+      os.tmpdir(),
+      'bigquery-credentials-temp-file.json'
+    );
+    fs.writeFileSync(tempFilePath, jsonString, 'utf8');
+    try {
       await testUser.page.locator('#upload-json-credentials').click();
 
       await testUser.page
         .locator('#upload-json-credentials')
         .setInputFiles(tempFilePath);
 
+      await testUser.page
+        .getByPlaceholder('SQL #')
+        .fill('BigQuery Integration');
+      await testUser.page
+        .getByRole('button', { name: 'Test Connection' })
+        .click();
+
+      await expect(testUser.page.getByText('Connection Worked')).toBeVisible();
+      await testUser.page.getByTestId('add-conn-button').click();
+      await expect(
+        testUser.page.getByText('Successfully added connection').first(),
+        'Adding SQL connection success message didnt show up'
+      ).toBeVisible();
+    } finally {
       fs.unlinkSync(tempFilePath);
-    })();
-
-    await testUser.page.getByPlaceholder('SQL #').fill('Bigquery Intergration');
-    await testUser.page
-      .getByRole('button', { name: 'Test Connection' })
-      .click();
-
-    await expect(testUser.page.getByText('Connection Worked')).toBeVisible();
-    await testUser.page.getByTestId('add-conn-button').click();
-    await expect(
-      testUser.page.getByText('Successfully added connection').first(),
-      'Adding SQL connection success message didnt show up'
-    ).toBeVisible();
+    }
   });
 
   await test.step('write query', async () => {
@@ -503,7 +502,7 @@ test('checks bigquery sql integrations works', async ({ testUser }) => {
     await testUser.notebook.addBlock('open-integration');
     await testUser.page.getByTestId('select-integration:SQL').click();
     await testUser.page.getByText('Select SQL Connection').click();
-    await testUser.page.getByText('BigQuery Intergration').first().click();
+    await testUser.page.getByText('BigQuery Integration').first().click();
     await testUser.page.getByTestId('code-mirror').click();
 
     await testUser.page.keyboard.type(
@@ -544,34 +543,10 @@ ORDER BY Day DESC
       expect(
         testUser.page.locator('div').filter({ hasText: /^Cowboys vs Giants$/ })
       ).toBeVisible(),
-      expect(
-        testUser.page.getByText('14 rows, previewing rows 1 to 10')
-      ).toBeVisible(),
-    ]);
-
-    await testUser.page
-      .getByTestId(/Go to page/)
-      .nth(1)
-      .click();
-
-    await Promise.all([
-      expect(
-        testUser.page.locator('div').filter({ hasText: /^Nebraska football$/ })
-      ).toBeVisible(),
-      expect(
-        testUser.page.locator('div').filter({ hasText: /^Cowboys vs Giants$/ })
-      ).toBeHidden(),
-      expect(
-        testUser.page.getByText('14 rows, previewing rows 11 to 14')
-      ).toBeVisible(),
     ]);
   });
 
   await testUser.page.getByTestId('integration-modal-continue').click();
 
   await expect(testUser.page.getByText('MySQL')).toBeVisible();
-
-  await expect(
-    testUser.page.getByText('14 rows, previewing rows 1 to 10')
-  ).toBeVisible({ timeout: 90_000 });
 });

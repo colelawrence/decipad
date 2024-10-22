@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import {
   BigQuery,
   BigQueryDate,
@@ -39,7 +40,7 @@ const urlToCredentials = (url: URL): BigQueryOptions['credentials'] => {
   try {
     return JSON.parse(Buffer.from(url.pathname, 'base64').toString('utf-8'));
   } catch (err) {
-    // eslint-disable-next-line no-console
+    console.warn('Error caught in call to urlToCredentials with URL "%s"', url);
     console.error(err);
     throw notAcceptable('Invalid BigQuery credentials');
   }
