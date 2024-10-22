@@ -4,7 +4,7 @@ import { pathsSpec } from './pathsSpec';
 
 extendZodWithOpenApi(z);
 
-export const apiSpec = (domain: string) =>
+export const apiSpec = (domain: string): ReturnType<typeof createDocument> =>
   createDocument({
     openapi: '3.1.0',
     info: {

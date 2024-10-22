@@ -31715,10 +31715,10 @@ zipit@~2.0.0:
     insync "2.1.1"
     yazl "2.5.1"
 
-zod-openapi@^2.17.0:
-  version "2.17.0"
-  resolved "https://registry.yarnpkg.com/zod-openapi/-/zod-openapi-2.17.0.tgz#212cbce4afb4f54cfa31f581a8ca1840a17e7958"
-  integrity sha512-S6x14LmPWZ3Sbnx71pqzIB6oIox1ce6vHnJY7ZUYLBm8TTEQ6/g6+kwutna5jplAhzphkMbYPbtW3cmHXFcRBg==
+zod-openapi@^2.19.0:
+  version "2.19.0"
+  resolved "https://registry.yarnpkg.com/zod-openapi/-/zod-openapi-2.19.0.tgz#c274468c63095e365127391930f54040f2e018ea"
+  integrity sha512-OUAAyBDPPwZ9u61i4k/LieXUzP2re8kFjqdNh2AvHjsyi/aRNz9leDAtMGcSoSzUT5xUeQoACJufBI6FzzZyxA==
 
 zod-to-json-schema@3.20.3:
   version "3.20.3"
