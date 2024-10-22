@@ -64,6 +64,6 @@ test.skip('AI clear chat @AI', async ({ testUser }) => {
   await aiAssistant.clearChat();
 
   await expect(async () => {
-    await expect(await aiAssistant.getChatMessages()).toEqual(initialMessages);
+    expect(await aiAssistant.getChatMessages()).toEqual(initialMessages);
   }, "chat didn't clear").toPass();
 });

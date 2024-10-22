@@ -489,7 +489,7 @@
     "eslint-import-resolver-typescript": "3.6.0",
     "eslint-plugin-decipad": "file:libs/eslint-plugin-decipad",
     "eslint-plugin-import": "2.31.0",
-    "eslint-plugin-playwright": "1.7.0",
+    "eslint-plugin-playwright": "1.8.0",
     "eslint-plugin-prettier": "4.2.1",
     "eslint-plugin-react": "7.37.1",
     "eslint-plugin-react-hooks": "5.0.0",

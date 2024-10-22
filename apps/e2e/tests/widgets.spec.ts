@@ -340,7 +340,7 @@ test('result widget', async ({ testUser }) => {
 
   await test.step('shows correct result of a variable', async () => {
     await notebook.selectDropdownOption('Bye');
-    await expect(await notebook.getResultWidgetValue('Bye')).toBe('$8');
+    expect(await notebook.getResultWidgetValue('Bye')).toBe('$8');
   });
 
   await test.step('updates the result when calculation changes', async () => {
@@ -349,7 +349,7 @@ test('result widget', async ({ testUser }) => {
     await page.keyboard.type(' + 4');
 
     await expect(async () => {
-      await expect(await notebook.getResultWidgetValue('Bye')).toBe('$12');
+      expect(await notebook.getResultWidgetValue('Bye')).toBe('$12');
     }).toPass();
   });
 

@@ -15,7 +15,7 @@ test('Loading reference notebook', async ({
   const notebookId = await testUser.importNotebook(notebookSource);
   await testUser.notebook.waitForEditorToLoad();
   await test.step('Waiting for editor to be ready', async () => {
-    await expect(
+    expect(
       testUser.page.getByTestId('[data-testid="editor-table"]')
     ).toBeDefined();
   });

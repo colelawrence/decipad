@@ -139,7 +139,7 @@ test('more JS codeblock checks', async ({ randomFreeUser }) => {
       await page.getByTestId('codeline-varname').nth(0).innerHTML()
     );
 
-    await expect(
+    expect(
       await page.getByTestId('codeline-varname').nth(0).textContent()
     ).toMatch(/[a-zA-Z_$][a-zA-Z0-9_$]*/);
   });

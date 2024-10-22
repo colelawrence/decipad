@@ -265,10 +265,11 @@ test('Basic Table', async ({ testUser }) => {
     // eslint-disable-next-line playwright/no-wait-for-timeout
     await testUser.page.waitForTimeout(Timeouts.typing);
     await createTable(testUser.page);
-    await expect(
-      await testUser.page.getByTestId('code-line-warning').count(),
-      `calculation errors`
-    ).toBe(0);
+    await expect(async () => {
+      expect(await testUser.page.getByTestId('code-line-warning').count()).toBe(
+        0
+      );
+    }).toPass();
   });
 
   await test.step('fills table', async () => {

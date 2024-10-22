@@ -667,7 +667,7 @@ export class Notebook {
     const checkIncremented = await this.page.getByTestId('code-line').count();
     await this.addBlock('calculation-block');
     await expect(async () => {
-      await expect(await this.page.getByTestId('code-line').count()).toBe(
+      expect(await this.page.getByTestId('code-line').count()).toBe(
         checkIncremented + 1
       );
     }).toPass();
