@@ -28,6 +28,8 @@ export const createMetricPlugin = createMyPluginFactory({
       return {
         id: nanoid(),
         type: ELEMENT_METRIC,
+        blockId: '',
+        comparisonBlockId: '',
         children: [{ text: '' }],
       };
     },

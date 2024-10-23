@@ -14,6 +14,7 @@ import stockOptionsStartup from './notebooks/stock-options-startup.json';
 import tutorialNotebook from './notebooks/tutorialNotebook.json';
 import veryWeirdLoadingWhenEditing from './notebooks/veryWeirdLoadingWhenEditing.json';
 import welcomeNotebook from './notebooks/welcomeNotebook.json';
+import metricPrototype from './notebooks/metric-prototype.json';
 
 export interface Notebook {
   title: string;
@@ -52,6 +53,12 @@ export const isLocalDev = once(() => {
 const shouldCreateDevNotebooks = once(() => !isTesting() && isLocalDev());
 
 const devOnlyNotebooks = (): InitialWorkspace['notebooks'] => [
+  {
+    title: 'Metric prototype',
+    content: metricPrototype as Document,
+    icon: 'Deci-Catskill',
+    status: 'draft',
+  },
   {
     title: 'Very weird loading when editing',
     content: veryWeirdLoadingWhenEditing as Document,

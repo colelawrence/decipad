@@ -14,6 +14,7 @@ export { ArrowBack } from './ArrowBack';
 export { ArrowBack2 } from './ArrowBack2';
 export { ArrowDiagonalTopRight } from './ArrowDiagonalTopRight';
 export { ArrowDown } from './ArrowDown';
+export { ArrowDown2 } from './ArrowDown2';
 export { ArrowRight } from './ArrowRight';
 export { ArrowRight2 } from './ArrowRight2';
 export { ArrowUp } from './ArrowUp';

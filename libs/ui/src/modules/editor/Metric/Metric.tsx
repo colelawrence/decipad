@@ -10,7 +10,15 @@ import {
   shortAnimationDuration,
 } from '../../../primitives';
 import { AvailableSwatchColor } from '../../../utils';
-import { ArrowUp2 } from 'libs/ui/src/icons';
+import { ArrowUp2, ArrowDown2 } from 'libs/ui/src/icons';
+import {
+  IdentifiedError,
+  IdentifiedResult,
+  ResultType,
+} from '@decipad/computer-interfaces';
+import { CodeResult } from '../CodeResult/CodeResult';
+import { Result } from '@decipad/language-interfaces';
+import { N, ZERO } from '@decipad/number';
 
 const bottomBarSize = 2;
 
@@ -91,14 +99,18 @@ const hiddenChildrenStyles = css({
 });
 
 interface MetricProps {
-  children?: ReactNode;
+  readonly children?: ReactNode;
+  readonly mainResult?: IdentifiedResult | IdentifiedError;
+  readonly trendResult?: ResultType;
   // TODO: Do something with color
-  color?: AvailableSwatchColor;
-  fullHeight?: boolean;
+  readonly color?: AvailableSwatchColor;
+  readonly fullHeight?: boolean;
 }
 
 export const Metric = ({
   children,
+  mainResult,
+  trendResult,
   fullHeight,
 }: MetricProps): ReturnType<FC> => {
   const selected = useSelected();
@@ -125,8 +137,6 @@ export const Metric = ({
     [resizeObserver]
   );
 
-  const trendColor = componentCssVars('TrendUpGreenColor');
-
   return (
     <div
       ref={fullHeight ? connectResizeObserver : undefined}
@@ -139,16 +149,47 @@ export const Metric = ({
     >
       <div css={captionStyles}>Revenue per pet</div>
       <div>
-        <div css={valueStyles(fullHeight ? height : 0)}>7.64</div>
-        <div css={comparisonStyles}>
-          <span css={{ color: trendColor, width: 16, height: 16 }}>
-            <ArrowUp2 />
-          </span>
-          <span css={{ color: trendColor }}>6%</span> vs last week
+        <div css={valueStyles(fullHeight ? height : 0)}>
+          {mainResult?.result?.type.kind !== 'type-error' &&
+          mainResult?.result ? (
+            <CodeResult {...mainResult.result} />
+          ) : (
+            '0'
+          )}
         </div>
+        {/* TODO: Handle case error case */}
+        {trendResult?.type.kind === 'trend' && (
+          <MetricComparison trendResult={trendResult as any} />
+        )}
       </div>
 
       <div css={hiddenChildrenStyles}>{children}</div>
+    </div>
+  );
+};
+
+interface MetricComparisonProps {
+  readonly trendResult: Result.Result<'trend'>;
+}
+
+const MetricComparison = ({ trendResult }: MetricComparisonProps) => {
+  const { first, diff } = trendResult.value;
+  if (!first || !diff) return null;
+
+  const percentageChange = diff.abs().div(first).mul(N(100)).round().toString();
+  const positive = diff.compare(ZERO) > 0;
+
+  const trendColor = componentCssVars(
+    positive ? 'TrendUpGreenColor' : 'TrendDownRedColor'
+  );
+  const Icon = positive ? ArrowUp2 : ArrowDown2;
+
+  return (
+    <div css={comparisonStyles}>
+      <span css={{ color: trendColor, width: 16, height: 16 }}>
+        <Icon />
+      </span>
+      <span css={{ color: trendColor }}>{percentageChange}%</span> vs last week
     </div>
   );
 };

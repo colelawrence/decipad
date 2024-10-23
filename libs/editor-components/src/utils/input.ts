@@ -172,6 +172,8 @@ export const insertDisplayBelow = (editor: MyEditor, path: Path): void => {
 const getMetricElement = (): MetricElement => {
   return {
     id: nanoid(),
+    blockId: '',
+    comparisonBlockId: '',
     type: ELEMENT_METRIC,
     children: [{ text: '' }],
   };

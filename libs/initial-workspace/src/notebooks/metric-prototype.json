@@ -1,0 +1,203 @@
+{
+  "children": [
+    {
+      "children": [
+        {
+          "text": "Metric prototype"
+        }
+      ],
+      "type": "title",
+      "id": "DKVY4_F4tLrgFSu-J2vhH"
+    },
+    {
+      "children": [],
+      "type": "data-tab",
+      "id": "u-TcVSMImScVOaBEpSWd7"
+    },
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "text": "ComparisonValueSlider"
+                    }
+                  ],
+                  "id": "4I46Yq13OaeWG3hQPlaOo",
+                  "type": "caption"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "47"
+                    }
+                  ],
+                  "id": "rX014zP5rk8W9GdV3Z0By",
+                  "type": "exp"
+                },
+                {
+                  "children": [
+                    {
+                      "text": ""
+                    }
+                  ],
+                  "id": "3WgLKOuBnjojQRIWZSYYI",
+                  "type": "slider",
+                  "max": "100",
+                  "min": "0",
+                  "step": "1"
+                }
+              ],
+              "id": "Oat42q2A28HhXY0afcQ9s",
+              "type": "def",
+              "variant": "slider"
+            },
+            {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "text": "MainValueSlider"
+                    }
+                  ],
+                  "id": "2HXOE2hEN3CzqzyO0oU1n",
+                  "type": "caption"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "57"
+                    }
+                  ],
+                  "id": "-vBEEvrYNoXyZzSLPpMWT",
+                  "type": "exp"
+                },
+                {
+                  "children": [
+                    {
+                      "text": ""
+                    }
+                  ],
+                  "id": "1eYQTesjYCSdDJ2scegoK",
+                  "type": "slider",
+                  "max": "100",
+                  "min": "0",
+                  "step": "1"
+                }
+              ],
+              "id": "TuBv06YeeSxs--wNByUkx",
+              "type": "def",
+              "variant": "slider"
+            }
+          ],
+          "id": "IxuBRfyYN9WIkUDdlBJd0",
+          "type": "columns"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "ComparisonValue"
+                }
+              ],
+              "type": "structured_varname",
+              "id": "XNkJ6FFQgAusm8_TnGRbQ"
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                },
+                {
+                  "children": [
+                    {
+                      "text": ""
+                    }
+                  ],
+                  "id": "bHRJsWSj6Tpuj99V9CvKR",
+                  "type": "smart-ref",
+                  "blockId": "Oat42q2A28HhXY0afcQ9s",
+                  "columnId": null,
+                  "lastSeenVariableName": "ComparisonValueSlider"
+                },
+                {
+                  "text": ""
+                }
+              ],
+              "type": "code_line_v2_code",
+              "id": "oEfhJUKCxWlon6NwSrRRy"
+            }
+          ],
+          "id": "fljLXV0jDK1wFPeQ2kcM9",
+          "type": "code_line_v2"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "MainValue"
+                }
+              ],
+              "type": "structured_varname",
+              "id": "h00LGI8h_GaZbxcV0bMv5"
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                },
+                {
+                  "children": [
+                    {
+                      "text": ""
+                    }
+                  ],
+                  "id": "O6z0pVE-Kh2DVqf_qKVrp",
+                  "type": "smart-ref",
+                  "blockId": "TuBv06YeeSxs--wNByUkx",
+                  "columnId": null,
+                  "lastSeenVariableName": "MainValueSlider"
+                },
+                {
+                  "text": ""
+                }
+              ],
+              "type": "code_line_v2_code",
+              "id": "HcUYq-OqpSLS5gjlhJEp1"
+            }
+          ],
+          "id": "2rBaGKLHYXhor3WTtQYxm",
+          "type": "code_line_v2"
+        },
+        {
+          "children": [
+            {
+              "text": ""
+            }
+          ],
+          "id": "iw0Cpvw_bVOLLwDrxTcuY",
+          "blockId": "2rBaGKLHYXhor3WTtQYxm",
+          "comparisonBlockId": "fljLXV0jDK1wFPeQ2kcM9",
+          "type": "metric"
+        },
+        {
+          "children": [
+            {
+              "text": ""
+            }
+          ],
+          "type": "p",
+          "id": "jX0gE09fJiVUtQKGA6J4b"
+        }
+      ],
+      "type": "tab",
+      "id": "I1hj72T40l8V2m2Exp3Sp",
+      "name": "New Tab"
+    }
+  ]
+}

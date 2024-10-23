@@ -369,6 +369,8 @@ export interface DisplayElement extends BaseElement {
 export interface MetricElement extends BaseElement {
   type: typeof ELEMENT_METRIC;
   children: [EmptyText];
+  blockId: string;
+  comparisonBlockId: string;
   color?: string;
 }
 
