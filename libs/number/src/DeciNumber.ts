@@ -115,9 +115,9 @@ export class DeciNumber implements TDeciNumber {
     }
     if (tof === 'number' || tof === 'string' || tof === 'bigint') {
       const n = F(f as number | string | bigint);
-      this.n = n.n;
-      this.d = n.d;
-      this.s = n.s;
+      this.n = n.n as bigint;
+      this.d = n.d as bigint;
+      this.s = n.s as bigint;
       return;
     }
     const ff = f as UndefinableOrInfiniteOrFractionLike;
@@ -153,9 +153,9 @@ export class DeciNumber implements TDeciNumber {
 
     if (isFractionLike(ff)) {
       const fraction = F(ff);
-      this.n = fraction.n;
-      this.d = fraction.d;
-      this.s = fraction.s;
+      this.n = fraction.n as bigint;
+      this.d = fraction.d as bigint;
+      this.s = fraction.s as bigint;
     } else {
       this.s = BigInt(Number(ff.s ?? 1));
       this.infinite = !!ff.infinite;
@@ -386,14 +386,14 @@ export class DeciNumber implements TDeciNumber {
     return Fraction.prototype.toFraction.call(this, excludeWhole);
   }
 
-  toContinued(): number[] {
+  toContinued(): (number | bigint)[] {
     if (isUndefined(this)) {
       return [];
     }
     if (isInfinite(this)) {
       return [Number(this.s) * Infinity, 1];
     }
-    return Fraction.prototype.toContinued.call(this);
+    return Fraction.prototype.toContinued.call(this) as bigint[];
   }
 
   clone(): TDeciNumber {

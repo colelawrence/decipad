@@ -18620,10 +18620,10 @@ forwarded@0.2.0:
   resolved "https://registry.yarnpkg.com/forwarded/-/forwarded-0.2.0.tgz#2269936428aad4c15c7ebe9779a84bf0b2a81811"
   integrity sha512-buRG0fpBtRHSTCOASe6hD258tEubFoRLb4ZNA6NxMVHNw2gOcwHo9wyablzMzOA5z9xA9L1KNjk/Nt6MT9aYow==
 
-fraction.js@4.2.0:
-  version "4.2.0"
-  resolved "https://registry.yarnpkg.com/fraction.js/-/fraction.js-4.2.0.tgz#448e5109a313a3527f5a3ab2119ec4cf0e0e2950"
-  integrity sha512-MhLuK+2gUcnZe8ZHlaaINnQLl0xRIGRfcGk2yl8xoQAfHrSsL3rYu6FCmBdkdbhc9EPlwyGHewaRsvwRMJtAlA==
+fraction.js@5.0.6:
+  version "5.0.6"
+  resolved "https://registry.yarnpkg.com/fraction.js/-/fraction.js-5.0.6.tgz#1cd227309a181a722720a5e65cdfd4f0265a1cc7"
+  integrity sha512-sQtpxkR+oTPCZ1RefIKCeytvMt7dkfdzvsQhCVe1kcZ6eOdB+d1QwxNfJLE8yf/+AlyH6coy7w6Hs3zKu3aSsw==
 
 fraction.js@^4.3.7:
   version "4.3.7"

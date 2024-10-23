@@ -1,4 +1,5 @@
-import Fraction from 'fraction.js/bigfraction';
+// eslint-disable-next-line no-restricted-imports
+import Fraction from 'fraction.js';
 import type { FractionLike } from './isFractionLike';
 import { isFractionLike } from './isFractionLike';
 

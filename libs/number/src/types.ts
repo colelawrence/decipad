@@ -40,7 +40,7 @@ export interface DeciNumberBase {
   toString(decimalPlaces?: number): string;
   toLatex(excludeWhole?: boolean): string;
   toFraction(excludeWhole?: boolean): string;
-  toContinued(): number[];
+  toContinued(): (number | bigint)[];
   clone(): DeciNumberBase;
 
   isZero(): boolean;
