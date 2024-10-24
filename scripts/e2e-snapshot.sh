@@ -2,8 +2,11 @@
 
 set -euo pipefail
 
+yarn clean
+
 export DECI_E2E=1
 export VITE_E2E=1
+export PERCY_PARALLEL_TOTAL=1
 
 
 # Load our local nx binary into the PATH, and the lib to start up the services
@@ -23,13 +26,11 @@ fi
 
 services_setup
 
-echo "running E2E tests and snapshots..."
+echo "running E2E snapshots..."
 cd apps/e2e
 if [ -n "${CI:-}" ]; then
-  npx playwright test --project=staging --repeat-each 1 --retries 2 --workers 1
-  npx playwright merge-reports --reporter github /home/runner/actions-runner/_work/decipad/decipad/blob-report
-  npx playwright merge-reports --reporter html /home/runner/actions-runner/_work/decipad/decipad/blob-report
-  
+  npx percy exec --parallel -- playwright test --project=chromium --grep @snapshot
+
 else
   npx playwright test $@
 fi

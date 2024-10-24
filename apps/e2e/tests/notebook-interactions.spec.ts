@@ -17,7 +17,7 @@ test('undo keyboard shortcuts', async ({ testUser }) => {
   await expect(text).toBeVisible();
 });
 
-test('check slash command', async ({ testUser }) => {
+test('check slash command @snapshot', async ({ testUser }) => {
   const { page, notebook } = testUser;
   await notebook.focusOnBody();
   await page.keyboard.type('/t');
@@ -71,7 +71,7 @@ test('inserts a link using markdown syntax', async ({ testUser }) => {
   await expect(locator).toHaveAttribute('href', 'https://example.com/');
 });
 
-test('text formatter options', async ({ testUser }) => {
+test('text formatter options @snapshot', async ({ testUser }) => {
   const { page, notebook } = testUser;
 
   await test.step('starts empty', async () => {

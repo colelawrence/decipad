@@ -1,7 +1,7 @@
 import { expect, test } from './manager/decipad-tests';
 import { snapshot } from '../utils/src';
 
-test('Checks notebook embeds @embeds', async ({ testUser }) => {
+test('Checks notebook embeds @embeds @snapshot', async ({ testUser }) => {
   const { page, notebook, workspace } = testUser;
 
   await notebook.returnToWorkspace();

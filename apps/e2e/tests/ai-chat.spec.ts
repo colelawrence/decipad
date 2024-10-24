@@ -3,7 +3,7 @@ import { expect, test } from './manager/decipad-tests';
 import { snapshot } from '../utils/src';
 
 // TODO: we skip these tests because apparenly we can't mock websockets using playwright.
-test('snapshot test for AI panel', async ({ testUser }) => {
+test('snapshot test for AI panel @snapshot', async ({ testUser }) => {
   const { aiAssistant } = testUser;
 
   await aiAssistant.openPannel();

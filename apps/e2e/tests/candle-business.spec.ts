@@ -3,7 +3,7 @@ import startingACandleBusiness from '../__fixtures__/starting-a-candle-business.
 import { fetchTable } from '../utils/page/ManyTables';
 import { snapshot, Timeouts } from '../utils/src';
 
-test('Use case: building a candle business', async ({ testUser }) => {
+test('Use case: building a candle business @snapshot', async ({ testUser }) => {
   const { page, notebook } = testUser;
   test.slow();
 

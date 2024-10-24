@@ -3,7 +3,7 @@ import { expect, test } from './manager/decipad-tests';
 import { snapshot } from '../utils/src';
 import { app } from '@decipad/backend-config';
 
-test('check playground @playground', async ({ unregisteredUser }) => {
+test('check playground @playground @snapshot', async ({ unregisteredUser }) => {
   const { page, notebook } = unregisteredUser;
   await page.goto(`${app().urlBase}/playground`);
   await notebook.waitForEditorToLoad();

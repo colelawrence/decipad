@@ -81,7 +81,7 @@ test('Charts', async ({ testUser: { page, notebook } }) => {
   });
 });
 
-test('check notebook with charts', async ({
+test('check notebook with charts @snapshot', async ({
   testUser,
   anotherTestUser,
   unregisteredUser,

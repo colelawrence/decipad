@@ -3,7 +3,7 @@ import { expect, test } from './manager/decipad-tests';
 import { snapshot, Timeouts } from '../utils/src';
 import { app } from '@decipad/backend-config';
 
-test('check auth flows @auth', async ({ unregisteredUser }) => {
+test('check auth flows @auth @snapshot', async ({ unregisteredUser }) => {
   const { page } = unregisteredUser;
   const testEmail = 'johndoe123@gmail.com';
   await Promise.all([page.goto('/'), page.waitForEvent('load')]);

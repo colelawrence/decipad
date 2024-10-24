@@ -22,7 +22,9 @@ const unpublishedParagraph = 'This paragraph isnt published';
 // tests on this file can't be ran in paparell, make them flaky, might be related to the workspace reuse
 test.describe.configure({ mode: 'serial' });
 
-test('check private url publishing on free workspace', async ({ testUser }) => {
+test('check private url publishing on free workspace @snapshot', async ({
+  testUser,
+}) => {
   await test.step('create notebook', async () => {
     await testUser.notebook.focusOnBody();
   });

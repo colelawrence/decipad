@@ -4,7 +4,6 @@ set -euo pipefail
 
 export DECI_E2E=1
 export VITE_E2E=1
-export PERCY_PARALLEL_TOTAL=2
 
 
 # Load our local nx binary into the PATH, and the lib to start up the services

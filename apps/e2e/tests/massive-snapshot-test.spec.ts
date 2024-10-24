@@ -15,7 +15,9 @@ const waitForPageLoad = async (page: Page) =>
   ]);
 
 test.use({ colorScheme: 'dark' });
-test('Loading and snapshot of big notebook darkmode', async ({ testUser }) => {
+test('Loading and snapshot of big notebook darkmode @snapshot', async ({
+  testUser,
+}) => {
   let notebookId: string;
   let localStorageValue: string | null;
 
@@ -58,7 +60,7 @@ test('Loading and snapshot of big notebook darkmode', async ({ testUser }) => {
 });
 
 test.use({ colorScheme: 'light' });
-test('Loading and snapshot of big notebook', async ({
+test('Loading and snapshot of big notebook @snapshot', async ({
   testUser,
   anotherRandomFreeUser,
   unregisteredUser,

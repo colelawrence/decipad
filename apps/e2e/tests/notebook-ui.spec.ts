@@ -50,7 +50,7 @@ test('notebook actions topbar @notebook', async ({ testUser }) => {
   });
 });
 
-test('notebook icon @notebook', async ({ testUser }) => {
+test('notebook icon @notebook @snapshot', async ({ testUser }) => {
   const { page, notebook } = testUser;
   await testUser.importNotebook(notebookSource);
   await testUser.notebook.waitForEditorToLoad();
@@ -125,7 +125,7 @@ test('sidebar in publish views @sidebar', async ({
   });
 });
 
-test('number catalog snapshot @sidebar', async ({ testUser }) => {
+test('number catalog snapshot @sidebar @snapshot', async ({ testUser }) => {
   const { page, notebook } = testUser;
   await testUser.importNotebook(notebookSource);
   await testUser.notebook.waitForEditorToLoad();
@@ -568,7 +568,7 @@ test('check live collaboration same notebook', async ({
   });
 });
 
-test('basic notebook comments @comments', async ({
+test('basic notebook comments @comments @snapshot', async ({
   testUser,
   anotherTestUser,
 }) => {

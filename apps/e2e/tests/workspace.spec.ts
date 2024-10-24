@@ -69,7 +69,7 @@ test('can move noteboks to workspace folders @workspace', async ({
   });
 });
 
-test('should display the initial notebooks @workspace', async ({
+test('should display the initial notebooks @workspace @snapshot', async ({
   randomFreeUser: { page, workspace, notebook },
 }) => {
   const workspaceNotebooks = await workspace.getPadList(true);
@@ -110,7 +110,7 @@ test('should display the initial notebooks @workspace', async ({
   await snapshot(page as Page, 'Dashboard: Initial Notebooks');
 });
 
-test('shows workspace in dark mode mode @workspace', async ({
+test('shows workspace in dark mode mode @workspace @snapshot', async ({
   randomFreeUser: { page },
 }) => {
   await page.emulateMedia({ colorScheme: 'dark' });

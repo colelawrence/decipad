@@ -3,7 +3,7 @@ import { Timeouts, snapshot } from '../utils/src';
 import type { Page } from './manager/decipad-tests';
 import { test } from './manager/decipad-tests';
 
-test('Use case: charts screenshot', async ({ testUser }) => {
+test('Use case: charts screenshot @snapshot', async ({ testUser }) => {
   const { page } = testUser;
   await testUser.importNotebook(charts);
   await testUser.notebook.waitForEditorToLoad();

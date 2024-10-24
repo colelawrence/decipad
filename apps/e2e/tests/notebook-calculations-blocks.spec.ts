@@ -3,7 +3,7 @@ import type { Page } from './manager/decipad-tests';
 import { expect, test } from './manager/decipad-tests';
 import { getClearText, snapshot, Timeouts } from '../utils/src';
 
-test.describe('structured input and calculations @calculation-blocks', () => {
+test.describe('structured input and calculations @calculation-blocks @snapshot', () => {
   test('advanced calculation blocks (old codelines) @advanced-formulas', async ({
     testUser,
   }) => {

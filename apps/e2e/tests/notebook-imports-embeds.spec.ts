@@ -4,7 +4,9 @@ import { snapshot, Timeouts } from '../utils/src';
 import notebookSource from '../__fixtures__/013-new-welcome.json';
 import { doubleClickCell } from '../utils/page/Table';
 
-test('import image via upload @imports @images', async ({ testUser }) => {
+test('import image via upload @imports @images @snapshot', async ({
+  testUser,
+}) => {
   const { page, notebook } = testUser;
 
   await test.step('Importing image through file explorer', async () => {
@@ -313,7 +315,7 @@ test('csv integrations work when duplicating a notebook', async ({
   });
 });
 
-test('csv calculations propagate @csv', async ({
+test('csv calculations propagate @csv @snapshot', async ({
   testUser,
   randomFreeUser,
 }) => {

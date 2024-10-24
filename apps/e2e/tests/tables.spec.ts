@@ -321,7 +321,7 @@ test('Basic Table', async ({ testUser }) => {
   });
 });
 
-test('tests table date pickers', async ({ testUser }) => {
+test('tests table date pickers @snapshot', async ({ testUser }) => {
   let col;
   let line;
   const today = new Date();

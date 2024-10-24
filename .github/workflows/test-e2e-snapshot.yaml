@@ -1,4 +1,4 @@
-name: 🔬 Run E2E Tests
+name: 🔬 Run E2E Snapshot Tests
 
 on:
   push:
@@ -30,7 +30,6 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-      - uses: actions-rust-lang/setup-rust-toolchain@v1
 
       - name: Cache Yarn dependencies and Node modules
         uses: buildjet/cache@v4
@@ -45,10 +44,10 @@ jobs:
         with:
           version: 'latest'
 
-      - name: Use Node.js
+      - name: Use Node.js ${{ matrix.node-version }}
         uses: buildjet/setup-node@v4
         with:
-          node-version: 18.x
+          node-version: ${{ matrix.node-version }}
 
       - name: Check if node_modules is cached
         id: cache-check
@@ -86,8 +85,9 @@ jobs:
           aws-secret-access-key: ${{ secrets.DEV_AWS_SECRET_ACCESS_KEY }}
           aws-region: eu-west-2
 
-      - name: Run e2e
+      - name: Run e2e Visual Regression Tests
         env:
+          PERCY_TOKEN: '${{ secrets.PERCY_TOKEN }}'
           NODE_OPTIONS: '--enable-source-maps --max_old_space_size=16384'
           STRIPE_EXTRA_CREDITS_PRODUCT_ID: '${{secrets.DEV_STRIPE_EXTRA_CREDITS_PRODUCT_ID}}'
           STRIPE_SUBSCRIPTIONS_PRODUCT_ID: '${{secrets.DEV_STRIPE_SUBSCRIPTIONS_PRODUCT_ID}}'
@@ -97,7 +97,7 @@ jobs:
           GOOGLE_BIGQUERY_CREDENTIALS: '${{secrets.GOOGLE_BIGQUERY_CREDENTIALS}}'
           DECI_VERBOSE: true
           TEST_DATABASE: '${{secrets.TEST_DATABASE}}'
-        run: ./scripts/e2e.sh
+        run: ./scripts/e2e-snapshot.sh ${{ matrix.shard }} ${{ strategy.job-total }}
 
       - name: Upload Blob Report to GitHub Actions Artifacts
         uses: actions/upload-artifact@v4
@@ -106,6 +106,12 @@ jobs:
           name: all-blob-reports
           path: /home/runner/actions-runner/_work/decipad/decipad/blob-report
           retention-days: 1
+
+      - name: Finalize Percy
+        env:
+          PERCY_TOKEN: '${{ secrets.PERCY_TOKEN }}'
+        if: failure() || cancelled()
+        run: npx percy build:finalize
 
   merge-reports:
     name: 📋 Create Report
@@ -129,7 +135,7 @@ jobs:
 
       - uses: buildjet/setup-node@v4
         with:
-          node-version: ${{ matrix.node-version }}
+          node-version: 18.x
 
       - name: Check if node_modules is cached
         id: cache-check

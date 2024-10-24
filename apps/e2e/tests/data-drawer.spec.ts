@@ -17,7 +17,7 @@ test('basic data drawer', async ({ testUser }) => {
   await expect(page.getByText('Edit Data')).toBeHidden();
 });
 
-test('basic functions helper', async ({ testUser }) => {
+test('basic functions helper @snapshot', async ({ testUser }) => {
   const { page, notebook } = testUser;
 
   await notebook.focusOnBody();

@@ -51,7 +51,7 @@ const executeCode = (user: User, page: Page, sourcecode: string, x: number) =>
   });
 
 // eslint-disable-next-line playwright/no-skipped-test
-test.skip('make sure our js code templates work', async ({
+test.skip('make sure our js code templates work @snapshot', async ({
   randomFreeUser,
 }) => {
   const { page, notebook, workspace } = randomFreeUser;
@@ -177,7 +177,7 @@ return this.${generatedVarName};`;
   });
 });
 
-test('screenshots the import menu', async ({ randomFreeUser }) => {
+test('screenshots the import menu @snapshot', async ({ randomFreeUser }) => {
   const { page, notebook, workspace } = randomFreeUser;
 
   await workspace.createNewNotebook();
