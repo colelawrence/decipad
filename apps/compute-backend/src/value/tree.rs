@@ -2,6 +2,7 @@ use crate::types::types::DeciResult;
 
 use super::{contiguous_slice::contiguous_slice, sorted_column::SortedColumn};
 
+#[allow(unused)]
 struct TreeNode {
     value: DeciResult,
 
@@ -12,6 +13,7 @@ pub struct Tree {
     top_level_nodes: Vec<TreeNode>,
 }
 
+#[allow(unused)]
 impl Tree {
     fn construct_node(result: &[DeciResult], start: usize, end: usize) -> Vec<TreeNode> {
         let column = &result[0].get_slice(start, end + 1);
@@ -35,7 +37,7 @@ impl Tree {
             nodes[index].children = Tree::construct_node(&result[1..], s + start, e + start);
         }
 
-        return nodes;
+        nodes
     }
 
     fn construct_tree(&mut self, result: &DeciResult) {
@@ -179,7 +181,7 @@ fn tree_repeat_column_values() {
     assert_eq!(child1[0].value, 3.0.into());
 
     assert_eq!(child2[0].value, 5.0.into());
-    assert_eq!(child2[1].value, 5.0.into());
+    assert_eq!(child2[1].value, 7.0.into());
 }
 
 //

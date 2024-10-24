@@ -1,7 +1,4 @@
-use std::{
-    collections::{BTreeMap, HashMap},
-    convert::TryInto,
-};
+use std::convert::TryInto;
 
 use compute_backend_derive::suppress_derive_case_warnings;
 use indexmap::IndexMap;

@@ -18,6 +18,7 @@ pub struct GSheets {
 
 #[derive(Deserialize)]
 #[serde(rename_all = "camelCase")]
+#[allow(dead_code)]
 struct GSheetsData {
     values: Vec<VecDeque<serde_json::Value>>,
     major_dimension: String,

@@ -11,6 +11,7 @@ pub struct FilteredColumn {
     filtered_column: Option<DeciResult>,
 }
 
+#[allow(unused)]
 impl FilteredColumn {
     fn set_filtered(&mut self) {
         self.filtered_column = Some(self.column.mask_with(self.mask.clone()));

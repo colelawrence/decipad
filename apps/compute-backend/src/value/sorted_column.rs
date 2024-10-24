@@ -1,5 +1,6 @@
 use crate::types::types::DeciResult;
 
+#[allow(unused)]
 struct IndexedDeciResult<'a>(usize, &'a DeciResult);
 
 impl<'a> PartialEq for IndexedDeciResult<'a> {
@@ -17,6 +18,7 @@ pub struct SortedColumn {
     sorted_column: Option<DeciResult>,
 }
 
+#[allow(unused)]
 impl SortedColumn {
     pub fn sort_and_save(&mut self) {
         let binding = self.column.clone();

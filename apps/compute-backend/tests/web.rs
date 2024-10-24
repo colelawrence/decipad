@@ -1,8 +1,6 @@
 //! Test suite for the Web and headless browsers.
-use js_sys::Float64Array;
-#[cfg(target_arch = "wasm32")]
+#![cfg(target_arch = "wasm32")]
 extern crate wasm_bindgen_test;
-use compute_backend::ComputeBackend;
 use wasm_bindgen_test::*;
 
 wasm_bindgen_test_configure!(run_in_browser);

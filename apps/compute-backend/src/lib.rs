@@ -1,23 +1,22 @@
 mod infer;
 mod parse;
-mod types;
+pub mod types;
 mod value;
 
 use deci_result::{deserialize_result, serialize_result};
-use import::{Csv, ImportOptions, Importer};
 use js_sys::{self, BigUint64Array, Uint8Array};
 use js_sys::{BigInt64Array, Object};
 use rand::rngs::OsRng;
 use rand_unique::{RandomSequence, RandomSequenceBuilder};
 use std::collections::HashMap;
-use types::types::{DeciResult, DeciType};
+use types::types::DeciResult;
 use value::sorted_column::SortedColumn;
 use wasm_bindgen::prelude::*;
 use wasm_bindgen_test::wasm_bindgen_test_configure;
 pub mod deci_result;
 pub mod import;
 #[cfg(test)]
-pub mod tests;
+mod tests;
 
 wasm_bindgen_test_configure!(run_in_browser);
 

@@ -1,6 +1,5 @@
 use crate::{
-    import::Kind,
-    parse::DateMemo,
+    parse::date::DateMemo,
     types::types::{DateSpecificity, DeciDate, DeciResult, DeciType},
 };
 use std::str::FromStr;
@@ -90,26 +89,26 @@ where
     }
 }
 
-macro_rules! coerce {
-    ($kind:ident, $inner:ident, [$($variant:ident / $deci:ident),*]) => {
-        match $kind {
-            $(Kind::$variant => Some(DeciResult::$deci($inner.coerce().ok()?)),)*
-            _ => None,
-        }
-    };
-}
-
-macro_rules! coerce_via_string {
-    ($kind:ident, $inner:ident) => {
-        match $kind {
-            Kind::Number => todo!(),
-            Kind::String => todo!(),
-            Kind::Boolean => todo!(),
-            Kind::Date => todo!(),
-            Kind::Error => todo!(),
-        }
-    };
-}
+//macro_rules! coerce {
+//    ($kind:ident, $inner:ident, [$($variant:ident / $deci:ident),*]) => {
+//        match $kind {
+//            $(Kind::$variant => Some(DeciResult::$deci($inner.coerce().ok()?)),)*
+//            _ => None,
+//        }
+//    };
+//}
+//
+//macro_rules! coerce_via_string {
+//    ($kind:ident, $inner:ident) => {
+//        match $kind {
+//            Kind::Number => todo!(),
+//            Kind::String => todo!(),
+//            Kind::Boolean => todo!(),
+//            Kind::Date => todo!(),
+//            Kind::Error => todo!(),
+//        }
+//    };
+//}
 
 impl Into<DeciResult> for String {
     fn into(self) -> DeciResult {

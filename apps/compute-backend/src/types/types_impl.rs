@@ -1,4 +1,3 @@
-use js_sys::Math::round;
 use num_bigint::BigInt;
 use std::ops::{Add, Div, Mul, Sub};
 
@@ -6,10 +5,8 @@ use std::ops::{Add, Div, Mul, Sub};
 use num::{
     abs,
     integer::{gcd, lcm},
-    FromPrimitive, ToPrimitive,
+    FromPrimitive,
 };
-
-use conv::ApproxInto;
 
 use super::types::{DateSpecificity, DeciDate, DeciResult};
 

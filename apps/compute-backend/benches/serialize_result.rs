@@ -1,8 +1,8 @@
-#[cfg(not(target_arch = "wasm32"))]
-use criterion::{black_box, criterion_group, criterion_main, Criterion};
+#![cfg(not(target_arch = "wasm32"))]
+use criterion::{criterion_group, criterion_main, Criterion};
 
-use compute_backend::deci_result::{deserialize_result, serialize_result, SerializedResult};
-use compute_backend::types::DeciResult;
+use compute_backend::deci_result::serialize_result;
+use compute_backend::types::types::DeciResult;
 
 #[cfg(not(target_arch = "wasm32"))]
 fn bench_bool(c: &mut Criterion) {

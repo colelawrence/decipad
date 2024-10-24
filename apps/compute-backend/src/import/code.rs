@@ -14,7 +14,7 @@ pub struct Code {
 impl Import for Code {
     type From = [u8];
 
-    fn import(&self, from: &Self::From, options: &ImportOptions) -> ImportResult {
+    fn import(&self, _from: &Self::From, _options: &ImportOptions) -> ImportResult {
         todo!()
     }
 }
