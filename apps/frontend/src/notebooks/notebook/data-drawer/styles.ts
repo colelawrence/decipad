@@ -257,6 +257,7 @@ export const DataDrawerCloseButton = styled.div({
 export const PaddingDiv = styled.div({ width: '8px', visibility: 'hidden' });
 
 export const CreateVariableWrapper = styled.div({
+  width: '100%',
   display: 'flex',
   flexDirection: 'column',
   gap: '4px',
@@ -275,4 +276,8 @@ export const DataDrawerContentWrapper = styled.div({
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'start',
+});
+
+export const EditVariableContainer = styled.div({
+  width: '100%',
 });

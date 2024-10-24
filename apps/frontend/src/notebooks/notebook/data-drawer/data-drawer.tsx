@@ -16,8 +16,8 @@ import {
   ErrorParagraph,
   HotKey,
   DataDrawerContentWrapper,
+  EditVariableContainer,
 } from './styles';
-
 import { Close } from 'libs/ui/src/icons';
 import { p14Medium, SegmentButtons, Toggle } from '@decipad/ui';
 import { Plate, PlateContent, focusEditorEdge } from '@udecode/plate-common';
@@ -192,12 +192,12 @@ const EditVariableDataDrawer: FC<EditVariableDataDrawerProps> = ({
   }
 
   return (
-    <div ref={ref}>
+    <EditVariableContainer ref={ref}>
       <Plate<DataDrawerEditorValue> editor={codeEditor}>
         <PlateContent />
         <FocusEnd />
       </Plate>
-    </div>
+    </EditVariableContainer>
   );
 };
 
