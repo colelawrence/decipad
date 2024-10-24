@@ -10,7 +10,7 @@ import type {
   Handler,
 } from 'aws-lambda';
 import chalk from 'chalk';
-import * as Sentry from '@sentry/aws-serverless';
+import { AWSLambda as SentryAWSLambda } from '@sentry/serverless';
 import { captureException, trace } from '@decipad/backend-trace';
 import { analyticsClient } from '@decipad/backend-analytics';
 import type { Handler as MyHandler } from '@decipad/backendtypes';
@@ -57,7 +57,7 @@ const wrapHandler = (
 
         const user = await getAuthenticatedUser(req);
         if (user) {
-          Sentry.setUser({
+          SentryAWSLambda.setUser({
             id: user.id,
             email: user.email ?? undefined,
           });

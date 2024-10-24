@@ -2,6 +2,10 @@ import { useEffect } from 'react';
 import { AnalyticsBrowser } from '@segment/analytics-next';
 import * as Sentry from '@sentry/react';
 import {
+  ExtraErrorData,
+  HttpClient as HttpClientIntegration,
+} from '@sentry/integrations';
+import {
   createRoutesFromChildren,
   matchRoutes,
   useLocation,
@@ -31,9 +35,9 @@ export const initSentry = () => {
   }
   try {
     sentryInitialised = true;
-    Sentry.registerSpanErrorInstrumentation();
+    Sentry.addTracingExtensions();
     Sentry.init({
-      beforeSend: (event) => {
+      beforeSend: (event: Sentry.Event) => {
         event.exception?.values?.forEach((error) => {
           if (!error.mechanism?.handled) {
             return;
@@ -53,16 +57,18 @@ export const initSentry = () => {
       replaysSessionSampleRate: 0.2,
       replaysOnErrorSampleRate: 1.0,
       integrations: [
-        Sentry.replayIntegration({ maskAllText: true, blockAllMedia: true }),
-        Sentry.reactRouterV6BrowserTracingIntegration({
-          useEffect,
-          useLocation,
-          useNavigationType,
-          createRoutesFromChildren,
-          matchRoutes,
+        new Sentry.Replay({ maskAllText: true, blockAllMedia: true }),
+        new Sentry.BrowserTracing({
+          routingInstrumentation: Sentry.reactRouterV6Instrumentation(
+            useEffect,
+            useLocation,
+            useNavigationType,
+            createRoutesFromChildren,
+            matchRoutes
+          ),
         }),
-        Sentry.extraErrorDataIntegration(),
-        Sentry.httpClientIntegration(),
+        new ExtraErrorData(),
+        new HttpClientIntegration(),
       ],
       tracesSampleRate: 0.3,
       enableTracing: true,

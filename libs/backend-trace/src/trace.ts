@@ -1,4 +1,7 @@
-import * as Sentry from '@sentry/aws-serverless';
+import {
+  AWSLambda as SentryAWSLambda,
+  configureScope,
+} from '@sentry/serverless';
 import type {
   Context,
   Handler,
@@ -30,39 +33,42 @@ const handleErrors = <
 >(
   handle: Handler<TReq, TRes>
 ): Handler<TReq, TRes> =>
-  Sentry.wrapHandler(async (event: TReq, context: Context): Promise<TRes> => {
-    try {
-      const resp = await new Promise<TRes>((resolve, reject) => {
-        const callback = (
-          err?: Error | null | string | undefined,
-          response?: TRes
-        ) => {
-          if (err) {
-            return reject(err);
-          }
-          resolve(getDefined(response));
-        };
-        const r = handle(event, context, callback);
-        if (r && r.then)
-          r.then((result) => {
-            if (result) {
-              callback(null, result);
+  SentryAWSLambda.wrapHandler(
+    async (event: TReq, context: Context): Promise<TRes> => {
+      try {
+        const resp = await new Promise<TRes>((resolve, reject) => {
+          const callback = (
+            err?: Error | null | string | undefined,
+            response?: TRes
+          ) => {
+            if (err) {
+              return reject(err);
             }
-          }).catch((err) => reject(err));
-      });
-      return resp;
-    } catch (err) {
-      const boomed = boomify(err as Error);
-      if (boomed.isServer) {
-        // eslint-disable-next-line no-console
-        console.error('Error caught', err);
-        await captureException(boomed);
+            resolve(getDefined(response));
+          };
+          const r = handle(event, context, callback);
+          if (r && r.then)
+            r.then((result) => {
+              if (result) {
+                callback(null, result);
+              }
+            }).catch((err) => reject(err));
+        });
+        return resp;
+      } catch (err) {
+        const boomed = boomify(err as Error);
+        if (boomed.isServer) {
+          // eslint-disable-next-line no-console
+          console.error('Error caught', err);
+          await captureException(boomed);
+        }
+        return {
+          statusCode: boomed.output.statusCode,
+        } as TRes;
       }
-      return {
-        statusCode: boomed.output.statusCode,
-      } as TRes;
-    }
-  }, lastHandlerOptions);
+    },
+    lastHandlerOptions
+  );
 
 export const trace = <
   TReqContext extends APIGatewayEventRequestContextV2 = APIGatewayEventRequestContextV2,
@@ -73,23 +79,24 @@ export const trace = <
   options: TraceOptions = {}
 ): Handler<TReq, TRes> => {
   const handler: Handler<TReq, TRes> = (event, context, callback) => {
-    const res = Sentry.continueTrace(
+    const res = SentryAWSLambda.continueTrace(
       {
         baggage: event.headers?.baggage,
         sentryTrace: event.headers?.['sentry-trace'],
       },
       () => {
         if (event.headers?.['x-transaction-id']) {
-          Sentry.getCurrentScope().setTag(
-            'transaction_id',
-            event.headers['x-transaction-id']
-          );
+          configureScope((scope) => {
+            scope.setTag('transaction_id', event.headers['x-transaction-id']);
+          });
         }
         return handle(event, context, callback);
       }
     );
     if (isPromise(res)) {
-      return res.finally(() => Sentry.flush());
+      return res.finally(() => {
+        SentryAWSLambda.flush();
+      });
     }
     return res;
   };

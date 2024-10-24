@@ -1,5 +1,5 @@
 import { nanoid } from 'nanoid';
-import { getCurrentScope } from '@sentry/browser';
+import { configureScope } from '@sentry/browser';
 
 const TRANSACTION_ID_HEADER_NAME = 'x-transaction-id';
 
@@ -23,7 +23,9 @@ export const fetch: typeof global.fetch = (
   if (!hHeaders.get(TRANSACTION_ID_HEADER_NAME)) {
     const transactionId = nanoid();
     hHeaders.set(TRANSACTION_ID_HEADER_NAME, transactionId);
-    getCurrentScope().setTag('transaction_id', transactionId);
+    configureScope((scope) => {
+      scope.setTag('transaction_id', transactionId);
+    });
   }
 
   const finalInput: string | Request =
