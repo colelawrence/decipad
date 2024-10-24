@@ -47,6 +47,10 @@ test('workspaces', (ctx) => {
       created: Date.now(),
       data: {
         object: {
+          client_secret: 'client_secret',
+          payment_link: null,
+          saved_payment_method_options: null,
+          ui_mode: 'hosted',
           id: 'sub_123',
           object: 'checkout.session',
           after_expiration: null,
@@ -56,6 +60,7 @@ test('workspaces', (ctx) => {
           automatic_tax: {
             enabled: true,
             status: 'complete',
+            liability: null,
           },
           billing_address_collection: 'auto',
           cancel_url: 'https://stripe.com',
@@ -67,6 +72,7 @@ test('workspaces', (ctx) => {
           consent_collection: {
             promotions: 'none',
             terms_of_service: 'required',
+            payment_method_reuse_agreement: null,
           },
           created: Date.now(),
           currency: 'usd',
@@ -76,6 +82,7 @@ test('workspaces', (ctx) => {
             shipping_address: null,
             submit: null,
             terms_of_service_acceptance: null,
+            after_submit: null,
           },
           customer: 'cus_PmNLVNAj0ksMFU',
           customer_creation: 'if_required',
@@ -95,7 +102,7 @@ test('workspaces', (ctx) => {
             tax_ids: [],
           },
           customer_email: null,
-          expires_at: addMonths(Date.now(), 1),
+          expires_at: addMonths(Date.now(), 1).getTime(),
           invoice: '789',
           invoice_creation: null,
           livemode: false,
@@ -244,46 +251,5 @@ test('workspaces', (ctx) => {
 
     expect(workspaceSubscription.paymentStatus).toBe('paid');
     await expect(queries.getUsage(workspace.id)).resolves.toBe(0);
-  });
-
-  it.skip('can cancel an existing subscription', async () => {
-    const client = ctx.graphql.withAuth(await ctx.auth());
-    const cancelStripeEvent = {
-      ...stripeEvent,
-      data: {
-        ...stripeEvent.data,
-        object: {
-          ...stripeEvent.data.object,
-          status: 'canceled',
-        },
-      },
-      type: 'customer.subscription.deleted',
-    };
-
-    const response = await ctx.http.fetch('/api/stripe/webhook', {
-      method: 'POST',
-      body: JSON.stringify(cancelStripeEvent),
-      headers: {
-        'content-type': 'application/json',
-        'stripe-signature': stripe.webhooks.generateTestHeaderString({
-          payload: JSON.stringify(cancelStripeEvent),
-          secret: defaultEnv('STRIPE_WEBHOOK_SECRET'),
-        }),
-      },
-    });
-    expect(response.ok).toBe(true);
-
-    const { workspaces } = (
-      await client.query({
-        query: GetWorkspacesWithSharedNotebooksDocument,
-      })
-    ).data;
-
-    const { workspaceSubscription, isPremium } = workspaces[0];
-
-    expect(workspaceSubscription.paymentStatus).toBe('unpaid');
-    expect(workspaceSubscription.credits).toBe(limits().maxCredits.free);
-    expect(workspaceSubscription.queries).toBe(limits().maxQueries.free);
-    expect(isPremium).toBeFalsy();
   });
 });
