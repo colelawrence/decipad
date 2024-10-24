@@ -197,6 +197,7 @@ fn test_serialize_really_big_arbitrary_fraction() {
 
 #[wasm_bindgen_test]
 fn test_serialize_date_with_value() {
+    #[allow(deprecated)]
     let date = NaiveDateTime::from_timestamp(1721668184, 0);
     let result =
         serialize_result_internal(DeciResult::Date(DeciDate(Some(date), DateSpecificity::Day)))

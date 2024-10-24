@@ -18,10 +18,7 @@
         )
       );
       # latest stable rust, with wasm target + rust-src extension
-      rustToolchain = eachSystem (pkgs: pkgs.rust-bin.stable.latest.default.override {
-        extensions = ["rust-src"];
-        targets = ["wasm32-unknown-unknown"];
-      });
+      rustToolchain = eachSystem (pkgs: pkgs.rust-bin.fromRustupToolchainFile ./rust-toolchain.toml);
       playwright-browsers = eachSystem(pkgs: ((pkgs.callPackage ./driver.nix {inherit pkgs;}) {
               version = "1.48.0";
               sha256 = "sha256-uay2XLmX9+/6OI0i7OP/Y1exWtUt37FVuOAl5/7jClo=";

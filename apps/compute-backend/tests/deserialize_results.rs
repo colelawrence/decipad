@@ -170,6 +170,7 @@ fn test_deserialize_date_with_value() {
     assert_eq!(
         result,
         DeciResult::Date(DeciDate(
+            #[allow(deprecated)]
             Some(NaiveDateTime::from_timestamp(1721668184, 0)),
             DateSpecificity::Day
         ))

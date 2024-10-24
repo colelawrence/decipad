@@ -35,6 +35,7 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+      - uses: actions-rust-lang/setup-rust-toolchain@v1
 
       - name: Cache Yarn dependencies and Node modules
         uses: buildjet/cache@v4

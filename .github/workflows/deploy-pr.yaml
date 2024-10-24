@@ -28,6 +28,8 @@ jobs:
           aws-region: eu-west-2
 
       - uses: actions/checkout@v4
+      - uses: actions-rust-lang/setup-rust-toolchain@v1
+
         with:
           fetch-depth: 0
       - uses: nrwl/nx-set-shas@v4
@@ -177,6 +179,7 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+      - uses: actions-rust-lang/setup-rust-toolchain@v1
 
       - name: Cache Yarn dependencies and Node modules
         uses: buildjet/cache@v4
