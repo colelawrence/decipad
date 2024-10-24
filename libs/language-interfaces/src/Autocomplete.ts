@@ -15,6 +15,22 @@ export type FormulaGroup =
   | 'Trigonometric'
   | 'Units';
 
+export type ImportElementSource =
+  | 'decipad'
+  | 'codeconnection'
+  | 'gsheets'
+  | 'csv'
+  | 'json'
+  | 'postgresql'
+  | 'mysql'
+  | 'oracledb'
+  | 'cockroachdb'
+  | 'redshift'
+  | 'mssql'
+  | 'mariadb'
+  | 'notion'
+  | 'bigquery';
+
 export interface AutocompleteName<
   Kind extends SerializedType['kind'] = SerializedType['kind']
 > {
@@ -29,6 +45,8 @@ export interface AutocompleteName<
   blockId?: string;
   columnId?: string;
   isLocal?: boolean;
+  blockType?: string;
+  integrationProvider?: ImportElementSource;
 }
 
 export interface AutocompleteNameWithSerializedType<

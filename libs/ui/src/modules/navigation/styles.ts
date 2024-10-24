@@ -40,6 +40,9 @@ export const NavigationSidebarWrapperStyles = styled.div(
     display: 'flex',
     flexDirection: 'column',
     marginLeft: '16px',
+    // small hack to avoid the marginRight: 24px coming from parent components.
+    // TODO: unify all margins and sidebars
+    marginRight: '-8px',
   },
   deciOverflowYStyles
 );
@@ -167,10 +170,9 @@ export const TextWrapper = styled.p<TextWrapperProps>((props) => [
     color: 'inherit',
     // some things about our font are just weird, you can't fix that
     paddingTop: 0.5,
-    paddingLeft: '6px',
     textOverflow: 'ellipsis',
     // this is needed to make the text overflow work
-    maxWidth: props.isNested ? '130px' : '160px',
+    maxWidth: props.isNested ? '110px' : '130px',
     whiteSpace: 'nowrap',
     // just in case...
     overflow: 'hidden',
@@ -214,8 +216,33 @@ export const EllipsisWrapper = styled.div({
   height: '40px',
 });
 
-export const UnsectionedNotebooksWrapper = styled.div({
+export const UnsectionedNotebooksWrapper = styled.div(deciOverflowYStyles, {
   width: '100%',
-  overflowY: 'auto',
   maxHeight: '220px',
+});
+
+// Drag and Drop
+export const DragDropWrapper = styled.div({
+  backgroundColor: cssVar('backgroundDefault'),
+  opacity: 1,
+  color: cssVar('textDefault'),
+  padding: 6,
+  borderRadius: 6,
+  display: 'inline-flex',
+  gap: 4,
+  zIndex: 1000,
+  transform: 'rotate(3deg)',
+});
+
+export const DragDropIcon = styled.span({
+  height: 16,
+  width: 16,
+  alignItems: 'center',
+  justifyContent: 'center',
+});
+
+export const DragDropTitle = styled.span({
+  alignItems: 'center',
+  justifyContent: 'center',
+  color: cssVar('textTitle'),
 });

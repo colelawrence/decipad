@@ -1,6 +1,9 @@
 /* eslint-disable decipad/css-prop-named-variable */
 import { ImportElementSource } from '@decipad/editor-types';
-import { useWorkspaceExternalData } from '@decipad/graphql-client';
+import {
+  ExternalProvider,
+  useWorkspaceExternalData,
+} from '@decipad/graphql-client';
 import { workspaces } from '@decipad/routing';
 import { useToast } from '@decipad/toast';
 import { BackendUrl } from '@decipad/utils';
@@ -124,6 +127,7 @@ export const DatabaseConnectionScreen: FC<DatabaseConnectionProps> = ({
                 remove(externalData.id);
               }}
               onClick={() => {}}
+              key={`integration-action-item-${externalData.id}`}
             />
           );
         })}
@@ -285,12 +289,19 @@ function NewDataConnection({
       return;
     }
 
+    let provider;
+    if (connMethod === 'full-url') {
+      provider = fullUrl.split('://')[0] as ImportElementSource;
+    } else {
+      provider = protocol;
+    }
+
     add({
       name: `data-source/${workspaceId}/${protocol}/${url}`,
       externalId: url,
       workspaceId,
       padId: undefined, // Resource belongs to the workspace, and not a specific notebook
-      provider: 'postgresql',
+      provider: provider as ExternalProvider,
       dataSourceName: name,
     }).then((success) => {
       if (success) {
@@ -362,6 +373,7 @@ function NewDataConnection({
                 label: 'SQL URL',
                 disabled: false,
               }}
+              key="full-url"
             />
             <TabsTrigger
               name="manual"
@@ -369,6 +381,7 @@ function NewDataConnection({
                 label: 'Advanced Configuration',
                 disabled: false,
               }}
+              key="manual"
             />
           </TabsList>
 
@@ -423,6 +436,7 @@ function NewDataConnection({
                     {Object.entries(placeholderList).map(([key, value]) => (
                       <MenuItem
                         onSelect={() => setProtocol(key as ImportElementSource)}
+                        key={`placeholder-list-${key}`}
                       >
                         <div css={{ minWidth: '136px' }}>{value}</div>
                       </MenuItem>

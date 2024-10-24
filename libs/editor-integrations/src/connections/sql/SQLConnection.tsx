@@ -25,7 +25,15 @@ import { SQLRunner, varIdentifierRegex } from '../../runners/mysql';
 import { PortalledPreview } from '../ResultPreview';
 import { css } from '@emotion/react';
 
-const SQL: Array<ExternalProvider> = ['mysql', 'postgresql'];
+const SQL: Array<ExternalProvider> = [
+  'mysql',
+  'postgresql',
+  'bigquery',
+  'cockroachdb',
+  'oracledb',
+  'mariadb',
+  'mssql',
+];
 
 export const SQLConnectionPicker: FC<ConnectionProps> = ({
   externalData,
@@ -48,7 +56,9 @@ export const SQLConnectionPicker: FC<ConnectionProps> = ({
           name: c.dataSourceName ?? '',
         }))}
         onSelect={(c) => {
-          runner.setOptions({ runner: { url: c.dataUrl! } });
+          runner.setOptions({
+            runner: { url: c.dataUrl!, provider: c.provider },
+          });
           setExternalData(c);
         }}
         extraOption={{

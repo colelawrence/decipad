@@ -16,3 +16,14 @@ export type NavigationSidebarProps = Readonly<{
   readonly search: string;
   readonly setSearch: Dispatch<SetStateAction<string>>;
 }>;
+
+export type NotebookNavigationProps = Readonly<{
+  readonly workspaceId?: string;
+  readonly currentNotebookId: string;
+  readonly workspaces: Array<WorkspaceSwitcherWorkspaceFragment>;
+  readonly actions: NotebookMetaActionsReturn;
+  readonly notebook: Notebook;
+  readonly onDuplicate: (_: string) => void;
+  readonly href: string;
+  readonly sections?: Section[];
+}>;

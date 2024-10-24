@@ -146,6 +146,11 @@ export const IntegrationBlock: PlateComponent = ({
     });
   };
 
+  const integrationTypeText =
+    element.integrationType.type === 'mysql' && element.integrationType.provider
+      ? element.integrationType.provider
+      : element.integrationType.type;
+
   return (
     <DraggableBlock
       {...attributes}
@@ -159,7 +164,7 @@ export const IntegrationBlock: PlateComponent = ({
             ? [{ label: 'Last run', value: element.timeOfLastRun }]
             : []
         }
-        text={ImportElementSourcePretty[element.integrationType.type]}
+        text={ImportElementSourcePretty[integrationTypeText]}
         actionButtons={actionButtons}
         buttons={[
           {

@@ -1,7 +1,7 @@
 import {
-  useGetWorkspaceNotebooksQuery,
-  useGetWorkspacesWithSharedNotebooksQuery,
   WorkspaceSwitcherWorkspaceFragment,
+  WorkspaceNotebookFragment,
+  WorkspaceSectionFragment,
 } from '@decipad/graphql-client';
 import { NotebookMetaActionsReturn } from '@decipad/interfaces';
 import {
@@ -10,7 +10,7 @@ import {
   NavigationSidebar as UINavigationSidebar,
 } from '@decipad/ui';
 import { ErrorBoundary } from '@sentry/react';
-import type { Dispatch, FC, ReactNode, SetStateAction } from 'react';
+import { Dispatch, FC, ReactNode, SetStateAction } from 'react';
 
 interface NavigationSidebarProps {
   readonly notebookId: string;
@@ -22,6 +22,9 @@ interface NavigationSidebarProps {
   readonly workspaces: Array<WorkspaceSwitcherWorkspaceFragment>;
   readonly actions: NotebookMetaActionsReturn;
   readonly toggleAddNewVariable: () => void;
+  readonly isFetching?: boolean;
+  readonly sections: Array<WorkspaceSectionFragment>;
+  readonly workspaceNotebooks: Array<WorkspaceNotebookFragment>;
 }
 
 export const NavigationSidebar: FC<NavigationSidebarProps> = ({
@@ -33,28 +36,16 @@ export const NavigationSidebar: FC<NavigationSidebarProps> = ({
   search,
   setSearch,
   toggleAddNewVariable,
+  isFetching,
+  sections,
+  workspaceNotebooks,
 }) => {
-  // todo: this should be a query for only sections
-  const [result] = useGetWorkspacesWithSharedNotebooksQuery();
-  const { data, fetching } = result;
-  const isFetching = fetching || !data;
-  const [wsNotebookResult] = useGetWorkspaceNotebooksQuery({
-    variables: { workspaceId: workspaceId ?? '' },
-  });
-
   if (isFetching) {
     return <Spinner />;
   }
 
-  // change this if we need to support pagination in the future
-  const workspaceNotebooks = wsNotebookResult.data?.pads.items;
-
-  const sections = data.workspaces.find(
-    (workspace) => workspace.id === workspaceId
-  )?.sections;
-
   if (!sections) {
-    return <></>;
+    return <>Could not get folder information</>;
   }
 
   const onDuplicate = (wsId: string) => {

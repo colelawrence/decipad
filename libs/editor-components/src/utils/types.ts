@@ -1,5 +1,10 @@
 import type { Path } from 'slate';
-import type { ELEMENT_H2, ELEMENT_H3 } from '@decipad/editor-types';
+import type {
+  ElementKind,
+  ELEMENT_H2,
+  ELEMENT_H3,
+  ImportElementSource,
+} from '@decipad/editor-types';
 
 export type CatalogHeadingItem = {
   type: typeof ELEMENT_H2 | typeof ELEMENT_H3;
@@ -18,6 +23,9 @@ export type CatalogItemVar = {
   currentTab: boolean;
   dataTab: boolean;
   isSelected?: boolean;
+  blockType?: ElementKind;
+  autocompleteGroup?: string;
+  integrationProvider?: ImportElementSource;
 };
 
 export type CatalogItem = CatalogHeadingItem | CatalogItemVar;

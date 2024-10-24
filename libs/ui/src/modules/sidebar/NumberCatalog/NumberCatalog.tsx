@@ -6,6 +6,7 @@ import { hideOnPrint } from '../../../styles/editor-layout';
 import { NumberCatalogHeading } from './NumberCatalogHeading';
 import { NumberCatalogItem } from './NumberCatalogItem';
 import { cssVar, p14Medium } from '../../../primitives';
+import { ImportElementSource } from '@decipad/editor-types';
 
 export type NumberCatalogItemType = {
   name: string;
@@ -13,7 +14,7 @@ export type NumberCatalogItemType = {
   type: 'h2' | 'h3' | 'var';
   currentTab: boolean;
   dataTab: boolean;
-
+  integrationProvider?: ImportElementSource;
   isSelected?: boolean;
 };
 
@@ -50,6 +51,7 @@ export const NumberCatalog = ({
             onClick={() => editVariable(item.blockId)}
             isDataTab={item.dataTab}
             isSelected={item.isSelected}
+            integrationProvider={item.integrationProvider}
           />
         );
       default:

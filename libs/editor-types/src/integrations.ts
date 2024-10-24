@@ -3,6 +3,7 @@ import type {
   PlainText,
   SimpleTableCellType,
   ELEMENT_INTEGRATION,
+  ImportElementSource,
 } from '.';
 
 export interface CodeBlockIntegration {
@@ -12,9 +13,9 @@ export interface CodeBlockIntegration {
 
 export interface SQLBlockIntegration {
   type: 'mysql';
-
-  query: string;
+  provider?: ImportElementSource;
   url: string;
+  query: string;
 }
 
 export interface NotionBlockIntegration {

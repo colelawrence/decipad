@@ -10,13 +10,21 @@ import {
 } from '@decipad/editor-components';
 import { useActiveEditor, useComputer } from '@decipad/editor-hooks';
 import { onDragStartSmartRef } from '@decipad/editor-utils';
-import { WorkspaceSwitcherWorkspaceFragment } from '@decipad/graphql-client';
+import {
+  useGetWorkspaceNotebooksQuery,
+  useGetWorkspacesWithSharedNotebooksQuery,
+  WorkspaceSwitcherWorkspaceFragment,
+} from '@decipad/graphql-client';
 import { NotebookMetaActionsReturn } from '@decipad/interfaces';
 import { AutocompleteName } from '@decipad/language-interfaces';
 import { useNotebookState } from '@decipad/notebook-state';
 import { EditorController } from '@decipad/notebook-tabs';
 import { NumberCatalog as UINumberCatalog } from '@decipad/ui';
 import { ErrorBoundary } from '@sentry/react';
+import {
+  SQLBlockIntegration,
+  IntegrationTypes,
+} from 'libs/editor-types/src/integrations';
 
 import { FC, useCallback, useMemo, useState } from 'react';
 
@@ -35,7 +43,16 @@ const NavigationSidebar: FC<NavigationSidebarProps> = ({
   workspaces,
   actions,
 }) => {
+  const passedController = docsync as unknown as EditorController;
+  const [result] = useGetWorkspacesWithSharedNotebooksQuery();
+  const { data, fetching } = result;
+  const isFetching = fetching || !data;
+  const [wsNotebookResult] = useGetWorkspaceNotebooksQuery({
+    variables: { workspaceId },
+    pause: !workspaceId,
+  });
   const editor = useActiveEditor();
+  const itemsTypesForNumberCatalog = ['var'];
 
   const onDragStart = useMemo(
     () => editor && onDragStartSmartRef(editor),
@@ -58,15 +75,47 @@ const NavigationSidebar: FC<NavigationSidebarProps> = ({
     [editor, docsync]
   );
 
-  const items = computer.getNamesDefined$.useWithSelectorDebounced(
-    catalogDebounceTimeMs,
-    useCallback(
-      (_items: AutocompleteName[]) => {
-        return catalog ? catalog(selectCatalogNames(_items).map(toVar)) : [];
-      },
-      [catalog]
+  const items = computer.getNamesDefined$
+    .useWithSelectorDebounced(
+      catalogDebounceTimeMs,
+      useCallback(
+        (_items: AutocompleteName[]) => {
+          const mappedItems = _items.map((_item) => {
+            let integrationProvider;
+            const elementFromBlockId = passedController.findNodeById(
+              _item.blockId ?? ''
+            );
+            if (elementFromBlockId?.integrationType) {
+              const integType = (
+                elementFromBlockId.integrationType as IntegrationTypes
+              ).type;
+
+              if (integType === 'mysql') {
+                integrationProvider = (
+                  elementFromBlockId.integrationType as SQLBlockIntegration
+                ).provider;
+              }
+            }
+
+            return {
+              ..._item,
+              blockType: elementFromBlockId?.type,
+              integrationProvider,
+            };
+          });
+
+          return catalog
+            ? catalog(selectCatalogNames(mappedItems).map(toVar))
+            : [];
+        },
+        [catalog, passedController]
+      )
     )
-  );
+    .filter((item) => itemsTypesForNumberCatalog.includes(item.type));
+
+  const sections = data?.workspaces?.find(
+    (workspace) => workspace.id === workspaceId
+  )?.sections;
 
   const [search, setSearch] = useState('');
 
@@ -78,6 +127,13 @@ const NavigationSidebar: FC<NavigationSidebarProps> = ({
     [items, search]
   );
 
+  const filteredNotebooks = useMemo(() => {
+    const workspaceNotebooks = wsNotebookResult.data?.pads.items || [];
+    return workspaceNotebooks.filter((nb) =>
+      nb.name.toLowerCase().includes(search)
+    );
+  }, [search, wsNotebookResult.data?.pads.items]);
+
   const groupedItems = useMemo(
     () => groupByTab(filteredItems),
     [filteredItems]
@@ -88,7 +144,7 @@ const NavigationSidebar: FC<NavigationSidebarProps> = ({
   }
 
   return (
-    <ErrorBoundary fallback={<></>}>
+    <ErrorBoundary fallback={<>Could not get notebook list</>}>
       <NavigationComponentSidebar
         notebookId={notebookId}
         workspaceId={workspaceId}
@@ -98,6 +154,9 @@ const NavigationSidebar: FC<NavigationSidebarProps> = ({
         workspaces={workspaces}
         actions={actions}
         toggleAddNewVariable={setAddVariable}
+        isFetching={isFetching}
+        sections={sections || []}
+        workspaceNotebooks={filteredNotebooks}
       >
         <UINumberCatalog
           items={groupedItems}

@@ -397,7 +397,7 @@ export class EditorController implements RootEditorController {
     if (matchingChild && isElement(matchingChild)) {
       return matchingChild as AnyElement;
     }
-    if (isElement(base)) {
+    if (isElement(base) || base instanceof EditorController) {
       for (const child of base.children) {
         if (isElement(child)) {
           const hasMatch = this.findNode(match, child);

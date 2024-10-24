@@ -2,17 +2,12 @@
 import { FC, useContext, useState } from 'react';
 import { notebooks as notebooksRouting } from '@decipad/routing';
 import { ClientEventsContext } from '@decipad/client-events';
-import {
-  PermissionType,
-  useCreateNotebookMutation,
-} from '@decipad/graphql-client';
+import { useCreateNotebookMutation } from '@decipad/graphql-client';
 import { useToast } from '@decipad/toast';
 import { initNewDocument } from '@decipad/docsync';
 import {
   Folder,
-  Sheet,
   Add,
-  Ellipsis,
   CaretDown,
   CaretRight,
   FolderOpen,
@@ -25,13 +20,13 @@ import {
   Spinner,
   Tooltip,
 } from '../../shared';
-import { Anchor, colorSwatches, DNDItemTypes } from '../../utils';
+import { colorSwatches, DNDItemTypes } from '../../utils';
 import { NavigationList } from '../workspace/NavigationList/NavigationList';
 import { SectionItem } from '../workspace/SectionItem/SectionItem';
 import * as Styled from './styles';
 import type { NavigationSidebarProps } from './types';
 import { useNavigate } from 'react-router-dom';
-import { NotebookOptions } from '../topbar';
+import { NotebookNavigation } from './NotebookNavigation';
 
 export const minWidthForItemStyles = { minWidth: '132px' };
 
@@ -144,8 +139,16 @@ export const NavigationSidebar: FC<NavigationSidebarProps> = ({
 
   return (
     <Styled.NavigationSidebarWrapperStyles data-testid="editor-navigation-bar">
-      <div css={{ padding: '10px 0' }}>
-        <Divider />
+      <div css={{ marginBottom: '8px' }}>
+        <SearchFieldWithDropdown
+          searchTerm={search}
+          onSearchChange={(newValue) => {
+            setSearch(newValue.toLocaleLowerCase());
+          }}
+          placeholder="Search"
+          icon={<MagnifyingGlass />}
+          hasGreyBackGround={true}
+        />
       </div>
       <Styled.NavigationTitleWrapper>
         <Styled.NavigationTitleInnerWrapper
@@ -215,48 +218,17 @@ export const NavigationSidebar: FC<NavigationSidebarProps> = ({
                       }).$;
 
                       return (
-                        <Styled.NotebookWrapper
-                          isSelected={notebook.id === notebookId}
-                          key={`notebook-item-${notebook.id}`}
-                        >
-                          <Anchor href={href}>
-                            <Styled.ItemWrapper marginLeft={22}>
-                              <Styled.IconWrapper>
-                                <Sheet />
-                              </Styled.IconWrapper>
-                              <Styled.TextWrapper
-                                isSelected={notebook.id === notebookId}
-                                isNested={true}
-                              >
-                                {notebook.name}
-                              </Styled.TextWrapper>
-                            </Styled.ItemWrapper>
-                          </Anchor>
-                          <Styled.NotebookOptionsWrapper>
-                            {notebook.id === notebookId && (
-                              <NotebookOptions
-                                permissionType={
-                                  notebook.myPermissionType as PermissionType
-                                }
-                                onDuplicate={onDuplicate}
-                                trigger={
-                                  <Styled.EllipsisWrapper data-testid="list-notebook-options">
-                                    <Ellipsis />
-                                  </Styled.EllipsisWrapper>
-                                }
-                                workspaces={workspaces}
-                                notebookId={id}
-                                creationDate={new Date(notebook.createdAt)}
-                                isArchived={!!notebook.archived}
-                                actions={actions}
-                                sections={sections}
-                                workspaceId={workspaceId ?? ''}
-                                popupAlign="start"
-                                popupSide="right"
-                              />
-                            )}
-                          </Styled.NotebookOptionsWrapper>
-                        </Styled.NotebookWrapper>
+                        <NotebookNavigation
+                          key={notebook.id}
+                          href={href}
+                          notebook={notebook}
+                          currentNotebookId={notebookId}
+                          actions={actions}
+                          sections={sections}
+                          workspaces={workspaces}
+                          workspaceId={workspaceId}
+                          onDuplicate={onDuplicate}
+                        />
                       );
                     }),
                   ]}
@@ -272,37 +244,15 @@ export const NavigationSidebar: FC<NavigationSidebarProps> = ({
                   notebook: { id, name },
                 }).$;
                 return (
-                  <Styled.NotebookWrapper key={`notebook-item-${notebook.id}`}>
-                    <Anchor href={href}>
-                      <Styled.ItemWrapper>
-                        <Styled.IconWrapper>
-                          <Sheet />
-                        </Styled.IconWrapper>
-                        <Styled.TextWrapper>{notebook.name}</Styled.TextWrapper>
-                      </Styled.ItemWrapper>
-                    </Anchor>
-                    <Styled.NotebookOptionsWrapper>
-                      {notebook.id === notebookId && (
-                        <NotebookOptions
-                          permissionType={
-                            notebook.myPermissionType as PermissionType
-                          }
-                          onDuplicate={onDuplicate}
-                          trigger={
-                            <Styled.EllipsisWrapper data-testid="list-notebook-options">
-                              <Ellipsis />
-                            </Styled.EllipsisWrapper>
-                          }
-                          workspaces={workspaces}
-                          notebookId={id}
-                          creationDate={new Date(notebook.createdAt)}
-                          isArchived={!!notebook.archived}
-                          actions={actions}
-                          workspaceId={workspaceId ?? ''}
-                        />
-                      )}
-                    </Styled.NotebookOptionsWrapper>
-                  </Styled.NotebookWrapper>
+                  <NotebookNavigation
+                    href={href}
+                    onDuplicate={onDuplicate}
+                    notebook={notebook}
+                    workspaces={workspaces}
+                    workspaceId={workspaceId}
+                    currentNotebookId={notebookId}
+                    actions={actions}
+                  />
                 );
               }),
             ]}
@@ -311,17 +261,6 @@ export const NavigationSidebar: FC<NavigationSidebarProps> = ({
       )}
       <div css={{ padding: '12px 0' }}>
         <Divider />
-      </div>
-      <div css={{ marginBottom: '8px' }}>
-        <SearchFieldWithDropdown
-          searchTerm={search}
-          onSearchChange={(newValue) => {
-            setSearch(newValue.toLocaleLowerCase());
-          }}
-          placeholder="Search"
-          icon={<MagnifyingGlass />}
-          hasGreyBackGround={true}
-        />
       </div>
       <Styled.NavigationTitleWrapper>
         <Styled.NavigationTitleInnerWrapper

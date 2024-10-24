@@ -9,6 +9,11 @@ import { cssVar, p14Medium } from '../../../primitives';
 import { CodeResult } from '../../editor';
 import { useComputer } from '@decipad/editor-hooks';
 import { isTable } from '@decipad/computer-utils';
+import { isFlagEnabled } from '@decipad/feature-flags';
+import {
+  ImportElementSource,
+  ImportElementSourcePretty,
+} from '@decipad/editor-types';
 
 interface NumberProps {
   name: string;
@@ -19,6 +24,7 @@ interface NumberProps {
   isDataTab?: boolean;
 
   isSelected?: boolean;
+  integrationProvider?: ImportElementSource;
 }
 
 export const NumberCatalogItem = ({
@@ -27,7 +33,7 @@ export const NumberCatalogItem = ({
   onDragStart,
   onDragEnd,
   onClick,
-
+  integrationProvider,
   isSelected = false,
 }: NumberProps) => {
   const computer = useComputer();
@@ -63,6 +69,9 @@ export const NumberCatalogItem = ({
 
   const displayResultType = (res: Result.Result) => {
     if (isTable(res.type)) {
+      if (isFlagEnabled('NAV_SIDEBAR') && integrationProvider) {
+        return ImportElementSourcePretty[integrationProvider];
+      }
       return 'Table';
     }
 

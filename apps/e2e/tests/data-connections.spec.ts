@@ -69,7 +69,7 @@ test('Data connections', async ({ testUser }) => {
       'text="SQL URL (Containing credentials, port and database host)"'
     );
     await sqlConnUrl.click();
-    await sqlConnUrl.fill('MyUrl');
+    await sqlConnUrl.fill('postgresql://username@password:mydatabaseurl');
 
     const submitConn = page.getByTestId('add-conn-button');
     await expect(submitConn).toBeVisible();

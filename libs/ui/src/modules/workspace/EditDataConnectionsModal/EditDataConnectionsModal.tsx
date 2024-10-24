@@ -66,6 +66,7 @@ export const EditDataConnectionsModal: React.FC<
                   label: 'Integrations',
                   disabled: false,
                 }}
+                key="integrations"
               />
               <TabsTrigger
                 name="datasets"
@@ -73,6 +74,7 @@ export const EditDataConnectionsModal: React.FC<
                   label: 'Datasets',
                   disabled: false,
                 }}
+                key="datasets"
               />
             </>
             <TabsTrigger
@@ -81,6 +83,7 @@ export const EditDataConnectionsModal: React.FC<
                 label: 'API Secrets',
                 disabled: false,
               }}
+              key="code-secrets"
             />
             <TabsTrigger
               name="webhooks"
@@ -88,6 +91,7 @@ export const EditDataConnectionsModal: React.FC<
                 label: 'Webhooks',
                 disabled: false,
               }}
+              key="webhooks"
             />
             <TabsTrigger
               name="sql-connections"
