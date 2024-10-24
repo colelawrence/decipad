@@ -42,6 +42,8 @@ import {
   ELEMENT_PARAGRAPH,
   ELEMENT_TAB,
   ELEMENT_TITLE,
+  TopLevelValue,
+  ELEMENT_LAYOUT,
 } from '@decipad/editor-types';
 import { assert, assertEqual, getDefined } from '@decipad/utils';
 import {
@@ -1006,5 +1008,31 @@ export class EditorController implements RootEditorController {
     this.isMoving = true;
     callback();
     this.isMoving = false;
+  }
+
+  public getEntryFromId(
+    blockId: string
+  ):
+    | [NotebookValue[number] | DataTabValue[number] | TopLevelValue, Path]
+    | undefined {
+    for (const [index, topLevel] of this.children.entries()) {
+      for (const [childIndex, child] of topLevel.children.entries()) {
+        if (!isElement(child)) continue;
+
+        if (child.type === ELEMENT_LAYOUT) {
+          for (const [colIndex, layoutChild] of child.children.entries()) {
+            if (layoutChild.id === blockId) {
+              return [layoutChild, [index, childIndex, colIndex]];
+            }
+          }
+        }
+
+        if (child.id === blockId) {
+          return [child, [index, childIndex]];
+        }
+      }
+    }
+
+    return undefined;
   }
 }

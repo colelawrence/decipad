@@ -1,161 +1,198 @@
+/* eslint-disable no-console */
 import { IntegrationTypes } from '@decipad/editor-types';
 import { getNodeString } from '@udecode/plate-common';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { useRunner } from '../runners';
+import { useResponsiveRunner } from '../runners';
 import { useComputer } from '@decipad/editor-hooks';
-import { Result, Unknown } from '@decipad/language-interfaces';
+import { useRenameIntegration } from './useRenameIntegration';
+import { useNotebookId } from '@decipad/react-contexts';
 import { pushResultToComputer } from '@decipad/computer-utils';
+import { getDefined } from '@decipad/utils';
+
+type ImportState =
+  | {
+      type: 'unloaded';
+    }
+  | {
+      type: 'loading-cache';
+    }
+  | {
+      type: 'loading-fetch';
+    }
+  | {
+      type: 'loaded';
+    }
+  | {
+      type: 'error';
+      message: string;
+    };
 
 type UseIntegraionReturn = {
   onRefresh: () => void;
-  loading: boolean;
-  error?: Error;
+  importState: ImportState;
 };
 
-const PENDING_RESULT: Result.Result = {
-  type: { kind: 'pending' },
-  value: Unknown,
-  meta: undefined,
-};
-
-const WAIT_FOR_RESULT_MS = 3000;
-
-const TRY_STAGE_IDLE = 0;
-const TRY_STAGE_WAITING_FOR_TRIED_CACHE = 1;
-const TRY_STAGE_WAITED_FOR_TRIED_CACHE = 2;
-const TRY_STAGE_WAITING_A_BIT_MORE = 3;
-const TRY_STAGE_WAITED_A_BIT_MORE = 4;
-const TRY_STAGE_REFRESHING = 5;
-const TRY_STAGE_HAVE_RELEVANT_RESULT = 100;
+const WAIT_TIME_BEFORE_AUTO_FETCH_MS = 3_000;
 
 export const useIntegration = (
   element: IntegrationTypes.IntegrationBlock
 ): UseIntegraionReturn => {
   const computer = useComputer();
-  const computerResult = computer.getBlockIdResult$.use(element.id);
-
-  const [loading, setLoading] = useState<boolean>(false);
-  const [error, setError] = useState<Error | undefined>();
-  const [gen, setGen] = useState(-1);
+  const [importState, setImportState] = useState<ImportState>({
+    type: 'unloaded',
+  });
+  const [triedCache, setTriedCache] = useState(false);
+  const [waitedABitAfterTriedCache, setWaitedABitAfterTriedCache] =
+    useState(false);
+  const result = computer.getBlockIdResult(element.id!);
+  const setCachedResult = useRef(false);
+  const calledOnRefreshAtLeastOnce = useRef(false);
+  const notebookId = useNotebookId();
 
   const varName = useMemo(
     () => getNodeString(element.children[0]),
     [element.children]
   );
-  const runner = useRunner(
-    varName,
-    element.id!,
-    element.integrationType,
-    element.typeMappings,
-    element.isFirstRowHeader
-  );
 
-  useEffect(() => {
-    runner.setName(varName);
-  }, [runner, varName]);
+  const runner = useResponsiveRunner({
+    id: element.id!,
+    name: varName,
+    integration: element,
+    types: element.typeMappings,
+    notebookId,
+    computer,
+    integrationType: undefined,
+  });
 
-  // push cache if no result has come in yet
-  const pushedCache = useRef(false);
-  useEffect(() => {
-    (async () => {
-      if (
-        !error &&
-        computerResult != null &&
-        computerResult.result?.type.kind !== 'pending' &&
-        !pushedCache.current
-      ) {
-        pushedCache.current = true;
-        await pushResultToComputer(
-          computer,
-          element.id ?? '',
-          varName,
-          computerResult.result
-        );
+  useRenameIntegration(runner, element);
+
+  // this might be the worst pr ever
+  // cache is for future us
+  //
+  const haveValidResult = useCallback(() => {
+    return (
+      result != null &&
+      result.type === 'computer-result' &&
+      result.result.type.kind !== 'pending'
+    );
+  }, [result]);
+
+  const setImportStateSafe = useCallback((newState: ImportState) => {
+    setImportState((prev) => {
+      if (prev.type === newState.type) {
+        return prev;
       }
-    })();
-  }, [error, computer, computerResult, element.id, varName]);
-
-  useEffect(() => {
-    (async () => {
-      if (gen < 0) {
-        return;
-      }
-      setLoading(true);
-      try {
-        const res = await runner.import();
-        if (typeof res === 'string') {
-          setLoading(false);
-          setError(undefined);
-        } else if (res) {
-          setError(res);
-        }
-      } catch (err) {
-        console.error('useIntegration: Caught error', err);
-        setError(err as Error);
-      } finally {
-        setLoading(false);
-      }
-    })();
-  }, [runner, gen]);
-
-  const refresh = useCallback(() => {
-    setGen((g) => g + 1);
+      return newState;
+    });
   }, []);
 
-  const haveRelevantResult = useCallback(
-    () =>
-      computerResult != null &&
-      computerResult.type === 'computer-result' &&
-      computerResult.result.type.kind !== 'pending',
-    [computerResult]
-  );
-
-  const [tryStage, setTryStage] = useState(TRY_STAGE_IDLE);
-
-  useEffect(() => {
-    if (haveRelevantResult()) {
-      setTryStage(TRY_STAGE_HAVE_RELEVANT_RESULT);
-    }
-  }, [haveRelevantResult]);
+  const onRefresh = useCallback(() => {
+    calledOnRefreshAtLeastOnce.current = true;
+    // * -> loading-fetch
+    setImportStateSafe({ type: 'loading-fetch' });
+    runner.import().catch((err) => {
+      setImportStateSafe({ type: 'error', message: err.message });
+    });
+  }, [runner, setImportStateSafe]);
 
   useEffect(() => {
-    if (tryStage === TRY_STAGE_IDLE && !haveRelevantResult()) {
-      setTryStage(TRY_STAGE_WAITING_FOR_TRIED_CACHE);
-      computer.waitForTriedCache().then(() => {
-        setTryStage(TRY_STAGE_WAITED_FOR_TRIED_CACHE);
-      });
-    }
-  }, [computer, haveRelevantResult, tryStage]);
-
-  useEffect(() => {
+    // FIXME: HACK: push first cached result so that the computer can use it
     if (
-      tryStage === TRY_STAGE_WAITED_FOR_TRIED_CACHE &&
-      !haveRelevantResult()
+      !setCachedResult.current &&
+      !calledOnRefreshAtLeastOnce.current &&
+      haveValidResult() &&
+      result?.type === 'computer-result' &&
+      result.fromCache
     ) {
-      setTryStage(TRY_STAGE_WAITING_A_BIT_MORE);
-      setTimeout(() => {
-        setTryStage(TRY_STAGE_WAITED_A_BIT_MORE);
-      }, WAIT_FOR_RESULT_MS);
-    }
-  }, [haveRelevantResult, tryStage]);
-
-  useEffect(() => {
-    if (tryStage === TRY_STAGE_WAITED_A_BIT_MORE && !haveRelevantResult()) {
-      setTryStage(TRY_STAGE_REFRESHING);
+      setCachedResult.current = true;
       pushResultToComputer(
         computer,
-        element.id ?? '',
+        getDefined(element.id),
         varName,
-        PENDING_RESULT
-      ).finally(() => {
-        refresh();
-      });
+        getDefined(result).result
+      );
     }
-  }, [computer, element.id, haveRelevantResult, refresh, tryStage, varName]);
+  }, [computer, element.id, haveValidResult, varName, result]);
+
+  useEffect(() => {
+    // setTriedCache to true
+    computer.waitForTriedCache().then(() => {
+      setTriedCache(true);
+    });
+  }, [computer]);
+
+  useEffect(() => {
+    // unloaded -> loading-cache
+    if (importState.type === 'unloaded' && !triedCache && !haveValidResult()) {
+      setImportStateSafe({ type: 'loading-cache' });
+    }
+  }, [
+    computer,
+    haveValidResult,
+    importState.type,
+    setImportStateSafe,
+    triedCache,
+  ]);
+
+  useEffect(() => {
+    // * -> loaded
+    if (haveValidResult()) {
+      setImportStateSafe({ type: 'loaded' });
+    }
+  }, [haveValidResult, setImportStateSafe]);
+
+  useEffect(() => {
+    // * -> unloaded
+    if (
+      !haveValidResult() &&
+      importState.type !== 'loading-cache' &&
+      importState.type !== 'loading-fetch' &&
+      triedCache
+    ) {
+      setImportStateSafe({ type: 'unloaded' });
+    }
+  }, [haveValidResult, importState.type, setImportStateSafe, triedCache]);
+
+  useEffect(() => {
+    // loading-cache -> wait a bit
+    if (
+      importState.type === 'loading-cache' &&
+      triedCache &&
+      !waitedABitAfterTriedCache &&
+      !haveValidResult()
+    ) {
+      setTimeout(() => {
+        setWaitedABitAfterTriedCache(true);
+      }, WAIT_TIME_BEFORE_AUTO_FETCH_MS);
+    }
+  }, [
+    haveValidResult,
+    importState.type,
+    onRefresh,
+    triedCache,
+    waitedABitAfterTriedCache,
+  ]);
+
+  useEffect(() => {
+    // loading-cache -> onRefresh()
+    if (
+      importState.type === 'loading-cache' &&
+      triedCache &&
+      waitedABitAfterTriedCache &&
+      !haveValidResult()
+    ) {
+      onRefresh();
+    }
+  }, [
+    haveValidResult,
+    importState.type,
+    onRefresh,
+    triedCache,
+    waitedABitAfterTriedCache,
+  ]);
 
   return {
-    onRefresh: refresh,
-    loading,
-    error,
+    onRefresh,
+    importState,
   };
 };

@@ -1,5 +1,4 @@
 import type { ComponentProps } from 'react';
-import { useConnectionStore } from '@decipad/react-contexts';
 import type { SelectIntegration } from '@decipad/ui';
 import {
   ThumbnailCode,
@@ -8,58 +7,42 @@ import {
   ThumbnailSql,
 } from '@decipad/ui/src/icons/thumbnail-icons';
 
-const store = useConnectionStore.getState();
 export const IntegrationList: ComponentProps<
   typeof SelectIntegration
 >['integrations'] = [
   {
     icon: <ThumbnailCode />,
     title: 'Code',
-    description:
-      'Harness the power of JavaScript to manipulate data from web APIs.',
-    onClick: () => {
-      store.Set({ connectionType: 'codeconnection' });
-      store.Set({ stage: 'connect' });
-    },
+    description: 'Work with data from APIs using JavaScript',
+    type: 'codeconnection',
     enabled: true,
   },
   {
     icon: <ThumbnailSql />,
     title: 'SQL',
-    description:
-      'Effortlessly access data from SQL databases through simple queries.',
-    onClick: () => {
-      store.Set({ connectionType: 'mysql' });
-      store.Set({ stage: 'connect' });
-    },
+    description: 'Access SQL databases with simple queries',
+    type: 'mysql',
     enabled: true,
   },
   {
     icon: <ThumbnailNotion />,
     title: 'Notion',
-    description: 'Connect your notion databases to decipad.',
-    onClick: () => {
-      store.Set({ connectionType: 'notion' });
-      store.Set({ stage: 'connect' });
-    },
+    description: 'Connect your Notion databases to Decipad',
+    type: 'notion',
     enabled: true,
   },
   {
     icon: <ThumbnailGoogleSheet />,
-    title: 'Google sheet',
-    description: 'Import, collaborate, and analyze Google Sheets data.',
-    onClick: () => {
-      store.Set({ connectionType: 'gsheets', stage: 'connect' });
-    },
+    title: 'Google Sheets',
+    description: 'Import and analyze data from Google Sheets',
+    type: 'gsheets',
     enabled: true,
   },
   {
     icon: <ThumbnailGoogleSheet />,
     title: 'CSV',
-    description: 'Easily retrieve your CSV and use it in Deci.',
-    onClick: () => {
-      store.Set({ connectionType: 'csv', stage: 'connect' });
-    },
+    description: 'Use your CSV data in Decipad',
+    type: 'csv',
     enabled: true,
   },
 ];

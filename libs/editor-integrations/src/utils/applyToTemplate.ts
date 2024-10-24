@@ -1,6 +1,7 @@
 import Mustache from 'mustache';
 import { SerializedType } from '@decipad/language-interfaces';
 import { Time } from '@decipad/language-types';
+import { getVariablesFromComputer } from '@decipad/computer-utils';
 
 const valueToString = (
   varName: string,
@@ -32,10 +33,10 @@ const valueToString = (
 };
 
 const valuesToFunctions = (
-  values: Record<string, [SerializedType, unknown]>
+  values: ReturnType<typeof getVariablesFromComputer>
 ): Record<string, () => unknown> =>
   Object.fromEntries(
-    Object.entries(values).map(([name, [type, value]]) => [
+    Object.entries(values).map(([name, { type, value }]) => [
       name,
       () => valueToString(name, type, value),
     ])
@@ -43,7 +44,7 @@ const valuesToFunctions = (
 
 export const applyToTemplate = (
   template: string,
-  values: Record<string, [SerializedType, unknown]>
+  values: ReturnType<typeof getVariablesFromComputer>
 ) => {
   const mustacheTemplate = Mustache.parse(template);
   for (const elem of mustacheTemplate) {

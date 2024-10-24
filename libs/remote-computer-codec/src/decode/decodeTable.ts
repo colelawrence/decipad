@@ -1,4 +1,4 @@
-import { Result } from '@decipad/language-interfaces';
+import { Result, SerializedType } from '@decipad/language-interfaces';
 import { RecursiveDecoder } from './types';
 
 export const decodeTable: RecursiveDecoder = async (
@@ -21,7 +21,12 @@ export const decodeTable: RecursiveDecoder = async (
     const decoder = decoders['materialized-column'];
     // eslint-disable-next-line no-await-in-loop
     const [col, newOffset] = await decoder(
-      { kind: 'materialized-column', cellType: colType, indexedBy: null },
+      {
+        kind: 'materialized-column',
+        cellType: colType,
+        indexedBy: null,
+        atParentIndex: colIndex,
+      } satisfies SerializedType,
       buffer,
       offset,
       decoders

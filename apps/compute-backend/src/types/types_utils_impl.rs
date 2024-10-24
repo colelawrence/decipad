@@ -13,13 +13,10 @@ impl Ord for DeciResult {
     }
 }
 
-impl DeciResult {
-    pub fn col_from_floats(f: impl IntoIterator<Item = f32>) -> DeciResult {
-        DeciResult::Column(f.into_iter().map(DeciResult::from_float).collect())
-    }
-
-    pub fn from_float(f: f32) -> DeciResult {
-        let f = fraction::Fraction::from(f);
+// TODO: macro this or something (or use numeric traits if possible)
+impl Into<DeciResult> for f32 {
+    fn into(self) -> DeciResult {
+        let f = fraction::Fraction::from(self);
         let (num, den) = (
             match f.is_sign_positive() {
                 true => *f.numer().unwrap() as i64,
@@ -29,6 +26,35 @@ impl DeciResult {
         );
         DeciResult::Fraction(num, den)
     }
+}
+impl Into<DeciResult> for f64 {
+    fn into(self) -> DeciResult {
+        let f = fraction::Fraction::from(self);
+        f.into()
+    }
+}
+impl Into<DeciResult> for bool {
+    fn into(self) -> DeciResult {
+        DeciResult::Boolean(self)
+    }
+}
+impl Into<DeciResult> for fraction::GenericFraction<u64> {
+    fn into(self) -> DeciResult {
+        DeciResult::Fraction(
+            match self.is_sign_negative() {
+                true => -(*self.numer().unwrap() as i64),
+                false => *self.numer().unwrap() as i64,
+            },
+            *self.denom().unwrap() as i64,
+        )
+    }
+}
+
+impl DeciResult {
+    pub fn col_from_floats(f: impl IntoIterator<Item = f32>) -> DeciResult {
+        DeciResult::Column(f.into_iter().map(Into::into).collect())
+    }
+
     pub fn from_frac(nums: Vec<i64>, dens: Vec<i64>) -> DeciResult {
         assert_eq!(nums.len(), dens.len());
         DeciResult::Column(
@@ -71,7 +97,8 @@ impl DeciResult {
         }
     }
 
-    pub fn eq_num(&self, val: DeciResult) -> DeciResult {
+    pub fn eq_num(&self, val: impl Into<DeciResult>) -> DeciResult {
+        let val = val.into();
         match self {
             DeciResult::Column(items) => match &items[0] {
                 DeciResult::Column(_) => {
@@ -88,7 +115,8 @@ impl DeciResult {
         }
     }
 
-    pub fn gt_num(&self, val: DeciResult) -> DeciResult {
+    pub fn gt_num(&self, val: impl Into<DeciResult>) -> DeciResult {
+        let val = val.into();
         match self {
             DeciResult::Column(items) => match &items[0] {
                 DeciResult::Column(_) => {
@@ -105,7 +133,8 @@ impl DeciResult {
         }
     }
 
-    pub fn ge_num(&self, val: DeciResult) -> DeciResult {
+    pub fn ge_num(&self, val: impl Into<DeciResult>) -> DeciResult {
+        let val = val.into();
         match self {
             DeciResult::Column(items) => match &items[0] {
                 DeciResult::Column(_) => {
@@ -122,7 +151,8 @@ impl DeciResult {
         }
     }
 
-    pub fn lt_num(&self, val: DeciResult) -> DeciResult {
+    pub fn lt_num(&self, val: impl Into<DeciResult>) -> DeciResult {
+        let val = val.into();
         match self {
             DeciResult::Column(items) => match &items[0] {
                 DeciResult::Column(_) => {

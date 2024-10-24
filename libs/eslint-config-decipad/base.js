@@ -57,7 +57,11 @@ module.exports = {
     'no-case-declarations': 'off',
     'no-void': 'off',
 
-    '@typescript-eslint/no-unused-vars': 'off', // or "@typescript-eslint/no-unused-vars": "off",
+    'no-underscore-dangle': 'off',
+
+    '@typescript-eslint/promise-function-async': 'off',
+
+    '@typescript-eslint/no-unused-vars': ['error', { caughtErrors: 'none' }],
     '@typescript-eslint/no-useless-constructor': 'off',
     'unused-imports/no-unused-imports': 'error',
     'unused-imports/no-unused-vars': [
@@ -67,6 +71,7 @@ module.exports = {
         varsIgnorePattern: '^_',
         args: 'after-used',
         argsIgnorePattern: '^_',
+        caughtErrors: 'none',
       },
     ],
 
@@ -145,3 +150,4 @@ module.exports = {
     },
   ],
 };
+

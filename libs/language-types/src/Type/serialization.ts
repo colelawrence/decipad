@@ -34,6 +34,7 @@ export function serializeType(type: Type | SerializedType): SerializedType {
         indexedBy: type.indexedBy,
         cellCount: type.cellCount,
         cellType: serializeType(type.cellType),
+        atParentIndex: type.atParentIndex,
       };
     }
 
@@ -173,7 +174,11 @@ export function deserializeType(type: Type | SerializedType): Type {
           return range(deserializeType(type.rangeOf));
         case 'column':
         case 'materialized-column':
-          return column(deserializeType(type.cellType), type.indexedBy);
+          return column(
+            deserializeType(type.cellType),
+            type.indexedBy,
+            type.atParentIndex
+          );
         case 'materialized-table':
         case 'table': {
           const { columnTypes, columnNames, delegatesIndexTo } = type;

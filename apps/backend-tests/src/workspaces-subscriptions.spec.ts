@@ -40,17 +40,6 @@ test('workspaces', (ctx) => {
       )
     ).data.createWorkspace;
 
-    await client.mutate({
-      mutation: ctx.gql`
-        mutation {
-          incrementQueryCount(id: "${workspace.id}") {
-            queryCount
-            quotaLimit
-          }
-        }
-      `,
-    });
-
     stripeEvent = {
       id: 'evt_1NuywjB0kCiHMJmLmpKXGHIf',
       object: 'event',

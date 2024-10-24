@@ -62,6 +62,7 @@ it('can stringify a type', () => {
   `);
   expect(serializeType(t.column(t.number(), 'Index'))).toMatchInlineSnapshot(`
     {
+      "atParentIndex": null,
       "cellCount": undefined,
       "cellType": {
         "kind": "number",
@@ -211,6 +212,7 @@ it('can parse a type', () => {
       kind: 'column',
       indexedBy: null,
       cellType: unitlessNumber,
+      atParentIndex: null,
     })
   ).toMatchObject({
     cellType: {

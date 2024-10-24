@@ -2,7 +2,7 @@ import { Meta, StoryFn } from '@storybook/react';
 import { Warning } from '../../../icons';
 import { FilterBubbles, FilterBubblesProps } from './FilterBubbles';
 
-const args = {
+const _args = {
   icon: <Warning />,
   description: 'Warning',
 };
@@ -10,8 +10,8 @@ const args = {
 export default {
   title: 'Molecules / UI / Dashboard / Filter Bubbles',
   component: FilterBubbles,
-} as Meta<typeof args>;
+} as Meta<typeof _args>;
 
-export const Normal: StoryFn<typeof args> = (props: FilterBubblesProps) => (
+export const Normal: StoryFn<typeof _args> = (props: FilterBubblesProps) => (
   <FilterBubbles {...props} />
 );

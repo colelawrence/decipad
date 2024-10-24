@@ -10,11 +10,14 @@ import {
 import * as Styled from './styles';
 import { useActiveElement } from '@decipad/react-utils';
 import { useOnAttachment, useOnImportUrl } from './hooks';
+import { ButtonProps } from 'libs/ui/src/shared/atoms/Button/Button';
 
 export const UploadCSV: FC<{
   workspaceId: string;
   afterUpload?: (_: string) => void;
-}> = ({ workspaceId, afterUpload = () => {} }) => {
+  type?: ButtonProps['type'];
+  text?: string;
+}> = ({ workspaceId, afterUpload = () => {}, type, text }) => {
   const fileUploadInputRef = useRef<HTMLInputElement>(null);
 
   const [status, setStatus] = useState<'default' | 'url'>('default');
@@ -46,7 +49,9 @@ export const UploadCSV: FC<{
               align="center"
               trigger={
                 <div>
-                  <Button type="primary">Add CSV</Button>
+                  <Button testId="add-csv" type={type ?? 'primary'}>
+                    {text ?? 'Add CSV'}
+                  </Button>
                 </div>
               }
             >

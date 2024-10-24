@@ -70,9 +70,9 @@ pub enum DateMemo<'a> {
     Complex(&'a Cow<'a, str>),
 }
 impl<'a> DateMemo<'a> {
-    pub fn simple<const N: usize>(self, fmts: [&'static str; N]) -> Option<&'static str> {
+    pub fn simple<S: AsRef<str> + 'static>(self, fmts: &'static [S]) -> Option<&'static str> {
         match self {
-            DateMemo::Simple(idx) => fmts.get(idx).copied(),
+            DateMemo::Simple(idx) => fmts.get(idx).map(|f| f.as_ref()),
             DateMemo::Complex(_) => None,
         }
     }
@@ -127,28 +127,29 @@ impl DateSpecificity {
         "%l%m%S%.f-%P", // 12 hr
     ];
     pub fn parse_str<'a, S: AsRef<str>>(
-        &'a self,
+        &self,
         str: S,
-        memo: Option<DateMemo<'a>>,
-    ) -> Result<(NaiveDateTime, Option<DateMemo<'a>>), DateParseError> {
+        memo: &mut Option<DateMemo<'a>>,
+    ) -> Result<NaiveDateTime, DateParseError> {
         let str = str.as_ref().trim();
         match self {
-            DateSpecificity::Month => self.parse_month(str).map(|d| (d, None)),
+            DateSpecificity::Month => self.parse_month(str),
             DateSpecificity::Day => {
                 let str = normalize(str).collect::<Vec<_>>().join("-");
                 dbg!(&str);
-                if let Some(fmt) = memo.and_then(|fmt| fmt.simple(Self::DAY_FMTS)) {
+                if let Some(fmt) = memo.and_then(|fmt| fmt.simple(Self::DAY_FMTS.as_slice())) {
                     if let Ok(date) = NaiveDate::parse_from_str(&str, &fmt) {
-                        return Ok((date.into(), memo));
+                        return Ok(date.into());
                     }
                 }
                 Self::DAY_FMTS
                     .iter()
                     .enumerate()
                     .find_map(|(i, fmt)| {
-                        NaiveDate::parse_from_str(&str, fmt)
-                            .ok()
-                            .map(|d| (d.into(), Some(DateMemo::Simple(i))))
+                        NaiveDate::parse_from_str(&str, fmt).ok().map(|d| {
+                            memo.replace(DateMemo::Simple(i));
+                            d.into()
+                        })
                     })
                     .ok_or_else(|| DateParseError::InvalidInput(*self, None))
             }
@@ -208,7 +209,8 @@ impl DateSpecificity {
 
                 dbg!(&hour);
 
-                let fmts = memo.and_then(|memo| memo.simple(Self::DAY_FMTS).map(|f| [f]));
+                let fmts =
+                    memo.and_then(|memo| memo.simple(Self::DAY_FMTS.as_slice()).map(|f| [f]));
                 let fmts = match &fmts {
                     Some(f) => f.as_slice(),
                     None => Self::DAY_FMTS.as_slice(),
@@ -230,57 +232,79 @@ impl DateSpecificity {
                     })
                     .ok_or_else(|| DateParseError::InvalidInput(*self, None))?;
 
+                if let Some(new_memo) = new_memo {
+                    if memo.is_none() {
+                        memo.replace(new_memo);
+                    }
+                }
+
                 let ts = ts
                     .and_hms_opt(hour?, 0, 0)
                     .ok_or_else(|| DateParseError::InvalidInput(*self, Some("invalid hour!")))?;
-                Ok((ts, memo.or(new_memo)))
+                Ok(ts)
             }
             DateSpecificity::Minute => {
                 let str = normalize(str).collect::<Vec<_>>().join("-");
                 dbg!(&str);
 
+                if let Some(memo) = memo.and_then(|memo| memo.simple(BAKED_MINUTE_FMTS.as_slice()))
+                {
+                    return NaiveDateTime::parse_from_str(&str, memo)
+                        .map_err(|_e| DateParseError::InvalidInput(*self, None));
+                }
+
                 BAKED_MINUTE_FMTS
                     .iter()
                     .enumerate()
                     .find_map(|(i, fmt)| {
-                        NaiveDateTime::parse_from_str(&str, &fmt)
-                            .ok()
-                            .map(|ts| (ts, Some(DateMemo::Simple(i))))
+                        NaiveDateTime::parse_from_str(&str, &fmt).ok().map(|ts| {
+                            memo.replace(DateMemo::Simple(i));
+                            ts
+                        })
                     })
                     .ok_or_else(|| DateParseError::InvalidInput(*self, None))
-                    .map(|(ts, new_memo)| (ts, memo.or(new_memo)))
             }
             DateSpecificity::Second => {
                 let str = normalize(str).collect::<Vec<_>>().join("-");
                 dbg!(&str);
 
-                // FIXME: this needs urgent lazy_static'ing
+                if let Some(memo) = memo.and_then(|memo| memo.simple(BAKED_SECOND_FMTS.as_slice()))
+                {
+                    return NaiveDateTime::parse_from_str(&str, memo)
+                        .map_err(|_e| DateParseError::InvalidInput(*self, None));
+                }
+
                 BAKED_SECOND_FMTS
                     .iter()
                     .enumerate()
                     .find_map(|(i, fmt)| {
-                        NaiveDateTime::parse_from_str(&str, &fmt)
-                            .ok()
-                            .map(|ts| (ts, Some(DateMemo::Simple(i))))
+                        NaiveDateTime::parse_from_str(&str, &fmt).ok().map(|ts| {
+                            memo.replace(DateMemo::Simple(i));
+                            ts
+                        })
                     })
                     .ok_or_else(|| DateParseError::InvalidInput(*self, None))
-                    .map(|(ts, new_memo)| (ts, memo.or(new_memo)))
             }
             DateSpecificity::Millisecond => {
                 let str = normalize(str).collect::<Vec<_>>().join("-");
                 dbg!(&str);
+
+                if let Some(memo) = memo.and_then(|memo| memo.simple(BAKED_MILLI_FMTS.as_slice())) {
+                    return NaiveDateTime::parse_from_str(&str, memo)
+                        .map_err(|_e| DateParseError::InvalidInput(*self, None));
+                }
 
                 // FIXME: this needs urgent lazy_static'ing
                 BAKED_MILLI_FMTS
                     .iter()
                     .enumerate()
                     .find_map(|(i, fmt)| {
-                        NaiveDateTime::parse_from_str(&str, &fmt)
-                            .ok()
-                            .map(|ts| (ts, Some(DateMemo::Simple(i))))
+                        NaiveDateTime::parse_from_str(&str, &fmt).ok().map(|ts| {
+                            memo.replace(DateMemo::Simple(i));
+                            ts
+                        })
                     })
                     .ok_or_else(|| DateParseError::InvalidInput(*self, None))
-                    .map(|(ts, new_memo)| (ts, memo.or(new_memo)))
             }
             _ => Err(DateParseError::InvalidInput(*self, Some("unsupported"))),
         }
@@ -301,7 +325,10 @@ mod tests {
                 for fmt in fmts {
                     let str = date.format(fmt).to_string();
                     dbg!(&str);
-                    assert_eq!(DateSpecificity::Month.parse_str(&str, None)?.0, date.into());
+                    assert_eq!(
+                        DateSpecificity::Month.parse_str(&str, &mut None)?,
+                        date.into()
+                    );
                 }
             }
             Ok::<_, DateParseError>(())
@@ -327,7 +354,10 @@ mod tests {
                 for fmt in fmts {
                     let str = date.format(fmt).to_string();
                     dbg!(&str);
-                    assert_eq!(DateSpecificity::Day.parse_str(&str, None)?.0, date.into());
+                    assert_eq!(
+                        DateSpecificity::Day.parse_str(&str, &mut None)?,
+                        date.into()
+                    );
                 }
             }
             Ok::<_, DateParseError>(())
@@ -356,7 +386,10 @@ mod tests {
                 for fmt in fmts {
                     let str = date.format(fmt).to_string();
                     dbg!(&str);
-                    assert_eq!(DateSpecificity::Hour.parse_str(&str, None)?.0, date.into());
+                    assert_eq!(
+                        DateSpecificity::Hour.parse_str(&str, &mut None)?,
+                        date.into()
+                    );
                 }
             }
             Ok::<_, DateParseError>(())
@@ -386,7 +419,7 @@ mod tests {
                     let str = date.format(fmt).to_string();
                     dbg!(&str);
                     assert_eq!(
-                        DateSpecificity::Minute.parse_str(&str, None)?.0,
+                        DateSpecificity::Minute.parse_str(&str, &mut None)?,
                         date.into()
                     );
                 }
@@ -418,7 +451,7 @@ mod tests {
                     let str = date.format(fmt).to_string();
                     dbg!(&str);
                     assert_eq!(
-                        DateSpecificity::Second.parse_str(&str, None)?.0,
+                        DateSpecificity::Second.parse_str(&str, &mut None)?,
                         date.into()
                     );
                 }
@@ -450,7 +483,7 @@ mod tests {
                     let str = date.format(fmt).to_string();
                     dbg!(&str);
                     assert_eq!(
-                        DateSpecificity::Millisecond.parse_str(&str, None)?.0,
+                        DateSpecificity::Millisecond.parse_str(&str, &mut None)?,
                         date.into()
                     );
                 }

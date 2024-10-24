@@ -34,6 +34,7 @@ export const oneResultToResult = (oneResult: OneResult): Result => {
         kind: 'column',
         indexedBy: 'number',
         cellType: { kind: 'anything' },
+        atParentIndex: null,
       },
       value: oneResult,
     };
@@ -58,6 +59,7 @@ export const oneResultToResult = (oneResult: OneResult): Result => {
         kind: 'column',
         indexedBy: 'number',
         cellType: { kind: 'anything' },
+        atParentIndex: null,
       },
       value: oneResult,
     };
@@ -96,3 +98,4 @@ export const oneResultToResult = (oneResult: OneResult): Result => {
   }
   throw new Error('Unknown result type');
 };
+

@@ -55,7 +55,7 @@ export const execute = async ({
   deleteBlock = true,
 }: ExecuteProps): Promise<void> => {
   const { setDialogOpen, setFileType } = useFileUploadStore.getState();
-  const { setSidebar } = useNotebookMetaData.getState();
+  const { pushSidebar } = useNotebookMetaData.getState();
 
   // eslint-disable-next-line complexity
   await withoutNormalizingAsync(editor, async () => {
@@ -107,7 +107,7 @@ export const execute = async ({
         await insertDataViewBelow(editor, path, computer);
         break;
       case 'open-integration':
-        setSidebar({ type: 'integrations' });
+        pushSidebar({ type: 'integrations' });
         break;
       case 'pie-chart':
         insertPlotBelow(editor, path, 'arc');

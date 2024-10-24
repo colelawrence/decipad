@@ -64,6 +64,11 @@ export const hydrateResult = <T extends Result.Result>(
               colType.kind === 'materialized-column'
                 ? colType.indexedBy
                 : '',
+            atParentIndex:
+              colType.kind === 'column' ||
+              colType.kind === 'materialized-column'
+                ? colType.atParentIndex
+                : null,
           },
           value: (value as Result.OneResult[])?.[colIndex],
           meta: result.meta,

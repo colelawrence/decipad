@@ -46,7 +46,8 @@ const spacingStyles = css({
   },
 
   th: {
-    'span:first-child': {
+    // Icon + Title + Type Menu
+    '> span:first-child': {
       display: 'inline-flex',
       alignItems: 'center',
       gap: '8px',
@@ -58,12 +59,15 @@ const spacingStyles = css({
         height: '16px',
       },
 
-      span: {
+      // Type menu
+      'span:first-child': {
         width: '100%',
         display: 'inline-flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        alignSelf: 'stretch',
+        justifyContent: 'end',
+
+        svg: {
+          cursor: 'pointer',
+        },
       },
     },
   },
@@ -78,14 +82,24 @@ const generalStyles = css({
   },
 });
 
+const hiddenStyles = css({
+  'th[data-hidden="true"]': {
+    backgroundColor: cssVar('backgroundHeavier'),
+  },
+  'td[data-hidden="true"]': {
+    backgroundColor: cssVar('backgroundDefault'),
+  },
+});
+
 export const StyledTable = styled.table(
   borderStyles,
   spacingStyles,
-  generalStyles
+  generalStyles,
+  hiddenStyles
 );
 
 export const TableWrapper = styled.div(noTrackScrollbarStyles, {
-  width: `calc(${cssVar('editorWidth')} - 120px)`,
+  width: '100%',
   overflowX: 'auto',
 });
 
@@ -101,4 +115,10 @@ export const StyledFooter = styled.tfoot({
       },
     },
   },
+});
+
+export const StyledInput = styled.input({
+  backgroundColor: cssVar('backgroundAccent'),
+  borderRadius: '8px',
+  padding: '4px',
 });

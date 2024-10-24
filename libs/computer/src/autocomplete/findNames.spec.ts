@@ -58,6 +58,7 @@ it('finds names', async () => {
         "kind": "column",
         "name": "Hello",
         "serializedType": {
+          "atParentIndex": 0,
           "cellCount": undefined,
           "cellType": {
             "kind": "string",
@@ -75,6 +76,7 @@ it('finds names', async () => {
         "kind": "column",
         "name": "Column2",
         "serializedType": {
+          "atParentIndex": 1,
           "cellCount": undefined,
           "cellType": {
             "kind": "number",
@@ -447,6 +449,7 @@ it('places local vars first', async () => {
         "kind": "column",
         "name": "Column2",
         "serializedType": {
+          "atParentIndex": 1,
           "cellCount": undefined,
           "cellType": {
             "kind": "number",

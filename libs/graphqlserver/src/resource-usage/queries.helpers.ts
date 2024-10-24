@@ -2,7 +2,6 @@ import { thirdParty } from '@decipad/backend-config';
 import { type ResourceUsageRecord, type User } from '@decipad/backendtypes';
 import type { ResourceTypes } from '@decipad/graphqlserver-types';
 import { resourceusage } from '@decipad/services';
-import Boom from '@hapi/boom';
 import Stripe from 'stripe';
 
 export type FrontendResourceUsageRecord = ResourceUsageRecord & {
@@ -28,30 +27,6 @@ export const getResourceUsage = async (
 ): Promise<FrontendResourceUsageRecord> => {
   const tracker = getResourceTracker(resourceType);
   const usage = await tracker.getUsage(workspaceId);
-
-  return {
-    id: `${resourceType}-${workspaceId}`,
-    consumption: usage,
-    resourceType,
-  };
-};
-
-export const incrementResourceUsage = async (
-  resourceType: ResourceTypes,
-  workspaceId: string,
-  amount: number
-): Promise<FrontendResourceUsageRecord> => {
-  if (amount < 0) {
-    throw Boom.badRequest('Cannot increment by a negative number');
-  }
-
-  if (resourceType === 'storage' || resourceType === 'openai') {
-    throw Boom.badRequest(`${resourceType} does not support incrementing`);
-  }
-
-  await resourceusage.queries.upsert(workspaceId, 'queries', amount);
-
-  const usage = await resourceusage.queries.getUsage(workspaceId);
 
   return {
     id: `${resourceType}-${workspaceId}`,

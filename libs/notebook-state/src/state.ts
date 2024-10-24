@@ -22,13 +22,29 @@ export type EnhancedPromise<T> = typeof Promise & {
 };
 
 export type DataDrawerState = {
-  isAddingOrEditingVariable: 'edit' | 'create' | undefined;
-  editingVariableId: string | undefined;
+  dataDrawerMode:
+    | {
+        type: 'edit';
+        variableId: string;
+      }
+    | {
+        type: 'create';
+      }
+    | {
+        type: 'integration-preview';
+      }
+    | {
+        type: 'closed';
+      };
 
-  // Use when you want to create a new variable.
+  // Specific boolean so we can know that the data drawer has been fully rendered to the DOM.
+  isDataDrawerOpen: boolean;
+
+  setIsDataDrawerOpen: (isOpen: boolean) => void;
   setAddVariable: () => void;
   setEditingVariable: (id: string) => void;
   closeDataDrawer: () => void;
+  setIntegration: () => void;
 
   // cosmetics
   height: number;

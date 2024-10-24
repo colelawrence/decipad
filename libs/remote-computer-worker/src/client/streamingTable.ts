@@ -34,6 +34,7 @@ export const streamingTable = async (
       kind: 'column',
       cellType: type.columnTypes[colIndex],
       indexedBy: type.indexName,
+      atParentIndex: colIndex,
     };
     // eslint-disable-next-line no-await-in-loop
     const colValue = await streamingValue(ctx, colType, colValueId, decoders);

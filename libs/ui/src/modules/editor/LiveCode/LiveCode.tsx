@@ -108,19 +108,19 @@ export const LiveCode = ({
 };
 
 const liveCodeWrapperStyles = css(codeBlock.structuredVariableStyles, {
+  height: '32px',
+
   display: 'flex',
-  gap: 2,
+  gap: '4px',
   backgroundColor: cssVar('backgroundDefault'),
   padding: '2px 2px 2px 6px',
   width: 'fit-content',
-  marginBottom: 8,
-  borderRadius: 6,
-  margin: 'auto 0',
-  maxHeight: 28,
+  borderRadius: '8px',
   overflowWrap: 'anywhere',
   maxWidth: '375px',
   wordBreak: 'break-word',
   whiteSpace: 'normal',
+
   '@media print': {
     background: 'unset',
   },

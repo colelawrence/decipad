@@ -228,8 +228,6 @@ export type Mutation = {
   getCreateAttachmentForm: CreateAttachmentForm;
   getCreateAttachmentFormWorkspace: CreateAttachmentForm;
   importPad: Pad;
-  incrementQueryCount: WorkspaceExecutedQuery;
-  incrementResourceUsage?: Maybe<ResourceUsage>;
   inviteUserToRole: Array<RoleInvitation>;
   movePad: Pad;
   recordPadEvent?: Maybe<Scalars['Boolean']['output']>;
@@ -411,18 +409,6 @@ export type MutationGetCreateAttachmentFormWorkspaceArgs = {
 export type MutationImportPadArgs = {
   source: Scalars['String']['input'];
   workspaceId: Scalars['ID']['input'];
-};
-
-
-export type MutationIncrementQueryCountArgs = {
-  id: Scalars['ID']['input'];
-};
-
-
-export type MutationIncrementResourceUsageArgs = {
-  amount: Scalars['Int']['input'];
-  resourceType: ResourceTypes;
-  workspaceId: Scalars['String']['input'];
 };
 
 
@@ -1259,7 +1245,6 @@ export type Workspace = {
   roles?: Maybe<Array<Role>>;
   secrets: Array<Secret>;
   sections: Array<Section>;
-  workspaceExecutedQuery?: Maybe<WorkspaceExecutedQuery>;
   workspaceSubscription?: Maybe<WorkspaceSubscription>;
 };
 
@@ -1273,15 +1258,6 @@ export type WorkspaceAccess = {
   id: Scalars['ID']['output'];
   roles?: Maybe<Array<RoleAccess>>;
   users?: Maybe<Array<UserAccess>>;
-};
-
-export type WorkspaceExecutedQuery = {
-  __typename?: 'WorkspaceExecutedQuery';
-  id: Scalars['ID']['output'];
-  queryCount: Scalars['Int']['output'];
-  query_reset_date?: Maybe<Scalars['DateTime']['output']>;
-  quotaLimit: Scalars['Int']['output'];
-  workspace?: Maybe<Workspace>;
 };
 
 export type WorkspaceInput = {
@@ -1761,15 +1737,6 @@ export type UpdateUserMutationVariables = Exact<{
 
 
 export type UpdateUserMutation = { __typename?: 'Mutation', updateSelf: { __typename?: 'User', name: string, description?: string | null, onboarded?: boolean | null } };
-
-export type IncrementResourceUsageMutationVariables = Exact<{
-  resourceType: ResourceTypes;
-  workspaceId: Scalars['String']['input'];
-  amount: Scalars['Int']['input'];
-}>;
-
-
-export type IncrementResourceUsageMutation = { __typename?: 'Mutation', incrementResourceUsage?: { __typename?: 'ResourceUsage', id: string, resourceType: ResourceTypes, consumption: number } | null };
 
 export type GetCreditsPlansQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -2974,23 +2941,6 @@ export const UpdateUserDocument = gql`
 export function useUpdateUserMutation() {
   return Urql.useMutation<UpdateUserMutation, UpdateUserMutationVariables>(UpdateUserDocument);
 };
-export const IncrementResourceUsageDocument = gql`
-    mutation IncrementResourceUsage($resourceType: ResourceTypes!, $workspaceId: String!, $amount: Int!) {
-  incrementResourceUsage(
-    resourceType: $resourceType
-    workspaceId: $workspaceId
-    amount: $amount
-  ) {
-    id
-    resourceType
-    consumption
-  }
-}
-    `;
-
-export function useIncrementResourceUsageMutation() {
-  return Urql.useMutation<IncrementResourceUsageMutation, IncrementResourceUsageMutationVariables>(IncrementResourceUsageDocument);
-};
 export const GetCreditsPlansDocument = gql`
     query GetCreditsPlans {
   getCreditsPlans {
@@ -3300,7 +3250,6 @@ export type GraphCacheKeysConfig = {
   UserAccess?: (data: WithTypename<UserAccess>) => null | string,
   Workspace?: (data: WithTypename<Workspace>) => null | string,
   WorkspaceAccess?: (data: WithTypename<WorkspaceAccess>) => null | string,
-  WorkspaceExecutedQuery?: (data: WithTypename<WorkspaceExecutedQuery>) => null | string,
   WorkspaceSubscription?: (data: WithTypename<WorkspaceSubscription>) => null | string,
   WorkspacesChanges?: (data: WithTypename<WorkspacesChanges>) => null | string
 }
@@ -3676,20 +3625,12 @@ export type GraphCacheResolvers = {
     roles?: GraphCacheResolver<WithTypename<Workspace>, Record<string, never>, Array<WithTypename<Role> | string>>,
     secrets?: GraphCacheResolver<WithTypename<Workspace>, Record<string, never>, Array<WithTypename<Secret> | string>>,
     sections?: GraphCacheResolver<WithTypename<Workspace>, Record<string, never>, Array<WithTypename<Section> | string>>,
-    workspaceExecutedQuery?: GraphCacheResolver<WithTypename<Workspace>, Record<string, never>, WithTypename<WorkspaceExecutedQuery> | string>,
     workspaceSubscription?: GraphCacheResolver<WithTypename<Workspace>, Record<string, never>, WithTypename<WorkspaceSubscription> | string>
   },
   WorkspaceAccess?: {
     id?: GraphCacheResolver<WithTypename<WorkspaceAccess>, Record<string, never>, Scalars['ID'] | string>,
     roles?: GraphCacheResolver<WithTypename<WorkspaceAccess>, Record<string, never>, Array<WithTypename<RoleAccess> | string>>,
     users?: GraphCacheResolver<WithTypename<WorkspaceAccess>, Record<string, never>, Array<WithTypename<UserAccess> | string>>
-  },
-  WorkspaceExecutedQuery?: {
-    id?: GraphCacheResolver<WithTypename<WorkspaceExecutedQuery>, Record<string, never>, Scalars['ID'] | string>,
-    queryCount?: GraphCacheResolver<WithTypename<WorkspaceExecutedQuery>, Record<string, never>, Scalars['Int'] | string>,
-    query_reset_date?: GraphCacheResolver<WithTypename<WorkspaceExecutedQuery>, Record<string, never>, Scalars['DateTime'] | string>,
-    quotaLimit?: GraphCacheResolver<WithTypename<WorkspaceExecutedQuery>, Record<string, never>, Scalars['Int'] | string>,
-    workspace?: GraphCacheResolver<WithTypename<WorkspaceExecutedQuery>, Record<string, never>, WithTypename<Workspace> | string>
   },
   WorkspaceSubscription?: {
     credits?: GraphCacheResolver<WithTypename<WorkspaceSubscription>, Record<string, never>, Scalars['Int'] | string>,
@@ -3735,8 +3676,6 @@ export type GraphCacheOptimisticUpdaters = {
   getCreateAttachmentForm?: GraphCacheOptimisticMutationResolver<MutationGetCreateAttachmentFormArgs, WithTypename<CreateAttachmentForm>>,
   getCreateAttachmentFormWorkspace?: GraphCacheOptimisticMutationResolver<MutationGetCreateAttachmentFormWorkspaceArgs, WithTypename<CreateAttachmentForm>>,
   importPad?: GraphCacheOptimisticMutationResolver<MutationImportPadArgs, WithTypename<Pad>>,
-  incrementQueryCount?: GraphCacheOptimisticMutationResolver<MutationIncrementQueryCountArgs, WithTypename<WorkspaceExecutedQuery>>,
-  incrementResourceUsage?: GraphCacheOptimisticMutationResolver<MutationIncrementResourceUsageArgs, Maybe<WithTypename<ResourceUsage>>>,
   inviteUserToRole?: GraphCacheOptimisticMutationResolver<MutationInviteUserToRoleArgs, Array<WithTypename<RoleInvitation>>>,
   movePad?: GraphCacheOptimisticMutationResolver<MutationMovePadArgs, WithTypename<Pad>>,
   recordPadEvent?: GraphCacheOptimisticMutationResolver<MutationRecordPadEventArgs, Maybe<Scalars['Boolean']>>,
@@ -3835,8 +3774,6 @@ export type GraphCacheUpdaters = {
     getCreateAttachmentForm?: GraphCacheUpdateResolver<{ getCreateAttachmentForm: WithTypename<CreateAttachmentForm> }, MutationGetCreateAttachmentFormArgs>,
     getCreateAttachmentFormWorkspace?: GraphCacheUpdateResolver<{ getCreateAttachmentFormWorkspace: WithTypename<CreateAttachmentForm> }, MutationGetCreateAttachmentFormWorkspaceArgs>,
     importPad?: GraphCacheUpdateResolver<{ importPad: WithTypename<Pad> }, MutationImportPadArgs>,
-    incrementQueryCount?: GraphCacheUpdateResolver<{ incrementQueryCount: WithTypename<WorkspaceExecutedQuery> }, MutationIncrementQueryCountArgs>,
-    incrementResourceUsage?: GraphCacheUpdateResolver<{ incrementResourceUsage: Maybe<WithTypename<ResourceUsage>> }, MutationIncrementResourceUsageArgs>,
     inviteUserToRole?: GraphCacheUpdateResolver<{ inviteUserToRole: Array<WithTypename<RoleInvitation>> }, MutationInviteUserToRoleArgs>,
     movePad?: GraphCacheUpdateResolver<{ movePad: WithTypename<Pad> }, MutationMovePadArgs>,
     recordPadEvent?: GraphCacheUpdateResolver<{ recordPadEvent: Maybe<Scalars['Boolean']> }, MutationRecordPadEventArgs>,
@@ -4236,20 +4173,12 @@ export type GraphCacheUpdaters = {
     roles?: GraphCacheUpdateResolver<Maybe<WithTypename<Workspace>>, Record<string, never>>,
     secrets?: GraphCacheUpdateResolver<Maybe<WithTypename<Workspace>>, Record<string, never>>,
     sections?: GraphCacheUpdateResolver<Maybe<WithTypename<Workspace>>, Record<string, never>>,
-    workspaceExecutedQuery?: GraphCacheUpdateResolver<Maybe<WithTypename<Workspace>>, Record<string, never>>,
     workspaceSubscription?: GraphCacheUpdateResolver<Maybe<WithTypename<Workspace>>, Record<string, never>>
   },
   WorkspaceAccess?: {
     id?: GraphCacheUpdateResolver<Maybe<WithTypename<WorkspaceAccess>>, Record<string, never>>,
     roles?: GraphCacheUpdateResolver<Maybe<WithTypename<WorkspaceAccess>>, Record<string, never>>,
     users?: GraphCacheUpdateResolver<Maybe<WithTypename<WorkspaceAccess>>, Record<string, never>>
-  },
-  WorkspaceExecutedQuery?: {
-    id?: GraphCacheUpdateResolver<Maybe<WithTypename<WorkspaceExecutedQuery>>, Record<string, never>>,
-    queryCount?: GraphCacheUpdateResolver<Maybe<WithTypename<WorkspaceExecutedQuery>>, Record<string, never>>,
-    query_reset_date?: GraphCacheUpdateResolver<Maybe<WithTypename<WorkspaceExecutedQuery>>, Record<string, never>>,
-    quotaLimit?: GraphCacheUpdateResolver<Maybe<WithTypename<WorkspaceExecutedQuery>>, Record<string, never>>,
-    workspace?: GraphCacheUpdateResolver<Maybe<WithTypename<WorkspaceExecutedQuery>>, Record<string, never>>
   },
   WorkspaceSubscription?: {
     credits?: GraphCacheUpdateResolver<Maybe<WithTypename<WorkspaceSubscription>>, Record<string, never>>,

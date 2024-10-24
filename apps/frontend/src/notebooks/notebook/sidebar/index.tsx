@@ -7,7 +7,6 @@ import { Suspense } from 'react';
 import Annotations from './Annotations';
 import AssistantChat from './AssistantChat';
 import EditorSidebar from './EditorSidebar';
-import IntegrationEditSidebar from './IntegrationEditSidebar';
 import IntegrationsSidebar from './IntegrationsSidebar';
 import Publishing from './Publishing';
 
@@ -24,7 +23,6 @@ const SidebarComponents: Record<
   publishing: Publishing,
   annotations: Annotations,
   integrations: IntegrationsSidebar,
-  'edit-integration': IntegrationEditSidebar,
   'formula-helper': FormulaHelper,
 };
 
@@ -38,9 +36,7 @@ const Sidebar: FC<Omit<SidebarComponentProps, 'editor'>> = (props) => {
     s.setSidebar,
   ]);
 
-  const isAddingOrEditingVariable = useNotebookWithIdState(
-    (s) => s.isAddingOrEditingVariable
-  );
+  const dataDrawerMode = useNotebookWithIdState((s) => s.dataDrawerMode);
 
   const editor = useActiveEditor();
 
@@ -52,7 +48,11 @@ const Sidebar: FC<Omit<SidebarComponentProps, 'editor'>> = (props) => {
     return null;
   }
 
-  if (component.type === 'formula-helper' && !isAddingOrEditingVariable) {
+  if (
+    component.type === 'formula-helper' &&
+    dataDrawerMode.type !== 'edit' &&
+    dataDrawerMode.type !== 'create'
+  ) {
     setSidebar({ type: 'closed' });
   }
 

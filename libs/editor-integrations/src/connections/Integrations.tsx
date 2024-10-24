@@ -1,235 +1,271 @@
+import { useNotebookMetaData } from '@decipad/react-contexts';
 import {
-  getConnectionDisplayLabel,
-  useConnectionStore,
-  useResourceUsage,
-  useNotebookMetaData,
-  ExecutionContext,
-  TExecution,
-} from '@decipad/react-contexts';
-import {
+  Button,
+  ContentEditableInput,
+  LiveCode,
   S,
+  SearchFieldWithDropdown,
   SelectIntegration,
+  Toggle,
   WrapperIntegrationModalDialog,
 } from '@decipad/ui';
 import type { FC, ReactNode } from 'react';
-import { useCallback, useEffect, useMemo, useState } from 'react';
-import {
-  useAnalytics,
-  useCreateIntegration,
-  useIntegrationScreenFactory,
-  useResetState,
-} from '../hooks';
-import {
-  ImportElementSource,
-  IntegrationTypes,
-  MyEditor,
-} from '@decipad/editor-types';
+import { useEffect, useMemo, useState } from 'react';
+import { useWorkspaceDatasets } from '../hooks';
+import { ImportElementSource } from '@decipad/editor-types';
 import { UpgradeWarningBlock } from '@decipad/editor-components';
-import {
-  CodeRunner,
-  CSVRunner,
-  GenericContainerRunner,
-  LegacyRunner,
-  useRunner as useIntegrationRunner,
-} from '../runners';
-import { useNotebookRoute } from '@decipad/routing';
 import { IntegrationList } from './IntegrationList';
-import { ExternalDataSourceFragmentFragment } from '@decipad/graphql-client';
-import { Close } from 'libs/ui/src/icons';
-
+import { ArrowBack2, Close, MagnifyingGlass } from 'libs/ui/src/icons';
+import { useComputer } from '@decipad/editor-hooks';
+import { useNotebookWithIdState } from '@decipad/notebook-state';
+import { Connection } from './Connection';
+import { createPortal } from 'react-dom';
 import {
-  useComputer,
-  useGlobalFindNode,
-  useGlobalFindNodeEntry,
-  useLiveConnectionWorker,
-} from '@decipad/editor-hooks';
-import { ResultPreview } from './ResultPreview';
-import { getNodeString } from '@udecode/plate-common';
-import omit from 'lodash/omit';
-import { Computer } from '@decipad/computer-interfaces';
-import { useEditorController } from '@decipad/notebook-state';
-import { pushResultToComputer } from '@decipad/computer-utils';
-import { useToast } from '@decipad/toast';
+  ConcreteIntegrationProps,
+  ConnectionProps,
+  IntegrationProps,
+} from './types';
+import {
+  ActiveDataSetsWrapper,
+  AllServicesWrapper,
+  DataDrawerButtonWrapper,
+  PreviewActionsWrapper,
+} from './styles';
+import { Dataset } from '@decipad/interfaces';
+import { ThumbnailCsv } from 'libs/ui/src/icons/thumbnail-icons';
+import { useConcreteIntegration } from './useCreateIntegration';
+import { InlineMenuItem } from 'libs/ui/src/modules/editor/InlineMenuItem/InlineMenuItem';
+import { PortalledPreview } from './ResultPreview';
 
-interface IntegrationProps {
-  readonly workspaceId: string;
-  readonly editor: MyEditor;
-}
-
-const useRunner = (
-  notebookId: string,
-  computer: Computer,
-  name: string,
-  id: string,
-  connectionType: ImportElementSource
-): GenericContainerRunner => {
-  const worker = useLiveConnectionWorker();
-  return useMemo(() => {
-    switch (connectionType) {
-      case 'csv':
-        const csv = new CSVRunner(name, id, undefined, undefined, notebookId);
-        csv.setIsFirstRowHeader(true);
-        return csv;
-      case 'gsheets':
-        const r = new LegacyRunner(
-          name,
-          id,
-          worker,
-          undefined,
-          undefined,
-          connectionType,
-          notebookId
-        );
-        r.setIsFirstRowHeader(true);
-
-        return r;
-      case 'notion':
-      case 'mysql':
-        return new LegacyRunner(
-          name,
-          id,
-          worker,
-          undefined,
-          undefined,
-          connectionType,
-          notebookId
-        );
-      case 'codeconnection':
-        return new CodeRunner(notebookId, computer, name, id, undefined);
-      default:
-        throw new Error('NOT IMPLEMENTED');
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [connectionType, id, notebookId, computer, worker]);
+type DataDrawerButtonProps = {
+  type: 'create' | 'edit';
+  canContinue?: boolean;
+  onContinue: () => void;
+  onBack: () => void;
 };
 
-const ConcreteIntegration: FC<IntegrationProps> = ({ workspaceId, editor }) => {
-  const [stage, connectionType, setter, next, back, varName, blockId] =
-    useConnectionStore((s) => [
-      s.stage,
-      s.connectionType,
-      s.Set,
-      s.next,
-      s.back,
-      s.varName,
-      s.blockId,
-    ]);
+const DataDrawerButtons: FC<DataDrawerButtonProps> = ({
+  type,
+  onContinue,
+  canContinue,
+}) => {
+  switch (type) {
+    case 'create':
+      return (
+        <DataDrawerButtonWrapper>
+          <Button
+            type="primary"
+            onClick={onContinue}
+            disabled={!(canContinue ?? true)}
+            testId="integration-modal-continue"
+          >
+            Add
+          </Button>
+        </DataDrawerButtonWrapper>
+      );
+    case 'edit':
+      return (
+        <DataDrawerButtonWrapper>
+          <Button
+            type="primary"
+            onClick={onContinue}
+            testId="integration-modal-continue"
+          >
+            Save
+          </Button>
+        </DataDrawerButtonWrapper>
+      );
+  }
+};
 
-  const setSidebar = useNotebookMetaData((s) => s.setSidebar);
-
-  const { queries } = useResourceUsage();
-
-  const [info, onExecute] = useState<Array<TExecution>>([]);
-
-  const [externalData, setExternalData] = useState<
-    ExternalDataSourceFragmentFragment | undefined
-  >(undefined);
-
-  useAnalytics();
-
-  const { notebookId } = useNotebookRoute();
-
-  const computer = useComputer();
-  const runner = useRunner(
-    notebookId,
-    computer,
-    varName,
-    blockId,
-    connectionType!
-  );
-  useEffect(() => {
-    runner.setName(varName);
-  }, [runner, varName]);
-  useEffect(() => {
-    return () => {
-      pushResultToComputer(computer, blockId, varName, undefined);
-      computer.releaseExternalData(blockId);
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-  const [loading, setLoading] = useState(false);
-
-  const reachedLimit = useMemo(() => queries.hasReachedLimit, [queries]);
-
-  const run = useCallback(() => {
-    if (reachedLimit) return;
-
-    onExecute([]);
-    onExecute((v) => [...v, { status: 'run' }]);
-    setLoading(true);
-
-    runner
-      .import()
-      .then((res) => {
-        setLoading(false);
-
-        if (res instanceof Error) {
-          onExecute((v) => [...v, { status: 'error', err: res.message }]);
-          return;
-        }
-
-        if (res) {
-          queries.incrementUsageWithBackend(workspaceId);
-        }
-
-        onExecute((v) => [...v, { status: 'success', ok: true }]);
-      })
-      .catch((err) => {
-        onExecute((v) => [...v, { status: 'error', err: err.message }]);
-      });
-  }, [queries, reachedLimit, runner, workspaceId]);
-
-  const screen = useIntegrationScreenFactory(
-    workspaceId,
-    runner,
-    run,
-    externalData,
-    setExternalData,
-    loading
-  );
-
-  useCreateIntegration(editor, runner, notebookId);
+const SidebarPreviewActions: FC<ConnectionProps> = ({
+  runner,
+  onRun,
+  stage,
+}) => {
+  if (stage !== 'map') {
+    return null;
+  }
 
   return (
-    <ExecutionContext.Provider value={{ info, onExecute }}>
-      <WrapperIntegrationModalDialog
-        title="Connect to your data"
-        infoPanel={
-          <UpgradeWarningBlock
-            type="queries"
-            variant="block"
-            workspaceId={workspaceId}
-          />
-        }
-        tabs={{
-          tabStage: stage,
-          connectionTabLabel: getConnectionDisplayLabel(connectionType),
-          onTabClick: (s) => setter({ stage: s }),
-        }}
-        onBack={back}
-        onContinue={next}
-        onClose={() => setSidebar({ type: 'closed' })}
-      >
-        {screen}
-      </WrapperIntegrationModalDialog>
-    </ExecutionContext.Provider>
+    <PreviewActionsWrapper>
+      {'isFirstHeaderRow' in runner.options.importer &&
+        typeof runner.options.importer.isFirstHeaderRow === 'boolean' && (
+          <div>
+            <p>Use first row as header</p>
+            <Toggle
+              variant="small-toggle"
+              active={runner.options.importer.isFirstHeaderRow}
+              onChange={(isFirstRowHeader) => {
+                if (!('isFirstHeaderRow' in runner.options.importer)) return;
+                runner.setOptions({
+                  importer: { isFirstHeaderRow: isFirstRowHeader },
+                });
+                onRun();
+              }}
+            />
+          </div>
+        )}
+    </PreviewActionsWrapper>
   );
+};
+
+const Preview: FC<ConnectionProps> = (props) => {
+  const isDataDrawerOpen = useNotebookWithIdState((s) => s.isDataDrawerOpen);
+
+  if (!isDataDrawerOpen) {
+    return null;
+  }
+
+  return (
+    <>
+      <SidebarPreviewActions {...props} />
+      {createPortal(
+        !(
+          (props.runner.type === 'code' || props.runner.type === 'mySql') &&
+          props.stage === 'connect'
+        ) && (
+          <PortalledPreview
+            {...props}
+            varNameInput={
+              props.type === 'create' && (
+                <LiveCode type="table" meta={[]}>
+                  <ContentEditableInput
+                    value={props.varName}
+                    onChange={props.onChangeVarName}
+                  />
+                </LiveCode>
+              )
+            }
+          />
+        ),
+        document.getElementById('data-drawer-content')!
+      )}
+    </>
+  );
+};
+
+const ConcreteIntegration: FC<ConcreteIntegrationProps> = (props) => {
+  const { onClose, connectionProps, onContinue } =
+    useConcreteIntegration(props);
+
+  useOpenDataDrawer();
+  const computer = useComputer();
+  const result = computer.getBlockIdResult$.use(connectionProps.id);
+
+  const lastLog = connectionProps.info.at(-1);
+
+  return (
+    <WrapperIntegrationModalDialog
+      title="Connect to your data"
+      infoPanel={
+        <UpgradeWarningBlock
+          type="queries"
+          variant="block"
+          workspaceId={props.workspaceId}
+        />
+      }
+      onClose={onClose}
+      onBack={props.onReset}
+    >
+      <Connection {...connectionProps} />
+      <Preview {...connectionProps} />
+      <span />
+      <DataDrawerButtons
+        canContinue={
+          lastLog?.status !== 'run' &&
+          lastLog?.status !== 'error' &&
+          lastLog?.status !== 'warning' &&
+          result?.type === 'computer-result' &&
+          result.result.type.kind !== 'pending'
+        }
+        onBack={props.onReset}
+        type={props.type}
+        onContinue={onContinue}
+      />
+    </WrapperIntegrationModalDialog>
+  );
+  // <PortalledDataDrawerButtons
+  //  type={props.type}
+  //  onContinue={onContinue}
+  //  onBack={onBack}
+  /// >
 };
 
 const EmptyWrapper: FC<{ children: ReactNode }> = ({ children }) => {
-  const setSidebar = useNotebookMetaData((s) => s.setSidebar);
+  const [setSidebar, popSidebar] = useNotebookMetaData((s) => [
+    s.setSidebar,
+    s.popSidebar,
+  ]);
 
   return (
     <S.IntegrationWrapper>
       <S.CloseIconWrapper>
-        {
-          <div onClick={() => setSidebar({ type: 'closed' })}>
-            <Close />
-          </div>
-        }
+        <Button type="minimal" onClick={popSidebar}>
+          <ArrowBack2 />
+        </Button>
+        <h2>Integrations</h2>
+        <span />
+        <Button type="minimal" onClick={() => setSidebar({ type: 'closed' })}>
+          <Close />
+        </Button>
       </S.CloseIconWrapper>
-      {children}
+      <main>{children}</main>
     </S.IntegrationWrapper>
+  );
+};
+
+const useOpenDataDrawer = (): void => {
+  const [onSetIntegration, onSetHeight, onCloseDataDrawer, isClosing] =
+    useNotebookWithIdState(
+      (s) =>
+        [s.setIntegration, s.setHeight, s.closeDataDrawer, s.isClosing] as const
+    );
+
+  const setSidebar = useNotebookMetaData((s) => s.setSidebar);
+
+  useEffect(() => {
+    if (isClosing) {
+      setSidebar({ type: 'closed' });
+    }
+  }, [isClosing, setSidebar]);
+
+  useEffect(() => {
+    onSetIntegration();
+    onSetHeight(500);
+
+    return onCloseDataDrawer;
+  }, [onSetIntegration, onSetHeight, onCloseDataDrawer]);
+};
+
+const ActiveDataSets: FC<{
+  dataSets: Dataset[];
+  onSelectDataset: (_dataset: Dataset) => void;
+}> = ({ dataSets, onSelectDataset }) => {
+  return (
+    <ActiveDataSetsWrapper>
+      <p>Active Datasets</p>
+      <div>
+        {dataSets.map((set) => (
+          <InlineMenuItem
+            key={set.dataset.id}
+            icon={<ThumbnailCsv />}
+            title={
+              set.type === 'attachment'
+                ? set.dataset.fileName
+                : set.dataset.name
+            }
+            enabled={true}
+            onExecute={() => onSelectDataset(set)}
+            description={`Size: ${
+              set.type === 'attachment'
+                ? Math.round(set.dataset.fileSize / 100_000) / 10
+                : '0'
+            }MB`}
+          />
+        ))}
+      </div>
+    </ActiveDataSetsWrapper>
   );
 };
 
@@ -237,163 +273,90 @@ const EmptyWrapper: FC<{ children: ReactNode }> = ({ children }) => {
  * Entry component for creating a new integration.
  */
 export const Integrations: FC<IntegrationProps> = (props) => {
-  const stage = useConnectionStore((s) => s.stage);
+  const [connectionType, setConnectionType] = useState<
+    ImportElementSource | undefined
+  >(props.type === 'edit' ? props.connectionType : undefined);
 
-  useResetState();
+  const [existingDataset, setExistingDataset] = useState<Dataset | undefined>(
+    undefined
+  );
 
-  if (stage === 'pick-integration') {
+  const [search, setSearch] = useState('');
+  const [setSidebar] = useNotebookMetaData((s) => [s.setSidebar]);
+
+  const integrations = useMemo(
+    () =>
+      IntegrationList.filter(
+        (i) =>
+          search.length === 0 || i.title.toLowerCase().indexOf(search) !== -1
+      ),
+    [search]
+  );
+
+  const dataSets = useWorkspaceDatasets(props.workspaceId);
+  const filteredDataSets = useMemo(
+    () =>
+      dataSets.filter(
+        (set) =>
+          search.length === 0 ||
+          (set.type === 'attachment' ? set.dataset.fileName : set.dataset.name)
+            .toLowerCase()
+            .indexOf(search) !== -1
+      ),
+    [dataSets, search]
+  );
+
+  if (connectionType == null) {
     return (
       <EmptyWrapper>
-        <SelectIntegration integrations={IntegrationList} />
+        <SearchFieldWithDropdown
+          searchTerm={search}
+          onSearchChange={(newValue) => {
+            setSearch(newValue.toLocaleLowerCase());
+          }}
+          placeholder={'Search'}
+          icon={<MagnifyingGlass />}
+        />
+        {filteredDataSets.length > 0 && (
+          <ActiveDataSets
+            dataSets={filteredDataSets}
+            onSelectDataset={(dataset) => {
+              setExistingDataset(dataset);
+
+              // Currently the only one we support.
+              setConnectionType('csv');
+            }}
+          />
+        )}
+        {integrations.length > 0 && (
+          <AllServicesWrapper>
+            <p>All services</p>
+            <SelectIntegration
+              integrations={integrations}
+              onSelectIntegration={(type) => {
+                setExistingDataset(undefined);
+                setConnectionType(type);
+              }}
+            />
+          </AllServicesWrapper>
+        )}
+        {integrations.length + filteredDataSets.length === 0 && (
+          <p>No integrations found!</p>
+        )}
       </EmptyWrapper>
     );
   }
-
-  return <ConcreteIntegration {...props} />;
-};
-
-type EditIntegrationProps = IntegrationProps & { integrationBlockId: string };
-type ConcreteEditIntegrationProps = EditIntegrationProps & {
-  block: IntegrationTypes.IntegrationBlock;
-};
-
-const ConcreteEditIntegration: FC<ConcreteEditIntegrationProps> = ({
-  workspaceId,
-  block,
-}) => {
-  const setSidebar = useNotebookMetaData((s) => s.setSidebar);
-
-  const findNode = useGlobalFindNode();
-  const findNodeEntry = useGlobalFindNodeEntry();
-
-  const controller = useEditorController();
-
-  if (findNode == null || findNodeEntry == null || controller == null) {
-    throw new Error('Needed functions cannot be null here');
-  }
-
-  const { queries } = useResourceUsage();
-
-  const [loading, setLoading] = useState(false);
-  const computer = useComputer();
-
-  const varName = getNodeString(block.children[0]);
-  const runner = useIntegrationRunner(
-    varName,
-    block.id!,
-    block.integrationType,
-    block.typeMappings,
-    block.isFirstRowHeader
-  );
-
-  // Refactor this to allow for testing.
-
-  const onEditBlock = useCallback(() => {
-    const entry = findNodeEntry((n) => n.id === block.id);
-    if (entry == null) {
-      throw new Error('Could not find the integration you are trying to edit.');
-    }
-
-    const [, path] = entry;
-
-    controller.apply({
-      type: 'set_node',
-      path,
-      properties: omit(block, ['children']),
-      newProperties: {
-        ...omit(block, ['children']),
-        typeMappings: runner.getTypes(),
-      } satisfies Partial<IntegrationTypes.IntegrationBlock>,
-    });
-
-    setSidebar({ type: 'closed' });
-  }, [block, controller, findNodeEntry, runner, setSidebar]);
-
-  const toast = useToast();
-
-  const hasReachedLimit = useMemo(() => queries.hasReachedLimit, [queries]);
-
-  const run = useCallback(() => {
-    if (hasReachedLimit) return;
-
-    setLoading(true);
-    runner.import().then((res) => {
-      if (res instanceof Error) {
-        toast.error(res.message);
-      }
-      if (res) {
-        queries.incrementUsageWithBackend(workspaceId);
-      }
-      setLoading(false);
-    });
-  }, [queries, runner, workspaceId, hasReachedLimit, toast]);
 
   return (
-    <WrapperIntegrationModalDialog
-      title="Edit your integration"
-      infoPanel={
-        <UpgradeWarningBlock
-          type="queries"
-          variant="block"
-          workspaceId={workspaceId}
-        />
-      }
-      onBack={() => setSidebar({ type: 'closed' })}
-      onContinue={onEditBlock}
-      onClose={() => setSidebar({ type: 'closed' })}
-    >
-      <ResultPreview
-        computer={computer}
-        blockId={block.id!}
-        name={varName}
-        loading={loading}
-        setName={() => {
-          // not used.
-        }}
-        setTypeMapping={(index, type) => {
-          runner.setTypeIndex(index, type);
-          run();
-        }}
-        timeOfLastRun={undefined}
-        columnsToHide={[]}
-        setColumnsToHide={() => {
-          // TODO: add hide columns
-          // In another PR
-        }}
-        isFirstRowHeader={block.isFirstRowHeader}
-        setFirstRowHeader={undefined}
-      />
-    </WrapperIntegrationModalDialog>
+    <ConcreteIntegration
+      {...props}
+      onReset={() => {
+        setExistingDataset(undefined);
+        setConnectionType(undefined);
+        setSidebar({ type: 'integrations' });
+      }}
+      connectionType={connectionType}
+      existingDataset={existingDataset}
+    />
   );
-};
-
-/**
- * Entry component for editing an existing integration.
- *
- * We don't allow complete editing (such as changing URL), but we
- * allow changing types.
- */
-export const EditIntegration: FC<EditIntegrationProps> = (props) => {
-  const findNode = useGlobalFindNode();
-  if (findNode == null) {
-    return (
-      <EmptyWrapper>
-        Sorry, cannot edit integration. Please contact support.
-      </EmptyWrapper>
-    );
-  }
-
-  const block = findNode((n) => n.id === props.integrationBlockId) as
-    | IntegrationTypes.IntegrationBlock
-    | undefined;
-
-  if (block == null || block.type !== 'integration-block') {
-    return (
-      <EmptyWrapper>
-        Sorry, this integration seems to not exist in your notebook.
-      </EmptyWrapper>
-    );
-  }
-
-  return <ConcreteEditIntegration {...props} block={block} />;
 };

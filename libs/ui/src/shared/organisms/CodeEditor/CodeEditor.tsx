@@ -1,7 +1,6 @@
 /* eslint decipad/css-prop-named-variable: 0 */
 import { javascript } from '@codemirror/lang-javascript';
 import { sql } from '@codemirror/lang-sql';
-import { TExecution } from '@decipad/react-contexts';
 import { css } from '@emotion/react';
 import CodeMirror, { useCodeMirror } from '@uiw/react-codemirror';
 import { ComponentProps, FC, useCallback, useEffect, useRef } from 'react';
@@ -9,6 +8,7 @@ import { Code } from '../../../icons';
 import { codeLog, cssVar, jsCode, componentCssVars } from '../../../primitives';
 import { defaultScrollbarWidth } from '../../../styles/scrollbars';
 import { themeStore } from '@decipad/utils';
+import { TExecution } from '@decipad/interfaces';
 
 const isE2E = 'navigator' in globalThis && navigator.webdriver;
 
@@ -16,20 +16,70 @@ interface CodeEditorProps {
   code: string;
   setCode: (newCode: string) => void;
   lang: 'javascript' | 'sql';
-
-  log: Array<TExecution>;
-  setLog: (_: Array<TExecution>) => void;
 }
 
 const logDetailHeight = 120;
-const editorHeight = 252;
 
-export const CodeEditor: FC<CodeEditorProps> = ({
-  code,
-  setCode,
-  lang,
-  log,
-}) => {
+export const Logs: FC<{
+  type: CodeEditorProps['lang'];
+  logs: Array<TExecution>;
+}> = ({ type, logs }) => {
+  if (logs.length === 0) {
+    return null;
+  }
+
+  return (
+    <div css={outputWrapperStyles}>
+      <div css={innerWrapperStyles}>
+        <div>
+          <div css={iconWrapper}>
+            <Code />
+          </div>
+          Output
+        </div>
+      </div>
+      {logs.map((logEntry) => (
+        <div css={outputStyles} key={JSON.stringify(logEntry)}>
+          {logEntry.status === 'run' && (
+            <>
+              <span css={runExecutionStyles}>&#8505;&#65039;</span> Running
+            </>
+          )}
+          {logEntry.status === 'error' && (
+            <>
+              <span css={outputErrorLabel}>&#9888;&#65039;</span>{' '}
+              {logEntry.err.toString()}
+            </>
+          )}
+          {logEntry.status === 'success' && (
+            <>
+              <span
+                css={successExecutionStyles}
+                data-testid="code-successfully-run"
+              >
+                &#9989;
+              </span>{' '}
+              {type === 'sql' ? 'Query' : 'Code'} ran successfully!
+            </>
+          )}
+          {logEntry.status === 'warning' && (
+            <>
+              <span css={warningExecutionStyles}>&#9888;&#65039;</span>{' '}
+              {logEntry.err.toString()}
+            </>
+          )}
+          {logEntry.status === 'log' && (
+            <>
+              <span css={logExecutionStyles}>➤</span> {logEntry.log}
+            </>
+          )}
+        </div>
+      ))}
+    </div>
+  );
+};
+
+export const CodeEditor: FC<CodeEditorProps> = ({ code, setCode, lang }) => {
   const handleCode = useCallback<
     NonNullable<ComponentProps<typeof CodeMirror>['onChange']>
   >(
@@ -46,11 +96,11 @@ export const CodeEditor: FC<CodeEditorProps> = ({
     value: isE2E ? '' : code,
     extensions: [lang === 'sql' ? sql() : javascript()],
     lang,
-    height: `${
-      log.length > 0 ? editorHeight : editorHeight + logDetailHeight
-    }px`,
     theme: themeStore().theme ? 'dark' : 'light',
     onChange: handleCode,
+    height: '100%',
+    maxHeight: '100%',
+    minHeight: '100%',
     basicSetup: isE2E
       ? false
       : {
@@ -67,105 +117,49 @@ export const CodeEditor: FC<CodeEditorProps> = ({
   }, [setContainer]);
 
   return (
-    <div css={mainStyles(log.length > 0)}>
+    <div css={mainStyles}>
       <div data-testid="code-mirror" ref={editor} />
-      {log.length > 0 && (
-        <div css={outputWrapperStyles}>
-          <div
-            css={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '4px',
-            }}
-          >
-            <div
-              css={{
-                display: 'flex',
-                left: -2,
-                position: 'relative',
-                alignItems: 'center',
-                marginBottom: 4,
-              }}
-            >
-              <div css={iconWrapper}>
-                <Code />
-              </div>
-              Output
-            </div>
-          </div>
-          {log.map((logEntry, i) => (
-            <div css={outputStyles} key={`log-line-${i}`}>
-              {logEntry.status === 'run' && (
-                <>
-                  <span css={runExecutionStyles}>&#8505;&#65039;</span> Running
-                </>
-              )}
-              {logEntry.status === 'error' && (
-                <>
-                  <span css={outputErrorLabel}>&#9888;&#65039;</span>{' '}
-                  {logEntry.err.toString()}
-                </>
-              )}
-              {logEntry.status === 'success' && (
-                <>
-                  <span
-                    css={successExecutionStyles}
-                    data-testid="code-successfully-run"
-                  >
-                    &#9989;
-                  </span>{' '}
-                  Code successfully run!
-                </>
-              )}
-              {logEntry.status === 'warning' && (
-                <>
-                  <span css={warningExecutionStyles}>&#9888;&#65039;</span>{' '}
-                  {logEntry.err.toString()}
-                </>
-              )}
-              {logEntry.status === 'log' && (
-                <>
-                  <span css={logExecutionStyles}>➤</span> {logEntry.log}
-                </>
-              )}
-            </div>
-          ))}
-        </div>
-      )}
     </div>
   );
 };
 
-const mainStyles = (hasLogs: boolean) =>
-  css(jsCode, {
-    width: '100%',
-    borderRadius: '0 0 12px 12px',
-    borderBottom: hasLogs ? 'unset' : `1px solid ${cssVar('borderDefault')}`,
-    '.cm-focused': {
-      outline: 0,
-    },
-    '.cm-gutters, .cm-content': {
-      borderTopLeftRadius: 12,
-      borderBottomLeftRadius: hasLogs ? 0 : 12,
-    },
-    '.cm-theme, .cm-editor,': {
-      borderRadius: `12px 12px ${hasLogs ? '0 0' : '12px 12px'}`,
-    },
-    '.cm-scroller::-webkit-scrollbar': {
-      width: defaultScrollbarWidth,
-      height: defaultScrollbarWidth,
-    },
-    '.cm-scroller::-webkit-scrollbar-track': {
-      backgroundColor: 'transparent',
-    },
-    '.cm-scroller::-webkit-scrollbar-thumb': {
-      backgroundColor: cssVar('iconColorDefault'),
-      borderRadius: defaultScrollbarWidth,
-    },
-    '.cm-scroller::-webkit-scrollbar-corner': {
-      backgroundColor: 'transparent',
-    },
-  });
+const mainStyles = css(jsCode, {
+  width: '100%',
+
+  // cursed??? Sets the height to 100% and respects flex properties
+  height: 0,
+  flexGrow: 1,
+
+  borderRadius: '0 0 12px 12px',
+  borderBottom: `1px solid ${cssVar('borderDefault')}`,
+  '> div:first-of-type': {
+    height: '100%',
+  },
+  '.cm-focused': {
+    outline: 0,
+  },
+  '.cm-gutters, .cm-content': {
+    borderTopLeftRadius: '12px',
+    borderBottomLeftRadius: '12px',
+  },
+  '.cm-theme, .cm-editor,': {
+    borderRadius: '12px',
+  },
+  '.cm-scroller::-webkit-scrollbar': {
+    width: defaultScrollbarWidth,
+    height: defaultScrollbarWidth,
+  },
+  '.cm-scroller::-webkit-scrollbar-track': {
+    backgroundColor: 'transparent',
+  },
+  '.cm-scroller::-webkit-scrollbar-thumb': {
+    backgroundColor: cssVar('iconColorDefault'),
+    borderRadius: defaultScrollbarWidth,
+  },
+  '.cm-scroller::-webkit-scrollbar-corner': {
+    backgroundColor: 'transparent',
+  },
+});
 
 const outputWrapperStyles = css(codeLog, {
   overflow: 'auto',
@@ -175,6 +169,20 @@ const outputWrapperStyles = css(codeLog, {
   borderRadius: '0 0 12px 12px',
   borderBottom: `1px solid ${cssVar('borderDefault')}`,
   padding: '10px',
+});
+
+const innerWrapperStyles = css({
+  display: 'flex',
+  alignItems: 'center',
+  gap: '4px',
+
+  'div:first-child': {
+    display: 'flex',
+    left: -2,
+    position: 'relative',
+    alignItems: 'center',
+    marginBottom: 4,
+  },
 });
 
 const iconWrapper = css({

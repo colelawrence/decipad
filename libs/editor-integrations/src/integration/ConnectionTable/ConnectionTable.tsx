@@ -1,37 +1,200 @@
 import { formatResultPreview } from '@decipad/format';
 import { all, count } from '@decipad/generator-utils';
-import { useResolved } from '@decipad/react-utils';
+import { useActiveElement, useResolved } from '@decipad/react-utils';
 import { Result } from '@decipad/remote-computer';
-import { PaginationControl, getTypeIcon } from '@decipad/ui';
+import {
+  HideColumn,
+  PaginationControl,
+  VariableTypeMenu,
+  getTypeIcon,
+} from '@decipad/ui';
 import { FC, memo, useMemo, useState } from 'react';
-import { StyledFooter, StyledTable, TableWrapper } from './styles';
+import { StyledFooter, StyledInput, StyledTable, TableWrapper } from './styles';
+import { CaretDown } from 'libs/ui/src/icons';
+import { SimpleTableCellType } from '@decipad/editor-types';
 
-export type ConnectionTableProps = {
-  tableResult: Result.Result<'table'>;
+export type ChangableTableOptions = {
+  onChangeColumnType: (
+    columnName: string,
+    type: SimpleTableCellType | undefined
+  ) => void;
+  onToggleHideColumn: (columnName: string) => void;
+  onChangeColumnName: (originalColumnName: string, columnName: string) => void;
 };
 
+export type ChangableVariableOptions = {
+  onChangeVariableType: (type: SimpleTableCellType | undefined) => void;
+};
+
+type CommonTableProps = {
+  tableResult: Result.Result<'table'>;
+  hiddenColumns: Array<string>;
+};
+
+export type ConnectionTableProps =
+  | ({
+      type: 'static';
+    } & CommonTableProps)
+  | ({
+      type: 'allow-changes';
+    } & ChangableTableOptions &
+      CommonTableProps);
+
 const PAGE_SIZE = 10;
+
+type Cell = { columnName: string; content: string };
 
 const getHtmlRows = (
   table: Result.Result<'table'>,
   columns: Array<Result.ResultMaterializedColumn>
-): Array<Array<string>> => {
-  const rows: Array<Array<string>> = [];
+): Array<Array<Cell>> => {
+  const rows: Array<Array<Cell>> = [];
+
+  if (columns.length === 0) {
+    return rows;
+  }
 
   for (let i = 0; i < columns[0].length; i++) {
-    const row: Array<string> = [];
+    const row: Array<Cell> = [];
     for (let j = 0; j < columns.length; j++) {
-      row.push(
-        formatResultPreview({
+      row.push({
+        columnName: table.type.columnNames[j],
+        content: formatResultPreview({
           type: table.type.columnTypes[j],
           value: columns[j][i]!,
-        })
-      );
+        }),
+      });
     }
     rows.push(row);
   }
 
   return rows;
+};
+
+const StaticTableHeader: FC<
+  Extract<ConnectionTableProps, { type: 'static' }>
+> = ({ tableResult }) => {
+  return (
+    <thead>
+      <tr>
+        {tableResult.type.columnNames.map((columnName, i) => {
+          const Icon = getTypeIcon(tableResult.type.columnTypes[i]);
+          return (
+            <th key={columnName} scope="col" data-hidden={i === 3}>
+              <span>
+                <Icon /> <span>{columnName}</span>
+              </span>
+            </th>
+          );
+        })}
+      </tr>
+    </thead>
+  );
+};
+
+const ToggleInput: FC<{
+  text: string;
+  onChangeText: (_text: string) => void;
+}> = ({ text, onChangeText }) => {
+  const [isEditing, setIsEditing] = useState(false);
+  const [inputText, setInputText] = useState(text);
+
+  const formRef = useActiveElement<HTMLFormElement>(() => {
+    if (!isEditing) {
+      return;
+    }
+
+    setIsEditing(false);
+  });
+
+  if (isEditing) {
+    return (
+      <form
+        ref={formRef}
+        onSubmit={(e) => {
+          e.preventDefault();
+          setIsEditing(false);
+          onChangeText(inputText);
+        }}
+      >
+        <StyledInput
+          value={inputText}
+          onChange={(e) => setInputText(e.target.value)}
+        />
+      </form>
+    );
+  }
+
+  return (
+    <span
+      onDoubleClick={() => {
+        setIsEditing(true);
+        setInputText(text);
+      }}
+    >
+      {text}
+    </span>
+  );
+};
+
+const ChangableTableHeader: FC<
+  Extract<ConnectionTableProps, { type: 'allow-changes' }>
+> = ({
+  tableResult,
+  hiddenColumns,
+  onChangeColumnType,
+  onChangeColumnName,
+  onToggleHideColumn,
+}) => {
+  return (
+    <thead>
+      <tr>
+        {tableResult.type.columnNames.map((columnName, i) => {
+          const Icon = getTypeIcon(tableResult.type.columnTypes[i]);
+          const isColumnHidden = hiddenColumns.some((c) => c === columnName);
+
+          return (
+            <th key={columnName} scope="col" data-hidden={isColumnHidden}>
+              <span>
+                <Icon />{' '}
+                <ToggleInput
+                  text={columnName}
+                  onChangeText={(newColumnName) =>
+                    onChangeColumnName(columnName, newColumnName)
+                  }
+                />{' '}
+                <VariableTypeMenu
+                  trigger={
+                    <button
+                      data-testid={`table-column-menu-button:${columnName}`}
+                    >
+                      <CaretDown />
+                    </button>
+                  }
+                  type={tableResult.type.columnTypes[i]}
+                  onChangeType={(type) => onChangeColumnType(columnName, type)}
+                >
+                  <HideColumn
+                    isColumnHidden={isColumnHidden}
+                    onToggleColumn={() => onToggleHideColumn(columnName)}
+                  />
+                </VariableTypeMenu>
+              </span>
+            </th>
+          );
+        })}
+      </tr>
+    </thead>
+  );
+};
+
+const TableHeader: FC<ConnectionTableProps> = (props) => {
+  switch (props.type) {
+    case 'static':
+      return <StaticTableHeader {...props} />;
+    case 'allow-changes':
+      return <ChangableTableHeader {...props} />;
+  }
 };
 
 /**
@@ -41,7 +204,8 @@ const getHtmlRows = (
  * It is optimizised by using `display: table` which allows the browser to
  * do a bunch of optimisations when it comes to rendering.
  */
-const UnmemoedConnectionTable: FC<ConnectionTableProps> = ({ tableResult }) => {
+const UnmemoedConnectionTable: FC<ConnectionTableProps> = (props) => {
+  const { tableResult, hiddenColumns } = props;
   const [page, setPage] = useState(1);
 
   const htmlRows = useResolved(
@@ -62,6 +226,10 @@ const UnmemoedConnectionTable: FC<ConnectionTableProps> = ({ tableResult }) => {
         return tableResult.type.rowCount;
       }
 
+      if (tableResult.value.length === 0) {
+        return undefined;
+      }
+
       const firstColumn = tableResult.value[0];
 
       return count(firstColumn());
@@ -75,25 +243,17 @@ const UnmemoedConnectionTable: FC<ConnectionTableProps> = ({ tableResult }) => {
   return (
     <TableWrapper>
       <StyledTable contentEditable={false}>
-        <thead>
-          <tr>
-            {tableResult.type.columnNames.map((columnName, i) => {
-              const Icon = getTypeIcon(tableResult.type.columnTypes[i]);
-              return (
-                <th key={columnName} scope="col">
-                  <span>
-                    <Icon /> <span>{columnName}</span>
-                  </span>
-                </th>
-              );
-            })}
-          </tr>
-        </thead>
+        <TableHeader {...props} />
         <tbody>
           {htmlRows.map((row, i) => (
             <tr key={i}>
               {row.map((cell, j) => (
-                <td key={j}>{cell}</td>
+                <td
+                  key={j}
+                  data-hidden={hiddenColumns.some((c) => c === cell.columnName)}
+                >
+                  {cell.content}
+                </td>
               ))}
             </tr>
           ))}
@@ -110,7 +270,7 @@ const UnmemoedConnectionTable: FC<ConnectionTableProps> = ({ tableResult }) => {
                 />
                 <span>
                   {rowCount} rows, previewing rows {(page - 1) * PAGE_SIZE + 1}{' '}
-                  to {page * PAGE_SIZE}
+                  to {Math.min(page * PAGE_SIZE, rowCount)}
                 </span>
               </div>
             </td>

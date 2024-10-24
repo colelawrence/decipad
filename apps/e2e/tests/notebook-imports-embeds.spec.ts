@@ -110,7 +110,7 @@ test('import CSVs via link @imports @csv', async ({ testUser }) => {
 
   await test.step('delete csvs', async () => {
     await expect(async () => {
-      await page.locator(`[data-testid="drag-handle"] >> nth=1`).click();
+      await page.getByTestId('drag-handle').nth(0).click();
       await page.getByRole('menuitem', { name: /Delete/ }).click();
       await expect(page.getByTestId('integration-block')).toBeHidden();
     }, "Wasn't able to delete all CSV tables").toPass();
@@ -209,8 +209,8 @@ test('check calculations from CSVs imported with link work across tabs @imports 
   await test.step('separate calculation and source table into different tabs', async () => {
     await notebook.createTab('Another Tab');
     await notebook.selectTab('New Tab');
-    await notebook.moveToTab(1, 'Another Tab');
-    await notebook.selectTab('nother Tab');
+    await notebook.moveToTab(0, 'Another Tab');
+    await notebook.selectTab('Another Tab');
 
     await expect(
       page.getByText('20 rows, previewing rows 1 to 10')
@@ -230,7 +230,7 @@ test('check calculations from CSVs imported with link work across tabs @imports 
     await notebook.selectTab('Another Tab');
     await notebook.selectTab('New Tab');
     await expect(
-      page.getByTestId('number-result:20'),
+      page.getByTestId('number-result:20').last(),
       'Formula that uses integration from another tab has a calculation error or never loads'
     ).toBeVisible();
     notebookLink = testUser.page.url();

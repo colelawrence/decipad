@@ -33,12 +33,14 @@ export const argDecoders: TRPCArgDecoders = {
   flush: noChangeArgEncoder,
   terminate: noChangeArgEncoder,
   importExternalData: (_store, [options]) => {
-    // eslint-disable-next-line no-param-reassign
-    options.types = options.types.map((t) => {
+    for (const k of Object.keys(options.metaColumnOptions)) {
+      const t = options.metaColumnOptions[k];
       // eslint-disable-next-line no-param-reassign
-      t.unit = t.unit && t.unit.map(hydrateUnit);
-      return t;
-    });
+      options.metaColumnOptions[k] = t && {
+        ...t,
+        unit: t.unit && t.unit.map(hydrateUnit),
+      };
+    }
     return [options];
   },
   releaseExternalData: noChangeArgEncoder,

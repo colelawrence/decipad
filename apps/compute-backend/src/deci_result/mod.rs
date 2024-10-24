@@ -1,9 +1,10 @@
 // #![cfg(target_arch = "wasm32")]
 extern crate wasm_bindgen_test;
+use crate::types::types::{DateSpecificity, DeciDate, Row, Table, Tree, TreeColumn};
 use crate::types::ast::{BasicNode, Node};
-use crate::types::types::{DateSpecificity, Row, Table, Tree, TreeColumn};
 use crate::DeciResult;
 use chrono::NaiveDateTime;
+use compute_backend_derive::suppress_derive_case_warnings;
 use js_sys::{BigUint64Array, Object, Uint8Array};
 use num_bigint::{BigInt, Sign, ToBigInt, ToBigUint};
 use num_traits::{One, Signed, ToPrimitive, Zero};
@@ -13,6 +14,8 @@ use std::mem::size_of;
 use std::{collections::HashMap, io::ErrorKind};
 use tsify_next::Tsify;
 use wasm_bindgen::prelude::*;
+
+pub mod coerce;
 
 #[wasm_bindgen]
 extern "C" {
@@ -44,6 +47,7 @@ impl SerializedResult {
     }
 }
 
+#[suppress_derive_case_warnings]
 #[derive(Copy, Clone, Debug, Serialize, Deserialize, Tsify)]
 #[repr(u64)]
 #[tsify(into_wasm_abi, from_wasm_abi)]
@@ -179,7 +183,7 @@ fn serialize_result_iter(
                 ]);
                 *data_length += bytes.len();
             }
-            DeciResult::Date(date, specificity) => {
+            DeciResult::Date(DeciDate(date, specificity)) => {
                 data_array.extend_from_slice(&[specificity as u8]);
 
                 let mut length = 1;
@@ -386,7 +390,8 @@ fn serialize_result_iter(
 }
 
 // Just used for testing serialize_result_iter
-fn serialize_result_internal(result: DeciResult) -> Result<SerializedResult, ErrorKind> {
+fn serialize_result_internal(result: impl Into<DeciResult>) -> Result<SerializedResult, ErrorKind> {
+    let result = result.into();
     let mut type_array = Vec::new();
     let mut data_array = Vec::new();
     let mut data_length = 0;
@@ -514,7 +519,7 @@ fn deserialize_data_iter(
             } else {
                 None
             };
-            Ok(Some(DeciResult::Date(date, date_specificity)))
+            Ok(Some(DeciDate(date, date_specificity).into()))
         }
         ResultType::Column => {
             let is_compressed = if let Some(content_type) = type_description.get(3) {
@@ -1008,8 +1013,7 @@ mod serialize_result_tests {
     #[wasm_bindgen_test]
     fn test_serialize_date_with_value() {
         let date = NaiveDateTime::from_timestamp(1721668184, 0);
-        let result =
-            serialize_result_internal(DeciResult::Date(Some(date), DateSpecificity::Day)).unwrap();
+        let result = serialize_result_internal(DeciDate(Some(date), DateSpecificity::Day)).unwrap();
         assert_eq!(result.type_array().to_vec(), vec![4, 0, 9]);
         assert_eq!(
             result.data().to_vec(),
@@ -1019,8 +1023,7 @@ mod serialize_result_tests {
 
     #[wasm_bindgen_test]
     fn test_serialize_date_without_value() {
-        let result =
-            serialize_result_internal(DeciResult::Date(None, DateSpecificity::Day)).unwrap();
+        let result = serialize_result_internal(DeciDate(None, DateSpecificity::Day)).unwrap();
         assert_eq!(result.type_array().to_vec(), vec![4, 0, 1]);
         assert_eq!(result.data().to_vec(), vec![4]);
     }
@@ -1665,17 +1668,18 @@ mod deserialize_result_tests {
         let result = deserialize_result_internal(serializde).unwrap();
         assert_eq!(
             result,
-            DeciResult::Date(
+            DeciDate(
                 Some(NaiveDateTime::from_timestamp(1721668184, 0)),
                 DateSpecificity::Day
             )
+            .into()
         );
     }
     #[wasm_bindgen_test]
     fn test_deserialize_date_without_value() {
         let serialized = create_serialized_result(vec![4, 0, 1], vec![4]);
         let result = deserialize_result_internal(serialized).unwrap();
-        assert_eq!(result, DeciResult::Date(None, DateSpecificity::Day));
+        assert_eq!(result, DeciDate(None, DateSpecificity::Day).into());
     }
 
     #[wasm_bindgen_test]

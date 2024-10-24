@@ -4,3 +4,6 @@ export * from './isColumn';
 export * from './isTable';
 export * from './isTableResult';
 export * from './pushResultToComputer';
+export * from './pushResultNameChange';
+export * from './pushExternalData';
+export * from './jsifyComputerVariables';

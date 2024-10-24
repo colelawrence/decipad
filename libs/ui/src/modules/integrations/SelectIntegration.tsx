@@ -1,35 +1,35 @@
 /* eslint decipad/css-prop-named-variable: 0 */
 import { css } from '@emotion/react';
 import { FC, ReactNode } from 'react';
-import {
-  IntegrationDisabledItem,
-  IntegrationItem,
-} from './IntegrationItem/IntegrationItem';
+
+import { ImportElementSource } from '@decipad/editor-types';
+import { InlineMenuItem } from '../editor/InlineMenuItem/InlineMenuItem';
 
 interface SelectIntegrationProps {
   integrations: Array<{
+    type: ImportElementSource;
     icon: ReactNode;
     title: string;
     description: string;
-    onClick: () => void;
-    enabled?: boolean;
+    enabled: boolean;
   }>;
+  onSelectIntegration: (connectionType: ImportElementSource) => void;
 }
 
 export const SelectIntegration: FC<SelectIntegrationProps> = ({
   integrations,
+  onSelectIntegration,
 }) => (
   <div css={mainStyles}>
     {integrations.map((i) => {
-      const Component = i.enabled ? IntegrationItem : IntegrationDisabledItem;
-
       return (
-        <Component
+        <InlineMenuItem
           key={i.title}
           title={i.title}
           description={i.description}
           icon={i.icon}
-          onClick={i.onClick}
+          enabled={i.enabled}
+          onExecute={() => onSelectIntegration(i.type)}
           testId={`select-integration:${i.title}`}
         />
       );
@@ -40,5 +40,6 @@ const mainStyles = css({
   width: '100%',
   display: 'flex',
   flexDirection: 'column',
-  gap: '12px',
+  gap: '16px 0',
+  padding: '8px',
 });

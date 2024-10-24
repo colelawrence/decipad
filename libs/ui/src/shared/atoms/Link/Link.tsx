@@ -40,10 +40,10 @@ const styleColors: Record<LinkColor, SerializedStyles> = {
   }),
 };
 
-const LinkSlot = createPrimitiveElement('a');
+const _LinkSlot = createPrimitiveElement('a');
 
 export interface LinkProps
-  extends Omit<ComponentProps<typeof LinkSlot>, 'contentEditable'> {
+  extends Omit<ComponentProps<typeof _LinkSlot>, 'contentEditable'> {
   color?: LinkColor;
   noUnderline?: boolean;
   children: React.ReactNode;

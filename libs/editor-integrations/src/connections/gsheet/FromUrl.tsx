@@ -1,13 +1,10 @@
 import { Button, cssVar, isValidURL, sanitizeInput } from '@decipad/ui';
-import { assertInstanceOf } from '@decipad/utils';
 import styled from '@emotion/styled';
 import { FC, useCallback, useMemo, useRef, useState } from 'react';
-import { LegacyRunner } from '../../runners';
 import { ConnectionProps } from '../types';
+import { isRunnerOfType } from '../../runners';
 
 export const FromUrl: FC<ConnectionProps> = ({ runner, onRun }) => {
-  assertInstanceOf(runner, LegacyRunner);
-
   const inputUrlRef = useRef<HTMLInputElement>(null);
   const [url, setUrl] = useState<string>('');
 
@@ -25,9 +22,13 @@ export const FromUrl: FC<ConnectionProps> = ({ runner, onRun }) => {
       console.error('Url is invalid or not provided');
       return;
     }
+    if (!isRunnerOfType(runner, 'gSheets')) {
+      console.error('runner is not gsheets!');
+      return;
+    }
     const sanitizedUrl = sanitizeInput({ input: url, isURL: true });
 
-    runner.setUrl(sanitizedUrl);
+    runner.setOptions({ runner: { spreadsheetUrl: sanitizedUrl } });
     onRun();
   };
 

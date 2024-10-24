@@ -11,7 +11,7 @@ use num::{
 
 use conv::ApproxInto;
 
-use super::types::{DateSpecificity, DeciResult};
+use super::types::{DateSpecificity, DeciDate, DeciResult};
 
 ///
 /// This file contains the implementation functions for Rust primitives
@@ -124,7 +124,7 @@ impl DeciResult {
                     .collect::<Vec<String>>()
                     .join(", ")
             ),
-            DeciResult::Date(date, specificity) => match specificity {
+            DeciResult::Date(DeciDate(date, specificity)) => match specificity {
                 DateSpecificity::None => date.unwrap().format("%Y-%m-%d %H:%M:%S.%f").to_string(),
                 DateSpecificity::Year => date.unwrap().format("%Y").to_string(),
                 DateSpecificity::Quarter => date.unwrap().format("%Y-%m").to_string(),

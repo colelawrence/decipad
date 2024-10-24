@@ -25,7 +25,6 @@ import {
 } from '@decipad/editor-types';
 import { assertElementType, isStructuredElement } from '@decipad/editor-utils';
 import {
-  useCurrentWorkspaceStore,
   useIsEditorReadOnly,
   useNotebookMetaData,
   useResourceUsage,
@@ -57,22 +56,17 @@ export const IntegrationBlock: PlateComponent = ({
 }) => {
   assertElementType(element, ELEMENT_INTEGRATION);
 
-  const { onRefresh, loading, error } = useIntegration(element);
+  const { onRefresh, importState } = useIntegration(element);
 
   // error handling
   const toast = useToast();
   useEffect(() => {
-    if (error) {
-      toast.error(`Error in integration: ${error.message}`);
+    if (importState.type === 'error') {
+      toast.error(`Error in integration: ${importState.message}`);
     }
-  }, [error, toast]);
+  }, [importState, toast]);
 
-  const workspaceId = useCurrentWorkspaceStore((w) => w.workspaceInfo.id);
-
-  const [setSidebar, setIntegrationBlockId] = useNotebookMetaData((s) => [
-    s.setSidebar,
-    s.setIntegrationBlockId,
-  ]);
+  const [setSidebar] = useNotebookMetaData((s) => [s.setSidebar]);
 
   const editor = useMyEditorRef();
   const path = useNodePath(element);
@@ -112,8 +106,7 @@ export const IntegrationBlock: PlateComponent = ({
       type: 'button',
       text: 'Edit',
       onClick: () => {
-        setSidebar({ type: 'edit-integration' });
-        setIntegrationBlockId(element.id ?? '');
+        setSidebar({ type: 'integrations', blockId: element.id ?? '' });
       },
       icon: <icons.Edit />,
     },
@@ -138,14 +131,6 @@ export const IntegrationBlock: PlateComponent = ({
 
   const handleClick = async () => {
     if (queries.hasReachedLimit) return;
-
-    if (workspaceId) {
-      //
-      // Potentially undefined because we could be in the Playground
-      // And there we don't want to increment usage.
-      //
-      queries.incrementUsageWithBackend(workspaceId);
-    }
 
     onRefresh();
 
@@ -174,13 +159,18 @@ export const IntegrationBlock: PlateComponent = ({
             ? [{ label: 'Last run', value: element.timeOfLastRun }]
             : []
         }
-        error={undefined}
         text={ImportElementSourcePretty[element.integrationType.type]}
         actionButtons={actionButtons}
         buttons={[
           {
             children: (
-              <AnimatedIcon icon={<icons.Refresh />} animated={loading} />
+              <AnimatedIcon
+                icon={<icons.Refresh />}
+                animated={
+                  importState.type === 'loading-cache' ||
+                  importState.type === 'loading-fetch'
+                }
+              />
             ),
             onClick: handleClick,
             tooltip: (
@@ -219,7 +209,9 @@ export const IntegrationBlock: PlateComponent = ({
       >
         {children}
       </UIIntegrationBlock>
-      {error ? <CodeError message={error.message} /> : null}
+      {importState.type === 'error' && (
+        <CodeError message={importState.message} />
+      )}
     </DraggableBlock>
   );
 };

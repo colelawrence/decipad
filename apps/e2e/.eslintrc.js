@@ -7,7 +7,7 @@ const { rules, ...playWrightConfig } =
 module.exports = {
   ...playWrightConfig,
   extends: ['../../libs/eslint-config-decipad'],
-  ignorePatterns: ['!**/*'],
+  ignorePatterns: ['!**/*', '.eslintrc.js'],
   parserOptions: {
     project: join(__dirname, 'tsconfig.json'),
   },

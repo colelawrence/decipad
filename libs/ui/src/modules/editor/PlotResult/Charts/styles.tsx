@@ -16,9 +16,7 @@ const keys = [
 
 type FontStyleKeys = typeof keys[number];
 
-type ChartAxisFontStyles = {
-  [key in FontStyleKeys]: string;
-};
+type ChartAxisFontStyles = Record<FontStyleKeys, string>;
 
 function convertFontToRechartsStyle(emotionStyle: CSSObject): CSSProperties {
   const rechartsStyle: Partial<ChartAxisFontStyles> = {};

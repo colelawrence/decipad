@@ -161,6 +161,7 @@ it('preserves row count of generator tables', async () => {
         "result": {
           "meta": [Function],
           "type": {
+            "atParentIndex": 0,
             "cellCount": 10000,
             "cellType": {
               "kind": "string",

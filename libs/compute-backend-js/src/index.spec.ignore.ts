@@ -9,6 +9,7 @@ it('should sum first 10,000 ints', async () => {
       kind: 'column',
       indexedBy: 'number',
       cellType: { kind: 'number' },
+      atParentIndex: null,
     },
     async *value() {
       for (let i = 1; i <= 10000; i++) {
@@ -21,3 +22,4 @@ it('should sum first 10,000 ints', async () => {
     computeBackendSingleton.computeBackend.sum_result_fraction_column(column);
   expect(x).toEqual(50005000);
 });
+

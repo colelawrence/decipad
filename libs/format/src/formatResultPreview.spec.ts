@@ -8,6 +8,7 @@ it('can summarize longer lists', async () => {
     formatResultPreview({
       type: {
         indexedBy: 'col',
+        atParentIndex: null,
         kind: 'column',
         cellType: {
           kind: 'number',
@@ -22,6 +23,7 @@ it('can summarize longer lists', async () => {
     formatResultPreview({
       type: {
         indexedBy: 'col',
+        atParentIndex: null,
         kind: 'column',
         cellType: {
           kind: 'string',

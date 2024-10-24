@@ -4,6 +4,8 @@
 
   "rules": {
     "no-shadow": "off",
+    "unused-imports/no-unused-vars": "off",
+    "unused-imports/no-unused-imports": "off",
     "@typescript-eslint/no-shadow": ["error"]
   }
 }

@@ -1,7 +1,13 @@
 /* eslint-disable import/no-relative-packages */
 /* eslint-disable no-underscore-dangle */
 // eslint-disable-next-line import/no-relative-packages, camelcase
-import { ComputeBackend, console_hook, DateSpecificity, DeciType, Kind } from './wasm/compute_backend';
+import {
+  ComputeBackend,
+  console_hook,
+  DateSpecificity,
+  DeciType,
+  Kind,
+} from './wasm/compute_backend';
 import { serializeResult, deserializeResult } from './serializableResult';
 import { Specificity } from 'libs/language-interfaces/src/Time';
 
@@ -31,44 +37,49 @@ const computeBackendSingleton = new ComputeBackendSingleton();
 
 export { computeBackendSingleton, serializeResult, deserializeResult };
 
-export type { DeciType, Importer, ResultType } from './wasm/compute_backend';
+export type {
+  DeciType,
+  Importer,
+  ImportOptions,
+  ResultType,
+} from './wasm/compute_backend';
 
 const assert_never = (a: never): never => {
   return a;
-}
+};
 
 export { Kind };
 export const kindToDeciType = (kind: Kind): DeciType => {
   switch (kind) {
     case Kind.Number:
-      return { type: "number" };
+      return { type: 'number' };
     case Kind.String:
-      return { type: "string" };
+      return { type: 'string' };
     case Kind.Boolean:
-      return { type: "boolean" };
+      return { type: 'boolean' };
     case Kind.Date:
-      return { type: "date", specificity: "none" };
+      return { type: 'date', specificity: 'none' };
     case Kind.Error:
-      return { type: "error" };
+      return { type: 'error' };
     default:
       return assert_never(kind);
   }
-}
+};
 
 export type { DateSpecificity };
 export const dateSpecificityToWasm = (date: Specificity): DateSpecificity => {
   switch (date) {
     case 'undefined':
-      return "none";
+      return 'none';
     default:
       return date;
   }
-}
+};
 export const dateSpecificityFromWasm = (date: DateSpecificity): Specificity => {
   switch (date) {
     case 'none':
-      return "undefined";
+      return 'undefined';
     default:
       return date;
   }
-}
+};

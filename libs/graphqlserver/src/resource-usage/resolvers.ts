@@ -1,8 +1,4 @@
-import {
-  getResourceUsage,
-  incrementResourceUsage,
-  updateExtraAiAllowance,
-} from './queries.helpers';
+import { getResourceUsage, updateExtraAiAllowance } from './queries.helpers';
 import type { Resolvers } from '@decipad/graphqlserver-types';
 
 const resolvers: Resolvers = {
@@ -27,9 +23,6 @@ const resolvers: Resolvers = {
         paymentMethodId,
         ctx.user
       );
-    },
-    async incrementResourceUsage(_, { resourceType, workspaceId, amount }) {
-      return incrementResourceUsage(resourceType, workspaceId, amount);
     },
   },
   Workspace: {

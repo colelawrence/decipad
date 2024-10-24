@@ -34,12 +34,22 @@ export interface CSVIntegration {
   csvUrl: string;
 }
 
-type IntegrationTypes =
+export type IntegrationTypes =
   | CodeBlockIntegration
   | SQLBlockIntegration
   | NotionBlockIntegration
   | GoogleSheetIntegration
   | CSVIntegration;
+
+export type TypeObject =
+  | {
+      type?: SimpleTableCellType | undefined;
+      desiredName?: string | undefined;
+      isHidden?: boolean;
+    }
+  | undefined;
+
+export type TypeMap = Record<string, TypeObject>;
 
 export interface IntegrationBlock<
   T extends IntegrationTypes['type'] = IntegrationTypes['type']
@@ -48,10 +58,10 @@ export interface IntegrationBlock<
   children: [PlainText];
 
   // Keeps the users desired result mappings.
-  typeMappings: Array<SimpleTableCellType | undefined>;
+  // THIS NEEDS TO BE MIGRATED.
+  // typeMappings: Array<SimpleTableCellType | undefined>;
 
-  // TODO: ADD MIGRATION TO EXISTING INTEGRATIONS, OTHERWISE KABOOM.
-  columnsToHide: Array<string>;
+  typeMappings: TypeMap;
 
   // TODO: migration to make this present everytime.
   isFirstRowHeader: boolean;

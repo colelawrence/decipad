@@ -17,7 +17,7 @@ export const ANNOTATIONS_WIDTH = 320;
 export const SIDEBAR_WIDTH = '320px';
 const NAVIGATION_SIDEBAR_WIDTH = '222px';
 const ASSISTANT_WIDTH = '640px';
-const INTEGRATIONS_WIDTH = '600px';
+const INTEGRATIONS_WIDTH = '320px';
 const HEADER_HEIGHT = '64px';
 
 /**
@@ -110,7 +110,6 @@ const ComponentWidths: Record<
   closed: { default: '0px' },
   annotations: { default: '0px', tablet: '0px' },
   integrations: { default: INTEGRATIONS_WIDTH },
-  'edit-integration': { default: INTEGRATIONS_WIDTH },
   'navigation-sidebar': { default: NAVIGATION_SIDEBAR_WIDTH },
   'formula-helper': { default: SIDEBAR_WIDTH },
 };
@@ -266,7 +265,9 @@ export const AsideWrapper = styled.aside<AsideWrapperProps>(
           sidebarComponent.type === 'publishing'
             ? undefined
             : isDataDrawerOpen
-            ? `calc(100vh - 80px - ${cssVar('dataDrawerHeight')})`
+            ? `max(calc(100vh - 80px - ${cssVar('dataDrawerHeight')}), ${
+                MIN_DATA_DRAWER_HEIGHT * 2
+              }px)`
             : 'calc(100vh - 80px)',
       },
     },

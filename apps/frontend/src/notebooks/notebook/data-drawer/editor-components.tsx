@@ -5,7 +5,7 @@ import {
 import { ELEMENT_CODE_LINE_V2, PlateComponent } from '@decipad/editor-types';
 import { assertElementType, getCodeLineSource } from '@decipad/editor-utils';
 import { Children, useMemo } from 'react';
-import { useDataDrawerContext, useDataDrawerCreatingCallback } from './types';
+import { useDataDrawerCreatingCallback } from './types';
 import { parseExpression } from '@decipad/remote-computer';
 import { useResolved } from '@decipad/react-utils';
 import {
@@ -18,6 +18,8 @@ import {
 import { CodeResult, StructuredInputUnits, cssVar } from '@decipad/ui';
 import { Enter, Formula } from 'libs/ui/src/icons';
 import { getNodeString } from '@udecode/plate-common';
+import { useNotebookWithIdState } from '@decipad/notebook-state';
+import { assert } from '@decipad/utils';
 
 export const DataDrawerEditingComponent: PlateComponent = ({
   children,
@@ -25,7 +27,11 @@ export const DataDrawerEditingComponent: PlateComponent = ({
 }) => {
   assertElementType(element, ELEMENT_CODE_LINE_V2);
 
-  const { computer, isEditing } = useDataDrawerContext();
+  const [computer, isEditing] = useNotebookWithIdState(
+    (s) => [s.computer, s.dataDrawerMode.type === 'edit'] as const
+  );
+  assert(computer != null, 'unreachable: computer cannot be null here.');
+
   const [varName, code] = Children.toArray(children);
 
   const onSubmitCreate = useDataDrawerCreatingCallback();

@@ -2,32 +2,15 @@ import { isFlagEnabled } from '@decipad/feature-flags';
 import { useNotebookWithIdState } from '@decipad/notebook-state';
 import { EditorController } from '@decipad/notebook-tabs';
 import { FC } from 'react';
-import {
-  CreateVariableDataDrawer,
-  DataDrawerComponent,
-  EditVariableDataDrawer,
-} from './data-drawer';
+import { DataDrawerContainer } from './data-drawer';
 
 export const DataDrawer: FC = () => {
-  const [
-    isAddingOrEditingVariable,
-    editingId,
-    closeDataDrawer,
-    computer,
-    editor,
-  ] = useNotebookWithIdState(
-    (state) =>
-      [
-        state.isAddingOrEditingVariable,
-        state.editingVariableId,
-        state.closeDataDrawer,
-        state.computer,
-        state.editor,
-      ] as const
+  const [mode, computer, editor] = useNotebookWithIdState(
+    (state) => [state.dataDrawerMode, state.computer, state.editor] as const
   );
 
   if (
-    isAddingOrEditingVariable == null ||
+    mode.type === 'closed' ||
     computer == null ||
     editor == null ||
     !(editor instanceof EditorController) ||
@@ -36,19 +19,5 @@ export const DataDrawer: FC = () => {
     return null;
   }
 
-  return (
-    <DataDrawerComponent
-      computer={computer}
-      controller={editor}
-      onClose={closeDataDrawer}
-      title={isAddingOrEditingVariable === 'create' ? 'Add data' : 'Edit data'}
-      isEditing={isAddingOrEditingVariable === 'edit'}
-    >
-      {isAddingOrEditingVariable === 'create' ? (
-        <CreateVariableDataDrawer />
-      ) : (
-        <EditVariableDataDrawer editingId={editingId!} />
-      )}
-    </DataDrawerComponent>
-  );
+  return <DataDrawerContainer />;
 };

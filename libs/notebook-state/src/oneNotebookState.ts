@@ -53,6 +53,9 @@ const initialState = (): Omit<
   | 'height'
   | 'setHeight'
   | 'isClosing'
+  | 'setIntegration'
+  | 'isDataDrawerOpen'
+  | 'setIsDataDrawerOpen'
 > => {
   let resolveNotebookLoadedPromise: (e: DocSyncEditor) => void;
   const notebookLoadedPromise: EnhancedPromise<DocSyncEditor> =
@@ -83,6 +86,9 @@ const initialState = (): Omit<
     liveConnectionWorker: once(() => createLiveConnectWorker()),
     editorChanges: new Subject(),
     interactionsSubscription: undefined,
+    dataDrawerMode: {
+      type: 'closed',
+    },
   };
 };
 
@@ -379,22 +385,30 @@ export const createNotebookStore = (
 
       setAddVariable() {
         set(() => ({
-          isAddingOrEditingVariable: 'create',
-          editingVariableId: undefined,
+          dataDrawerMode: {
+            type: 'create',
+          },
         }));
       },
 
       setEditingVariable(id) {
         set(() => ({
-          isAddingOrEditingVariable: 'edit',
-          editingVariableId: id,
+          dataDrawerMode: {
+            type: 'edit',
+            variableId: id,
+          },
         }));
+      },
+
+      setIntegration() {
+        set(() => ({ dataDrawerMode: { type: 'integration-preview' } }));
       },
 
       closeDataDrawer() {
         set(() => ({
-          isAddingOrEditingVariable: undefined,
-          editingVariableId: undefined,
+          dataDrawerMode: {
+            type: 'closed',
+          },
         }));
       },
 
@@ -414,6 +428,13 @@ export const createNotebookStore = (
 
       setAnnotations(annotations) {
         set(() => ({ annotations }));
+      },
+
+      isDataDrawerOpen: false,
+      setIsDataDrawerOpen(isDataDrawerOpen) {
+        set(() => ({
+          isDataDrawerOpen,
+        }));
       },
 
       isClosing: false,
@@ -446,6 +467,7 @@ export const createNotebookStore = (
         }
 
         let height = h;
+
         if (height < MIN_DATA_DRAWER_HEIGHT) {
           height = MIN_DATA_DRAWER_HEIGHT;
         }

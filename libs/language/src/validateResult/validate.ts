@@ -124,6 +124,7 @@ const validate: Validate = <
             kind: 'column',
             cellType,
             indexedBy: null,
+            atParentIndex: null,
           };
           validate(implicitColumn, value);
         }

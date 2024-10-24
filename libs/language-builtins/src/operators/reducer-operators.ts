@@ -24,7 +24,12 @@ const trendSumEval: Evaluator = async ([values]) => {
   const trendGen = getResultGenerator(await getColumnLike(values).getData());
 
   const firstResult = await serializeResult({
-    type: { kind: 'column', cellType: { kind: 'number' }, indexedBy: null },
+    type: {
+      kind: 'column',
+      cellType: { kind: 'number' },
+      indexedBy: null,
+      atParentIndex: null,
+    },
     value: (start = 0, end = Infinity) =>
       map(trendGen(start, end), (value) => getTrendValue(value)?.first ?? ZERO),
     meta: undefined,
@@ -40,7 +45,12 @@ const trendSumEval: Evaluator = async ([values]) => {
   );
 
   const lastResult = await serializeResult({
-    type: { kind: 'column', cellType: { kind: 'number' }, indexedBy: null },
+    type: {
+      kind: 'column',
+      cellType: { kind: 'number' },
+      indexedBy: null,
+      atParentIndex: null,
+    },
     value: (start = 0, end = Infinity) =>
       map(trendGen(start, end), (value) => getTrendValue(value)?.last ?? ZERO),
     meta: undefined,

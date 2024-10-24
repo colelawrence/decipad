@@ -1161,7 +1161,7 @@ export class Notebook {
         await test.step('Importing csv through file explorer', async () => {
           const fileChooserPromise = this.page.waitForEvent('filechooser');
 
-          await this.page.getByText('Add CSV').click();
+          await this.page.getByTestId('add-csv').click();
           await this.page.getByText('Upload file').click();
 
           const fileChooser = await fileChooserPromise;
@@ -1170,7 +1170,7 @@ export class Notebook {
         break;
       case 'link':
         await test.step('Importing csv via link', async () => {
-          await this.page.getByText('Add CSV').click();
+          await this.page.getByTestId('add-csv').click();
           await this.page.getByText('Import from link').click();
 
           await this.page.getByTestId('csv-link').fill(option.link);
@@ -1187,7 +1187,7 @@ export class Notebook {
     // uploading the file
     // eslint-disable-next-line playwright/no-wait-for-timeout
     await this.page.waitForTimeout(5_000);
-    await this.page.getByText('Continue').click();
+    await this.page.getByTestId('integration-modal-continue').click();
 
     await expect(this.page.getByTestId('result-preview')).toBeVisible();
 
@@ -1210,7 +1210,7 @@ export class Notebook {
     // A request is made before creating the integration. Which has to be waited for
     // eslint-disable-next-line playwright/no-wait-for-timeout
     await this.page.waitForTimeout(2_000);
-    await this.page.getByText('Continue').click();
+    await this.page.getByTestId('integration-modal-continue').click();
   }
 
   /**

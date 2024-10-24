@@ -717,6 +717,7 @@ it('can list tables and columns', async () => {
         {
           "blockId": "block-0_0",
           "blockType": {
+            "atParentIndex": 0,
             "cellCount": undefined,
             "cellType": {
               "kind": "number",
@@ -730,6 +731,7 @@ it('can list tables and columns', async () => {
           "result": {
             "meta": [Function],
             "type": {
+              "atParentIndex": 0,
               "cellCount": undefined,
               "cellType": {
                 "kind": "number",
@@ -752,6 +754,7 @@ it('can list tables and columns', async () => {
         {
           "blockId": "block-0_1",
           "blockType": {
+            "atParentIndex": 1,
             "cellCount": undefined,
             "cellType": {
               "kind": "string",
@@ -764,6 +767,7 @@ it('can list tables and columns', async () => {
           "result": {
             "meta": [Function],
             "type": {
+              "atParentIndex": 1,
               "cellCount": undefined,
               "cellType": {
                 "kind": "string",
@@ -780,6 +784,7 @@ it('can list tables and columns', async () => {
         {
           "blockId": "block-1",
           "blockType": {
+            "atParentIndex": 2,
             "cellCount": undefined,
             "cellType": {
               "date": "day",
@@ -793,6 +798,7 @@ it('can list tables and columns', async () => {
           "result": {
             "meta": [Function],
             "type": {
+              "atParentIndex": 2,
               "cellCount": undefined,
               "cellType": {
                 "date": "day",

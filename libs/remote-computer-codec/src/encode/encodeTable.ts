@@ -31,7 +31,12 @@ export const encodeTable = async (
     // eslint-disable-next-line no-await-in-loop
     offset = await encoder(
       {
-        type: { kind: encoderType, cellType: colType, indexedBy: null },
+        type: {
+          kind: encoderType,
+          cellType: colType,
+          indexedBy: null,
+          atParentIndex: colIndex,
+        } satisfies SerializedType,
         value: col,
         meta,
       },

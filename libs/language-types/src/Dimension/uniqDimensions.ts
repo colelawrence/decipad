@@ -27,7 +27,7 @@ export const uniqDimensions = async (
           argDimensions: await arg.dimensions(),
           argDimIds,
         })}`;
-      } catch (e2) {
+      } catch (_e2) {
         // ignore
       }
       throw e;

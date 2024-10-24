@@ -4,10 +4,9 @@ mod types;
 mod value;
 
 use deci_result::{deserialize_result, serialize_result};
-use infer::infer_column;
+use import::{Csv, ImportOptions, Importer};
 use js_sys::{self, BigUint64Array, Uint8Array};
 use js_sys::{BigInt64Array, Object};
-use parse::csv_to_parsed;
 use rand::rngs::OsRng;
 use rand_unique::{RandomSequence, RandomSequenceBuilder};
 use std::collections::HashMap;
@@ -52,110 +51,6 @@ pub enum ComputeErrors {
     InferError,
 }
 
-/*
- * Takes the raw string of CSV, coherses it and stores the type in WASM.
- * It then returns the IDs of the columns or an error.
- */
-pub fn internal_parse_csv(
-    csv: &String,
-    is_first_header_row: bool,
-    types: Option<Vec<DeciType>>,
-) -> Result<(Vec<String>, Vec<DeciResult>), ComputeErrors> {
-    let parsed_csv = csv_to_parsed(&csv, is_first_header_row);
-    let mut column_types = types.unwrap_or_default();
-
-    // infer cols we weren't given types for
-    column_types.extend(
-        parsed_csv
-            .iter()
-            .skip(column_types.len())
-            .map(|col| infer_column(col).expect("valid column")),
-    );
-
-    let mut injected_result_names: Vec<String> = Vec::new();
-    let mut injested_result: Vec<DeciResult> = Vec::new();
-
-    for (col, desired_type) in parsed_csv.into_iter().zip(column_types.into_iter()) {
-        let coerced_column = match desired_type {
-            DeciType::String | DeciType::Error => DeciResult::Column(
-                col.value
-                    .into_iter()
-                    .map(|x| DeciResult::String(x))
-                    .collect(),
-            ),
-            DeciType::Number => DeciResult::Column(
-                col.value
-                    .into_iter()
-                    .map(|value| {
-                        value
-                            .trim()
-                            .replace("r$", "")
-                            .replace("R$", "")
-                            .replace(['_', ' ', ',', '$', '£', '€'], "")
-                            .parse::<f64>()
-                            .map(|val| fraction::Fraction::from(val))
-                            .map(|frac| {
-                                let (&num, &den) = (frac.numer().unwrap(), frac.denom().unwrap());
-                                match frac.sign() {
-                                    Some(fraction::Sign::Minus) => (-(num as i64), (den as i64)),
-                                    _ => (num as i64, den as i64),
-                                }
-                            })
-                            .map(|(num, den)| DeciResult::Fraction(num, den))
-                            .unwrap_or_else(|err| {
-                                log!("error parsing number: {err:?}");
-                                DeciResult::TypeError
-                            })
-                    })
-                    .collect(),
-            ),
-            DeciType::Boolean => DeciResult::Column(
-                col.value
-                    .into_iter()
-                    .map(|mut value| {
-                        value.make_ascii_lowercase();
-                        DeciResult::Boolean(
-                            value.parse::<bool>().expect("could not parse inferred col"),
-                        )
-                    })
-                    .collect(),
-            ),
-            DeciType::Date { specificity } => {
-                log!("parsing a date");
-                let mut memo = None;
-                DeciResult::Column(
-                    col.value
-                        .into_iter()
-                        .map(|value| {
-                            let (out, new_memo) = specificity
-                                .parse_str(value, memo)
-                                .map(|(date, memo)| {
-                                    (DeciResult::Date(Some(date), specificity), memo)
-                                })
-                                .unwrap_or_else(|_| (DeciResult::TypeError, None));
-                            memo = new_memo;
-                            out
-                        })
-                        .collect(),
-                )
-            }
-            DeciType::Column => unreachable!("can't coerce column type to column"),
-            DeciType::Table => unreachable!("can't coerce column type to table"),
-        };
-
-        injected_result_names.push(col.name.clone());
-        injested_result.push(coerced_column);
-    }
-
-    Ok((injected_result_names, injested_result))
-}
-
-#[wasm_bindgen]
-pub fn parse_csv(csv: String, is_first_header_row: bool) -> Object {
-    let (_column_names, csv_columns) = internal_parse_csv(&csv, is_first_header_row, None).unwrap();
-
-    serialize_result(DeciResult::Column(csv_columns))
-}
 #[wasm_bindgen]
 pub struct ComputeBackend {
     values: HashMap<String, DeciResult>,
@@ -164,20 +59,6 @@ pub struct ComputeBackend {
 
 #[wasm_bindgen]
 impl ComputeBackend {
-    pub fn read_csv_in(&mut self, csv: String, is_first_header_row: bool) -> Object {
-        let (col_names, csv_cols) = internal_parse_csv(&csv, is_first_header_row, None).unwrap();
-        let mut col_keys = vec![];
-        for (col, i) in csv_cols.into_iter().zip(0..col_names.len()) {
-            let current_key = self.sequence.next().unwrap().to_string();
-            col_keys.push(DeciResult::Column(vec![
-                DeciResult::String(col_names[i].clone()),
-                DeciResult::String(current_key.clone()),
-            ]));
-            self.values.insert(current_key, col);
-        }
-        return serialize_result(DeciResult::Column(col_keys));
-    }
-
     pub fn insert_number_column_frac(
         &mut self,
         id: String,
@@ -332,7 +213,7 @@ impl ComputeBackend {
         };
         let start_usize = start as usize;
 
-        assert!(start_usize < end_usize);
+        assert!(start_usize <= end_usize);
 
         Some(serialize_result(DeciResult::Column(
             number_column[start_usize..end_usize].to_vec(),
@@ -527,12 +408,7 @@ fn test_masking() {
             })
             .to_vec(),
     );
-    println!(
-        "{}",
-        my_deci
-            .mask_with(my_deci.lt_num(DeciResult::from_float(5.0)))
-            .get_string()
-    );
+    println!("{}", my_deci.mask_with(my_deci.lt_num(5.0)).get_string());
 }
 
 #[test]

@@ -154,7 +154,7 @@ export const InlineMenu: FC<InlineMenuProps> = ({
               const focusedItem = (
                 <InlineMenuItem
                   {...item}
-                  data-testid={`menu-item-${command}`}
+                  testId={`menu-item-${command}`}
                   key={command}
                   focused={setFocus}
                   onExecute={() => onExecute(command)}

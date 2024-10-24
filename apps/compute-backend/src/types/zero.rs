@@ -14,7 +14,7 @@ impl Zero for DeciResult {
             DeciResult::ArbitraryFraction(n, d) => *n == BigInt::ZERO && *d != BigInt::ZERO,
             DeciResult::Fraction(n, d) => *n == 0 && *d != 0,
             DeciResult::Column(_) => false,
-            DeciResult::Date(_, _) => false,
+            DeciResult::Date(_) => false,
             DeciResult::Table(_) => false,
             DeciResult::Range(_) => false,
             DeciResult::Row(_) => false,

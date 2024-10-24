@@ -1,45 +1,76 @@
 import styled from '@emotion/styled';
-import { cssVar, mobileQuery, smallestMobile } from '../../primitives';
+import {
+  cssVar,
+  mobileQuery,
+  p14Medium,
+  p14Regular,
+  smallestMobile,
+} from '../../primitives';
+import { noTrackScrollbarStyles } from '../../styles/scrollbars';
+import { sidebarWrapperStyles } from '../sidebar/EditorSidebar/styles';
 
 export const S = {
-  IntegrationWrapper: styled.div({
-    display: 'flex',
-    flexDirection: 'column',
+  IntegrationWrapper: styled.div(noTrackScrollbarStyles, sidebarWrapperStyles, {
     alignItems: 'center',
-    width: '500px',
-    height: '662px',
+    // width: '500px',
     maxHeight: 'calc(100vh - 40px)',
-    padding: '32px',
-    gap: '20px',
+    overflowY: 'auto',
+    gap: '16px',
+    paddingRight: '16px',
 
-    border: `1px solid ${cssVar('backgroundDefault')}`,
-    borderRadius: '24px',
-
-    backgroundColor: cssVar('backgroundMain'),
     [mobileQuery]: { width: smallestMobile.landscape.width },
 
     section: {
       width: '100%',
     },
+    '& > main': {
+      display: 'flex',
+      flexDirection: 'column',
+      gap: '16px',
+      width: '100%',
+
+      '& > p': {
+        ...p14Medium,
+        width: '100%',
+        textAlign: 'center',
+      },
+    },
   }),
   CloseIconWrapper: styled.div({
-    height: '30px',
     display: 'flex',
-
-    justifyContent: 'right',
+    gap: '8px',
     alignItems: 'center',
-
     width: '100%',
 
-    div: {
-      marginLeft: 'auto',
+    h2: { ...p14Regular, color: cssVar('textTitle') },
+
+    // back button + close button
+    svg: {
+      stroke: cssVar('textTitle'),
       width: '16px',
       height: '16px',
-      display: 'grid',
-      borderRadius: 4,
-      ':hover': {
+      cursor: 'pointer',
+    },
+    // 'div:last-child > svg': {
+    //  width: '28px',
+    //  height: '28px',
+    //  padding: '6px',
+    // },
+    button: {
+      width: '28px',
+      height: '28px',
+      flexGrow: '0',
+      padding: '6px',
+      '&:hover': {
         backgroundColor: cssVar('backgroundHeavy'),
+        borderRadius: '6px',
       },
+      '&:last-child': {
+        color: cssVar('textDisabled'),
+      },
+    },
+    span: {
+      flexGrow: '1',
     },
   }),
 } as const;

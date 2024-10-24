@@ -161,6 +161,7 @@ describe('abstract refs', () => {
         {
           "meta": [Function],
           "type": {
+            "atParentIndex": 1,
             "cellCount": undefined,
             "cellType": {
               "kind": "number",
@@ -210,6 +211,7 @@ describe('abstract refs', () => {
         {
           "meta": [Function],
           "type": {
+            "atParentIndex": 1,
             "cellCount": undefined,
             "cellType": {
               "kind": "number",
@@ -258,6 +260,7 @@ describe('abstract refs', () => {
         {
           "meta": [Function],
           "type": {
+            "atParentIndex": null,
             "cellCount": undefined,
             "cellType": {
               "kind": "number",
@@ -615,6 +618,7 @@ describe('abstract refs', () => {
       {
         "meta": [Function],
         "type": {
+          "atParentIndex": null,
           "cellCount": undefined,
           "cellType": {
             "kind": "number",

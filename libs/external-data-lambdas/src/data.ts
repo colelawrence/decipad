@@ -90,6 +90,7 @@ const proxy = async (
 
   const reqUrl = url ?? dataSource.externalId;
 
+  console.log('>>', reqUrl);
   const resp = await fetch(reqUrl, { method, headers: reqHeaders });
 
   if (resp == null) {

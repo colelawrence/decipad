@@ -16,6 +16,7 @@ describe('encode and decode column', () => {
       kind: 'column',
       cellType: { kind: 'number', unit: null },
       indexedBy: null,
+      atParentIndex: null,
     };
     const columnEncoder = valueEncoder(columnType);
     const columnDecoder = valueDecoder(columnType);
@@ -38,8 +39,10 @@ describe('encode and decode column', () => {
         kind: 'column',
         cellType: { kind: 'number', unit: null },
         indexedBy: null,
+        atParentIndex: null,
       },
       indexedBy: null,
+      atParentIndex: null,
     };
     const columnEncoder = valueEncoder(columnType);
     const columnDecoder = valueDecoder(columnType);

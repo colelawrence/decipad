@@ -10,6 +10,7 @@ import {
 } from '@decipad/language-types';
 import { zip } from '@decipad/utils';
 import { isTableResult } from './isTableResult';
+
 /**
  * Inject a table into the computer so the rest of the notebook can read isTableResult
  * Pass `computerResult` as `undefined` if you want to erase the result.
@@ -51,7 +52,7 @@ export async function pushResultToComputer(
         type.columnNames,
         type.columnTypes
       ).entries()) {
-        const dataRef = `${blockId}--${index}`;
+        const dataRef = `${blockId}--${colName}`;
 
         // Table.Column = {Data}
         programBlocks.set(dataRef, [
@@ -132,7 +133,7 @@ export async function pushResultToComputer(
   } else {
     await computer.pushComputeDelta({
       external: { remove: [`${blockId}-external`] },
-      extra: { remove: [blockId] },
+      program: { remove: [blockId] },
     });
   }
 }

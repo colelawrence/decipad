@@ -4,11 +4,13 @@ import { VariableTypeMenuItems } from './VariableTypeMenuItems';
 
 type VariableTypeMenuProps = Readonly<{
   trigger: ReactNode;
+  children?: ReactNode;
 }> &
   ComponentProps<typeof VariableTypeMenuItems>;
 
 export const VariableTypeMenu: FC<VariableTypeMenuProps> = ({
   trigger,
+  children,
   ...props
 }) => {
   const [open, setOpen] = useState(false);
@@ -22,6 +24,7 @@ export const VariableTypeMenu: FC<VariableTypeMenuProps> = ({
       trigger={trigger}
     >
       <VariableTypeMenuItems {...props} />
+      {children}
     </MenuList>
   );
 };

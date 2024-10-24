@@ -58,7 +58,7 @@ export const useGeneratedName = ({
       if (userIconKeys.includes(icon) && typeof setIcon === 'function') {
         setIcon(icon);
       }
-    } catch (e) {
+    } catch (_e) {
       toast.error('Failed to generate a name');
     }
   }, [element.children, notebookId, ai, toast, setLabel, setIcon]);

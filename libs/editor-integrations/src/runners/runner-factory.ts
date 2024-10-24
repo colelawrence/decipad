@@ -1,148 +1,157 @@
 import type { IntegrationTypes } from '@decipad/editor-types';
-import {
-  CodeRunner,
-  CSVRunner,
-  GenericContainerRunner,
-  LegacyRunner,
-} from './types';
 import type { Computer } from '@decipad/computer-interfaces';
-import { useMemo } from 'react';
-import { useNotebookRoute } from '@decipad/routing';
-import { useComputer, useLiveConnectionWorker } from '@decipad/editor-hooks';
-import { LiveConnectionWorker } from '@decipad/live-connect';
+import { Runner } from './runner';
+import { CSVRunner } from './csv';
+import { IntegrationBlock } from 'libs/editor-types/src/integrations';
+import { CodeRunner } from './code';
+import { useEffect, useMemo, useState } from 'react';
+import { SQLRunner } from './mysql';
+import { NotionRunner } from './notion';
+import { GSheetRunner } from './gsheet';
+import { omit } from 'lodash';
+import { dequal } from '@decipad/utils';
 
-type RunnerFactoryParams = {
-  integration: IntegrationTypes.IntegrationBlock['integrationType'];
-  types: IntegrationTypes.IntegrationBlock['typeMappings'];
+export type RunnerFactoryParams = {
   notebookId: string;
   computer: Computer;
-  isFirstRowHeader: boolean;
+
   name: string;
   id: string;
-  worker: LiveConnectionWorker;
-};
 
-function getRunner(options: RunnerFactoryParams): GenericContainerRunner {
-  switch (options.integration.type) {
+  types: IntegrationTypes.IntegrationBlock['typeMappings'];
+} & (
+  | {
+      integration: IntegrationTypes.IntegrationBlock;
+      integrationType: undefined;
+    }
+  | {
+      integration: undefined;
+      integrationType: IntegrationTypes.IntegrationBlock['integrationType']['type'];
+    }
+);
+
+function getRunner(options: RunnerFactoryParams): Runner {
+  const integrationType = options.integration
+    ? options.integration?.integrationType
+    : ({ type: options.integrationType } as Partial<
+        IntegrationBlock['integrationType']
+      >);
+  switch (integrationType.type) {
     case 'csv':
-      const csvRunner = new CSVRunner(
-        options.name,
-        options.id,
-        options.integration.csvUrl,
-        options.types,
-        options.notebookId
-      );
+      const csvRunner = new CSVRunner(options.id, {
+        name: options.name,
+        padId: options.notebookId,
+        importer: {
+          isFirstHeaderRow: options.integration?.isFirstRowHeader ?? true,
+        },
+        runner: { csvUrl: integrationType.csvUrl },
+        types: options.types,
+      });
       return csvRunner;
     case 'notion':
-      return new LegacyRunner(
-        options.name,
-        options.id,
-        options.worker,
-        options.integration.notionUrl,
-        options.types,
-        'notion',
-        options.notebookId
-      );
+      return new NotionRunner(options.id, {
+        name: options.name,
+        runner: { notionUrl: integrationType.notionUrl },
+        importer: {},
+        types: options.types,
+        padId: options.notebookId,
+      });
     case 'gsheets':
-      const runner = new LegacyRunner(
-        options.name,
-        options.id,
-        options.worker,
-        options.integration.spreadsheetUrl,
-        options.types,
-        'gsheets',
-        options.notebookId
-      );
-
-      const url = new URL(options.integration.spreadsheetUrl);
-
-      const spreadsheetUrl = url.searchParams.get('url');
-      if (spreadsheetUrl == null) {
-        // Imported directly from GSheet URL.
-        runner.setUrl(url.toString());
-
-        return runner;
-      }
-
-      const urlWithHash = new URL(url.searchParams.get('url')!);
-      urlWithHash.hash = url.hash;
-
-      // data?url=googlehseeturl
-      runner.setUrl(urlWithHash.toString());
-      runner.setProxy(url.origin + url.pathname);
-
-      return runner;
+      return new GSheetRunner(options.id, {
+        name: options.name,
+        runner: { spreadsheetUrl: integrationType.spreadsheetUrl },
+        importer: {
+          isFirstHeaderRow: options.integration?.isFirstRowHeader ?? true,
+        },
+        types: options.types,
+        padId: options.notebookId,
+      });
     case 'mysql':
-      const sqlRunner = new LegacyRunner(
-        options.name,
-        options.id,
-        options.worker,
-        options.integration.url,
-        options.types,
-        'mysql',
-        options.notebookId
-      );
-      sqlRunner.setQuery(options.integration.query);
-
-      return sqlRunner;
+      return new SQLRunner(options.id, {
+        name: options.name,
+        runner: { url: integrationType.url, query: integrationType.query },
+        importer: {},
+        types: options.types,
+        padId: options.notebookId,
+      });
     case 'codeconnection':
-      return new CodeRunner(
-        options.notebookId,
-        options.computer,
-        options.name,
-        options.id,
-        options.integration.code,
-        options.types
-      );
+      return new CodeRunner(options.id, {
+        padId: options.notebookId,
+        name: options.name,
+        importer: {
+          isFirstHeaderRow: options.integration?.isFirstRowHeader ?? false,
+        },
+        runner: { code: integrationType.code },
+        types: options.types,
+      });
     default:
       throw new Error('NOT IMPLEMENTED');
   }
 }
 
-export function runnerFactory(
-  options: RunnerFactoryParams
-): GenericContainerRunner {
-  const runner = getRunner(options);
+/**
+ * @returns a static runner that will not be rebuilt if the `opts` change.
+ */
+export const useRunner = (opts: RunnerFactoryParams) => {
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  return useMemo(() => getRunner(opts), [opts.id, opts.integration]);
+};
 
-  runner.setIsFirstRowHeader(options.isFirstRowHeader);
+const integrationWithoutChildren = (
+  integration: RunnerFactoryParams['integration']
+): Omit<RunnerFactoryParams['integration'], 'children' | 'hideResult'> => {
+  return omit(integration, ['children', 'hideResult']);
+};
 
-  return runner;
-}
+const useDeepEqualState = <TInput, TOutput>(
+  input: TInput,
+  transformer: (i: TInput) => TOutput
+): TInput => {
+  const [state, setState] = useState<TInput>(input);
 
-export function useRunner(
-  name: string,
-  id: string,
-  integration: IntegrationTypes.IntegrationBlock['integrationType'],
-  types: IntegrationTypes.IntegrationBlock['typeMappings'],
-  isFirstRowHeader: boolean
-): GenericContainerRunner {
-  const computer = useComputer();
+  useEffect(() => {
+    const previousState = transformer(state);
+    const newState = transformer(input);
+    if (dequal(previousState, newState)) {
+      return;
+    }
 
-  const worker = useLiveConnectionWorker();
+    setState(input);
+    // Don't memo the transformer function
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [input, state]);
 
-  const { notebookId } = useNotebookRoute();
+  return state;
+};
 
-  return useMemo(
-    () =>
-      runnerFactory({
-        name,
-        id,
-        integration,
-        types,
-        notebookId,
-        computer,
-        isFirstRowHeader,
-        worker,
-      }),
-    [
-      name,
-      worker,
-      id,
-      integration,
-      types,
-      notebookId,
-      computer,
-      isFirstRowHeader,
-    ]
+const identity = <T>(i: T) => i;
+
+export const useResponsiveRunner = (opts: RunnerFactoryParams) => {
+  const diffedIntegration = useDeepEqualState(
+    opts.integration,
+    integrationWithoutChildren
   );
-}
+  const diffedTypes = useDeepEqualState(opts.types, identity);
+
+  return useMemo(() => {
+    return getRunner({
+      name: opts.name,
+      id: opts.id,
+      computer: opts.computer,
+      notebookId: opts.notebookId,
+      integrationType: opts.integrationType,
+
+      types: diffedTypes,
+      integration: diffedIntegration,
+    } as RunnerFactoryParams);
+    // Don't depend on name.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    diffedIntegration,
+    diffedTypes,
+    opts.computer,
+    opts.id,
+    opts.integrationType,
+    opts.notebookId,
+  ]);
+};

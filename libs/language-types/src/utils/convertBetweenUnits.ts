@@ -15,7 +15,7 @@ export const convertBetweenUnits = (
 ): DeciNumberBase => {
   try {
     return realConvertBetweenUnits(n, from, to, opts);
-  } catch (err) {
+  } catch (_err) {
     throw InferError.cannotConvertBetweenUnits(from, to);
   }
 };

@@ -20,7 +20,7 @@ import type {
   SerializedType,
   Unit,
 } from '@decipad/language-interfaces';
-import type { DeciType, Importer } from '@decipad/compute-backend-js';
+import type { Importer, ImportOptions } from '@decipad/compute-backend-js';
 import type { ListenerHelper } from '@decipad/listener-helper';
 import type { PromiseOrType } from '@decipad/utils';
 
@@ -28,11 +28,24 @@ export type ComputerImportExternalDataOptions = {
   name: string;
   id: string;
   data: Uint8Array;
+
   importer: Importer;
-  types: {
-    type: DeciType;
-    unit?: Unit[] | undefined;
-  }[];
+  importOptions: ImportOptions;
+
+  metaColumnOptions: {
+    [id: string]:
+      | {
+          desiredName?: string;
+          unit?: Unit[];
+          isHidden?: boolean;
+        }
+      | undefined;
+  };
+};
+
+export type ImportedExternalDataResult = {
+  id: string;
+  columnNamesToId: Record<string, string>;
 };
 
 export interface Computer {
@@ -72,7 +85,7 @@ export interface Computer {
   // ------------ external import ---------//
   importExternalData(
     options: ComputerImportExternalDataOptions
-  ): Promise<string>;
+  ): Promise<ImportedExternalDataResult>;
   releaseExternalData(id: string): Promise<void>;
 
   // --------------- streams --------------//

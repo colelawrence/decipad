@@ -121,6 +121,7 @@ describe('remote computer worker integration tests', () => {
                 kind: 'materialized-column',
                 cellType: { kind: 'number' },
                 indexedBy: null,
+                atParentIndex: null,
               },
               value: [N(10), N(11), N(12)],
               meta: () => ({
@@ -146,6 +147,7 @@ describe('remote computer worker integration tests', () => {
                 kind: 'materialized-column',
                 cellType: { kind: 'number' },
                 indexedBy: null,
+                atParentIndex: null,
               });
               expect(typeof value).toEqual('function');
               const resultValue = await all(value());
@@ -174,6 +176,7 @@ describe('remote computer worker integration tests', () => {
                 kind: 'materialized-column',
                 cellType: { kind: 'number' },
                 indexedBy: null,
+                atParentIndex: null,
               },
               value: [N(10), N(11), N(12), N(13), N(14)],
               meta: () => ({
@@ -199,6 +202,7 @@ describe('remote computer worker integration tests', () => {
                 kind: 'materialized-column',
                 cellType: { kind: 'number' },
                 indexedBy: null,
+                atParentIndex: null,
               });
               expect(typeof value).toEqual('function');
               const resultValue = await all(value(1, 3));
@@ -227,6 +231,7 @@ describe('remote computer worker integration tests', () => {
                 kind: 'column',
                 cellType: { kind: 'number' },
                 indexedBy: null,
+                atParentIndex: null,
               },
               value: (start = 0, end = Infinity) =>
                 slice(from([N(10), N(11), N(12)]), start, end),
@@ -253,6 +258,7 @@ describe('remote computer worker integration tests', () => {
                 kind: 'column',
                 cellType: { kind: 'number' },
                 indexedBy: null,
+                atParentIndex: null,
               });
               expect(typeof value).toEqual('function');
               const resultValue = await all(value());
@@ -281,6 +287,7 @@ describe('remote computer worker integration tests', () => {
                 kind: 'column',
                 cellType: { kind: 'number' },
                 indexedBy: null,
+                atParentIndex: null,
               },
               value: (start = 0, end = Infinity) =>
                 slice(from([N(10), N(11), N(12), N(13), N(14)]), start, end),
@@ -307,6 +314,7 @@ describe('remote computer worker integration tests', () => {
                 kind: 'column',
                 cellType: { kind: 'number' },
                 indexedBy: null,
+                atParentIndex: null,
               });
               expect(typeof value).toEqual('function');
               const resultValue = await all(value(1, 3));
@@ -460,6 +468,7 @@ describe('remote computer worker integration tests', () => {
                     kind: 'column',
                     cellType: { kind: 'number' },
                     indexedBy: null,
+                    atParentIndex: null,
                   },
                   { kind: 'number' },
                 ],
@@ -499,6 +508,7 @@ describe('remote computer worker integration tests', () => {
                     kind: 'column',
                     cellType: { kind: 'number' },
                     indexedBy: null,
+                    atParentIndex: null,
                   },
                   { kind: 'number' },
                 ],

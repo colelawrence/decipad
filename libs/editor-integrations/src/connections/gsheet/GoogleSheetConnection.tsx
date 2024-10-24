@@ -15,6 +15,6 @@ export const GoogleSheetConnection: FC<ConnectionProps> = (props) => (
     <SheetSelector {...props} />
     <Divider />
     <FromUrl {...props} />
-    <Loading />
+    <Loading info={props.info} />
   </UIGoogleSheetConnection>
 );

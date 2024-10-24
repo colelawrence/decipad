@@ -13,6 +13,7 @@ module.exports = {
         varsIgnorePattern: '^_',
         args: 'after-used',
         argsIgnorePattern: '^_',
+        caughtErrors: 'none',
       },
     ],
     'no-restricted-imports': [
@@ -71,3 +72,4 @@ module.exports = {
     ],
   },
 };
+

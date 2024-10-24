@@ -11,6 +11,7 @@ import { decodeFullNotebookResults } from '../decode/decodeFullNotebookResults';
 import { encodeRemoteNotebookResults } from './encodeRemoteNotebookResults';
 import { PROTOCOL_VERSION } from '../constants';
 import { debug } from '../debug';
+import { resultsWithCachedIndicator } from '../utils/resultsWithCachedIndicator';
 
 const CACHE_RESULTS_DEBOUNCE_TIME_MS = 3000;
 
@@ -96,7 +97,7 @@ export const createComputerResultsCache = (
           cachedResults
         );
         latestCachedResults = cachedResults;
-        computer.results.next(cachedResults);
+        computer.results.next(resultsWithCachedIndicator(cachedResults));
       } else {
         debug('No locally cached results found');
       }

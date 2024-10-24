@@ -108,6 +108,8 @@ export const FormulaUnitDrawer = styled.span(p13Medium, {
 
 export const DataDrawerDragWrapper = styled.div<{ height: number }>(
   (props) => ({
+    // 400px = notebook height
+    maxHeight: 'calc(100svh - 400px)',
     height: props.height,
     overflow: 'hidden',
 
@@ -144,34 +146,38 @@ export const DragPill = styled.div({
   },
 });
 
-export const DataDrawerKeysWrapper = styled.div({
-  width: '100%',
-  height: '100%',
+export const DataDrawerKeysWrapper = styled.div<{ maxHeight: number }>(
+  (props) => ({
+    width: '100%',
+    height: '100%',
 
-  display: 'flex',
-  flexDirection: 'column',
-
-  background: cssVar('backgroundMain'),
-  borderRadius: '16px',
-
-  '> footer': {
-    ...p12Regular,
-    color: cssVar('textDefault'),
+    maxHeight: props.maxHeight - DRAG_PILL_HEIGHT,
 
     display: 'flex',
-    justifyContent: 'end',
-    alignItems: 'center',
+    flexDirection: 'column',
 
-    height: '48px',
+    background: cssVar('backgroundMain'),
+    borderRadius: '16px',
 
-    backgroundColor: cssVar('backgroundHeavy'),
+    '> footer': {
+      ...p12Regular,
+      color: cssVar('textDefault'),
 
-    borderBottomLeftRadius: '16px',
-    borderBottomRightRadius: '16px',
+      display: 'flex',
+      justifyContent: 'end',
+      alignItems: 'center',
 
-    padding: '0px 16px',
-  },
-});
+      height: '48px',
+
+      backgroundColor: cssVar('backgroundHeavy'),
+
+      borderBottomLeftRadius: '16px',
+      borderBottomRightRadius: '16px',
+
+      padding: '0px 16px',
+    },
+  })
+);
 
 export const DataDrawerWrapper = styled.div({
   padding: '16px',
@@ -186,7 +192,7 @@ export const DataDrawerWrapper = styled.div({
     width: '100%',
 
     display: 'flex',
-    alignItems: 'center',
+    // alignItems: 'center',
     gap: '8px',
   },
 
@@ -258,4 +264,15 @@ export const CreateVariableWrapper = styled.div({
 
 export const ErrorParagraph = styled.p(p13Bold, {
   color: red400.rgb,
+});
+
+export const StyledIntegrationPortal = styled.div({
+  height: '100%',
+});
+
+export const DataDrawerContentWrapper = styled.div({
+  height: '100%',
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'start',
 });

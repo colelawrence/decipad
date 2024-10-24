@@ -153,7 +153,6 @@ export const TextAndIconButton = ({
 
 const wrapperStyles = {
   display: 'inline-block',
-  height: '100%',
 };
 
 const styles = (size: 'fit' | 'normal', variantHover: boolean) =>

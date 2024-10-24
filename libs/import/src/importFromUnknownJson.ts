@@ -125,6 +125,7 @@ const importFromArray = async (
           type: {
             kind: 'column',
             indexedBy: null,
+            atParentIndex: null,
             cellType: salvagedType as SerializedType,
           },
           value: salvagedValues,
@@ -135,6 +136,7 @@ const importFromArray = async (
       {
         kind: 'column',
         indexedBy: null,
+        atParentIndex: null,
         cellType: {
           kind: 'string',
         },
@@ -147,6 +149,7 @@ const importFromArray = async (
     {
       kind: 'column',
       indexedBy: null,
+      atParentIndex: null,
       cellType: results[0].type,
     },
     results.map((r) => r.value as Result.OneResult)

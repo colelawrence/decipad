@@ -35,6 +35,7 @@ describe('serializeResult', async () => {
       kind: 'materialized-column',
       indexedBy: 'number',
       cellType: { kind: 'boolean' },
+      atParentIndex: null,
     },
     value: new Array(10_000).fill(true),
     meta: undefined,
@@ -49,6 +50,7 @@ describe('serializeResult', async () => {
       kind: 'materialized-column',
       indexedBy: 'number',
       cellType: { kind: 'string' },
+      atParentIndex: null,
     },
     value: new Array(10_000).fill(N({ n: 1n, d: 2n, s: 1n, infinite: false })),
     meta: undefined,
@@ -63,6 +65,7 @@ describe('serializeResult', async () => {
       kind: 'materialized-column',
       indexedBy: 'number',
       cellType: { kind: 'string' },
+      atParentIndex: null,
     },
     value: new Array(10_000).fill('hello'),
     meta: undefined,
@@ -226,3 +229,4 @@ describe('Rust deserializeResult', () => {
     computeBackendSingleton.computeBackend.bench_deserialize_string_col();
   });
 });
+

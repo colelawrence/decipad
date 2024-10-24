@@ -1,5 +1,3 @@
-import { createContext, useContext } from 'react';
-
 export type TExecution =
   | {
       status: 'success'; // ok
@@ -12,15 +10,3 @@ export type TExecution =
   | { status: 'log'; log: string }
   | { status: 'unset' } // initial
   | { status: 'run' }; // run has been requested
-
-export type TExecutionContext = {
-  onExecute: (_: Array<TExecution>) => void;
-  info: Array<TExecution>;
-};
-
-export const ExecutionContext = createContext<TExecutionContext>({
-  onExecute: () => {},
-  info: [{ status: 'run' }],
-});
-
-export const useExecutionContext = () => useContext(ExecutionContext);

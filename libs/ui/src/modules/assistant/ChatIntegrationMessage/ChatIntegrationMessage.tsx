@@ -29,7 +29,6 @@ import { useToast } from '@decipad/toast';
 import type { Result } from '@decipad/language-interfaces';
 import { Button, CodeEditor, InputField, Tooltip } from '../../../shared';
 import { ChatMarkdownRenderer } from '../ChatMarkdownRenderer/ChatMarkdownRenderer';
-import { ResultPreview } from './ResultPreview';
 import { SecretInput } from './SecretInput';
 
 const wrapperStyles = css({
@@ -271,7 +270,7 @@ const Integration = ({
       id: nanoid(),
       type: ELEMENT_INTEGRATION,
       children: [{ text: fnName }],
-      typeMappings: [],
+      typeMappings: {},
       latestResult: resultJSON.result,
       timeOfLastRun,
       columnsToHide: [],
@@ -293,9 +292,7 @@ const Integration = ({
     toast,
   ]);
 
-  const [deciResult, setDeciResult] = useState<Result.Result | undefined>(
-    undefined
-  );
+  const [_, setDeciResult] = useState<Result.Result | undefined>(undefined);
 
   const computer = useComputer();
 
@@ -332,8 +329,6 @@ const Integration = ({
               setTempCode(code);
             }}
             lang="javascript"
-            log={[]}
-            setLog={() => {}}
           />
         )}
       </div>
@@ -388,17 +383,7 @@ const Integration = ({
       {resultJSON.status === 'error' && (
         <div css={errorContentStyles}>{resultJSON.msg}</div>
       )}
-      {resultJSON.status === 'success' && functionBody && (
-        <ResultPreview
-          result={deciResult}
-          name={fnName}
-          setName={() => {}}
-          setTypeMapping={() => {}}
-          timeOfLastRun={undefined}
-          columnsToHide={[]}
-          setColumnsToHide={() => {}}
-        />
-      )}
+      {resultJSON.status === 'success' && functionBody && <></>}
       <div css={buttonContainerStyles}>
         <Button
           type="primary"

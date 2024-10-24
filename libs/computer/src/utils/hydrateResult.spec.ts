@@ -92,6 +92,7 @@ describe('hydrateResult result', () => {
         type: {
           kind: 'column',
           indexedBy: '',
+          atParentIndex: null,
           cellType: {
             kind: 'number',
             unit: [
@@ -125,6 +126,7 @@ describe('hydrateResult result', () => {
     expect(await materializeResult(hydratedResult)).toMatchInlineSnapshot(`
       {
         "type": {
+          "atParentIndex": null,
           "cellType": {
             "kind": "number",
             "unit": [
@@ -354,6 +356,7 @@ describe('hydrateResult result', () => {
             {
               kind: 'column',
               indexedBy: '',
+              atParentIndex: null,
               cellType: {
                 kind: 'number',
                 unit: [
@@ -396,6 +399,7 @@ describe('hydrateResult result', () => {
           ],
           "columnTypes": [
             {
+              "atParentIndex": null,
               "cellType": {
                 "kind": "number",
                 "unit": [

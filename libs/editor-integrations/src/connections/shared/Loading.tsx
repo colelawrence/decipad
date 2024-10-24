@@ -1,7 +1,7 @@
-import { useExecutionContext } from '@decipad/react-contexts';
 import { LoadingIndicator, p14Bold } from '@decipad/ui';
 import styled from '@emotion/styled';
 import { FC } from 'react';
+import { ConnectionProps } from '../types';
 
 const extractError = (err: string | Error): string => {
   if (typeof err === 'string') {
@@ -10,8 +10,7 @@ const extractError = (err: string | Error): string => {
   return err.message;
 };
 
-export const Loading: FC = () => {
-  const { info } = useExecutionContext();
+export const Loading: FC<Pick<ConnectionProps, 'info'>> = ({ info }) => {
   const lastLog = info.at(-1);
 
   if (lastLog == null) {
@@ -26,7 +25,8 @@ export const Loading: FC = () => {
         </LoadingDiv>
       );
     case 'success':
-      return <LoadingDiv>Integration loaded successfully!</LoadingDiv>;
+      // return <LoadingDiv>Integration loaded successfully!</LoadingDiv>;
+      return <></>;
     case 'warning':
     case 'error':
       return (

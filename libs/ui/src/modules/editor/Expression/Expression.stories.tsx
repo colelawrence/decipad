@@ -1,7 +1,7 @@
 import { Meta, StoryFn } from '@storybook/react';
 import { Expression, VariableEditorProps } from './Expression';
 
-const args = {
+const _args = {
   children: <span>children here</span>,
   error: {
     message: 'some error',
@@ -13,16 +13,16 @@ const args = {
 export default {
   title: 'Molecules / Editor / Input / Expression',
   component: Expression,
-} as Meta<typeof args>;
+} as Meta<typeof _args>;
 
-export const Normal: StoryFn<typeof args> = (props: VariableEditorProps) => (
+export const Normal: StoryFn<typeof _args> = (props: VariableEditorProps) => (
   <Expression {...props} />
 );
 Normal.args = {
   children: <span>1 m/s</span>,
 };
 
-export const Error: StoryFn<typeof args> = (props: VariableEditorProps) => (
+export const Error: StoryFn<typeof _args> = (props: VariableEditorProps) => (
   <Expression {...props} />
 );
 Error.args = {
@@ -33,7 +33,7 @@ Error.args = {
   },
 };
 
-export const Placeholder: StoryFn<typeof args> = (
+export const Placeholder: StoryFn<typeof _args> = (
   props: VariableEditorProps
 ) => <Expression {...props} />;
 Placeholder.args = {

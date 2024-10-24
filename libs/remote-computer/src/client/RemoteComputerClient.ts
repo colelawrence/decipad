@@ -65,6 +65,7 @@ import { deserializeType } from '@decipad/language';
 import { linearizeType } from 'libs/language-types/src/Dimension';
 import zip from 'lodash.zip';
 import { getDeepLengths, isColumn } from '@decipad/computer-utils';
+import { resultsWithCachedIndicator } from '../utils/resultsWithCachedIndicator';
 
 const testing = !!(process.env.VITEST_WORKER_ID ?? process.env.VITEST);
 
@@ -641,7 +642,7 @@ export const createRemoteComputerClientFromWorker = (
           console.log(
             'Remote computer cache: fetched notebook cache, applying it'
           );
-          this.results.next(remoteNotebookResults);
+          this.results.next(resultsWithCachedIndicator(remoteNotebookResults));
         } else if (!remoteNotebookResults) {
           console.warn(
             'Did not apply remote cache because of no remote results, which may mean that the cache has an outdated encoding',

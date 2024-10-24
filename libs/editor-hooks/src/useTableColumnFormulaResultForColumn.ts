@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { findNodePath } from '@udecode/plate-common';
-import type { Result } from '@decipad/language-interfaces';
+import type { Column, Result } from '@decipad/language-interfaces';
 import type {
   MyReactEditor,
   TableCellElement,
@@ -75,6 +75,8 @@ const getColumnResult = async (
         type: {
           kind: 'materialized-column',
           indexedBy: result.type.indexName,
+          atParentIndex: (result.type.columnTypes[columnIndex] as Column)
+            .atParentIndex,
           cellType: result.type.columnTypes[columnIndex],
         },
         value,

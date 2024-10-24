@@ -31,7 +31,7 @@ import {
   nanoid,
 } from '@udecode/plate-common';
 import { DataDrawerEditingComponent } from './editor-components';
-import { DataDrawerEditorValue, useDataDrawerContext } from './types';
+import { DataDrawerEditorValue } from './types';
 import { createCodeLineV2Normalizers } from '@decipad/editor-plugin-factories';
 import { RefObject, useEffect, useState, useMemo, useRef } from 'react';
 import {
@@ -45,7 +45,7 @@ import { useNotebookWithIdState } from '@decipad/notebook-state';
 import { resetChanges } from './reset-changes';
 import { useNotebookMetaData } from '@decipad/react-contexts';
 import { PlateEditorWithSelectionHelpers } from '@decipad/interfaces';
-import { noop } from '@decipad/utils';
+import { assert, noop } from '@decipad/utils';
 
 const isSingleLeafChild = (
   children: unknown
@@ -271,12 +271,18 @@ type UseEditorDataDrawerReturn = {
 export const useEditingDataDrawer = (
   editingId: string
 ): UseEditorDataDrawerReturn => {
-  const { computer, controller } = useDataDrawerContext();
-
   const [sidebar, setSidebar] = useNotebookMetaData((s) => [
     s.sidebarComponent,
     s.setSidebar,
   ]);
+
+  const [computer, controller] = useNotebookWithIdState(
+    (s) => [s.computer, s.controller] as const
+  );
+  assert(
+    computer != null && controller != null,
+    'unreachable: these cannot be null here'
+  );
 
   const [codeEditor] = useState(() => createDataDrawerEditor(computer));
 
@@ -338,8 +344,7 @@ export const useEditingDataDrawer = (
     if (
       node.type === ELEMENT_CODE_LINE ||
       node.type === ELEMENT_TABLE ||
-      node.type === ELEMENT_DATA_VIEW ||
-      node.type === ELEMENT_INTEGRATION
+      node.type === ELEMENT_DATA_VIEW
     ) {
       onCloseDataDrawer();
 
@@ -354,6 +359,9 @@ export const useEditingDataDrawer = (
       }
 
       htmlElement.scrollIntoView();
+    } else if (node.type === ELEMENT_INTEGRATION) {
+      setSidebar({ type: 'integrations', blockId: node.id });
+      return;
     }
 
     const { apply, normalize } = codeEditor;
@@ -413,7 +421,15 @@ export const useEditingDataDrawer = (
       resetChanges(controller, block as any, [codeEditor.children[0], [0]]);
       isResetting.current = false;
     };
-  }, [codeEditor, controller, block, editingId, toast, onCloseDataDrawer]);
+  }, [
+    setSidebar,
+    codeEditor,
+    controller,
+    block,
+    editingId,
+    toast,
+    onCloseDataDrawer,
+  ]);
 
   const ref = useActiveElement(() => {
     codeEditor.deselect();
@@ -435,16 +451,27 @@ type UseCreatingDataDrawerReturn = {
 };
 
 export const useCreatingDataDrawer = (): UseCreatingDataDrawerReturn => {
-  const [onEditVariable, onCloseDataDrawer] = useNotebookWithIdState(
-    (state) => [state.setEditingVariable, state.closeDataDrawer] as const
-  );
-
   const [sidebar, setSidebar] = useNotebookMetaData((s) => [
     s.sidebarComponent,
     s.setSidebar,
   ]);
 
-  const { computer, controller } = useDataDrawerContext();
+  const [onEditVariable, onCloseDataDrawer, computer, controller] =
+    useNotebookWithIdState(
+      (s) =>
+        [
+          s.setEditingVariable,
+          s.closeDataDrawer,
+          s.computer,
+          s.controller,
+        ] as const
+    );
+
+  assert(
+    computer != null && controller != null,
+    'unreachable: these cannot be null here'
+  );
+
   const toast = useToast();
 
   const [error, setError] =
@@ -478,6 +505,11 @@ export const useCreatingDataDrawer = (): UseCreatingDataDrawerReturn => {
   // making it more of a burden.
   //
   function onSubmit() {
+    assert(
+      computer != null && controller != null,
+      'unreachable: these cannot be null here'
+    );
+
     const varName = getNodeString(codeEditor.children[0].children[0]).trim();
     if (varName.length === 0) {
       setError('empty-name');

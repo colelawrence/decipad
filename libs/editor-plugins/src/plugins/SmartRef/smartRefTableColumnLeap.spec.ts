@@ -109,6 +109,7 @@ it('supports a variable name with the same name as a table', async () => {
       {
         "meta": [Function],
         "type": {
+          "atParentIndex": 0,
           "cellCount": 1,
           "cellType": {
             "kind": "number",
@@ -129,6 +130,7 @@ it('supports a variable name with the same name as a table', async () => {
       {
         "meta": [Function],
         "type": {
+          "atParentIndex": 1,
           "cellCount": 1,
           "cellType": {
             "kind": "number",
@@ -198,6 +200,7 @@ it('supports a table column named the same as the table (1 - does not refer to i
         {
           "meta": [Function],
           "type": {
+            "atParentIndex": 0,
             "cellCount": 1,
             "cellType": {
               "kind": "number",
@@ -218,6 +221,7 @@ it('supports a table column named the same as the table (1 - does not refer to i
         {
           "meta": [Function],
           "type": {
+            "atParentIndex": 1,
             "cellCount": 1,
             "cellType": {
               "kind": "number",
@@ -287,6 +291,7 @@ it('supports a table column named the same as the table (2 - tricky name used in
         {
           "meta": [Function],
           "type": {
+            "atParentIndex": 0,
             "cellCount": 1,
             "cellType": {
               "kind": "number",
@@ -307,6 +312,7 @@ it('supports a table column named the same as the table (2 - tricky name used in
         {
           "meta": [Function],
           "type": {
+            "atParentIndex": 1,
             "cellCount": 1,
             "cellType": {
               "kind": "number",
@@ -391,6 +397,7 @@ it('supports a table column named the same as the table (3 - defined before)', a
       {
         "meta": [Function],
         "type": {
+          "atParentIndex": 0,
           "cellCount": 1,
           "cellType": {
             "kind": "number",
@@ -411,6 +418,7 @@ it('supports a table column named the same as the table (3 - defined before)', a
       {
         "meta": [Function],
         "type": {
+          "atParentIndex": 1,
           "cellCount": 1,
           "cellType": {
             "kind": "number",
@@ -431,6 +439,7 @@ it('supports a table column named the same as the table (3 - defined before)', a
       {
         "meta": [Function],
         "type": {
+          "atParentIndex": 2,
           "cellCount": 1,
           "cellType": {
             "kind": "number",
@@ -522,6 +531,7 @@ it('supports a table column named the same as the table (4 - defined after)', as
       {
         "meta": [Function],
         "type": {
+          "atParentIndex": 0,
           "cellCount": 1,
           "cellType": {
             "kind": "number",
@@ -542,6 +552,7 @@ it('supports a table column named the same as the table (4 - defined after)', as
       {
         "meta": [Function],
         "type": {
+          "atParentIndex": 1,
           "cellCount": 1,
           "cellType": {
             "kind": "number",
@@ -562,6 +573,7 @@ it('supports a table column named the same as the table (4 - defined after)', as
       {
         "meta": [Function],
         "type": {
+          "atParentIndex": 2,
           "cellCount": 1,
           "cellType": {
             "kind": "number",
@@ -640,6 +652,7 @@ it('supports a table column named the same as the table (5 - defined after)', as
       {
         "meta": [Function],
         "type": {
+          "atParentIndex": 0,
           "cellCount": 1,
           "cellType": {
             "kind": "number",
@@ -660,6 +673,7 @@ it('supports a table column named the same as the table (5 - defined after)', as
       {
         "meta": [Function],
         "type": {
+          "atParentIndex": 1,
           "cellCount": 1,
           "cellType": {
             "kind": "number",
@@ -734,6 +748,7 @@ it('Legacy reference to a table column ID (now we use blockId + columnId for thi
       {
         "meta": [Function],
         "type": {
+          "atParentIndex": 0,
           "cellCount": 1,
           "cellType": {
             "kind": "number",
@@ -754,6 +769,7 @@ it('Legacy reference to a table column ID (now we use blockId + columnId for thi
       {
         "meta": [Function],
         "type": {
+          "atParentIndex": 1,
           "cellCount": 1,
           "cellType": {
             "kind": "number",
@@ -774,6 +790,7 @@ it('Legacy reference to a table column ID (now we use blockId + columnId for thi
       {
         "meta": [Function],
         "type": {
+          "atParentIndex": null,
           "cellCount": undefined,
           "cellType": {
             "kind": "number",

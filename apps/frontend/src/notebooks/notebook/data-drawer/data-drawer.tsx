@@ -1,16 +1,10 @@
-import { Computer } from '@decipad/computer-interfaces';
-import { EditorController } from '@decipad/notebook-tabs';
-import { FC, ReactNode, memo, useEffect, useMemo } from 'react';
+import { FC, memo, ReactNode, useEffect, useMemo, useRef } from 'react';
 import {
   CREATING_VARIABLE_INITIAL_VALUE,
   useCreatingDataDrawer,
   useEditingDataDrawer,
 } from './editor';
-import {
-  DataDrawerContext,
-  DataDrawerCreatingCallback,
-  DataDrawerEditorValue,
-} from './types';
+import { DataDrawerCreatingCallback, DataDrawerEditorValue } from './types';
 import {
   CreateVariableWrapper,
   DataDrawerCloseButton,
@@ -21,6 +15,7 @@ import {
   DragPill,
   ErrorParagraph,
   HotKey,
+  DataDrawerContentWrapper,
 } from './styles';
 
 import { Close } from 'libs/ui/src/icons';
@@ -29,25 +24,35 @@ import { Plate, PlateContent, focusEditorEdge } from '@udecode/plate-common';
 import { useNotebookWithIdState } from '@decipad/notebook-state';
 import { useNotebookMetaData } from '@decipad/react-contexts';
 import { useMyEditorRef } from '@decipad/editor-types';
+import { assert, assertDefined } from '@decipad/utils';
+import { titles } from './title';
 
 type DataDrawerResizerProps = {
-  height: number;
-  onCommitNewHeigfht: (_height: number) => void;
+  parentRef: HTMLElement | null;
+  onCommitNewHeight: (_height: number) => void;
 };
 
 const DataDrawerResizer: FC<DataDrawerResizerProps> = ({
-  height,
-  onCommitNewHeigfht,
+  parentRef,
+  onCommitNewHeight,
 }) => {
+  if (parentRef == null) {
+    return null;
+  }
+
   return (
     <DragPill
       onMouseDown={(e) => {
+        assertDefined(parentRef);
+
         const startY = e.clientY;
-        const startHeight = height;
+        const startHeight = parentRef.clientHeight;
+
+        onCommitNewHeight(parentRef.clientHeight);
 
         const onMouseMove = (moveEvent: MouseEvent) => {
           const newHeight = startHeight - (moveEvent.clientY - startY);
-          onCommitNewHeigfht(newHeight);
+          onCommitNewHeight(newHeight);
         };
 
         const onMouseUp = () => {
@@ -80,95 +85,104 @@ const HotKeys: FC<{ isEditing: boolean }> = ({ isEditing }) => {
   );
 };
 
-export const DataDrawerComponent: FC<{
-  computer: Computer;
-  controller: EditorController;
-  children: ReactNode;
-  onClose: () => void;
-  title: string;
-  isEditing: boolean;
-}> = ({ computer, controller, children, onClose, title, isEditing }) => {
-  const [height, setHeight] = useNotebookWithIdState(
-    (s) => [s.height, s.setHeight] as const
-  );
+type DataDrawerType =
+  | {
+      type: 'edit';
+      onClose: () => void;
+      variableId: string;
+    }
+  | {
+      type: 'create';
+      onClose: () => void;
+    }
+  | {
+      type: 'integration-preview';
+    };
 
+const DataDrawerVariableButtons: FC<
+  Extract<DataDrawerType, { type: 'edit' | 'create' }>
+> = ({ onClose }) => {
   const [sidebarComponent, pushSidebar, popSidebar] = useNotebookMetaData(
     (s) => [s.sidebarComponent, s.pushSidebar, s.popSidebar]
   );
 
   return (
-    <DataDrawerContext.Provider
-      value={useMemo(
-        () => ({ computer, controller, isEditing }),
-        [computer, controller, isEditing]
-      )}
-    >
-      <DataDrawerDragWrapper height={height}>
-        <DataDrawerResizer height={height} onCommitNewHeigfht={setHeight} />
-        <DataDrawerKeysWrapper>
-          <DataDrawerWrapper>
-            <div>
-              <p css={p14Medium}>{title}</p>
-              <DataDrawerFormulaHelperWrapper>
-                Functions Helper
-                <Toggle
-                  active={
-                    sidebarComponent.type === 'formula-helper'
-                    // typeof sidebarComponent !== 'string' &&
-                    // sidebarComponent.type === 'formula-helper'
-                  }
-                  onChange={(v) => {
-                    if (v) {
-                      pushSidebar({
-                        type: 'formula-helper',
-                        editor: undefined,
-                        selection: undefined,
-                      });
-                    } else {
-                      popSidebar();
-                    }
-                  }}
-                  variant="small-toggle"
-                />
-              </DataDrawerFormulaHelperWrapper>
-              <SegmentButtons
-                border
-                variant="default"
-                padding="skinny"
-                buttons={[
-                  // {
-                  //  children: (
-                  //    <DataDrawerCloseButton>
-                  //      <QuestionMark />
-                  //    </DataDrawerCloseButton>
-                  //  ),
-                  //  onClick: () => {},
-                  // },
-                  {
-                    children: (
-                      <DataDrawerCloseButton>
-                        <Close />
-                      </DataDrawerCloseButton>
-                    ),
-                    onClick: onClose,
-                  },
-                ]}
-              />
-            </div>
-            {children}
-          </DataDrawerWrapper>
-          <HotKeys isEditing={isEditing} />
-        </DataDrawerKeysWrapper>
-      </DataDrawerDragWrapper>
-    </DataDrawerContext.Provider>
+    <>
+      <DataDrawerFormulaHelperWrapper>
+        Formula Helper
+        <Toggle
+          active={sidebarComponent.type === 'formula-helper'}
+          onChange={(v) => {
+            if (v) {
+              pushSidebar({
+                type: 'formula-helper',
+                editor: undefined,
+                selection: undefined,
+              });
+            } else {
+              popSidebar();
+            }
+          }}
+          variant="small-toggle"
+        />
+      </DataDrawerFormulaHelperWrapper>
+      <SegmentButtons
+        border
+        variant="default"
+        padding="skinny"
+        buttons={[
+          {
+            children: (
+              <DataDrawerCloseButton>
+                <Close />
+              </DataDrawerCloseButton>
+            ),
+            onClick: onClose,
+          },
+        ]}
+      />
+    </>
   );
+};
+
+const DataDrawerButtons: FC<DataDrawerType> = (props) => {
+  switch (props.type) {
+    case 'create':
+    case 'edit':
+      return <DataDrawerVariableButtons {...props} />;
+    case 'integration-preview':
+      return null;
+  }
+};
+
+const DataDrawerHotKeys: FC<DataDrawerType> = (props) => {
+  switch (props.type) {
+    case 'create':
+      return <HotKeys isEditing={false} />;
+    case 'edit':
+      return <HotKeys isEditing={true} />;
+    case 'integration-preview':
+      return null;
+  }
+};
+
+const DataDrawerContent: FC<DataDrawerType> = (props) => {
+  switch (props.type) {
+    case 'create':
+      return <CreateVariableDataDrawer />;
+    case 'edit':
+      return <EditVariableDataDrawer editingId={props.variableId} />;
+    case 'integration-preview':
+      // We portal in.
+      return null;
+  }
 };
 
 type EditVariableDataDrawerProps = {
   editingId: string;
 };
 
-export const UnmemoEditVariableDataDrawer: FC<EditVariableDataDrawerProps> = ({
+const EditVariableDataDrawer: FC<EditVariableDataDrawerProps> = ({
   editingId,
 }) => {
   const { block, codeEditor, ref } = useEditingDataDrawer(editingId);
@@ -210,7 +224,7 @@ const CreateVariableError: FC<{
   }
 };
 
-export const UnmemoCreateVariableDataDrawer: FC = () => {
+const CreateVariableDataDrawer: FC = () => {
   const { codeEditor, error, ref, onSubmit } = useCreatingDataDrawer();
 
   return (
@@ -230,5 +244,106 @@ export const UnmemoCreateVariableDataDrawer: FC = () => {
   );
 };
 
-export const EditVariableDataDrawer = memo(UnmemoEditVariableDataDrawer);
-export const CreateVariableDataDrawer = memo(UnmemoCreateVariableDataDrawer);
+const useDataDrawerTypeAndTitle = (): [DataDrawerType, string | undefined] => {
+  const [mode, onCloseDataDrawer] = useNotebookWithIdState(
+    (s) => [s.dataDrawerMode, s.closeDataDrawer] as const
+  );
+
+  const title = titles[mode.type];
+
+  const dataDrawerType = useMemo<DataDrawerType>(() => {
+    assert(mode.type !== 'closed', 'unreachable');
+
+    switch (mode.type) {
+      case 'create':
+        return {
+          type: 'create',
+          onClose: onCloseDataDrawer,
+        };
+      case 'edit':
+        return {
+          type: 'edit',
+          onClose: onCloseDataDrawer,
+          variableId: mode.variableId,
+        };
+      case 'integration-preview':
+        return {
+          type: 'integration-preview',
+        };
+    }
+  }, [mode, onCloseDataDrawer]);
+
+  return [dataDrawerType, title];
+};
+
+const TitleAndButtons: FC<{
+  title: string | undefined;
+  children: ReactNode;
+}> = ({ title, children }) => {
+  if (title == null) {
+    return null;
+  }
+
+  return (
+    <div>
+      <p css={p14Medium}>{title}</p>
+      {children}
+    </div>
+  );
+};
+
+const UnmemoedDataDrawerInnerContainer: FC = () => {
+  const [dataDrawerType, title] = useDataDrawerTypeAndTitle();
+
+  return (
+    <>
+      <DataDrawerWrapper>
+        <TitleAndButtons title={title}>
+          <DataDrawerButtons {...dataDrawerType} />
+        </TitleAndButtons>
+        <DataDrawerContentWrapper id="data-drawer-content">
+          <DataDrawerContent {...dataDrawerType} />
+        </DataDrawerContentWrapper>
+      </DataDrawerWrapper>
+      <DataDrawerHotKeys {...dataDrawerType} />
+    </>
+  );
+};
+
+/**
+ * We wrap this in a memo because the height can change a lot.
+ *
+ * And by default React re-renders children even if no props changed.
+ * Memo alters this behavior, only re-rendering if the props change.
+ *
+ * And since this component has no props. It won't re-render.
+ */
+const DataDrawerInnerContainer = memo(UnmemoedDataDrawerInnerContainer);
+
+export const DataDrawerContainer: FC = () => {
+  const [height, setHeight, setIsDataDrawerOpen] = useNotebookWithIdState(
+    (s) => [s.height, s.setHeight, s.setIsDataDrawerOpen] as const
+  );
+
+  const dataDrawerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    setIsDataDrawerOpen(true);
+
+    return () => {
+      setIsDataDrawerOpen(false);
+    };
+  }, [setIsDataDrawerOpen]);
+
+  return (
+    <DataDrawerDragWrapper ref={dataDrawerRef} height={height}>
+      <DataDrawerResizer
+        parentRef={dataDrawerRef.current}
+        onCommitNewHeight={setHeight}
+      />
+      <DataDrawerKeysWrapper maxHeight={height}>
+        <DataDrawerInnerContainer />
+      </DataDrawerKeysWrapper>
+    </DataDrawerDragWrapper>
+  );
+};

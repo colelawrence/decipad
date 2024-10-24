@@ -13,6 +13,7 @@ import {
 import { Height } from '../../../styles/spacings';
 import { CreateChartMenu } from '../CreateChartMenu/CreateChartMenu';
 import { LiveCode } from '../LiveCode/LiveCode';
+import styled from '@emotion/styled';
 
 type IntegrationButton =
   | {
@@ -73,7 +74,7 @@ export const IntegrationBlock: FC<IntegrationBlockProps> = ({
           {children}
         </LiveCode>
 
-        <div contentEditable={false} css={controlStyles}>
+        <ControlButtonsDiv contentEditable={false}>
           {readOnly || actionButtons.length === 0 ? (
             <div css={{ visibility: 'hidden' }} />
           ) : (
@@ -102,7 +103,7 @@ export const IntegrationBlock: FC<IntegrationBlockProps> = ({
             padding="skinny"
             iconSize="integrations"
           />
-        </div>
+        </ControlButtonsDiv>
       </div>
 
       <div contentEditable={false}>{resultPreview}</div>
@@ -110,7 +111,7 @@ export const IntegrationBlock: FC<IntegrationBlockProps> = ({
   );
 };
 
-const controlStyles = css(p12Medium, hideOnPrint, {
+const ControlButtonsDiv = styled.div(p12Medium, hideOnPrint, {
   // Shifts whole div to the right.
   marginLeft: 'auto',
   display: 'flex',

@@ -2,6 +2,7 @@ import { EditorSidebarTab } from '@decipad/editor-types';
 import { PlateEditorWithSelectionHelpers } from '@decipad/interfaces';
 import { isE2E } from '@decipad/utils';
 import { TEditor } from '@udecode/plate-common';
+import equal from 'fast-deep-equal/es6';
 import { BaseRange } from 'slate';
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
@@ -22,8 +23,7 @@ export type SidebarComponentsWithoutClosed =
   | { type: 'ai' }
   | { type: 'publishing' }
   | { type: 'annotations' }
-  | { type: 'integrations' }
-  | { type: 'edit-integration' }
+  | { type: 'integrations'; blockId?: string }
   | FormulaHelperType;
 
 export type SidebarPublishingTab = 'collaborators' | 'publishing' | 'embed';
@@ -48,9 +48,6 @@ export interface NotebookMetaDataType {
 
   readonly workspacePlan: string;
   readonly setWorkspacePlan: (workspacePlan: string) => void;
-
-  readonly integrationBlockId: string | undefined;
-  readonly setIntegrationBlockId: (blockId: string) => void;
 }
 
 export const useNotebookMetaData = create<NotebookMetaDataType>()(
@@ -58,11 +55,6 @@ export const useNotebookMetaData = create<NotebookMetaDataType>()(
     (set, get) => {
       return {
         sidebarTab: 'block',
-        // hahahahha, try remove the `as undefined`.
-        integrationBlockId: undefined as undefined,
-        setIntegrationBlockId(blockId) {
-          set({ integrationBlockId: blockId });
-        },
 
         sidebarComponent: { type: isE2E() ? 'closed' : 'default-sidebar' },
         sidebarHistory: [],
@@ -88,7 +80,9 @@ export const useNotebookMetaData = create<NotebookMetaDataType>()(
         pushSidebar(sidebarComponent) {
           set(() => {
             const { sidebarHistory, sidebarComponent: prevSidebar } = get();
-            sidebarHistory.push(prevSidebar);
+            if (!equal(sidebarComponent, prevSidebar)) {
+              sidebarHistory.push(prevSidebar);
+            }
             return {
               sidebarHistory,
               sidebarComponent,
@@ -128,8 +122,10 @@ export const useNotebookMetaData = create<NotebookMetaDataType>()(
     },
     {
       name: 'notebook-ui-meta',
-      version: 3,
+      version: 4,
       migrate: (state, version) => {
+        const finalState = { ...(state as NotebookMetaDataType) };
+        // move from string sidebar components, to {type: string, ..} components
         if (version < 3) {
           const oldState = state as NotebookMetaDataType & {
             sidebarComponent: unknown;
@@ -140,15 +136,35 @@ export const useNotebookMetaData = create<NotebookMetaDataType>()(
               return extractComponentType(obj.type);
             return null;
           };
-          return {
-            ...(state as NotebookMetaDataType),
-            sidebarComponent: {
-              type: (extractComponentType(oldState.sidebarComponent) ??
-                'closed') as SidebarComponent['type'],
-            },
-            sidebarHistory: [],
+          finalState.sidebarComponent = {
+            type: (extractComponentType(oldState.sidebarComponent) ??
+              'closed') as SidebarComponent['type'],
           };
+          finalState.sidebarHistory = [];
         }
+        // merge edit-integrations and integrations sidebar types
+        if (version < 4) {
+          const replaceEditIntegrations = (
+            sidebarComponent: SidebarComponent
+          ): SidebarComponent => {
+            if (
+              (finalState.sidebarComponent.type as any) === 'edit-integrations'
+            ) {
+              return {
+                type: 'integrations',
+              };
+            }
+            return sidebarComponent;
+          };
+
+          finalState.sidebarComponent = replaceEditIntegrations(
+            finalState.sidebarComponent
+          );
+          finalState.sidebarHistory = finalState.sidebarHistory.map((c) =>
+            replaceEditIntegrations(c)
+          );
+        }
+
         return state as NotebookMetaDataType;
       },
       partialize(state) {

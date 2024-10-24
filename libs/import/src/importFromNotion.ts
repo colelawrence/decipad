@@ -9,11 +9,13 @@ import type {
 
 export function importFromNotion(
   source: QueryDatabaseResponse
-): [Record<string, Array<string>>, Array<TableCellType | undefined>] {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+): [Record<string, Array<any>>, Array<TableCellType | undefined>] {
   const cleanResponse = filterNotionQuery(source);
 
   // Turns a parsed notion response into a json object
-  const data: Record<string, Array<string>> = {};
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const data: Record<string, Array<any>> = {};
   const cohersingTypes: Array<TableCellType | undefined> = [];
 
   // Iterate through first row of json to get column names
@@ -103,7 +105,8 @@ export function importDatabases(
 export interface NotionResponse {
   type: string;
   column_name: string;
-  value: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  value: any;
   cohersion: TableCellType | undefined;
 }
 
@@ -115,14 +118,15 @@ type ExtractRecord<R> = R extends Record<string, infer T> ? T : never;
 // eslint-disable-next-line complexity
 function getValue(
   object: ExtractRecord<PageObjectResponse['properties']>
-): [string, TableCellType | undefined] {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+): [any, TableCellType | undefined] {
   switch (object.type) {
     case 'title':
       return [richTextToString(object.title), undefined];
     case 'number':
-      return [object.number?.toString() ?? '0', undefined];
+      return [object.number, undefined];
     case 'checkbox':
-      return [String(object.checkbox), undefined];
+      return [object.checkbox, undefined];
     case 'rich_text':
       return [richTextToString(object.rich_text), undefined];
     case 'select':

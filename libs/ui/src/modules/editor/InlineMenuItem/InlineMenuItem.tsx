@@ -76,7 +76,7 @@ export interface InlineMenuItemProps {
    */
   readonly focused?: boolean;
   readonly onExecute?: () => void;
-  readonly 'data-testid'?: string;
+  readonly testId?: string;
   readonly restrictToPlans?: string[];
 }
 export const InlineMenuItem = ({
@@ -87,7 +87,7 @@ export const InlineMenuItem = ({
   focused,
   restrictToPlans,
   onExecute = noop,
-  'data-testid': testId,
+  testId,
 }: InlineMenuItemProps): ReturnType<FC> => {
   const itemRef = useRef<HTMLButtonElement>(null);
 

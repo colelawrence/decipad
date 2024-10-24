@@ -37,6 +37,7 @@ export type Column = {
   readonly kind: 'column';
   readonly indexedBy: string | null;
   readonly cellCount?: number;
+  readonly atParentIndex: number | null;
   cellType: SerializedType;
 } & Common;
 
@@ -44,6 +45,7 @@ export type MaterializedColumn = {
   readonly kind: 'materialized-column';
   readonly indexedBy: string | null;
   readonly cellType: SerializedType;
+  readonly atParentIndex: number | null;
 } & Common;
 
 export type Table = {

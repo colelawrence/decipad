@@ -25,6 +25,7 @@ describe('unnestTableRows', () => {
       {
         kind: 'materialized-column',
         indexedBy: 'Table',
+        atParentIndex: null,
         cellType: {
           kind: 'number',
         },
@@ -99,6 +100,7 @@ describe('unnestTableRows', () => {
       {
         kind: 'column',
         indexedBy: 'Table',
+        atParentIndex: null,
         cellType: {
           kind: 'number',
         },

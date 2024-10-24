@@ -16,7 +16,7 @@ export const NotionConnection: FC<ConnectionProps> = (props) => {
             provider="notion"
           />
           <NotionPrivateDatabases {...props} />
-          <Loading />
+          <Loading info={props.info} />
         </Suspense>
       </Styles.Wrapper>
     </Styles.OuterWrapper>

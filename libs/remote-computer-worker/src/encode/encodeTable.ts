@@ -40,6 +40,7 @@ export const encodeTable = async (
       kind: encoderType,
       cellType: type.columnTypes[colIndex],
       indexedBy: type.indexName,
+      atParentIndex: null,
     };
     const valueId = nanoid();
     remoteValueStore.set(undefined, valueId, {

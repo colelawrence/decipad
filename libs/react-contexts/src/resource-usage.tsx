@@ -1,8 +1,4 @@
 /* eslint-disable no-param-reassign */
-import {
-  type ResourceTypes,
-  useIncrementResourceUsageMutation,
-} from '@decipad/graphql-client';
 import { dequal } from '@decipad/utils';
 import type { FC, ReactNode } from 'react';
 import {
@@ -17,7 +13,6 @@ type ResourceUsageActions = {
   updateUsage: (usage: Partial<SingleResourceUsage>) => void;
   incrementUsage: () => void;
   incrementUsageBy: (_: number) => void;
-  incrementUsageWithBackend: (workspaceId: string) => void;
   increaseQuotaLimit: (quotaLimit: number) => void;
 };
 
@@ -30,12 +25,6 @@ export type SingleResourceUsage = {
 };
 
 type TrackedResources = 'ai' | 'queries' | 'storage';
-
-const GraphqlTypeMap: Record<TrackedResources, ResourceTypes> = {
-  ai: 'openai',
-  queries: 'queries',
-  storage: 'storage',
-};
 
 type ResourceUsages = Record<TrackedResources, SingleResourceUsage>;
 
@@ -56,7 +45,6 @@ const defaultContextValue: ResourceUsagesWithActions = {
     updateUsage: () => {},
     incrementUsage: () => {},
     incrementUsageBy: () => {},
-    incrementUsageWithBackend: () => {},
     increaseQuotaLimit: () => {},
   },
 
@@ -69,7 +57,6 @@ const defaultContextValue: ResourceUsagesWithActions = {
     updateUsage: () => {},
     incrementUsage: () => {},
     incrementUsageBy: () => {},
-    incrementUsageWithBackend: () => {},
     increaseQuotaLimit: () => {},
   },
 
@@ -82,7 +69,6 @@ const defaultContextValue: ResourceUsagesWithActions = {
     updateUsage: () => {},
     incrementUsage: () => {},
     incrementUsageBy: () => {},
-    incrementUsageWithBackend: () => {},
     increaseQuotaLimit: () => {},
   },
 };
@@ -124,8 +110,6 @@ export const ResourceUsageProvider: FC<{
   const [resourceUsage, setResourceUsage] =
     useState<ResourceUsages>(defaultContextValue);
 
-  const [, incrementBackendResourceUsage] = useIncrementResourceUsageMutation();
-
   const updateUsage = useCallback<
     (_: TrackedResources) => ResourceUsageActions['updateUsage']
   >(
@@ -160,20 +144,6 @@ export const ResourceUsageProvider: FC<{
     []
   );
 
-  const increaseUsageWithBackend = useCallback<
-    (_: TrackedResources) => ResourceUsageActions['incrementUsageWithBackend']
-  >(
-    (resource) => (workspaceId) => {
-      increaseUsage(resource)();
-      incrementBackendResourceUsage({
-        workspaceId,
-        resourceType: GraphqlTypeMap[resource],
-        amount: 1,
-      }).catch(console.error);
-    },
-    [increaseUsage, incrementBackendResourceUsage]
-  );
-
   const increaseQuotaLimit = useCallback<
     (_: TrackedResources) => ResourceUsageActions['increaseQuotaLimit']
   >(
@@ -196,7 +166,6 @@ export const ResourceUsageProvider: FC<{
           updateUsage: updateUsage(resource),
           incrementUsage: increaseUsage(resource),
           incrementUsageBy: incrementUsageBy(resource),
-          incrementUsageWithBackend: increaseUsageWithBackend(resource),
           increaseQuotaLimit: increaseQuotaLimit(resource),
         };
 
@@ -205,7 +174,6 @@ export const ResourceUsageProvider: FC<{
     [
       increaseQuotaLimit,
       increaseUsage,
-      increaseUsageWithBackend,
       incrementUsageBy,
       resourceUsage,
       updateUsage,

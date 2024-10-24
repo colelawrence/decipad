@@ -5,12 +5,7 @@ use js_sys::{Object, Uint8Array};
 use wasm_bindgen_test::*;
 
 pub fn dcolFromVec(input: impl IntoIterator<Item = i64>) -> DeciResult {
-    DeciResult::Column(
-        input
-            .into_iter()
-            .map(|x| DeciResult::from_float(x as f32))
-            .collect(),
-    )
+    DeciResult::Column(input.into_iter().map(|x| (x as f32).into()).collect())
 }
 
 #[test]
@@ -103,7 +98,7 @@ pub fn print_test() {
     let dim: usize = 5;
     let res1 = DeciResult::Column(
         (1..dim)
-            .map(|x| DeciResult::Column((1..x).map(|y| DeciResult::from_float(y as f32)).collect()))
+            .map(|x| DeciResult::Column((1..x).map(|y| (y as f32).into()).collect()))
             .collect(),
     );
     let decisum = res1.get_string();

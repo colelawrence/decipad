@@ -17,7 +17,6 @@ import workspaces from './workspaces';
 import logs from './logs-module';
 import secrets from './secrets';
 import workspaceSubscriptions from './workspaceSubscriptions';
-import workspaceExecutedQueries from './workspaceExecutedQueries';
 import resourceUsage from './resource-usage';
 import pricing from './pricing';
 import templates from './templates';
@@ -42,7 +41,6 @@ const modules: GraphqlModule[] = [
   logs,
   secrets,
   workspaceSubscriptions,
-  workspaceExecutedQueries,
   resourceUsage,
   pricing,
   annotations,

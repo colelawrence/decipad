@@ -355,6 +355,7 @@ describe('it works with un-materialized tables and columns', () => {
         type: {
           kind: 'column',
           indexedBy: null,
+          atParentIndex: null,
           cellType: {
             kind: 'number',
           },

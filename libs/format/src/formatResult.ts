@@ -81,6 +81,7 @@ export const formatResult: FormatResult = (
               kind: 'column',
               cellType: t,
               indexedBy: null,
+              atParentIndex: null,
             },
             color
           )}`

@@ -17,6 +17,7 @@ module.exports = {
         varsIgnorePattern: '^_',
         args: 'after-used',
         argsIgnorePattern: '^_',
+        caughtErrors: 'none',
       },
     ],
     '@typescript-eslint/explicit-function-return-type': 'off',
@@ -41,3 +42,4 @@ module.exports = {
     },
   ],
 };
+

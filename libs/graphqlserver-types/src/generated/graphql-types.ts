@@ -228,7 +228,6 @@ export type Mutation = {
   getCreateAttachmentFormWorkspace: CreateAttachmentForm;
   importPad: Pad;
   incrementQueryCount: WorkspaceExecutedQuery;
-  incrementResourceUsage?: Maybe<ResourceUsage>;
   inviteUserToRole: Array<RoleInvitation>;
   movePad: Pad;
   recordPadEvent?: Maybe<Scalars['Boolean']['output']>;
@@ -415,13 +414,6 @@ export type MutationImportPadArgs = {
 
 export type MutationIncrementQueryCountArgs = {
   id: Scalars['ID']['input'];
-};
-
-
-export type MutationIncrementResourceUsageArgs = {
-  amount: Scalars['Int']['input'];
-  resourceType: ResourceTypes;
-  workspaceId: Scalars['String']['input'];
 };
 
 
@@ -1693,7 +1685,6 @@ export type MutationResolvers<ContextType = GraphqlContext, ParentType extends R
   getCreateAttachmentFormWorkspace?: Resolver<ResolversTypes['CreateAttachmentForm'], ParentType, ContextType, RequireFields<MutationGetCreateAttachmentFormWorkspaceArgs, 'fileName' | 'fileType' | 'workspaceId'>>;
   importPad?: Resolver<ResolversTypes['Pad'], ParentType, ContextType, RequireFields<MutationImportPadArgs, 'source' | 'workspaceId'>>;
   incrementQueryCount?: Resolver<ResolversTypes['WorkspaceExecutedQuery'], ParentType, ContextType, RequireFields<MutationIncrementQueryCountArgs, 'id'>>;
-  incrementResourceUsage?: Resolver<Maybe<ResolversTypes['ResourceUsage']>, ParentType, ContextType, RequireFields<MutationIncrementResourceUsageArgs, 'amount' | 'resourceType' | 'workspaceId'>>;
   inviteUserToRole?: Resolver<Array<ResolversTypes['RoleInvitation']>, ParentType, ContextType, RequireFields<MutationInviteUserToRoleArgs, 'permission' | 'roleId' | 'userId'>>;
   movePad?: Resolver<ResolversTypes['Pad'], ParentType, ContextType, RequireFields<MutationMovePadArgs, 'id' | 'workspaceId'>>;
   recordPadEvent?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationRecordPadEventArgs, 'aliasId' | 'name' | 'padId'>>;

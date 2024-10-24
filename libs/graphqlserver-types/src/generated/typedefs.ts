@@ -593,12 +593,6 @@ extend type Mutation {
     resourceId: String!
     paymentMethodId: String!
   ): NewResourceQuotaLimit
-
-  incrementResourceUsage(
-    resourceType: ResourceTypes!
-    workspaceId: String!
-    amount: Int!
-  ): ResourceUsage
 }
 
 extend type User {
@@ -868,21 +862,6 @@ extend type Query {
 extend type Mutation {
   updateSelf(props: UserInput!): User!
   setUsername(props: UsernameInput!): Boolean! ## returns false if another user with that name already exists
-}
-type WorkspaceExecutedQuery {
-  id: ID!
-  queryCount: Int!
-  query_reset_date: DateTime
-  quotaLimit: Int!
-  workspace: Workspace
-}
-
-extend type Mutation {
-  incrementQueryCount(id: ID!): WorkspaceExecutedQuery!
-}
-
-extend type Workspace {
-  workspaceExecutedQuery: WorkspaceExecutedQuery
 }
 enum SubscriptionStatus {
   active

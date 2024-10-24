@@ -1,17 +1,22 @@
 import { type FC } from 'react';
 import styled from '@emotion/styled';
 import { UpgradeWarningBlock } from '@decipad/editor-components';
-import { type ConnectionProps } from './types';
+import { type ConnectionProps } from '../types';
 import { UploadCSV, OptionsList } from '@decipad/ui';
-import { CSVRunner } from '../runners';
 import { assertInstanceOf } from '@decipad/utils';
-import { Loading } from './shared';
-import { useWorkspaceDatasets } from '../hooks/useWorkspaceDatasets';
+import { Loading } from '../shared';
+import { useWorkspaceDatasets } from '../../hooks/useWorkspaceDatasets';
+import { CSVRunner } from '../../runners/csv';
 
 const Wrapper = styled.div({
   display: 'flex',
   flexDirection: 'column',
   gap: '8px',
+
+  '& > section': {
+    display: 'flex',
+    gap: '4px',
+  },
 });
 
 const getDatasetNameAndId = (
@@ -31,6 +36,7 @@ const getDatasetNameAndId = (
 export const CSVConnection: FC<ConnectionProps> = ({
   runner,
   workspaceId,
+  info,
   onRun,
 }) => {
   assertInstanceOf(runner, CSVRunner);
@@ -40,27 +46,31 @@ export const CSVConnection: FC<ConnectionProps> = ({
 
   return (
     <Wrapper>
-      <OptionsList
-        name={runner.getResourceName() ?? 'Select CSV'}
-        label="Select CSV"
-        disabled={workspaceDatasets.length === 0}
-        selections={selections}
-        onSelect={(selection) => {
-          runner.setUrl(selection.id);
-          runner.setResourceName(selection.name);
-          onRun();
-        }}
-      />
+      <section>
+        <OptionsList
+          name={runner.resourceName ?? 'Select CSV'}
+          label="Select CSV"
+          disabled={workspaceDatasets.length === 0}
+          selections={selections}
+          onSelect={(selection) => {
+            runner.setOptions({ runner: { csvUrl: selection.id } });
+            runner.setResourceName(selection.name);
+            onRun();
+          }}
+        />
 
-      <UploadCSV
-        workspaceId={workspaceId}
-        afterUpload={(url) => {
-          runner.setUrl(url);
-          onRun();
-        }}
-      />
+        <UploadCSV
+          workspaceId={workspaceId}
+          afterUpload={(url) => {
+            runner.setOptions({ runner: { csvUrl: url } });
+            onRun();
+          }}
+          type="secondary"
+          text="+"
+        />
+      </section>
 
-      <Loading />
+      <Loading info={info} />
 
       <UpgradeWarningBlock
         type="storage"

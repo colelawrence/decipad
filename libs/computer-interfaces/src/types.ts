@@ -55,6 +55,7 @@ export interface IdentifiedResult {
   usedNames?: (readonly [string, string])[];
   // So we can use it interchangeably with IdentifiedError
   error?: undefined;
+  fromCache?: boolean;
 }
 
 export type ProgramBlock = IdentifiedBlock | IdentifiedError;

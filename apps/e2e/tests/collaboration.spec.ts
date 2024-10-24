@@ -1,5 +1,6 @@
 /* eslint-disable playwright/prefer-web-first-assertions */
 /* eslint-disable playwright/no-skipped-test */
+/* eslint-disable playwright/prefer-web-first-assertions */
 import { expect, test } from './manager/decipad-tests';
 
 let teamWorkspaceURL: string;
@@ -58,8 +59,10 @@ test('check inviting readers stay in reading mode', async ({
 
     const titleElementPage1 = testUser.page.getByTestId('editor-title');
     const titleElementPage2 = anotherTestUser.page.getByTestId('editor-title');
+
     const page1Text = await titleElementPage1.textContent();
     const page2Text = await titleElementPage2.textContent();
+
     expect(page1Text).toEqual(page2Text);
 
     expect(

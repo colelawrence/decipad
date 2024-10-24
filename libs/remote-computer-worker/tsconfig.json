@@ -15,6 +15,6 @@
     { "path": "../remote-computer-codec" },
     { "path": "../fnqueue" },
     { "path": "../postmessage-rpc" },
-    { "path": "../compute-backend-js"}
+    { "path": "../compute-backend-js" }
   ]
 }

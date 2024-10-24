@@ -132,8 +132,8 @@ fn tree_multiple_columns() {
     assert!(child1.len() == 1);
     assert!(child2.len() == 1);
 
-    assert_eq!(child1[0].value, DeciResult::from_float(3.0));
-    assert_eq!(child2[0].value, DeciResult::from_float(4.0));
+    assert_eq!(child1[0].value, 3.0.into());
+    assert_eq!(child2[0].value, 4.0.into());
 }
 
 #[test]
@@ -152,12 +152,12 @@ fn tree_repeat_values() {
     assert_eq!(child1.len(), 2);
     assert_eq!(child2.len(), 3);
 
-    assert_eq!(child1[0].value, DeciResult::from_float(3.0));
-    assert_eq!(child1[1].value, DeciResult::from_float(4.0));
+    assert_eq!(child1[0].value, 3.0.into());
+    assert_eq!(child1[1].value, 4.0.into());
 
-    assert_eq!(child2[0].value, DeciResult::from_float(5.0));
-    assert_eq!(child2[1].value, DeciResult::from_float(6.0));
-    assert_eq!(child2[2].value, DeciResult::from_float(7.0));
+    assert_eq!(child2[0].value, 5.0.into());
+    assert_eq!(child2[1].value, 6.0.into());
+    assert_eq!(child2[2].value, 7.0.into());
 }
 
 #[test]
@@ -176,10 +176,10 @@ fn tree_repeat_column_values() {
     assert_eq!(child1.len(), 1);
     assert_eq!(child2.len(), 2);
 
-    assert_eq!(child1[0].value, DeciResult::from_float(3.0));
+    assert_eq!(child1[0].value, 3.0.into());
 
-    assert_eq!(child2[0].value, DeciResult::from_float(5.0));
-    assert_eq!(child2[1].value, DeciResult::from_float(7.0));
+    assert_eq!(child2[0].value, 5.0.into());
+    assert_eq!(child2[1].value, 5.0.into());
 }
 
 //
@@ -205,14 +205,14 @@ fn tree_recursive_columns() {
     assert_eq!(child1.len(), 1);
     assert_eq!(child2.len(), 2);
 
-    assert_eq!(child1[0].value, DeciResult::from_float(3.0));
-    assert_eq!(child2[0].value, DeciResult::from_float(5.0));
-    assert_eq!(child2[1].value, DeciResult::from_float(7.0));
+    assert_eq!(child1[0].value, 3.0.into());
+    assert_eq!(child2[0].value, 5.0.into());
+    assert_eq!(child2[1].value, 7.0.into());
 
     let nested_child1 = &child1[0].children; // [10, 20]
 
     assert_eq!(nested_child1.len(), 2);
 
-    assert_eq!(nested_child1[0].value, DeciResult::from_float(10.0));
-    assert_eq!(nested_child1[1].value, DeciResult::from_float(20.0));
+    assert_eq!(nested_child1[0].value, 10.0.into());
+    assert_eq!(nested_child1[1].value, 20.0.into());
 }

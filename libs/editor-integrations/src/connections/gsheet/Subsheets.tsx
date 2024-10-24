@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 import { Button, OptionsList, cssVar, p13Bold } from '@decipad/ui';
 import styled from '@emotion/styled';
 import { FC, useCallback, useState } from 'react';
@@ -6,10 +7,10 @@ import { useCustomScript } from '@decipad/react-utils';
 import { useRefreshKeyMutation } from '@decipad/graphql-client';
 import { env } from '@decipad/client-env';
 import { getExternalDataUrl } from '../../utils';
-import { LegacyRunner } from '../../runners';
 import { ImportParams, getGsheetMeta } from '@decipad/import';
-import { assertInstanceOf } from '@decipad/utils';
 import { useComputer } from '@decipad/editor-hooks';
+import { assert, assertInstanceOf } from '@decipad/utils';
+import { GSheetRunner } from '../../runners';
 
 const Styles = {
   Trigger: styled.div({
@@ -60,10 +61,8 @@ const ActualSheetSelector: FC<ConnectionProps> = ({
   onRun,
   runner,
 }) => {
-  assertInstanceOf(runner, LegacyRunner);
-  if (_externalData == null) {
-    throw new Error('External data should never be null here');
-  }
+  assertInstanceOf(runner, GSheetRunner);
+  assert(_externalData != null, 'External data should never be null here');
   const externalData = _externalData;
 
   const [loaded, setLoaded] = useState(false);
@@ -137,10 +136,15 @@ const ActualSheetSelector: FC<ConnectionProps> = ({
           mappedSubsheets
         );
 
-        runner.setProxy(getExternalDataUrl(externalData.id));
-        runner.setUrl(picked.docs[0].url);
-        runner.setResourceName(picked.docs[0].name);
-        runner.setSubId(mappedSubsheets[0]);
+        assertInstanceOf(runner, GSheetRunner);
+
+        runner.setOptions({ runner: { spreadsheetUrl: picked.docs[0].url } });
+        runner.setResourceName({
+          sheet: picked.docs[0].name,
+          subsheet: mappedSubsheets[0].name,
+        });
+
+        runner.setExternalDataId(externalData.id);
 
         onRun();
 
@@ -148,36 +152,38 @@ const ActualSheetSelector: FC<ConnectionProps> = ({
       })
       .build();
     picker.setVisible(true);
-  }, [computer, externalData.id, externalData.keys, onRun, refreshKey, runner]);
+  }, [computer, externalData, onRun, refreshKey, runner]);
 
   if (!loaded) {
     return null;
   }
 
-  const resourceName = runner.getResourceName();
-  const subsheet = runner.getSubId();
-
   return (
     <>
       <p css={p13Bold}>Select Spreadsheet</p>
-      <div css={{ display: 'flex', gap: '6px' }}>
+      <div css={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
         <Button onClick={selectGSheet} styles={{ whiteSpace: 'nowrap' }}>
           Select Spreadsheet
         </Button>
-        {resourceName != null && (
-          <Styles.Trigger>{resourceName}</Styles.Trigger>
+        {runner.resourceName != null && (
+          <Styles.Trigger>{runner.resourceName.sheet}</Styles.Trigger>
         )}
-        {resourceName != null && (
+        {runner.resourceName != null && (
           <div css={{ width: '100%' }}>
             <SubsheetSelector
-              name={subsheet!.name}
-              subsheets={SUBSHEET_CACHE.get(new URL(runner.getUrl()).pathname)}
+              name={runner.resourceName.subsheet}
+              subsheets={
+                SUBSHEET_CACHE.get(
+                  new URL(runner.options.runner.spreadsheetUrl!).pathname
+                ) ?? []
+              }
               setSubsheet={(s) => {
-                const url = new URL(runner.getUrl());
+                const url = new URL(runner.options.runner.spreadsheetUrl!);
                 url.hash = `gid=${s.id.toString()}`;
-
-                runner.setUrl(url.toString());
-                runner.setSubId(s);
+                runner.setOptions({
+                  runner: { spreadsheetUrl: url.toString() },
+                });
+                runner.setResourceName({ subsheet: s.name });
 
                 onRun();
               }}

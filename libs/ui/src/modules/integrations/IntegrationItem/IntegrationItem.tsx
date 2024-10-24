@@ -31,32 +31,11 @@ export const IntegrationItem: FC<IntegrationItemProps> = ({
   onClick,
   testId,
 }) => {
-  const [isConnecting, setIsConnecting] = useState(false);
   return (
-    <div css={IntegrationItemStyled}>
+    <div css={IntegrationItemStyled} data-testid={testId} onClick={onClick}>
       <div css={IntegrationItemIconWrapper}>{icon}</div>
-      <div css={IntegrationItemTextAndActions}>
-        <div>
-          <p css={p14Medium}>{title}</p>
-          {description.length > 0 && <p css={p12Regular}>{description}</p>}
-        </div>
-      </div>
-      <div css={IntegrationButton}>
-        <Button
-          type="secondary"
-          onClick={() => {
-            setIsConnecting(true);
-            onClick();
-          }}
-          testId={testId}
-          disabled={isConnecting}
-        >
-          Connect{' '}
-          {isConnecting && (
-            <Loading width="16px" style={{ marginLeft: '6px' }} />
-          )}
-        </Button>
-      </div>
+      <h2 css={p14Medium}>{title}</h2>
+      {description.length > 0 && <p css={p12Regular}>{description}</p>}
     </div>
   );
 };

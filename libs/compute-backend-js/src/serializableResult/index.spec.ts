@@ -230,6 +230,7 @@ describe('serializeResult', () => {
         kind: 'column',
         indexedBy: 'number',
         cellType: { kind: 'boolean' },
+        atParentIndex: null,
       },
       async *value() {
         yield true;
@@ -254,6 +255,7 @@ describe('serializeResult', () => {
         kind: 'column',
         indexedBy: 'number',
         cellType: { kind: 'boolean' },
+        atParentIndex: null,
       },
       async *value() {
         yield true;
@@ -278,6 +280,7 @@ describe('serializeResult', () => {
         kind: 'column',
         indexedBy: 'number',
         cellType: { kind: 'string' },
+        atParentIndex: null,
       },
       async *value() {
         yield 'Hello';
@@ -306,10 +309,12 @@ describe('serializeResult', () => {
       type: {
         kind: 'column',
         indexedBy: 'number',
+        atParentIndex: null,
         cellType: {
           kind: 'column',
           indexedBy: 'number',
           cellType: { kind: 'boolean' },
+          atParentIndex: null,
         },
       },
       async *value() {
@@ -340,10 +345,12 @@ describe('serializeResult', () => {
       type: {
         kind: 'column',
         indexedBy: 'number',
+        atParentIndex: null,
         cellType: {
           kind: 'column',
           indexedBy: 'number',
           cellType: { kind: 'string' },
+          atParentIndex: null,
         },
       },
       async *value() {
@@ -372,17 +379,20 @@ describe('serializeResult', () => {
   });
 
   // TODO test 3-dimensional strings
-  const threeDimensionalStringColumn = {
+  const threeDimensionalStringColumn: Result.Result<'column'> = {
     type: {
       kind: 'column' as const,
       indexedBy: 'number' as const,
+      atParentIndex: null,
       cellType: {
         kind: 'column' as const,
         indexedBy: 'number' as const,
+        atParentIndex: null,
         cellType: {
           kind: 'column' as const,
           indexedBy: 'number' as const,
           cellType: { kind: 'string' as const },
+          atParentIndex: null,
         },
       },
     },
@@ -499,6 +509,7 @@ describe('serializeResult', () => {
         kind: 'materialized-column',
         indexedBy: 'number',
         cellType: { kind: 'string' },
+        atParentIndex: null,
       },
       value: ['Hello', 'there', 'world', '!'],
       meta: undefined,
@@ -1129,6 +1140,7 @@ describe('deserializeResult', () => {
     expect(result.type).toEqual({
       kind: 'column',
       indexedBy: 'number',
+      atParentIndex: null,
       cellType: { kind: 'anything' },
     });
   });
@@ -1709,3 +1721,4 @@ describe('deserializeResult', () => {
     expect(result).toMatchObject(expected);
   });
 });
+

@@ -2,18 +2,30 @@ import { css } from '@emotion/react';
 import { cssVar, p12Medium, p8Medium } from 'libs/ui/src/primitives';
 
 export const IntegrationItemStyled = css({
-  display: 'flex',
-  padding: '8px',
+  display: 'grid',
+  // padding: '8px',
   alignItems: 'center',
-  gap: '12px',
+  gap: '0 12px',
+  // height: '56px',
+
+  gridTemplateColumns: '40px 1fr',
+  gridTemplateRows: 'min-content 1fr',
+
+  cursor: 'pointer',
 
   borderRadius: '8px',
-  border: `1px solid ${cssVar('borderSubdued')}`,
+  // border: `1px solid ${cssVar('borderSubdued')}`,
+
+  'h2, p': {
+    gridColumn: '2/3',
+    // lineHeight: '0.8rem',
+  },
 });
 
 export const IntegrationItemIconWrapper = css({
   display: 'grid',
   placeItems: 'center',
+  gridRow: '1/3',
   flexShrink: 0,
   width: '40px',
   height: '40px',

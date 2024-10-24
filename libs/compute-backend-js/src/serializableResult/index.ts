@@ -155,6 +155,7 @@ const nullColumn: Result<'materialized-column'> = {
     kind: 'materialized-column',
     cellType: { kind: 'anything' },
     indexedBy: null,
+    atParentIndex: null,
   },
   value: [],
 };
@@ -296,6 +297,7 @@ export const serializeResultIter = async <T extends Result>(
               kind: 'column',
               cellType,
               indexedBy: 'number',
+              atParentIndex: childCount,
             },
             meta: tableResult.meta?.bind(tableResult),
           });
@@ -425,6 +427,7 @@ export const serializeResultIter = async <T extends Result>(
               kind: 'materialized-column',
               cellType,
               indexedBy: 'number',
+              atParentIndex: i,
             },
             meta: columnToMeta(value),
           });
@@ -831,6 +834,7 @@ const deserializeResultIter = (
           kind: 'column',
           cellType,
           indexedBy: 'number',
+          atParentIndex: null,
         },
         value: generator,
         meta: columnToMeta(generator),
@@ -1232,3 +1236,4 @@ export const deserializeResult = (val: {
   }
   return result;
 };
+

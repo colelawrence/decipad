@@ -1,5 +1,3 @@
-use conv::ApproxInto;
-
 use super::types::DeciResult;
 
 use std::cmp::{PartialEq, PartialOrd};
@@ -26,7 +24,7 @@ impl PartialEq for DeciResult {
                 .all(|x| x),
             (DeciResult::Pending, DeciResult::Pending) => true, // Add this line
             (DeciResult::TypeError, DeciResult::TypeError) => true,
-            (DeciResult::Date(d1, s1), DeciResult::Date(d2, s2)) => d1 == d2 && s1 == s2,
+            (DeciResult::Date(d1), DeciResult::Date(d2)) => d1 == d2,
             (DeciResult::Table(t1), DeciResult::Table(t2)) => t1 == t2,
             (DeciResult::Range(r1), DeciResult::Range(r2)) => r1 == r2,
             (DeciResult::Row(r1), DeciResult::Row(r2)) => r1 == r2,
@@ -50,41 +48,24 @@ impl PartialEq for DeciResult {
 impl Eq for DeciResult {}
 
 impl PartialOrd for DeciResult {
-    fn partial_cmp(&self, _other: &Self) -> Option<std::cmp::Ordering> {
-        None
-    }
-
-    fn lt(&self, other: &DeciResult) -> bool {
+    fn partial_cmp(&self, other: &Self) -> Option<std::cmp::Ordering> {
         match (self, other) {
-            (DeciResult::Fraction(n1, d1), DeciResult::Fraction(n2, d2)) => *n1 * *d2 < *n2 * *d1,
+            (DeciResult::Fraction(n1, d1), DeciResult::Fraction(n2, d2)) => {
+                (*n1 * *d2).partial_cmp(&(*n2 * *d1))
+            }
             (DeciResult::Fraction(_n1, _d1), DeciResult::ArbitraryFraction(_n2, _d2)) => {
-                &self.to_arb() < other
+                self.to_arb().partial_cmp(other)
             }
             (DeciResult::ArbitraryFraction(_n1, _d1), DeciResult::Fraction(_n2, _d2)) => {
-                self < &other.to_arb()
+                self.partial_cmp(&other.to_arb())
             }
             (DeciResult::ArbitraryFraction(n1, d1), DeciResult::ArbitraryFraction(n2, d2)) => {
-                n1 * d2 < n2 * d1
+                (n1 * d2).partial_cmp(&(n2 * d1))
             }
-            (DeciResult::String(s1), DeciResult::String(s2)) => s1 < s2,
-            (DeciResult::Boolean(b1), DeciResult::Boolean(b2)) => !*b1 && *b2,
-            (DeciResult::Date(d1, _), DeciResult::Date(d2, _)) => match (d1, d2) {
-                (Some(dd1), Some(dd2)) => dd1 < dd2,
-                _ => unreachable!(),
-            },
-            _ => panic!("Can't compare these types"),
+            (DeciResult::String(s1), DeciResult::String(s2)) => s1.partial_cmp(&s2),
+            (DeciResult::Boolean(b1), DeciResult::Boolean(b2)) => b1.partial_cmp(b2),
+            (DeciResult::Date(d1), DeciResult::Date(d2)) => d1.partial_cmp(d2),
+            _ => None,
         }
-    }
-
-    fn le(&self, other: &DeciResult) -> bool {
-        return self < other || self == other;
-    }
-
-    fn gt(&self, other: &DeciResult) -> bool {
-        return !(self <= other);
-    }
-
-    fn ge(&self, other: &DeciResult) -> bool {
-        return self > other || self == other;
     }
 }

@@ -263,6 +263,7 @@ describe('remote computer client', () => {
                       "result": {
                         "meta": [Function],
                         "type": {
+                          "atParentIndex": 0,
                           "cellType": {
                             "kind": "number",
                             "unit": null,
@@ -479,6 +480,7 @@ describe('remote computer client', () => {
                     "result": {
                       "meta": [Function],
                       "type": {
+                        "atParentIndex": 0,
                         "cellType": {
                           "kind": "number",
                           "unit": null,
@@ -707,6 +709,7 @@ describe('remote computer client', () => {
           "kind": "column",
           "name": "T.C1",
           "serializedType": {
+            "atParentIndex": 0,
             "cellType": {
               "kind": "number",
               "unit": null,
@@ -1076,6 +1079,7 @@ describe('remote computer client', () => {
               "kind": "column",
               "name": "T.C1",
               "serializedType": {
+                "atParentIndex": 0,
                 "cellType": {
                   "kind": "number",
                   "unit": null,
@@ -1174,6 +1178,7 @@ describe('remote computer client', () => {
               {
                 "blockId": "block-4",
                 "blockType": {
+                  "atParentIndex": 0,
                   "cellType": {
                     "kind": "number",
                     "unit": null,
@@ -1191,6 +1196,7 @@ describe('remote computer client', () => {
                   },
                   "meta": [Function],
                   "type": {
+                    "atParentIndex": 0,
                     "cellType": {
                       "kind": "number",
                       "unit": null,
@@ -1215,6 +1221,7 @@ describe('remote computer client', () => {
                 },
                 "meta": [Function],
                 "type": {
+                  "atParentIndex": 0,
                   "cellType": {
                     "kind": "number",
                     "unit": null,
@@ -1312,6 +1319,7 @@ describe('remote computer client', () => {
               kind: 'materialized-column',
               indexedBy: null,
               cellType: { kind: 'number', unit: null },
+              atParentIndex: null,
             },
             [N(10), N(20), N(30)]
           ),
@@ -1365,6 +1373,7 @@ describe('remote computer client', () => {
               {
                 "meta": [Function],
                 "type": {
+                  "atParentIndex": null,
                   "cellType": {
                     "kind": "number",
                     "unit": null,
@@ -1459,8 +1468,8 @@ describe('remote computer client', () => {
                       "varName.Column1",
                       "varName.Column2",
                       "varName",
-                      "exprRef_block_id__0",
-                      "exprRef_block_id__1",
+                      "exprRef_block_id__Column1",
+                      "exprRef_block_id__Column2",
                     },
                     "local": Set {
                       "Column1",
@@ -1468,12 +1477,13 @@ describe('remote computer client', () => {
                     },
                   },
                 },
-                "block-id--0": {
+                "block-id--Column1": {
                   "epoch": 1n,
-                  "id": "block-id--0",
+                  "id": "block-id--Column1",
                   "result": {
                     "meta": [Function],
                     "type": {
+                      "atParentIndex": 0,
                       "cellType": {
                         "kind": "number",
                         "unit": null,
@@ -1493,8 +1503,8 @@ describe('remote computer client', () => {
                       "varName.Column1",
                       "varName.Column2",
                       "varName",
-                      "exprRef_block_id__0",
-                      "exprRef_block_id__1",
+                      "exprRef_block_id__Column1",
+                      "exprRef_block_id__Column2",
                     },
                     "local": Set {
                       "Column1",
@@ -1502,12 +1512,13 @@ describe('remote computer client', () => {
                     },
                   },
                 },
-                "block-id--1": {
+                "block-id--Column2": {
                   "epoch": 1n,
-                  "id": "block-id--1",
+                  "id": "block-id--Column2",
                   "result": {
                     "meta": [Function],
                     "type": {
+                      "atParentIndex": 1,
                       "cellType": {
                         "kind": "number",
                         "unit": null,
@@ -1527,8 +1538,8 @@ describe('remote computer client', () => {
                       "varName.Column1",
                       "varName.Column2",
                       "varName",
-                      "exprRef_block_id__0",
-                      "exprRef_block_id__1",
+                      "exprRef_block_id__Column1",
+                      "exprRef_block_id__Column2",
                     },
                     "local": Set {
                       "Column1",

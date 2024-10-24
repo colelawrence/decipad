@@ -1,6 +1,6 @@
 /* eslint-disable no-underscore-dangle */
 import type { Observable } from 'rxjs';
-import { BehaviorSubject, firstValueFrom, Subject } from 'rxjs';
+import { BehaviorSubject, Subject } from 'rxjs';
 import {
   concatMap,
   distinctUntilChanged,
@@ -46,6 +46,7 @@ import type {
   TableDesc,
   ComputeDeltaRequest,
   ComputerImportExternalDataOptions,
+  ImportedExternalDataResult,
 } from '@decipad/computer-interfaces';
 import { listenerHelper } from '@decipad/listener-helper';
 import { findNames } from '../autocomplete';
@@ -83,7 +84,7 @@ import {
   isTableResult,
   isTable,
   isColumn,
-  pushResultToComputer,
+  pushExternalData,
 } from '@decipad/computer-utils';
 import zip from 'lodash.zip';
 import {
@@ -243,68 +244,114 @@ export class Computer implements ComputerInterface {
     id,
     name,
     data,
-    types,
     importer,
-  }: ComputerImportExternalDataOptions): Promise<string> {
-    return this.importQueue.push(async () => {
-      const columns =
-        computeBackendSingleton.computeBackend.import_external_data_from_u8_arr(
-          data,
-          importer,
-          types.map((t) => t.type)
-        );
+    importOptions,
+    metaColumnOptions,
+  }: ComputerImportExternalDataOptions): Promise<ImportedExternalDataResult> {
+    return this.importQueue.push(() =>
+      this.waitForTriedCache().then(async () => {
+        const tableResult =
+          computeBackendSingleton.computeBackend.import_external_data_from_u8_arr(
+            data,
+            importer,
+            importOptions
+          );
 
-      const table: Result.Result = {
-        type: {
-          kind: 'table',
-          columnTypes: columns.map((col, i): SerializedType => {
-            // not a fan of the as here
-            const deciType = types[i]?.type ?? kindToDeciType(col.column_type);
-            const date =
-              'specificity' in deciType ? deciType.specificity : undefined;
-            return {
-              kind: deciType.type,
-              date: date && dateSpecificityFromWasm(date),
-              unit: types[i]?.unit,
-            } as SerializedType;
-          }),
-          columnNames: columns.map((col) => col.name),
-          indexName: columns[0].name,
-        },
-        value: columns.map((col) => {
-          const columnsGenerator: ResultGenerator = async function* colGen(
-            start,
-            end
-          ) {
-            const slice =
-              computeBackendSingleton.computeBackend.get_slice(
-                col.id,
-                BigInt(start ?? 0),
-                BigInt((Number.isFinite(end ?? 0) ? end : -1) ?? -1)
-              ) ?? [];
+        const table: Result.Result = {
+          type: {
+            kind: 'table',
+            columnTypes: tableResult
+              .map((col): SerializedType | undefined => {
+                const columnType = importOptions.column_types?.[col.name];
 
-            const fullResult = deserializeResult(
-              slice as SerializedResult
-            ) as Result.Result<'column'>;
+                // not a fan of the as here
+                const deciType = columnType ?? kindToDeciType(col.column_type);
 
-            if (fullResult.type.kind !== 'column') {
-              throw new Error('oops');
-            }
+                const date =
+                  'specificity' in deciType ? deciType.specificity : undefined;
 
-            yield* fullResult.value(start, end);
-          };
+                // TODO: fix the AS here. Use satisfies.
 
-          columnsGenerator.WASM_ID = col.id;
-          columnsGenerator.WASM_REALM_ID = 'compute-backend';
+                const metaColumn = metaColumnOptions[col.name];
 
-          return columnsGenerator;
-        }),
-      };
+                if (metaColumn?.isHidden) {
+                  return undefined;
+                }
 
-      await pushResultToComputer(this, id, name, table);
-      await firstValueFrom(this.getBlockIdResult$.observe(id));
-      return id;
-    });
+                return {
+                  kind: deciType.type,
+                  date: date && dateSpecificityFromWasm(date),
+                  unit: metaColumn?.unit,
+                } as SerializedType;
+              })
+              .filter((col): col is SerializedType => col != null),
+            columnNames: tableResult
+              .map((col) =>
+                metaColumnOptions[col.name]?.isHidden
+                  ? undefined
+                  : metaColumnOptions[col.name]?.desiredName ?? col.name
+              )
+              .filter((name): name is string => name != null),
+            indexName: tableResult[0].name,
+          },
+          value: tableResult
+            .map((col) => {
+              const metaColumn = metaColumnOptions[col.name];
+              if (metaColumn?.isHidden) {
+                return undefined;
+              }
+              const columnsGenerator: ResultGenerator = async function* colGen(
+                start,
+                end
+              ) {
+                const slice =
+                  computeBackendSingleton.computeBackend.get_slice(
+                    col.id,
+                    BigInt(start ?? 0),
+                    BigInt((Number.isFinite(end ?? 0) ? end : -1) ?? -1)
+                  ) ?? [];
+
+                const fullResult = deserializeResult(
+                  slice as SerializedResult
+                ) as Result.Result<'column'>;
+
+                if (fullResult.type.kind !== 'column') {
+                  throw new Error('oops');
+                }
+
+                yield* fullResult.value(start, end);
+              };
+
+              columnsGenerator.WASM_ID = col.id;
+              columnsGenerator.WASM_REALM_ID = 'compute-backend';
+
+              return columnsGenerator;
+            })
+            .filter((col) => col != null),
+        };
+
+        const x: Record<string, string> = {};
+        for (const [k, v] of Object.entries(metaColumnOptions)) {
+          if (v?.isHidden || v?.desiredName == null) {
+            continue;
+          }
+
+          x[v.desiredName] = k;
+        }
+
+        await pushExternalData(this, id, name, table, x);
+
+        return {
+          id,
+          columnNamesToId: Object.fromEntries(
+            tableResult.map((col) => [
+              metaColumnOptions[col.name]?.desiredName ?? col.name,
+              col.name,
+            ])
+          ),
+        } satisfies ImportedExternalDataResult;
+      })
+    );
   }
 
   /**
@@ -714,6 +761,11 @@ export class Computer implements ComputerInterface {
                       {
                         kind: 'column',
                         cellType,
+                        atParentIndex:
+                          cellType.kind === 'column' ||
+                          cellType.kind === 'materialized-column'
+                            ? cellType.atParentIndex
+                            : null,
                         indexedBy:
                           cellType.kind === 'column' ||
                           cellType.kind === 'materialized-column'
@@ -754,6 +806,11 @@ export class Computer implements ComputerInterface {
                       {
                         kind: 'column',
                         cellType,
+                        atParentIndex:
+                          cellType.kind === 'column' ||
+                          cellType.kind === 'materialized-column'
+                            ? cellType.atParentIndex
+                            : null,
                         indexedBy:
                           cellType.kind === 'column' ||
                           cellType.kind === 'materialized-column'

@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 import { FC, useEffect, useState } from 'react';
 import { ConnectionProps } from '../types';
 import {
@@ -8,9 +9,9 @@ import {
 import { LoadingIndicator, MenuItem, MenuList } from '@decipad/ui';
 import { Styles } from './styles';
 import { CaretDown, CaretUp } from 'libs/ui/src/icons';
-import { LegacyRunner } from '../../runners';
 import { ExternalDataSourceFragmentFragment } from '@decipad/graphql-client';
 import { importDatabases } from '@decipad/import';
+import { NotionRunner } from '../../runners';
 import { assertInstanceOf } from '@decipad/utils';
 
 const DATABASES_CACHE = new Map<string, Array<{ id: string; name: string }>>();
@@ -20,7 +21,7 @@ const NotionPrivateDatabasesSelector: FC<ConnectionProps> = ({
   runner,
   onRun,
 }) => {
-  assertInstanceOf(runner, LegacyRunner);
+  assertInstanceOf(runner, NotionRunner);
   if (_externalData == null) {
     throw new Error('Checked in comp above');
   }
@@ -58,7 +59,8 @@ const NotionPrivateDatabasesSelector: FC<ConnectionProps> = ({
       return <LoadingIndicator />;
     }
 
-    const databaseName = runner.getSubId();
+    // const databaseName = runner.getSubId();
+    const databaseName = { name: 'FIXME' };
 
     if (databaseName == null) {
       return 'Select Database';
@@ -97,15 +99,15 @@ const NotionPrivateDatabasesSelector: FC<ConnectionProps> = ({
           key={db.id}
           css={{ minWidth: '240px' }}
           onSelect={() => {
-            runner.setSubId(db);
-
-            runner.setUrl(
-              getExternalDataUrl(externalData.id, {
-                url: encodeURI(getNotionQueryDbLink(db.id)),
-                method: 'POST',
-              })
-            );
-
+            runner.setResourceName(db.name);
+            runner.setOptions({
+              runner: {
+                notionUrl: getExternalDataUrl(externalData.id, {
+                  url: encodeURI(getNotionQueryDbLink(db.id)),
+                  method: 'POST',
+                }),
+              },
+            });
             onRun();
           }}
         >
