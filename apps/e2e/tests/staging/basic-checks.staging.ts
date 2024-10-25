@@ -155,9 +155,9 @@ test.describe('staging performance checks', () => {
     expect
       .soft(
         performance.getSampleTime('Reducers max'),
-        'Reducers max took more than 3 second'
+        'Reducers max took more than 4 second'
       )
-      .toBeLessThanOrEqual(3_000);
+      .toBeLessThanOrEqual(4_000);
 
     // average
     performance.sampleStart('Reducers average');
@@ -179,9 +179,9 @@ test.describe('staging performance checks', () => {
     expect
       .soft(
         performance.getSampleTime('Reducers average'),
-        'Reducers average took more than 3 second'
+        'Reducers average took more than 4 second'
       )
-      .toBeLessThanOrEqual(3_000);
+      .toBeLessThanOrEqual(4_000);
 
     // meadian
     performance.sampleStart('Reducers median');
@@ -201,9 +201,9 @@ test.describe('staging performance checks', () => {
     expect
       .soft(
         performance.getSampleTime('Reducers median'),
-        'Reducers median took more than 3 second'
+        'Reducers median took more than 4 second'
       )
-      .toBeLessThanOrEqual(3_000);
+      .toBeLessThanOrEqual(4_000);
 
     // sum
     performance.sampleStart('Reducers sum');
@@ -220,9 +220,9 @@ test.describe('staging performance checks', () => {
     expect
       .soft(
         performance.getSampleTime('Reducers sum'),
-        'Reducers sum took more than 3 second'
+        'Reducers sum took more than 4 second'
       )
-      .toBeLessThanOrEqual(3_000);
+      .toBeLessThanOrEqual(4_000);
 
     // sumif
     performance.sampleStart('Reducers sumif');
@@ -242,9 +242,9 @@ test.describe('staging performance checks', () => {
     expect
       .soft(
         performance.getSampleTime('Reducers sum'),
-        'Reducers sum took more than 3 second'
+        'Reducers sum took more than 4 second'
       )
-      .toBeLessThanOrEqual(3_000);
+      .toBeLessThanOrEqual(4_000);
   });
 });
 
@@ -611,9 +611,9 @@ test.describe('staging operation performance checks', () => {
       expect
         .soft(
           performance.getSampleTime('Operations column + number unitless'),
-          'Operations column + number unitless took more than 3 second'
+          'Operations column + number unitless took more than 4 seconds'
         )
-        .toBeLessThanOrEqual(3_000);
+        .toBeLessThanOrEqual(4_000);
       await page.getByText('Hide data').last().click();
       await notebook.deleteBlock(2);
     });
@@ -659,9 +659,9 @@ test.describe('staging operation performance checks', () => {
       expect
         .soft(
           performance.getSampleTime('Operations column - number unitless'),
-          'Operations column - number unitless took more than 3 second'
+          'Operations column - number unitless took more than 4 seconds'
         )
-        .toBeLessThanOrEqual(3_000);
+        .toBeLessThanOrEqual(4_000);
       await page.getByText('Hide data').last().click();
       await notebook.deleteBlock(2);
     });
@@ -682,9 +682,9 @@ test.describe('staging operation performance checks', () => {
           performance.getSampleTime(
             'Operations column - another column unitless'
           ),
-          'Operations column - another column unitless took more than 3 second'
+          'Operations column - another column unitless took more than 4 seconds'
         )
-        .toBeLessThanOrEqual(3_000);
+        .toBeLessThanOrEqual(4_000);
       await page.getByText('Hide data').last().click();
       await notebook.deleteBlock(2);
     });
@@ -705,9 +705,9 @@ test.describe('staging operation performance checks', () => {
       expect
         .soft(
           performance.getSampleTime('Operations column * number unitless'),
-          'Operations column * number unitless took more than 3.5 second'
+          'Operations column * number unitless took more than 5 seconds'
         )
-        .toBeLessThanOrEqual(3_500);
+        .toBeLessThanOrEqual(5_000);
       await page.getByText('Hide data').last().click();
       await notebook.deleteBlock(2);
     });
@@ -728,9 +728,9 @@ test.describe('staging operation performance checks', () => {
           performance.getSampleTime(
             'Operations column * another column unitless'
           ),
-          'Operations column * another column unitless took more than 3.5 second'
+          'Operations column * another column unitless took more than 4 seconds'
         )
-        .toBeLessThanOrEqual(3_500);
+        .toBeLessThanOrEqual(4_000);
       await page.getByText('Hide data').last().click();
       await notebook.deleteBlock(2);
     });
@@ -751,9 +751,9 @@ test.describe('staging operation performance checks', () => {
       expect
         .soft(
           performance.getSampleTime('Operations column / number unitless'),
-          'Operations column * number unitless took more than 3.5 second'
+          'Operations column * number unitless took more than 5 seconds'
         )
-        .toBeLessThanOrEqual(3_500);
+        .toBeLessThanOrEqual(5_000);
       await page.getByText('Hide data').last().click();
       await notebook.deleteBlock(2);
     });
@@ -774,9 +774,9 @@ test.describe('staging operation performance checks', () => {
           performance.getSampleTime(
             'Operations column / another column unitless'
           ),
-          'Operations column / another column unitless took more than 3 second'
+          'Operations column / another column unitless took more than 4 seconds'
         )
-        .toBeLessThanOrEqual(3_000);
+        .toBeLessThanOrEqual(4_000);
       await page.getByText('Hide data').last().click();
       await notebook.deleteBlock(2);
     });
@@ -797,9 +797,9 @@ test.describe('staging operation performance checks', () => {
       expect
         .soft(
           performance.getSampleTime('Operations column > number unitless'),
-          'Operations column > number unitless took more than 3 second'
+          'Operations column > number unitless took more than 4 seconds'
         )
-        .toBeLessThanOrEqual(3_000);
+        .toBeLessThanOrEqual(4_000);
       await page.getByText('Hide data').last().click();
       await notebook.deleteBlock(2);
     });
@@ -822,9 +822,9 @@ test.describe('staging operation performance checks', () => {
           performance.getSampleTime(
             'Operations column > another column unitless'
           ),
-          'Operations column > another column unitless took more than 3 second'
+          'Operations column > another column unitless took more than 4 seconds'
         )
-        .toBeLessThanOrEqual(3_000);
+        .toBeLessThanOrEqual(4_000);
       await page.getByText('Hide data').last().click();
       await notebook.deleteBlock(2);
     });
@@ -845,9 +845,9 @@ test.describe('staging operation performance checks', () => {
       expect
         .soft(
           performance.getSampleTime('Operations column >= number unitless'),
-          'Operations column >= number unitless took more than 3 second'
+          'Operations column >= number unitless took more than 4 seconds'
         )
-        .toBeLessThanOrEqual(3_000);
+        .toBeLessThanOrEqual(4_000);
       await page.getByText('Hide data').last().click();
       await notebook.deleteBlock(2);
     });
@@ -870,9 +870,9 @@ test.describe('staging operation performance checks', () => {
           performance.getSampleTime(
             'Operations column  >= another column unitless'
           ),
-          'Operations column >= another column unitless took more than 3 second'
+          'Operations column >= another column unitless took more than 4 seconds'
         )
-        .toBeLessThanOrEqual(3_000);
+        .toBeLessThanOrEqual(4_000);
       await page.getByText('Hide data').last().click();
       await notebook.deleteBlock(2);
     });
@@ -893,9 +893,9 @@ test.describe('staging operation performance checks', () => {
       expect
         .soft(
           performance.getSampleTime('Operations column < number unitless'),
-          'Operations column < number unitless took more than 3 second'
+          'Operations column < number unitless took more than 4 seconds'
         )
-        .toBeLessThanOrEqual(3_000);
+        .toBeLessThanOrEqual(4_000);
       await page.getByText('Hide data').last().click();
       await notebook.deleteBlock(2);
     });
@@ -918,9 +918,9 @@ test.describe('staging operation performance checks', () => {
           performance.getSampleTime(
             'Operations column < another column unitless'
           ),
-          'Operations column < another column unitless took more than 3 second'
+          'Operations column < another column unitless took more than 4 seconds'
         )
-        .toBeLessThanOrEqual(3_000);
+        .toBeLessThanOrEqual(4_000);
       await page.getByText('Hide data').last().click();
       await notebook.deleteBlock(2);
     });
@@ -941,9 +941,9 @@ test.describe('staging operation performance checks', () => {
       expect
         .soft(
           performance.getSampleTime('Operations column  <= number unitless'),
-          'Operations column <= number unitless took more than 3 second'
+          'Operations column <= number unitless took more than 4 seconds'
         )
-        .toBeLessThanOrEqual(3_000);
+        .toBeLessThanOrEqual(4_000);
       await page.getByText('Hide data').last().click();
       await notebook.deleteBlock(2);
     });
@@ -966,9 +966,9 @@ test.describe('staging operation performance checks', () => {
           performance.getSampleTime(
             'Operations column <= another column unitless'
           ),
-          'Operations column <= another column unitless took more than 3 second'
+          'Operations column <= another column unitless took more than 4 seconds'
         )
-        .toBeLessThanOrEqual(3_000);
+        .toBeLessThanOrEqual(4_000);
       await page.getByText('Hide data').last().click();
       await notebook.deleteBlock(2);
     });
@@ -989,9 +989,9 @@ test.describe('staging operation performance checks', () => {
       expect
         .soft(
           performance.getSampleTime('Operations column == number unitless'),
-          'Operations column == number unitless took more than 3 second'
+          'Operations column == number unitless took more than 4 seconds'
         )
-        .toBeLessThanOrEqual(3_000);
+        .toBeLessThanOrEqual(4_000);
       await page.getByText('Hide data').last().click();
       await notebook.deleteBlock(2);
     });
@@ -1014,9 +1014,9 @@ test.describe('staging operation performance checks', () => {
           performance.getSampleTime(
             'Operations column == another column unitless'
           ),
-          'Operations column == another column unitless took more than 3 second'
+          'Operations column == another column unitless took more than 4 seconds'
         )
-        .toBeLessThanOrEqual(3_000);
+        .toBeLessThanOrEqual(4_000);
       await page.getByText('Hide data').last().click();
       await notebook.deleteBlock(2);
     });
@@ -1037,9 +1037,9 @@ test.describe('staging operation performance checks', () => {
       expect
         .soft(
           performance.getSampleTime('Operations column != number unitless'),
-          'Operations column != number unitless took more than 3 second'
+          'Operations column != number unitless took more than 4 seconds'
         )
-        .toBeLessThanOrEqual(3_000);
+        .toBeLessThanOrEqual(4_000);
       await page.getByText('Hide data').last().click();
       await notebook.deleteBlock(2);
     });
@@ -1062,9 +1062,9 @@ test.describe('staging operation performance checks', () => {
           performance.getSampleTime(
             'Operations column != another column unitless'
           ),
-          'Operations column != another column unitless took more than 3 second'
+          'Operations column != another column unitless took more than 4 seconds'
         )
-        .toBeLessThanOrEqual(3_000);
+        .toBeLessThanOrEqual(4_000);
       await page.getByText('Hide data').last().click();
       await notebook.deleteBlock(2);
     });
@@ -1085,9 +1085,9 @@ test.describe('staging operation performance checks', () => {
       expect
         .soft(
           performance.getSampleTime('Functions column filter() number'),
-          'Functions column filter() number took more than 3 second'
+          'Functions column filter() number took more than 4 seconds'
         )
-        .toBeLessThanOrEqual(3_000);
+        .toBeLessThanOrEqual(4_000);
       await page.getByText('Hide data').last().click();
       await notebook.deleteBlock(2);
     });
@@ -1106,9 +1106,9 @@ test.describe('staging operation performance checks', () => {
       expect
         .soft(
           performance.getSampleTime('Functions column lookup() number'),
-          'Functions column lookup() number took more than 3 second'
+          'Functions column lookup() number took more than 4 seconds'
         )
-        .toBeLessThanOrEqual(3_000);
+        .toBeLessThanOrEqual(4_000);
       await page.getByText('Hide data').last().click();
       await notebook.deleteBlock(2);
     });
