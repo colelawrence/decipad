@@ -1,7 +1,10 @@
 import * as Sentry from '@sentry/react';
 import type { ErrorInfo, FC, ReactNode } from 'react';
 import { useCallback, useEffect, useState } from 'react';
-import { ErrorBoundary as ReactErrorBoundary } from 'react-error-boundary';
+import {
+  ErrorBoundary as ReactErrorBoundary,
+  FallbackProps,
+} from 'react-error-boundary';
 import { ErrorPage } from './ErrorPage';
 import { isExpectableServerSideError } from '../utils/isExpectableServerSideError';
 
@@ -72,7 +75,7 @@ export const ErrorBoundary: FC<ErrorBoundaryProps> = ({ children }) => {
     <ReactErrorBoundary
       onError={onError}
       fallbackRender={useCallback(
-        (props) => (
+        (props: FallbackProps) => (
           <ErrorRender {...props} errorCount={errorCount} />
         ),
         [errorCount]
