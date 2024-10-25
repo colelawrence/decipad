@@ -256,7 +256,7 @@ test('checks the ability to change the unit of a response', async ({
   await page.waitForTimeout(Timeouts.liveBlockDelay);
 });
 
-test('check sql integrations is working correctly', async ({ testUser }) => {
+test('check sql integrations are working correctly', async ({ testUser }) => {
   test.slow();
   let notebookURL: string;
 
@@ -502,4 +502,32 @@ ORDER BY Day DESC
   await testUser.page.getByTestId('integration-modal-continue').click();
 
   await expect(testUser.page.getByText('MySQL')).toBeVisible();
+});
+
+test('Can add secrets to workspace', async ({ testUser }) => {
+  const { page, workspace } = testUser;
+  await test.step('Can see data connections button', async () => {
+    await testUser.goToWorkspace();
+    await workspace.openWorkspaceSettingsSection();
+    await expect(page.getByText('Data connections')).toBeVisible();
+  });
+
+  await test.step('Can click data connections and view modal', async () => {
+    await page.getByText('Data connections').click();
+    await expect(page.getByText('API Secrets')).toBeVisible();
+    await expect(page.getByText('SQL')).toBeVisible();
+  });
+
+  await test.step('Clicking code secrets shows the code secrets UI, and allows user to add.', async () => {
+    await page.getByText('API Secrets').click();
+    await page.getByTestId('input-secret-name').fill('MySecret');
+    await page.getByTestId('input-secret-value').fill('123');
+    await page.getByTestId('add-secret-button').click();
+    await expect(page.getByText('MySecret')).toBeVisible();
+  });
+
+  await test.step('Can delete code secrets', async () => {
+    await page.getByTestId('delete-secret').click();
+    await expect(page.getByText('MySecret')).toHaveCount(0);
+  });
 });
