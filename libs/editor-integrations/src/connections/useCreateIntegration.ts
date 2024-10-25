@@ -258,7 +258,7 @@ export const useConcreteIntegration = (
   return {
     stage,
     onClose: () => {
-      setSidebar({ type: 'integrations' });
+      setSidebar({ type: 'default-sidebar' });
     },
     connectionProps,
     onContinue,

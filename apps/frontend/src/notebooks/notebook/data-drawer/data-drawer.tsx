@@ -1,4 +1,12 @@
-import { FC, memo, ReactNode, useEffect, useMemo, useRef } from 'react';
+import {
+  FC,
+  memo,
+  ReactNode,
+  RefObject,
+  useEffect,
+  useMemo,
+  useRef,
+} from 'react';
 import {
   CREATING_VARIABLE_INITIAL_VALUE,
   useCreatingDataDrawer,
@@ -24,11 +32,11 @@ import { Plate, PlateContent, focusEditorEdge } from '@udecode/plate-common';
 import { useNotebookWithIdState } from '@decipad/notebook-state';
 import { useNotebookMetaData } from '@decipad/react-contexts';
 import { useMyEditorRef } from '@decipad/editor-types';
-import { assert, assertDefined } from '@decipad/utils';
+import { assert } from '@decipad/utils';
 import { titles } from './title';
 
 type DataDrawerResizerProps = {
-  parentRef: HTMLElement | null;
+  parentRef: RefObject<HTMLElement>;
   onCommitNewHeight: (_height: number) => void;
 };
 
@@ -36,19 +44,15 @@ const DataDrawerResizer: FC<DataDrawerResizerProps> = ({
   parentRef,
   onCommitNewHeight,
 }) => {
-  if (parentRef == null) {
-    return null;
-  }
-
   return (
     <DragPill
       onMouseDown={(e) => {
-        assertDefined(parentRef);
+        if (!parentRef.current) return;
 
         const startY = e.clientY;
-        const startHeight = parentRef.clientHeight;
+        const startHeight = parentRef.current.clientHeight;
 
-        onCommitNewHeight(parentRef.clientHeight);
+        onCommitNewHeight(parentRef.current.clientHeight);
 
         const onMouseMove = (moveEvent: MouseEvent) => {
           const newHeight = startHeight - (moveEvent.clientY - startY);
@@ -338,7 +342,7 @@ export const DataDrawerContainer: FC = () => {
   return (
     <DataDrawerDragWrapper ref={dataDrawerRef} height={height}>
       <DataDrawerResizer
-        parentRef={dataDrawerRef.current}
+        parentRef={dataDrawerRef}
         onCommitNewHeight={setHeight}
       />
       <DataDrawerKeysWrapper maxHeight={height}>

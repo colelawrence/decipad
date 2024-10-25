@@ -88,6 +88,28 @@ export const ActiveDataSetsWrapper = styled.div({
   },
 });
 
+export const DatasetCollapsibleTrigger = css(p14Medium, {
+  display: 'flex',
+  flexDirection: 'row',
+  alignItems: 'center',
+  color: cssVar('textDisabled'),
+  svg: {
+    width: '16px',
+    height: '16px',
+    padding: '4px',
+    boxSizing: 'content-box',
+  },
+  '& > *:last-child': {
+    marginLeft: '8px',
+  },
+});
+export const DatasetBadge = css({
+  marginTop: '1px',
+  lineHeight: 'normal',
+  padding: '0.1em 0.4em',
+  backgroundColor: cssVar('backgroundHeavy'),
+});
+
 export const AllServicesWrapper = styled.div({
   width: '100%',
   display: 'flex',

@@ -8,7 +8,7 @@ import {
   VariableTypeMenu,
   getTypeIcon,
 } from '@decipad/ui';
-import { FC, memo, useMemo, useState } from 'react';
+import { FC, memo, useEffect, useMemo, useRef, useState } from 'react';
 import { StyledFooter, StyledInput, StyledTable, TableWrapper } from './styles';
 import { CaretDown } from 'libs/ui/src/icons';
 import { SimpleTableCellType } from '@decipad/editor-types';
@@ -99,13 +99,21 @@ const ToggleInput: FC<{
   const [isEditing, setIsEditing] = useState(false);
   const [inputText, setInputText] = useState(text);
 
+  const inputRef = useRef<HTMLInputElement>(null);
+
   const formRef = useActiveElement<HTMLFormElement>(() => {
     if (!isEditing) {
       return;
     }
 
     setIsEditing(false);
+    onChangeText(inputText);
   });
+
+  useEffect(() => {
+    if (!isEditing) return;
+    inputRef.current?.focus();
+  }, [isEditing]);
 
   if (isEditing) {
     return (
@@ -118,6 +126,7 @@ const ToggleInput: FC<{
         }}
       >
         <StyledInput
+          ref={inputRef}
           value={inputText}
           onChange={(e) => setInputText(e.target.value)}
         />

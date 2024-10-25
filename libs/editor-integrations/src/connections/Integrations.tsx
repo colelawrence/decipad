@@ -1,5 +1,6 @@
 import { useNotebookMetaData } from '@decipad/react-contexts';
 import {
+  Badge,
   Button,
   ContentEditableInput,
   LiveCode,
@@ -15,7 +16,13 @@ import { useWorkspaceDatasets } from '../hooks';
 import { ImportElementSource } from '@decipad/editor-types';
 import { UpgradeWarningBlock } from '@decipad/editor-components';
 import { IntegrationList } from './IntegrationList';
-import { ArrowBack2, Close, MagnifyingGlass } from 'libs/ui/src/icons';
+import {
+  ArrowBack2,
+  CaretDown,
+  CaretRight,
+  Close,
+  MagnifyingGlass,
+} from 'libs/ui/src/icons';
 import { useComputer } from '@decipad/editor-hooks';
 import { useNotebookWithIdState } from '@decipad/notebook-state';
 import { Connection } from './Connection';
@@ -29,6 +36,8 @@ import {
   ActiveDataSetsWrapper,
   AllServicesWrapper,
   DataDrawerButtonWrapper,
+  DatasetBadge,
+  DatasetCollapsibleTrigger,
   PreviewActionsWrapper,
 } from './styles';
 import { Dataset } from '@decipad/interfaces';
@@ -36,6 +45,7 @@ import { ThumbnailCsv } from 'libs/ui/src/icons/thumbnail-icons';
 import { useConcreteIntegration } from './useCreateIntegration';
 import { InlineMenuItem } from 'libs/ui/src/modules/editor/InlineMenuItem/InlineMenuItem';
 import { PortalledPreview } from './ResultPreview';
+import * as Collapsible from '@radix-ui/react-collapsible';
 
 type DataDrawerButtonProps = {
   type: 'create' | 'edit';
@@ -242,30 +252,37 @@ const ActiveDataSets: FC<{
   dataSets: Dataset[];
   onSelectDataset: (_dataset: Dataset) => void;
 }> = ({ dataSets, onSelectDataset }) => {
+  const [open, setOpen] = useState(() => dataSets.length < 8);
   return (
-    <ActiveDataSetsWrapper>
-      <p>Active Datasets</p>
-      <div>
-        {dataSets.map((set) => (
-          <InlineMenuItem
-            key={set.dataset.id}
-            icon={<ThumbnailCsv />}
-            title={
-              set.type === 'attachment'
-                ? set.dataset.fileName
-                : set.dataset.name
-            }
-            enabled={true}
-            onExecute={() => onSelectDataset(set)}
-            description={`Size: ${
-              set.type === 'attachment'
-                ? Math.round(set.dataset.fileSize / 100_000) / 10
-                : '0'
-            }MB`}
-          />
-        ))}
-      </div>
-    </ActiveDataSetsWrapper>
+    <Collapsible.Root asChild open={open} onOpenChange={setOpen}>
+      <ActiveDataSetsWrapper>
+        <Collapsible.CollapsibleTrigger css={DatasetCollapsibleTrigger}>
+          {open ? <CaretDown /> : <CaretRight />}
+          <p>Active Datasets</p>
+          <Badge styles={DatasetBadge}>{dataSets.length}</Badge>
+        </Collapsible.CollapsibleTrigger>
+        <Collapsible.Content>
+          {dataSets.map((set) => (
+            <InlineMenuItem
+              key={set.dataset.id}
+              icon={<ThumbnailCsv />}
+              title={
+                set.type === 'attachment'
+                  ? set.dataset.fileName
+                  : set.dataset.name
+              }
+              enabled={true}
+              onExecute={() => onSelectDataset(set)}
+              description={`Size: ${
+                set.type === 'attachment'
+                  ? Math.round(set.dataset.fileSize / 100_000) / 10
+                  : '0'
+              }MB`}
+            />
+          ))}
+        </Collapsible.Content>
+      </ActiveDataSetsWrapper>
+    </Collapsible.Root>
   );
 };
 
