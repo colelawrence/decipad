@@ -384,7 +384,7 @@
     "unified": "11.0.4",
     "unist-util-visit": "5.0.0",
     "unzip-stream": "^0.3.4",
-    "urql": "^4.1.0",
+    "urql": "^4.2.0",
     "use-debounce": "^10.0.0",
     "use-query-params": "^2.2.0",
     "use-sync-external-store": "1.2.0",
