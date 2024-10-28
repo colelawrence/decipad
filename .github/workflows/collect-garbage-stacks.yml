@@ -22,5 +22,41 @@ jobs:
 
       - uses: actions/checkout@v4
 
+      - name: Cache Yarn dependencies and Node modules
+        uses: buildjet/cache@v4
+        with:
+          path: |
+            ~/.cache/yarn
+            node_modules
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+
+removestacks:
+  name: Remove garbage stacks
+  timeout-minutes: 90
+  runs-on: ubuntu-latest
+  strategy:
+    matrix:
+      node-version: [18.x]  # Specify the required Node.js version
+  concurrency:
+    group: collect-garbage-stacks
+    cancel-in-progress: false
+      - name: Uses wasm-pack
+        uses: jetli/wasm-pack-action@v0.4.0
+        with:
+          version: 'latest'
+
+      - name: Check if node_modules is cached
+        id: cache-check
+        run: |
+          if [ -d "node_modules" ]; then
+            echo "restored=true" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Install Dependencies
+        env:
+          PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: 'true'
+          DECI_IMAGE_LAMBDA_LAYER: 'arn:aws:lambda:eu-west-2:861969788890:layer:sharp:2'
+        run: yarn install --ignore-engines
+
       - name: Collect
         run: ./scripts/aws-garbage-collect-stacks.sh
