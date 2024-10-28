@@ -18,8 +18,11 @@ import {
 } from './Type';
 import { InferError } from '../InferError';
 
+const isSerializedType = (t: unknown): t is SerializedType =>
+  t != null && typeof t === 'object' && 'kind' in t;
+
 export function serializeType(type: Type | SerializedType): SerializedType {
-  if (!(type instanceof Type)) {
+  if (isSerializedType(type)) {
     // Already serialized
     return type;
   }
