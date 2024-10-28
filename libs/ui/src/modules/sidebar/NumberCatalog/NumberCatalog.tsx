@@ -1,12 +1,14 @@
 /* eslint decipad/css-prop-named-variable: 0 */
 import { SmartRefDragCallback } from '@decipad/editor-utils';
 import { css } from '@emotion/react';
-import { ReactNode } from 'react';
+import { ReactNode, useEffect, useState } from 'react';
 import { hideOnPrint } from '../../../styles/editor-layout';
 import { NumberCatalogHeading } from './NumberCatalogHeading';
 import { NumberCatalogItem } from './NumberCatalogItem';
 import { cssVar, p14Medium } from '../../../primitives';
 import { ImportElementSource } from '@decipad/editor-types';
+import * as Styled from './styles';
+import { CaretDown, CaretRight } from '../../../icons';
 
 export type NumberCatalogItemType = {
   name: string;
@@ -33,6 +35,23 @@ export const NumberCatalog = ({
   items = {},
   editVariable,
 }: NumberCatalogProps) => {
+  const [expandedHeadings, setExpandedHeadings] = useState<
+    Record<string, boolean>
+  >({});
+
+  const setIsHeadingExpanded = (tab: string) => {
+    setExpandedHeadings((prev) => ({ ...prev, [tab]: !prev[tab] }));
+  };
+
+  useEffect(() => {
+    const allTabs = Object.keys(items);
+    const expandedTabs = allTabs.reduce((acc, tab) => {
+      acc[tab] = true;
+      return acc;
+    }, {} as Record<string, boolean>);
+    setExpandedHeadings(expandedTabs);
+  }, [items]);
+
   function getNumberCatalogItemComponent(
     item: NumberCatalogItemType
   ): ReactNode {
@@ -66,9 +85,19 @@ export const NumberCatalog = ({
           {Object.keys(items).map((tab) => (
             <div key={tab} css={groupStyles}>
               {Object.keys(items).length > 1 && (
-                <span css={groupHeadingStyles}>{tab}:</span>
+                <span css={groupHeadingStyles}>
+                  <Styled.IconOuterWrapper
+                    onClick={() => setIsHeadingExpanded(tab)}
+                  >
+                    <Styled.IconWrapper>
+                      {expandedHeadings[tab] ? <CaretDown /> : <CaretRight />}
+                    </Styled.IconWrapper>
+                  </Styled.IconOuterWrapper>
+                  {tab}
+                </span>
               )}
-              {items[tab].map((item) => getNumberCatalogItemComponent(item))}
+              {expandedHeadings[tab] &&
+                items[tab].map((item) => getNumberCatalogItemComponent(item))}
             </div>
           ))}
         </div>
@@ -109,5 +138,8 @@ const groupStyles = css({
 
 const groupHeadingStyles = css(p14Medium, {
   color: cssVar('textSubdued'),
-  padding: '4px 8px',
+  padding: '4px 0',
+  display: 'flex',
+  alignItems: 'center',
+  gap: 4,
 });
