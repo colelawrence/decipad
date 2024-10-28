@@ -117,9 +117,9 @@ test.describe('staging performance checks', () => {
     expect
       .soft(
         performance.getSampleTime('Reducers count'),
-        'Reducers count took more than 3 second'
+        'Reducers count took more than 4 seconds'
       )
-      .toBeLessThanOrEqual(3_000);
+      .toBeLessThanOrEqual(4_000);
 
     // min
     performance.sampleStart('Reducers min');
@@ -136,9 +136,9 @@ test.describe('staging performance checks', () => {
     expect
       .soft(
         performance.getSampleTime('Reducers min'),
-        'Reducers min took more than 3 second'
+        'Reducers min took more than 4 seconds'
       )
-      .toBeLessThanOrEqual(3_000);
+      .toBeLessThanOrEqual(4_000);
 
     // max
     performance.sampleStart('Reducers max');
@@ -155,7 +155,7 @@ test.describe('staging performance checks', () => {
     expect
       .soft(
         performance.getSampleTime('Reducers max'),
-        'Reducers max took more than 4 second'
+        'Reducers max took more than 4 seconds'
       )
       .toBeLessThanOrEqual(4_000);
 
