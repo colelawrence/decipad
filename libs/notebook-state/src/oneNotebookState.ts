@@ -1,5 +1,5 @@
 /* eslint-disable no-labels */
-import { getComputer, getExprRef } from '@decipad/computer';
+import { getExprRef } from '@decipad/computer';
 import { type Computer } from '@decipad/computer-interfaces';
 import type { DocSyncEditor, OnLoadedCallback } from '@decipad/docsync';
 import { createDocSyncEditor } from '@decipad/docsync';
@@ -21,7 +21,6 @@ import { DATA_TAB_INDEX } from 'libs/notebook-tabs/src/constants';
 import debounce from 'lodash/debounce';
 import { nanoid } from 'nanoid';
 import { Subject, take } from 'rxjs';
-import { UAParser } from 'ua-parser-js';
 import { createStore } from 'zustand';
 import { subscribeWithSelector } from 'zustand/middleware';
 import { cursorAwareness } from './cursors';
@@ -92,32 +91,13 @@ const initialState = (): Omit<
   };
 };
 
-const supportsRemoteComputer = () => {
-  if (typeof navigator !== 'undefined') {
-    const { browser } = UAParser(navigator.userAgent);
-    if (browser.name?.includes('Safari')) {
-      return false;
+const createComputer = (notebookId: string): Computer =>
+  createRemoteComputerClient(notebookId, (err) => {
+    if (err) {
+      console.error('notebook store: Error in remote computer client', err);
+      captureException(err);
     }
-  }
-  if (typeof globalThis.location !== 'undefined') {
-    if (globalThis.location.pathname.startsWith('/docs')) {
-      return false;
-    }
-  }
-  return true;
-};
-
-const createComputer = (notebookId: string): Computer => {
-  if (supportsRemoteComputer()) {
-    return createRemoteComputerClient(notebookId, (err) => {
-      if (err) {
-        console.error('notebook store: Error in remote computer client', err);
-        captureException(err);
-      }
-    });
-  }
-  return getComputer();
-};
+  });
 
 export const createNotebookStore = (
   notebookId: string,
