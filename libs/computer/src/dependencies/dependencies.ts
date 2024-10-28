@@ -18,9 +18,10 @@ export const dependencies = (
 ): string[] => {
   if (initialNode.type === 'block') {
     // We need to get to the statement level
-    return unique(
+    const deps = unique(
       initialNode.args.flatMap((node) => dependencies(node, namespaces))
     );
+    return deps;
   }
 
   const localNames = getLocalNames(initialNode, namespaces) ?? new Set();
@@ -168,23 +169,26 @@ export const dependencies = (
         return unique(node.args.flatMap(findRefs));
       }
       case 'ref': {
-        const names = [node.args[0]];
-        if (node.previousVarName) {
-          names.push(node.previousVarName);
-        }
-        let hasLocalName;
-        for (const name of names) {
-          if (localNames.has(name)) {
-            hasLocalName = true;
-            if (localTableName != null) {
-              return names.map((name) => `${localTableName}::${name}`);
+        const ret = (() => {
+          const names = [node.args[0]];
+          if (node.previousVarName) {
+            names.push(node.previousVarName);
+          }
+          let hasLocalName;
+          for (const name of names) {
+            if (localNames.has(name)) {
+              hasLocalName = true;
+              if (localTableName != null) {
+                return names.map((name) => `${localTableName}::${name}`);
+              }
             }
           }
-        }
-        if (hasLocalName) {
-          return [];
-        }
-        return node.args;
+          if (hasLocalName) {
+            return [];
+          }
+          return node.args;
+        })();
+        return ret;
       }
       case 'tablepartialdef': {
         return node.args;

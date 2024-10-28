@@ -264,48 +264,13 @@ export const topologicalSort = (blocks: ProgramBlock[]): ProgramBlock[] => {
     return undefined;
   };
 
-  const nodeIsTableColumn = (node: Node): [string[], Node[]] | undefined => {
-    if (node.value.definesTableColumn) {
-      const [tableName] = node.value.definesTableColumn;
-      const tableNodes = identifiersToNode.get(tableName);
-      if (tableNodes) {
-        const tableEntities = tableNodes.flatMap((tableNode) =>
-          Array.from(tableNode.entities)
-        );
-        const tableColumnNodes = tableEntities.flatMap(
-          (tableNodeEntity) => tables[tableNodeEntity] ?? []
-        );
-        if (tableColumnNodes) {
-          return [tableEntities, tableColumnNodes];
-        }
-      }
-    }
-    return undefined;
-  };
-
-  const nodeIsTableOrTableColumn = (
-    node: Node,
-    tryTableColumns: boolean
-  ): [string[], Node[]] | undefined => {
-    return (
-      nodeIsTable(node) ??
-      (tryTableColumns ? nodeIsTableColumn(node) : undefined)
-    );
-  };
-
   // if some node A has a table as a dep, and A is not a property of that table, add all the table's columns as deps
   for (const node of nodes) {
     if (!node.edges) {
       continue;
     }
     for (const edge of node.edges) {
-      const pointsToTable = nodeIsTableOrTableColumn(
-        edge,
-        // skip table columns if node defines a table
-        // column. This allows different tables to
-        // depend on each other.
-        !node.value.definesTableColumn
-      );
+      const pointsToTable = nodeIsTable(edge);
       if (!pointsToTable) {
         continue;
       }
@@ -319,11 +284,6 @@ export const topologicalSort = (blocks: ProgramBlock[]): ProgramBlock[] => {
           tableOrColumnEntities.has(nodeEnt)
         )
       ) {
-        // console.log(
-        //   'adding edges',
-        //   node.value.id,
-        //   columns.map((c) => c.value.id)
-        // );
         for (const col of columns) {
           node.edges.add(col);
         }
