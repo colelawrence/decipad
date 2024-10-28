@@ -42,6 +42,7 @@ export type IdentifiedError =
       errorKind: 'dependency-cycle';
       source?: undefined;
       error?: undefined;
+      explanation: string[];
     });
 
 /** Contains the result */

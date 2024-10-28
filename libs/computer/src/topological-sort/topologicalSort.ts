@@ -97,10 +97,14 @@ const drawEdges = (
   node.edges = new Set(edges) as Set<Node>;
 };
 
-const identifiedErrorFromNode = (id: string): IdentifiedError => ({
+const identifiedErrorFromNode = (
+  id: string,
+  explanation: string[]
+): IdentifiedError => ({
   type: 'identified-error',
   id,
   errorKind: 'dependency-cycle',
+  explanation,
 });
 
 const isTesting = !!(
@@ -111,35 +115,38 @@ const getBlockName = (block: IdentifiedBlock): string =>
   block.definesVariable ??
   (block.definesTableColumn ? block.definesTableColumn.join('.') : block.id);
 
-const printDependents = (n: Node, visited: Set<string>): void => {
+const printDependents = (n: Node, visited: Set<string>): string[] => {
   if (visited.has(n.value.id)) {
-    return;
+    return [];
   }
   if (n.edges == null) {
-    return;
+    return [];
   }
   const interestingEdges = Array.from(n.edges).filter(
     (edge) => edge.temporaryMark
   );
   if (!interestingEdges.length) {
-    return;
+    return [];
   }
   visited.add(n.value.id);
-  console.error(
-    '%s depends on %s',
-    getBlockName(n.value),
-    interestingEdges.map((edge) => getBlockName(edge.value)).join(', ')
-  );
+  const dependents: string[] = [
+    `${getBlockName(n.value)} depends on ${interestingEdges
+      .map((edge) => getBlockName(edge.value))
+      .join(' and ')}`,
+  ];
   for (const edge of n.edges ?? []) {
     if (!visited.has(edge.value.id)) {
-      printDependents(edge, visited);
+      dependents.push(...printDependents(edge, visited));
     }
   }
+  return dependents;
 };
 
-const printDependencyCycle = (n: Node): void => {
-  console.error('node %s has a dependency cycle', getBlockName(n.value));
-  printDependents(n, new Set());
+const printDependencyCycle = (n: Node): string[] => {
+  return [
+    `node ${getBlockName(n.value)} has a dependency cycle`,
+    ...printDependents(n, new Set()),
+  ];
 };
 
 // eslint-disable-next-line complexity
@@ -166,11 +173,12 @@ export const topologicalSort = (blocks: ProgramBlock[]): ProgramBlock[] => {
     }
     if (n.temporaryMark) {
       // Circular dep
+      const cycleDesc = printDependencyCycle(n);
       if (!isTesting) {
-        printDependencyCycle(n);
+        console.error(cycleDesc.join('\n'));
       }
       if (!n.permanentMark) {
-        const errorNode = identifiedErrorFromNode(n.value.id);
+        const errorNode = identifiedErrorFromNode(n.value.id, cycleDesc);
         n.permanentMark = true;
         errored.push(errorNode);
       }
@@ -184,7 +192,9 @@ export const topologicalSort = (blocks: ProgramBlock[]): ProgramBlock[] => {
       if (error) {
         if (!n.permanentMark) {
           n.permanentMark = true;
-          errored.push(identifiedErrorFromNode(n.value.id));
+          errored.push(
+            identifiedErrorFromNode(n.value.id, printDependencyCycle(n))
+          );
         }
         return error;
       }

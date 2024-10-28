@@ -5,14 +5,16 @@ import type {
   IdentifiedResult,
 } from '@decipad/computer-interfaces';
 
-const errorMessage = (message?: IdentifiedError['errorKind']): string => {
-  switch (message) {
+const errorMessage = (error?: IdentifiedError): string => {
+  switch (error?.errorKind) {
     case 'parse-error':
       return 'Syntax error';
-    case 'dependency-cycle':
-      return 'Circular definition';
+    case 'dependency-cycle': {
+      const [first, ...rest] = error.explanation;
+      return `Circular definition: ${first} since ${rest.join(', and ')}`;
+    }
   }
-  return message ?? 'Unknown error';
+  return 'Unknown error';
 };
 
 export const selectErrorFromResult = (
@@ -24,7 +26,7 @@ export const selectErrorFromResult = (
         kind: 'type-error',
         errorCause: {
           errType: 'free-form',
-          message: errorMessage(blockResult.errorKind),
+          message: errorMessage(blockResult),
         },
       },
       value: Unknown,
