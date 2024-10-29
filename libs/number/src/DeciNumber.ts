@@ -114,6 +114,10 @@ export class DeciNumber implements TDeciNumber {
       }
     }
     if (tof === 'number' || tof === 'string' || tof === 'bigint') {
+      if (typeof f === 'string') {
+        // HACK: remove commas
+        f = f.replaceAll(',', '');
+      }
       const n = F(f as number | string | bigint);
       this.n = n.n as bigint;
       this.d = n.d as bigint;

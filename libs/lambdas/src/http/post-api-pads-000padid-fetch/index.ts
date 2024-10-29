@@ -45,6 +45,7 @@ const replaceWithSecrets = (
     return template;
   }
   const cTemplate = Handlebars.compile(template, {
+    noEscape: true,
     strict: true,
     preventIndent: true,
   });
