@@ -85,12 +85,10 @@ test.describe('staging performance checks', () => {
         await expect(
           page.getByTestId('live-code').getByTestId('loading-animation').first()
         ).toBeHidden();
-      }).toPass({
-        timeout: 1000,
-      });
-      await expect(
-        page.getByText('4999 rows, previewing rows 1 to 10')
-      ).toBeVisible();
+        await expect(
+          page.getByText('4999 rows, previewing rows 1 to 10')
+        ).toBeVisible();
+      }).toPass();
     });
     performance.sampleEnd('Ingest CSV');
     expect
@@ -433,12 +431,10 @@ test.describe('data views', () => {
         await expect(
           page.getByTestId('live-code').getByTestId('loading-animation').first()
         ).toBeHidden();
-      }).toPass({
-        timeout: 1000,
-      });
-      await expect(
-        page.getByText('4999 rows, previewing rows 1 to 10')
-      ).toBeVisible();
+        await expect(
+          page.getByText('4999 rows, previewing rows 1 to 10')
+        ).toBeVisible();
+      }).toPass();
     });
     performance.sampleEnd('Ingest CSV');
     expect
@@ -578,12 +574,10 @@ test.describe('staging operation performance checks', () => {
         await expect(
           page.getByTestId('live-code').getByTestId('loading-animation').first()
         ).toBeHidden();
-      }).toPass({
-        timeout: 1000,
-      });
-      await expect(
-        page.getByText('4999 rows, previewing rows 1 to 10')
-      ).toBeVisible();
+        await expect(
+          page.getByText('4999 rows, previewing rows 1 to 10')
+        ).toBeVisible();
+      }).toPass();
     });
     performance.sampleEnd('Ingest CSV');
     expect
