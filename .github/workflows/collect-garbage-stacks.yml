@@ -30,16 +30,6 @@ jobs:
             node_modules
           key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
 
-removestacks:
-  name: Remove garbage stacks
-  timeout-minutes: 90
-  runs-on: ubuntu-latest
-  strategy:
-    matrix:
-      node-version: [18.x]  # Specify the required Node.js version
-  concurrency:
-    group: collect-garbage-stacks
-    cancel-in-progress: false
       - name: Uses wasm-pack
         uses: jetli/wasm-pack-action@v0.4.0
         with:
