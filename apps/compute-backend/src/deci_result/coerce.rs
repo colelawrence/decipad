@@ -2,6 +2,8 @@ use crate::{
     parse::date::DateMemo,
     types::types::{DateSpecificity, DeciDate, DeciResult, DeciType},
 };
+use core::f64;
+use fraction::ToPrimitive as _;
 use std::str::FromStr;
 
 pub trait Coerce<To> {
@@ -155,7 +157,7 @@ impl DeciResult {
                 );
                 Some(match to {
                     DeciType::Number => self,
-                    DeciType::String => inner.to_string().into(),
+                    DeciType::String => inner.to_f64().unwrap_or(f64::NAN).to_string().into(),
                     _ => return None,
                 })
             }

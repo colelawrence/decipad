@@ -118,4 +118,38 @@ export class GSheetRunner extends Runner<T, O> {
     }
     return res.arrayBuffer().then((arr) => new Uint8Array(arr));
   }
+
+  public static parseRange(range: string): ReturnType<typeof parseRange> {
+    return parseRange(range);
+  }
 }
+
+const parseRange = (
+  range?: string
+): [[number, number], [number, number]] | undefined => {
+  if (!range || range.trim().length === 0) return undefined;
+
+  const parts = range.split(':');
+  if (parts.length !== 2) return undefined;
+  const start = parts[0].trim();
+  const end = parts[1].trim();
+
+  const cellToCoords = (cell: string): [number, number] | undefined => {
+    const match = cell.match(/^([A-Z]+)(\d+)$/);
+    if (!match) return undefined;
+
+    const col =
+      match[1]
+        .split('')
+        .reduce((acc, char) => acc * 26 + char.charCodeAt(0) - 64, 0) - 1;
+    const row = parseInt(match[2], 10) - 1;
+    return [col, row];
+  };
+
+  const startCoords = cellToCoords(start);
+  const endCoords = cellToCoords(end);
+
+  if (!startCoords || !endCoords) return undefined;
+
+  return [startCoords, endCoords];
+};

@@ -27,6 +27,7 @@ export interface NotionBlockIntegration {
 export interface GoogleSheetIntegration {
   type: 'gsheets';
   spreadsheetUrl: string;
+  range?: string;
 }
 
 export interface CSVIntegration {

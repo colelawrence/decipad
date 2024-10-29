@@ -1,6 +1,5 @@
 /* eslint-disable no-param-reassign */
-import { Button, OptionsList, cssVar, p13Bold } from '@decipad/ui';
-import styled from '@emotion/styled';
+import { Button, Input, OptionsList } from '@decipad/ui';
 import { FC, useCallback, useState } from 'react';
 import { ConnectionProps } from '../types';
 import { useCustomScript } from '@decipad/react-utils';
@@ -11,20 +10,6 @@ import { ImportParams, getGsheetMeta } from '@decipad/import';
 import { useComputer } from '@decipad/editor-hooks';
 import { assert, assertInstanceOf } from '@decipad/utils';
 import { GSheetRunner } from '../../runners';
-
-const Styles = {
-  Trigger: styled.div({
-    cursor: 'pointer',
-    width: '100%',
-    display: 'flex',
-    justifyContent: 'space-between',
-    borderRadius: '6px',
-    height: '32px',
-    border: `1px solid ${cssVar('borderSubdued')}`,
-    padding: '6px',
-    svg: { width: '16px', height: '16px' },
-  }),
-};
 
 type CallbackResponse =
   | {
@@ -160,13 +145,13 @@ const ActualSheetSelector: FC<ConnectionProps> = ({
 
   return (
     <>
-      <p css={p13Bold}>Select Spreadsheet</p>
+      <h3>Select Spreadsheet</h3>
       <div css={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
         <Button onClick={selectGSheet} styles={{ whiteSpace: 'nowrap' }}>
           Select Spreadsheet
         </Button>
         {runner.resourceName != null && (
-          <Styles.Trigger>{runner.resourceName.sheet}</Styles.Trigger>
+          <Input disabled variant="small" value={runner.resourceName.sheet} />
         )}
         {runner.resourceName != null && (
           <div css={{ width: '100%' }}>

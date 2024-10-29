@@ -292,7 +292,7 @@ export class Computer implements ComputerInterface {
                   : metaColumnOptions[col.name]?.desiredName ?? col.name
               )
               .filter((name): name is string => name != null),
-            indexName: tableResult[0].name,
+            indexName: tableResult[0]?.name,
           },
           value: tableResult
             .map((col) => {

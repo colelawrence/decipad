@@ -1,17 +1,11 @@
-import { Button, cssVar, isValidURL, sanitizeInput } from '@decipad/ui';
+import { Button, cssVar, Input, isValidURL, sanitizeInput } from '@decipad/ui';
 import styled from '@emotion/styled';
-import { FC, useCallback, useMemo, useRef, useState } from 'react';
+import { FC, useMemo, useState } from 'react';
 import { ConnectionProps } from '../types';
 import { isRunnerOfType } from '../../runners';
 
 export const FromUrl: FC<ConnectionProps> = ({ runner, onRun }) => {
-  const inputUrlRef = useRef<HTMLInputElement>(null);
   const [url, setUrl] = useState<string>('');
-
-  const handleInputChange = useCallback(() => {
-    const newUrl = inputUrlRef.current?.value || '';
-    setUrl(newUrl);
-  }, []);
 
   const isValidUrl = useMemo(() => {
     return url != null && isValidURL(url);
@@ -34,9 +28,10 @@ export const FromUrl: FC<ConnectionProps> = ({ runner, onRun }) => {
 
   return (
     <Wrapper>
-      <input
-        ref={inputUrlRef}
-        onChange={handleInputChange}
+      <Input
+        variant="small"
+        value={url}
+        onChangeValue={setUrl}
         type="text"
         placeholder="Google Sheet URL"
       />

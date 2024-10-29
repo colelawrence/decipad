@@ -82,6 +82,7 @@ export type MenuListProps = (
 ) & {
   readonly children: ReactNode;
   readonly open?: boolean;
+  readonly disabled?: boolean;
   readonly portal?: boolean;
   readonly modal?: boolean;
   readonly onChangeOpen?: (newOpen: boolean) => void;
@@ -146,6 +147,7 @@ export const MenuList: FC<MenuListProps> = ({
   modal,
   dropdown = !root,
   portal = true,
+  disabled = false,
   align = 'start',
   side = 'bottom',
   sideOffset = 0,
@@ -187,7 +189,9 @@ export const MenuList: FC<MenuListProps> = ({
 
   if (root) {
     triggerNode = (
-      <DropdownMenuTriggerElement asChild>{trigger}</DropdownMenuTriggerElement>
+      <DropdownMenuTriggerElement asChild disabled={disabled}>
+        {trigger}
+      </DropdownMenuTriggerElement>
     );
   } else if (isElement(itemTrigger) && itemTrigger.type === TriggerMenuItem) {
     triggerNode = itemTrigger;

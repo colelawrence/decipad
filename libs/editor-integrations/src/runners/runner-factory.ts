@@ -59,9 +59,15 @@ function getRunner(options: RunnerFactoryParams): Runner {
     case 'gsheets':
       return new GSheetRunner(options.id, {
         name: options.name,
-        runner: { spreadsheetUrl: integrationType.spreadsheetUrl },
+        runner: {
+          spreadsheetUrl: integrationType.spreadsheetUrl,
+          range: integrationType.range,
+        },
         importer: {
           isFirstHeaderRow: options.integration?.isFirstRowHeader ?? true,
+          range: integrationType.range
+            ? GSheetRunner.parseRange(integrationType.range)
+            : undefined,
         },
         types: options.types,
         padId: options.notebookId,

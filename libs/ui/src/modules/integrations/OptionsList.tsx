@@ -25,6 +25,7 @@ export const OptionsList = <T extends BasicSelector>({
 
   extraOption,
   onSelect,
+  disabled,
 }: UISelectConnectionProps<T>): ReturnType<FC> => {
   const [open, setOpen] = useState(false);
 
@@ -34,6 +35,7 @@ export const OptionsList = <T extends BasicSelector>({
     <MenuList
       root
       dropdown
+      disabled={disabled}
       open={open}
       onChangeOpen={setOpen}
       sideOffset={6}
