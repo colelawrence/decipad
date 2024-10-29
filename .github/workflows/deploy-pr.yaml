@@ -7,7 +7,6 @@ on:
       - '.husky/**'
       - '.vscode/**'
       - '.yarn/**'
-      - 'apps/e2e/**'
 
 jobs:
   deploy:

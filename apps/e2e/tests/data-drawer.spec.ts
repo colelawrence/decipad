@@ -42,7 +42,7 @@ test('basic inline results', async ({ testUser }) => {
   });
 
   await test.step('Testing checkboxes', async () => {
-    await page.getByTestId('code-result:false').click();
+    await page.getByTestId('code-result:false').first().click();
     await expect(testUser.notebook.dataDrawer).toBeVisible();
 
     await testUser.notebook.dataDrawer.fill('true');
