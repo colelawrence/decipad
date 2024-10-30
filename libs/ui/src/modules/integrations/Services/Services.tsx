@@ -100,6 +100,7 @@ export const Services: FC<ServicesProps> = ({ workspaceId }) => {
         icon={<ThumbnailNotion />}
         title="Notion"
         description="Work with Notion Databases at the speed of thought!"
+        variant="modal"
         onClick={() => {
           track({
             segmentEvent: {
@@ -118,6 +119,7 @@ export const Services: FC<ServicesProps> = ({ workspaceId }) => {
         icon={<ThumbnailGoogleSheet />}
         title="Google Sheets"
         description="Effortlessly use your spreadsheet inside Decipad!"
+        variant="modal"
         onClick={() => {
           OnConnectIntegration('gsheets');
         }}
@@ -130,6 +132,7 @@ export const Services: FC<ServicesProps> = ({ workspaceId }) => {
               icon={IconMap[externalDataSource.provider]}
               title={externalDataSource.name}
               description={''}
+              variant="modal"
               onClick={() => {}}
               onEdit={() => {
                 OnAuth(externalDataSource);

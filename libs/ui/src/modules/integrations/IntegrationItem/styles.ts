@@ -8,17 +8,33 @@ export const IntegrationItemStyled = css({
   gap: '0 12px',
   // height: '56px',
 
-  gridTemplateColumns: '40px 1fr',
+  gridTemplateColumns: '40px 1fr max-content',
   gridTemplateRows: 'min-content 1fr',
+  '&[data-single="true"]': {
+    gridTemplateRows: '1fr',
+  },
 
-  cursor: 'pointer',
+  '&[data-variant=sidebar]': {
+    cursor: 'pointer',
+  },
+
+  '&[data-variant=modal]': {
+    border: `1px solid ${cssVar('borderSubdued')}`,
+    padding: '8px',
+  },
 
   borderRadius: '8px',
-  // border: `1px solid ${cssVar('borderSubdued')}`,
 
   'h2, p': {
     gridColumn: '2/3',
     // lineHeight: '0.8rem',
+  },
+
+  span: {
+    gridArea: '3/4/1/3',
+    display: 'flex',
+    flexDirection: 'row',
+    gap: '8px',
   },
 });
 

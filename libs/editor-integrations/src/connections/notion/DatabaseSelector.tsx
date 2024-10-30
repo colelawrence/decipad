@@ -59,18 +59,17 @@ const NotionPrivateDatabasesSelector: FC<ConnectionProps> = ({
       return <LoadingIndicator />;
     }
 
-    // const databaseName = runner.getSubId();
-    const databaseName = { name: 'FIXME' };
+    const databaseName = runner.resourceName;
 
     if (databaseName == null) {
       return 'Select Database';
     }
 
-    if (databaseName.name.length === 0) {
+    if (databaseName.length === 0) {
       return 'Unnamed Database';
     }
 
-    return databaseName.name;
+    return databaseName;
   };
 
   if (databases?.length === 0 && !isFetching) {

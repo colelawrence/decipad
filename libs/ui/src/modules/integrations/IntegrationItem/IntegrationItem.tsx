@@ -5,19 +5,18 @@ import { Button, Loading } from '../../../shared';
 import {
   IntegrationItemStyled,
   IntegrationItemIconWrapper,
-  IntegrationItemTextAndActions,
   IntegrationActionItemStyled,
   IntegrationDeleteText,
   IntegrationItemIconDisabledWrapper,
   IntegrationItemDisabledTextAndActions,
   IntegrationSoonTag,
-  IntegrationButton,
 } from './styles';
 
 type IntegrationItemProps = Readonly<{
   icon: ReactNode;
   title: string;
   description: string;
+  variant?: 'sidebar' | 'modal';
 
   onClick: () => void;
   isOperationInprogress?: boolean;
@@ -30,12 +29,28 @@ export const IntegrationItem: FC<IntegrationItemProps> = ({
   description,
   onClick,
   testId,
+  variant = 'sidebar',
 }) => {
   return (
-    <div css={IntegrationItemStyled} data-testid={testId} onClick={onClick}>
+    <div
+      css={IntegrationItemStyled}
+      data-variant={variant}
+      data-testid={variant === 'sidebar' && testId}
+      onClick={() => {
+        if (variant !== 'sidebar') return;
+        onClick();
+      }}
+    >
       <div css={IntegrationItemIconWrapper}>{icon}</div>
       <h2 css={p14Medium}>{title}</h2>
       {description.length > 0 && <p css={p12Regular}>{description}</p>}
+      <span>
+        {variant === 'modal' && (
+          <Button type="secondary" onClick={onClick} testId={testId}>
+            Connect
+          </Button>
+        )}
+      </span>
     </div>
   );
 };
@@ -54,6 +69,7 @@ export const IntegrationActionItem: FC<IntegrationActionItemProps> = ({
   testId,
   onEdit,
   onDelete,
+  variant = 'sidebar',
 }) => {
   const [isDeleting, setIsDeleting] = useState(false);
   const [isDeleteInProgress, setIsDeleteInProgress] = useState(false);
@@ -66,71 +82,55 @@ export const IntegrationActionItem: FC<IntegrationActionItemProps> = ({
     setIsDeleteInProgress(false);
   };
 
-  if (isDeleting) {
-    return (
-      <div css={IntegrationActionItemStyled} data-testid={testId}>
-        <div css={IntegrationItemIconWrapper}>{icon}</div>
-        <div css={IntegrationItemTextAndActions}>
-          <div>
-            <p css={p14Medium}>{title}</p>
-            <p css={p12Regular}>{description}</p>
-          </div>
-          <div css={IntegrationButton}>
-            <span css={IntegrationDeleteText}>
-              Notebooks with this connection could break
-            </span>
-            <Button type="secondary" onClick={() => setIsDeleting(false)}>
-              Cancel
-            </Button>
-            <Button
-              type="danger"
-              onClick={onConfirmDelete}
-              disabled={isDeleteInProgress || isEditInProgress}
-            >
-              Delete
-            </Button>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
   return (
-    <div css={IntegrationActionItemStyled} data-testid={testId}>
+    <div
+      css={IntegrationActionItemStyled}
+      data-variant={variant}
+      data-single={description.length === 0}
+      data-testid={testId}
+    >
       <div css={IntegrationItemIconWrapper}>{icon}</div>
-      <div css={IntegrationItemTextAndActions}>
-        <div>
-          <p css={p14Medium}>{title}</p>
-          {description.length > 0 && <p css={p12Regular}>{description}</p>}
-        </div>
-        <div css={IntegrationButton}>
-          {onEdit != null && (
-            <Button
-              type="secondary"
-              onClick={() => {
-                setIsEditInProgress(true);
-                onEdit();
-              }}
-              disabled={isDeleteInProgress || isEditInProgress}
-            >
-              Edit
-              {isEditInProgress && (
-                <Loading width="16px" style={{ marginLeft: '6px' }} />
-              )}
-            </Button>
-          )}
+      <h2 css={p14Medium}>{title}</h2>
+      {description.length > 0 && <p css={p12Regular}>{description}</p>}
+      <span>
+        {isDeleting && (
+          <span css={IntegrationDeleteText}>
+            Notebooks with this connection could break
+          </span>
+        )}
+        {onEdit != null && (
           <Button
             type="secondary"
-            onClick={() => setIsDeleting(true)}
+            onClick={() => {
+              if (isDeleting) {
+                setIsDeleting(false);
+                return;
+              }
+              setIsEditInProgress(true);
+              onEdit();
+            }}
             disabled={isDeleteInProgress || isEditInProgress}
           >
-            Delete{' '}
-            {isDeleteInProgress && (
+            {isDeleting ? 'Cancel' : 'Edit'}
+            {isEditInProgress && (
               <Loading width="16px" style={{ marginLeft: '6px' }} />
             )}
           </Button>
-        </div>
-      </div>
+        )}
+        <Button
+          type={isDeleting ? 'danger' : 'secondary'}
+          onClick={() => {
+            if (isDeleting) onConfirmDelete();
+            else setIsDeleting(true);
+          }}
+          disabled={isDeleteInProgress || isEditInProgress}
+        >
+          Delete{' '}
+          {isDeleteInProgress && (
+            <Loading width="16px" style={{ marginLeft: '6px' }} />
+          )}
+        </Button>
+      </span>
     </div>
   );
 };
