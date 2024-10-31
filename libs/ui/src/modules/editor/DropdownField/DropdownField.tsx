@@ -33,40 +33,34 @@ const triggerStyles = css([
 ]);
 
 interface DropdownFieldProps {
-  readonly label?: string;
+  readonly label?: ReactNode;
   readonly icon?: ReactNode;
   readonly squareIcon?: boolean;
-  readonly triggerText: string;
+  readonly triggerText: ReactNode;
   readonly children: ReactNode;
 }
 
 export const DropdownField = ({
   label,
   icon,
-  squareIcon = true,
+  squareIcon,
   triggerText,
   children,
 }: DropdownFieldProps) => {
   const id = `dropdown-${useId()}`;
 
-  const labelEl = label && (
-    <label htmlFor={id} css={[inputLabel, { display: 'block' }]}>
-      {label}
-    </label>
-  );
-
   return (
     <div>
-      {labelEl}
+      {label && <DropdownFieldLabel id={id}>{label}</DropdownFieldLabel>}
       <MenuList
         root
         dropdown
         trigger={
-          <button id={id} type="button" css={triggerStyles}>
-            {icon && <span css={iconWrapperStyles(squareIcon)}>{icon}</span>}
-            {triggerText}
-            <CaretDown css={{ width: '12px', marginLeft: 'auto' }} />
-          </button>
+          <div>
+            <DropdownFieldTrigger id={id} icon={icon} squareIcon={squareIcon}>
+              {triggerText}
+            </DropdownFieldTrigger>
+          </div>
         }
         sideOffset={4}
         styles={css({ width: 'var(--radix-popper-anchor-width)' })}
@@ -76,3 +70,37 @@ export const DropdownField = ({
     </div>
   );
 };
+
+export interface DropdownFieldLabelProps {
+  readonly id: string;
+  readonly children: ReactNode;
+}
+
+export const DropdownFieldLabel = ({
+  id,
+  children,
+}: DropdownFieldLabelProps) => (
+  <label htmlFor={id} css={[inputLabel, { display: 'block' }]}>
+    {children}
+  </label>
+);
+
+export interface DropdownFieldTriggerProps {
+  readonly id: string;
+  readonly icon?: ReactNode;
+  readonly squareIcon?: boolean;
+  readonly children: ReactNode;
+}
+
+export const DropdownFieldTrigger = ({
+  id,
+  icon,
+  squareIcon = true,
+  children,
+}: DropdownFieldTriggerProps) => (
+  <button id={id} type="button" css={triggerStyles}>
+    {icon && <span css={iconWrapperStyles(squareIcon)}>{icon}</span>}
+    {children}
+    <CaretDown css={{ width: '12px', marginLeft: 'auto' }} />
+  </button>
+);

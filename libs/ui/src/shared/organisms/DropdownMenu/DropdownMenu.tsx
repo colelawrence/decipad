@@ -14,7 +14,12 @@ import {
 } from 'react';
 import { Add } from 'libs/ui/src/icons';
 import { DropdownOption, EditItemsOptions, SelectItems } from '../../molecules';
-import { cssVar, mediumShadow, p13Medium } from '../../../primitives';
+import {
+  cssVar,
+  mediumShadow,
+  p12Regular,
+  p13Medium,
+} from '../../../primitives';
 import { deciOverflowYStyles } from '../../../styles/scrollbars';
 import { DropdownMenuGroup } from '../DropdownMenuGroup/DropdownMenuGroup';
 
@@ -32,8 +37,7 @@ const styles = css({
   border: `1px solid ${cssVar('borderSubdued')}`,
   borderRadius: '12px',
   boxShadow: `0px 3px 24px -4px ${mediumShadow.rgba}`,
-  width: '100%',
-  maxWidth: '244px',
+  width: 'var(--radix-popper-anchor-width)',
   minWidth: '244px',
   boxSizing: 'border-box',
 });
@@ -75,6 +79,19 @@ const hotKeyStyle = css({
   color: cssVar('textSubdued'),
 });
 
+const emptyStyle = css([
+  p12Regular,
+  {
+    height: '32px',
+    display: 'flex',
+    paddingLeft: '4px',
+    paddingRight: '4px',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    color: cssVar('textSubdued'),
+  },
+]);
+
 export type DropdownMenuProps = EditItemsOptions & {
   readonly open: boolean;
   readonly setOpen: (a: boolean) => void;
@@ -85,6 +102,7 @@ export type DropdownMenuProps = EditItemsOptions & {
   readonly addOption?: (a: string) => void;
   readonly children?: ReactNode;
   readonly selectedIndex?: number;
+  readonly renderEmpty?: ReactNode;
 };
 
 /**
@@ -102,6 +120,7 @@ export const DropdownMenu: FC<DropdownMenuProps> = ({
   isEditingAllowed = false,
   children,
   selectedIndex,
+  renderEmpty,
 }) => {
   const ref = useRef<HTMLInputElement>(null);
 
@@ -115,26 +134,28 @@ export const DropdownMenu: FC<DropdownMenuProps> = ({
   /**
    * Splits the given content into various groups.
    */
-  const splitGroups = useMemo(
+  const splitGroupEntries = useMemo(
     () =>
-      groups.reduce((prev, next) => {
-        if (!next.group) {
-          if (!prev['']) {
-            /* eslint no-param-reassign: "error" */
-            prev[''] = [];
+      Object.entries(
+        groups.reduce((prev, next) => {
+          if (!next.group) {
+            if (!prev['']) {
+              /* eslint no-param-reassign: "error" */
+              prev[''] = [];
+            }
+            prev[''].push(next);
+            return prev;
           }
-          prev[''].push(next);
-          return prev;
-        }
 
-        if (next.group! in prev) {
-          prev[next.group].push(next);
+          if (next.group! in prev) {
+            prev[next.group].push(next);
+            return prev;
+          }
+          /* eslint no-param-reassign: "error" */
+          prev[next.group] = [next];
           return prev;
-        }
-        /* eslint no-param-reassign: "error" */
-        prev[next.group] = [next];
-        return prev;
-      }, {} as Record<string, Array<SelectItems>>),
+        }, {} as Record<string, Array<SelectItems>>)
+      ),
     [groups]
   );
 
@@ -195,7 +216,7 @@ export const DropdownMenu: FC<DropdownMenuProps> = ({
         <Popover.Content style={{ zIndex: '100' }}>
           <div css={styles}>
             <div css={mainStyles}>
-              {Object.entries(splitGroups).map(([key, items]) => (
+              {splitGroupEntries.map(([key, items]) => (
                 <DropdownMenuGroup
                   key={key}
                   title={key.length === 0 ? undefined : key}
@@ -207,6 +228,9 @@ export const DropdownMenu: FC<DropdownMenuProps> = ({
                   focusedItem={focusedItem}
                 />
               ))}
+              {splitGroupEntries.length === 0 && renderEmpty && (
+                <div css={emptyStyle}>{renderEmpty}</div>
+              )}
               {!isReadOnly && showInput && (
                 <DropdownOption
                   value={inputValue}

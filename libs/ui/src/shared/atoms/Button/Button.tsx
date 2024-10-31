@@ -42,7 +42,7 @@ export const typeStyles: Record<
       boxShadow: '',
       backgroundColor: cssVar('backgroundMain'),
 
-      ':hover, :focus': {
+      ':hover, :focus-visible': {
         backgroundColor: cssVar('backgroundSubdued'),
       },
     },
@@ -53,12 +53,29 @@ export const typeStyles: Record<
       backgroundColor: cssVar('backgroundMain'),
     },
   },
+  ghost: {
+    enabled: {
+      boxSizing: 'border-box',
+      boxShadow: '',
+      backgroundColor: cssVar('backgroundMain'),
+
+      ':hover, :focus-visible': {
+        boxShadow: `0px 0px 0px 1px ${cssVar('borderDefault')} inset`,
+        backgroundColor: cssVar('backgroundSubdued'),
+      },
+    },
+    disabled: {
+      border: 0,
+      boxShadow: '',
+      backgroundColor: cssVar('backgroundMain'),
+    },
+  },
   primaryBrand: {
     enabled: {
       backgroundColor: componentCssVars('ButtonPrimaryDefaultBackground'),
       color: componentCssVars('ButtonPrimaryDefaultText'),
 
-      ':hover, :focus': {
+      ':hover, :focus-visible': {
         backgroundColor: componentCssVars('ButtonPrimaryHoverBackground'),
         color: componentCssVars('ButtonPrimaryHoverText'),
       },
@@ -73,7 +90,7 @@ export const typeStyles: Record<
       backgroundColor: componentCssVars('ButtonSecondaryDefaultBackground'),
       color: componentCssVars('ButtonSecondaryDefaultText'),
 
-      ':hover, :focus': {
+      ':hover, :focus-visible': {
         backgroundColor: componentCssVars('ButtonSecondaryHoverBackground'),
         color: componentCssVars('ButtonSecondaryHoverText'),
       },
@@ -88,7 +105,7 @@ export const typeStyles: Record<
       backgroundColor: componentCssVars('ButtonTertiaryDefaultBackground'),
       color: componentCssVars('ButtonTertiaryDefaultText'),
 
-      ':hover, :focus': {
+      ':hover, :focus-visible': {
         backgroundColor: componentCssVars('ButtonTertiaryHoverBackground'),
         color: componentCssVars('ButtonTertiaryHoverText'),
       },
@@ -103,7 +120,7 @@ export const typeStyles: Record<
       backgroundColor: componentCssVars('ButtonTertiaryAltDefaultBackground'),
       color: componentCssVars('ButtonTertiaryAltDefaultText'),
 
-      ':hover, :focus': {
+      ':hover, :focus-visible': {
         backgroundColor: componentCssVars('ButtonTertiaryAltHoverBackground'),
         color: componentCssVars('ButtonTertiaryAltHoverText'),
       },
@@ -118,7 +135,7 @@ export const typeStyles: Record<
       backgroundColor: componentCssVars('ButtonDangerDefaultBackground'),
       color: componentCssVars('ButtonDangerDefaultText'),
 
-      ':hover, :focus': {
+      ':hover, :focus-visible': {
         backgroundColor: componentCssVars('ButtonDangerHoverBackground'),
         color: componentCssVars('ButtonDangerHoverText'),
       },
@@ -132,7 +149,7 @@ export const typeStyles: Record<
     enabled: {
       backgroundColor: yellow500.rgb,
 
-      ':hover, :focus': {
+      ':hover, :focus-visible': {
         backgroundColor: yellow400.rgb,
       },
     },
@@ -144,7 +161,7 @@ export const typeStyles: Record<
     enabled: {
       backgroundColor: yellow100.rgb,
 
-      ':hover, :focus': {
+      ':hover, :focus-visible': {
         backgroundColor: yellow300.rgb,
       },
     },
@@ -200,6 +217,9 @@ export const sizeStyles: Record<NonNullable<ButtonProps['size']>, CSSObject> = {
   tag: {
     padding: '2px 4px',
   },
+  square: {
+    padding: '8px',
+  },
 };
 
 export const enabledStyles = css({ cursor: 'pointer' });
@@ -208,6 +228,7 @@ export const disabledStyles = css({ cursor: 'not-allowed' });
 export type ButtonProps = {
   readonly type?:
     | 'minimal'
+    | 'ghost'
     | 'primary'
     | 'primaryBrand'
     | 'secondary'
@@ -227,7 +248,8 @@ export type ButtonProps = {
     | 'extraSlim'
     | 'extraLarge'
     | 'extraExtraSlim'
-    | 'tag';
+    | 'tag'
+    | 'square';
   readonly testId?: string;
   readonly href?: string;
   readonly tabIndex?: number;

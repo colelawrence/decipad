@@ -6,6 +6,7 @@ import {
   DropdownVariableForm,
   dropdownVariableConfig,
 } from './dropdownVariable';
+import { MetricForm, metricConfig } from './metric';
 
 // The first proxy factory that matches all selected nodes will be used
 export const proxyFactories = [
@@ -13,6 +14,7 @@ export const proxyFactories = [
   dropdownVariableConfig,
   genericVariableConfig,
   resultConfig,
+  metricConfig,
 ] satisfies AnyProxyFactoryConfig[];
 
 export const proxyFormsByKey: ProxyFormsByKey<typeof proxyFactories> = {
@@ -20,4 +22,5 @@ export const proxyFormsByKey: ProxyFormsByKey<typeof proxyFactories> = {
   dropdownVariable: DropdownVariableForm,
   genericVariable: GenericVariableForm,
   result: ResultForm,
+  metric: MetricForm,
 };

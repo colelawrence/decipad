@@ -1,12 +1,12 @@
 /* eslint decipad/css-prop-named-variable: 0 */
-import { AutocompleteName, SerializedType } from '@decipad/language-interfaces';
+import { AutocompleteName } from '@decipad/language-interfaces';
 import { useWindowListener } from '@decipad/react-utils';
 import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
-import { FC, ReactNode, useCallback, useEffect, useRef, useState } from 'react';
-import { Calendar, Formula, Number, TableSmall, Text } from '../../../icons';
+import { FC, useCallback, useEffect, useRef, useState } from 'react';
 import { cssVar, p12Medium } from '../../../primitives';
 import { useCancelingEvent } from '../../../utils';
+import { ResultIcon } from '../ResultIcon/ResultIcon';
 
 const wrapperStyles = (focused: boolean) =>
   css({
@@ -67,19 +67,6 @@ export interface AutoCompleteMenuItemProps {
   readonly onHover?: () => void;
 }
 
-const getAutocompleteIconFor = (type: SerializedType['kind']) => {
-  const icons: Partial<Record<SerializedType['kind'], ReactNode>> = {
-    number: <Number />,
-    string: <Text />,
-    date: <Calendar />,
-    table: <TableSmall />,
-    column: <TableSmall />,
-    function: <Formula />,
-  };
-  const selected = icons[type] || <Number />;
-  return selected;
-};
-
 export const AutoCompleteMenuItem = ({
   item,
   focused = false,
@@ -133,7 +120,9 @@ export const AutoCompleteMenuItem = ({
         onMouseDown={useCancelingEvent(onExecute)}
         ref={itemRef}
       >
-        <span css={iconStyles}>{getAutocompleteIconFor(item.kind)}</span>
+        <span css={iconStyles}>
+          <ResultIcon kind={item.kind} />
+        </span>
         <div css={textStyles} data-testid={`autocomplete-item:${item.name}`}>
           <strong css={identifierStyles}>{item.name}</strong>
         </div>

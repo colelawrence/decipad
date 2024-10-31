@@ -1,6 +1,5 @@
 import { ClientEventsContext } from '@decipad/client-events';
 import { DraggableBlock } from '../block-management/DraggableBlock';
-import { useUnnamedResults } from '../hooks/useUnnamedResults';
 import {
   useNodePath,
   usePathMutatorCallback,
@@ -21,10 +20,19 @@ import {
 } from '@decipad/react-contexts';
 import type { SelectItems, AvailableSwatchColor } from '@decipad/ui';
 import { DisplayWidget, VariableEditor } from '@decipad/ui';
-import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
-import { Number } from 'libs/ui/src/icons';
+import { useCallback, useContext, useEffect, useState } from 'react';
+import { useResults } from '../hooks';
+import { SerializedType } from '@decipad/language-interfaces';
 
-const displayDebounceNamesDefinedMs = 500;
+const allowedKinds: SerializedType['kind'][] = [
+  'number',
+  'string',
+  'boolean',
+  'trend',
+];
+
+const filterDisplayType = (serializedType: SerializedType) =>
+  allowedKinds.includes(serializedType.kind);
 
 export const Display: PlateComponent = ({ attributes, element, children }) => {
   assertElementType(element, ELEMENT_DISPLAY);
@@ -63,59 +71,10 @@ export const Display: PlateComponent = ({ attributes, element, children }) => {
   const computer = useComputer();
   const res = computer.getBlockIdResult$.use(element.blockId);
 
-  // Results from computer are NOT calculated until the menu is actually open.
-  // Saving a lot of CPU when the editor is re-rendering when the user is busy
-  // doing other work.
-  const namesDefined = computer.getNamesDefined$
-    .useWithSelectorDebounced(
-      displayDebounceNamesDefinedMs,
-      useCallback(
-        (names) =>
-          Object.values(names).map((name, i): SelectItems | undefined => {
-            if (!openMenu && loaded) return undefined;
-            const { kind } = name;
-            if (
-              !(
-                kind === 'string' ||
-                kind === 'number' ||
-                kind === 'boolean' ||
-                kind === 'trend' ||
-                kind === 'type-error'
-              ) ||
-              name.autocompleteGroup !== 'variable'
-            ) {
-              return undefined;
-            }
-            return {
-              index: i,
-              item: name.name,
-              blockId: name.blockId || '',
-              group: 'Variables',
-            };
-          }),
-        [loaded, openMenu]
-      )
-    )
-    .filter((n): n is SelectItems => n !== undefined)
-    .map((name) => ({ ...name, icon: <Number /> }));
-
-  // Decilang codelines do not need to have a name defining them.
-  // But we still want to add them.
-  const unnamedResults = useUnnamedResults();
-
-  const allResults = useMemo(
-    (): SelectItems[] => [
-      ...namesDefined,
-      ...unnamedResults.map((r, i) => ({
-        index: i + namesDefined.length,
-        item: r.sourceCode,
-        blockId: r.blockId,
-        group: 'Calculations',
-        icon: <Number />,
-      })),
-    ],
-    [namesDefined, unnamedResults]
-  );
+  const allResults = useResults({
+    enabled: openMenu || !loaded,
+    filterType: filterDisplayType,
+  });
 
   // Performance improvement: Because results are only calculated when
   // menu is open, we no longer have access to them all the time. So we

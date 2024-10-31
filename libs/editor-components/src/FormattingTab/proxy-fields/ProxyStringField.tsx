@@ -3,6 +3,7 @@ import { identity } from '@decipad/utils';
 import { InputField, InputFieldHorizontal } from '@decipad/ui';
 import { useStableCallback } from '@decipad/react-utils';
 import { ProxyFieldProps } from './types';
+import { ifVaries } from '../proxy/utils';
 
 /**
  * Certain element properties are slow to update, and may be normalized when
@@ -85,10 +86,8 @@ export const ProxyStringField = ({
   disabled,
   error,
 }: ProxyStringFieldProps) => {
-  const varies = property === 'varies';
-
   const [value, setValue, { onFocus, onBlur, onSubmit }] = useWriteOnBlur(
-    varies ? '' : property.value,
+    ifVaries(property, ''),
     (newValue) => onChange(editor, newValue)
   );
 
@@ -99,7 +98,7 @@ export const ProxyStringField = ({
       label={label}
       value={value}
       error={error}
-      placeholder={varies ? 'Multiple' : ''}
+      placeholder={property === 'varies' ? 'Multiple' : undefined}
       disabled={disabled}
       onChange={(newValue) => setValue(normalizeValue(newValue))}
       onFocus={onFocus}

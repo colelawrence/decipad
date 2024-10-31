@@ -37,7 +37,7 @@ export type InputFieldHorizontalProps = Omit<
   InputFieldProps,
   'size' | 'submitButton'
 > & {
-  readonly label: string;
+  readonly label: ReactNode;
 };
 
 export const InputFieldHorizontal = ({

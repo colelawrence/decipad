@@ -79,7 +79,7 @@ export type InputFieldProps = {
   readonly inputCss?: Interpolation<Theme>;
 
   readonly testId?: string;
-  readonly label?: string;
+  readonly label?: ReactNode;
   readonly placeholder?: string;
   readonly name?: string;
   readonly pattern?: string;

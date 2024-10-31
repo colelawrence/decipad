@@ -34,7 +34,7 @@ export type ImportElementSource =
 export interface AutocompleteName<
   Kind extends SerializedType['kind'] = SerializedType['kind']
 > {
-  autocompleteGroup: 'function' | 'variable' | 'column';
+  autocompleteGroup: 'function' | 'variable' | 'column' | 'calculation';
   syntax?: string;
   example?: string;
   formulaGroup?: FormulaGroup;

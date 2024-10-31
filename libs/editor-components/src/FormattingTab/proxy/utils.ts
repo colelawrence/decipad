@@ -12,3 +12,8 @@ export const withDefault = <T>(
   defaultValue: T
 ): MultipleNodeProxyProperty<T> =>
   mapProperty(property, (value) => value ?? defaultValue);
+
+export const ifVaries = <T, U = T>(
+  property: MultipleNodeProxyProperty<T>,
+  valueIfVaries: U
+): T | U => (property === 'varies' ? valueIfVaries : property.value);

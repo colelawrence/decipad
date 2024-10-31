@@ -27,9 +27,11 @@ export const createMetricPlugin = createMyPluginFactory({
     getNode: (): MetricElement | undefined => {
       return {
         id: nanoid(),
+        caption: 'Metric',
         type: ELEMENT_METRIC,
         blockId: '',
         comparisonBlockId: '',
+        comparisonDescription: '',
         children: [{ text: '' }],
       };
     },

@@ -10,7 +10,7 @@ import {
   shortAnimationDuration,
 } from '../../../primitives';
 import { AvailableSwatchColor } from '../../../utils';
-import { ArrowUp2, ArrowDown2 } from 'libs/ui/src/icons';
+import { ArrowUp2, ArrowDown2, Settings2 } from 'libs/ui/src/icons';
 import {
   IdentifiedError,
   IdentifiedResult,
@@ -19,6 +19,7 @@ import {
 import { CodeResult } from '../CodeResult/CodeResult';
 import { Result } from '@decipad/language-interfaces';
 import { N, ZERO } from '@decipad/number';
+import { NumberFormatting } from '@decipad/editor-types';
 
 const bottomBarSize = 2;
 
@@ -65,16 +66,47 @@ const wrapperStyles = css({
   // Bottom side color bar.
   boxShadow: `0px ${bottomBarSize}px ${cssVar('borderSubdued')}`,
   marginBottom: `${bottomBarSize}px`,
+
+  '--metric-hover': 0,
+
+  '&:hover': {
+    '--metric-hover': 1,
+  },
 });
 
 const selectedStyles = css({ backgroundColor: cssVar('backgroundAccent') });
 
+const headerStyles = css({
+  display: 'flex',
+  alignItems: 'center',
+  gap: '4px',
+  marginBottom: '8px',
+});
+
 const captionStyles = css([
   p13Medium,
   {
-    marginBottom: 8,
+    flexGrow: 1,
   },
 ]);
+
+const formatButtonStyles = css({
+  display: 'grid',
+  alignItems: 'start',
+  height: '20px',
+  width: '20px',
+  flexShrink: 0,
+  padding: '2px',
+  ':hover': {
+    backgroundColor: cssVar('backgroundHeavy'),
+    borderRadius: '50%',
+  },
+  // Always visible on devices that cannot hover
+  '@media (hover: hover)': {
+    opacity: 'var(--metric-hover)',
+    transition: `opacity ${shortAnimationDuration}`,
+  },
+});
 
 const valueStyles = (height: number) =>
   css({
@@ -100,18 +132,28 @@ const hiddenChildrenStyles = css({
 
 interface MetricProps {
   readonly children?: ReactNode;
+  readonly readOnly?: boolean;
+  readonly caption: string;
   readonly mainResult?: IdentifiedResult | IdentifiedError;
   readonly trendResult?: ResultType;
+  readonly comparisonDescription?: string;
+  readonly formatting?: NumberFormatting;
   // TODO: Do something with color
   readonly color?: AvailableSwatchColor;
   readonly fullHeight?: boolean;
+  readonly onClickEdit?: () => void;
 }
 
 export const Metric = ({
   children,
+  readOnly = false,
+  caption,
   mainResult,
   trendResult,
+  comparisonDescription,
+  formatting,
   fullHeight,
+  onClickEdit,
 }: MetricProps): ReturnType<FC> => {
   const selected = useSelected();
 
@@ -147,19 +189,29 @@ export const Metric = ({
         fullHeight && { height: '100%' },
       ]}
     >
-      <div css={captionStyles}>Revenue per pet</div>
+      <div css={headerStyles}>
+        <div css={captionStyles}>{caption || '\u00a0'}</div>
+        {!readOnly && onClickEdit && (
+          <button type="button" css={formatButtonStyles} onClick={onClickEdit}>
+            <Settings2 />
+          </button>
+        )}
+      </div>
       <div>
         <div css={valueStyles(fullHeight ? height : 0)}>
           {mainResult?.result?.type.kind !== 'type-error' &&
           mainResult?.result ? (
-            <CodeResult {...mainResult.result} />
+            <CodeResult {...mainResult.result} formatting={formatting} />
           ) : (
             '0'
           )}
         </div>
         {/* TODO: Handle case error case */}
         {trendResult?.type.kind === 'trend' && (
-          <MetricComparison trendResult={trendResult as any} />
+          <MetricComparison
+            trendResult={trendResult as any}
+            comparisonDescription={comparisonDescription}
+          />
         )}
       </div>
 
@@ -170,26 +222,35 @@ export const Metric = ({
 
 interface MetricComparisonProps {
   readonly trendResult: Result.Result<'trend'>;
+  readonly comparisonDescription?: string;
 }
 
-const MetricComparison = ({ trendResult }: MetricComparisonProps) => {
+const MetricComparison = ({
+  trendResult,
+  comparisonDescription,
+}: MetricComparisonProps) => {
   const { first, diff } = trendResult.value;
   if (!first || !diff) return null;
 
   const percentageChange = diff.abs().div(first).mul(N(100)).round().toString();
+  const zero = diff.isZero();
   const positive = diff.compare(ZERO) > 0;
 
-  const trendColor = componentCssVars(
-    positive ? 'TrendUpGreenColor' : 'TrendDownRedColor'
-  );
+  const trendColor = zero
+    ? cssVar('textSubdued')
+    : componentCssVars(positive ? 'TrendUpGreenColor' : 'TrendDownRedColor');
+
   const Icon = positive ? ArrowUp2 : ArrowDown2;
 
   return (
     <div css={comparisonStyles}>
-      <span css={{ color: trendColor, width: 16, height: 16 }}>
-        <Icon />
-      </span>
-      <span css={{ color: trendColor }}>{percentageChange}%</span> vs last week
+      {!zero && (
+        <span css={{ color: trendColor, width: 16, height: 16 }}>
+          <Icon />
+        </span>
+      )}
+      <span css={{ color: trendColor }}>{percentageChange}%</span>
+      {comparisonDescription && ` ${comparisonDescription.trim()}`}
     </div>
   );
 };
