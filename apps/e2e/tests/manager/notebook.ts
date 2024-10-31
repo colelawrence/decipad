@@ -21,7 +21,6 @@ export class Notebook {
   readonly notebookPlusBlockCommand: Locator;
   readonly formulaBlock: Locator;
   readonly advancedFomulaBlock: Locator;
-  readonly formulaBlockUnitPicker: Locator;
   readonly formulaBlockCode: Locator;
   readonly notebookActions: Locator;
   readonly notebookStatus: Locator;
@@ -50,7 +49,6 @@ export class Notebook {
     this.notebookPlusBlockCommand = page.getByTestId('plus-block-button');
     this.formulaBlock = page.getByTestId('codeline-varname');
     this.advancedFomulaBlock = page.getByTestId('code-line');
-    this.formulaBlockUnitPicker = page.getByTestId('unit-picker-button');
     this.formulaBlockCode = page.getByTestId('codeline-code');
     this.notebookActions = page.getByTestId('notebook-actions');
     this.notebookStatus = page.getByTestId('notebook-status');

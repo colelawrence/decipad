@@ -260,23 +260,6 @@ test.describe('structured input and calculations @calculation-blocks @snapshot',
       await expect(page.getByText('DragMeRenamed')).toHaveCount(2);
     });
 
-    await test.step('applies unit from unit picker', async () => {
-      await notebook.addFormula('Units', '100');
-
-      await page.getByTestId('unit-picker-button').nth(-1).click();
-      await page.getByTestId('unit-picker-percentage').click();
-
-      expect(await notebook.getFormulaContents(-1)).toContain('100%');
-    });
-
-    await test.step('changing unit changes the text of the codeline', async () => {
-      await page.getByTestId('unit-picker-button').nth(-1).click();
-      await page.getByTestId('unit-picker-Weight').click();
-      await page.getByTestId('unit-picker-Weight-kilogram').click();
-
-      expect(await notebook.getFormulaContents(-1)).toContain('kilogram');
-    });
-
     await test.step('check custom unit conversion', async () => {
       await notebook.addFormula('Euro', '$1.5');
       await notebook.addFormula('DolarToEuro', '$5 in Euro');
@@ -286,28 +269,6 @@ test.describe('structured input and calculations @calculation-blocks @snapshot',
           .getByTestId('codeline-code')
           .last()
           .getByTestId('number-result:≈3.33 €')
-      ).toBeVisible();
-    });
-
-    await test.step('custom units', async () => {
-      await notebook.addFormula('MyApples', '50');
-      await notebook.formulaBlockUnitPicker.last().click();
-      await page.getByPlaceholder('add custom unit').click();
-
-      // ensure the button is disabled if the user doesn't enter any unit
-      await expect(page.getByTestId('advanced_unit_button')).toBeDisabled();
-      await page.keyboard.type('apples');
-
-      // ensure the button is enabled if the user enters a valid unit
-      await expect(page.getByTestId('advanced_unit_button')).toBeEnabled();
-
-      await page.getByText('Add new').click();
-
-      await expect(
-        page
-          .getByTestId('codeline-code')
-          .last()
-          .getByTestId('number-result:50 apples')
       ).toBeVisible();
     });
 

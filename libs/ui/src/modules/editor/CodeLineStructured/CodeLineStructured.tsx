@@ -1,16 +1,17 @@
 /* eslint decipad/css-prop-named-variable: 0 */
-import { useDelayedValue } from '@decipad/react-utils';
 import type { Result } from '@decipad/language-interfaces';
+import { useDelayedValue } from '@decipad/react-utils';
 import React, { ComponentProps, ReactNode, useCallback, useState } from 'react';
 
+import { css } from '@emotion/react';
 import { grey400 } from '../../../primitives';
+import { Loading } from '../../../shared';
 import { hideOnPrint } from '../../../styles/editor-layout';
 import { CodeResultProps } from '../../../types';
 import { CodeError } from '../CodeError/CodeError';
 import { useResultInfo } from '../CodeLine/CodeLine';
 import { StructuredInputLines } from '../StructuredInputLines/StructuredInputLines';
 import { TableButton } from '../TableButton/TableButton';
-import { Loading } from '../../../shared';
 import {
   canGrabStyles,
   codeContainerStyles,
@@ -20,7 +21,6 @@ import {
   inlineStyles,
   variableNameContainerStyles,
 } from './styles';
-import { css } from '@emotion/react';
 
 export const loadingIconStyles = css({
   minHeight: '19px',
@@ -56,7 +56,6 @@ export const CodeLineStructured = ({
   onDragEnd,
   variableNameChild,
   codeChild,
-  unitPicker,
   readOnly = false,
   insideLayout = false,
   showResult = false,
@@ -170,7 +169,6 @@ export const CodeLineStructured = ({
             data-testid="code-line-expression"
           >
             {codeChild}
-            {unitPicker}
           </div>
         </code>
       </div>

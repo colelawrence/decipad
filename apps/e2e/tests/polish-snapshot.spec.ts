@@ -9,6 +9,5 @@ test('Use case: polish screenshot @snapshot', async ({ testUser }) => {
   await testUser.notebook.waitForEditorToLoad();
   // eslint-disable-next-line playwright/no-wait-for-timeout
   await page.waitForTimeout(Timeouts.chartsDelay + Timeouts.computerDelay);
-  await page.getByTestId('unit-picker-button').click();
   await snapshot(page as Page, 'Notebook: Polish check');
 });
