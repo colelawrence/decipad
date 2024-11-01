@@ -1,4 +1,4 @@
-import type { IntegrationTypes } from '@decipad/editor-types';
+import type { Filter, IntegrationTypes } from '@decipad/editor-types';
 import type { Computer } from '@decipad/computer-interfaces';
 import { Runner } from './runner';
 import { CSVRunner } from './csv';
@@ -19,6 +19,8 @@ export type RunnerFactoryParams = {
   id: string;
 
   types: IntegrationTypes.IntegrationBlock['typeMappings'];
+
+  filters: Filter[];
 } & (
   | {
       integration: IntegrationTypes.IntegrationBlock;
@@ -46,6 +48,7 @@ function getRunner(options: RunnerFactoryParams): Runner {
         },
         runner: { csvUrl: integrationType.csvUrl },
         types: options.types,
+        filters: options.filters,
       });
       return csvRunner;
     case 'notion':
@@ -55,6 +58,7 @@ function getRunner(options: RunnerFactoryParams): Runner {
         importer: {},
         types: options.types,
         padId: options.notebookId,
+        filters: options.filters,
       });
     case 'gsheets':
       return new GSheetRunner(options.id, {
@@ -71,6 +75,7 @@ function getRunner(options: RunnerFactoryParams): Runner {
         },
         types: options.types,
         padId: options.notebookId,
+        filters: options.filters,
       });
     case 'mysql':
       return new SQLRunner(options.id, {
@@ -79,6 +84,7 @@ function getRunner(options: RunnerFactoryParams): Runner {
         importer: {},
         types: options.types,
         padId: options.notebookId,
+        filters: options.filters,
       });
     case 'codeconnection':
       return new CodeRunner(options.id, {
@@ -89,6 +95,7 @@ function getRunner(options: RunnerFactoryParams): Runner {
         },
         runner: { code: integrationType.code },
         types: options.types,
+        filters: options.filters,
       });
     default:
       throw new Error('NOT IMPLEMENTED');
@@ -149,6 +156,7 @@ export const useResponsiveRunner = (opts: RunnerFactoryParams) => {
 
       types: diffedTypes,
       integration: diffedIntegration,
+      filters: opts.filters,
     } as RunnerFactoryParams);
     // Don't depend on name.
     // eslint-disable-next-line react-hooks/exhaustive-deps

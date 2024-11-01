@@ -102,6 +102,14 @@ interface WithTabs {
   whileMoving: (callback: () => void) => void;
 }
 
+interface WithFilters {
+  insertFilter: (filter: {
+    filterName: string;
+    column: string;
+    value: string;
+  }) => string;
+}
+
 export interface ObservableRootEditorNewTabEvent {
   type: 'new-tab';
 }
@@ -149,8 +157,12 @@ export type MinimalRootEditorWithEventsAndTabs =
 export type MinimalRootEditorWithEventsAndTabsAndUndo =
   MinimalRootEditorWithEventsAndTabs & WithUndo;
 
-export type MinimalRootEditorWithEventsAndTabsAndUndoAndTitleEditor =
-  MinimalRootEditorWithEventsAndTabsAndUndo & WithTitleEditor;
+export type MinimalRootEditorWithEventsAndTabsAndUndoAndFilters =
+  MinimalRootEditorWithEventsAndTabsAndUndo & WithFilters;
+
+export type MinimalRootEditorWithEventsAndTabsAndUndoAndFiltersAndTitleEditor =
+  MinimalRootEditorWithEventsAndTabsAndUndoAndFilters & WithTitleEditor;
+
 /**
  * Element
  */

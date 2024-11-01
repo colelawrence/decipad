@@ -4,6 +4,7 @@ import type {
   SimpleTableCellType,
   ELEMENT_INTEGRATION,
   ImportElementSource,
+  Filter,
 } from '.';
 
 export interface CodeBlockIntegration {
@@ -73,4 +74,6 @@ export interface IntegrationBlock<
   integrationType: Extract<IntegrationTypes, { type: T }>;
 
   hideResult?: boolean;
+
+  filters?: Filter[];
 }

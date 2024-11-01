@@ -45,6 +45,9 @@
     },
     {
       "path": "../language-utils"
+    },
+    {
+      "path": "../language"
     }
   ]
 }

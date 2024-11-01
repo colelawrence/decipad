@@ -1,5 +1,5 @@
 import { useTabs } from '@decipad/editor-hooks';
-import type { MinimalRootEditorWithEventsAndTabsAndUndoAndTitleEditor } from '@decipad/editor-types';
+import type { MinimalRootEditorWithEventsAndTabsAndUndoAndFiltersAndTitleEditor } from '@decipad/editor-types';
 import type { TabEditorContextValue } from '@decipad/react-contexts';
 import {
   EditorIdContext,
@@ -32,7 +32,7 @@ type TabEditorComponentProps = Omit<
   ComponentProps<typeof Editor>,
   'editor' | 'tabIndex' | 'titleEditor'
 > & {
-  controller: MinimalRootEditorWithEventsAndTabsAndUndoAndTitleEditor;
+  controller: MinimalRootEditorWithEventsAndTabsAndUndoAndFiltersAndTitleEditor;
 };
 
 /**

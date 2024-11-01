@@ -14,6 +14,7 @@ import { compoundOperators } from './compound-operators';
 import { enrichOperators } from './enrichOperators';
 import { roundOperators } from './round-operators';
 import { dateOperators } from './date-operators';
+import { stringOperators } from './string-operators';
 import * as trendOperators from './trend';
 
 export const operators: { [fname: string]: BuiltinSpec } = enrichOperators({
@@ -32,4 +33,5 @@ export const operators: { [fname: string]: BuiltinSpec } = enrichOperators({
   ...roundOperators,
   ...dateOperators,
   ...trendOperators,
+  ...stringOperators,
 });

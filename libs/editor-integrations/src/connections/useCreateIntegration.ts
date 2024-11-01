@@ -87,6 +87,7 @@ export const useConcreteIntegration = (
       props.type === 'create' ? (props.connectionType as any) : undefined,
     types: {},
     hiddenColumns: [],
+    filters: [],
   } as RunnerFactoryParams);
 
   const onCreateIntegration = useCreateIntegration(runner, props);

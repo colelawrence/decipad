@@ -248,6 +248,11 @@ export const inputLabel = css({
   marginBottom: '8px',
 });
 
+export const errorStyles = css([
+  inputLabel,
+  { gridArea: 'error', color: cssVar('stateDangerBackground') },
+]);
+
 export const smallCode: TypographyStyles = {
   ...code,
   fontSize: `${10 / usualRemPxs}rem`,

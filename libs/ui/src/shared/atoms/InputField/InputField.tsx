@@ -4,7 +4,7 @@ import { Interpolation, Theme, css } from '@emotion/react';
 import { sanitizeInput } from 'libs/ui/src/utils';
 import { FC, FocusEvent, ReactNode, useEffect, useId, useRef } from 'react';
 import { cssVar, p13Medium, p14Regular } from '../../../primitives';
-import { inputLabel } from '../../../primitives/text';
+import { inputLabel, errorStyles } from '../../../primitives/text';
 
 /**
  * Including 'button' in the template areas when no button is used causes an
@@ -45,10 +45,6 @@ const inputStylesSmall = css(inputStyles, p13Medium, {
 });
 
 const labelStyles = css([{ gridArea: 'label' }, inputLabel]);
-const errorStyles = css([
-  inputLabel,
-  { gridArea: 'error', color: cssVar('stateDangerBackground') },
-]);
 
 const disabledStyles = css({
   backgroundColor: cssVar('backgroundSubdued'),
@@ -67,6 +63,7 @@ type FieldType =
   | 'tel'
   | 'url'
   | 'password'
+  | 'number'
   | 'date';
 export type InputFieldProps = {
   readonly type?: FieldType;

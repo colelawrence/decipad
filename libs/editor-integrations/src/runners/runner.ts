@@ -4,7 +4,8 @@ import {
   Importer,
 } from '@decipad/compute-backend-js';
 import { pushExtraData, pushResultNameChange } from '@decipad/computer-utils';
-import { SimpleTableCellType } from '@decipad/editor-types';
+import { filterExpression } from '@decipad/editor-language-elements';
+import { Filter, SimpleTableCellType } from '@decipad/editor-types';
 import { getNotebookStore } from '@decipad/notebook-state';
 import { astNode, hydrateType, Unknown } from '@decipad/remote-computer';
 import { assert } from '@decipad/utils';
@@ -22,6 +23,7 @@ export type Options<T extends ImporterTypes, O extends Record<string, any>> = {
   /** Options specific to the JS-land runner */
   runner: O;
   padId: string;
+  filters: Filter[];
   /** Desired column types for inference.
    *
    * If a column is not defined, its type will be guessed.
@@ -65,15 +67,19 @@ export abstract class Runner<
   private _nameToColumnId: Record<string, string | undefined> | undefined =
     undefined;
 
+  public filters: Filter[];
+
   constructor(
     id: string,
-    { name, types, importer, padId, runner }: PartialOptions<T, O>
+    { name, types, importer, padId, runner, filters }: PartialOptions<T, O>
   ) {
     this.name = name;
     this._id = id;
 
     this.options = { importer, runner };
     this.padId = padId;
+
+    this.filters = filters;
 
     if (types != null) {
       this.setTypes(types);
@@ -308,7 +314,8 @@ export abstract class Runner<
       this.id,
       this.name,
       Object.values(nonHiddenColumns),
-      Object.keys(nonHiddenColumns)
+      Object.keys(nonHiddenColumns),
+      filterExpression(this.filters)
     );
 
     this._nameToColumnId = importedResult.columnNamesToId;

@@ -1,5 +1,5 @@
 import { Computer, ProgramBlock } from '@decipad/computer-interfaces';
-import { Result } from '@decipad/language-interfaces';
+import { AST, Result } from '@decipad/language-interfaces';
 // eslint-disable-next-line no-restricted-imports
 import { astNode } from '@decipad/language-utils';
 import { zip } from '@decipad/utils';
@@ -21,7 +21,8 @@ export async function pushExtraData(
   blockId: string,
   variableName: string,
   columnIds: string[],
-  columnNames: string[]
+  columnNames: string[],
+  filterExpression?: AST.Expression
 ): Promise<void> {
   const programBlocks: ProgramBlock[] = [];
 
@@ -39,10 +40,10 @@ export async function pushExtraData(
 
   programBlocks.push(tableNamespaceBlock);
 
-  for (const [index, [originalColumnId, columnName]] of zip(
+  for (const [originalColumnId, columnName] of zip(
     columnIds,
     columnNames
-  ).entries()) {
+  ).values()) {
     const columnId = getColumnId(blockId, originalColumnId);
 
     const columnProgramBlock: ProgramBlock = {
@@ -56,8 +57,17 @@ export async function pushExtraData(
             'table-column-assign',
             astNode('tablepartialdef', variableName),
             astNode('coldef', columnName),
-            astNode('externalref', columnId),
-            index
+            filterExpression
+              ? astNode(
+                  'function-call',
+                  astNode('funcref', 'filter'),
+                  astNode(
+                    'argument-list',
+                    astNode('externalref', columnId),
+                    filterExpression
+                  )
+                )
+              : astNode('externalref', columnId)
           ),
         ],
       },

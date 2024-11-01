@@ -13,7 +13,8 @@ export type FormulaGroup =
   | 'Tables or Columns'
   | 'Tables'
   | 'Trigonometric'
-  | 'Units';
+  | 'Units'
+  | 'Strings';
 
 export type ImportElementSource =
   | 'decipad'

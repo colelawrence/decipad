@@ -26,7 +26,7 @@ export const filterValuesNoAutomap: FullBuiltinSpec['fnValuesNoAutomap'] =
     const filterMap = (await all(
       map(Value.getColumnLike(_column).values(), valueToResultValue)
     )) as boolean[];
-    if (subject instanceof Value.Column) {
+    if (Value.isColumnLike(subject)) {
       return applyFilterMap(subject, filterMap);
     }
     const table = Value.getTableValue(subject);

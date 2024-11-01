@@ -10,7 +10,7 @@ import type {
   Map as YMap,
   UndoManager,
 } from 'yjs';
-import type { MinimalRootEditorWithEventsAndTabsAndUndoAndTitleEditor } from '../../editor-types/src/nodes';
+import type { MinimalRootEditorWithEventsAndTabsAndUndoAndFiltersAndTitleEditor } from '../../editor-types/src/nodes';
 
 export type Doc = YArray<RootElement>;
 
@@ -37,7 +37,7 @@ type TCursorEditor = GTCursorEditor<MinimalRootEditor>;
 
 export type DocSyncEditor = TYjsEditor &
   TCursorEditor &
-  MinimalRootEditorWithEventsAndTabsAndUndoAndTitleEditor &
+  MinimalRootEditorWithEventsAndTabsAndUndoAndFiltersAndTitleEditor &
   UndoEditor & {
     withoutCapturingUndo?: (cb: () => void) => void;
     isReadOnly?: boolean;

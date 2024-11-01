@@ -24,6 +24,7 @@ import { editorOnPaste } from './utils/editorOnPaste';
 import { useWriteLock } from './utils/useWriteLock';
 import { useComputer } from '@decipad/editor-hooks';
 import { useNotebookWithIdState } from '@decipad/notebook-state';
+import { Filters } from './Filters.component';
 
 export interface EditorProps {
   notebookId: string;
@@ -141,6 +142,9 @@ export const Editor: FC<PropsWithChildren<EditorProps>> = (props) => {
           <CategoriesContextProvider>
             <EditorLayout>
               {props.titleEditor}
+              <div>
+                <Filters />
+              </div>
               <div ref={containerRef} className="relative">
                 <BlockLengthSynchronizationProvider editor={editor}>
                   <Plate<MyValue>

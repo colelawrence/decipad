@@ -13,6 +13,7 @@ import {
   MagnifyingGlass,
   CaretDown,
   CaretUp,
+  Text,
 } from 'libs/ui/src/icons';
 import styled from '@emotion/styled';
 import {
@@ -63,6 +64,7 @@ const iconMap: {
   Tables: <Table />,
   Trigonometric: <Number />,
   Units: <All />,
+  Strings: <Text />,
 };
 
 const IdentifierEntry = styled.li({

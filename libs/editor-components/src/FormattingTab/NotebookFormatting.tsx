@@ -3,6 +3,7 @@ import { useWriteOnBlur } from './proxy-fields/ProxyStringField';
 import { DropdownField, InputField, MenuItem } from '@decipad/ui';
 import { NumberFormatting } from '@decipad/editor-types';
 import { FormWrapper } from './FormWrapper';
+import { Filters } from '../Filters';
 
 export interface NotebookFormattingProps {
   numberFormatting: NumberFormatting | undefined;
@@ -44,7 +45,7 @@ export const NotebookFormatting = ({
         onBlur={onBlur}
         onEnter={onSubmit}
       />
-
+      <Filters />
       <DropdownField
         label="Number formatting"
         triggerText={numberFormattingLabels[numberFormatting]}

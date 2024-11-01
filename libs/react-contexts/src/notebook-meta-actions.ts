@@ -48,6 +48,10 @@ export interface NotebookMetaDataType {
 
   readonly workspacePlan: string;
   readonly setWorkspacePlan: (workspacePlan: string) => void;
+
+  readonly addFilterSymbol: Symbol | undefined;
+  readonly addFilter: () => void;
+  readonly resetAddFilterSymbol: () => void;
 }
 
 export const useNotebookMetaData = create<NotebookMetaDataType>()(
@@ -117,6 +121,22 @@ export const useNotebookMetaData = create<NotebookMetaDataType>()(
         workspacePlan: 'free',
         setWorkspacePlan(workspacePlan) {
           set(() => ({ workspacePlan }));
+        },
+
+        addFilterSymbol: undefined,
+        resetAddFilterSymbol() {
+          set(() => ({
+            addFilterSymbol: undefined,
+          }));
+        },
+        addFilter() {
+          set(() => ({
+            addFilterSymbol: Symbol('add-filter'),
+            sidebarComponent: {
+              type: 'default-sidebar',
+              selectedTab: 'format',
+            },
+          }));
         },
       };
     },

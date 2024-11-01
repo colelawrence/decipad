@@ -7,6 +7,7 @@ export * from './convertVariableDefInto';
 export * from './createCodeLine';
 export * from './createDefaultNotebook';
 export * from './decorateCode';
+export * from './elementFilters';
 export * from './filterDecorate';
 export * from './findDomNodePath';
 export * from './findElementById';

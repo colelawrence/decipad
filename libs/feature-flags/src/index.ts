@@ -30,6 +30,8 @@ export const availableFlags = [
   'NAV_SIDEBAR',
 
   'METRIC_BLOCK',
+
+  'INTEGRATION_FILTERS',
 ] as const;
 
 export type Flag = typeof availableFlags[number];

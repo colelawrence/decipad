@@ -97,6 +97,13 @@ import { UserIconKey } from './icons';
 import { IntegrationBlock } from './integrations';
 import { ElementKind, markKinds } from '.';
 
+export type Filter = {
+  id: string;
+  filterName: string;
+  columnId: string;
+  value: string | number;
+};
+
 export type SeriesType = 'date' | 'number';
 
 export type NumberFormatting =
@@ -207,6 +214,7 @@ export interface TableElement extends BaseElement {
   isCollapsed?: boolean;
   hideFormulas?: boolean;
   hideCellFormulas?: boolean;
+  filters?: Filter[];
 }
 
 // legacy
@@ -577,6 +585,7 @@ export interface CodeLineV2Element extends BaseElement {
   type: typeof ELEMENT_CODE_LINE_V2;
   showResult?: boolean;
   children: [StructuredVarnameElement, CodeLineV2ElementCode];
+  filters?: Filter[];
 }
 export interface StructuredVarnameElement extends BaseElement {
   type: typeof ELEMENT_STRUCTURED_VARNAME;
@@ -829,6 +838,11 @@ export type AnyElement =
   | StructuredVarnameElement
   | DataViewCaptionElement
   | DataViewNameElement;
+
+export type FilterableElement =
+  | TableElement
+  | IntegrationBlock
+  | CodeLineV2Element;
 
 export const topLevelBlockKinds: string[] = [
   ELEMENT_H1,

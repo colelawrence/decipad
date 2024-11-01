@@ -2,7 +2,12 @@
 import { css } from '@emotion/react';
 import { ReactNode, useId } from 'react';
 import { MenuList } from '../../../shared';
-import { cssVar, inputLabel, p13Medium } from 'libs/ui/src/primitives';
+import {
+  cssVar,
+  inputLabel,
+  p13Medium,
+  errorStyles,
+} from 'libs/ui/src/primitives';
 import { CaretDown } from 'libs/ui/src/icons';
 
 const iconWrapperStyles = (squareIcon: boolean) =>
@@ -32,12 +37,24 @@ const triggerStyles = css([
   },
 ]);
 
+const containerStyles = css({
+  display: 'grid',
+  gap: '0px 8px',
+  gridTemplateColumns: 'auto 1fr ',
+  gridTemplateRows: 'auto auto',
+  gridTemplateAreas: `
+    "label error"
+    "input input";
+  `,
+});
+
 interface DropdownFieldProps {
   readonly label?: ReactNode;
   readonly icon?: ReactNode;
   readonly squareIcon?: boolean;
   readonly triggerText: ReactNode;
   readonly children: ReactNode;
+  readonly error?: string;
 }
 
 export const DropdownField = ({
@@ -46,27 +63,32 @@ export const DropdownField = ({
   squareIcon,
   triggerText,
   children,
+  error,
 }: DropdownFieldProps) => {
   const id = `dropdown-${useId()}`;
+  const errorEl = error ? <span css={errorStyles}>{error}</span> : null;
 
   return (
-    <div>
+    <div css={containerStyles}>
       {label && <DropdownFieldLabel id={id}>{label}</DropdownFieldLabel>}
-      <MenuList
-        root
-        dropdown
-        trigger={
-          <div>
-            <DropdownFieldTrigger id={id} icon={icon} squareIcon={squareIcon}>
-              {triggerText}
-            </DropdownFieldTrigger>
-          </div>
-        }
-        sideOffset={4}
-        styles={css({ width: 'var(--radix-popper-anchor-width)' })}
-      >
-        {children}
-      </MenuList>
+      {errorEl}
+      <div css={css({ gridArea: 'input' })}>
+        <MenuList
+          root
+          dropdown
+          trigger={
+            <div>
+              <DropdownFieldTrigger id={id} icon={icon} squareIcon={squareIcon}>
+                {triggerText}
+              </DropdownFieldTrigger>
+            </div>
+          }
+          sideOffset={4}
+          styles={css({ width: 'var(--radix-popper-anchor-width)' })}
+        >
+          {children}
+        </MenuList>
+      </div>
     </div>
   );
 };

@@ -6,8 +6,9 @@ import { useResponsiveRunner } from '../runners';
 import { useComputer } from '@decipad/editor-hooks';
 import { useRenameIntegration } from './useRenameIntegration';
 import { useNotebookId } from '@decipad/react-contexts';
-import { pushResultToComputer } from '@decipad/computer-utils';
+import { isTableResult, pushResultToComputer } from '@decipad/computer-utils';
 import { getDefined } from '@decipad/utils';
+import { formatError } from '@decipad/format';
 
 type ImportState =
   | {
@@ -62,20 +63,28 @@ export const useIntegration = (
     notebookId,
     computer,
     integrationType: undefined,
+    filters: element.filters ?? [],
   });
 
   useRenameIntegration(runner, element);
 
-  // this might be the worst pr ever
-  // cache is for future us
-  //
+  const hasErrorResult = useCallback(() => {
+    return (
+      result?.type === 'computer-result' &&
+      (result.result.type.kind === 'type-error' ||
+        (isTableResult(result.result) &&
+          result.result.type.columnTypes.some((t) => t.kind === 'type-error')))
+    );
+  }, [result]);
+
   const haveValidResult = useCallback(() => {
     return (
       result != null &&
       result.type === 'computer-result' &&
-      result.result.type.kind !== 'pending'
+      result.result.type.kind !== 'pending' &&
+      !hasErrorResult()
     );
-  }, [result]);
+  }, [hasErrorResult, result]);
 
   const setImportStateSafe = useCallback((newState: ImportState) => {
     setImportState((prev) => {
@@ -94,6 +103,36 @@ export const useIntegration = (
       setImportStateSafe({ type: 'error', message: err.message });
     });
   }, [runner, setImportStateSafe]);
+
+  useEffect(() => {
+    const { result: res } = result ?? {};
+    // result has type error -> error
+    if (res?.type.kind === 'type-error') {
+      setImportStateSafe({
+        type: 'error',
+        message: formatError('en_US', res.type.errorCause),
+      });
+      return;
+    }
+
+    if (isTableResult(res)) {
+      const columnIndexWithError = res.type.columnTypes.findIndex(
+        (t) => t.kind === 'type-error'
+      );
+      if (columnIndexWithError >= 0) {
+        const columnType = res.type.columnTypes[columnIndexWithError];
+        if (columnType?.kind === 'type-error') {
+          setImportStateSafe({
+            type: 'error',
+            message: `Error in column: ${formatError(
+              'en_US',
+              columnType.errorCause
+            )}`,
+          });
+        }
+      }
+    }
+  }, [result, setImportStateSafe]);
 
   useEffect(() => {
     // FIXME: HACK: push first cached result so that the computer can use it
@@ -145,13 +184,20 @@ export const useIntegration = (
     // * -> unloaded
     if (
       !haveValidResult() &&
+      !hasErrorResult() &&
       importState.type !== 'loading-cache' &&
       importState.type !== 'loading-fetch' &&
       triedCache
     ) {
       setImportStateSafe({ type: 'unloaded' });
     }
-  }, [haveValidResult, importState.type, setImportStateSafe, triedCache]);
+  }, [
+    hasErrorResult,
+    haveValidResult,
+    importState.type,
+    setImportStateSafe,
+    triedCache,
+  ]);
 
   useEffect(() => {
     // loading-cache -> wait a bit
