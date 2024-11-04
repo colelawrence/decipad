@@ -86,7 +86,7 @@ We have some Rust code, which needs to be compiled to WASM, this uses two tools.
 
 Here is how to install both of them:
 
-```
+```sh
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs/ | sh
 
 curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | sh
@@ -96,6 +96,18 @@ This should work, but here is the website for both of these tools, in case you n
 
 1. https://www.rust-lang.org/tools/install
 2. https://rustwasm.github.io/wasm-pack/installer/
+
+If there are some errors with missing wasm installation run:
+
+```sh
+cargo install wasm-pack
+```
+
+then:
+
+```sh
+yarn build:wasm
+```
 
 ### (Optional) Git hooks
 
