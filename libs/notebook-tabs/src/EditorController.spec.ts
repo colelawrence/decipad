@@ -6,11 +6,14 @@ import {
   ELEMENT_DATA_TAB_CHILDREN,
   ELEMENT_H1,
   ELEMENT_H2,
+  ELEMENT_LAYOUT,
   ELEMENT_PARAGRAPH,
   ELEMENT_STRUCTURED_VARNAME,
   ELEMENT_TAB,
   ELEMENT_TITLE,
+  LayoutElement,
   MyValue,
+  ParagraphElement,
   TabElement,
   TitleElement,
 } from '@decipad/editor-types';
@@ -1625,5 +1628,73 @@ describe('Actions', () => {
       id: 'h2',
       type: 'h2',
     });
+  });
+});
+
+describe('findNodeEntry', () => {
+  let controller = new EditorController('id', []);
+  beforeEach(() => {
+    controller = new EditorController('id', []);
+    controller.forceNormalize();
+  });
+
+  it('returns undefined when it cannot find the node', () => {
+    expect(controller.findNodeEntryById('wrong')).toBeUndefined();
+  });
+
+  it('returns the correct entry for an element', () => {
+    controller.apply({
+      type: 'insert_node',
+      path: [FIRST_TAB_INDEX, 0],
+      node: {
+        id: 'my-id',
+        type: ELEMENT_PARAGRAPH,
+        children: [{ text: 'some-text' }],
+      } satisfies ParagraphElement,
+    });
+
+    expect(controller.findNodeEntryById('my-id')).toMatchObject([
+      {
+        children: [
+          {
+            text: 'some-text',
+          },
+        ],
+        id: 'my-id',
+        type: 'p',
+      },
+      [2, 0],
+    ]);
+  });
+
+  it('returns the correct entry inside ELEMENT_LAYOUT', () => {
+    controller.apply({
+      type: 'insert_node',
+      path: [FIRST_TAB_INDEX, 0],
+      node: {
+        id: 'my-id',
+        type: ELEMENT_LAYOUT,
+        children: [
+          {
+            id: 'my-id2',
+            type: ELEMENT_PARAGRAPH,
+            children: [{ text: 'some-text' }],
+          } satisfies ParagraphElement,
+        ],
+      } satisfies LayoutElement,
+    });
+
+    expect(controller.findNodeEntryById('my-id2')).toMatchObject([
+      {
+        children: [
+          {
+            text: 'some-text',
+          },
+        ],
+        id: 'my-id2',
+        type: 'p',
+      },
+      [2, 0, 0],
+    ]);
   });
 });

@@ -46,6 +46,7 @@ import { resetChanges } from './reset-changes';
 import { useNotebookMetaData } from '@decipad/react-contexts';
 import { PlateEditorWithSelectionHelpers } from '@decipad/interfaces';
 import { assert, noop } from '@decipad/utils';
+import { blockSelectionStore } from '@udecode/plate-selection';
 
 const isSingleLeafChild = (
   children: unknown
@@ -304,6 +305,9 @@ export const useEditingDataDrawer = (
 
   const onCloseDataDrawer = useNotebookWithIdState((s) => s.closeDataDrawer);
 
+  const resetBlockSelectionStore = () =>
+    blockSelectionStore.set.selectedIds(new Set());
+
   useWindowListener('keyup', (e) => {
     switch (e.key) {
       case 'Delete': {
@@ -319,10 +323,12 @@ export const useEditingDataDrawer = (
         });
 
         onCloseDataDrawer();
+        resetBlockSelectionStore();
         break;
       }
       case 'Escape': {
         onCloseDataDrawer();
+        resetBlockSelectionStore();
         isResetting.current = true;
 
         break;

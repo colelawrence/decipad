@@ -34,6 +34,7 @@ import { useNotebookMetaData } from '@decipad/react-contexts';
 import { useMyEditorRef } from '@decipad/editor-types';
 import { assert } from '@decipad/utils';
 import { titles } from './title';
+import { blockSelectionStore } from '@udecode/plate-selection';
 
 type DataDrawerResizerProps = {
   parentRef: RefObject<HTMLElement>;
@@ -110,6 +111,10 @@ const DataDrawerVariableButtons: FC<
     (s) => [s.sidebarComponent, s.pushSidebar, s.popSidebar]
   );
 
+  const handleOnClose = () => {
+    blockSelectionStore.set.selectedIds(new Set());
+  };
+
   return (
     <>
       <DataDrawerFormulaHelperWrapper>
@@ -137,7 +142,7 @@ const DataDrawerVariableButtons: FC<
         buttons={[
           {
             children: (
-              <DataDrawerCloseButton>
+              <DataDrawerCloseButton onClick={handleOnClose}>
                 <Close />
               </DataDrawerCloseButton>
             ),

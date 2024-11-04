@@ -1,14 +1,19 @@
 /* eslint decipad/css-prop-named-variable: 0 */
 import { SmartRefDragCallback } from '@decipad/editor-utils';
 import { css } from '@emotion/react';
-import { ReactNode, useEffect, useState } from 'react';
+import React, { ReactNode, useCallback, useEffect, useState } from 'react';
 import { hideOnPrint } from '../../../styles/editor-layout';
 import { NumberCatalogHeading } from './NumberCatalogHeading';
 import { NumberCatalogItem } from './NumberCatalogItem';
 import { cssVar, p14Medium } from '../../../primitives';
 import { ImportElementSource } from '@decipad/editor-types';
+import {
+  blockSelectionStore,
+  useBlockSelectionSelectors,
+} from '@udecode/plate-selection';
 import * as Styled from './styles';
 import { CaretDown, CaretRight } from '../../../icons';
+import { useNotebookWithIdState } from '@decipad/notebook-state';
 
 export type NumberCatalogItemType = {
   name: string;
@@ -35,6 +40,61 @@ export const NumberCatalog = ({
   items = {},
   editVariable,
 }: NumberCatalogProps) => {
+  const selectedIdsStore =
+    useBlockSelectionSelectors().selectedIds() as Set<string>;
+  const [selectedIds, setSelectedIds] = useState<Set<string>>(
+    new Set(selectedIdsStore)
+  );
+
+  useEffect(() => {
+    setSelectedIds(new Set(selectedIdsStore));
+  }, [selectedIdsStore]);
+
+  const [closeDataDrawer, dataDrawerMode] = useNotebookWithIdState(
+    (s) => [s.closeDataDrawer, s.dataDrawerMode] as const
+  );
+  const handleOnClick = useCallback(
+    (event: React.MouseEvent, blockId: string) => {
+      const newSelectedIds = new Set(selectedIds);
+      if (newSelectedIds.has(blockId)) {
+        newSelectedIds.delete(blockId);
+      } else {
+        // If shift is not pressed, enforce single selection, otherwise add to selection
+        if (!event.shiftKey) {
+          newSelectedIds.clear();
+        }
+        newSelectedIds.add(blockId);
+      }
+      // if we are now selecting nothing, or >1, we don't want data drawer
+      if (newSelectedIds.size !== 1) {
+        closeDataDrawer();
+      } else {
+        // otherwise we want to have the data drawer editing the only selected value
+        editVariable(newSelectedIds.values().next().value);
+      }
+
+      blockSelectionStore.set.selectedIds(newSelectedIds);
+      setSelectedIds(newSelectedIds);
+    },
+    [selectedIds, closeDataDrawer, editVariable]
+  );
+
+  // Sync selection state with external changes to data-drawer
+  useEffect(() => {
+    if (dataDrawerMode.type !== 'edit') return;
+    // If our selected state is not what's currently being edited,
+    // we derive our selection state from the data-drawer
+    //
+    // This does not cause issues - since when we change selection above,
+    // selection state and data-drawer state are kept in sync
+    if (
+      selectedIds.size > 1 ||
+      selectedIds.values().next().value !== dataDrawerMode.variableId
+    ) {
+      setSelectedIds(new Set([dataDrawerMode.variableId]));
+    }
+  }, [dataDrawerMode, selectedIds]);
+
   const [expandedHeadings, setExpandedHeadings] = useState<
     Record<string, boolean>
   >({});
@@ -67,9 +127,11 @@ export const NumberCatalog = ({
             blockId={item.blockId}
             onDragStart={onDragStart}
             onDragEnd={onDragEnd}
-            onClick={() => editVariable(item.blockId)}
+            onClick={(event: React.MouseEvent) =>
+              handleOnClick(event, item.blockId)
+            }
             isDataTab={item.dataTab}
-            isSelected={item.isSelected}
+            isSelected={item.isSelected || selectedIds.has(item.blockId)}
             integrationProvider={item.integrationProvider}
           />
         );

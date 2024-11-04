@@ -382,9 +382,11 @@ export class EditorController implements RootEditorController {
   getNode(path: Path): ENode<NotebookValue> | null {
     return getNode(this as unknown as TEditor, path);
   }
+
   findNodeById(id: string) {
     return this.findNode((node) => isElement(node) && node.id === id);
   }
+
   findNode(
     match: (node: ENode<NotebookValue>) => boolean,
     base: RootEditorController | EElement<NotebookValue> = this
@@ -408,6 +410,28 @@ export class EditorController implements RootEditorController {
       }
     }
     return null;
+  }
+
+  public findNodeEntryById(blockId: string): [AnyElement, Path] | undefined {
+    for (const [index, topLevel] of this.children.entries()) {
+      for (const [childIndex, child] of topLevel.children.entries()) {
+        if (!isElement(child)) continue;
+
+        if (child.type === ELEMENT_LAYOUT) {
+          for (const [colIndex, layoutChild] of child.children.entries()) {
+            if (layoutChild.id === blockId) {
+              return [layoutChild, [index, childIndex, colIndex]];
+            }
+          }
+        }
+
+        if (child.id === blockId) {
+          return [child, [index, childIndex]];
+        }
+      }
+    }
+
+    return undefined;
   }
 
   // ======== Slate Editor Stubs ========
