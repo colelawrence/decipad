@@ -313,12 +313,15 @@ export const MetricForm: FC<ProxyFormProps<typeof metricConfig>> = ({
             onSetAggregationId={actions.setComparisonAggregation}
           />
 
-          <ProxyStringField
-            editor={editor}
-            label="Comparison description"
-            property={properties.comparisonDescription}
-            onChange={actions.setComparisonDescription}
-          />
+          {(properties.comparisonBlockId === 'varies' ||
+            properties.comparisonBlockId.value !== '') && (
+            <ProxyStringField
+              editor={editor}
+              label="Comparison description"
+              property={properties.comparisonDescription}
+              onChange={actions.setComparisonDescription}
+            />
+          )}
         </>
       )}
 

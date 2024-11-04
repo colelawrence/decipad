@@ -31,8 +31,8 @@ const allowedKinds: SerializedType['kind'][] = [
   'trend',
 ];
 
-const filterDisplayType = (serializedType: SerializedType) =>
-  allowedKinds.includes(serializedType.kind);
+const filterDisplayResults = ({ blockType }: SelectItems) =>
+  blockType && allowedKinds.includes(blockType.kind);
 
 export const Display: PlateComponent = ({ attributes, element, children }) => {
   assertElementType(element, ELEMENT_DISPLAY);
@@ -73,8 +73,7 @@ export const Display: PlateComponent = ({ attributes, element, children }) => {
 
   const allResults = useResults({
     enabled: openMenu || !loaded,
-    filterType: filterDisplayType,
-  });
+  }).filter(filterDisplayResults);
 
   // Performance improvement: Because results are only calculated when
   // menu is open, we no longer have access to them all the time. So we

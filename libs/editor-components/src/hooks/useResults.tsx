@@ -7,10 +7,7 @@ import {
   useMyEditorRef,
 } from '@decipad/editor-types';
 import { assertElementType } from '@decipad/editor-utils';
-import {
-  AutocompleteNameWithSerializedType,
-  SerializedType,
-} from '@decipad/language-interfaces';
+import { AutocompleteNameWithSerializedType } from '@decipad/language-interfaces';
 import { ResultIcon, SelectItems } from '@decipad/ui';
 import { getNodeString } from '@udecode/plate-common';
 import { useMemo, useCallback } from 'react';
@@ -22,7 +19,6 @@ export interface UseResultsOptions {
   // Saving a lot of CPU when the editor is re-rendering when the user is busy
   // doing other work.
   enabled: boolean;
-  filterType: (serializedType: SerializedType) => boolean;
 }
 
 export const useResults = (options: UseResultsOptions) => {
@@ -30,7 +26,7 @@ export const useResults = (options: UseResultsOptions) => {
 
   // Decilang codelines do not need to have a name defining them.
   // But we still want to add them.
-  const calculations = useCalculations(options);
+  const calculations = useCalculations();
 
   return useMemo(
     (): SelectItems[] =>
@@ -51,9 +47,7 @@ export const useResults = (options: UseResultsOptions) => {
   );
 };
 
-const useCalculations = ({
-  filterType,
-}: UseResultsOptions): AutocompleteNameWithSerializedType[] => {
+const useCalculations = (): AutocompleteNameWithSerializedType[] => {
   const computer = useComputer();
   const editor = useMyEditorRef();
 
@@ -70,7 +64,6 @@ const useCalculations = ({
 
       const serializedType = result.result?.type;
       if (!serializedType) return;
-      if (!filterType(serializedType)) return;
 
       const text = getCodeLineText(computer, node);
       if (!text) return;
@@ -107,7 +100,6 @@ const getCodeLineText = (
 
 const useNamesDefined = ({
   enabled,
-  filterType,
 }: UseResultsOptions): AutocompleteNameWithSerializedType[] => {
   const computer = useComputer();
   return computer.getNamesDefined$.useWithSelectorDebounced(
@@ -115,12 +107,9 @@ const useNamesDefined = ({
     useCallback(
       (names) => {
         if (!enabled) return [];
-        return names.filter((name) => {
-          if (name.kind === 'type-error') return false;
-          return filterType(name.serializedType);
-        });
+        return names.filter((name) => name.kind !== 'type-error');
       },
-      [enabled, filterType]
+      [enabled]
     )
   );
 };

@@ -1,12 +1,13 @@
 import { useCallback, useId, useMemo, useState } from 'react';
 import { ProxyFieldProps } from './types';
-import { UseResultsOptions, useResults } from '../../hooks';
+import { useResults } from '../../hooks';
 import {
   DropdownMenu,
   SelectItems,
   DropdownFieldLabel,
   DropdownFieldTrigger,
 } from '@decipad/ui';
+import { SerializedType } from '@decipad/language-interfaces';
 
 export const ProxyVariableDropdownField = ({
   editor,
@@ -17,20 +18,31 @@ export const ProxyVariableDropdownField = ({
   filterType,
 }: ProxyFieldProps<string> & {
   placeholder: string;
-  filterType: UseResultsOptions['filterType'];
+  filterType: (serializedType: SerializedType) => boolean;
 }) => {
   const id = `dropdown-${useId()}`;
   const [open, setOpen] = useState(false);
-  const allResults = useResults({ enabled: true, filterType });
+  const allResults = useResults({ enabled: true });
 
-  /**
-   * FIXME before merge: If the type of the selected variable changes and fails
-   * filterType, UI will incorrectly report that no variable is selected.
-   */
+  const hasBlockId = property !== 'varies' && property.value !== '';
+
+  const filteredResults = useMemo(
+    () =>
+      allResults.filter(({ blockType }) => blockType && filterType(blockType)),
+    [allResults, filterType]
+  );
+
   const result = useMemo(() => {
     if (property === 'varies') return null;
     return allResults.find((r) => r.blockId === property.value) ?? null;
   }, [allResults, property]);
+
+  const triggerText = useMemo(() => {
+    if (property === 'varies') return 'Multiple';
+    if (!hasBlockId) return placeholder;
+    if (!result) return 'Missing variable';
+    return result.item;
+  }, [property, result, hasBlockId, placeholder]);
 
   const onExecute = useCallback(
     (item: SelectItems) => {
@@ -47,12 +59,12 @@ export const ProxyVariableDropdownField = ({
         open={open}
         setOpen={setOpen}
         onExecute={onExecute}
-        groups={allResults}
+        groups={filteredResults}
         selectedIndex={result?.index}
         renderEmpty="No variables"
       >
         <DropdownFieldTrigger id={id} icon={result?.icon}>
-          {property === 'varies' ? 'Multiple' : result?.item ?? placeholder}
+          {triggerText}
         </DropdownFieldTrigger>
       </DropdownMenu>
     </div>
