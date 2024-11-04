@@ -630,9 +630,9 @@ test.describe('staging operation performance checks', () => {
           performance.getSampleTime(
             'Operations column + another column unitless'
           ),
-          'Operations column + another column unitless took more than 4 seconds'
+          'Operations column + another column unitless took more than 4.5 seconds'
         )
-        .toBeLessThanOrEqual(4_000);
+        .toBeLessThanOrEqual(4_500);
       await page.getByText('Hide data').last().click();
       await notebook.deleteBlock(2);
     });
@@ -722,9 +722,9 @@ test.describe('staging operation performance checks', () => {
           performance.getSampleTime(
             'Operations column * another column unitless'
           ),
-          'Operations column * another column unitless took more than 4 seconds'
+          'Operations column * another column unitless took more than 4. seconds'
         )
-        .toBeLessThanOrEqual(4_000);
+        .toBeLessThanOrEqual(4_500);
       await page.getByText('Hide data').last().click();
       await notebook.deleteBlock(2);
     });

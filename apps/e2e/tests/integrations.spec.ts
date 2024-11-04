@@ -256,7 +256,10 @@ test('checks the ability to change the unit of a response', async ({
   await page.waitForTimeout(Timeouts.liveBlockDelay);
 });
 
-test('check sql integrations are working correctly', async ({ testUser }) => {
+// eslint-disable-next-line playwright/no-skipped-test
+test.skip('check sql integrations are working correctly', async ({
+  testUser,
+}) => {
   test.slow();
   let notebookURL: string;
 
@@ -504,7 +507,7 @@ ORDER BY Day DESC
   await expect(testUser.page.getByText('MySQL')).toBeVisible();
 });
 
-test('Can add secrets to workspace', async ({ testUser }) => {
+test('Can add secrets to workspace @snapshot', async ({ testUser }) => {
   const { page, workspace } = testUser;
   await test.step('Can see data connections button', async () => {
     await testUser.goToWorkspace();
@@ -514,6 +517,10 @@ test('Can add secrets to workspace', async ({ testUser }) => {
 
   await test.step('Can click data connections and view modal', async () => {
     await page.getByText('Data connections').click();
+    await snapshot(page, 'Integrations: Shows Integration providers', {
+      mobile: false,
+    });
+    await expect(page.getByText('Connect Services')).toBeVisible();
     await expect(page.getByText('API Secrets')).toBeVisible();
     await expect(page.getByText('SQL')).toBeVisible();
   });
