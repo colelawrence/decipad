@@ -94,6 +94,8 @@ const NavigationSidebar: FC<NavigationSidebarProps> = ({
                 integrationProvider = (
                   elementFromBlockId.integrationType as SQLBlockIntegration
                 ).provider;
+              } else {
+                integrationProvider = integType;
               }
             }
 

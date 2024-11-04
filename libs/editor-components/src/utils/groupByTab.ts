@@ -1,8 +1,12 @@
 import {
   ElementKind,
+  ELEMENT_CODE_LINE,
+  ELEMENT_CODE_LINE_V2,
   ELEMENT_DATA_TAB_CHILDREN,
   ELEMENT_INTEGRATION,
   ELEMENT_VARIABLE_DEF,
+  ELEMENT_TABLE,
+  ELEMENT_METRIC,
 } from '@decipad/editor-types';
 import { isFlagEnabled } from '@decipad/feature-flags';
 import find from 'lodash/find';
@@ -19,14 +23,19 @@ export const catalogGroups: Record<
 > = {
   variables: {
     name: 'Variables',
-    validBlockTypes: [ELEMENT_DATA_TAB_CHILDREN],
+    validBlockTypes: [
+      ELEMENT_DATA_TAB_CHILDREN,
+      ELEMENT_CODE_LINE_V2,
+      ELEMENT_CODE_LINE,
+      ELEMENT_TABLE,
+    ],
   },
   widgets: {
     name: 'Widgets',
-    validBlockTypes: [ELEMENT_VARIABLE_DEF],
+    validBlockTypes: [ELEMENT_VARIABLE_DEF, ELEMENT_METRIC],
   },
   queries: {
-    name: 'Queries',
+    name: 'Datasets',
     validBlockTypes: [ELEMENT_INTEGRATION],
   },
 };

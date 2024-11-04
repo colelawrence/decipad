@@ -147,10 +147,11 @@ export const NumberCatalog = ({
           {Object.keys(items).map((tab) => (
             <div key={tab} css={groupStyles}>
               {Object.keys(items).length > 1 && (
-                <span css={groupHeadingStyles}>
-                  <Styled.IconOuterWrapper
-                    onClick={() => setIsHeadingExpanded(tab)}
-                  >
+                <span
+                  css={groupHeadingStyles}
+                  onClick={() => setIsHeadingExpanded(tab)}
+                >
+                  <Styled.IconOuterWrapper>
                     <Styled.IconWrapper>
                       {expandedHeadings[tab] ? <CaretDown /> : <CaretRight />}
                     </Styled.IconWrapper>
@@ -190,12 +191,7 @@ const menuBodyStyles = css({
 const groupStyles = css({
   display: 'flex',
   flexDirection: 'column',
-  gap: 4,
   padding: '4px 0',
-
-  '&:not(:last-child)': {
-    borderBottom: `1px solid ${cssVar('borderSubdued')}`,
-  },
 });
 
 const groupHeadingStyles = css(p14Medium, {
@@ -204,4 +200,5 @@ const groupHeadingStyles = css(p14Medium, {
   display: 'flex',
   alignItems: 'center',
   gap: 4,
+  cursor: 'pointer',
 });

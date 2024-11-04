@@ -351,6 +351,7 @@
     "react-mathjax-preview": "^2.2.6",
     "react-portal": "4.2.2",
     "react-remark": "^2.1.0",
+    "react-resizable-panels": "^2.1.6",
     "react-router-dom": "6.27.0",
     "react-simple-code-editor": "0.14.1",
     "react-tweet": "^3.1.1",

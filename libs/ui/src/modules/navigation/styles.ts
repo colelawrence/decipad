@@ -34,12 +34,6 @@ type TextWrapperProps = {
 
 export const NavigationSidebarWrapperStyles = styled.div(
   {
-    position: 'relative',
-    overflowX: 'hidden',
-    height: '100%',
-    display: 'flex',
-    flexDirection: 'column',
-    marginLeft: '16px',
     // small hack to avoid the marginRight: 24px coming from parent components.
     // TODO: unify all margins and sidebars
     marginRight: '-8px',
@@ -90,7 +84,7 @@ export const ItemWrapper = styled.div<ItemWrapperProps>((props) => [
     justifyItems: 'flex-start',
     alignItems: 'center',
     gridTemplateColumns: '24px auto',
-    padding: '8px 6px',
+    padding: '4px',
     gap: 4,
     color: props.isButton ? cssVar('textSubdued') : 'inherit',
 
@@ -196,8 +190,13 @@ export const NavigationTitleInnerWrapper = styled.div({
 export const NavigationTitleWrapper = styled.div({
   display: 'flex',
   justifyContent: 'space-between',
-  marginBottom: '8px',
+  paddingTop: '8px',
+  paddingBottom: '8px',
   alignItems: 'center',
+  backgroundColor: cssVar('backgroundDefault'),
+  position: 'fixed',
+  width: '225px',
+  zIndex: '2',
 });
 
 export const NavigationTitle = styled.p([
@@ -213,12 +212,11 @@ export const EllipsisWrapper = styled.div({
   display: 'flex',
   alignItems: 'center',
   // to center vertically the ellipsis
-  height: '40px',
+  height: '36px',
 });
 
-export const UnsectionedNotebooksWrapper = styled.div(deciOverflowYStyles, {
-  width: '100%',
-  maxHeight: '220px',
+export const SectionListWrapper = styled.div(deciOverflowYStyles, {
+  overflow: 'auto !important',
 });
 
 // Drag and Drop
@@ -245,4 +243,8 @@ export const DragDropTitle = styled.span({
   alignItems: 'center',
   justifyContent: 'center',
   color: cssVar('textTitle'),
+});
+
+export const ListWrapper = styled.div({
+  marginTop: '40px',
 });

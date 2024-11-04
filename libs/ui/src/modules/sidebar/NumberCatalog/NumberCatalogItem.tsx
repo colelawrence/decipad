@@ -209,7 +209,7 @@ const dragHandleStyles = css({
 });
 
 export const numberCatalogListItemStyles = css(p14Medium, {
-  padding: '4px 8px 4px 0px',
+  padding: '2px 8px 2px 0px',
   borderRadius: '6px',
   display: 'grid',
   gridTemplateColumns: '28px minmax(0, 1fr)',

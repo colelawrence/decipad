@@ -1,4 +1,3 @@
-import { isFlagEnabled } from '@decipad/feature-flags';
 import { SidebarComponent } from '@decipad/react-contexts';
 import styled from '@emotion/styled';
 import {
@@ -76,9 +75,7 @@ export const MainWrapper = styled.main<{
   display: 'flex',
   justifyContent: 'flex-end',
 
-  padding: props.isInEditorSidebar
-    ? `0px 0px 16px ${!isFlagEnabled('NAV_SIDEBAR') ? '24' : '0'}px`
-    : `0px 24px 16px ${!isFlagEnabled('NAV_SIDEBAR') ? '24' : '0'}px`,
+  padding: props.isInEditorSidebar ? `0px 0px 16px` : `0px 24px 16px`,
 
   gap: '24px',
   [tabletScreenQuery]: {
@@ -252,6 +249,8 @@ export const AsideWrapper = styled.aside<AsideWrapperProps>(
     borderRadius: '16px',
     zIndex: 40,
     overflow: 'visible',
+    // this is needed to fix the left side bar for reader mode (hidden)
+    marginLeft: '-8px',
 
     '& > :first-child': {
       width: ComponentWidths[sidebarComponent.type].default,
