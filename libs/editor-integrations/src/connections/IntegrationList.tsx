@@ -6,6 +6,7 @@ import {
   ThumbnailNotion,
   ThumbnailSql,
 } from '@decipad/ui/src/icons/thumbnail-icons';
+import { isFlagEnabled } from '@decipad/feature-flags';
 
 export const IntegrationList: ComponentProps<
   typeof SelectIntegration
@@ -36,7 +37,7 @@ export const IntegrationList: ComponentProps<
     title: 'Google Sheets',
     description: 'Import and analyze data from Google Sheets',
     type: 'gsheets',
-    enabled: true,
+    enabled: isFlagEnabled('GOOGLE_SHEETS_INTEGRATION'),
   },
   {
     icon: <ThumbnailGoogleSheet />,

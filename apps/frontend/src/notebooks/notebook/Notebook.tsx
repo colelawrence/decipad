@@ -146,10 +146,7 @@ export const Notebook: FC = () => {
             </Suspense>
           }
           leftSidebar={
-            isFlagEnabled('NAV_SIDEBAR') &&
-            ['ADMIN', 'WRITE'].includes(
-              notebookMetadaData?.getPadById?.myPermissionType || ''
-            ) ? (
+            isFlagEnabled('NAV_SIDEBAR') ? (
               <Suspense fallback={<NotebookListPlaceholder />}>
                 <NavigationSidebar {...props} />
               </Suspense>

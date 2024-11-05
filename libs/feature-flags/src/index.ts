@@ -28,6 +28,7 @@ export const availableFlags = [
   'DATA_DRAWER',
 
   'NAV_SIDEBAR',
+  'GOOGLE_SHEETS_INTEGRATION',
 
   'METRIC_BLOCK',
 
