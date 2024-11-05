@@ -540,18 +540,65 @@ it('can extract units from text', async () => {
   expect(units).toBeNull();
 });
 
-it('can get a expression from text in streaming mode', async () => {
-  await computeOnTestComputer({
-    program: {
-      upsert: getIdentifiedBlocks('Time = 120 minutes'),
-    },
+describe('getExpressionFromText', () => {
+  it('can get an expression from text in streaming mode', async () => {
+    await computeOnTestComputer({
+      program: {
+        upsert: getIdentifiedBlocks('Time = 120 minutes'),
+      },
+    });
+
+    const TimeStream = computer.expressionResultFromText$('Time in hours');
+
+    const firstTime = await firstValueFrom(TimeStream);
+
+    expect(firstTime?.value?.toString()).toBe('2');
   });
 
-  const TimeStream = computer.expressionResultFromText$('Time in hours');
+  it('can get an expression from text if expression changes', async () => {
+    await computeOnTestComputer({
+      program: { upsert: getIdentifiedBlocks('A = 5') },
+    });
 
-  const firstTime = await firstValueFrom(TimeStream);
+    const aStream = computer.expressionResultFromText$('A');
 
-  expect(firstTime?.value?.toString()).toBe('2');
+    const firstValue = await firstValueFrom(aStream);
+    expect(firstValue.value?.toString()).toBe('5');
+
+    await computeOnTestComputer({
+      program: { upsert: getIdentifiedBlocks('A = 6') },
+    });
+
+    const secondValue = await firstValueFrom(aStream);
+    expect(secondValue.value?.toString()).toBe('6');
+  });
+
+  it('can get an expression from text if expression is from table', async () => {
+    const blocks = getIdentifiedBlocks('MyTable = {}', 'MyTable.Col1 = [1, 2]');
+    const columnId = blocks[1].id;
+
+    await computer.pushComputeDelta({
+      program: {
+        upsert: blocks,
+      },
+    });
+
+    const maxStream = computer.expressionResultFromText$(
+      `max(${getExprRef(columnId)})`
+    );
+
+    const firstValue = await firstValueFrom(maxStream);
+    expect(firstValue.value?.toString()).toBe('2');
+
+    await computer.pushComputeDelta({
+      program: {
+        upsert: getIdentifiedBlocks('MyTable = {}', 'MyTable.Col1 = [3, 4]'),
+      },
+    });
+
+    const secondValue = await firstValueFrom(maxStream);
+    expect(secondValue.value?.toString()).toBe('4');
+  });
 });
 
 it('regression: can describe tables correctly', async () => {

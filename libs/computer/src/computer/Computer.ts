@@ -893,6 +893,7 @@ export class Computer implements ComputerInterface {
 
   expressionResultFromText$(decilang: string) {
     const exp = parseExpressionOrThrow(decilang, true);
+    delete exp.cacheKey;
 
     return this.results.pipe(
       switchMap(async () => this.expressionResult(exp)),
