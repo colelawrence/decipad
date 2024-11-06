@@ -1,6 +1,7 @@
+/* eslint decipad/css-prop-named-variable: 0 */
 import { Button } from '../../shared';
 import { css } from '@emotion/react';
-import { FC } from 'react';
+import { FC, Fragment } from 'react';
 import {
   banner,
   cssVar,
@@ -9,6 +10,10 @@ import {
   smallestMobile,
 } from '../../primitives';
 import { viewportClampCalc } from '../../utils';
+import styled from '@emotion/styled';
+import { env } from '@decipad/client-env';
+
+const isDev = env.DEV;
 
 const styles = css({
   padding: viewportClampCalc(smallestMobile, 16, largestDesktop, 66, 'px'),
@@ -62,6 +67,7 @@ export interface ErrorPageProps {
   readonly authenticated?: boolean;
   readonly backUrl?: string;
   readonly backCall?: string;
+  readonly error?: Error;
   readonly retry?: () => void;
 }
 
@@ -72,6 +78,7 @@ export const ErrorPage = ({
   authenticated = false,
   backUrl,
   backCall,
+  error,
   retry,
 }: ErrorPageProps): ReturnType<FC> => {
   return (
@@ -115,6 +122,8 @@ export const ErrorPage = ({
               </p>
             </>
           )}
+
+          {isDev && error && <ErrorStack error={error} />}
         </>
       )}
       <div css={buttonStyles} data-testid="errorPageBacklink">
@@ -148,5 +157,79 @@ export const ErrorPage = ({
         </Button>
       </div>
     </main>
+  );
+};
+
+const ErrorStackWrapper = styled.div({
+  textAlign: 'left',
+  maxWidth: '100%',
+  overflow: 'auto',
+  fontFamily: 'monospace',
+  lineHeight: 1.4,
+  padding: 12,
+  fontSize: `${12 / 16}rem`,
+  marginTop: 12,
+});
+
+const JsonPre = styled.pre({
+  maxHeight: 240,
+  overflow: 'auto',
+  backgroundColor: cssVar('backgroundHeavy'),
+  borderRadius: 4,
+  marginTop: 8,
+  marginBottom: 8,
+});
+
+const WarningWord = styled.strong({
+  fontWeight: 'bold',
+  color: cssVar('stateDangerBackground'),
+});
+
+export const ErrorStack = ({ error }: { error: Error }) => {
+  return (
+    <>
+      <ErrorStackWrapper>
+        {error?.stack?.split('\n').map((line, index) => (
+          <p key={line + index}>
+            {
+              // Search for JSON objects
+              line?.split(/({.*})/).map((x, i) => {
+                // If contains a JSON object try to format it
+                if (x.startsWith('{')) {
+                  try {
+                    const parsed = JSON.parse(x);
+                    return (
+                      <JsonPre key={i}>
+                        {JSON.stringify(parsed, null, 2)}
+                      </JsonPre>
+                    );
+                  } catch (e) {
+                    // If parsing fails, return the original text
+                    return x;
+                  }
+                } else {
+                  // Split words to style object names.
+                  const words = x.split(/\s+/);
+
+                  return words.map((word, j) => (
+                    <Fragment key={`${i}-${j}`}>
+                      {index && j === 2 ? (
+                        <WarningWord>{word} </WarningWord>
+                      ) : (
+                        `${word} `
+                      )}
+                    </Fragment>
+                  ));
+                }
+              })
+            }
+          </p>
+        ))}
+      </ErrorStackWrapper>
+
+      <ErrorStackWrapper>
+        Check the browser console for more details.
+      </ErrorStackWrapper>
+    </>
   );
 };

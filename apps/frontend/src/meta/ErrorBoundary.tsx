@@ -27,14 +27,21 @@ const ErrorRender: FC<{
   errorCount: number;
   error: Error;
   resetErrorBoundary: () => void;
-}> = ({ errorCount, resetErrorBoundary }) => {
+}> = ({ errorCount, error, resetErrorBoundary }) => {
   useEffect(() => {
     if (errorCount < 1) {
       resetErrorBoundary();
     }
   }, [errorCount, resetErrorBoundary]);
 
-  return <ErrorPage Heading="h1" wellKnown="508" retry={resetErrorBoundary} />;
+  return (
+    <ErrorPage
+      Heading="h1"
+      wellKnown="508"
+      retry={resetErrorBoundary}
+      error={error}
+    />
+  );
 };
 
 export const ErrorBoundary: FC<ErrorBoundaryProps> = ({ children }) => {

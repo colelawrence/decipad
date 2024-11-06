@@ -1,5 +1,6 @@
 /// <reference types="vite/client" />
 /// <reference types="vite-plugin-pwa/client" />
+/// <reference types="vite/types/importMeta.d.ts" />
 
 // Define .env variables to be available for typechecking.
 // Prefix them with `VITE_`, otherwise they are not imported.
