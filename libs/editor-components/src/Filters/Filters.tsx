@@ -23,6 +23,8 @@ import { omit } from 'lodash';
 import { ErrorBoundary } from '@sentry/react';
 import { isFlagEnabled } from '@decipad/feature-flags';
 import { useNotebookMetaData } from '@decipad/react-contexts';
+import { useNotebookRoute } from '@decipad/routing';
+import { useGetNotebookMetaQuery } from '@decipad/graphql-client';
 
 const titleStyles = css([
   p13Medium,
@@ -179,6 +181,14 @@ export const Filters = () => {
   // TODO remove empty filter
   const [draftFilter, setDraftFilter] = useState<DraftFilter>();
   const { filters, deleteFilter } = useFilters(controller);
+  const { notebookId } = useNotebookRoute();
+  const [{ data: notebookMetaData }] = useGetNotebookMetaQuery({
+    variables: { id: notebookId },
+  });
+  const isReadOnly = !(
+    notebookMetaData?.getPadById?.myPermissionType === 'WRITE' ||
+    notebookMetaData?.getPadById?.myPermissionType === 'ADMIN'
+  );
 
   const { addFilterSymbol, resetAddFilterSymbol } = useNotebookMetaData((s) => {
     return {
@@ -200,6 +210,7 @@ export const Filters = () => {
   }, [addFilterSymbol, lastAddFilterSymbol, resetAddFilterSymbol]);
 
   if (!isFlagEnabled('INTEGRATION_FILTERS')) return null;
+  if (isReadOnly) return null;
 
   // TODO give filter a name
   return (

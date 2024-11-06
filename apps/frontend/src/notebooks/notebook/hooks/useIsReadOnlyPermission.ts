@@ -4,9 +4,9 @@ import { useNotebookRoute } from '@decipad/routing';
 export const useIsReadOnlyPermission = (): boolean => {
   const { notebookId } = useNotebookRoute();
 
-  const [{ data: notebookMetadaData }] = useGetNotebookMetaQuery({
+  const [{ data: notebookMetaData }] = useGetNotebookMetaQuery({
     variables: { id: notebookId },
   });
 
-  return notebookMetadaData?.getPadById?.myPermissionType === 'READ';
+  return notebookMetaData?.getPadById?.myPermissionType === 'READ';
 };

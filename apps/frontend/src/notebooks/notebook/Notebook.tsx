@@ -59,15 +59,13 @@ export const Notebook: FC = () => {
 
   const setPermission = useNotebookWithIdState((s) => s.setPermission);
 
-  const [{ data: notebookMetadaData }] = useGetNotebookMetaQuery({
+  const [{ data: notebookMetaData }] = useGetNotebookMetaQuery({
     variables: { id: notebookId },
   });
 
   useEffect(() => {
-    setPermission(
-      notebookMetadaData?.getPadById?.myPermissionType ?? undefined
-    );
-  }, [notebookMetadaData?.getPadById?.myPermissionType, setPermission]);
+    setPermission(notebookMetaData?.getPadById?.myPermissionType ?? undefined);
+  }, [notebookMetaData?.getPadById?.myPermissionType, setPermission]);
 
   const isReadOnly = useIsReadOnlyPermission();
 
@@ -100,13 +98,13 @@ export const Notebook: FC = () => {
     onRecordReaderLoadPad();
   }, [isReadOnly, onRecordPadEvent]);
 
-  useInitializeResourceUsage(notebookMetadaData?.getPadById?.workspace);
+  useInitializeResourceUsage(notebookMetaData?.getPadById?.workspace);
 
   useEffect(() => {
-    setWorkspacePlan(notebookMetadaData?.getPadById?.workspace?.plan || 'free');
+    setWorkspacePlan(notebookMetaData?.getPadById?.workspace?.plan || 'free');
   }, [
     notebookId,
-    notebookMetadaData?.getPadById?.workspace?.plan,
+    notebookMetaData?.getPadById?.workspace?.plan,
     setWorkspacePlan,
   ]);
 
@@ -128,7 +126,7 @@ export const Notebook: FC = () => {
     notebookId,
     docsync,
     workspaceId: workspaceInfo.id ?? '',
-    workspaces: notebookMetadaData?.workspaces ?? [],
+    workspaces: notebookMetaData?.workspaces ?? [],
     actions,
   };
 
@@ -192,7 +190,7 @@ export const Notebook: FC = () => {
           dataDrawer={<DataDrawer />}
           isEmbed={isEmbed}
           isReadOnly={docsync?.isReadOnly}
-          permission={notebookMetadaData?.getPadById?.myPermissionType}
+          permission={notebookMetaData?.getPadById?.myPermissionType}
         />
         <Suspense>
           {isBuyCreditsModalOpen && (

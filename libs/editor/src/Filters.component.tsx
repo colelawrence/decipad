@@ -5,6 +5,8 @@ import { Add, Close } from 'libs/ui/src/icons';
 import { useFilters } from '@decipad/editor-hooks';
 import { isFlagEnabled } from '@decipad/feature-flags';
 import { useNotebookMetaData } from '@decipad/react-contexts';
+import { useNotebookRoute } from '@decipad/routing';
+import { useGetNotebookMetaQuery } from '@decipad/graphql-client';
 
 const filtersContainer = css({
   maxWidth: '620px',
@@ -69,11 +71,21 @@ export const Filters = () => {
     return { addFilter };
   });
   const { filters, deleteFilter } = useFilters(controller);
+  const { notebookId } = useNotebookRoute();
+  const [{ data: notebookMetaData }] = useGetNotebookMetaQuery({
+    variables: { id: notebookId },
+  });
+  const isReadOnly = !(
+    notebookMetaData?.getPadById?.myPermissionType === 'WRITE' ||
+    notebookMetaData?.getPadById?.myPermissionType === 'ADMIN'
+  );
+
   if (!isFlagEnabled('INTEGRATION_FILTERS')) return null;
+  if (isReadOnly) return null;
 
   return (
     <div css={filtersContainer}>
-      {filters?.length === 0 && (
+      {filters?.length === 0 && !isReadOnly && (
         <button css={addFilterStyles} onClick={addFilter}>
           <Add />
           <span>Add filter</span>
@@ -87,9 +99,11 @@ export const Filters = () => {
           >
             <span css={filterName}>{filter.filterName}</span>
             <span css={filterValue}>{filter.value}</span>
-            <button css={filterDelete} onClick={() => deleteFilter(filter)}>
-              <Close />
-            </button>
+            {!isReadOnly && (
+              <button css={filterDelete} onClick={() => deleteFilter(filter)}>
+                <Close />
+              </button>
+            )}
           </div>
         );
       })}
