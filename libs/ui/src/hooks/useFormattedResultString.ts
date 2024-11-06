@@ -17,7 +17,7 @@ export const useFormattedResultString = (
   );
 
   const buildString = useCallback(
-    (p: string) => `${currency}${p} ${unit}`,
+    (p: string) => `${currency}${p}${unit ? ` ${unit}` : ''}`,
     [currency, unit]
   );
 
