@@ -44,16 +44,19 @@ export type NewFilterSymbol = typeof newFilterSymbol;
 export const buttonContainerStyles = css({
   display: 'flex',
   justifyContent: 'flex-start',
-  gap: '8px',
+  gap: '16px',
+  paddingLeft: 4,
   '> button': {
     flex: '0 0 auto',
+    padding: 0,
+    fontWeight: 400,
   },
 });
 
 const newFilterStyles = css({
   display: 'flex',
   flexDirection: 'column',
-  gap: '8px',
+  gap: '16px',
   background: cssVar('backgroundDefault'),
   padding: '12px 8px',
   borderRadius: '8px',
@@ -231,6 +234,8 @@ export const DraftFilterForm = ({
       inputFieldType = 'text';
   }
 
+  const noValueSelected = !filter.integrationName || !filter.columnName;
+
   return (
     <div css={newFilterStyles}>
       <InputField
@@ -261,6 +266,7 @@ export const DraftFilterForm = ({
             ? `${filter.integrationName}.${filter.columnName}`
             : 'Select a column'
         }
+        noValueSelected={noValueSelected}
       >
         {tableResults.flatMap(({ varName, id, result }) => {
           return result.type.columnNames

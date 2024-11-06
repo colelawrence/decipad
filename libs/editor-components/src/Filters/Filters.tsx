@@ -26,10 +26,16 @@ import { useNotebookMetaData } from '@decipad/react-contexts';
 import { useNotebookRoute } from '@decipad/routing';
 import { useGetNotebookMetaQuery } from '@decipad/graphql-client';
 
+const containerStyles = css({
+  display: 'flex',
+  flexDirection: 'column',
+  gap: '8px',
+});
+
 const titleStyles = css([
   p13Medium,
   {
-    color: cssVar('textHeavy'),
+    color: cssVar('textSubdued'),
   },
 ]);
 
@@ -45,10 +51,11 @@ export const buttonContainerStyles = css({
 const addButtonContainerStyles = css(buttonContainerStyles, {
   button: {
     paddingLeft: 0,
+    padding: '4px 0',
+    gap: '4px',
   },
   svg: {
-    width: 32,
-    padding: 8,
+    height: 16,
   },
 });
 
@@ -64,19 +71,29 @@ const filterListItemStyles = css({
   alignItems: 'center',
 });
 
-const filterMenuHandleStyles = css({
-  width: 32,
-  height: 32,
-  padding: 8,
-  borderRadius: '8px',
-  '&:hover': {
-    background: cssVar('backgroundHeavy'),
-  },
-});
+const filterMenuHandleStyles = (menuOpen: boolean) =>
+  css(
+    {
+      width: 32,
+      height: 32,
+      padding: 8,
+      borderRadius: 8,
+      marginBottom: 8,
+      '&:hover': {
+        background: cssVar('backgroundHeavy'),
+        border: `1px solid ${cssVar('backgroundHeavier')}`,
+      },
+    },
+    menuOpen
+      ? {
+          background: cssVar('backgroundHeavy'),
+          border: `1px solid ${cssVar('backgroundHeavier')}`,
+        }
+      : {}
+  );
 
 const filterIconStyles = css({
-  width: 32,
-  padding: 8,
+  height: 16,
 });
 
 const filterNameStyles = css(p13Medium, {
@@ -98,7 +115,7 @@ const FilterListItem = ({
   const [menuOpen, setMenuOpen] = useState(false);
   const menuButton = (
     <button
-      css={filterMenuHandleStyles}
+      css={css(filterMenuHandleStyles(menuOpen))}
       onClick={() => setMenuOpen((x) => !x)}
       aria-label="Filter options"
       type="button"
@@ -131,7 +148,9 @@ const FilterListItem = ({
           onChangeOpen={setMenuOpen}
           trigger={menuButton}
           dropdown
-          side="right"
+          side="bottom"
+          align="end"
+          styles={css({ marginTop: 4 })}
         >
           <MenuItem icon={<Edit />} onClick={handleEdit}>
             Edit
@@ -215,14 +234,16 @@ export const Filters = () => {
   // TODO give filter a name
   return (
     <ErrorBoundary fallback={<div>Failed to load filters</div>}>
-      <>
+      <div css={containerStyles}>
         <div css={titleStyles}>Filters</div>
-        <FilterList
-          filters={filters}
-          deleteFilter={deleteFilter}
-          draftFilter={draftFilter}
-          setDraftFilter={setDraftFilter}
-        />
+        {filters.length > 0 && (
+          <FilterList
+            filters={filters}
+            deleteFilter={deleteFilter}
+            draftFilter={draftFilter}
+            setDraftFilter={setDraftFilter}
+          />
+        )}
         {draftFilter && draftFilter.id === undefined ? (
           <DraftFilterForm
             filter={draftFilter}
@@ -239,7 +260,7 @@ export const Filters = () => {
             </Button>
           </div>
         )}
-      </>
+      </div>
     </ErrorBoundary>
   );
 };

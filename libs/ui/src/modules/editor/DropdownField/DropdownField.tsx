@@ -18,24 +18,26 @@ const iconWrapperStyles = (squareIcon: boolean) =>
     height: '16px',
   });
 
-const triggerStyles = css([
-  p13Medium,
-  {
-    width: '100%',
-    height: '32px',
-    padding: '10px 12px',
-    display: 'flex',
-    alignItems: 'center',
-    gap: '6px',
-    border: `1px solid ${cssVar('borderSubdued')}`,
-    borderRadius: '6px',
-    backgroundColor: cssVar('backgroundMain'),
+const triggerStyles = (noValueSelected?: boolean) =>
+  css([
+    p13Medium,
+    noValueSelected ? { color: cssVar('textDisabled') } : {},
+    {
+      width: '100%',
+      height: '32px',
+      padding: '10px 12px',
+      display: 'flex',
+      alignItems: 'center',
+      gap: '6px',
+      border: `1px solid ${cssVar('borderSubdued')}`,
+      borderRadius: '6px',
+      backgroundColor: cssVar('backgroundMain'),
 
-    ':hover, :focus-visible': {
-      backgroundColor: cssVar('backgroundSubdued'),
+      ':hover, :focus-visible': {
+        backgroundColor: cssVar('backgroundSubdued'),
+      },
     },
-  },
-]);
+  ]);
 
 const containerStyles = css({
   display: 'grid',
@@ -55,6 +57,7 @@ interface DropdownFieldProps {
   readonly triggerText: ReactNode;
   readonly children: ReactNode;
   readonly error?: string;
+  readonly noValueSelected?: boolean;
 }
 
 export const DropdownField = ({
@@ -64,6 +67,7 @@ export const DropdownField = ({
   triggerText,
   children,
   error,
+  noValueSelected,
 }: DropdownFieldProps) => {
   const id = `dropdown-${useId()}`;
   const errorEl = error ? <span css={errorStyles}>{error}</span> : null;
@@ -78,7 +82,12 @@ export const DropdownField = ({
           dropdown
           trigger={
             <div>
-              <DropdownFieldTrigger id={id} icon={icon} squareIcon={squareIcon}>
+              <DropdownFieldTrigger
+                id={id}
+                icon={icon}
+                squareIcon={squareIcon}
+                noValueSelected={noValueSelected}
+              >
                 {triggerText}
               </DropdownFieldTrigger>
             </div>
@@ -112,6 +121,7 @@ export interface DropdownFieldTriggerProps {
   readonly icon?: ReactNode;
   readonly squareIcon?: boolean;
   readonly children: ReactNode;
+  readonly noValueSelected?: boolean;
 }
 
 export const DropdownFieldTrigger = ({
@@ -119,8 +129,9 @@ export const DropdownFieldTrigger = ({
   icon,
   squareIcon = true,
   children,
+  noValueSelected,
 }: DropdownFieldTriggerProps) => (
-  <button id={id} type="button" css={triggerStyles}>
+  <button id={id} type="button" css={triggerStyles(noValueSelected)}>
     {icon && <span css={iconWrapperStyles(squareIcon)}>{icon}</span>}
     {children}
     <CaretDown css={{ width: '12px', marginLeft: 'auto' }} />
