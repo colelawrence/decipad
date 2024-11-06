@@ -175,7 +175,7 @@ export const NavigationSidebar: FC<NavigationSidebarProps> = ({
         />
       </div>
       <StyledSplitPane direction="vertical" autoSaveId="leftSideBar">
-        <SectionWrapper minSize={20}>
+        <SectionWrapper minSize={5}>
           <Styled.NavigationTitleWrapper>
             <Styled.NavigationTitleInnerWrapper
               onClick={() => setIsNavigationExpanded(!isNavigationExpanded)}
@@ -286,7 +286,7 @@ export const NavigationSidebar: FC<NavigationSidebarProps> = ({
           )}
         </SectionWrapper>
         <ResizableDivider />
-        <SectionWrapper minSize={20}>
+        <SectionWrapper minSize={5}>
           <Styled.NavigationTitleWrapper>
             <Styled.NavigationTitleInnerWrapper
               onClick={() => setIsNotebookDataExpanded(!isNotebookDataExpanded)}

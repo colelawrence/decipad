@@ -193,7 +193,7 @@ export const NavigationTitleWrapper = styled.div({
   paddingTop: '8px',
   paddingBottom: '8px',
   alignItems: 'center',
-  backgroundColor: cssVar('backgroundDefault'),
+  backgroundColor: cssVar('backgroundAccent'),
   position: 'fixed',
   width: '225px',
   zIndex: '2',

@@ -24,8 +24,7 @@ import {
   NotebookListPlaceholder,
 } from '@decipad/ui';
 import { getAnonUserMetadata } from '@decipad/utils';
-import type { FC } from 'react';
-import { Suspense, useCallback, useEffect } from 'react';
+import { FC, Suspense, useCallback, useEffect, useMemo } from 'react';
 import { createPortal } from 'react-dom';
 import {
   useInitializeResourceUsage,
@@ -135,6 +134,18 @@ export const Notebook: FC = () => {
 
   const editorClientEvents = useEditorClientEvents(notebookId);
 
+  const shouldRenderNavigationSidebar = useMemo(() => {
+    if (!notebookMetadaData?.getPadById) {
+      return false;
+    }
+    return (
+      isFlagEnabled('NAV_SIDEBAR') &&
+      ['ADMIN', 'WRITE'].includes(
+        notebookMetadaData.getPadById.myPermissionType || ''
+      )
+    );
+  }, [notebookMetadaData]);
+
   return (
     <NotebookErrorBoundary>
       <ClientEventsContext.Provider value={editorClientEvents}>
@@ -145,12 +156,17 @@ export const Notebook: FC = () => {
               <Editor notebookId={notebookId} docsync={docsync} />
             </Suspense>
           }
+          /* even if this logic seems redundant please
+           * do not remove it because otherwise this will
+           * break newly created notebooks
+           */
+          shouldRenderNavigationSidebar={shouldRenderNavigationSidebar}
           leftSidebar={
-            isFlagEnabled('NAV_SIDEBAR') ? (
-              <Suspense fallback={<NotebookListPlaceholder />}>
+            <Suspense fallback={<NotebookListPlaceholder />}>
+              {shouldRenderNavigationSidebar ? (
                 <NavigationSidebar {...props} />
-              </Suspense>
-            ) : null
+              ) : null}
+            </Suspense>
           }
           topbar={
             <Suspense fallback={<TopbarPlaceholder />}>
@@ -164,11 +180,13 @@ export const Notebook: FC = () => {
           }
           tabs={
             !isEmbed && docsync ? (
-              <Tabs
-                notebookId={notebookId}
-                controller={docsync}
-                docsync={docsync}
-              />
+              <Suspense fallback={<></>}>
+                <Tabs
+                  notebookId={notebookId}
+                  controller={docsync}
+                  docsync={docsync}
+                />
+              </Suspense>
             ) : null
           }
           dataDrawer={<DataDrawer />}

@@ -20,6 +20,7 @@ interface NotebookPageProps {
   readonly isReadOnly: boolean | undefined;
   readonly permission?: PermissionType | null | undefined;
   readonly articleRef: React.RefObject<HTMLElement>;
+  readonly shouldRenderNavigationSidebar?: boolean;
 }
 
 const ALLOWED_READER_SIDEBAR_COMPONENTS: SidebarComponent['type'][] = [
@@ -61,6 +62,7 @@ export const NotebookPage: React.FC<NotebookPageProps> = (props) => {
     isEmbed = false,
     articleRef,
     dataDrawer,
+    shouldRenderNavigationSidebar = false,
   } = props;
 
   const sidebarComponent = useNotebookMetaData(
@@ -91,7 +93,7 @@ export const NotebookPage: React.FC<NotebookPageProps> = (props) => {
         {leftSidebar && (
           <SidebarExtra
             isDataDrawerOpen={shouldRenderComponent(dataDrawer)}
-            showSidebar={!!leftSidebar}
+            showSidebar={shouldRenderNavigationSidebar}
             sidebarComponent={{ type: 'navigation-sidebar' }}
             position="left"
           >
