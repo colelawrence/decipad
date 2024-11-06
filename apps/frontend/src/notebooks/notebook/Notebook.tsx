@@ -133,16 +133,16 @@ export const Notebook: FC = () => {
   const editorClientEvents = useEditorClientEvents(notebookId);
 
   const shouldRenderNavigationSidebar = useMemo(() => {
-    if (!notebookMetadaData?.getPadById) {
+    if (!notebookMetaData?.getPadById) {
       return false;
     }
     return (
       isFlagEnabled('NAV_SIDEBAR') &&
       ['ADMIN', 'WRITE'].includes(
-        notebookMetadaData.getPadById.myPermissionType || ''
+        notebookMetaData.getPadById.myPermissionType || ''
       )
     );
-  }, [notebookMetadaData]);
+  }, [notebookMetaData]);
 
   return (
     <NotebookErrorBoundary>
