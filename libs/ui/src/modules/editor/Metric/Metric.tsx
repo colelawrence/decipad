@@ -11,11 +11,7 @@ import {
 } from '../../../primitives';
 import { AvailableSwatchColor } from '../../../utils';
 import { ArrowUp2, ArrowDown2, Settings2 } from 'libs/ui/src/icons';
-import {
-  IdentifiedError,
-  IdentifiedResult,
-  ResultType,
-} from '@decipad/computer-interfaces';
+import { ResultType } from '@decipad/computer-interfaces';
 import { CodeResult } from '../CodeResult/CodeResult';
 import { Result } from '@decipad/language-interfaces';
 import { N, ZERO } from '@decipad/number';
@@ -134,7 +130,7 @@ interface MetricProps {
   readonly children?: ReactNode;
   readonly readOnly?: boolean;
   readonly caption: string;
-  readonly mainResult?: IdentifiedResult | IdentifiedError;
+  readonly mainResult?: ResultType;
   readonly trendResult?: ResultType;
   readonly comparisonDescription?: string;
   readonly formatting?: NumberFormatting;
@@ -199,9 +195,8 @@ export const Metric = ({
       </div>
       <div>
         <div css={valueStyles(fullHeight ? height : 0)}>
-          {mainResult?.result?.type.kind !== 'type-error' &&
-          mainResult?.result ? (
-            <CodeResult {...mainResult.result} formatting={formatting} />
+          {mainResult?.type.kind !== 'type-error' && mainResult ? (
+            <CodeResult {...mainResult} formatting={formatting} />
           ) : (
             '0'
           )}

@@ -10,30 +10,61 @@ import {
   useInsideLayoutContext,
   useIsEditorReadOnly,
 } from '@decipad/react-contexts';
-import { useComputer, useEditElement } from '@decipad/editor-hooks';
-import { useEffect, useState } from 'react';
-import { ResultType } from '@decipad/computer-interfaces';
+import {
+  useComputer,
+  useEditElement,
+  useExpressionResult,
+  useMetricAggregation,
+} from '@decipad/editor-hooks';
 import { getExprRef } from '@decipad/computer';
 
 export const Metric: PlateComponent = ({ attributes, element, children }) => {
   assertElementType(element, ELEMENT_METRIC);
-  const { id, blockId, comparisonBlockId, color } = element;
+  const {
+    id,
+    blockId,
+    aggregation: aggregationId,
+    comparisonBlockId,
+    comparisonAggregation: comparisonAggregationId,
+    color,
+  } = element;
 
+  const computer = useComputer();
   const insideLayout = useInsideLayoutContext();
   const readOnly = useIsEditorReadOnly();
   const onEdit = useEditElement(element);
 
-  const computer = useComputer();
-  const mainResult = computer.getBlockIdResult$.use(blockId);
-  const [trendResult, setTrendResult] = useState<ResultType | null>(null);
+  const { aggregation } = useMetricAggregation({ blockId, aggregationId });
+  const { aggregation: comparisonAggregation } = useMetricAggregation({
+    blockId: comparisonBlockId,
+    aggregationId: comparisonAggregationId,
+  });
 
-  useEffect(() => {
-    const observable = computer.expressionResultFromText$(
-      `trend([${getExprRef(comparisonBlockId)}, ${getExprRef(blockId)}])`
-    );
-    const sub = observable.subscribe(setTrendResult);
-    return () => sub.unsubscribe();
-  }, [computer, blockId, comparisonBlockId]);
+  const blockRef = getExprRef(blockId);
+  const comparisonBlockRef = getExprRef(comparisonBlockId);
+
+  const expression = aggregation?.expression(blockRef, { sum: '' }) ?? blockRef;
+  const comparisonExpresison =
+    comparisonAggregation?.expression(comparisonBlockRef, { sum: '' }) ??
+    comparisonBlockRef;
+
+  /**
+   * Optimization: `computer.getBlockIdResult$` produces a result much faster
+   * than `useExpressionResult` does. Use it instead if the main value does not
+   * use an aggregation.
+   */
+  const unaggregatedMainResult =
+    computer.getBlockIdResult$.use(blockId)?.result;
+  const aggregatedMainResult = useExpressionResult(expression, {
+    enabled: !!aggregation,
+  });
+  const mainResult = aggregation
+    ? aggregatedMainResult
+    : unaggregatedMainResult;
+
+  const trendResult = useExpressionResult(
+    `trend([${comparisonExpresison}, ${expression}])`
+  );
 
   return (
     <div
@@ -50,7 +81,7 @@ export const Metric: PlateComponent = ({ attributes, element, children }) => {
         <UIMetric
           readOnly={readOnly}
           caption={element.caption}
-          mainResult={mainResult}
+          mainResult={mainResult ?? undefined}
           trendResult={trendResult ?? undefined}
           comparisonDescription={element.comparisonDescription}
           formatting={element.formatting}

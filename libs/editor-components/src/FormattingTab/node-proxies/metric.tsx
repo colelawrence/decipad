@@ -13,7 +13,7 @@ import {
 } from '../proxy';
 import { setNodeProperty } from './utils';
 import { ProxyFactoryConfig, ProxyFormProps } from './types';
-import { FC, useMemo } from 'react';
+import { FC } from 'react';
 import { FormWrapper } from '../FormWrapper';
 import {
   ProxyColorDropdownField,
@@ -22,18 +22,17 @@ import {
   ProxyStringField,
 } from '../proxy-fields';
 import { ProxyVariableDropdownField } from '../proxy-fields/ProxyVariableDropdownField';
-import { useComputer } from '@decipad/editor-hooks';
 import { SerializedType } from '@decipad/language-interfaces';
 import { css } from '@emotion/react';
 import {
   AggregationType,
   availableAggregations,
-  getAggregationById,
   getAggregationShortName,
 } from '@decipad/language-aggregations';
 import { Button } from '@decipad/ui';
 import { Trash } from 'libs/ui/src/icons';
 import { capitalize } from 'lodash';
+import { useMetricAggregation } from '@decipad/editor-hooks';
 
 export const metricConfig = {
   key: 'metric' as const,
@@ -118,63 +117,6 @@ const filterMetricType = (serializedType: SerializedType) => {
   return false;
 };
 
-const useResultType = (blockId: string): SerializedType | null => {
-  const computer = useComputer();
-  const result = computer.getBlockIdResult$.use(blockId);
-  if (result?.type !== 'computer-result') return null;
-  return result.result.type;
-};
-
-interface UseMetricValueOptions {
-  blockId: string;
-  aggregationId?: string;
-}
-
-const useMetricValue = ({ blockId, aggregationId }: UseMetricValueOptions) => {
-  const valueType = useResultType(blockId);
-  const columnType =
-    valueType?.kind === 'column' || valueType?.kind === 'materialized-column'
-      ? valueType.cellType
-      : null;
-
-  const aggregationOptions = useMemo(
-    () => (columnType ? availableAggregations(columnType) : []),
-    [columnType]
-  );
-
-  const safeAggregationId = useMemo(() => {
-    if (aggregationOptions.length === 0) return null;
-
-    // Make sure the selected option is available
-    if (aggregationOptions.find(({ id }) => id === aggregationId)) {
-      return aggregationId!;
-    }
-
-    // Default to first option
-    return aggregationOptions[0].id;
-  }, [aggregationOptions, aggregationId]);
-
-  const aggregationResultType = useMemo(() => {
-    if (!safeAggregationId || !columnType) return null;
-
-    const aggregation = getAggregationById(safeAggregationId);
-    if (!aggregation) return null;
-
-    const { getResultType } = aggregation;
-    if (!getResultType) return null;
-
-    return getResultType(columnType);
-  }, [safeAggregationId, columnType]);
-
-  const resultType = aggregationResultType ?? valueType;
-
-  return {
-    safeAggregationId,
-    aggregationOptions,
-    resultType,
-  };
-};
-
 // Visible only to screen-readers but still takes up space
 const invisibleText = css({
   opacity: 0,
@@ -256,10 +198,11 @@ export const MetricForm: FC<ProxyFormProps<typeof metricConfig>> = ({
   editor,
   proxy: { properties, actions },
 }) => {
-  const { safeAggregationId, aggregationOptions, resultType } = useMetricValue({
-    blockId: ifVaries(properties.blockId, ''),
-    aggregationId: ifVaries(properties.aggregation, undefined),
-  });
+  const { safeAggregationId, aggregationOptions, resultType } =
+    useMetricAggregation({
+      blockId: ifVaries(properties.blockId, ''),
+      aggregationId: ifVaries(properties.aggregation, undefined),
+    });
 
   const aggregationIdProperty = mapProperty(
     properties.aggregation,
@@ -271,7 +214,7 @@ export const MetricForm: FC<ProxyFormProps<typeof metricConfig>> = ({
   const {
     safeAggregationId: safeComparisonAggregationId,
     aggregationOptions: comparisonAggregationOptions,
-  } = useMetricValue({
+  } = useMetricAggregation({
     blockId: ifVaries(properties.comparisonBlockId, ''),
     aggregationId: ifVaries(properties.comparisonAggregation, undefined),
   });

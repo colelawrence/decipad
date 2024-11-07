@@ -14,6 +14,7 @@ export interface AggregationType {
     colRef: string,
     totalAggregationExpressions: TotalAggregationExpressions
   ) => string;
+  requiresSum?: boolean;
   // Use null only when the result type cannot be predicted
   getResultType: ((cellType: SerializedType) => SerializedType) | null;
 }
@@ -140,6 +141,7 @@ const aggregationTypes: { [type: string]: AggregationType[] } = {
       shortName: 'Percent',
       expression: (colDef, totalAggregationExpressions) =>
         `sum(${colDef}) / (${totalAggregationExpressions.sum}) in %`,
+      requiresSum: true,
       getResultType: getResultTypeNumber,
     },
   ],
@@ -172,6 +174,7 @@ const aggregationTypes: { [type: string]: AggregationType[] } = {
       shortName: 'Percent',
       expression: (colDef, totalAggregationExpressions) =>
         `sum(${colDef}) / (${totalAggregationExpressions.sum}) in %`,
+      requiresSum: true,
       getResultType: getResultTypeNumber,
     },
     {

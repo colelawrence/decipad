@@ -192,9 +192,13 @@ test('check calculations from CSVs imported with link work across tabs @imports 
       varName: 'TableImported',
     });
 
-    await expect(
-      page.getByText('20 rows, previewing rows 1 to 10')
-    ).toBeVisible();
+    await expect(async () => {
+      await expect(
+        page
+          .getByTestId('integration-block')
+          .getByText('20 rows, previewing rows 1 to 10')
+      ).toBeVisible();
+    }, 'Integration no added to the notebook').toPass();
   });
 
   await test.step('add formula that uses the integration table', async () => {
