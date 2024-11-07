@@ -12,8 +12,8 @@ export default {
   },
 } as Meta;
 
-export const Normal: StoryFn<{ numberOfNotebooks?: number }> = (
-  args: NotebookListHeaderProps
-) => <NotebookListHeader {...args} />;
+export const Normal = (args: NotebookListHeaderProps) => (
+  <NotebookListHeader {...args} />
+);
 
 export const Loading: StoryFn = () => <NotebookListHeader Heading="h1" />;

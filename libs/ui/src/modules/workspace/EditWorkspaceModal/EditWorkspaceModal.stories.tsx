@@ -1,4 +1,4 @@
-import { Meta, StoryFn } from '@storybook/react';
+import { Meta } from '@storybook/react';
 import {
   EditWorkspaceModal,
   EditWorkspaceModalProps,
@@ -16,6 +16,6 @@ export default {
   args,
 } as Meta;
 
-export const Normal: StoryFn<typeof args> = (
-  props: EditWorkspaceModalProps
-) => <EditWorkspaceModal {...props} onClose={noop} membersHref="" />;
+export const Normal = (props: EditWorkspaceModalProps) => (
+  <EditWorkspaceModal {...props} onClose={noop} membersHref="" />
+);

@@ -33,7 +33,7 @@ export const Normal: StoryFn = () => <PlotBlock {...props} />;
 const withMessageArgs = {
   errorMessage: 'Something awful just happened',
 };
-export const WithErrorMessage: StoryFn<typeof withMessageArgs> = (
-  extraProps: PlotBlockProps
-) => <PlotBlock {...props} {...extraProps} />;
+export const WithErrorMessage = (extraProps: PlotBlockProps) => (
+  <PlotBlock {...props} {...extraProps} />
+);
 WithErrorMessage.args = withMessageArgs;

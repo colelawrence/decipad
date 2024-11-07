@@ -17,9 +17,7 @@ export default {
   args,
 } as Meta;
 
-export const Normal: StoryFn<typeof args> = ({
-  numberOfItems,
-}: NestedArgsProps) => (
+export const Normal = ({ numberOfItems }: NestedArgsProps) => (
   <UnorderedList>
     {Array.from({ length: numberOfItems }, (_, i) => (
       <ListItemContent key={i}>Item {i + 1}</ListItemContent>
@@ -36,7 +34,8 @@ export const Nested: StoryFn<typeof nestedArgs> = (
     {Array.from({ length: numberOfItems }, (_, i) => (
       <ListItemContent key={i}>
         Item {i + 1}
-        {levels > 1 && Nested({ numberOfItems, levels: levels - 1 }, context)}
+        {levels > 1 &&
+          Nested({ numberOfItems, levels: levels - 1 }, context as any)}
       </ListItemContent>
     ))}
   </UnorderedList>

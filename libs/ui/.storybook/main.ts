@@ -2,9 +2,10 @@
 import type { StorybookConfig } from '@storybook/react-vite';
 import tsconfigPaths from 'vite-tsconfig-paths';
 import react from '@vitejs/plugin-react-swc';
+import wasm from 'vite-plugin-wasm';
 
 const viteStoryBookConfig: StorybookConfig = {
-  stories: ['../src/**/*.stories.@(js|jsx|ts|tsx|mdx)'],
+  stories: ['../src/**/*.stories.@(js|jsx|ts|tsx)', '../src/**/*.mdx'],
   addons: ['@storybook/addon-essentials', '@storybook/addon-interactions'],
   framework: {
     name: '@storybook/react-vite',
@@ -28,6 +29,7 @@ const viteStoryBookConfig: StorybookConfig = {
     );
 
     config.plugins.push(tsconfigPaths());
+    config.plugins.push(wasm());
 
     config.define = {
       process: {

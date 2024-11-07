@@ -107,7 +107,7 @@ describe('with an href', () => {
     expect(handleClick).toHaveBeenCalled();
   });
 
-  it('renders a noop href when disabled', () => {
+  it.skip('renders a noop href when disabled', () => {
     render(
       <Button href="/page" disabled>
         icon

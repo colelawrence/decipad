@@ -1,4 +1,4 @@
-import { Meta, StoryFn } from '@storybook/react';
+import { Meta } from '@storybook/react';
 import { circleIcon, inMenu } from '../../../storybook-utils';
 import { InlineMenuItem, InlineMenuItemProps } from './InlineMenuItem';
 
@@ -15,6 +15,6 @@ export default {
   decorators: [inMenu],
 } as Meta;
 
-export const Normal: StoryFn<typeof args> = (props: InlineMenuItemProps) => (
+export const Normal = (props: InlineMenuItemProps) => (
   <InlineMenuItem {...props} icon={circleIcon} />
 );

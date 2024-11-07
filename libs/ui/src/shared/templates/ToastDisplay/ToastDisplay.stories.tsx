@@ -1,5 +1,5 @@
 import { ToastStatus, useToast } from '@decipad/toast';
-import { Meta, StoryFn } from '@storybook/react';
+import { Meta } from '@storybook/react';
 import { ComponentProps } from 'react';
 import { ToastDisplay } from './ToastDisplay';
 
@@ -23,7 +23,7 @@ const ToastButton = ({ status, text }: ToastButtonProps) => {
   return <button onClick={() => toast(text, status)}>Click me</button>;
 };
 
-export const Info: StoryFn<typeof args> = (props: ToastButtonProps) => {
+export const Info = (props: ToastButtonProps) => {
   return (
     <ToastDisplay>
       <ToastButton {...props} status="info" />
@@ -31,7 +31,7 @@ export const Info: StoryFn<typeof args> = (props: ToastButtonProps) => {
   );
 };
 
-export const Success: StoryFn<typeof args> = (props: ToastButtonProps) => {
+export const Success = (props: ToastButtonProps) => {
   return (
     <ToastDisplay>
       <ToastButton {...props} status="success" />
@@ -39,7 +39,7 @@ export const Success: StoryFn<typeof args> = (props: ToastButtonProps) => {
   );
 };
 
-export const Error: StoryFn<typeof args> = (props: ToastButtonProps) => {
+export const Error = (props: ToastButtonProps) => {
   return (
     <ToastDisplay>
       <ToastButton {...props} status="error" />
@@ -47,7 +47,7 @@ export const Error: StoryFn<typeof args> = (props: ToastButtonProps) => {
   );
 };
 
-export const Warning: StoryFn<typeof args> = (props: ToastButtonProps) => {
+export const Warning = (props: ToastButtonProps) => {
   return (
     <ToastDisplay>
       <ToastButton {...props} status="warning" />

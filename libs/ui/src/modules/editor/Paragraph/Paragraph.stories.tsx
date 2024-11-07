@@ -19,7 +19,7 @@ export const Active: StoryFn<{ children: string }> = (args: ParagraphProps) => (
 );
 Active.args = { children: lorem };
 
-export const Placeholder: StoryFn<{ placeholder: string }> = (
-  args: ParagraphProps
-) => <Paragraph {...args}>{null}</Paragraph>;
+export const Placeholder = (args: ParagraphProps) => (
+  <Paragraph {...args}>{null}</Paragraph>
+);
 Placeholder.args = { placeholder: 'Press "/" for options' };
