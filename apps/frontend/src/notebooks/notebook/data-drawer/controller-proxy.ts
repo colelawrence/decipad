@@ -71,9 +71,7 @@ export const controllerReverseProxy = <T extends TEditor>(
     if (
       e.type !== 'root-any-change' ||
       e.op == null ||
-      e.op.type === 'move_node' ||
-      e.op.type === 'merge_node' ||
-      e.op.type === 'split_node'
+      e.op.type === 'move_node'
     ) {
       return;
     }
