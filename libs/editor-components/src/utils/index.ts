@@ -12,6 +12,5 @@ export * from './slashCommands';
 export * from './table';
 export * from './toVar';
 export * from './useDnd';
-export * from './useTurnIntoProps';
 export * from './validateItemAndGetFile';
 export const catalogDebounceTimeMs = 1_000;

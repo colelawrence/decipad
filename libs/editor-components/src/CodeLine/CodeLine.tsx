@@ -28,7 +28,6 @@ import { onDragStartTableCellResult } from './onDragStartTableCellResult';
 import { useAutoConvertToSmartRef } from './useAutoConvertToSmartRef';
 import { useCodeLineClickReference } from './useCodeLineClickReference';
 import { useSiblingCodeLines } from './useSiblingCodeLines';
-import { useTurnIntoProps } from './useTurnIntoProps';
 
 const codeLineDebounceResultMs = 500;
 
@@ -107,15 +106,12 @@ export const CodeLine: PlateComponent = ({ attributes, children, element }) => {
 
   const onDragEnd = useOnDragEnd();
 
-  const turnIntoProps = useTurnIntoProps(element, computer, lineId ?? '');
-
   const [aPlaceholder] = useState(placeholderForCalculationLine);
 
   return (
     <DraggableBlock
       blockKind="codeLine"
       element={element}
-      {...turnIntoProps}
       {...attributes}
       dependencyId={lineId}
       hasPreviousSibling={siblingCodeLines?.hasPrevious}

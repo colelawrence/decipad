@@ -14,7 +14,6 @@ import { VariableEditor } from '@decipad/ui';
 import { findNodePath, getNodeString } from '@udecode/plate-common';
 import type { AvailableSwatchColor } from 'libs/ui/src/utils';
 import { useCallback } from 'react';
-import { useTurnIntoProps } from '../utils/useTurnIntoProps';
 import { VariableEditorContextProvider } from './VariableEditorContext';
 import { useEditElement } from '@decipad/editor-hooks';
 
@@ -50,8 +49,6 @@ export const VariableDef: PlateComponent = ({
 
   const { color: defaultColor } = useEditorStylesContext();
 
-  const turnIntoProps = useTurnIntoProps(element);
-
   const { color = defaultColor } = element.children[0];
 
   return (
@@ -62,7 +59,6 @@ export const VariableDef: PlateComponent = ({
       suppressContentEditableWarning
       id={element.id}
       dependencyId={element.id}
-      {...turnIntoProps}
       {...attributes}
     >
       <VariableEditorContextProvider

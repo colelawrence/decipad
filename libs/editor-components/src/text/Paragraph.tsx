@@ -27,7 +27,6 @@ import { Range } from 'slate';
 import { ReactEditor } from 'slate-react';
 import { ParagraphAIPanel } from '../AIPanel';
 import { DraggableBlock } from '../block-management';
-import { useTurnIntoProps } from '../utils';
 
 const isSelected = (editor: MyEditor, element: AnyElement) => {
   if (!editor.selection) {
@@ -70,7 +69,6 @@ export const Paragraph: PlateComponent = ({
   const placeholder =
     readOnly || !showPlaceHolder ? undefined : <ParagraphPlaceholder />;
 
-  const turnIntoProps = useTurnIntoProps(element);
   const editor = useMyEditorRef();
   const path = useNodePath(element);
   const [showAiPanel, setShowAiPanel] = useState(false);
@@ -90,7 +88,6 @@ export const Paragraph: PlateComponent = ({
         visible: showAiPanel,
         toggle: toggleAiPanel,
       }}
-      {...turnIntoProps}
       {...attributes}
     >
       <UIParagraph placeholder={placeholder}>{children}</UIParagraph>

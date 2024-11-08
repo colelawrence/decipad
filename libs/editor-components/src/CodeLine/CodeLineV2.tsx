@@ -70,7 +70,6 @@ import { onDragStartTableCellResult } from './onDragStartTableCellResult';
 import { useAutoConvertToSmartRef } from './useAutoConvertToSmartRef';
 import { useCodeLineClickReference } from './useCodeLineClickReference';
 import { useSimpleValueInfo } from './useSimpleValueInfo';
-import { useTurnIntoProps } from './useTurnIntoProps';
 
 export type Variant = 'error' | 'calculation' | 'value';
 
@@ -127,8 +126,6 @@ export const CodeLineV2: PlateComponent = ({
     [editor, element, isReadOnly, lineResult]
   );
 
-  const turnIntoProps = useTurnIntoProps(element, computer, lineId ?? '');
-
   const childrenArray = Children.toArray(children);
   if (childrenArray.length !== 2) {
     throw new Error('panic: expected only 2 children');
@@ -165,7 +162,6 @@ export const CodeLineV2: PlateComponent = ({
     <DraggableBlock
       blockKind="structured"
       element={element}
-      {...turnIntoProps}
       {...attributes}
       dependencyId={lineId}
       isCentered={true}
