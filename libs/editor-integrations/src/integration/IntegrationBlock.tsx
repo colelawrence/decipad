@@ -4,7 +4,7 @@ import {
   setNodes,
 } from '@udecode/plate-common';
 import type { ComponentProps } from 'react';
-import { useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 import { useClientEvents } from '@decipad/client-events';
 import {
   DraggableBlock,
@@ -38,6 +38,7 @@ import {
   icons,
 } from '@decipad/ui';
 import { useToast } from '@decipad/toast';
+import { dequal } from '@decipad/utils';
 import { useIntegration } from '../hooks/useIntegration';
 
 function canBePlotted(result: Result.Result | undefined): boolean {
@@ -57,6 +58,21 @@ export const IntegrationBlock: PlateComponent = ({
   assertElementType(element, ELEMENT_INTEGRATION);
 
   const { onRefresh, importState } = useIntegration(element);
+  const onRefreshRef = useRef(onRefresh);
+  const filtersRef = useRef(element.filters);
+  useEffect(() => {
+    // HACK don't like this one bit, but if we don't do it, we always get a
+    // stale onRefresh that only sees old filters value
+    if (onRefreshRef.current === onRefresh) {
+      return;
+    }
+    onRefreshRef.current = onRefresh;
+    if (dequal(filtersRef.current, element.filters)) {
+      return;
+    }
+    filtersRef.current = element.filters;
+    onRefresh();
+  }, [element.filters, onRefresh]);
 
   // error handling
   const toast = useToast();
