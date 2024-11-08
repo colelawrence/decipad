@@ -12,10 +12,20 @@ export type EditableFilter = Filter & {
 export const useFilters = (
   controller: EditorController
 ): {
+  hasIntegrations: boolean;
   filters: EditableFilter[];
   deleteFilter: (filter: EditableFilter) => void;
 } => {
   const [children, setChildren] = useState(controller?.children);
+
+  const hasIntegrations = children.some((child) => {
+    return (
+      child.type === 'tab' &&
+      child.children.some((grandChild) => {
+        return grandChild.type === 'integration-block';
+      })
+    );
+  });
 
   // TODO use this to subscribe to changes!
   useEffect(() => {
@@ -64,5 +74,5 @@ export const useFilters = (
     [filters, controller]
   );
 
-  return { filters, deleteFilter };
+  return { hasIntegrations, filters, deleteFilter };
 };

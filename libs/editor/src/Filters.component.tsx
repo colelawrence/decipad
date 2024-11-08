@@ -70,7 +70,7 @@ export const Filters = () => {
   const { addFilter } = useNotebookMetaData(({ addFilter }) => {
     return { addFilter };
   });
-  const { filters, deleteFilter } = useFilters(controller);
+  const { filters, deleteFilter, hasIntegrations } = useFilters(controller);
   const { notebookId } = useNotebookRoute();
   const [{ data: notebookMetaData }] = useGetNotebookMetaQuery({
     variables: { id: notebookId },
@@ -82,6 +82,7 @@ export const Filters = () => {
 
   if (!isFlagEnabled('INTEGRATION_FILTERS')) return null;
   if (isReadOnly) return null;
+  if (!hasIntegrations) return null;
 
   return (
     <div css={filtersContainer}>

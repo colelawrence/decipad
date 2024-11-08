@@ -199,7 +199,7 @@ export const Filters = () => {
   const controller = useNotebookWithIdState((s) => s.controller!);
   // TODO remove empty filter
   const [draftFilter, setDraftFilter] = useState<DraftFilter>();
-  const { filters, deleteFilter } = useFilters(controller);
+  const { filters, deleteFilter, hasIntegrations } = useFilters(controller);
   const { notebookId } = useNotebookRoute();
   const [{ data: notebookMetaData }] = useGetNotebookMetaQuery({
     variables: { id: notebookId },
@@ -230,6 +230,8 @@ export const Filters = () => {
 
   if (!isFlagEnabled('INTEGRATION_FILTERS')) return null;
   if (isReadOnly) return null;
+
+  if (!hasIntegrations) return null;
 
   // TODO give filter a name
   return (
