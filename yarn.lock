@@ -7959,10 +7959,10 @@
   dependencies:
     tslib "^2.4.1"
 
-"@segment/analytics-next@1.75.0":
-  version "1.75.0"
-  resolved "https://registry.yarnpkg.com/@segment/analytics-next/-/analytics-next-1.75.0.tgz#27ef5781f3396d8799dbb3ef252cda5bb15013ac"
-  integrity sha512-IWtcLqYMOdoa0KbLf2y0EMuZmOhRysYxECgKkf0VD6SPAmioQjSvTwa6YGxRWNrE/eATqhdfhjQkRF3J25Ti5w==
+"@segment/analytics-next@1.76.0":
+  version "1.76.0"
+  resolved "https://registry.yarnpkg.com/@segment/analytics-next/-/analytics-next-1.76.0.tgz#38bc7db53360d3af87b566bb10dd7a3c5c5bb262"
+  integrity sha512-4n4vMvX0+bfypFWuu/UJNenT/Gv2+04SsjvnQL1eBd1hngKBV56EkCW+PCJyFRQQ7BnzHgWF4mY+vOPkdoke3A==
   dependencies:
     "@lukeed/uuid" "^2.0.0"
     "@segment/analytics-core" "1.8.0"
