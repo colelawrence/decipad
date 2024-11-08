@@ -483,7 +483,7 @@
     "eslint-plugin-tailwindcss": "3.17.4",
     "eslint-plugin-testing-library": "6.4.0",
     "fake-indexeddb": "6.0.0",
-    "fast-check": "3.22.0",
+    "fast-check": "3.23.1",
     "geometry-polyfill": "1.0.7",
     "husky": "9.1.1",
     "jsdom": "^25.0.1",
