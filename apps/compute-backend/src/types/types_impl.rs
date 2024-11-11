@@ -331,6 +331,13 @@ impl<'a, 'b> Add<&'b DeciResult> for &'a DeciResult {
                     .map(|(a, b)| a + b)
                     .collect(),
             ),
+            (DeciResult::Column(items), DeciResult::String(_s)) => {
+                DeciResult::Column(items.iter().map(|x| x + other).collect())
+            }
+            (DeciResult::String(a), DeciResult::String(b)) => DeciResult::String(a.to_owned() + b),
+            (DeciResult::String(_s), DeciResult::Column(items)) => {
+                DeciResult::Column(items.iter().map(|x| self + x).collect())
+            }
             _ => panic!("Cannot add these types"),
         }
     }

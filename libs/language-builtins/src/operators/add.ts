@@ -1,48 +1,35 @@
-import type { DeciNumberBase } from '@decipad/number';
-import { ONE } from '@decipad/number';
-import type { Result } from '@decipad/language-interfaces';
 // eslint-disable-next-line no-restricted-imports
-import { Type, Value } from '@decipad/language-types';
+import { Type } from '@decipad/language-types';
 import { overloadBuiltin } from '../overloadBuiltin';
 import { dateOverloads } from '../dateOverloads';
-import { coerceToFraction } from '../utils/coerceToFraction';
-import { secondArgIsPercentage } from '../utils/secondArgIsPercentage';
-import type { FullBuiltinSpec } from '../types';
-import { binopBuiltin } from '../utils/binopBuiltin';
-import { binopFunctor } from '../utils/binopFunctor';
+import type { FullBuiltinSpec, Functor } from '../types';
+import { scalarNumericBinopFunctor } from '../utils/scalarNumericBinopFunctor';
+import { binOpBuiltinForUniversalEval } from '../utils/binopBuiltinForUniversalEval';
+import { computeBackendSingleton } from '@decipad/compute-backend-js';
+import { wasmUniversalBinopEval } from '../utils/wasmUniversalBinopEval';
 
-const addPrimitive = async (
-  n1: Result.OneResult,
-  n2: Result.OneResult,
-  types: Type[]
-): Promise<DeciNumberBase> => {
-  if (secondArgIsPercentage(types)) {
-    return coerceToFraction(n1).mul(coerceToFraction(n2).add(ONE));
-  }
+const addStringsBinopPrimitiveFunctor: Functor = async ([a, b]) =>
+  (await a.isScalar('string')).sameAs(b);
 
-  return coerceToFraction(n1).add(coerceToFraction(n2));
-};
+const addBinopPrimitiveFunctor: Functor = async (...args) =>
+  Type.either(
+    scalarNumericBinopFunctor(...args),
+    addStringsBinopPrimitiveFunctor(...args)
+  );
+
+const addUniversalEval = wasmUniversalBinopEval((...args) =>
+  computeBackendSingleton.computeBackend.add_results(...args)
+);
 
 export const add: FullBuiltinSpec = overloadBuiltin(
   '+',
   2,
   [
-    ...binopBuiltin('+', {
-      primitiveFunctor: binopFunctor,
-      primitiveReverseFunctor: binopFunctor,
-      primitiveEval: addPrimitive,
-      primitiveReverseEval: addPrimitive,
+    ...binOpBuiltinForUniversalEval({
+      primitiveFunctor: addBinopPrimitiveFunctor,
+      primitiveReverseFunctor: addBinopPrimitiveFunctor,
+      universalEval: addUniversalEval,
     }),
-    {
-      argCount: 2,
-      argCardinalities: [[1, 1]],
-      fnValues: async ([n1, n2]) =>
-        Value.Scalar.fromValue(
-          String(await n1.getData()) + String(await n2.getData())
-        ),
-      functor: async ([a, b]) =>
-        Type.combine(a.isScalar('string'), b.isScalar('string')),
-    },
     ...dateOverloads['+'],
   ],
   'infix'

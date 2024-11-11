@@ -9,7 +9,11 @@ import {
   DeciType,
   Kind,
 } from './wasm/compute_backend';
-import { serializeResult, deserializeResult } from './serializableResult';
+import {
+  serializeResult,
+  deserializeResult,
+  getDeserializeResultArg,
+} from './serializableResult';
 import { Specificity } from 'libs/language-interfaces/src/Time';
 
 if (typeof window !== 'undefined') {
@@ -36,7 +40,12 @@ class ComputeBackendSingleton {
 
 const computeBackendSingleton = new ComputeBackendSingleton();
 
-export { computeBackendSingleton, serializeResult, deserializeResult };
+export {
+  computeBackendSingleton,
+  serializeResult,
+  deserializeResult,
+  getDeserializeResultArg,
+};
 
 export type {
   DeciType,

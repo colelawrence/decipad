@@ -9,7 +9,7 @@ import { secondArgIsPercentage } from '../utils/secondArgIsPercentage';
 import { dateOverloads } from '../dateOverloads';
 import type { FullBuiltinSpec } from '../types';
 import { binopBuiltin } from '../utils/binopBuiltin';
-import { binopFunctor } from '../utils/binopFunctor';
+import { scalarNumericBinopFunctor } from '../utils/scalarNumericBinopFunctor';
 import { reverseBinopPrimitiveEval } from '../utils/reverseBinopPrimitiveEval';
 
 const subtractPrimitive = async (
@@ -29,8 +29,8 @@ export const subtract: FullBuiltinSpec = overloadBuiltin(
   2,
   [
     ...binopBuiltin('-', {
-      primitiveFunctor: binopFunctor,
-      primitiveReverseFunctor: binopFunctor,
+      primitiveFunctor: scalarNumericBinopFunctor,
+      primitiveReverseFunctor: scalarNumericBinopFunctor,
       primitiveEval: subtractPrimitive,
       primitiveReverseEval: reverseBinopPrimitiveEval(subtractPrimitive),
     }),

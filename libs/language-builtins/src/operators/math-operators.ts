@@ -18,7 +18,7 @@ import type { Value as ValueTypes } from '@decipad/language-interfaces';
 import { map } from '@decipad/generator-utils';
 import { FullBuiltinSpec, type BuiltinSpec, type Functor } from '../types';
 import { coerceToFraction } from '../utils/coerceToFraction';
-import { binopFunctor } from '../utils/binopFunctor';
+import { scalarNumericBinopFunctor } from '../utils/scalarNumericBinopFunctor';
 import { add } from './add';
 import { subtract } from './subtract';
 import { mult } from './mult';
@@ -50,7 +50,9 @@ const exponentiationFunctor: Functor = async ([a, b], values, utils) => {
         throw err;
       }
     }
-    return (await binopFunctor([a, removeUnit(b)])).mapType(
+    return (
+      await scalarNumericBinopFunctor([a, removeUnit(b)], values, utils)
+    ).mapType(
       produce((arg1) => {
         for (const unit of arg1.unit ?? []) {
           unit.exp = (unit.exp || N(1)).mul(u);
@@ -58,7 +60,7 @@ const exponentiationFunctor: Functor = async ([a, b], values, utils) => {
       })
     );
   } else {
-    return binopFunctor([a, removeUnit(b)]);
+    return scalarNumericBinopFunctor([a, removeUnit(b)], values, utils);
   }
 };
 
@@ -459,7 +461,7 @@ export const mathOperators: Record<string, BuiltinSpec> = {
   mod: {
     argCount: 2,
     fn: ([a, b]) => a.mod(b),
-    functor: binopFunctor,
+    functor: scalarNumericBinopFunctor,
     operatorKind: 'infix',
     explanation: 'Remainder when dividing.',
     formulaGroup: 'Numbers',

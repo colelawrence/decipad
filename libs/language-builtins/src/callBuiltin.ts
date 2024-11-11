@@ -19,6 +19,9 @@ import {
   type CallBuiltin,
 } from './types';
 
+const hasUnit = (type: Type): boolean =>
+  type.unit != null && type.unit.length > 0;
+
 async function shouldAutoconvert(types: Type[]): Promise<boolean> {
   if (types.length === 1) {
     return false;
@@ -27,8 +30,10 @@ async function shouldAutoconvert(types: Type[]): Promise<boolean> {
     const [typeA, typeB] = await Promise.all(
       types.map(async (t) => t.reducedToLowest())
     );
-    // console.log({ typeA, typeB });
-    if ((typeA.unit && !typeB.unit) || (typeB.unit && !typeA.unit)) {
+    if (
+      (hasUnit(typeA) && !hasUnit(typeB)) ||
+      (hasUnit(typeB) && !hasUnit(typeA))
+    ) {
       return false;
     }
   }

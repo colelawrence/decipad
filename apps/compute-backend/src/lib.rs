@@ -332,6 +332,51 @@ impl ComputeBackend {
         serialize_result(s.median())
     }
 
+    pub fn add_results(
+        &self,
+        res_a: js_sys::Object,
+        res_b: js_sys::Object,
+        second_arg_percentage: bool,
+    ) -> Object {
+        if second_arg_percentage {
+            serialize_result(
+                deserialize_result(res_a).unwrap()
+                    * (deserialize_result(res_b).unwrap() + DeciResult::Fraction(1, 1)),
+            )
+        } else {
+            serialize_result(
+                deserialize_result(res_a).unwrap() + deserialize_result(res_b).unwrap(),
+            )
+        }
+    }
+
+    pub fn subtract_results(
+        &self,
+        res_a: js_sys::Object,
+        res_b: js_sys::Object,
+        _second_arg_percentage: bool,
+    ) -> Object {
+        serialize_result(deserialize_result(res_a).unwrap() - deserialize_result(res_b).unwrap())
+    }
+
+    pub fn multiply_results(
+        &self,
+        res_a: js_sys::Object,
+        res_b: js_sys::Object,
+        _second_arg_percentage: bool,
+    ) -> Object {
+        serialize_result(deserialize_result(res_a).unwrap() * deserialize_result(res_b).unwrap())
+    }
+
+    pub fn divide_results(
+        &self,
+        res_a: js_sys::Object,
+        res_b: js_sys::Object,
+        _second_arg_percentage: bool,
+    ) -> Object {
+        serialize_result(deserialize_result(res_a).unwrap() / deserialize_result(res_b).unwrap())
+    }
+
     pub fn test_deserialization(&mut self, result: js_sys::Object) -> bool {
         let res = deserialize_result(result);
         log(&format!("{:?}", res));

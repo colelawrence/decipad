@@ -1,28 +1,29 @@
+/* eslint-disable no-use-before-define */
+/* eslint-disable no-restricted-imports */
 /* eslint-disable no-await-in-loop */
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-bitwise */
 import DeciNumber from '@decipad/number';
-// eslint-disable-next-line no-restricted-imports
 import {
-  getResultGenerator,
-  Value as ValueType,
-} from '@decipad/language-types';
-import { all } from '@decipad/generator-utils';
-import {
-  AST,
+  AnyResult,
   Result,
-  SerializedType,
-  Value,
-} from '@decipad/language-interfaces';
+  ResultGenerator,
+  OneResult,
+} from 'libs/language-interfaces/src/Result';
 import { Specificity } from 'libs/language-interfaces/src/Time';
 import { columnToMeta } from './columnToMeta';
 import { oneResultToResult } from './oneResultToResult';
+import { getResultGenerator } from '@decipad/language-types';
+import { all } from '@decipad/generator-utils';
+import { AST, SerializedType } from '@decipad/language-interfaces';
+import { FunctionValue, TreeColumn } from 'libs/language-interfaces/src/Value';
+import { Tree } from 'libs/language-types/src/Value';
 
 const FULL_BYTE = 0xff;
 const FULL_NIBBLE = 0x80;
 
 // Warning: if you want to add values to this, you must update their corresponding values in Rust too!
-// eslint-disable-next-line @typescript-eslint/no-unused-vars, no-shadow
+// eslint-disable-next-line no-shadow
 enum ResultType {
   Boolean = 0,
   Fraction = 1,
@@ -35,6 +36,7 @@ enum ResultType {
   TypeError = 8,
   Pending = 9,
   BigFraction = 10,
+  // eslint-disable-next-line no-shadow
   Tree = 11,
   Function = 12,
   Undefined = 13,
@@ -152,7 +154,7 @@ const serializeDeciNumber = (
 };
 
 // Used to represent null values in metadata
-const nullColumn: Result.Result<'materialized-column'> = {
+const nullColumn: Result<'materialized-column'> = {
   type: {
     kind: 'materialized-column',
     cellType: { kind: 'anything' },
@@ -162,37 +164,14 @@ const nullColumn: Result.Result<'materialized-column'> = {
   value: [],
 };
 
-const timeSpecificityToNumber = (specificity: Specificity): number => {
-  switch (specificity) {
-    case 'undefined':
-      return 0;
-    case 'year':
-      return 1;
-    case 'quarter':
-      return 2;
-    case 'month':
-      return 3;
-    case 'day':
-      return 4;
-    case 'hour':
-      return 5;
-    case 'minute':
-      return 6;
-    case 'second':
-      return 7;
-    case 'millisecond':
-      return 8;
-  }
-};
-
 // eslint-disable-next-line complexity
-export const serializeResultIter = async <T extends Result.Result>(
+export const serializeResultIter = async <T extends Result>(
   results: (T | undefined)[],
   typeArray: number[],
   dataArray: Uint8Array[],
   dataLength = { n: 0 } // allow this value to be mutated globally
 ) => {
-  const nextResults: (Result.AnyResult | undefined)[] = [];
+  const nextResults: (AnyResult | undefined)[] = [];
   const initialTypeArrayLength = typeArray.length;
 
   // leaving this unused for now; but will be needed to compress data at some point
@@ -205,7 +184,7 @@ export const serializeResultIter = async <T extends Result.Result>(
     }
     switch (result.type.kind) {
       case 'boolean': {
-        const { value } = result as Result.Result<'boolean'>;
+        const { value } = result as Result<'boolean'>;
         const data = new Uint8Array([value ? 1 : 0]);
         dataArray.push(data);
 
@@ -217,7 +196,7 @@ export const serializeResultIter = async <T extends Result.Result>(
       }
       case 'number': {
         const [encodedNumerator, encodedDenominator] = serializeDeciNumber(
-          (result as Result.Result<'number'>).value
+          (result as Result<'number'>).value
         );
 
         dataArray.push(encodedNumerator);
@@ -232,7 +211,7 @@ export const serializeResultIter = async <T extends Result.Result>(
         break;
       }
       case 'date': {
-        const { value } = result as Result.Result<'date'>;
+        const { value } = result as Result<'date'>;
         const specificity = result.type.date;
         dataArray.push(new Uint8Array([timeSpecificityToNumber(specificity)]));
         let contentLength = 1; // 1 is length of specificity
@@ -249,7 +228,7 @@ export const serializeResultIter = async <T extends Result.Result>(
         break;
       }
       case 'string': {
-        const { value } = result as Result.Result<'string'>;
+        const { value } = result as Result<'string'>;
         const data = new TextEncoder().encode(value);
         dataArray.push(data);
 
@@ -260,7 +239,7 @@ export const serializeResultIter = async <T extends Result.Result>(
         break;
       }
       case 'column': {
-        const columnResult = result as Result.Result<'column'>;
+        const columnResult = result as Result<'column'>;
         typeArray.push(ResultType.Column);
         typeArray.push(-1); // Placeholder value; fixed after loop.
 
@@ -279,7 +258,7 @@ export const serializeResultIter = async <T extends Result.Result>(
       case 'table': {
         // [indexName, delegatesIndexTo, columnNames[], columns[]]
         // Note: indexName and delegatesIndexTo are nullable, we use an empty column to represent null
-        const tableResult = result as Result.Result<'table'>;
+        const tableResult = result as Result<'table'>;
         typeArray.push(ResultType.Table);
         typeArray.push(-1); // Placeholder value; fixed after loop.
 
@@ -339,7 +318,7 @@ export const serializeResultIter = async <T extends Result.Result>(
         // columnLength
         // ...([name, aggregation | undefined][])
         // children[]
-        const treeResult = result as Result.Result<'tree'>;
+        const treeResult = result as Result<'tree'>;
 
         typeArray.push(ResultType.Tree);
         typeArray.push(-1); // Placeholder value; fixed after loop.
@@ -389,7 +368,7 @@ export const serializeResultIter = async <T extends Result.Result>(
       }
 
       case 'materialized-column': {
-        const columnResult = result as Result.Result<'materialized-column'>;
+        const columnResult = result as Result<'materialized-column'>;
         typeArray.push(ResultType.Column);
         typeArray.push(-1); // Placeholder value; fixed after loop.
 
@@ -408,7 +387,7 @@ export const serializeResultIter = async <T extends Result.Result>(
       case 'materialized-table': {
         // [indexName, delegatesIndexTo, ...columnNames, ...columns]
         // Note: indexName and delegatesIndexTo are nullable, we use an empty column to represent null
-        const tableResult = result as Result.Result<'materialized-table'>;
+        const tableResult = result as Result<'materialized-table'>;
         typeArray.push(ResultType.Table);
         typeArray.push(-1); // Placeholder value; fixed after loop.
         typeArray.push(tableResult.value.length);
@@ -461,7 +440,7 @@ export const serializeResultIter = async <T extends Result.Result>(
       }
 
       case 'range': {
-        const rangeResult = result as Result.Result<'range'>;
+        const rangeResult = result as Result<'range'>;
         typeArray.push(ResultType.Range);
         typeArray.push(dataLength.n);
 
@@ -501,7 +480,7 @@ export const serializeResultIter = async <T extends Result.Result>(
 
       case 'row': {
         // [rowIndexName] [cell1Name] [cell1Value] [cell2Name] [cell2Value] ... [cellNType] [cellNValue]
-        const rowResult = result as Result.Result<'row'>;
+        const rowResult = result as Result<'row'>;
         typeArray.push(ResultType.Row);
         typeArray.push(-1); // Placeholder value; fixed after loop.
         typeArray.push(rowResult.value.length);
@@ -547,7 +526,7 @@ export const serializeResultIter = async <T extends Result.Result>(
         break;
       }
       case 'function': {
-        const functionResult = result as Result.Result<'function'>;
+        const functionResult = result as Result<'function'>;
         typeArray.push(ResultType.Function);
         typeArray.push(-1); // Placeholder value; fixed after loop.
         typeArray.push(functionResult.value.argumentNames.length);
@@ -596,7 +575,7 @@ export const serializeResultIter = async <T extends Result.Result>(
 };
 
 export const serializeResult = async (
-  result: Result.AnyResult
+  result: AnyResult
 ): Promise<SerializedResult> => {
   const typeArray: number[] = [];
   const dataArray: Uint8Array[] = [];
@@ -685,6 +664,29 @@ function readInt64FromUint8Array(array: Uint8Array, offset: number): bigint {
   return BigInt(new DataView(buffer.buffer).getBigInt64(0, true));
 }
 
+const timeSpecificityToNumber = (specificity: Specificity): number => {
+  switch (specificity) {
+    case 'undefined':
+      return 0;
+    case 'year':
+      return 1;
+    case 'quarter':
+      return 2;
+    case 'month':
+      return 3;
+    case 'day':
+      return 4;
+    case 'hour':
+      return 5;
+    case 'minute':
+      return 6;
+    case 'second':
+      return 7;
+    case 'millisecond':
+      return 8;
+  }
+};
+
 const numberToTimeSpecificity = (number: number): Specificity => {
   switch (number) {
     case 0:
@@ -715,7 +717,7 @@ const deserializeResultIter = (
   data: Uint8Array,
   typeDescription: bigint[],
   typeDescriptionPointer = 0
-): Result.Result | undefined => {
+): Result | undefined => {
   const [isCompressed, resultType] = decodeNumber(
     typeDescription[3 * typeDescriptionPointer]
   );
@@ -781,28 +783,29 @@ const deserializeResultIter = (
       const dataTypeOffset = offset;
       const dataTypeLength = length;
 
-      let generator: Result.ResultGenerator;
+      let generator: ResultGenerator;
       if (!isCompressed2) {
-        generator = async function* generateUncompressed() {
+        generator = async function* generateUncompressed(
+          start = 0,
+          end = Infinity
+        ) {
           for (
-            let i = dataTypeOffset;
-            i < dataTypeOffset + dataTypeLength;
+            let i = dataTypeOffset + start;
+            i <= end && i < dataTypeOffset + dataTypeLength;
             i++
           ) {
-            yield (
-              deserializeResultIter(
-                data,
-                typeDescription,
-                i
-              ) as Result.AnyResult
-            ).value as Result.OneResult;
+            yield (deserializeResultIter(data, typeDescription, i) as AnyResult)
+              .value as OneResult;
           }
         };
       } else {
-        generator = async function* generateUncompressed() {
+        generator = async function* generateCompressed(
+          start = 0,
+          end = Infinity
+        ) {
           const itemCount = Number(typeDescription[4]);
           const itemLength = Number(typeDescription[5]);
-          for (let i = 0; i < itemCount; i++) {
+          for (let i = start; i <= end && i < itemCount; i++) {
             const newOffset = offset + i * itemLength;
             const typeDescriptionSlice = [...typeDescription.slice(3)];
             typeDescriptionSlice[0] &= (BigInt(1) << BigInt(63)) - BigInt(1);
@@ -811,11 +814,8 @@ const deserializeResultIter = (
 
             // TODO get rid of "as"
             yield (
-              deserializeResultIter(
-                data,
-                typeDescriptionSlice
-              ) as Result.AnyResult
-            ).value as Result.OneResult;
+              deserializeResultIter(data, typeDescriptionSlice) as AnyResult
+            ).value as OneResult;
           }
         };
       }
@@ -931,14 +931,14 @@ const deserializeResultIter = (
         columnNames.push(res.value as string);
       }
 
-      const columnTypes: Result.Result['type'][] = [];
-      const columns: Result.Result<'column'>[] = [];
+      const columnTypes: Result['type'][] = [];
+      const columns: Result<'column'>[] = [];
       for (let i = 0; i < childCount; i++) {
         const res = deserializeResultIter(
           data,
           typeDescription,
           typeDescriptionPointer + 3 + childCount + i
-        ) as Result.Result<'column'>;
+        ) as Result<'column'>;
         columnTypes.push(res.type.cellType);
         columns.push(res);
       }
@@ -973,7 +973,7 @@ const deserializeResultIter = (
         data,
         typeDescription,
         tdp
-      ) as Result.Result<'number'>;
+      ) as Result<'number'>;
       if (originalCardinalityDeciNum.type.kind !== 'number') {
         throw new Error(
           `Expected number, got ${originalCardinalityDeciNum.type.kind}`
@@ -986,7 +986,7 @@ const deserializeResultIter = (
         data,
         typeDescription,
         tdp
-      ) as Result.Result<'number'>;
+      ) as Result<'number'>;
 
       if (
         columnLength.type.kind !== 'number' ||
@@ -996,7 +996,7 @@ const deserializeResultIter = (
       }
 
       let i = 0;
-      const columns: Value.TreeColumn[] = [];
+      const columns: TreeColumn[] = [];
       const l = Number(columnLength.value.n);
       while (i < l) {
         tdp += 1;
@@ -1004,7 +1004,7 @@ const deserializeResultIter = (
           data,
           typeDescription,
           tdp
-        ) as Result.Result<'string'>;
+        ) as Result<'string'>;
 
         if (columnName.type.kind !== 'string') {
           throw new Error('Expected string');
@@ -1021,30 +1021,30 @@ const deserializeResultIter = (
         data,
         typeDescription,
         tdp
-      ) as Result.Result<'number'>;
+      ) as Result<'number'>;
 
       const childCount = Number(childCountDeciNum.value.n);
 
       let j = 0;
-      const children: Value.Tree[] = [];
+      const children: Tree[] = [];
       while (j < childCount) {
         tdp += 1;
         const child = deserializeResultIter(
           data,
           typeDescription,
           tdp
-        ) as Result.Result<'tree'>;
+        ) as Result<'tree'>;
         children.push(child.value);
         j += 1;
       }
 
-      const treeResult: Result.Result<'tree'> = {
+      const treeResult: Result<'tree'> = {
         type: {
           kind: 'tree',
           columnNames: [], // TODO
           columnTypes: [], // TODO
         },
-        value: ValueType.Tree.from(
+        value: Tree.from(
           root.value,
           rootAggregation,
           children,
@@ -1052,14 +1052,14 @@ const deserializeResultIter = (
           originalCardinality
         ),
       };
-      return treeResult as Result.Result;
+      return treeResult as Result;
     }
 
     case ResultType.Row: {
       const rowLength = Number(typeDescription[3 * typeDescriptionPointer + 2]);
-      const rowCells: Result.OneResult[] = [];
+      const rowCells: OneResult[] = [];
       const rowCellNames: string[] = [];
-      const rowCellTypes: Result.Result['type'][] = [];
+      const rowCellTypes: Result['type'][] = [];
 
       const rowIndexNameResult = deserializeResultIter(
         data,
@@ -1072,8 +1072,7 @@ const deserializeResultIter = (
       if (rowIndexNameResult.type.kind !== 'string') {
         throw new Error('Row index name is not a string');
       }
-      const rowIndexName = (rowIndexNameResult as Result.Result<'string'>)
-        .value;
+      const rowIndexName = (rowIndexNameResult as Result<'string'>).value;
       for (let i = 0; i < rowLength; i++) {
         const cellNameresult = deserializeResultIter(
           data,
@@ -1086,7 +1085,7 @@ const deserializeResultIter = (
         if (cellNameresult.type.kind !== 'string') {
           throw new Error('Cell name is not a string');
         }
-        const cellName = (cellNameresult as Result.Result<'string'>).value;
+        const cellName = (cellNameresult as Result<'string'>).value;
 
         const cellResult = deserializeResultIter(
           data,
@@ -1096,7 +1095,7 @@ const deserializeResultIter = (
         if (cellResult === undefined) {
           throw new Error('Cell result is undefined');
         }
-        rowCells.push(cellResult.value as Result.OneResult);
+        rowCells.push(cellResult.value as OneResult);
         rowCellNames.push(cellName);
         rowCellTypes.push(cellResult.type);
       }
@@ -1125,7 +1124,7 @@ const deserializeResultIter = (
       if (nameResult?.type.kind !== 'string') {
         throw new Error('Function name is not a string');
       }
-      const fnName = (nameResult as Result.Result<'string'>).value;
+      const fnName = (nameResult as Result<'string'>).value;
 
       // get function arguments
       const argNames: string[] = [];
@@ -1139,7 +1138,7 @@ const deserializeResultIter = (
         if (argResult?.type.kind !== 'string') {
           throw new Error('function argument name is not a string.');
         }
-        argNames.push((argResult as Result.Result<'string'>).value);
+        argNames.push((argResult as Result<'string'>).value);
       }
 
       // get function body and deserialize
@@ -1151,7 +1150,7 @@ const deserializeResultIter = (
       if (nameResult?.type.kind !== 'string') {
         throw new Error('Function body is not a string');
       }
-      const fnBodyString = (fnBodyResult as Result.Result<'string'>).value;
+      const fnBodyString = (fnBodyResult as Result<'string'>).value;
       let fnBody: AST.Block;
       try {
         fnBody = JSON.parse(fnBodyString);
@@ -1165,7 +1164,7 @@ const deserializeResultIter = (
           argumentNames: argNames,
           body: fnBody,
           async getData() {
-            return this as Value.FunctionValue;
+            return this as FunctionValue;
           },
         },
       };
@@ -1233,10 +1232,27 @@ const deserializeResultIter = (
   }
 };
 
-export const deserializeResult = (val: {
+export interface DeserializeResultArg {
   type: BigUint64Array;
   data: Uint8Array;
-}): Result.Result => {
+}
+
+export const isDeserializeResultArg = (o: unknown): o is DeserializeResultArg =>
+  o != null &&
+  typeof o === 'object' &&
+  'type' in o &&
+  'data' in o &&
+  o.type instanceof BigUint64Array &&
+  o.data instanceof Uint8Array;
+
+export const getDeserializeResultArg = (o: unknown): DeserializeResultArg => {
+  if (!isDeserializeResultArg(o)) {
+    throw new TypeError('Expected deserialize result arg');
+  }
+  return o;
+};
+
+export const deserializeResult = (val: DeserializeResultArg): Result => {
   const typeDescription = Array.from(val.type); // TODO consider passing BigUint64Array directly
   const result = deserializeResultIter(val.data, typeDescription);
   // should never be undefined at the top level

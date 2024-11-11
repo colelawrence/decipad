@@ -37,7 +37,7 @@ const MAX_GENERATOR_MEMO_ELEMENTS = Infinity;
 export class LeanColumn extends ColumnBase implements TLeanColumn {
   private gen: PromiseOrType<Result.ResultGenerator>;
   private type: SerializedType;
-  public meta: undefined | (() => Result.ResultMetadataColumn);
+  public meta: undefined | (() => Result.ResultMetadataColumn | undefined);
   private memo: undefined | Array<Value.Value>;
   private partialMemo: undefined | boolean;
   private desc: string;
@@ -45,7 +45,7 @@ export class LeanColumn extends ColumnBase implements TLeanColumn {
   constructor(
     gen: PromiseOrType<Result.ResultGenerator>,
     type: SerializedType,
-    meta: undefined | (() => Result.ResultMetadataColumn),
+    meta: undefined | (() => Result.ResultMetadataColumn | undefined),
     desc: string
   ) {
     super();
@@ -132,7 +132,7 @@ export class LeanColumn extends ColumnBase implements TLeanColumn {
   static fromGeneratorAndType(
     gen: (start?: number, end?: number) => AsyncGenerator<Result.OneResult>,
     type: SerializedType,
-    meta: undefined | (() => Result.ResultMetadataColumn),
+    meta: undefined | (() => Result.ResultMetadataColumn | undefined),
     desc = `LeanColumn.fromGeneratorAndType(${gen.name}, ${type.kind})`
   ) {
     return new LeanColumn(gen, type, meta, desc);
