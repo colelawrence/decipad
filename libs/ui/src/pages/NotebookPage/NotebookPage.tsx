@@ -1,6 +1,5 @@
 /* eslint decipad/css-prop-named-variable: 0 */
 import { SidebarComponent, useNotebookMetaData } from '@decipad/react-contexts';
-import { shouldRenderComponent } from '@decipad/react-utils';
 import React, { FC, ReactNode } from 'react';
 import { IN_EDITOR_SIDEBAR_ID, OVERFLOWING_EDITOR_ID } from '../../constants';
 import { useDraggingScroll, useScrollToHash } from '../../hooks';
@@ -92,7 +91,7 @@ export const NotebookPage: React.FC<NotebookPageProps> = (props) => {
       >
         {leftSidebar && (
           <SidebarExtra
-            isDataDrawerOpen={shouldRenderComponent(dataDrawer)}
+            isDataDrawerOpen={dataDrawer != null}
             showSidebar={shouldRenderNavigationSidebar}
             sidebarComponent={{ type: 'navigation-sidebar' }}
             position="left"
@@ -124,7 +123,7 @@ export const NotebookPage: React.FC<NotebookPageProps> = (props) => {
               </S.TabWrapper>
             )}
           </S.EditorAndTabWrapper>
-          {shouldRenderComponent(dataDrawer) && (
+          {dataDrawer != null && (
             <S.DataDrawer isInEditorSidebar={isInEditorSidebar}>
               {dataDrawer}
             </S.DataDrawer>
@@ -133,7 +132,7 @@ export const NotebookPage: React.FC<NotebookPageProps> = (props) => {
         <SidebarExtra
           showSidebar={showSidebar}
           sidebarComponent={sidebarComponent}
-          isDataDrawerOpen={shouldRenderComponent(dataDrawer)}
+          isDataDrawerOpen={dataDrawer != null}
         >
           {sidebar}
         </SidebarExtra>
