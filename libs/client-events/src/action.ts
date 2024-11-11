@@ -41,6 +41,13 @@ type Action =
       };
     }
   | {
+      action: 'Notebook Created';
+      props: {
+        notebook_id?: string;
+        analytics_source: 'frontend' | 'backend';
+      };
+    }
+  | {
       action: 'Tab Created';
       props: {
         notebook_id?: string;
@@ -202,7 +209,6 @@ type Action =
   | { action: 'notebook duplicated'; props?: undefined }
   | { action: 'notebook shared'; props?: undefined }
   | { action: 'notebook deleted'; props?: undefined }
-  | { action: 'notebook created'; props?: undefined }
   | { action: 'notebook icon changed'; props?: undefined }
   | { action: 'notebook icon color changed'; props?: undefined }
   | { action: 'notebook local changes removed'; props?: undefined }

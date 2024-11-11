@@ -46,6 +46,7 @@ export function create<
           event: 'Notebook Created',
           properties: {
             analytics_source: 'backend',
+            notebook_id: newRecord.id,
           },
         },
         context
