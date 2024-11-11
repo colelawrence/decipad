@@ -1,7 +1,7 @@
-import { PromptTemplate } from 'langchain/prompts';
+import { ChatPromptTemplate } from '@langchain/core/prompts';
 
 export const afterBlocksTemplate =
-  PromptTemplate.fromTemplate(`Consider the following TypeScript Interface for a JSON schema:
+  ChatPromptTemplate.fromTemplate(`Consider the following TypeScript Interface for a JSON schema:
 
 \`\`\`typescript
 {schema}

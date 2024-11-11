@@ -1,5 +1,5 @@
-import { ChatOpenAI } from 'langchain/chat_models/openai';
-import { HumanMessage, SystemMessage } from 'langchain/schema';
+import { ChatOpenAI } from '@langchain/openai';
+import { HumanMessage, SystemMessage } from '@langchain/core/messages';
 import { thirdParty } from '../../backend-config/src';
 import { debug } from './debug';
 import { messageContentToString } from './utils/messageContentToString';

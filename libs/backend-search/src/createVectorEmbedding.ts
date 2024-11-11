@@ -1,4 +1,4 @@
-import { OpenAIEmbeddings } from 'langchain/embeddings/openai';
+import { OpenAIEmbeddings } from '@langchain/openai';
 import { thirdParty } from '../../backend-config/src';
 import { shortenNotebook } from './shortenNotebook';
 import type { EmbeddingsVector } from './types';

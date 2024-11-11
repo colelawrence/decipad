@@ -1,6 +1,6 @@
 /* eslint-disable no-underscore-dangle */
-import { ChatOpenAI } from 'langchain/chat_models/openai';
-import { HumanMessage, SystemMessage } from 'langchain/schema';
+import { ChatOpenAI } from '@langchain/openai';
+import { HumanMessage, SystemMessage } from '@langchain/core/messages';
 import type { PadRecord } from '@decipad/backendtypes';
 import tables from '../../tables/src';
 import { searchStore } from './searchStore';
