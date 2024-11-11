@@ -22,4 +22,3 @@ it('should sum first 10,000 ints', async () => {
     computeBackendSingleton.computeBackend.sum_result_fraction_column(column);
   expect(x).toEqual(50005000);
 });
-

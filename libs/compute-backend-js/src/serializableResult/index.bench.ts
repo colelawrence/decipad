@@ -1,3 +1,5 @@
+/* eslint-disable camelcase */
+// eslint-disable-next-line import/no-extraneous-dependencies
 import { bench, describe } from 'vitest';
 import { deserializeResult, serializeResult } from '.';
 import { N } from '@decipad/number';
@@ -229,4 +231,3 @@ describe('Rust deserializeResult', () => {
     computeBackendSingleton.computeBackend.bench_deserialize_string_col();
   });
 });
-

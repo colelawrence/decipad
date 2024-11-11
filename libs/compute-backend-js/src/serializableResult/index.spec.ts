@@ -5,6 +5,7 @@ import { N } from '@decipad/number';
 import { AST, Result, SerializedType } from '@decipad/language-interfaces';
 import chunk from 'lodash/chunk';
 import { deserializeResult, SerializedResult, serializeResult } from '.';
+// eslint-disable-next-line no-restricted-imports
 import { Value } from '@decipad/language-types';
 import { FunctionValue } from 'libs/language-types/src/Value';
 
@@ -1721,4 +1722,3 @@ describe('deserializeResult', () => {
     expect(result).toMatchObject(expected);
   });
 });
-

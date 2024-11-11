@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 /* eslint-disable import/no-relative-packages */
 /* eslint-disable no-underscore-dangle */
 // eslint-disable-next-line import/no-relative-packages, camelcase

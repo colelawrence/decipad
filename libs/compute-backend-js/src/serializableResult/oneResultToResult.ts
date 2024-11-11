@@ -85,8 +85,8 @@ export const oneResultToResult = (oneResult: OneResult): Result => {
   }
   if (
     typeof oneResult === 'object' &&
-    oneResult.hasOwnProperty('argumentNames') &&
-    oneResult.hasOwnProperty('body')
+    Object.hasOwn(oneResult, 'argumentNames') &&
+    Object.hasOwn(oneResult, 'body')
   ) {
     return {
       type: {
@@ -98,4 +98,3 @@ export const oneResultToResult = (oneResult: OneResult): Result => {
   }
   throw new Error('Unknown result type');
 };
-

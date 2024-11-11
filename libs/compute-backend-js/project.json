@@ -10,6 +10,16 @@
         "command": "yarn tsc -b libs/compute-backend-js"
       }
     },
+    "lint": {
+      "executor": "@nx/linter:eslint",
+      "options": {
+        "lintFilePatterns": [
+          "libs/compute-backend-js/**/*.ts",
+          "libs/compute-backend-js/**/*.tsx"
+        ],
+        "maxWarnings": 0
+      }
+    },
     "test": {
       "executor": "nx:run-commands",
       "options": {
