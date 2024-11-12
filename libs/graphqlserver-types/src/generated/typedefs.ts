@@ -920,6 +920,24 @@ type WorkspaceAccess {
   users: [UserAccess!]
 }
 
+input WorkspaceNumberInput {
+  id: ID
+  name: String!
+
+  # Base64 encoded
+  encoding: String!
+  origin: String!
+}
+
+type WorkspaceNumber {
+  id: ID!
+  name: String!
+
+  # Base64 encoded
+  encoding: String!
+  origin: String!
+}
+
 type Workspace {
   id: ID!
   name: String!
@@ -934,6 +952,8 @@ type Workspace {
   secrets: [Secret!]!
   membersCount: Int
   plan: SubscriptionPlansNames
+
+  workspaceNumbers: [WorkspaceNumber!]!
 }
 
 type WorkspacesChanges {
@@ -958,6 +978,11 @@ extend type Mutation {
     canComment: Boolean!
   ): Workspace!
   unshareWorkspaceWithUser(id: ID!, userId: ID!): Workspace
+
+  upsertWorkspaceNumber(
+    workspaceId: ID!
+    workspaceNumber: WorkspaceNumberInput!
+  ): Workspace
 }
 
 extend type Subscription {

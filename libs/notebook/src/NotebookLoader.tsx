@@ -35,6 +35,7 @@ export const NotebookLoader: FC<NotebookLoaderProps> = ({
   const [
     notebookLoadedPromise,
     initEditor,
+    controller,
     editor,
     computer,
     loadedFromRemote,
@@ -46,6 +47,7 @@ export const NotebookLoader: FC<NotebookLoaderProps> = ({
       [
         s.notebookLoadedPromise,
         s.initEditor,
+        s.controller,
         s.editor,
         s.computer,
         s.loadedFromRemote,
@@ -147,7 +149,12 @@ export const NotebookLoader: FC<NotebookLoaderProps> = ({
             controller={readOrSuspendEditor.read()}
             readOnly={readOnly}
           >
-            <OutsideTabHiddenLanguageElements editor={editor} tabId={tabId} />
+            {workspaceId && controller && (
+              <OutsideTabHiddenLanguageElements
+                controller={controller}
+                tabId={tabId}
+              />
+            )}
           </TabEditorComponent>
         </div>
       </Suspense>

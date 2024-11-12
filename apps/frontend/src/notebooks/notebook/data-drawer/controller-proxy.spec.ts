@@ -4,6 +4,7 @@ import { describe, it, expect, beforeEach } from 'vitest';
 import { controllerProxy, controllerReverseProxy } from './controller-proxy';
 import { createPlateEditor } from '@udecode/plate-common';
 import { CREATING_VARIABLE_INITIAL_VALUE } from './editor';
+import { ELEMENT_DATA_TAB_CHILDREN } from '@decipad/editor-types';
 
 describe('Proxy from data-drawer -> controller', () => {
   let controller = new EditorController('id', []);
@@ -18,6 +19,7 @@ describe('Proxy from data-drawer -> controller', () => {
       type: 'insert_node',
       node: {
         id: '1',
+        type: ELEMENT_DATA_TAB_CHILDREN,
         children: [],
       } as any,
       path: [1, 0],
@@ -26,22 +28,24 @@ describe('Proxy from data-drawer -> controller', () => {
     const proxied = controllerProxy(controller, '1');
     proxied({
       type: 'insert_node',
-      node: { id: '2', children: [] } as any,
+      node: { id: '2', type: ELEMENT_DATA_TAB_CHILDREN, children: [] } as any,
       path: [0],
     });
 
     expect(controller.children[1].children).toMatchInlineSnapshot(`
-    [
-      {
-        "children": [],
-        "id": "2",
-      },
-      {
-        "children": [],
-        "id": "1",
-      },
-    ]
-  `);
+      [
+        {
+          "children": [],
+          "id": "2",
+          "type": "data-tab-children",
+        },
+        {
+          "children": [],
+          "id": "1",
+          "type": "data-tab-children",
+        },
+      ]
+    `);
   });
 
   it('Correctly proxies to controller in other tabs', () => {

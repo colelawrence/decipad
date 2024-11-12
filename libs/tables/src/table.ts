@@ -22,6 +22,7 @@ const enhancedTables: Set<keyof DataTables> = new Set([
   'workspacesubscriptions',
   'resourceusages',
   'externaldatasnapshots',
+  'workspacenumbers',
 ]);
 
 const observedTables: Set<keyof DataTables> = new Set([
@@ -58,3 +59,4 @@ export const tablesProp = <T extends keyof DataTables>(
   }
   return target;
 };
+

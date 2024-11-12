@@ -1,12 +1,13 @@
-import type { TEditor } from '@udecode/plate-common';
-import { withoutNormalizing } from '@udecode/plate-common';
+import { TEditor, withoutNormalizing } from '@udecode/plate-common';
+import { BaseEditor } from 'slate';
 
 export const withoutNormalizingEditors = (
-  editors: TEditor[],
+  editors: Array<BaseEditor | TEditor>,
   cb: () => void
 ) => {
   editors.reduce(
-    (callback, subEditor) => () => withoutNormalizing(subEditor, callback),
+    (callback, subEditor) => () =>
+      withoutNormalizing(subEditor as TEditor, callback),
     cb
   )();
 };

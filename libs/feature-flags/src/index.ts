@@ -32,6 +32,7 @@ export const availableFlags = [
 
   'METRIC_BLOCK',
 
+  'WORKSPACE_NUMBERS',
   'INTEGRATION_FILTERS',
 ] as const;
 

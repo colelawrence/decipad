@@ -66,15 +66,9 @@ const Config = ({
   const navigate = useNavigate();
 
   const onNavigateToSecrets = useCallback(() => {
-    setTimeout(() => {
-      navigate(
-        workspaces({}).workspace({ workspaceId }).connections({}).webhooks({})
-          .$,
-        {
-          replace: true,
-        }
-      );
-    }, 0);
+    navigate(
+      workspaces({}).workspace({ workspaceId }).connections({}).webhooks({}).$
+    );
   }, [navigate, workspaceId]);
 
   return (

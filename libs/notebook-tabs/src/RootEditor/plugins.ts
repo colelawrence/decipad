@@ -22,22 +22,27 @@ import {
   ELEMENT_DATA_TAB_CHILDREN,
   ELEMENT_STRUCTURED_VARNAME,
   ELEMENT_CODE_LINE_V2_CODE,
+  ELEMENT_DATA_TAB_WORKSPACE_RESULT,
+  DataTabWorkspaceResultElement,
 } from '@decipad/editor-types';
 import { nanoid } from 'nanoid';
-import { IsTab, IsTitle } from '../utils';
+import { IsDataTab, IsTab, IsTitle } from '../utils';
 import {
   type TNodeEntry,
   type TEditor,
   isEditor,
   isElement,
+  Value,
 } from '@udecode/plate-common';
 import { getExprRef, isExprRef } from '@decipad/computer';
-import { generatedNames } from '@decipad/utils';
+import { assert, generatedNames } from '@decipad/utils';
 import { isFirstOfOldNodes } from './utils';
 import { DATA_TAB_INDEX, FIRST_TAB_INDEX } from '../constants';
 
 type NormalizePlugin = (entry: TNodeEntry) => boolean;
-type CurriedNormalizePlugin = (editor: TEditor) => NormalizePlugin;
+type CurriedNormalizePlugin = <T extends Value = Value>(
+  editor: TEditor<T>
+) => NormalizePlugin;
 type CurriedNormalizerPluginWithIdGenerator = (
   editor: TEditor,
   idGenerator: () => string
@@ -437,6 +442,37 @@ const ensureDataTab: CurriedNormalizePlugin = (editor) => (entry) => {
   return true;
 };
 
+const normalizeDataTab: CurriedNormalizePlugin = (editor) => (entry) => {
+  const [node] = entry;
+
+  if (!isEditor(node)) return false;
+
+  const dataTab = editor.children[DATA_TAB_INDEX];
+  assert(dataTab.type === ELEMENT_DATA_TAB, 'unreachable');
+
+  let hasErronousChildren = false;
+
+  // We go backwards, so no shifts in the document occur.
+  for (let i = dataTab.children.length - 1; i >= 0; i--) {
+    if (
+      dataTab.children[i].type === ELEMENT_DATA_TAB_CHILDREN ||
+      dataTab.children[i].type === ELEMENT_DATA_TAB_WORKSPACE_RESULT
+    ) {
+      continue;
+    }
+
+    hasErronousChildren = true;
+
+    editor.apply({
+      type: 'remove_node',
+      path: [DATA_TAB_INDEX, i],
+      node: dataTab.children[i],
+    });
+  }
+
+  return hasErronousChildren;
+};
+
 const TEXT_ELEMENTS_WITH_INLINE_NUMBERS = new Set([
   ELEMENT_PARAGRAPH,
   ELEMENT_CALLOUT,
@@ -539,8 +575,39 @@ const migrateInlineNumbers: CurriedNormalizerPluginWithIdGenerator =
     return true;
   };
 
-export const normalizers = (
-  editor: TEditor,
+const preventDuplicateWorkspaceNumber: CurriedNormalizePlugin =
+  (editor) => (entry) => {
+    const [node] = entry;
+
+    if (!IsDataTab(node)) {
+      return false;
+    }
+
+    const workspaceNumbers = node.children.filter(
+      (c): c is DataTabWorkspaceResultElement =>
+        c.type === ELEMENT_DATA_TAB_WORKSPACE_RESULT
+    );
+    const existingIds = new Set<string>();
+
+    for (const [index, workspaceNumber] of workspaceNumbers.entries()) {
+      if (existingIds.has(workspaceNumber.workspaceResultId)) {
+        editor.apply({
+          type: 'remove_node',
+          path: [DATA_TAB_INDEX, index],
+          node,
+        });
+
+        return true;
+      }
+
+      existingIds.add(workspaceNumber.workspaceResultId);
+    }
+
+    return false;
+  };
+
+export const normalizers = <T extends Value = Value>(
+  editor: TEditor<T>,
   idGenerator: () => string = nanoid
 ): Array<NormalizePlugin> => [
   findOrInsertTitlePlugin(editor),
@@ -550,5 +617,7 @@ export const normalizers = (
   ensureParagraphInTab(editor),
   emptyTitleNodes(editor),
   removeExtraTitles(editor),
+  normalizeDataTab(editor),
   migrateInlineNumbers(editor, idGenerator),
+  preventDuplicateWorkspaceNumber(editor),
 ];

@@ -82,6 +82,7 @@ import {
   ELEMENT_LAYOUT,
   ELEMENT_LIVE_CONNECTION,
   ELEMENT_METRIC,
+  ELEMENT_DATA_TAB_WORKSPACE_RESULT,
 } from './element-kinds';
 import { UNCOLUMNABLE_KINDS } from './uncolumnable-kinds';
 import {
@@ -773,7 +774,14 @@ export interface DataTabChildrenElement extends BaseElement {
 export interface DataTabElement extends BaseElement {
   type: typeof ELEMENT_DATA_TAB;
   id: string;
-  children: Array<DataTabChildrenElement>;
+  children: DataTabValue;
+}
+
+export interface DataTabWorkspaceResultElement extends BaseElement {
+  type: typeof ELEMENT_DATA_TAB_WORKSPACE_RESULT;
+  id: string;
+  workspaceResultId: string;
+  children: [{ text: string }];
 }
 
 export type TopLevelValue =
@@ -808,7 +816,9 @@ export type NotebookValue = [
   ...Array<TabElement>
 ];
 
-export type DataTabValue = Array<DataTabChildrenElement>;
+export type DataTabValue = Array<
+  DataTabChildrenElement | DataTabWorkspaceResultElement
+>;
 
 export type TitleValue = [TitleElement];
 
@@ -832,6 +842,7 @@ export type AnyElement =
   | TabElement
   | DataTabElement
   | DataTabChildrenElement
+  | DataTabWorkspaceResultElement
   | BlockElement
   | InlineElement
   | CodeLineV2ElementCode

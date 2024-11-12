@@ -17,7 +17,10 @@ import { type NodeEntry, Element, type BaseEditor, Node, Editor } from 'slate';
 // - Only allow Elements at the top level, remove other nodes.
 // - Ignore anything inside `children` array, thats that components problem.
 //
-const normalizeNode = (editor: TEditor, entry: NodeEntry): boolean => {
+const normalizeNode = <T extends BaseEditor | TEditor>(
+  editor: T,
+  entry: NodeEntry
+): boolean => {
   const [node, path] = entry;
 
   if (path.length === 0) return false;
@@ -40,7 +43,10 @@ const normalizeNode = (editor: TEditor, entry: NodeEntry): boolean => {
 // 2) Plugins
 //
 export const normalizeCurried =
-  (editor: TEditor, plugins: Array<(_entry: MyNodeEntry) => boolean>) =>
+  <T extends BaseEditor | TEditor>(
+    editor: T,
+    plugins: Array<(_entry: MyNodeEntry) => boolean>
+  ) =>
   (): void => {
     if (!Editor.isNormalizing(editor as BaseEditor)) {
       return;

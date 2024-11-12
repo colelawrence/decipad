@@ -3,13 +3,16 @@ import {
   createAutoCompleteMenuPlugin,
   createSmartRefPlugin,
 } from '@decipad/editor-plugins';
+import { Path } from 'slate';
 import {
+  AnyElement,
   CodeLineV2Element,
   DataTabChildrenElement,
   ELEMENT_CODE_LINE,
   ELEMENT_CODE_LINE_V2,
   ELEMENT_CODE_LINE_V2_CODE,
   ELEMENT_DATA_TAB_CHILDREN,
+  ELEMENT_DATA_TAB_WORKSPACE_RESULT,
   ELEMENT_DATA_VIEW,
   ELEMENT_INTEGRATION,
   ELEMENT_SMART_REF,
@@ -34,11 +37,7 @@ import { DataDrawerEditingComponent } from './editor-components';
 import { DataDrawerEditorValue } from './types';
 import { createCodeLineV2Normalizers } from '@decipad/editor-plugin-factories';
 import { RefObject, useEffect, useState, useMemo, useRef } from 'react';
-import {
-  controllerProxy,
-  controllerReverseProxy,
-  findTopLevelEntry,
-} from './controller-proxy';
+import { controllerProxy, controllerReverseProxy } from './controller-proxy';
 import { useActiveElement, useWindowListener } from '@decipad/react-utils';
 import { useToast } from '@decipad/toast';
 import { useNotebookWithIdState } from '@decipad/notebook-state';
@@ -213,7 +212,7 @@ export const createDataDrawerEditor = (
 
 const insertEditingBlock = (
   codeEditor: PlateEditor<DataDrawerEditorValue>,
-  block: ReturnType<typeof findTopLevelEntry>,
+  block: [AnyElement, Path],
   apply: (op: TOperation) => void
 ): Error | undefined => {
   if (block == null) {
@@ -295,7 +294,7 @@ export const useEditingDataDrawer = (
   }, [setSidebar, sidebar, codeEditor]);
 
   const block = useMemo(
-    () => findTopLevelEntry(controller, editingId),
+    () => controller.findNodeEntryById(editingId),
     [controller, editingId]
   );
 
@@ -303,7 +302,9 @@ export const useEditingDataDrawer = (
 
   const isResetting = useRef(false);
 
-  const onCloseDataDrawer = useNotebookWithIdState((s) => s.closeDataDrawer);
+  const [onCloseDataDrawer, onSetWorkspaceNumber] = useNotebookWithIdState(
+    (s) => [s.closeDataDrawer, s.setWorkspaceNumber] as const
+  );
 
   const resetBlockSelectionStore = () =>
     blockSelectionStore.set.selectedIds(new Set());
@@ -365,6 +366,9 @@ export const useEditingDataDrawer = (
       }
 
       htmlElement.scrollIntoView();
+    } else if (node.type === ELEMENT_DATA_TAB_WORKSPACE_RESULT) {
+      onSetWorkspaceNumber(node.workspaceResultId);
+      return;
     } else if (node.type === ELEMENT_INTEGRATION) {
       setSidebar({ type: 'integrations', blockId: node.id });
       return;
@@ -429,6 +433,7 @@ export const useEditingDataDrawer = (
     };
   }, [
     setSidebar,
+    onSetWorkspaceNumber,
     codeEditor,
     controller,
     block,
@@ -532,7 +537,7 @@ export const useCreatingDataDrawer = (): UseCreatingDataDrawerReturn => {
 
     controller.apply({
       type: 'insert_node',
-      path: [1, controller.children[1].children.length],
+      path: [1, 0],
       node: {
         id: newVariableId,
         type: ELEMENT_DATA_TAB_CHILDREN,

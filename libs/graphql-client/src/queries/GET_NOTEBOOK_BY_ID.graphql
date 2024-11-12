@@ -44,6 +44,12 @@ fragment EditorNotebook on Pad {
     workspaceSubscription {
       ...WorkspaceSubscriptionData
     }
+    workspaceNumbers {
+      id
+      name
+      encoding
+      origin
+    }
   }
   padConnectionParams {
     url

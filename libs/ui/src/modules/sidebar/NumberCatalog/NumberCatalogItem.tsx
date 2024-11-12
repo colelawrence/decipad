@@ -16,8 +16,10 @@ import {
   ImportElementSource,
   ImportElementSourcePretty,
 } from '@decipad/editor-types';
+import { FC, HTMLProps, ReactNode } from 'react';
+import { assert } from '@decipad/utils';
 
-interface NumberProps {
+type NumberProps = {
   name: string;
   blockId: string;
   onDragStart?: SmartRefDragCallback;
@@ -27,24 +29,56 @@ interface NumberProps {
 
   isSelected?: boolean;
   integrationProvider?: ImportElementSource;
-}
+};
 
-export const NumberCatalogItem = ({
+type NumberCatalogItemWithResultProps = NumberProps & { result: Result.Result };
+
+type NumberCatalogItemStyledProps = HTMLProps<HTMLDivElement> & {
+  variableName: string;
+  variant: 'draggable' | 'static';
+  children?: ReactNode;
+};
+
+export const NumberCatalogItemStyled: FC<NumberCatalogItemStyledProps> = ({
+  variableName,
+  children,
+  variant,
+  ...props
+}) => {
+  switch (variant) {
+    case 'draggable':
+      return (
+        <div {...props} css={numberCatalogDraggableItemStyles}>
+          <span data-drag-handle css={dragHandleStyles}>
+            <DragHandle />
+          </span>
+          <span css={contentWrapperDraggable}>{children}</span>
+        </div>
+      );
+    case 'static':
+      return (
+        <div {...props} css={numberCatalogNonDraggableItemStyles}>
+          <span css={contentWrapperStatic}>
+            <span>{variableName}</span>
+            {children}
+          </span>
+        </div>
+      );
+  }
+};
+
+const NumberCatalogItemWithResult: FC<NumberCatalogItemWithResultProps> = ({
   name,
   blockId,
+  result,
   onDragStart,
   onDragEnd,
   onClick,
   integrationProvider,
   isSelected = false,
-}: NumberProps) => {
-  const computer = useComputer();
-  const undebouncedResult = computer.getBlockIdResult$.use(blockId);
-
+}) => {
   const controller = useNotebookWithIdState((s) => s.controller);
-  if (controller == null) {
-    throw new Error('Controller is null');
-  }
+  assert(controller != null, 'unreachable');
 
   const handleDelete = () => {
     const block = controller.findNodeEntryById(blockId);
@@ -60,17 +94,11 @@ export const NumberCatalogItem = ({
     });
   };
 
-  const result = useDelayedValue(
-    undebouncedResult,
-    undebouncedResult?.result == null
-  );
-
-  if (!result?.result) {
+  if (!result) {
     return null;
   }
 
-  const { type } = result.result;
-  const { kind } = type;
+  const { kind } = result.type;
 
   // only display supported types
   if (
@@ -86,7 +114,7 @@ export const NumberCatalogItem = ({
     return null;
   }
 
-  const asText = formatResultPreview(result.result);
+  const asText = formatResultPreview(result);
 
   const displayResultType = (res: Result.Result) => {
     if (isTable(res.type)) {
@@ -108,47 +136,58 @@ export const NumberCatalogItem = ({
   };
 
   return (
-    <div onClick={onClick}>
-      <div
-        draggable
-        onDragStart={
-          onDragStart &&
-          onDragStart({
-            blockId,
-            asText,
-            result: result.result,
-          })
-        }
-        aria-selected={isSelected}
-        onDragEnd={onDragEnd}
-        css={numberCatalogListItemStyles}
-        data-testid={`number-catalogue-${name}`}
-      >
-        <span data-drag-handle css={dragHandleStyles}>
-          <DragHandle />
-        </span>
-        <span css={contentWrapper}>
-          <span css={nameGroupStyles}>
-            <span css={combinedStyles}>
-              {name}
-              {!isSelected && (
-                <span css={pencilIconStyles}>
-                  <Pencil />
-                </span>
-              )}
+    <NumberCatalogItemStyled
+      variant="draggable"
+      onClick={onClick}
+      variableName={name}
+      draggable
+      onDragStart={
+        onDragStart &&
+        onDragStart({
+          blockId,
+          asText,
+          result,
+        })
+      }
+      aria-selected={isSelected}
+      onDragEnd={onDragEnd}
+      data-testid={`number-catalogue-${name}`}
+    >
+      <span css={nameGroupStyles}>
+        <span css={combinedStyles}>
+          {name}
+          {!isSelected && (
+            <span css={pencilIconStyles}>
+              <Pencil />
             </span>
-          </span>
-          {isSelected ? (
-            <span css={trashIconStyles} onClick={handleDelete}>
-              <Trash />
-            </span>
-          ) : (
-            <span className="result">{displayResultType(result.result)}</span>
           )}
         </span>
-      </div>
-    </div>
+      </span>
+      {isSelected ? (
+        <span css={trashIconStyles} onClick={handleDelete}>
+          <Trash />
+        </span>
+      ) : (
+        <span className="result">{displayResultType(result)}</span>
+      )}
+    </NumberCatalogItemStyled>
   );
+};
+
+export const NumberCatalogItem: FC<NumberProps> = (props) => {
+  const computer = useComputer();
+  const undebouncedResult = computer.getBlockIdResult$.use(props.blockId);
+
+  const result = useDelayedValue(
+    undebouncedResult,
+    undebouncedResult?.result == null
+  );
+
+  if (result?.result == null) {
+    return null;
+  }
+
+  return <NumberCatalogItemWithResult {...props} result={result.result} />;
 };
 
 const trashIconStyles = css({
@@ -208,15 +247,20 @@ const dragHandleStyles = css({
   },
 });
 
-export const numberCatalogListItemStyles = css(p14Medium, {
+const numberCatalogItemStyles = css({
   padding: '2px 8px 2px 0px',
   borderRadius: '6px',
   display: 'grid',
-  gridTemplateColumns: '28px minmax(0, 1fr)',
   alignItems: 'center',
-  cursor: 'grab',
   minWidth: 0,
   minHeight: 0,
+});
+
+const numberCatalogDraggableItemStyles = css(numberCatalogItemStyles, {
+  cursor: 'grab',
+
+  // 28px is for the drag handle.
+  gridTemplateColumns: '28px minmax(0, 1fr)',
 
   '&:hover, &[aria-selected="true"]': {
     backgroundColor: cssVar('backgroundDefault'),
@@ -232,6 +276,22 @@ export const numberCatalogListItemStyles = css(p14Medium, {
 
   '&[aria-selected="true"]': {
     backgroundColor: cssVar('backgroundHeavy'),
+  },
+});
+
+const numberCatalogNonDraggableItemStyles = css(numberCatalogItemStyles, {
+  // This would be made up by the drag handle in the "draggable" variant.
+  // But we don't want to create a weird visual difference where,
+  // one variant has a gap to the left and the other doesnt.
+  marginLeft: '28px',
+  cursor: 'pointer',
+
+  gridTemplateColumns: 'minmax(0, 1fr)',
+  paddingTop: 8,
+  paddingBottom: 8,
+
+  '> span:first-of-type': {
+    width: '100%',
   },
 });
 
@@ -251,7 +311,16 @@ const contentWrapper = css(p14Medium, {
     overflow: 'hidden',
     display: 'inline-block',
   },
+});
 
+const contentWrapperStatic = css(contentWrapper, {
+  '> svg': {
+    cursor: 'pointer',
+    alignSelf: 'center',
+  },
+});
+
+const contentWrapperDraggable = css(contentWrapper, {
   '> span:last-of-type': {
     color: cssVar('textSubdued'),
   },

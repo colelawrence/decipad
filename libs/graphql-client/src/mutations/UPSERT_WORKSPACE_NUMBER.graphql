@@ -1,0 +1,17 @@
+mutation UpsertWorkspaceNumber(
+  $workspaceId: ID!
+  $workspaceNumber: WorkspaceNumberInput!
+) {
+  upsertWorkspaceNumber(
+    workspaceId: $workspaceId
+    workspaceNumber: $workspaceNumber
+  ) {
+    id
+    workspaceNumbers {
+      id
+      name
+      encoding
+      origin
+    }
+  }
+}

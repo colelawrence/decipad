@@ -93,6 +93,7 @@ export const ELEMENT_SUBMIT_FORM = 'submit-form';
 // Tabs
 export const ELEMENT_TAB = 'tab';
 export const ELEMENT_DATA_TAB = 'data-tab';
+export const ELEMENT_DATA_TAB_WORKSPACE_RESULT = 'data-tab-workspace-result';
 export const ELEMENT_DATA_TAB_CHILDREN = 'data-tab-children';
 export const ELEMENT_TITLE = 'title';
 

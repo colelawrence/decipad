@@ -15,7 +15,18 @@ export const DataDrawerEditor = styled.div({
   width: '100%',
   height: '32px',
 
-  color: cssVar('textTitle'),
+  color: cssVar('stateOkBackground'),
+});
+
+export const DataDrawerInputWrapper = styled.div({
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
+
+  paddingRight: '4px',
+  paddingLeft: '6px',
+
+  color: cssVar('iconColorHeavy'),
 });
 
 export const DataDrawerNameWrapper = styled.div(p14Regular, {
@@ -39,17 +50,11 @@ export const DataDrawerNameWrapper = styled.div(p14Regular, {
     minWidth: '160px',
 
     whiteSpace: 'pre',
-  },
 
-  '> div:last-of-type': {
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-
-    paddingRight: '4px',
-    paddingLeft: '6px',
-
-    color: cssVar('iconColorHeavy'),
+    '> input': {
+      background: 'transparent',
+      border: 'none',
+    },
   },
 });
 

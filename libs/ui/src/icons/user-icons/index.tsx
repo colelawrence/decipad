@@ -56,6 +56,7 @@ export { Photo } from './Photo';
 export { PiggyBank } from './PiggyBank';
 export { PinOnMap } from './PinOnMap';
 export { Pin } from './Pin';
+export { PinTack } from './PinTack';
 export { Plane } from './Plane';
 export { Polaroids } from './Polaroids';
 export { Receipt } from './Receipt';

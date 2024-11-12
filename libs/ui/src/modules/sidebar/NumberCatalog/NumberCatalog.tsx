@@ -26,10 +26,9 @@ export type NumberCatalogItemType = {
 };
 
 interface NumberCatalogProps {
-  onDragStart?: SmartRefDragCallback;
-  onDragEnd?: (e: React.DragEvent) => void;
+  onDragStart: SmartRefDragCallback;
+  onDragEnd: (e: React.DragEvent) => void;
   items: Record<string, NumberCatalogItemType[]>;
-  alignment?: 'right' | 'left';
 
   editVariable: (id: string) => void;
 }
@@ -135,8 +134,6 @@ export const NumberCatalog = ({
             integrationProvider={item.integrationProvider}
           />
         );
-      default:
-        return null;
     }
   }
 
@@ -194,7 +191,7 @@ const groupStyles = css({
   padding: '4px 0',
 });
 
-const groupHeadingStyles = css(p14Medium, {
+export const groupHeadingStyles = css(p14Medium, {
   color: cssVar('textSubdued'),
   padding: '4px 0',
   display: 'flex',

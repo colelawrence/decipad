@@ -25,6 +25,7 @@ import { getWorkspaceMembersCount } from './workspace.helpers';
 import { workspaceResource } from './workspaceResource';
 import { withSubscriptionSideEffects } from './workspaceStripeEffects';
 import type {
+  GraphqlContext,
   PermissionType,
   Resolvers,
   Role,
@@ -34,7 +35,11 @@ import type {
   Workspace,
   WorkspaceAccess,
 } from '@decipad/graphqlserver-types';
-import type { PermissionRecord, WorkspaceRecord } from '@decipad/backendtypes';
+import type {
+  PermissionRecord,
+  WorkspaceNumberRecord,
+  WorkspaceRecord,
+} from '@decipad/backendtypes';
 import by from 'libs/graphqlresource/src/utils/by';
 import { padResource } from '../pads/padResource';
 import Boom from '@hapi/boom';
@@ -126,17 +131,18 @@ function isLocalOrDev(): boolean {
   );
 }
 
-const getWorkspaceById: NonNullable<
-  NonNullable<Resolvers['Query']>['getWorkspaceById']
-> = async (_, { id }, context) => {
+const dbGetWorkspaceById = async (
+  workspaceId: string,
+  context: GraphqlContext
+) => {
   await workspaces.expectAuthorizedForGraphql({
     context,
-    recordId: id,
+    recordId: workspaceId,
     minimumPermissionType: 'READ',
   });
 
   const data = await tables();
-  const dbWorkspaces = await data.workspaces.get({ id });
+  const dbWorkspaces = await data.workspaces.get({ id: workspaceId });
   if (dbWorkspaces == null) {
     return null;
   }
@@ -146,6 +152,10 @@ const getWorkspaceById: NonNullable<
   // in computed properties.
   return WorkspaceRecordToWorkspace(dbWorkspaces);
 };
+
+const getWorkspaceById: NonNullable<
+  NonNullable<Resolvers['Query']>['getWorkspaceById']
+> = async (_, { id }, context) => dbGetWorkspaceById(id, context);
 
 const resolvers: Resolvers = {
   Query: {
@@ -360,6 +370,34 @@ const resolvers: Resolvers = {
 
       return true;
     },
+
+    async upsertWorkspaceNumber(_, { workspaceId, workspaceNumber }, context) {
+      await workspaces.expectAuthorizedForGraphql({
+        context,
+        recordId: workspaceId,
+        minimumPermissionType: 'ADMIN',
+      });
+
+      const data = await tables();
+
+      if (!workspaceNumber.name) {
+        throw Boom.badRequest('Needs workspace number name');
+      }
+
+      const id = `${workspaceId}/${workspaceNumber.name}`;
+
+      const workspaceNumberRecord: WorkspaceNumberRecord = {
+        id,
+        name: workspaceNumber.name,
+        encoding: workspaceNumber.encoding,
+        origin: workspaceNumber.origin,
+        workspace_id: workspaceId,
+      };
+
+      await data.workspacenumbers.put(workspaceNumberRecord);
+
+      return dbGetWorkspaceById(workspaceId, context);
+    },
   },
 
   Workspace: {
@@ -507,6 +545,25 @@ const resolvers: Resolvers = {
         ...pagedDbPads,
         items: pagedPadsItems,
       };
+    },
+
+    async workspaceNumbers(workspace) {
+      const data = await tables();
+
+      const { Items: workspaceNumbers } = await data.workspacenumbers.query({
+        IndexName: 'byWorkspace',
+        KeyConditionExpression: 'workspace_id = :workspace_id',
+        ExpressionAttributeValues: {
+          ':workspace_id': workspace.id,
+        },
+      });
+
+      return workspaceNumbers.map((workspaceNumberRecord) => ({
+        id: workspaceNumberRecord.id,
+        name: workspaceNumberRecord.name,
+        encoding: workspaceNumberRecord.encoding,
+        origin: workspaceNumberRecord.origin ?? '',
+      }));
     },
   },
 };

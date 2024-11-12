@@ -59,6 +59,7 @@ import {
   isNormalizing,
   type Path,
   setNormalizing,
+  BaseOperation,
 } from 'slate';
 import { normalizeCurried } from './RootEditor/normalizeNode';
 import { normalizers } from './RootEditor/plugins';
@@ -74,10 +75,23 @@ import { withoutNormalizingEditors } from './withoutNormalizingEditors';
 import stringify from 'json-stringify-safe';
 import { nanoid } from 'nanoid';
 import { applyToMirrorAsRoot } from './controller-functions';
+import { ReactEditor, withReact } from 'slate-react';
 
-const isTesting = !!(
-  process.env.JEST_WORKER_ID || process.env.VITEST_WORKER_ID
-);
+type ExtendedOperation = TOperation & {
+  FROM_ROOT?: boolean;
+  IS_LOCAL?: boolean;
+  FROM_MIRROR?: boolean;
+};
+
+type DataTabEditor = BaseEditor &
+  ReactEditor & {
+    id: string;
+    children: DataTabValue;
+    apply: (op: ExtendedOperation) => void;
+  };
+
+const isTesting =
+  !!(process.env.JEST_WORKER_ID || process.env.VITEST_WORKER_ID) || true;
 
 const logsColor = 'color: green;';
 
@@ -107,7 +121,8 @@ export class EditorController implements RootEditorController {
   private selectedTab = 0;
   private editorPlugins: Array<MyPlatePlugin>;
   private mirrorEditor: PlateEditor<NotebookValue>;
-  private dataTabEditor: PlateEditor<DataTabValue>;
+
+  public dataTabEditor: DataTabEditor;
 
   /**
    * Constructor initalizes a basic slate text editor, and
@@ -175,7 +190,7 @@ export class EditorController implements RootEditorController {
   private createMirrorEditor(): PlateEditor<NotebookValue> {
     const mirrorEditor = createPlateEditor<NotebookValue>({
       plugins: [],
-    }) as PlateEditor<NotebookValue>;
+    });
     const { apply, onChange } = mirrorEditor;
 
     mirrorEditor.normalize = normalizeCurried(
@@ -218,25 +233,27 @@ export class EditorController implements RootEditorController {
     return mirrorEditor;
   }
 
-  private createDataTabEditor(): PlateEditor<DataTabValue> {
-    const dataTabEditor = createPlateEditor<DataTabValue>({
-      plugins: [],
-    });
+  private createDataTabEditor(): DataTabEditor {
+    const dataTabEditor = withReact(createEditor()) as DataTabEditor;
 
     dataTabEditor.normalize = normalizeCurried(dataTabEditor, []);
 
     const { apply, onChange } = dataTabEditor;
 
-    dataTabEditor.apply = (op) => {
+    dataTabEditor.apply = (_op: BaseOperation) => {
+      const op = _op as TOperation;
+
       // Cancel any selection events.
       if (op.type === 'set_selection') {
         return;
       }
 
       if (op.FROM_ROOT) {
-        this.events.next({ type: 'any-change', op });
+        this.events.next({ type: 'any-change', op: op as TOperation });
 
         apply(op);
+
+        this.events.next({ type: 'data-tab-change', op: op as TOperation });
         return;
       }
 
@@ -462,7 +479,7 @@ export class EditorController implements RootEditorController {
       [
         this.mirrorEditor,
         this.dataTabEditor,
-        this.titleEditor as unknown as TEditor,
+        this.titleEditor,
         ...this.tabEditors,
       ],
       cb

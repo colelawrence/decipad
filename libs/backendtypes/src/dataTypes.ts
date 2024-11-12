@@ -437,6 +437,15 @@ export interface WorkspaceRecord extends TableRecordBase {
   plan?: SubscriptionPlansNames;
 }
 
+export interface WorkspaceNumberRecord extends TableRecordBase {
+  name: string;
+  workspace_id: ID;
+
+  /** Base64 encoded */
+  encoding: string;
+  origin: string;
+}
+
 export interface TagRecord extends TableRecordBase {
   tag: string;
   resource_uri: string;
@@ -736,6 +745,7 @@ export interface EnhancedDataTables {
   userbackups: DataTable<UserBackup>;
   permissions: EnhancedDataTable<PermissionRecord>;
   workspaces: EnhancedDataTable<WorkspaceRecord>;
+  workspacenumbers: EnhancedDataTable<WorkspaceNumberRecord>;
   pads: EnhancedDataTable<PadRecord>;
   sections: EnhancedDataTable<SectionRecord>;
   workspaceroles: EnhancedDataTable<RoleRecord>;

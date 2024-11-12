@@ -5,6 +5,7 @@ import {
   ELEMENT_DATA_TAB_CHILDREN,
   ELEMENT_INTEGRATION,
   ELEMENT_VARIABLE_DEF,
+  ELEMENT_DATA_TAB_WORKSPACE_RESULT,
   ELEMENT_TABLE,
   ELEMENT_METRIC,
 } from '@decipad/editor-types';
@@ -25,6 +26,8 @@ export const catalogGroups: Record<
     name: 'Variables',
     validBlockTypes: [
       ELEMENT_DATA_TAB_CHILDREN,
+      ELEMENT_DATA_TAB_WORKSPACE_RESULT,
+      ELEMENT_CODE_LINE_V2,
       ELEMENT_CODE_LINE_V2,
       ELEMENT_CODE_LINE,
       ELEMENT_TABLE,
@@ -55,9 +58,8 @@ const sortGroup = (obj: CatalogGroups): CatalogGroups => {
 const NOTEBOOK_VARIABLES = 'Notebook Variables';
 
 export const groupByTab = (items: CatalogItems): CatalogGroups => {
-  return items.reduce((acc, item) => {
+  return items.reduce<CatalogGroups>((acc, item) => {
     if (isFlagEnabled('NAV_SIDEBAR')) {
-      // TODO: refactor this when the feature flag is enabled
       if (item.type === 'var') {
         const groupName = find(Object.values(catalogGroups), (cg) =>
           cg.validBlockTypes.includes(item.blockType ?? ELEMENT_VARIABLE_DEF)
@@ -73,6 +75,7 @@ export const groupByTab = (items: CatalogItems): CatalogGroups => {
       }
       return sortGroup(acc);
     }
+
     if (item.type === 'var' && item.dataTab) {
       if (!acc[NOTEBOOK_VARIABLES]) {
         acc[NOTEBOOK_VARIABLES] = [];
@@ -90,5 +93,5 @@ export const groupByTab = (items: CatalogItems): CatalogGroups => {
     }
     acc[tab].push(item);
     return sortGroup(acc);
-  }, {} as CatalogGroups);
+  }, {});
 };

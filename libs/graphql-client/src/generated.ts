@@ -273,6 +273,7 @@ export type Mutation = {
   updateSectionInWorkspace?: Maybe<Scalars['Boolean']['output']>;
   updateSelf: User;
   updateWorkspace: Workspace;
+  upsertWorkspaceNumber?: Maybe<Workspace>;
 };
 
 
@@ -684,6 +685,12 @@ export type MutationUpdateSelfArgs = {
 export type MutationUpdateWorkspaceArgs = {
   id: Scalars['ID']['input'];
   workspace: WorkspaceInput;
+};
+
+
+export type MutationUpsertWorkspaceNumberArgs = {
+  workspaceId: Scalars['ID']['input'];
+  workspaceNumber: WorkspaceNumberInput;
 };
 
 export type NewResourceQuotaLimit = {
@@ -1245,6 +1252,7 @@ export type Workspace = {
   roles?: Maybe<Array<Role>>;
   secrets: Array<Secret>;
   sections: Array<Section>;
+  workspaceNumbers: Array<WorkspaceNumber>;
   workspaceSubscription?: Maybe<WorkspaceSubscription>;
 };
 
@@ -1262,6 +1270,21 @@ export type WorkspaceAccess = {
 
 export type WorkspaceInput = {
   name: Scalars['String']['input'];
+};
+
+export type WorkspaceNumber = {
+  __typename?: 'WorkspaceNumber';
+  encoding: Scalars['String']['output'];
+  id: Scalars['ID']['output'];
+  name: Scalars['String']['output'];
+  origin: Scalars['String']['output'];
+};
+
+export type WorkspaceNumberInput = {
+  encoding: Scalars['String']['input'];
+  id?: InputMaybe<Scalars['ID']['input']>;
+  name: Scalars['String']['input'];
+  origin: Scalars['String']['input'];
 };
 
 export type WorkspaceSubscription = {
@@ -1360,7 +1383,7 @@ export type ClaimNotebookMutationVariables = Exact<{
 }>;
 
 
-export type ClaimNotebookMutation = { __typename?: 'Mutation', claimNotebook?: { __typename?: 'Pad', id: string, name: string, myPermissionType?: PermissionType | null, icon?: string | null, numberFormatting?: string | null, status?: string | null, isPublic?: boolean | null, createdAt: any, archived?: boolean | null, gist?: Gist | null, canPublicDuplicate?: boolean | null, initialState?: string | null, sectionId?: string | null, workspaceId?: string | null, workspace?: { __typename?: 'Workspace', id: string, name: string, isPremium?: boolean | null, plan?: SubscriptionPlansNames | null, workspaceSubscription?: { __typename?: 'WorkspaceSubscription', id: string, credits: number, queries: number, storage: number, seats?: number | null } | null } | null, padConnectionParams: { __typename?: 'PadConnectionParams', url: string, token: string }, attachments: Array<{ __typename?: 'Attachment', id: string, fileName: string, fileType: string, fileSize: number, url: string }> } | null };
+export type ClaimNotebookMutation = { __typename?: 'Mutation', claimNotebook?: { __typename?: 'Pad', id: string, name: string, myPermissionType?: PermissionType | null, icon?: string | null, numberFormatting?: string | null, status?: string | null, isPublic?: boolean | null, createdAt: any, archived?: boolean | null, gist?: Gist | null, canPublicDuplicate?: boolean | null, initialState?: string | null, sectionId?: string | null, workspaceId?: string | null, workspace?: { __typename?: 'Workspace', id: string, name: string, isPremium?: boolean | null, plan?: SubscriptionPlansNames | null, workspaceSubscription?: { __typename?: 'WorkspaceSubscription', id: string, credits: number, queries: number, storage: number, seats?: number | null } | null, workspaceNumbers: Array<{ __typename?: 'WorkspaceNumber', id: string, name: string, encoding: string, origin: string }> } | null, padConnectionParams: { __typename?: 'PadConnectionParams', url: string, token: string }, attachments: Array<{ __typename?: 'Attachment', id: string, fileName: string, fileType: string, fileSize: number, url: string }> } | null };
 
 export type CreateAnnotationMutationVariables = Exact<{
   content: Scalars['String']['input'];
@@ -1396,7 +1419,7 @@ export type CreateNotebookMutationVariables = Exact<{
 }>;
 
 
-export type CreateNotebookMutation = { __typename?: 'Mutation', createPad: { __typename?: 'Pad', id: string, name: string, myPermissionType?: PermissionType | null, icon?: string | null, numberFormatting?: string | null, status?: string | null, isPublic?: boolean | null, createdAt: any, archived?: boolean | null, gist?: Gist | null, canPublicDuplicate?: boolean | null, initialState?: string | null, sectionId?: string | null, workspaceId?: string | null, workspace?: { __typename?: 'Workspace', id: string, name: string, isPremium?: boolean | null, plan?: SubscriptionPlansNames | null, workspaceSubscription?: { __typename?: 'WorkspaceSubscription', id: string, credits: number, queries: number, storage: number, seats?: number | null } | null } | null, padConnectionParams: { __typename?: 'PadConnectionParams', url: string, token: string }, attachments: Array<{ __typename?: 'Attachment', id: string, fileName: string, fileType: string, fileSize: number, url: string }> } };
+export type CreateNotebookMutation = { __typename?: 'Mutation', createPad: { __typename?: 'Pad', id: string, name: string, myPermissionType?: PermissionType | null, icon?: string | null, numberFormatting?: string | null, status?: string | null, isPublic?: boolean | null, createdAt: any, archived?: boolean | null, gist?: Gist | null, canPublicDuplicate?: boolean | null, initialState?: string | null, sectionId?: string | null, workspaceId?: string | null, workspace?: { __typename?: 'Workspace', id: string, name: string, isPremium?: boolean | null, plan?: SubscriptionPlansNames | null, workspaceSubscription?: { __typename?: 'WorkspaceSubscription', id: string, credits: number, queries: number, storage: number, seats?: number | null } | null, workspaceNumbers: Array<{ __typename?: 'WorkspaceNumber', id: string, name: string, encoding: string, origin: string }> } | null, padConnectionParams: { __typename?: 'PadConnectionParams', url: string, token: string }, attachments: Array<{ __typename?: 'Attachment', id: string, fileName: string, fileType: string, fileSize: number, url: string }> } };
 
 export type CreateSectionMutationVariables = Exact<{
   workspaceId: Scalars['ID']['input'];
@@ -1494,7 +1517,7 @@ export type DuplicateNotebookMutationVariables = Exact<{
 }>;
 
 
-export type DuplicateNotebookMutation = { __typename?: 'Mutation', duplicatePad: { __typename?: 'Pad', id: string, name: string, myPermissionType?: PermissionType | null, icon?: string | null, numberFormatting?: string | null, status?: string | null, isPublic?: boolean | null, createdAt: any, archived?: boolean | null, gist?: Gist | null, canPublicDuplicate?: boolean | null, initialState?: string | null, sectionId?: string | null, workspaceId?: string | null, workspace?: { __typename?: 'Workspace', id: string, name: string, isPremium?: boolean | null, plan?: SubscriptionPlansNames | null, workspaceSubscription?: { __typename?: 'WorkspaceSubscription', id: string, credits: number, queries: number, storage: number, seats?: number | null } | null } | null, padConnectionParams: { __typename?: 'PadConnectionParams', url: string, token: string }, attachments: Array<{ __typename?: 'Attachment', id: string, fileName: string, fileType: string, fileSize: number, url: string }> } };
+export type DuplicateNotebookMutation = { __typename?: 'Mutation', duplicatePad: { __typename?: 'Pad', id: string, name: string, myPermissionType?: PermissionType | null, icon?: string | null, numberFormatting?: string | null, status?: string | null, isPublic?: boolean | null, createdAt: any, archived?: boolean | null, gist?: Gist | null, canPublicDuplicate?: boolean | null, initialState?: string | null, sectionId?: string | null, workspaceId?: string | null, workspace?: { __typename?: 'Workspace', id: string, name: string, isPremium?: boolean | null, plan?: SubscriptionPlansNames | null, workspaceSubscription?: { __typename?: 'WorkspaceSubscription', id: string, credits: number, queries: number, storage: number, seats?: number | null } | null, workspaceNumbers: Array<{ __typename?: 'WorkspaceNumber', id: string, name: string, encoding: string, origin: string }> } | null, padConnectionParams: { __typename?: 'PadConnectionParams', url: string, token: string }, attachments: Array<{ __typename?: 'Attachment', id: string, fileName: string, fileType: string, fileSize: number, url: string }> } };
 
 export type GetCreateAttachmentFormMutationVariables = Exact<{
   notebookId: Scalars['ID']['input'];
@@ -1511,7 +1534,7 @@ export type ImportNotebookMutationVariables = Exact<{
 }>;
 
 
-export type ImportNotebookMutation = { __typename?: 'Mutation', importPad: { __typename?: 'Pad', id: string, name: string, myPermissionType?: PermissionType | null, icon?: string | null, numberFormatting?: string | null, status?: string | null, isPublic?: boolean | null, createdAt: any, archived?: boolean | null, gist?: Gist | null, canPublicDuplicate?: boolean | null, initialState?: string | null, sectionId?: string | null, workspaceId?: string | null, workspace?: { __typename?: 'Workspace', id: string, name: string, isPremium?: boolean | null, plan?: SubscriptionPlansNames | null, workspaceSubscription?: { __typename?: 'WorkspaceSubscription', id: string, credits: number, queries: number, storage: number, seats?: number | null } | null } | null, padConnectionParams: { __typename?: 'PadConnectionParams', url: string, token: string }, attachments: Array<{ __typename?: 'Attachment', id: string, fileName: string, fileType: string, fileSize: number, url: string }> } };
+export type ImportNotebookMutation = { __typename?: 'Mutation', importPad: { __typename?: 'Pad', id: string, name: string, myPermissionType?: PermissionType | null, icon?: string | null, numberFormatting?: string | null, status?: string | null, isPublic?: boolean | null, createdAt: any, archived?: boolean | null, gist?: Gist | null, canPublicDuplicate?: boolean | null, initialState?: string | null, sectionId?: string | null, workspaceId?: string | null, workspace?: { __typename?: 'Workspace', id: string, name: string, isPremium?: boolean | null, plan?: SubscriptionPlansNames | null, workspaceSubscription?: { __typename?: 'WorkspaceSubscription', id: string, credits: number, queries: number, storage: number, seats?: number | null } | null, workspaceNumbers: Array<{ __typename?: 'WorkspaceNumber', id: string, name: string, encoding: string, origin: string }> } | null, padConnectionParams: { __typename?: 'PadConnectionParams', url: string, token: string }, attachments: Array<{ __typename?: 'Attachment', id: string, fileName: string, fileType: string, fileSize: number, url: string }> } };
 
 export type MoveNotebookMutationVariables = Exact<{
   id: Scalars['ID']['input'];
@@ -1604,7 +1627,7 @@ export type UnarchiveNotebookMutationVariables = Exact<{
 }>;
 
 
-export type UnarchiveNotebookMutation = { __typename?: 'Mutation', updatePad: { __typename?: 'Pad', id: string, name: string, myPermissionType?: PermissionType | null, icon?: string | null, numberFormatting?: string | null, status?: string | null, isPublic?: boolean | null, createdAt: any, archived?: boolean | null, gist?: Gist | null, canPublicDuplicate?: boolean | null, initialState?: string | null, workspace?: { __typename?: 'Workspace', id: string, name: string, isPremium?: boolean | null, plan?: SubscriptionPlansNames | null, workspaceSubscription?: { __typename?: 'WorkspaceSubscription', id: string, credits: number, queries: number, storage: number, seats?: number | null } | null } | null, padConnectionParams: { __typename?: 'PadConnectionParams', url: string, token: string }, attachments: Array<{ __typename?: 'Attachment', id: string, fileName: string, fileType: string, fileSize: number, url: string }> } };
+export type UnarchiveNotebookMutation = { __typename?: 'Mutation', updatePad: { __typename?: 'Pad', id: string, name: string, myPermissionType?: PermissionType | null, icon?: string | null, numberFormatting?: string | null, status?: string | null, isPublic?: boolean | null, createdAt: any, archived?: boolean | null, gist?: Gist | null, canPublicDuplicate?: boolean | null, initialState?: string | null, workspace?: { __typename?: 'Workspace', id: string, name: string, isPremium?: boolean | null, plan?: SubscriptionPlansNames | null, workspaceSubscription?: { __typename?: 'WorkspaceSubscription', id: string, credits: number, queries: number, storage: number, seats?: number | null } | null, workspaceNumbers: Array<{ __typename?: 'WorkspaceNumber', id: string, name: string, encoding: string, origin: string }> } | null, padConnectionParams: { __typename?: 'PadConnectionParams', url: string, token: string }, attachments: Array<{ __typename?: 'Attachment', id: string, fileName: string, fileType: string, fileSize: number, url: string }> } };
 
 export type UnsafePermissionsMutationVariables = Exact<{
   id: Scalars['String']['input'];
@@ -1660,7 +1683,7 @@ export type UpdateNotebookArchiveMutationVariables = Exact<{
 }>;
 
 
-export type UpdateNotebookArchiveMutation = { __typename?: 'Mutation', updatePad: { __typename?: 'Pad', id: string, name: string, myPermissionType?: PermissionType | null, icon?: string | null, numberFormatting?: string | null, status?: string | null, isPublic?: boolean | null, createdAt: any, archived?: boolean | null, gist?: Gist | null, canPublicDuplicate?: boolean | null, initialState?: string | null, workspace?: { __typename?: 'Workspace', id: string, name: string, isPremium?: boolean | null, plan?: SubscriptionPlansNames | null, workspaceSubscription?: { __typename?: 'WorkspaceSubscription', id: string, credits: number, queries: number, storage: number, seats?: number | null } | null } | null, padConnectionParams: { __typename?: 'PadConnectionParams', url: string, token: string }, attachments: Array<{ __typename?: 'Attachment', id: string, fileName: string, fileType: string, fileSize: number, url: string }> } };
+export type UpdateNotebookArchiveMutation = { __typename?: 'Mutation', updatePad: { __typename?: 'Pad', id: string, name: string, myPermissionType?: PermissionType | null, icon?: string | null, numberFormatting?: string | null, status?: string | null, isPublic?: boolean | null, createdAt: any, archived?: boolean | null, gist?: Gist | null, canPublicDuplicate?: boolean | null, initialState?: string | null, workspace?: { __typename?: 'Workspace', id: string, name: string, isPremium?: boolean | null, plan?: SubscriptionPlansNames | null, workspaceSubscription?: { __typename?: 'WorkspaceSubscription', id: string, credits: number, queries: number, storage: number, seats?: number | null } | null, workspaceNumbers: Array<{ __typename?: 'WorkspaceNumber', id: string, name: string, encoding: string, origin: string }> } | null, padConnectionParams: { __typename?: 'PadConnectionParams', url: string, token: string }, attachments: Array<{ __typename?: 'Attachment', id: string, fileName: string, fileType: string, fileSize: number, url: string }> } };
 
 export type UpdateNotebookIconMutationVariables = Exact<{
   id: Scalars['ID']['input'];
@@ -1668,7 +1691,7 @@ export type UpdateNotebookIconMutationVariables = Exact<{
 }>;
 
 
-export type UpdateNotebookIconMutation = { __typename?: 'Mutation', updatePad: { __typename?: 'Pad', id: string, name: string, myPermissionType?: PermissionType | null, icon?: string | null, numberFormatting?: string | null, status?: string | null, isPublic?: boolean | null, createdAt: any, archived?: boolean | null, gist?: Gist | null, canPublicDuplicate?: boolean | null, initialState?: string | null, workspace?: { __typename?: 'Workspace', id: string, name: string, isPremium?: boolean | null, plan?: SubscriptionPlansNames | null, workspaceSubscription?: { __typename?: 'WorkspaceSubscription', id: string, credits: number, queries: number, storage: number, seats?: number | null } | null } | null, padConnectionParams: { __typename?: 'PadConnectionParams', url: string, token: string }, attachments: Array<{ __typename?: 'Attachment', id: string, fileName: string, fileType: string, fileSize: number, url: string }> } };
+export type UpdateNotebookIconMutation = { __typename?: 'Mutation', updatePad: { __typename?: 'Pad', id: string, name: string, myPermissionType?: PermissionType | null, icon?: string | null, numberFormatting?: string | null, status?: string | null, isPublic?: boolean | null, createdAt: any, archived?: boolean | null, gist?: Gist | null, canPublicDuplicate?: boolean | null, initialState?: string | null, workspace?: { __typename?: 'Workspace', id: string, name: string, isPremium?: boolean | null, plan?: SubscriptionPlansNames | null, workspaceSubscription?: { __typename?: 'WorkspaceSubscription', id: string, credits: number, queries: number, storage: number, seats?: number | null } | null, workspaceNumbers: Array<{ __typename?: 'WorkspaceNumber', id: string, name: string, encoding: string, origin: string }> } | null, padConnectionParams: { __typename?: 'PadConnectionParams', url: string, token: string }, attachments: Array<{ __typename?: 'Attachment', id: string, fileName: string, fileType: string, fileSize: number, url: string }> } };
 
 export type UpdateNotebookNumberFormattingMutationVariables = Exact<{
   id: Scalars['ID']['input'];
@@ -1676,7 +1699,7 @@ export type UpdateNotebookNumberFormattingMutationVariables = Exact<{
 }>;
 
 
-export type UpdateNotebookNumberFormattingMutation = { __typename?: 'Mutation', updatePad: { __typename?: 'Pad', id: string, name: string, myPermissionType?: PermissionType | null, icon?: string | null, numberFormatting?: string | null, status?: string | null, isPublic?: boolean | null, createdAt: any, archived?: boolean | null, gist?: Gist | null, canPublicDuplicate?: boolean | null, initialState?: string | null, workspace?: { __typename?: 'Workspace', id: string, name: string, isPremium?: boolean | null, plan?: SubscriptionPlansNames | null, workspaceSubscription?: { __typename?: 'WorkspaceSubscription', id: string, credits: number, queries: number, storage: number, seats?: number | null } | null } | null, padConnectionParams: { __typename?: 'PadConnectionParams', url: string, token: string }, attachments: Array<{ __typename?: 'Attachment', id: string, fileName: string, fileType: string, fileSize: number, url: string }> } };
+export type UpdateNotebookNumberFormattingMutation = { __typename?: 'Mutation', updatePad: { __typename?: 'Pad', id: string, name: string, myPermissionType?: PermissionType | null, icon?: string | null, numberFormatting?: string | null, status?: string | null, isPublic?: boolean | null, createdAt: any, archived?: boolean | null, gist?: Gist | null, canPublicDuplicate?: boolean | null, initialState?: string | null, workspace?: { __typename?: 'Workspace', id: string, name: string, isPremium?: boolean | null, plan?: SubscriptionPlansNames | null, workspaceSubscription?: { __typename?: 'WorkspaceSubscription', id: string, credits: number, queries: number, storage: number, seats?: number | null } | null, workspaceNumbers: Array<{ __typename?: 'WorkspaceNumber', id: string, name: string, encoding: string, origin: string }> } | null, padConnectionParams: { __typename?: 'PadConnectionParams', url: string, token: string }, attachments: Array<{ __typename?: 'Attachment', id: string, fileName: string, fileType: string, fileSize: number, url: string }> } };
 
 export type UpdateNotebookStatusMutationVariables = Exact<{
   id: Scalars['ID']['input'];
@@ -1684,7 +1707,7 @@ export type UpdateNotebookStatusMutationVariables = Exact<{
 }>;
 
 
-export type UpdateNotebookStatusMutation = { __typename?: 'Mutation', updatePad: { __typename?: 'Pad', id: string, name: string, myPermissionType?: PermissionType | null, icon?: string | null, numberFormatting?: string | null, status?: string | null, isPublic?: boolean | null, createdAt: any, archived?: boolean | null, gist?: Gist | null, canPublicDuplicate?: boolean | null, initialState?: string | null, workspace?: { __typename?: 'Workspace', id: string, name: string, isPremium?: boolean | null, plan?: SubscriptionPlansNames | null, workspaceSubscription?: { __typename?: 'WorkspaceSubscription', id: string, credits: number, queries: number, storage: number, seats?: number | null } | null } | null, padConnectionParams: { __typename?: 'PadConnectionParams', url: string, token: string }, attachments: Array<{ __typename?: 'Attachment', id: string, fileName: string, fileType: string, fileSize: number, url: string }> } };
+export type UpdateNotebookStatusMutation = { __typename?: 'Mutation', updatePad: { __typename?: 'Pad', id: string, name: string, myPermissionType?: PermissionType | null, icon?: string | null, numberFormatting?: string | null, status?: string | null, isPublic?: boolean | null, createdAt: any, archived?: boolean | null, gist?: Gist | null, canPublicDuplicate?: boolean | null, initialState?: string | null, workspace?: { __typename?: 'Workspace', id: string, name: string, isPremium?: boolean | null, plan?: SubscriptionPlansNames | null, workspaceSubscription?: { __typename?: 'WorkspaceSubscription', id: string, credits: number, queries: number, storage: number, seats?: number | null } | null, workspaceNumbers: Array<{ __typename?: 'WorkspaceNumber', id: string, name: string, encoding: string, origin: string }> } | null, padConnectionParams: { __typename?: 'PadConnectionParams', url: string, token: string }, attachments: Array<{ __typename?: 'Attachment', id: string, fileName: string, fileType: string, fileSize: number, url: string }> } };
 
 export type UpdateNotebookAllowDuplicateMutationVariables = Exact<{
   id: Scalars['ID']['input'];
@@ -1738,6 +1761,14 @@ export type UpdateUserMutationVariables = Exact<{
 
 export type UpdateUserMutation = { __typename?: 'Mutation', updateSelf: { __typename?: 'User', name: string, description?: string | null, onboarded?: boolean | null } };
 
+export type UpsertWorkspaceNumberMutationVariables = Exact<{
+  workspaceId: Scalars['ID']['input'];
+  workspaceNumber: WorkspaceNumberInput;
+}>;
+
+
+export type UpsertWorkspaceNumberMutation = { __typename?: 'Mutation', upsertWorkspaceNumber?: { __typename?: 'Workspace', id: string, workspaceNumbers: Array<{ __typename?: 'WorkspaceNumber', id: string, name: string, encoding: string, origin: string }> } | null };
+
 export type GetCreditsPlansQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -1779,7 +1810,7 @@ export type CollaboratorFragment = { __typename?: 'User', id: string, image?: st
 
 export type WorkspaceSubscriptionDataFragment = { __typename?: 'WorkspaceSubscription', id: string, credits: number, queries: number, storage: number, seats?: number | null };
 
-export type EditorNotebookFragment = { __typename?: 'Pad', id: string, name: string, myPermissionType?: PermissionType | null, icon?: string | null, numberFormatting?: string | null, status?: string | null, isPublic?: boolean | null, createdAt: any, archived?: boolean | null, gist?: Gist | null, canPublicDuplicate?: boolean | null, initialState?: string | null, workspace?: { __typename?: 'Workspace', id: string, name: string, isPremium?: boolean | null, plan?: SubscriptionPlansNames | null, workspaceSubscription?: { __typename?: 'WorkspaceSubscription', id: string, credits: number, queries: number, storage: number, seats?: number | null } | null } | null, padConnectionParams: { __typename?: 'PadConnectionParams', url: string, token: string }, attachments: Array<{ __typename?: 'Attachment', id: string, fileName: string, fileType: string, fileSize: number, url: string }> };
+export type EditorNotebookFragment = { __typename?: 'Pad', id: string, name: string, myPermissionType?: PermissionType | null, icon?: string | null, numberFormatting?: string | null, status?: string | null, isPublic?: boolean | null, createdAt: any, archived?: boolean | null, gist?: Gist | null, canPublicDuplicate?: boolean | null, initialState?: string | null, workspace?: { __typename?: 'Workspace', id: string, name: string, isPremium?: boolean | null, plan?: SubscriptionPlansNames | null, workspaceSubscription?: { __typename?: 'WorkspaceSubscription', id: string, credits: number, queries: number, storage: number, seats?: number | null } | null, workspaceNumbers: Array<{ __typename?: 'WorkspaceNumber', id: string, name: string, encoding: string, origin: string }> } | null, padConnectionParams: { __typename?: 'PadConnectionParams', url: string, token: string }, attachments: Array<{ __typename?: 'Attachment', id: string, fileName: string, fileType: string, fileSize: number, url: string }> };
 
 export type GetNotebookByIdQueryVariables = Exact<{
   id: Scalars['ID']['input'];
@@ -1787,7 +1818,7 @@ export type GetNotebookByIdQueryVariables = Exact<{
 }>;
 
 
-export type GetNotebookByIdQuery = { __typename?: 'Query', getPadById?: { __typename?: 'Pad', id: string, name: string, myPermissionType?: PermissionType | null, icon?: string | null, numberFormatting?: string | null, status?: string | null, isPublic?: boolean | null, createdAt: any, archived?: boolean | null, gist?: Gist | null, canPublicDuplicate?: boolean | null, initialState?: string | null, workspace?: { __typename?: 'Workspace', id: string, name: string, isPremium?: boolean | null, plan?: SubscriptionPlansNames | null, workspaceSubscription?: { __typename?: 'WorkspaceSubscription', id: string, credits: number, queries: number, storage: number, seats?: number | null } | null } | null, padConnectionParams: { __typename?: 'PadConnectionParams', url: string, token: string }, attachments: Array<{ __typename?: 'Attachment', id: string, fileName: string, fileType: string, fileSize: number, url: string }> } | null };
+export type GetNotebookByIdQuery = { __typename?: 'Query', getPadById?: { __typename?: 'Pad', id: string, name: string, myPermissionType?: PermissionType | null, icon?: string | null, numberFormatting?: string | null, status?: string | null, isPublic?: boolean | null, createdAt: any, archived?: boolean | null, gist?: Gist | null, canPublicDuplicate?: boolean | null, initialState?: string | null, workspace?: { __typename?: 'Workspace', id: string, name: string, isPremium?: boolean | null, plan?: SubscriptionPlansNames | null, workspaceSubscription?: { __typename?: 'WorkspaceSubscription', id: string, credits: number, queries: number, storage: number, seats?: number | null } | null, workspaceNumbers: Array<{ __typename?: 'WorkspaceNumber', id: string, name: string, encoding: string, origin: string }> } | null, padConnectionParams: { __typename?: 'PadConnectionParams', url: string, token: string }, attachments: Array<{ __typename?: 'Attachment', id: string, fileName: string, fileType: string, fileSize: number, url: string }> } | null };
 
 export type UserAccessMetaFragment = { __typename?: 'UserAccess', permission: PermissionType, canComment: boolean, user?: { __typename?: 'User', id: string, name: string, email?: string | null, image?: string | null } | null };
 
@@ -1949,6 +1980,12 @@ export const EditorNotebookFragmentDoc = gql`
     plan
     workspaceSubscription {
       ...WorkspaceSubscriptionData
+    }
+    workspaceNumbers {
+      id
+      name
+      encoding
+      origin
     }
   }
   padConnectionParams {
@@ -2941,6 +2978,26 @@ export const UpdateUserDocument = gql`
 export function useUpdateUserMutation() {
   return Urql.useMutation<UpdateUserMutation, UpdateUserMutationVariables>(UpdateUserDocument);
 };
+export const UpsertWorkspaceNumberDocument = gql`
+    mutation UpsertWorkspaceNumber($workspaceId: ID!, $workspaceNumber: WorkspaceNumberInput!) {
+  upsertWorkspaceNumber(
+    workspaceId: $workspaceId
+    workspaceNumber: $workspaceNumber
+  ) {
+    id
+    workspaceNumbers {
+      id
+      name
+      encoding
+      origin
+    }
+  }
+}
+    `;
+
+export function useUpsertWorkspaceNumberMutation() {
+  return Urql.useMutation<UpsertWorkspaceNumberMutation, UpsertWorkspaceNumberMutationVariables>(UpsertWorkspaceNumberDocument);
+};
 export const GetCreditsPlansDocument = gql`
     query GetCreditsPlans {
   getCreditsPlans {
@@ -3250,6 +3307,7 @@ export type GraphCacheKeysConfig = {
   UserAccess?: (data: WithTypename<UserAccess>) => null | string,
   Workspace?: (data: WithTypename<Workspace>) => null | string,
   WorkspaceAccess?: (data: WithTypename<WorkspaceAccess>) => null | string,
+  WorkspaceNumber?: (data: WithTypename<WorkspaceNumber>) => null | string,
   WorkspaceSubscription?: (data: WithTypename<WorkspaceSubscription>) => null | string,
   WorkspacesChanges?: (data: WithTypename<WorkspacesChanges>) => null | string
 }
@@ -3625,12 +3683,19 @@ export type GraphCacheResolvers = {
     roles?: GraphCacheResolver<WithTypename<Workspace>, Record<string, never>, Array<WithTypename<Role> | string>>,
     secrets?: GraphCacheResolver<WithTypename<Workspace>, Record<string, never>, Array<WithTypename<Secret> | string>>,
     sections?: GraphCacheResolver<WithTypename<Workspace>, Record<string, never>, Array<WithTypename<Section> | string>>,
+    workspaceNumbers?: GraphCacheResolver<WithTypename<Workspace>, Record<string, never>, Array<WithTypename<WorkspaceNumber> | string>>,
     workspaceSubscription?: GraphCacheResolver<WithTypename<Workspace>, Record<string, never>, WithTypename<WorkspaceSubscription> | string>
   },
   WorkspaceAccess?: {
     id?: GraphCacheResolver<WithTypename<WorkspaceAccess>, Record<string, never>, Scalars['ID'] | string>,
     roles?: GraphCacheResolver<WithTypename<WorkspaceAccess>, Record<string, never>, Array<WithTypename<RoleAccess> | string>>,
     users?: GraphCacheResolver<WithTypename<WorkspaceAccess>, Record<string, never>, Array<WithTypename<UserAccess> | string>>
+  },
+  WorkspaceNumber?: {
+    encoding?: GraphCacheResolver<WithTypename<WorkspaceNumber>, Record<string, never>, Scalars['String'] | string>,
+    id?: GraphCacheResolver<WithTypename<WorkspaceNumber>, Record<string, never>, Scalars['ID'] | string>,
+    name?: GraphCacheResolver<WithTypename<WorkspaceNumber>, Record<string, never>, Scalars['String'] | string>,
+    origin?: GraphCacheResolver<WithTypename<WorkspaceNumber>, Record<string, never>, Scalars['String'] | string>
   },
   WorkspaceSubscription?: {
     credits?: GraphCacheResolver<WithTypename<WorkspaceSubscription>, Record<string, never>, Scalars['Int'] | string>,
@@ -3720,7 +3785,8 @@ export type GraphCacheOptimisticUpdaters = {
   updateSecret?: GraphCacheOptimisticMutationResolver<MutationUpdateSecretArgs, WithTypename<Secret>>,
   updateSectionInWorkspace?: GraphCacheOptimisticMutationResolver<MutationUpdateSectionInWorkspaceArgs, Maybe<Scalars['Boolean']>>,
   updateSelf?: GraphCacheOptimisticMutationResolver<MutationUpdateSelfArgs, WithTypename<User>>,
-  updateWorkspace?: GraphCacheOptimisticMutationResolver<MutationUpdateWorkspaceArgs, WithTypename<Workspace>>
+  updateWorkspace?: GraphCacheOptimisticMutationResolver<MutationUpdateWorkspaceArgs, WithTypename<Workspace>>,
+  upsertWorkspaceNumber?: GraphCacheOptimisticMutationResolver<MutationUpsertWorkspaceNumberArgs, Maybe<WithTypename<Workspace>>>
 };
 
 export type GraphCacheUpdaters = {
@@ -3818,7 +3884,8 @@ export type GraphCacheUpdaters = {
     updateSecret?: GraphCacheUpdateResolver<{ updateSecret: WithTypename<Secret> }, MutationUpdateSecretArgs>,
     updateSectionInWorkspace?: GraphCacheUpdateResolver<{ updateSectionInWorkspace: Maybe<Scalars['Boolean']> }, MutationUpdateSectionInWorkspaceArgs>,
     updateSelf?: GraphCacheUpdateResolver<{ updateSelf: WithTypename<User> }, MutationUpdateSelfArgs>,
-    updateWorkspace?: GraphCacheUpdateResolver<{ updateWorkspace: WithTypename<Workspace> }, MutationUpdateWorkspaceArgs>
+    updateWorkspace?: GraphCacheUpdateResolver<{ updateWorkspace: WithTypename<Workspace> }, MutationUpdateWorkspaceArgs>,
+    upsertWorkspaceNumber?: GraphCacheUpdateResolver<{ upsertWorkspaceNumber: Maybe<WithTypename<Workspace>> }, MutationUpsertWorkspaceNumberArgs>
   },
   Subscription?: {
     hello?: GraphCacheUpdateResolver<{ hello: Maybe<Scalars['String']> }, Record<string, never>>,
@@ -4173,12 +4240,19 @@ export type GraphCacheUpdaters = {
     roles?: GraphCacheUpdateResolver<Maybe<WithTypename<Workspace>>, Record<string, never>>,
     secrets?: GraphCacheUpdateResolver<Maybe<WithTypename<Workspace>>, Record<string, never>>,
     sections?: GraphCacheUpdateResolver<Maybe<WithTypename<Workspace>>, Record<string, never>>,
+    workspaceNumbers?: GraphCacheUpdateResolver<Maybe<WithTypename<Workspace>>, Record<string, never>>,
     workspaceSubscription?: GraphCacheUpdateResolver<Maybe<WithTypename<Workspace>>, Record<string, never>>
   },
   WorkspaceAccess?: {
     id?: GraphCacheUpdateResolver<Maybe<WithTypename<WorkspaceAccess>>, Record<string, never>>,
     roles?: GraphCacheUpdateResolver<Maybe<WithTypename<WorkspaceAccess>>, Record<string, never>>,
     users?: GraphCacheUpdateResolver<Maybe<WithTypename<WorkspaceAccess>>, Record<string, never>>
+  },
+  WorkspaceNumber?: {
+    encoding?: GraphCacheUpdateResolver<Maybe<WithTypename<WorkspaceNumber>>, Record<string, never>>,
+    id?: GraphCacheUpdateResolver<Maybe<WithTypename<WorkspaceNumber>>, Record<string, never>>,
+    name?: GraphCacheUpdateResolver<Maybe<WithTypename<WorkspaceNumber>>, Record<string, never>>,
+    origin?: GraphCacheUpdateResolver<Maybe<WithTypename<WorkspaceNumber>>, Record<string, never>>
   },
   WorkspaceSubscription?: {
     credits?: GraphCacheUpdateResolver<Maybe<WithTypename<WorkspaceSubscription>>, Record<string, never>>,

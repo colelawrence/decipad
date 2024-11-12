@@ -39,6 +39,10 @@ export interface ObservableRootEditorRootEvent {
   type: 'root-any-change';
   op: TOperation;
 }
+export interface ObservableDataTabChangeEvent {
+  type: 'data-tab-change';
+  op: TOperation;
+}
 
 export type ObservableRootEditorEvent =
   | ObservableRootEditorNewTabEvent
@@ -48,7 +52,8 @@ export type ObservableRootEditorEvent =
   | ObservableRootEditorUndoEvent
   | ObservableRootEditorRedoEvent
   | ObservableRootEditorNewTabEditorEvent
-  | ObservableRootEditorRootEvent;
+  | ObservableRootEditorRootEvent
+  | ObservableDataTabChangeEvent;
 
 export interface ObservableRootEditor {
   events: Subject<ObservableRootEditorEvent>;

@@ -15,6 +15,10 @@ import {
   getDeserializeResultArg,
 } from './serializableResult';
 import { Specificity } from 'libs/language-interfaces/src/Time';
+import {
+  encodeResultToBuffer,
+  decodeResultBuffer,
+} from './serializableResult/full-binary-encoding';
 
 if (typeof window !== 'undefined') {
   // JS's runtime woes,
@@ -44,6 +48,8 @@ export {
   computeBackendSingleton,
   serializeResult,
   deserializeResult,
+  encodeResultToBuffer,
+  decodeResultBuffer,
   getDeserializeResultArg,
 };
 

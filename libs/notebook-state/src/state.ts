@@ -22,6 +22,7 @@ export type EnhancedPromise<T> = typeof Promise & {
 };
 
 export type DataDrawerState = {
+  // TODO: Tie these types to the data-drawer/data-drawer.tsx switch statements instead of duplicating.
   dataDrawerMode:
     | {
         type: 'edit';
@@ -32,6 +33,10 @@ export type DataDrawerState = {
       }
     | {
         type: 'integration-preview';
+      }
+    | {
+        type: 'workspace-number';
+        workspaceNumberId: string;
       }
     | {
         type: 'closed';
@@ -45,6 +50,7 @@ export type DataDrawerState = {
   setEditingVariable: (id: string) => void;
   closeDataDrawer: () => void;
   setIntegration: () => void;
+  setWorkspaceNumber: (workspaceNumberId: string) => void;
 
   // cosmetics
   height: number;

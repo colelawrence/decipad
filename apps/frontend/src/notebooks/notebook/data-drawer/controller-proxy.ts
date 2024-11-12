@@ -1,38 +1,8 @@
-import {
-  DataTabChildrenElement,
-  ELEMENT_LAYOUT,
-  TopLevelValue,
-} from '@decipad/editor-types';
 import { EditorController } from '@decipad/notebook-tabs';
 import { noop } from '@decipad/utils';
-import { isElement, TEditor, TOperation } from '@udecode/plate-common';
+import { TEditor, TOperation } from '@udecode/plate-common';
 import { Subscription } from 'rxjs';
 import { Path } from 'slate';
-
-export const findTopLevelEntry = (
-  controller: EditorController,
-  blockId: string
-): [TopLevelValue | DataTabChildrenElement, Path] | undefined => {
-  for (const [index, topLevel] of controller.children.entries()) {
-    for (const [childIndex, child] of topLevel.children.entries()) {
-      if (!isElement(child)) continue;
-
-      if (child.type === ELEMENT_LAYOUT) {
-        for (const [colIndex, layoutChild] of child.children.entries()) {
-          if (layoutChild.id === blockId) {
-            return [layoutChild, [index, childIndex, colIndex]];
-          }
-        }
-      }
-
-      if (child.id === blockId) {
-        return [child, [index, childIndex]];
-      }
-    }
-  }
-
-  return undefined;
-};
 
 export const controllerProxy = (
   controller: EditorController,
@@ -47,7 +17,7 @@ export const controllerProxy = (
     // We must find it each time, because it could happen that the editor blocks,
     // have shifted around, and therefore wouldn't catch this
     //
-    const entry = findTopLevelEntry(controller, blockId);
+    const entry = controller.findNodeEntryById(blockId);
     if (entry == null) {
       return;
     }
@@ -76,7 +46,7 @@ export const controllerReverseProxy = <T extends TEditor>(
       return;
     }
 
-    const entry = findTopLevelEntry(controller, blockId);
+    const entry = controller.findNodeEntryById(blockId);
     if (entry == null) {
       return;
     }

@@ -176,6 +176,12 @@ workspaces
   name String
   encrypt true
 
+workspacenumbers
+  id *String
+  name String
+  encoding String
+  encrypt true
+
 workspaceroles
   id *String
   name String
@@ -382,6 +388,10 @@ invites
 invites
   user_id *String
   name byUser
+
+workspacenumbers
+  workspace_id *String
+  name byWorkspace
 
 pads
   workspace_id *String

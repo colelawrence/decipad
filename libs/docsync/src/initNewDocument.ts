@@ -6,7 +6,12 @@ import { IndexeddbPersistence } from '@decipad/y-indexeddb';
 import { slateYjsSymbol } from './docsync';
 import { isFlagEnabled } from '@decipad/feature-flags';
 import { starterNotebook } from './initialNotebook';
-import type { MyValue } from '@decipad/editor-types';
+import {
+  ELEMENT_DATA_TAB,
+  ELEMENT_TAB,
+  ELEMENT_TITLE,
+  type MyValue,
+} from '@decipad/editor-types';
 
 export interface InitDocumentResult {
   id: string;
@@ -33,7 +38,7 @@ export async function initNewDocument(
         type: 'insert_node',
         path: [0],
         node: {
-          type: 'title',
+          type: ELEMENT_TITLE,
           id: nanoid(),
           children: [{ text: name }],
         },
@@ -42,7 +47,17 @@ export async function initNewDocument(
         type: 'insert_node',
         path: [1],
         node: {
-          type: 'tab',
+          type: ELEMENT_DATA_TAB,
+          id: nanoid(),
+          children: [],
+          name: 'New Tab',
+        },
+      },
+      {
+        type: 'insert_node',
+        path: [2],
+        node: {
+          type: ELEMENT_TAB,
           id: firstTabId,
           children: getTabContent(),
           name: 'New Tab',

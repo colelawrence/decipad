@@ -19,6 +19,7 @@
     { "path": "../notebook-state" },
     { "path": "../editor-attachments" },
     { "path": "../feature-flags" },
-    { "path": "../notebook-tabs" }
+    { "path": "../notebook-tabs" },
+    { "path": "../compute-backend-js" }
   ]
 }

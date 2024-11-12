@@ -227,7 +227,6 @@ export type Mutation = {
   getCreateAttachmentForm: CreateAttachmentForm;
   getCreateAttachmentFormWorkspace: CreateAttachmentForm;
   importPad: Pad;
-  incrementQueryCount: WorkspaceExecutedQuery;
   inviteUserToRole: Array<RoleInvitation>;
   movePad: Pad;
   recordPadEvent?: Maybe<Scalars['Boolean']['output']>;
@@ -273,6 +272,7 @@ export type Mutation = {
   updateSectionInWorkspace?: Maybe<Scalars['Boolean']['output']>;
   updateSelf: User;
   updateWorkspace: Workspace;
+  upsertWorkspaceNumber?: Maybe<Workspace>;
 };
 
 
@@ -409,11 +409,6 @@ export type MutationGetCreateAttachmentFormWorkspaceArgs = {
 export type MutationImportPadArgs = {
   source: Scalars['String']['input'];
   workspaceId: Scalars['ID']['input'];
-};
-
-
-export type MutationIncrementQueryCountArgs = {
-  id: Scalars['ID']['input'];
 };
 
 
@@ -691,6 +686,12 @@ export type MutationUpdateWorkspaceArgs = {
   workspace: WorkspaceInput;
 };
 
+
+export type MutationUpsertWorkspaceNumberArgs = {
+  workspaceId: Scalars['ID']['input'];
+  workspaceNumber: WorkspaceNumberInput;
+};
+
 export type NewResourceQuotaLimit = {
   __typename?: 'NewResourceQuotaLimit';
   newQuotaLimit: Scalars['Float']['output'];
@@ -719,6 +720,7 @@ export type Pad = {
   isTemplate?: Maybe<Scalars['Boolean']['output']>;
   myPermissionType?: Maybe<PermissionType>;
   name: Scalars['String']['output'];
+  numberFormatting?: Maybe<Scalars['String']['output']>;
   padConnectionParams: PadConnectionParams;
   section?: Maybe<Section>;
   sectionId?: Maybe<Scalars['ID']['output']>;
@@ -767,6 +769,7 @@ export type PadInput = {
   icon?: InputMaybe<Scalars['String']['input']>;
   isTemplate?: InputMaybe<Scalars['Boolean']['input']>;
   name?: InputMaybe<Scalars['String']['input']>;
+  numberFormatting?: InputMaybe<Scalars['String']['input']>;
   section_id?: InputMaybe<Scalars['String']['input']>;
   status?: InputMaybe<Scalars['String']['input']>;
   tags?: InputMaybe<Array<Scalars['String']['input']>>;
@@ -1248,7 +1251,7 @@ export type Workspace = {
   roles?: Maybe<Array<Role>>;
   secrets: Array<Secret>;
   sections: Array<Section>;
-  workspaceExecutedQuery?: Maybe<WorkspaceExecutedQuery>;
+  workspaceNumbers: Array<WorkspaceNumber>;
   workspaceSubscription?: Maybe<WorkspaceSubscription>;
 };
 
@@ -1264,17 +1267,23 @@ export type WorkspaceAccess = {
   users?: Maybe<Array<UserAccess>>;
 };
 
-export type WorkspaceExecutedQuery = {
-  __typename?: 'WorkspaceExecutedQuery';
-  id: Scalars['ID']['output'];
-  queryCount: Scalars['Int']['output'];
-  query_reset_date?: Maybe<Scalars['DateTime']['output']>;
-  quotaLimit: Scalars['Int']['output'];
-  workspace?: Maybe<Workspace>;
-};
-
 export type WorkspaceInput = {
   name: Scalars['String']['input'];
+};
+
+export type WorkspaceNumber = {
+  __typename?: 'WorkspaceNumber';
+  encoding: Scalars['String']['output'];
+  id: Scalars['ID']['output'];
+  name: Scalars['String']['output'];
+  origin: Scalars['String']['output'];
+};
+
+export type WorkspaceNumberInput = {
+  encoding: Scalars['String']['input'];
+  id?: InputMaybe<Scalars['ID']['input']>;
+  name: Scalars['String']['input'];
+  origin: Scalars['String']['input'];
 };
 
 export type WorkspaceSubscription = {
@@ -1367,7 +1376,7 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 
 /** Mapping of union types */
 export type ResolversUnionTypes<_RefType extends Record<string, unknown>> = {
-  AttachmentResource: ( Pad ) | ( Workspace );
+  AttachmentResource: ( Omit<Pad, 'access' | 'attachments' | 'section' | 'workspace'> & { access: _RefType['ResourceAccess'], attachments: Array<_RefType['Attachment']>, section?: Maybe<_RefType['Section']>, workspace?: Maybe<_RefType['Workspace']> } ) | ( Omit<Workspace, 'attachments' | 'pads' | 'roles' | 'secrets' | 'sections' | 'workspaceSubscription'> & { attachments: Array<_RefType['Attachment']>, pads: _RefType['PagedPadResult'], roles?: Maybe<Array<_RefType['Role']>>, secrets: Array<_RefType['Secret']>, sections: Array<_RefType['Section']>, workspaceSubscription?: Maybe<_RefType['WorkspaceSubscription']> } );
   Pageable: ( SharedResource );
 };
 
@@ -1386,7 +1395,7 @@ export type ResolversTypes = {
   CreditPricePlan: ResolverTypeWrapper<CreditPricePlan>;
   CreditsPlan: ResolverTypeWrapper<CreditsPlan>;
   DateTime: ResolverTypeWrapper<Scalars['DateTime']['output']>;
-  ExternalDataSource: ResolverTypeWrapper<ExternalDataSource>;
+  ExternalDataSource: ResolverTypeWrapper<Omit<ExternalDataSource, 'access'> & { access: ResolversTypes['ResourceAccess'] }>;
   ExternalDataSourceCreateInput: ExternalDataSourceCreateInput;
   ExternalDataSourceOwnership: ExternalDataSourceOwnership;
   ExternalDataSourceUpdateInput: ExternalDataSourceUpdateInput;
@@ -1404,33 +1413,33 @@ export type ResolversTypes = {
   Mutation: ResolverTypeWrapper<{}>;
   NewResourceQuotaLimit: ResolverTypeWrapper<NewResourceQuotaLimit>;
   PUBLISH_STATE: Publish_State;
-  Pad: ResolverTypeWrapper<Pad>;
+  Pad: ResolverTypeWrapper<Omit<Pad, 'access' | 'attachments' | 'section' | 'workspace'> & { access: ResolversTypes['ResourceAccess'], attachments: Array<ResolversTypes['Attachment']>, section?: Maybe<ResolversTypes['Section']>, workspace?: Maybe<ResolversTypes['Workspace']> }>;
   PadAlias: ResolverTypeWrapper<PadAlias>;
-  PadChanges: ResolverTypeWrapper<PadChanges>;
+  PadChanges: ResolverTypeWrapper<Omit<PadChanges, 'added' | 'updated'> & { added: Array<ResolversTypes['Pad']>, updated: Array<ResolversTypes['Pad']> }>;
   PadConnectionParams: ResolverTypeWrapper<PadConnectionParams>;
   PadEvent: ResolverTypeWrapper<PadEvent>;
   PadInput: PadInput;
   PadSnapshot: ResolverTypeWrapper<PadSnapshot>;
   PageInput: PageInput;
   Pageable: ResolverTypeWrapper<ResolversUnionTypes<ResolversTypes>['Pageable']>;
-  PagedPadResult: ResolverTypeWrapper<PagedPadResult>;
+  PagedPadResult: ResolverTypeWrapper<Omit<PagedPadResult, 'items'> & { items: Array<ResolversTypes['Pad']> }>;
   PagedResult: ResolverTypeWrapper<Omit<PagedResult, 'items'> & { items: Array<ResolversTypes['Pageable']> }>;
   PagedTemplateSearchResult: ResolverTypeWrapper<PagedTemplateSearchResult>;
   Permission: ResolverTypeWrapper<Permission>;
   PermissionType: PermissionType;
   Query: ResolverTypeWrapper<{}>;
-  ResourceAccess: ResolverTypeWrapper<ResourceAccess>;
+  ResourceAccess: ResolverTypeWrapper<Omit<ResourceAccess, 'roles'> & { roles: Array<ResolversTypes['RoleAccess']> }>;
   ResourceTypes: ResourceTypes;
   ResourceUsage: ResolverTypeWrapper<ResourceUsage>;
-  Role: ResolverTypeWrapper<Role>;
-  RoleAccess: ResolverTypeWrapper<RoleAccess>;
+  Role: ResolverTypeWrapper<Omit<Role, 'workspace'> & { workspace: ResolversTypes['Workspace'] }>;
+  RoleAccess: ResolverTypeWrapper<Omit<RoleAccess, 'role'> & { role: ResolversTypes['Role'] }>;
   RoleInput: RoleInput;
-  RoleInvitation: ResolverTypeWrapper<RoleInvitation>;
-  Secret: ResolverTypeWrapper<Secret>;
+  RoleInvitation: ResolverTypeWrapper<Omit<RoleInvitation, 'role'> & { role: ResolversTypes['Role'] }>;
+  Secret: ResolverTypeWrapper<Omit<Secret, 'workspace'> & { workspace?: Maybe<ResolversTypes['Workspace']> }>;
   SecretAccess: ResolverTypeWrapper<SecretAccess>;
   SecretInput: SecretInput;
-  Section: ResolverTypeWrapper<Section>;
-  SectionChanges: ResolverTypeWrapper<SectionChanges>;
+  Section: ResolverTypeWrapper<Omit<Section, 'pads'> & { pads: Array<ResolversTypes['Pad']> }>;
+  SectionChanges: ResolverTypeWrapper<Omit<SectionChanges, 'added' | 'updated'> & { added: Array<ResolversTypes['Section']>, updated: Array<ResolversTypes['Section']> }>;
   SectionInput: SectionInput;
   ShareInvitation: ResolverTypeWrapper<ShareInvitation>;
   ShareWithEmailInput: ResolverTypeWrapper<ShareWithEmailInput>;
@@ -1438,8 +1447,8 @@ export type ResolversTypes = {
   ShareWithSecretInput: ResolverTypeWrapper<ShareWithSecretInput>;
   ShareWithUserInput: ResolverTypeWrapper<ShareWithUserInput>;
   SharedResource: ResolverTypeWrapper<SharedResource>;
-  SharedWith: ResolverTypeWrapper<SharedWith>;
-  SharedWithRole: ResolverTypeWrapper<SharedWithRole>;
+  SharedWith: ResolverTypeWrapper<Omit<SharedWith, 'roles'> & { roles: Array<ResolversTypes['SharedWithRole']> }>;
+  SharedWithRole: ResolverTypeWrapper<Omit<SharedWithRole, 'role'> & { role: ResolversTypes['Role'] }>;
   SharedWithUser: ResolverTypeWrapper<SharedWithUser>;
   String: ResolverTypeWrapper<Scalars['String']['output']>;
   Subscription: ResolverTypeWrapper<{}>;
@@ -1457,12 +1466,13 @@ export type ResolversTypes = {
   UserAccess: ResolverTypeWrapper<UserAccess>;
   UserInput: UserInput;
   UsernameInput: UsernameInput;
-  Workspace: ResolverTypeWrapper<Workspace>;
-  WorkspaceAccess: ResolverTypeWrapper<WorkspaceAccess>;
-  WorkspaceExecutedQuery: ResolverTypeWrapper<WorkspaceExecutedQuery>;
+  Workspace: ResolverTypeWrapper<Omit<Workspace, 'attachments' | 'pads' | 'roles' | 'secrets' | 'sections' | 'workspaceSubscription'> & { attachments: Array<ResolversTypes['Attachment']>, pads: ResolversTypes['PagedPadResult'], roles?: Maybe<Array<ResolversTypes['Role']>>, secrets: Array<ResolversTypes['Secret']>, sections: Array<ResolversTypes['Section']>, workspaceSubscription?: Maybe<ResolversTypes['WorkspaceSubscription']> }>;
+  WorkspaceAccess: ResolverTypeWrapper<Omit<WorkspaceAccess, 'roles'> & { roles?: Maybe<Array<ResolversTypes['RoleAccess']>> }>;
   WorkspaceInput: WorkspaceInput;
-  WorkspaceSubscription: ResolverTypeWrapper<WorkspaceSubscription>;
-  WorkspacesChanges: ResolverTypeWrapper<WorkspacesChanges>;
+  WorkspaceNumber: ResolverTypeWrapper<WorkspaceNumber>;
+  WorkspaceNumberInput: WorkspaceNumberInput;
+  WorkspaceSubscription: ResolverTypeWrapper<Omit<WorkspaceSubscription, 'workspace'> & { workspace?: Maybe<ResolversTypes['Workspace']> }>;
+  WorkspacesChanges: ResolverTypeWrapper<Omit<WorkspacesChanges, 'added' | 'updated'> & { added: Array<ResolversTypes['Workspace']>, updated: Array<ResolversTypes['Workspace']> }>;
 };
 
 /** Mapping between all available schema types and the resolvers parents */
@@ -1478,7 +1488,7 @@ export type ResolversParentTypes = {
   CreditPricePlan: CreditPricePlan;
   CreditsPlan: CreditsPlan;
   DateTime: Scalars['DateTime']['output'];
-  ExternalDataSource: ExternalDataSource;
+  ExternalDataSource: Omit<ExternalDataSource, 'access'> & { access: ResolversParentTypes['ResourceAccess'] };
   ExternalDataSourceCreateInput: ExternalDataSourceCreateInput;
   ExternalDataSourceUpdateInput: ExternalDataSourceUpdateInput;
   ExternalKey: ExternalKey;
@@ -1491,31 +1501,31 @@ export type ResolversParentTypes = {
   LogInput: LogInput;
   Mutation: {};
   NewResourceQuotaLimit: NewResourceQuotaLimit;
-  Pad: Pad;
+  Pad: Omit<Pad, 'access' | 'attachments' | 'section' | 'workspace'> & { access: ResolversParentTypes['ResourceAccess'], attachments: Array<ResolversParentTypes['Attachment']>, section?: Maybe<ResolversParentTypes['Section']>, workspace?: Maybe<ResolversParentTypes['Workspace']> };
   PadAlias: PadAlias;
-  PadChanges: PadChanges;
+  PadChanges: Omit<PadChanges, 'added' | 'updated'> & { added: Array<ResolversParentTypes['Pad']>, updated: Array<ResolversParentTypes['Pad']> };
   PadConnectionParams: PadConnectionParams;
   PadEvent: PadEvent;
   PadInput: PadInput;
   PadSnapshot: PadSnapshot;
   PageInput: PageInput;
   Pageable: ResolversUnionTypes<ResolversParentTypes>['Pageable'];
-  PagedPadResult: PagedPadResult;
+  PagedPadResult: Omit<PagedPadResult, 'items'> & { items: Array<ResolversParentTypes['Pad']> };
   PagedResult: Omit<PagedResult, 'items'> & { items: Array<ResolversParentTypes['Pageable']> };
   PagedTemplateSearchResult: PagedTemplateSearchResult;
   Permission: Permission;
   Query: {};
-  ResourceAccess: ResourceAccess;
+  ResourceAccess: Omit<ResourceAccess, 'roles'> & { roles: Array<ResolversParentTypes['RoleAccess']> };
   ResourceUsage: ResourceUsage;
-  Role: Role;
-  RoleAccess: RoleAccess;
+  Role: Omit<Role, 'workspace'> & { workspace: ResolversParentTypes['Workspace'] };
+  RoleAccess: Omit<RoleAccess, 'role'> & { role: ResolversParentTypes['Role'] };
   RoleInput: RoleInput;
-  RoleInvitation: RoleInvitation;
-  Secret: Secret;
+  RoleInvitation: Omit<RoleInvitation, 'role'> & { role: ResolversParentTypes['Role'] };
+  Secret: Omit<Secret, 'workspace'> & { workspace?: Maybe<ResolversParentTypes['Workspace']> };
   SecretAccess: SecretAccess;
   SecretInput: SecretInput;
-  Section: Section;
-  SectionChanges: SectionChanges;
+  Section: Omit<Section, 'pads'> & { pads: Array<ResolversParentTypes['Pad']> };
+  SectionChanges: Omit<SectionChanges, 'added' | 'updated'> & { added: Array<ResolversParentTypes['Section']>, updated: Array<ResolversParentTypes['Section']> };
   SectionInput: SectionInput;
   ShareInvitation: ShareInvitation;
   ShareWithEmailInput: ShareWithEmailInput;
@@ -1523,8 +1533,8 @@ export type ResolversParentTypes = {
   ShareWithSecretInput: ShareWithSecretInput;
   ShareWithUserInput: ShareWithUserInput;
   SharedResource: SharedResource;
-  SharedWith: SharedWith;
-  SharedWithRole: SharedWithRole;
+  SharedWith: Omit<SharedWith, 'roles'> & { roles: Array<ResolversParentTypes['SharedWithRole']> };
+  SharedWithRole: Omit<SharedWithRole, 'role'> & { role: ResolversParentTypes['Role'] };
   SharedWithUser: SharedWithUser;
   String: Scalars['String']['output'];
   Subscription: {};
@@ -1539,12 +1549,13 @@ export type ResolversParentTypes = {
   UserAccess: UserAccess;
   UserInput: UserInput;
   UsernameInput: UsernameInput;
-  Workspace: Workspace;
-  WorkspaceAccess: WorkspaceAccess;
-  WorkspaceExecutedQuery: WorkspaceExecutedQuery;
+  Workspace: Omit<Workspace, 'attachments' | 'pads' | 'roles' | 'secrets' | 'sections' | 'workspaceSubscription'> & { attachments: Array<ResolversParentTypes['Attachment']>, pads: ResolversParentTypes['PagedPadResult'], roles?: Maybe<Array<ResolversParentTypes['Role']>>, secrets: Array<ResolversParentTypes['Secret']>, sections: Array<ResolversParentTypes['Section']>, workspaceSubscription?: Maybe<ResolversParentTypes['WorkspaceSubscription']> };
+  WorkspaceAccess: Omit<WorkspaceAccess, 'roles'> & { roles?: Maybe<Array<ResolversParentTypes['RoleAccess']>> };
   WorkspaceInput: WorkspaceInput;
-  WorkspaceSubscription: WorkspaceSubscription;
-  WorkspacesChanges: WorkspacesChanges;
+  WorkspaceNumber: WorkspaceNumber;
+  WorkspaceNumberInput: WorkspaceNumberInput;
+  WorkspaceSubscription: Omit<WorkspaceSubscription, 'workspace'> & { workspace?: Maybe<ResolversParentTypes['Workspace']> };
+  WorkspacesChanges: Omit<WorkspacesChanges, 'added' | 'updated'> & { added: Array<ResolversParentTypes['Workspace']>, updated: Array<ResolversParentTypes['Workspace']> };
 };
 
 export type AnnotationResolvers<ContextType = GraphqlContext, ParentType extends ResolversParentTypes['Annotation'] = ResolversParentTypes['Annotation']> = {
@@ -1684,7 +1695,6 @@ export type MutationResolvers<ContextType = GraphqlContext, ParentType extends R
   getCreateAttachmentForm?: Resolver<ResolversTypes['CreateAttachmentForm'], ParentType, ContextType, RequireFields<MutationGetCreateAttachmentFormArgs, 'fileName' | 'fileType' | 'padId'>>;
   getCreateAttachmentFormWorkspace?: Resolver<ResolversTypes['CreateAttachmentForm'], ParentType, ContextType, RequireFields<MutationGetCreateAttachmentFormWorkspaceArgs, 'fileName' | 'fileType' | 'workspaceId'>>;
   importPad?: Resolver<ResolversTypes['Pad'], ParentType, ContextType, RequireFields<MutationImportPadArgs, 'source' | 'workspaceId'>>;
-  incrementQueryCount?: Resolver<ResolversTypes['WorkspaceExecutedQuery'], ParentType, ContextType, RequireFields<MutationIncrementQueryCountArgs, 'id'>>;
   inviteUserToRole?: Resolver<Array<ResolversTypes['RoleInvitation']>, ParentType, ContextType, RequireFields<MutationInviteUserToRoleArgs, 'permission' | 'roleId' | 'userId'>>;
   movePad?: Resolver<ResolversTypes['Pad'], ParentType, ContextType, RequireFields<MutationMovePadArgs, 'id' | 'workspaceId'>>;
   recordPadEvent?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationRecordPadEventArgs, 'aliasId' | 'name' | 'padId'>>;
@@ -1730,6 +1740,7 @@ export type MutationResolvers<ContextType = GraphqlContext, ParentType extends R
   updateSectionInWorkspace?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationUpdateSectionInWorkspaceArgs, 'section' | 'sectionId' | 'workspaceId'>>;
   updateSelf?: Resolver<ResolversTypes['User'], ParentType, ContextType, RequireFields<MutationUpdateSelfArgs, 'props'>>;
   updateWorkspace?: Resolver<ResolversTypes['Workspace'], ParentType, ContextType, RequireFields<MutationUpdateWorkspaceArgs, 'id' | 'workspace'>>;
+  upsertWorkspaceNumber?: Resolver<Maybe<ResolversTypes['Workspace']>, ParentType, ContextType, RequireFields<MutationUpsertWorkspaceNumberArgs, 'workspaceId' | 'workspaceNumber'>>;
 };
 
 export type NewResourceQuotaLimitResolvers<ContextType = GraphqlContext, ParentType extends ResolversParentTypes['NewResourceQuotaLimit'] = ResolversParentTypes['NewResourceQuotaLimit']> = {
@@ -1754,6 +1765,7 @@ export type PadResolvers<ContextType = GraphqlContext, ParentType extends Resolv
   isTemplate?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   myPermissionType?: Resolver<Maybe<ResolversTypes['PermissionType']>, ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  numberFormatting?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   padConnectionParams?: Resolver<ResolversTypes['PadConnectionParams'], ParentType, ContextType>;
   section?: Resolver<Maybe<ResolversTypes['Section']>, ParentType, ContextType>;
   sectionId?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType>;
@@ -2107,7 +2119,7 @@ export type WorkspaceResolvers<ContextType = GraphqlContext, ParentType extends 
   roles?: Resolver<Maybe<Array<ResolversTypes['Role']>>, ParentType, ContextType>;
   secrets?: Resolver<Array<ResolversTypes['Secret']>, ParentType, ContextType>;
   sections?: Resolver<Array<ResolversTypes['Section']>, ParentType, ContextType>;
-  workspaceExecutedQuery?: Resolver<Maybe<ResolversTypes['WorkspaceExecutedQuery']>, ParentType, ContextType>;
+  workspaceNumbers?: Resolver<Array<ResolversTypes['WorkspaceNumber']>, ParentType, ContextType>;
   workspaceSubscription?: Resolver<Maybe<ResolversTypes['WorkspaceSubscription']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
@@ -2119,12 +2131,11 @@ export type WorkspaceAccessResolvers<ContextType = GraphqlContext, ParentType ex
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type WorkspaceExecutedQueryResolvers<ContextType = GraphqlContext, ParentType extends ResolversParentTypes['WorkspaceExecutedQuery'] = ResolversParentTypes['WorkspaceExecutedQuery']> = {
+export type WorkspaceNumberResolvers<ContextType = GraphqlContext, ParentType extends ResolversParentTypes['WorkspaceNumber'] = ResolversParentTypes['WorkspaceNumber']> = {
+  encoding?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
-  queryCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  query_reset_date?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
-  quotaLimit?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  workspace?: Resolver<Maybe<ResolversTypes['Workspace']>, ParentType, ContextType>;
+  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  origin?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -2206,7 +2217,7 @@ export type Resolvers<ContextType = GraphqlContext> = {
   UserAccess?: UserAccessResolvers<ContextType>;
   Workspace?: WorkspaceResolvers<ContextType>;
   WorkspaceAccess?: WorkspaceAccessResolvers<ContextType>;
-  WorkspaceExecutedQuery?: WorkspaceExecutedQueryResolvers<ContextType>;
+  WorkspaceNumber?: WorkspaceNumberResolvers<ContextType>;
   WorkspaceSubscription?: WorkspaceSubscriptionResolvers<ContextType>;
   WorkspacesChanges?: WorkspacesChangesResolvers<ContextType>;
 };

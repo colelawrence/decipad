@@ -4,7 +4,7 @@ import { EditorController } from '@decipad/notebook-tabs';
 import { FC } from 'react';
 import { DataDrawerContainer } from './data-drawer';
 
-export const DataDrawer: FC = () => {
+export const DataDrawer: FC<{ workspaceId: string }> = ({ workspaceId }) => {
   const [mode, computer, editor] = useNotebookWithIdState(
     (state) => [state.dataDrawerMode, state.computer, state.editor] as const
   );
@@ -19,5 +19,5 @@ export const DataDrawer: FC = () => {
     return null;
   }
 
-  return <DataDrawerContainer />;
+  return <DataDrawerContainer workspaceId={workspaceId} />;
 };

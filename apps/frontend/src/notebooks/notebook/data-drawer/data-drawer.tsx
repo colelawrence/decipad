@@ -27,13 +27,25 @@ import {
   EditVariableContainer,
 } from './styles';
 import { Close } from 'libs/ui/src/icons';
-import { p14Medium, SegmentButtons, Toggle } from '@decipad/ui';
+import { p12Regular, p14Medium, SegmentButtons, Toggle } from '@decipad/ui';
 import { Plate, PlateContent, focusEditorEdge } from '@udecode/plate-common';
 import { useNotebookWithIdState } from '@decipad/notebook-state';
 import { useNotebookMetaData } from '@decipad/react-contexts';
 import { useMyEditorRef } from '@decipad/editor-types';
+import { useUpsertWorkspaceNumberMutation } from '@decipad/graphql-client';
 import { assert } from '@decipad/utils';
+import { useToast } from '@decipad/toast';
 import { titles } from './title';
+import { WorkspaceNumber } from './workspace-number';
+import {
+  encodeResult,
+  recursiveEncoders,
+} from '@decipad/remote-computer-codec';
+import { GrowableDataView } from 'libs/language-types/src/Value';
+import { notebooks } from '@decipad/routing';
+import { useNotebookId } from '@decipad/editor-hooks';
+import { isFlagEnabled } from '@decipad/feature-flags';
+import { PinTack } from 'libs/ui/src/icons/user-icons';
 import { blockSelectionStore } from '@udecode/plate-selection';
 
 type DataDrawerResizerProps = {
@@ -74,27 +86,12 @@ const DataDrawerResizer: FC<DataDrawerResizerProps> = ({
   );
 };
 
-const HotKeys: FC<{ isEditing: boolean }> = ({ isEditing }) => {
-  if (isEditing) {
-    return (
-      <footer>
-        Press <HotKey>Esc</HotKey> to dismiss <HotKey>Del</HotKey> to delete
-      </footer>
-    );
-  }
-
-  return (
-    <footer>
-      Press <HotKey>Enter</HotKey> to save <HotKey>Escape</HotKey> to dismiss
-    </footer>
-  );
-};
-
 type DataDrawerType =
   | {
       type: 'edit';
       onClose: () => void;
       variableId: string;
+      workspaceId: string;
     }
   | {
       type: 'create';
@@ -102,14 +99,93 @@ type DataDrawerType =
     }
   | {
       type: 'integration-preview';
+    }
+  | {
+      type: 'workspace-number';
+      workspaceId: string;
+      workspaceNumberId: string;
     };
 
 const DataDrawerVariableButtons: FC<
   Extract<DataDrawerType, { type: 'edit' | 'create' }>
-> = ({ onClose }) => {
+> = (props) => {
   const [sidebarComponent, pushSidebar, popSidebar] = useNotebookMetaData(
     (s) => [s.sidebarComponent, s.pushSidebar, s.popSidebar]
   );
+
+  const [, upsertWorkspaceNumber] = useUpsertWorkspaceNumberMutation();
+
+  const toast = useToast();
+  const [computer, controller] = useNotebookWithIdState(
+    (s) => [s.computer, s.controller] as const
+  );
+  const notebookId = useNotebookId();
+
+  assert(
+    computer != null && controller != null,
+    'Computer or controller is not defined'
+  );
+
+  //
+  // WIP:
+  //
+  // Just save the name of the variable and ignore clashes right now.
+  // In the future, we want the user to select a name specific to the
+  // workspace.
+  //
+  // + We want to do some loading state to prevent the user from trying this again.
+  // + We want to check if this number already exists?
+  //
+  const onSaveToWorkspace = async () => {
+    if (props.type === 'create' || !computer || !controller) {
+      toast.error('Could not save number to workspace.');
+      return;
+    }
+
+    const result = computer.getBlockIdResult(props.variableId);
+    const varName = computer.getSymbolDefinedInBlock(props.variableId);
+    assert(result != null && varName != null);
+
+    if (result.type === 'identified-error') {
+      toast.warning('Sorry, this result appears to have an error.');
+      return;
+    }
+
+    const dataView = new GrowableDataView(new ArrayBuffer(1024));
+    const offset = await encodeResult(
+      dataView,
+      0,
+      result.result,
+      recursiveEncoders
+    );
+
+    const base64Result = Buffer.from(dataView.seal(offset)).toString('base64');
+
+    const name = varName;
+    const origin = `${
+      notebooks({}).notebook({
+        notebook: {
+          id: notebookId,
+          name: '',
+        },
+      }).$
+    }#${props.variableId}`;
+
+    upsertWorkspaceNumber({
+      workspaceId: props.workspaceId,
+      workspaceNumber: {
+        name,
+        encoding: base64Result,
+        origin,
+      },
+    })
+      .then(() => {
+        toast.success(`Number with name ${name} added to workspace`);
+      })
+      .catch((err) => {
+        toast.error(`Error creating workspace number: ${err.message}`);
+      });
+  };
 
   const handleOnClose = () => {
     blockSelectionStore.set.selectedIds(new Set());
@@ -137,16 +213,39 @@ const DataDrawerVariableButtons: FC<
       </DataDrawerFormulaHelperWrapper>
       <SegmentButtons
         border
-        variant="default"
+        variant="transparent"
         padding="skinny"
         buttons={[
+          ...(isFlagEnabled('WORKSPACE_NUMBERS')
+            ? [
+                {
+                  children: (
+                    <div
+                      css={{
+                        ...p12Regular,
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '4px',
+                        svg: {
+                          width: '16px',
+                          height: '16px',
+                        },
+                      }}
+                    >
+                      <PinTack /> Save to Workspace
+                    </div>
+                  ),
+                  onClick: onSaveToWorkspace,
+                },
+              ]
+            : []),
           {
             children: (
               <DataDrawerCloseButton onClick={handleOnClose}>
                 <Close />
               </DataDrawerCloseButton>
             ),
-            onClick: onClose,
+            onClick: props.onClose,
           },
         ]}
       />
@@ -159,6 +258,7 @@ const DataDrawerButtons: FC<DataDrawerType> = (props) => {
     case 'create':
     case 'edit':
       return <DataDrawerVariableButtons {...props} />;
+    case 'workspace-number':
     case 'integration-preview':
       return null;
   }
@@ -167,9 +267,24 @@ const DataDrawerButtons: FC<DataDrawerType> = (props) => {
 const DataDrawerHotKeys: FC<DataDrawerType> = (props) => {
   switch (props.type) {
     case 'create':
-      return <HotKeys isEditing={false} />;
+      return (
+        <footer>
+          Press <HotKey>Enter</HotKey> to save <HotKey>Escape</HotKey> to
+          dismiss
+        </footer>
+      );
     case 'edit':
-      return <HotKeys isEditing={true} />;
+      return (
+        <footer>
+          Press <HotKey>Esc</HotKey> to dismiss <HotKey>Del</HotKey> to delete
+        </footer>
+      );
+    case 'workspace-number':
+      return (
+        <footer>
+          Press <HotKey>Enter</HotKey> to save
+        </footer>
+      );
     case 'integration-preview':
       return null;
   }
@@ -181,6 +296,13 @@ const DataDrawerContent: FC<DataDrawerType> = (props) => {
       return <CreateVariableDataDrawer />;
     case 'edit':
       return <EditVariableDataDrawer editingId={props.variableId} />;
+    case 'workspace-number':
+      return (
+        <WorkspaceNumber
+          workspaceId={props.workspaceId}
+          workspaceNumberId={props.workspaceNumberId}
+        />
+      );
     case 'integration-preview':
       // We portal in.
       return null;
@@ -253,14 +375,18 @@ const CreateVariableDataDrawer: FC = () => {
   );
 };
 
-const useDataDrawerTypeAndTitle = (): [DataDrawerType, string | undefined] => {
+// TODO: hook to get workspace ID?
+
+const useDataDrawerTypeAndTitle = (
+  workspaceId: string
+): [DataDrawerType, string | undefined] => {
   const [mode, onCloseDataDrawer] = useNotebookWithIdState(
     (s) => [s.dataDrawerMode, s.closeDataDrawer] as const
   );
 
   const title = titles[mode.type];
 
-  const dataDrawerType = useMemo<DataDrawerType>(() => {
+  const dataDrawerType = useMemo((): DataDrawerType => {
     assert(mode.type !== 'closed', 'unreachable');
 
     switch (mode.type) {
@@ -274,13 +400,20 @@ const useDataDrawerTypeAndTitle = (): [DataDrawerType, string | undefined] => {
           type: 'edit',
           onClose: onCloseDataDrawer,
           variableId: mode.variableId,
+          workspaceId,
+        };
+      case 'workspace-number':
+        return {
+          type: 'workspace-number',
+          workspaceId,
+          workspaceNumberId: mode.workspaceNumberId,
         };
       case 'integration-preview':
         return {
           type: 'integration-preview',
         };
     }
-  }, [mode, onCloseDataDrawer]);
+  }, [mode, onCloseDataDrawer, workspaceId]);
 
   return [dataDrawerType, title];
 };
@@ -301,8 +434,10 @@ const TitleAndButtons: FC<{
   );
 };
 
-const UnmemoedDataDrawerInnerContainer: FC = () => {
-  const [dataDrawerType, title] = useDataDrawerTypeAndTitle();
+const UnmemoedDataDrawerInnerContainer: FC<{ workspaceId: string }> = ({
+  workspaceId,
+}) => {
+  const [dataDrawerType, title] = useDataDrawerTypeAndTitle(workspaceId);
 
   return (
     <>
@@ -329,7 +464,9 @@ const UnmemoedDataDrawerInnerContainer: FC = () => {
  */
 const DataDrawerInnerContainer = memo(UnmemoedDataDrawerInnerContainer);
 
-export const DataDrawerContainer: FC = () => {
+export const DataDrawerContainer: FC<{ workspaceId: string }> = ({
+  workspaceId,
+}) => {
   const [height, setHeight, setIsDataDrawerOpen] = useNotebookWithIdState(
     (s) => [s.height, s.setHeight, s.setIsDataDrawerOpen] as const
   );
@@ -351,7 +488,7 @@ export const DataDrawerContainer: FC = () => {
         onCommitNewHeight={setHeight}
       />
       <DataDrawerKeysWrapper maxHeight={height}>
-        <DataDrawerInnerContainer />
+        <DataDrawerInnerContainer workspaceId={workspaceId} />
       </DataDrawerKeysWrapper>
     </DataDrawerDragWrapper>
   );

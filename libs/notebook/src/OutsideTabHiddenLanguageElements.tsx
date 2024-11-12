@@ -1,14 +1,15 @@
 import type { FC } from 'react';
 import { useRef } from 'react';
-import { type DocSyncEditor } from '@decipad/docsync';
 import type {
   ElementKind,
   MyEditor,
   MyNode,
   PlateComponent,
   TabElement,
+  DataTabWorkspaceResultElement,
 } from '@decipad/editor-types';
 import {
+  ELEMENT_DATA_TAB_WORKSPACE_RESULT,
   ELEMENT_INTEGRATION,
   ELEMENT_LIVE_CONNECTION,
   ELEMENT_LIVE_DATASET,
@@ -19,9 +20,13 @@ import { css } from '@emotion/react';
 import type { PlateEditor } from '@udecode/plate-common';
 import { Plate, getPlugin, isElement } from '@udecode/plate-common';
 import { ErrorBoundary } from '@sentry/react';
+import { WorkspaceNumber } from './WorkspaceNumber';
+import { EditorController } from '@decipad/notebook-tabs';
+import { Editable, ReactEditor, Slate } from 'slate-react';
+import { BaseEditor } from 'slate';
 
 export interface OutsideTabHiddenLanguageElementsProps {
-  editor: DocSyncEditor;
+  controller: EditorController;
   tabId?: string;
 }
 
@@ -59,6 +64,39 @@ const RenderElement: FC<{ element: MyNode; editor: MyEditor }> = ({
   return null;
 };
 
+const DataTabElements: FC<{
+  controller: EditorController;
+}> = ({ controller }) => {
+  return (
+    <Slate
+      initialValue={controller.dataTabEditor.children}
+      editor={controller.dataTabEditor as BaseEditor & ReactEditor}
+    >
+      <Editable
+        renderElement={({ element, attributes, children }) => {
+          if (
+            'type' in element &&
+            element.type !== ELEMENT_DATA_TAB_WORKSPACE_RESULT
+          ) {
+            return <div {...attributes}>{children}</div>;
+          }
+          return (
+            <div {...attributes}>
+              <WorkspaceNumber
+                workspaceNumberElement={
+                  element as DataTabWorkspaceResultElement
+                }
+              >
+                {children}
+              </WorkspaceNumber>
+            </div>
+          );
+        }}
+      />
+    </Slate>
+  );
+};
+
 const TabElements: FC<{
   tab: TabElement;
   editor: MyEditor;
@@ -82,23 +120,26 @@ const TabElements: FC<{
 
 export const OutsideTabHiddenLanguageElements: FC<
   OutsideTabHiddenLanguageElementsProps
-> = ({ editor, tabId: _tabId }) => {
-  const tabId = _tabId || editor.children[1]?.id;
+> = ({ controller, tabId: _tabId }) => {
+  const tabId = _tabId ?? controller.children[1]?.id;
   if (!tabId) {
     return null;
   }
-  const otherTabs = editor.children.filter((c) => c.id !== tabId);
+
+  const otherTabs = controller.children.filter((c) => c.id !== tabId);
 
   return (
     <div css={outsideTabContainerStyles}>
-      {otherTabs.map((tab) =>
-        tab.type === ELEMENT_TAB ? (
-          <TabElements
-            key={tab.id}
-            editor={editor.getTabEditor(tabId)}
-            tab={tab}
-          />
-        ) : null
+      <DataTabElements controller={controller} />
+      {otherTabs.map(
+        (tab) =>
+          tab.type === ELEMENT_TAB && (
+            <TabElements
+              key={tab.id}
+              editor={controller.getTabEditor(tabId)}
+              tab={tab}
+            />
+          )
       )}
     </div>
   );

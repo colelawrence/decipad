@@ -161,9 +161,9 @@ export const Notebook: FC = () => {
           shouldRenderNavigationSidebar={shouldRenderNavigationSidebar}
           leftSidebar={
             <Suspense fallback={<NotebookListPlaceholder />}>
-              {shouldRenderNavigationSidebar ? (
+              {shouldRenderNavigationSidebar && (
                 <NavigationSidebar {...props} />
-              ) : null}
+              )}
             </Suspense>
           }
           topbar={
@@ -187,7 +187,11 @@ export const Notebook: FC = () => {
               </Suspense>
             ) : null
           }
-          dataDrawer={<DataDrawer />}
+          dataDrawer={
+            workspaceInfo.id != null && (
+              <DataDrawer workspaceId={workspaceInfo.id} />
+            )
+          }
           isEmbed={isEmbed}
           isReadOnly={docsync?.isReadOnly}
           permission={notebookMetaData?.getPadById?.myPermissionType}

@@ -11,6 +11,7 @@ import { useResolved } from '@decipad/react-utils';
 import {
   DataDrawerCodeWrapper,
   DataDrawerEditor,
+  DataDrawerInputWrapper,
   DataDrawerNameWrapper,
   FormulaUnitDrawer,
   PaddingDiv,
@@ -97,9 +98,12 @@ export const DataDrawerEditingComponent: PlateComponent = ({
         >
           {varName}
         </div>
-        <div contentEditable={false} data-testid="data-drawer-unit-picker">
+        <DataDrawerInputWrapper
+          contentEditable={false}
+          data-testid="data-drawer-unit-picker"
+        >
           {unit}
-        </div>
+        </DataDrawerInputWrapper>
       </DataDrawerNameWrapper>
       <DataDrawerCodeWrapper>
         <div data-testid="data-drawer">{code}</div>

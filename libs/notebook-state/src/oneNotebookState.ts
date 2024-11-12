@@ -53,6 +53,7 @@ const initialState = (): Omit<
   | 'setHeight'
   | 'isClosing'
   | 'setIntegration'
+  | 'setWorkspaceNumber'
   | 'isDataDrawerOpen'
   | 'setIsDataDrawerOpen'
 > => {
@@ -154,7 +155,10 @@ export const createNotebookStore = (
 
           controller.apply({
             type: 'insert_node',
-            path: [1, controller.children[DATA_TAB_INDEX].children.length],
+            path: [
+              DATA_TAB_INDEX,
+              controller.children[DATA_TAB_INDEX].children.length,
+            ],
             node: {
               type: ELEMENT_DATA_TAB_CHILDREN,
               id: dataTabVarId,
@@ -389,6 +393,12 @@ export const createNotebookStore = (
           dataDrawerMode: {
             type: 'closed',
           },
+        }));
+      },
+
+      setWorkspaceNumber(workspaceNumberId) {
+        set(() => ({
+          dataDrawerMode: { type: 'workspace-number', workspaceNumberId },
         }));
       },
 

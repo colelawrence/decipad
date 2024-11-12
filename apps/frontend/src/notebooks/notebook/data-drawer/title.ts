@@ -8,6 +8,7 @@ export const titles: Record<
 > = {
   edit: 'Edit data',
   create: 'Add data',
+  'workspace-number': 'Workspace Number',
   'integration-preview': undefined,
   closed: undefined,
 };

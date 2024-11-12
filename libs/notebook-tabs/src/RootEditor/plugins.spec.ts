@@ -7,7 +7,10 @@ import { ELEMENT_PARAGRAPH } from '@udecode/plate-paragraph';
 import type { TEditor } from '@udecode/plate-common';
 import {
   DataTabElement,
+  DataTabWorkspaceResultElement,
   ELEMENT_DATA_TAB,
+  ELEMENT_DATA_TAB_CHILDREN,
+  ELEMENT_DATA_TAB_WORKSPACE_RESULT,
   ELEMENT_TAB,
   ELEMENT_TITLE,
   MARK_MAGICNUMBER,
@@ -17,6 +20,7 @@ import {
 } from '@decipad/editor-types';
 import { nanoid } from 'nanoid';
 import { getExprRef } from '@decipad/computer';
+import { DATA_TAB_INDEX } from '../constants';
 
 vi.mock('nanoid', () => ({
   nanoid: () => 'mocked-id',
@@ -53,6 +57,10 @@ const EXPECTED_NOTEBOOK = [
 describe('Normalize editor plugins', () => {
   const editor = createEditor() as TEditor;
   editor.normalize = normalizeCurried(editor, normalizers(editor as TEditor));
+
+  beforeEach(() => {
+    editor.children = [];
+  });
 
   it('normalizes empty notebook', () => {
     editor.children = [];
@@ -259,7 +267,8 @@ describe('Normalize editor plugins', () => {
         id: 'second-one',
         children: [
           {
-            text: 'some claculation',
+            type: ELEMENT_DATA_TAB_CHILDREN,
+            children: [{ text: 'some claculation' }],
           },
         ],
       },
@@ -272,39 +281,44 @@ describe('Normalize editor plugins', () => {
     editor.normalize();
 
     expect(editor.children).toMatchInlineSnapshot(`
-    [
-      {
-        "children": [
-          {
-            "text": "my title",
-          },
-        ],
-        "type": "title",
-      },
-      {
-        "children": [
-          {
-            "text": "some claculation",
-          },
-        ],
-        "id": "second-one",
-        "type": "data-tab",
-      },
-      {
-        "children": [
-          {
-            "children": [
-              {
-                "text": "tab paragraph",
-              },
-            ],
-            "type": "p",
-          },
-        ],
-        "type": "tab",
-      },
-    ]
-  `);
+      [
+        {
+          "children": [
+            {
+              "text": "my title",
+            },
+          ],
+          "type": "title",
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "some claculation",
+                },
+              ],
+              "type": "data-tab-children",
+            },
+          ],
+          "id": "second-one",
+          "type": "data-tab",
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "tab paragraph",
+                },
+              ],
+              "type": "p",
+            },
+          ],
+          "type": "tab",
+        },
+      ]
+    `);
   });
 
   it('keeps the children from a data tab that is removed', () => {
@@ -319,10 +333,12 @@ describe('Normalize editor plugins', () => {
         children: [
           {
             id: '1',
+            type: ELEMENT_DATA_TAB_CHILDREN,
             text: 'more calculations',
           },
           {
             id: '2',
+            type: ELEMENT_DATA_TAB_CHILDREN,
             text: 'even more calculations',
           },
         ],
@@ -333,6 +349,7 @@ describe('Normalize editor plugins', () => {
         children: [
           {
             id: '3',
+            type: ELEMENT_DATA_TAB_CHILDREN,
             text: 'some claculation',
           },
         ],
@@ -400,10 +417,12 @@ describe('Normalize editor plugins', () => {
         children: [
           {
             id: '1',
+            type: ELEMENT_DATA_TAB_CHILDREN,
             text: 'more calculations',
           },
           {
             id: '2',
+            type: ELEMENT_DATA_TAB_CHILDREN,
             text: 'even more calculations',
           },
         ],
@@ -414,6 +433,7 @@ describe('Normalize editor plugins', () => {
         children: [
           {
             id: '3',
+            type: ELEMENT_DATA_TAB_CHILDREN,
             text: 'some claculation',
           },
         ],
@@ -428,18 +448,22 @@ describe('Normalize editor plugins', () => {
         children: [
           {
             id: '4',
+            type: ELEMENT_DATA_TAB_CHILDREN,
             text: '4',
           },
           {
             id: '5',
+            type: ELEMENT_DATA_TAB_CHILDREN,
             text: '5',
           },
           {
             id: '6',
+            type: ELEMENT_DATA_TAB_CHILDREN,
             text: '6',
           },
           {
             id: '7',
+            type: ELEMENT_DATA_TAB_CHILDREN,
             text: '7',
           },
         ],
@@ -507,6 +531,76 @@ describe('Normalize editor plugins', () => {
           },
         ],
         type: 'tab',
+      },
+    ]);
+  });
+
+  it('removes erronous elements from data tab', () => {
+    editor.children = [
+      {
+        type: ELEMENT_DATA_TAB,
+        id: 'first-one',
+        children: [
+          {
+            id: '1',
+            type: ELEMENT_DATA_TAB_CHILDREN,
+            text: 'more calculations',
+          },
+          {
+            id: '2',
+            type: ELEMENT_PARAGRAPH,
+            children: [{ text: 'should be deleted' }],
+          },
+        ],
+      },
+    ];
+
+    editor.normalize();
+
+    expect(editor.children[DATA_TAB_INDEX].children).toHaveLength(1);
+    expect(editor.children[DATA_TAB_INDEX].children).toMatchObject([
+      {
+        id: '1',
+        text: 'more calculations',
+        type: 'data-tab-children',
+      },
+    ]);
+  });
+
+  it('removes duplicate workspace numbers from data tab', () => {
+    editor.children = [
+      {
+        type: ELEMENT_DATA_TAB,
+        id: 'first-one',
+        children: [
+          {
+            id: 'block-id-1',
+            type: ELEMENT_DATA_TAB_WORKSPACE_RESULT,
+            workspaceResultId: 'same-id',
+            children: [{ text: '' }],
+          } satisfies DataTabWorkspaceResultElement,
+          {
+            id: 'block-id-2',
+            type: ELEMENT_DATA_TAB_WORKSPACE_RESULT,
+            workspaceResultId: 'same-id',
+            children: [{ text: '' }],
+          } satisfies DataTabWorkspaceResultElement,
+        ],
+      },
+    ];
+
+    editor.normalize();
+
+    expect(editor.children[DATA_TAB_INDEX].children).toMatchObject([
+      {
+        children: [
+          {
+            text: '',
+          },
+        ],
+        id: 'block-id-1',
+        type: 'data-tab-workspace-result',
+        workspaceResultId: 'same-id',
       },
     ]);
   });
