@@ -13,7 +13,9 @@ interface NotebookPageProps {
   readonly sidebar: ReactNode;
   readonly leftSidebar?: ReactNode;
   readonly tabs: ReactNode;
+
   readonly dataDrawer: ReactNode;
+  readonly isDataDrawerOpen: boolean;
 
   readonly isEmbed: boolean;
   readonly isReadOnly: boolean | undefined;
@@ -62,6 +64,7 @@ export const NotebookPage: React.FC<NotebookPageProps> = (props) => {
     articleRef,
     dataDrawer,
     shouldRenderNavigationSidebar = false,
+    isDataDrawerOpen,
   } = props;
 
   const sidebarComponent = useNotebookMetaData(
@@ -91,7 +94,7 @@ export const NotebookPage: React.FC<NotebookPageProps> = (props) => {
       >
         {leftSidebar && (
           <SidebarExtra
-            isDataDrawerOpen={dataDrawer != null}
+            isDataDrawerOpen={isDataDrawerOpen}
             showSidebar={shouldRenderNavigationSidebar}
             sidebarComponent={{ type: 'navigation-sidebar' }}
             position="left"
@@ -123,16 +126,12 @@ export const NotebookPage: React.FC<NotebookPageProps> = (props) => {
               </S.TabWrapper>
             )}
           </S.EditorAndTabWrapper>
-          {dataDrawer != null && (
-            <S.DataDrawer isInEditorSidebar={isInEditorSidebar}>
-              {dataDrawer}
-            </S.DataDrawer>
-          )}
+          {dataDrawer}
         </S.ArticleWrapper>
         <SidebarExtra
           showSidebar={showSidebar}
           sidebarComponent={sidebarComponent}
-          isDataDrawerOpen={dataDrawer != null}
+          isDataDrawerOpen={isDataDrawerOpen}
         >
           {sidebar}
         </SidebarExtra>

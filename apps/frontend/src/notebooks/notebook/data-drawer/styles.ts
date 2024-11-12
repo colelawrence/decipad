@@ -5,8 +5,26 @@ import {
   p13Medium,
   p14Regular,
   red400,
+  tabletScreenQuery,
 } from '@decipad/ui';
 import styled from '@emotion/styled';
+import { ANNOTATIONS_WIDTH } from 'libs/ui/src/pages/NotebookPage/styles';
+
+export const DataDrawerNotebookPageWrapper = styled.div<{
+  isInEditorSidebar: boolean;
+}>((props) => ({
+  position: 'relative',
+  zIndex: 50, // Above `dropzoneDetector`
+
+  width: props.isInEditorSidebar
+    ? `calc(100% - ${ANNOTATIONS_WIDTH}px - 32px)`
+    : '100%',
+  borderRadius: '16px',
+
+  [tabletScreenQuery]: {
+    width: '100%',
+  },
+}));
 
 export const DataDrawerEditor = styled.div({
   display: 'flex',

@@ -57,7 +57,9 @@ export const Notebook: FC = () => {
   const canUseDom = useCanUseDom();
   const actions = useNotebookMetaActions();
 
-  const setPermission = useNotebookWithIdState((s) => s.setPermission);
+  const [setPermission, isDataDrawerOpen] = useNotebookWithIdState(
+    (s) => [s.setPermission, s.isDataDrawerOpen] as const
+  );
 
   const [{ data: notebookMetaData }] = useGetNotebookMetaQuery({
     variables: { id: notebookId },
@@ -192,6 +194,7 @@ export const Notebook: FC = () => {
               <DataDrawer workspaceId={workspaceInfo.id} />
             )
           }
+          isDataDrawerOpen={isDataDrawerOpen}
           isEmbed={isEmbed}
           isReadOnly={docsync?.isReadOnly}
           permission={notebookMetaData?.getPadById?.myPermissionType}

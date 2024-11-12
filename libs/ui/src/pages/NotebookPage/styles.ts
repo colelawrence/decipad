@@ -161,22 +161,6 @@ export const TabWrapper = styled.div<{ isInEditorSidebar: boolean }>(
   })
 );
 
-export const DataDrawer = styled.div<{ isInEditorSidebar: boolean }>(
-  (props) => ({
-    position: 'relative',
-    zIndex: 50, // Above `dropzoneDetector`
-
-    width: props.isInEditorSidebar
-      ? `calc(100% - ${ANNOTATIONS_WIDTH}px - 32px)`
-      : '100%',
-    borderRadius: '16px',
-
-    [tabletScreenQuery]: {
-      width: '100%',
-    },
-  })
-);
-
 export const NotebookSpacingWrapper = styled.div([
   deciOverflowYStyles,
   {

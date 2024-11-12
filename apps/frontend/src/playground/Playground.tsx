@@ -31,6 +31,7 @@ const Playground: React.FC = () => {
     <NotebookPage
       articleRef={articleRef}
       topbar={<PlaygroundTopBar />}
+      isDataDrawerOpen={false}
       notebook={
         <div data-editorloaded data-hydrated={!isServerSideRendering()}>
           <Frame

@@ -3,10 +3,16 @@ import { useNotebookWithIdState } from '@decipad/notebook-state';
 import { EditorController } from '@decipad/notebook-tabs';
 import { FC } from 'react';
 import { DataDrawerContainer } from './data-drawer';
+import { DataDrawerNotebookPageWrapper } from './styles';
+import { useNotebookMetaData } from '@decipad/react-contexts';
 
 export const DataDrawer: FC<{ workspaceId: string }> = ({ workspaceId }) => {
   const [mode, computer, editor] = useNotebookWithIdState(
     (state) => [state.dataDrawerMode, state.computer, state.editor] as const
+  );
+
+  const isInEditorSidebar = useNotebookMetaData(
+    (s) => s.sidebarComponent.type === 'annotations'
   );
 
   if (
@@ -19,5 +25,9 @@ export const DataDrawer: FC<{ workspaceId: string }> = ({ workspaceId }) => {
     return null;
   }
 
-  return <DataDrawerContainer workspaceId={workspaceId} />;
+  return (
+    <DataDrawerNotebookPageWrapper isInEditorSidebar={isInEditorSidebar}>
+      <DataDrawerContainer workspaceId={workspaceId} />
+    </DataDrawerNotebookPageWrapper>
+  );
 };
