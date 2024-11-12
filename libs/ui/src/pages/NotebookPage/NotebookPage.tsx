@@ -86,12 +86,7 @@ export const NotebookPage: React.FC<NotebookPageProps> = (props) => {
   return (
     <S.AppWrapper isEmbed={isEmbed}>
       {topbar && <header>{topbar}</header>}
-      <S.MainWrapper
-        isEmbed={isEmbed}
-        hasTabs={!!tabs}
-        ref={scrollToRef}
-        isInEditorSidebar={isInEditorSidebar}
-      >
+      <S.MainWrapper isEmbed={isEmbed} hasTabs={!!tabs} ref={scrollToRef}>
         {leftSidebar && (
           <SidebarExtra
             isDataDrawerOpen={isDataDrawerOpen}

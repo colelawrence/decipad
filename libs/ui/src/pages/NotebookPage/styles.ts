@@ -65,7 +65,6 @@ export const AppWrapper = styled.div<{ isEmbed: boolean }>((props) => ({
 export const MainWrapper = styled.main<{
   isEmbed: boolean;
   hasTabs: boolean;
-  isInEditorSidebar: boolean;
 }>((props) => ({
   // min-height: 0 is very important
   // See: https://stackoverflow.com/questions/30861247/flexbox-children-does-not-respect-height-of-parent-with-flex-direction-column
@@ -75,7 +74,7 @@ export const MainWrapper = styled.main<{
   display: 'flex',
   justifyContent: 'flex-end',
 
-  padding: props.isInEditorSidebar ? `0px 0px 16px` : `0px 24px 16px`,
+  padding: '0px 24px 16px',
 
   gap: '24px',
   [tabletScreenQuery]: {
