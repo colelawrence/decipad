@@ -72,7 +72,7 @@ export const gsheets = (): GoogleSheetProvider => {
     clientId: config.google.sheets.clientId,
     clientSecret: config.google.sheets.clientSecret,
     scope:
-      'email profile openid https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/drive.readonly https://www.googleapis.com/auth/spreadsheets.readonly',
+      'email profile openid https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/spreadsheets.readonly',
     authorizationParams: {
       response_type: 'code',
       access_type: 'offline',

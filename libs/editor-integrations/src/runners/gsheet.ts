@@ -99,6 +99,7 @@ export class GSheetRunner extends Runner<T, O> {
         : `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}?${queryString}`
     ).then((res) => res.json());
   }
+
   protected async fetchData(): Promise<Uint8Array> {
     const options = this.assertedOptions();
     const { sheetId, gid } = getSheetRequestDataFromUrl(

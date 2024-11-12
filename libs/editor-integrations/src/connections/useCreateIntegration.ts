@@ -11,7 +11,12 @@ import { useClientEvents } from '@decipad/client-events';
 import { useComputer } from '@decipad/editor-hooks';
 import { nanoid } from 'nanoid';
 import { getExprRef } from '@decipad/computer';
-import { CSVRunner, RunnerFactoryParams, useRunner } from '../runners';
+import {
+  CSVRunner,
+  GSheetRunner,
+  RunnerFactoryParams,
+  useRunner,
+} from '../runners';
 import { useCreateIntegration } from '../hooks';
 import { assertInstanceOf } from '@decipad/utils';
 import { TypeMap } from 'libs/editor-types/src/integrations';
@@ -99,6 +104,10 @@ export const useConcreteIntegration = (
     onExecute([]);
     onExecute((v) => [...v, { status: 'run' }]);
 
+    if (externalData != null && runner instanceof GSheetRunner) {
+      runner.setExternalDataId(externalData.id);
+    }
+
     await runner
       .import()
       .then(() => {
@@ -110,7 +119,7 @@ export const useConcreteIntegration = (
         onExecute((v) => [...v, { status: 'error', err: err.message }]);
         toast.error('Error importing integration!');
       });
-  }, [queries, runner, toast]);
+  }, [queries, runner, toast, externalData]);
 
   useEffect(() => {
     runner.name = varName;

@@ -1,7 +1,6 @@
 import { FC } from 'react';
 import { ConnectionProps } from '../types';
 import { Divider, Input, Link, UIGoogleSheetConnection } from '@decipad/ui';
-import { SheetSelector } from './Subsheets';
 import { Loading, OAuthConnections } from '../shared';
 import { FromUrl } from './FromUrl';
 import styled from '@emotion/styled';
@@ -39,7 +38,6 @@ export const GoogleSheetConnection: FC<ConnectionProps> = (props) => {
         label="Select Connection"
         provider="gsheets"
       />
-      <SheetSelector {...props} />
       <Divider />
       <FromUrl {...props} />
       <Loading info={props.info} />
