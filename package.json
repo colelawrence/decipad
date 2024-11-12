@@ -493,7 +493,7 @@
     "lint-staged": "15.2.7",
     "node-watch": "0.7.3",
     "npm-check": "^6.0.1",
-    "npm-run-all2": "6.2.0",
+    "npm-run-all2": "7.0.1",
     "nx": "16.10.0",
     "p-time": "4",
     "prettier": "2.8.1",
