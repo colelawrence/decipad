@@ -38,6 +38,7 @@ function getRunner(options: RunnerFactoryParams): Runner {
     : ({ type: options.integrationType } as Partial<
         IntegrationBlock['integrationType']
       >);
+
   switch (integrationType.type) {
     case 'csv':
       const csvRunner = new CSVRunner(options.id, {

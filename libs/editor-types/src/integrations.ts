@@ -4,8 +4,14 @@ import type {
   SimpleTableCellType,
   ELEMENT_INTEGRATION,
   ImportElementSource,
-  Filter,
 } from '.';
+
+export type SerializedFilter = {
+  id: string;
+  filterName: string;
+  columnId: string;
+  value: string | { n: bigint; d: bigint; s: bigint; infinite: boolean };
+};
 
 export interface CodeBlockIntegration {
   type: 'codeconnection';
@@ -75,5 +81,5 @@ export interface IntegrationBlock<
 
   hideResult?: boolean;
 
-  filters?: Filter[];
+  filters?: SerializedFilter[];
 }

@@ -1,6 +1,6 @@
 import { BlockResult, IdentifiedResult } from '@decipad/computer-interfaces';
 import { useComputer } from '@decipad/editor-hooks';
-import { type Filter } from '@decipad/editor-types';
+import { ELEMENT_INTEGRATION, type Filter } from '@decipad/editor-types';
 import {
   Button,
   cssVar,
@@ -23,6 +23,7 @@ import { isEmpty, omit } from 'lodash';
 import { elementFilters } from '@decipad/editor-utils';
 import { nanoid } from 'nanoid';
 import { css } from '@emotion/react';
+import DeciNumber from '@decipad/number';
 
 export type DraftFilter = Partial<
   Filter & {
@@ -173,6 +174,9 @@ export const DraftFilterForm = ({
 
     assert(integrationEntry != null);
     const [block, path] = integrationEntry;
+    if (block.type !== ELEMENT_INTEGRATION) {
+      throw new Error('Invalid integration type');
+    }
 
     const newFilter = {
       id: filter.id ?? nanoid(),
@@ -310,12 +314,29 @@ export const DraftFilterForm = ({
         placeholder="Filter value"
         value={filter.value?.toString()}
         onChange={(text) => {
-          return setDraftFilter((dFilter) => {
-            return {
-              ...dFilter,
-              value: inputFieldType === 'number' ? Number(text) : text,
-            };
-          });
+          switch (inputFieldType) {
+            case 'number':
+              return setDraftFilter((dFilter) => {
+                return {
+                  ...dFilter,
+                  value: new DeciNumber(text),
+                };
+              });
+            case 'text':
+              return setDraftFilter((dFilter) => {
+                return {
+                  ...dFilter,
+                  value: text,
+                };
+              });
+            default:
+              return setDraftFilter((dFilter) => {
+                return {
+                  ...dFilter,
+                  value: text,
+                };
+              });
+          }
         }}
         testId="draft-filter-value"
       />

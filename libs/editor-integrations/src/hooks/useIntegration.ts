@@ -1,5 +1,5 @@
 /* eslint-disable no-console */
-import { IntegrationTypes } from '@decipad/editor-types';
+import { Filter, IntegrationTypes } from '@decipad/editor-types';
 import { getNodeString } from '@udecode/plate-common';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useResponsiveRunner } from '../runners';
@@ -9,6 +9,7 @@ import { useNotebookId } from '@decipad/react-contexts';
 import { isTableResult, pushResultToComputer } from '@decipad/computer-utils';
 import { getDefined } from '@decipad/utils';
 import { formatError } from '@decipad/format';
+import DeciNumber from '@decipad/number';
 
 type ImportState =
   | {
@@ -55,6 +56,13 @@ export const useIntegration = (
     [element.children]
   );
 
+  const filters = (element.filters ?? []).map((filter): Filter => {
+    if (typeof filter.value === 'object') {
+      return { ...filter, value: new DeciNumber(filter.value) };
+    }
+    return filter as Filter;
+  });
+
   const runner = useResponsiveRunner({
     id: element.id!,
     name: varName,
@@ -63,7 +71,7 @@ export const useIntegration = (
     notebookId,
     computer,
     integrationType: undefined,
-    filters: element.filters ?? [],
+    filters,
   });
 
   useRenameIntegration(runner, element);

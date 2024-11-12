@@ -97,12 +97,13 @@ import {
 import { UserIconKey } from './icons';
 import { IntegrationBlock } from './integrations';
 import { ElementKind, markKinds } from '.';
+import DeciNumber from '@decipad/number';
 
 export type Filter = {
   id: string;
   filterName: string;
   columnId: string;
-  value: string | number;
+  value: string | DeciNumber;
 };
 
 export type SeriesType = 'date' | 'number';

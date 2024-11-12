@@ -99,7 +99,7 @@ export const Filters = () => {
             css={filterWrapper}
           >
             <span css={filterName}>{filter.filterName}</span>
-            <span css={filterValue}>{filter.value}</span>
+            <span css={filterValue}>{filter.value.toString()}</span>
             {!isReadOnly && (
               <button css={filterDelete} onClick={() => deleteFilter(filter)}>
                 <Close />

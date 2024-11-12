@@ -1,25 +1,24 @@
-import {
-  AnyElement,
-  ELEMENT_INTEGRATION,
-  ELEMENT_TABLE,
-  Filter,
-  FilterableElement,
-} from '@decipad/editor-types';
-import { ELEMENT_CODE_BLOCK } from '@udecode/plate-code-block';
+import { Filter } from '@decipad/editor-types';
+import DeciNumber from '@decipad/number';
+import { IntegrationBlock } from 'libs/editor-types/src/integrations';
 
-const typesWithFilters = Object.freeze(
-  new Set([ELEMENT_TABLE, ELEMENT_CODE_BLOCK, ELEMENT_INTEGRATION])
-);
+export const elementFilters = (element: IntegrationBlock): Filter[] => {
+  if (!element.filters) return [];
 
-const isFilterableElement = (
-  element: AnyElement
-): element is FilterableElement => {
-  return typesWithFilters.has(element.type);
-};
-
-export const elementFilters = (element: AnyElement | undefined): Filter[] => {
-  if (element != null && isFilterableElement(element)) {
-    return element.filters ?? [];
-  }
-  return [];
+  return element.filters.map((filter): Filter => {
+    if (typeof filter.value === 'string') {
+      return {
+        ...filter,
+        value: filter.value,
+      };
+    }
+    if (typeof filter.value === 'object') {
+      const value = new DeciNumber(filter.value);
+      return {
+        ...filter,
+        value,
+      };
+    }
+    throw new Error('Invalid filter');
+  });
 };

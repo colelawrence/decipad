@@ -3,6 +3,7 @@ import { assert } from '@decipad/utils';
 import { EditorController } from 'libs/notebook-tabs/src/EditorController';
 import { Filter } from '@decipad/editor-types';
 import { omit } from 'lodash';
+import DeciNumber from '@decipad/number';
 
 export type EditableFilter = Filter & {
   integrationId: string;
@@ -44,11 +45,25 @@ export const useFilters = (
       assert(grandchild.id != null);
 
       return (
-        grandchild.filters?.map((filter, i) => ({
-          ...filter,
-          integrationId: grandchild.id as string,
-          filterIndex: i,
-        })) || []
+        grandchild.filters?.map((filter, i): EditableFilter => {
+          if (typeof filter.value === 'string') {
+            return {
+              ...filter,
+              value: filter.value,
+              integrationId: grandchild.id as string,
+              filterIndex: i,
+            };
+          }
+          if (typeof filter.value === 'object') {
+            return {
+              ...filter,
+              value: new DeciNumber(filter.value),
+              integrationId: grandchild.id as string,
+              filterIndex: i,
+            };
+          }
+          throw new Error('Invalid filter value');
+        }) || []
       );
     });
   });

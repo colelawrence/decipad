@@ -2,7 +2,7 @@
 import * as RadixDropdown from '@radix-ui/react-dropdown-menu';
 import { Decorator, StoryFn } from '@storybook/react';
 
-export const inMenu: Decorator = (story: StoryFn, context) => (
+export const inMenu: Decorator = (story: StoryFn, context: any) => (
   <RadixDropdown.Root open modal={false}>
     <RadixDropdown.Trigger asChild>
       <div css={{ display: 'none' }} />
