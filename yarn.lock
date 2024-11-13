@@ -29546,10 +29546,10 @@ zipit@~2.0.0:
     insync "2.1.1"
     yazl "2.5.1"
 
-zod-openapi@^2.19.0:
-  version "2.19.0"
-  resolved "https://registry.yarnpkg.com/zod-openapi/-/zod-openapi-2.19.0.tgz#c274468c63095e365127391930f54040f2e018ea"
-  integrity sha512-OUAAyBDPPwZ9u61i4k/LieXUzP2re8kFjqdNh2AvHjsyi/aRNz9leDAtMGcSoSzUT5xUeQoACJufBI6FzzZyxA==
+zod-openapi@^4.0.0:
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/zod-openapi/-/zod-openapi-4.0.0.tgz#e28f213ff365d7bbbef704fbc453cd472c6cec72"
+  integrity sha512-X/YT3VTYMon10rdTGApBIMPpSm17l/sxyVz3cao9M6ynv348ctYi62TDwdnDO+Po1YxA0KiguIW1gIGVRRGqvA==
 
 zod-to-json-schema@^3.22.3:
   version "3.23.5"

@@ -396,7 +396,7 @@
     "yarn": "^1.22.21",
     "yjs": "13.6.12",
     "zod": "^3.23.0",
-    "zod-openapi": "^2.19.0",
+    "zod-openapi": "^4.0.0",
     "zustand": "4.5.0"
   },
   "devDependencies": {
