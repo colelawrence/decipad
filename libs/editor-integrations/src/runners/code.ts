@@ -2,13 +2,16 @@ import { assert, BackendUrl } from '@decipad/utils';
 import { Options, PartialOptions, Runner } from './runner';
 import { Computer } from '@decipad/computer-interfaces';
 import { getNotebookStore } from '@decipad/notebook-state';
-import { SafeJs } from '@decipad/safejs';
+import { ErrorMessageType, ResultMessageType, SafeJs } from '@decipad/safejs';
 import DeciNumber, { safeNumberForPrecision } from '@decipad/number';
 import { codePlaceholder } from '@decipad/editor-utils';
 import { importFromJSONAndCoercions } from '@decipad/import';
 import { pushResultToComputer } from '@decipad/computer-utils';
 import { IntegrationTypes } from '@decipad/editor-types';
 import { Result, Unknown } from '@decipad/language-interfaces';
+import { Subject } from 'rxjs';
+
+const MAX_WORKER_RETURN_LENGTH = 1_000_000_000;
 
 type T = 'code';
 type O = Omit<IntegrationTypes.CodeBlockIntegration, 'type'>;
@@ -17,6 +20,8 @@ export class CodeRunner extends Runner<T, O> {
 
   public resourceName: string | undefined = undefined;
   private worker: SafeJs;
+
+  public logs: Subject<ResultMessageType | ErrorMessageType> = new Subject();
 
   public assertedOptions(): Pick<Options<T, O>, 'runner' | 'importer'> {
     assert(
@@ -40,9 +45,16 @@ export class CodeRunner extends Runner<T, O> {
     this.options.runner.code ??= codePlaceholder();
 
     this.worker = new SafeJs(
-      () => {},
-      () => {},
-      { fetchProxyUrl: BackendUrl.fetchProxy(this.padId).toString() }
+      (m) => {
+        this.logs.next(m);
+      },
+      (m) => {
+        this.logs.next(m);
+      },
+      {
+        fetchProxyUrl: BackendUrl.fetchProxy(this.padId).toString(),
+        maxWorkerReturn: MAX_WORKER_RETURN_LENGTH,
+      }
     );
   }
 

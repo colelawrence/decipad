@@ -12,6 +12,7 @@ import { useComputer } from '@decipad/editor-hooks';
 import { nanoid } from 'nanoid';
 import { getExprRef } from '@decipad/computer';
 import {
+  CodeRunner,
   CSVRunner,
   GSheetRunner,
   RunnerFactoryParams,
@@ -101,6 +102,16 @@ export const useConcreteIntegration = (
   const run = useCallback(async () => {
     if (queries.hasReachedLimit) return;
 
+    const logSub =
+      runner instanceof CodeRunner
+        ? runner.logs.subscribe((m) => {
+            onExecute((v) => [
+              ...v,
+              ...m.logs.map((log) => ({ status: 'log' as const, log })),
+            ]);
+          })
+        : undefined;
+
     onExecute([]);
     onExecute((v) => [...v, { status: 'run' }]);
 
@@ -118,6 +129,13 @@ export const useConcreteIntegration = (
         console.error('error importing:', err);
         onExecute((v) => [...v, { status: 'error', err: err.message }]);
         toast.error('Error importing integration!');
+      })
+      .finally(() => {
+        if (logSub == null) {
+          return;
+        }
+
+        logSub.unsubscribe();
       });
   }, [queries, runner, toast, externalData]);
 
