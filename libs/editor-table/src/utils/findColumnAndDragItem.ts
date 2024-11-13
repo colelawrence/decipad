@@ -1,8 +1,8 @@
 import type { Path } from 'slate';
 import { isElement } from '@udecode/plate-common';
 import type { MyEditor } from '@decipad/editor-types';
-import type { CellDndProps } from '../contexts/TableDndContext';
 import { findColumnByCell } from './findColumnByCell';
+import { CellDndProps } from '@decipad/react-contexts';
 
 export const findColumnAndDragItem = (
   editor: MyEditor,

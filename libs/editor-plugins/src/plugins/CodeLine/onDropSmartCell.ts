@@ -1,5 +1,6 @@
 import type { MyEditor, MyText } from '@decipad/editor-types';
 import {
+  DRAG_SMART_CELL,
   ELEMENT_CODE_LINE,
   ELEMENT_CODE_LINE_V2_CODE,
   ELEMENT_LIC,
@@ -11,8 +12,6 @@ import { cursorStore } from '@decipad/react-contexts';
 import { getBlockAbove, isElement } from '@udecode/plate-common';
 import { dndStore } from '@udecode/plate-dnd';
 import type React from 'react';
-
-export const DRAG_SMART_CELL = 'smart-cell';
 
 export const onDropSmartCell =
   (editor: MyEditor) => (event: React.DragEvent) => {

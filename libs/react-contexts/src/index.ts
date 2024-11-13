@@ -18,3 +18,4 @@ export * from './theme';
 export * from './notebook-meta-actions';
 export * from './resource-usage';
 export * from './ai-credits';
+export * from './TableDndContext';

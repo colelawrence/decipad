@@ -1,4 +1,5 @@
 import type {
+  DragColumnItem,
   MyEditor,
   TableElement,
   TableHeaderElement,
@@ -6,7 +7,6 @@ import type {
 import { ELEMENT_TR } from '@decipad/editor-types';
 import { getNodeChildren, isElement } from '@udecode/plate-common';
 import type { Path } from 'slate';
-import type { DragColumnItem } from '../types';
 
 export const findColumnByCell = (
   editor: MyEditor,

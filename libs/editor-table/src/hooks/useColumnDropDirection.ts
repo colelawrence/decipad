@@ -2,7 +2,7 @@ import { useContext, useMemo } from 'react';
 import type { MyEditor, MyElement } from '@decipad/editor-types';
 
 import { getColumnDropDirection } from '../utils/getColumnDropDirection';
-import { TableDndContext } from '../contexts/TableDndContext';
+import { TableDndContext } from '@decipad/react-contexts';
 
 export const useColumnDropDirection = (
   editor: MyEditor,

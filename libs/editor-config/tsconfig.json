@@ -38,12 +38,6 @@
       "path": "../editor-utils"
     },
     {
-      "path": "../editor-variable-def"
-    },
-    {
-      "path": "../editor-data-view"
-    },
-    {
       "path": "../editor-integrations"
     }
   ]

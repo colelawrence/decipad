@@ -16,10 +16,10 @@ import {
   Anchor,
   AvailableSwatchColor,
   DNDItemTypes,
-  getEmptyImage,
   swatchesThemed,
 } from '../../../utils';
 import { NotebookOptions } from '../../topbar/NotebookOptions/NotebookOptions';
+import { getEmptyImage } from '@decipad/editor-utils';
 
 function CustomDragLayer() {
   const {

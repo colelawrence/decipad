@@ -1,0 +1,157 @@
+import {
+  useComputer,
+  useDragColumn,
+  useNodePath,
+  usePathMutatorCallback,
+} from '@decipad/editor-hooks';
+import type {
+  DataViewElement,
+  PlateComponent,
+  TableCellType,
+} from '@decipad/editor-types';
+import {
+  DRAG_ITEM_DATAVIEW_COLUMN,
+  ELEMENT_DATA_VIEW_TH,
+  useMyEditorRef,
+} from '@decipad/editor-types';
+import {
+  assertElementType,
+  getNodeEntrySafe,
+  isCellAlignRight,
+} from '@decipad/editor-utils';
+import { availableAggregations as getAvailableAggregations } from '@decipad/language-aggregations';
+import { useDeepMemo } from '@decipad/react-utils';
+import { DataViewColumnHeader as UIDataViewColumnHeader } from '@decipad/ui';
+import { useCallback, useContext, useMemo, useRef } from 'react';
+import { Path } from 'slate';
+import { useDataViewActions, useDropColumn } from '../../hooks';
+import { useDataViewNormalizeColumnHeader } from '../../hooks/useDataViewNormalizeColumnHeader';
+import { useDataViewContext } from '../DataViewContext';
+import { availableRoundings } from './availableRoundings';
+import { TableDndContext } from '@decipad/react-contexts';
+
+export const DataViewColumnHeader: PlateComponent<{ overridePath?: Path }> = ({
+  attributes,
+  children,
+  element,
+  overridePath,
+}) => {
+  assertElementType(element, ELEMENT_DATA_VIEW_TH);
+
+  const editor = useMyEditorRef();
+  const computer = useComputer();
+  const path = useNodePath(element);
+
+  const { columns } = useDataViewContext();
+
+  const tableDnd = useContext(TableDndContext);
+
+  const { dragSource, dragPreview } = useDragColumn(
+    editor,
+    element,
+    DRAG_ITEM_DATAVIEW_COLUMN,
+    tableDnd.onCellDragEnd
+  );
+
+  const actualPath = overridePath ?? path;
+  const dataView: DataViewElement | undefined = useMemo(() => {
+    const dataViewPath = actualPath && Path.parent(Path.parent(actualPath));
+    return (
+      dataViewPath &&
+      (getNodeEntrySafe(editor, dataViewPath)?.[0] as
+        | DataViewElement
+        | undefined)
+    );
+  }, [editor, actualPath]);
+
+  const columnHeaderRef = useRef<HTMLTableCellElement>(null);
+
+  const [{ isOverCurrent }, connectDropTarget, hoverDirection] = useDropColumn(
+    editor,
+    dataView,
+    element,
+    columnHeaderRef,
+    DRAG_ITEM_DATAVIEW_COLUMN
+  );
+
+  const availableAggregations = useMemo(() => {
+    if (!actualPath) {
+      // first column: do not present aggregation choices
+      return [];
+    }
+    return getAvailableAggregations(element.cellType as TableCellType);
+  }, [element.cellType, actualPath]);
+
+  const onAggregationChange = usePathMutatorCallback(
+    editor,
+    path,
+    'aggregation',
+    'DataViewColumnHeader'
+  );
+
+  const { onDeleteColumn } = useDataViewActions(editor, dataView);
+
+  const handleColumnDelete = useCallback(() => {
+    if (actualPath) {
+      onDeleteColumn(actualPath);
+    }
+  }, [onDeleteColumn, actualPath]);
+
+  // roundings
+  const roundings = useDeepMemo(
+    useCallback(
+      () => (element ? availableRoundings(element.cellType) : []),
+      [element]
+    )
+  );
+  const onRoundingChange = usePathMutatorCallback(
+    editor,
+    path,
+    'rounding',
+    'DataViewColumnHeader'
+  );
+
+  const onFilterChange = usePathMutatorCallback(
+    editor,
+    path,
+    'filter',
+    'DataViewColumnHeader'
+  );
+
+  useDataViewNormalizeColumnHeader(
+    editor,
+    computer,
+    dataView?.varName,
+    element
+  );
+
+  return (
+    <UIDataViewColumnHeader
+      key={element.id}
+      name={element.label}
+      type={element.cellType}
+      attributes={attributes}
+      selectedAggregation={element.aggregation}
+      availableAggregations={availableAggregations}
+      onAggregationChange={onAggregationChange}
+      availableRoundings={roundings}
+      onRoundingChange={onRoundingChange}
+      selectedRounding={element.rounding}
+      onDeleteColumn={handleColumnDelete}
+      connectDragSource={dragSource}
+      connectDragPreview={dragPreview}
+      connectDropTarget={connectDropTarget}
+      hoverDirection={hoverDirection}
+      isOverCurrent={isOverCurrent}
+      alignRight={isCellAlignRight(element.cellType)}
+      ref={columnHeaderRef}
+      rotate={dataView?.rotate ?? false}
+      columns={columns}
+      columnIndex={actualPath?.at(2)}
+      onFilterChange={onFilterChange}
+      selectedFilter={element.filter}
+    >
+      {children}
+    </UIDataViewColumnHeader>
+  );
+};

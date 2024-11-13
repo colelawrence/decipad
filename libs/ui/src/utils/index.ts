@@ -3,7 +3,6 @@ export * from './cn';
 export * from './counter';
 export * from './dev';
 export * from './dnd';
-export * from './getEmptyImage';
 export * from './heading';
 export * from './isSameUnits';
 export * from './isValidUrl';

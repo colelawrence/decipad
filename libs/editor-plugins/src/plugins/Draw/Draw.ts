@@ -1,3 +1,3 @@
-import { Draw } from '@decipad/editor-draw';
+import { Draw } from '@decipad/editor-components';
 
 export default Draw;

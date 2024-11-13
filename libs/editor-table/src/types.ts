@@ -7,13 +7,6 @@ export interface DecorationCellUnit extends Range {
   unitString: string;
 }
 
-export interface DragColumnItem {
-  id?: string;
-  type?: string;
-}
-
-export type ColumnDndDirection = undefined | 'left' | 'right';
-
 export interface DropdownOption {
   id: string;
   value: string;

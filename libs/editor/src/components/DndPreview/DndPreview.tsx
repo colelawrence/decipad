@@ -1,13 +1,15 @@
-import type { DragColumnItem } from '@decipad/editor-table';
-import { DRAG_ITEM_COLUMN } from '@decipad/editor-table';
 import { useDndPreviewSelectors } from '@decipad/react-contexts';
 import { cssVar } from '@decipad/ui';
 import { varStyles } from '@decipad/ui/src/styles/code-block';
 import { useEditorRef } from '@udecode/plate-common';
-import { DRAG_ITEM_DATAVIEW_COLUMN } from 'libs/editor-table/src/contexts/TableDndContext';
 import { useEffect, useRef } from 'react';
 import { usePreview } from 'react-dnd-preview';
 import { DndColumnPreview } from './DndColumnPreview';
+import {
+  DRAG_ITEM_COLUMN,
+  DRAG_ITEM_DATAVIEW_COLUMN,
+  DragColumnItem,
+} from '@decipad/editor-types';
 
 export const DndPreview = () => {
   const editor = useEditorRef();

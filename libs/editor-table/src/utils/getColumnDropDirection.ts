@@ -1,6 +1,6 @@
 import type { MyEditor, MyElement } from '@decipad/editor-types';
+import { ColumnDropLine } from '@decipad/react-contexts';
 import { findNodePath } from '@udecode/plate-common';
-import type { ColumnDropLine } from '../contexts/TableDndContext';
 
 export const getColumnDropDirection = (
   editor: MyEditor,

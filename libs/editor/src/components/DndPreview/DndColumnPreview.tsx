@@ -1,5 +1,8 @@
-import type { DragColumnItem } from '@decipad/editor-table';
-import type { DataViewHeader, TableHeaderElement } from '@decipad/editor-types';
+import type {
+  DataViewHeader,
+  DragColumnItem,
+  TableHeaderElement,
+} from '@decipad/editor-types';
 import { useMyEditorRef } from '@decipad/editor-types';
 import { ColumnDndPreview as UIColumnDndPreview } from '@decipad/ui';
 import type { TNodeEntry } from '@udecode/plate-common';

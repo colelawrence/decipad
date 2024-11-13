@@ -74,8 +74,6 @@
       "@decipad/editor-attachments": ["libs/editor-attachments/src/index.ts"],
       "@decipad/editor-components": ["libs/editor-components/src/index.ts"],
       "@decipad/editor-config": ["libs/editor-config/src/index.ts"],
-      "@decipad/editor-data-view": ["libs/editor-data-view/src/index.ts"],
-      "@decipad/editor-draw": ["libs/editor-draw/src/index.ts"],
       "@decipad/editor-hooks": ["libs/editor-hooks/src/index.ts"],
       "@decipad/editor-integrations": ["libs/editor-integrations/src/index.ts"],
       "@decipad/editor-language-elements": [
@@ -88,7 +86,6 @@
       "@decipad/editor-table": ["libs/editor-table/src/index.ts"],
       "@decipad/editor-types": ["libs/editor-types/src/index.ts"],
       "@decipad/editor-utils": ["libs/editor-utils/src/index.ts"],
-      "@decipad/editor-variable-def": ["libs/editor-variable-def/src/index.ts"],
       "@decipad/email-templates": ["emails/src/index.tsx"],
       "@decipad/emails": ["libs/emails/src/index.ts"],
       "@decipad/eslint-config-decipad": ["libs/eslint-config-decipad/index.js"],

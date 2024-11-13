@@ -61,6 +61,7 @@ const plugins = [
       clientsClaim: false,
       inlineWorkboxRuntime: true,
       cleanupOutdatedCaches: true,
+      maximumFileSizeToCacheInBytes: 5_000_000, // 5MB
       globPatterns: ['**/*.{js,html,css,ico,png,svg,woff2}'],
       navigateFallback: null,
       navigateFallbackDenylist: [/^\/api/, /^\/graphql/, /^\/docs/],

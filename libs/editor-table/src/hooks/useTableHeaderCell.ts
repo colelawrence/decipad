@@ -1,6 +1,7 @@
 import type { Unit } from '@decipad/language-interfaces';
 import {
   useComputer,
+  useDragColumn,
   useNodePath,
   usePathMutatorCallback,
 } from '@decipad/editor-hooks';
@@ -11,10 +12,10 @@ import type {
   TableElement,
   TableHeaderElement,
 } from '@decipad/editor-types';
-import { useMyEditorRef } from '@decipad/editor-types';
-import { useIsEditorReadOnly } from '@decipad/react-contexts';
+import { DRAG_ITEM_COLUMN, useMyEditorRef } from '@decipad/editor-types';
+import { TableDndContext, useIsEditorReadOnly } from '@decipad/react-contexts';
 import { getNode } from '@udecode/plate-common';
-import { useMemo } from 'react';
+import { useContext, useMemo } from 'react';
 import type { ConnectDragSource, ConnectDropTarget } from 'react-dnd';
 import { Path } from 'slate';
 import { useSelected } from 'slate-react';
@@ -25,9 +26,7 @@ import {
   useDropColumn,
   useTableActions,
 } from '.';
-import { DRAG_ITEM_COLUMN } from '../contexts/TableDndContext';
 import { sanitizeColumnDropDirection } from '../utils';
-import { useDragColumn } from './useDragColumn';
 import { useTableHeaderCellDropdownNames } from './useTableHeaderCellDropdownNames';
 import { useNormalizeTableHeaderAggregation } from './useNormalizeTableHeaderAggregation';
 
@@ -70,10 +69,13 @@ export const useTableHeaderCell = (
   const focused = useSelected();
   const readOnly = useIsEditorReadOnly();
 
+  const tableDnd = useContext(TableDndContext);
+
   const { dragSource, isDragging } = useDragColumn(
     editor,
     element,
-    DRAG_ITEM_COLUMN
+    DRAG_ITEM_COLUMN,
+    tableDnd.onCellDragEnd
   );
   const [{ isOver }, dropTarget] = useDropColumn(editor, element);
   const dropDirection = useColumnDropDirection(editor, element);

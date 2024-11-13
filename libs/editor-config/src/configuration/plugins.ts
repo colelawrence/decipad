@@ -1,6 +1,5 @@
 import type { Computer } from '@decipad/computer-interfaces';
 import { ClientEventContextType } from '@decipad/client-events';
-import { createDataViewPlugin } from '@decipad/editor-data-view';
 import { createIntegrationPlugin } from '@decipad/editor-integrations';
 import {
   createCrossBlockSelection,
@@ -60,6 +59,7 @@ import {
   createCodeLineCodeTextPlugin,
   createAutoFormatCodeLinePlugin,
   createCrashingBlock,
+  createDataViewPlugin,
 } from '@decipad/editor-plugins';
 import {
   createCodeLineV2Plugin,
@@ -75,7 +75,6 @@ import {
   ELEMENT_MEDIA_EMBED,
 } from '@decipad/editor-types';
 import { noopPromise } from '@decipad/editor-utils';
-import { createVariableDefPlugin } from '@decipad/editor-variable-def';
 import type { UserInteraction } from '@decipad/react-contexts';
 
 import { createDndPlugin } from '@udecode/plate-dnd';
@@ -94,6 +93,7 @@ import { createSelectOnBackspacePlugin } from '@udecode/plate-select';
 import { createDeserializeDocxPlugin } from '@udecode/plate-serializer-docx';
 import { createDeserializeMdPlugin } from '@udecode/plate-serializer-md';
 import { createCaptionPlugin } from '@udecode/plate-caption';
+import { createVariableDefPlugin } from '@decipad/editor-components';
 
 interface PluginOptions {
   computer: Computer;

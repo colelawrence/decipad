@@ -6,17 +6,16 @@ import type {
 } from '@decipad/editor-types';
 import { dndStore } from '@udecode/plate-dnd';
 import { findNodePath } from '@udecode/plate-common';
-import type {
-  CellDndProps,
-  ColumnDropLine,
-} from '../../contexts/TableDndContext';
-import { TableDndContext } from '../../contexts/TableDndContext';
 import { findColumnAndDragItem } from '../../utils/findColumnAndDragItem';
 import { focusEditorForColumnDnd } from '../../utils/focusEditorForColumnDnd';
 import { useMemoPath } from '@decipad/react-utils';
 import { useTableActions } from '../../hooks/tableActions';
-import { getHoverDirection } from '../../utils/getHoverDirection';
-import { findSwappableColumns } from '../../utils/findSwappableColumns';
+import { findSwappableColumns, getHoverDirection } from '@decipad/editor-utils';
+import {
+  CellDndProps,
+  ColumnDropLine,
+  TableDndContext,
+} from '@decipad/react-contexts';
 
 export const TableDndProvider = ({
   editor,

@@ -32,12 +32,6 @@
       "path": "../editor-table"
     },
     {
-      "path": "../editor-data-view"
-    },
-    {
-      "path": "../editor-variable-def"
-    },
-    {
       "path": "../editor-components"
     },
     {
@@ -48,9 +42,6 @@
     },
     {
       "path": "../notebook-tabs"
-    },
-    {
-      "path": "../editor-data-view"
     },
     {
       "path": "../editor-integrations"

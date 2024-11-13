@@ -51,3 +51,4 @@ export * from './CreateCrossBlockSelection';
 export * from './TabSelectionPlugin';
 export * from './SubmitForm';
 export * from './Math';
+export * from './Components';

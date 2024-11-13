@@ -1,10 +1,15 @@
 import { useContext } from 'react';
 import { useDrop } from 'react-dnd';
-import type { MyEditor, MyElement } from '@decipad/editor-types';
+import {
+  DRAG_ITEM_COLUMN,
+  type ColumnDndDirection,
+  type DragColumnItem,
+  type MyEditor,
+  type MyElement,
+} from '@decipad/editor-types';
 
-import { getHoverDirection } from '../utils';
-import type { ColumnDndDirection, DragColumnItem } from '../types';
-import { DRAG_ITEM_COLUMN, TableDndContext } from '../contexts/TableDndContext';
+import { getHoverDirection } from '@decipad/editor-utils';
+import { TableDndContext } from '@decipad/react-contexts';
 
 interface CollectedProps {
   isOver: boolean;

@@ -6,14 +6,10 @@ import { NotebookNavigationProps } from './types';
 import * as Styled from './styles';
 import { Sheet, Ellipsis } from '../../icons';
 import { NotebookOptions } from '../topbar';
-import {
-  Anchor,
-  DNDItemTypes,
-  AvailableSwatchColor,
-  getEmptyImage,
-} from '../../utils';
+import { Anchor, DNDItemTypes, AvailableSwatchColor } from '../../utils';
 import { cssVar } from '../../primitives';
 import { css } from '@emotion/react';
+import { getEmptyImage } from '@decipad/editor-utils';
 
 interface DropResult {
   id: string;

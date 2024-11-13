@@ -1,9 +1,7 @@
 import { createMyPluginFactory, ELEMENT_DRAW } from '@decipad/editor-types';
 import { lazyElementComponent } from '../../utils/lazyElement';
 
-const LazyDraw = lazyElementComponent(
-  () => import(/* webpackChunkName: "editor-draw" */ './Draw')
-);
+const LazyDraw = lazyElementComponent(() => import('./Draw'));
 
 export const createDrawPlugin = createMyPluginFactory({
   key: ELEMENT_DRAW,

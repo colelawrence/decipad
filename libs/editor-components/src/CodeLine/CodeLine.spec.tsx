@@ -1,5 +1,4 @@
 import { describe, it, expect } from 'vitest';
-import { CodeLine } from '@decipad/editor-components';
 import type { CodeLineElement } from '@decipad/editor-types';
 import { ELEMENT_CODE_LINE } from '@decipad/editor-types';
 import { render, screen } from '@testing-library/react';
@@ -9,6 +8,7 @@ import React, { createRef } from 'react';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { BrowserRouter } from 'react-router-dom';
+import { CodeLine } from './CodeLine';
 
 describe('Placeholders', () => {
   // @ts-ignore
