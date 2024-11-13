@@ -23,7 +23,6 @@ import {
 } from '../../../icons/thumbnail-icons';
 import { TEMP_CONNECTION_NAME } from '@decipad/frontend-config';
 import * as Styled from './styles';
-import { isFlagEnabled } from '@decipad/feature-flags';
 
 interface ServicesProps {
   readonly workspaceId: string;
@@ -116,17 +115,15 @@ export const Services: FC<ServicesProps> = ({ workspaceId }) => {
           OnConnectIntegration('notion');
         }}
       />
-      {isFlagEnabled('GOOGLE_SHEETS_INTEGRATION') && (
-        <IntegrationItem
-          icon={<ThumbnailGoogleSheet />}
-          title="Google Sheets"
-          description="Effortlessly use your spreadsheet inside Decipad!"
-          variant="modal"
-          onClick={() => {
-            OnConnectIntegration('gsheets');
-          }}
-        />
-      )}
+      <IntegrationItem
+        icon={<ThumbnailGoogleSheet />}
+        title="Google Sheets"
+        description="Effortlessly use your spreadsheet inside Decipad!"
+        variant="modal"
+        onClick={() => {
+          OnConnectIntegration('gsheets');
+        }}
+      />
       {filteredDataSources.length > 0 && (
         <>
           <Styled.Title>Existing connections</Styled.Title>
