@@ -558,7 +558,7 @@
     "dset": "3.1.4",
     "send": "1.1.0",
     "dompurify": "^3.2.0",
-    "rollup": "4.25.0",
+    "rollup": "4.26.0",
     "cookie": "1.0.0",
     "serve-handler": "6.1.6",
     "micromatch": "4.0.8"
