@@ -24,7 +24,6 @@ import { evaluateCategories } from '../categories';
 import { evaluateColumnAssign } from '../tables/column-assign';
 import { evaluateMatch } from '../match/evaluateMatch';
 import { evaluateTiered } from '../tiered/evaluateTiered';
-import { getDependencies } from '../dependencies/getDependencies';
 import { CURRENT_COLUMN_SYMBOL, usingPrevious } from './previous';
 import { isPrevious } from '../utils/isPrevious';
 import { getOfType } from '../parser/getOfType';
@@ -277,20 +276,8 @@ export async function evaluate(
   realm: TRealm,
   node: AST.Statement
 ): Promise<ValueTypes.Value> {
-  const cachedValue = node.cacheKey
-    ? realm.expressionCache.getCacheResult(node.cacheKey)
-    : undefined;
-  if (cachedValue != null) {
-    return cachedValue;
-  }
-
   try {
-    const value = await internalEvaluate(realm, node);
-    if (node.cacheKey) {
-      const dependencies = getDependencies(node);
-      realm.expressionCache.putCacheResult(node.cacheKey, dependencies, value);
-    }
-    return value;
+    return await internalEvaluate(realm, node);
   } catch (err) {
     if (!(err as ErrorWithLoggedError)[loggedError]) {
       if (shouldOutputDebugInfo) {

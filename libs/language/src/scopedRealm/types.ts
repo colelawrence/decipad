@@ -1,7 +1,6 @@
 // eslint-disable-next-line no-restricted-imports
 import type { ContextUtils, Type } from '@decipad/language-types';
 import type { AST, ExternalDataMap, Value } from '@decipad/language-interfaces';
-import type { ExpressionCache } from '../expression-cache';
 import type { TStackFrame } from './stack';
 
 export type InferContextUtils = Omit<
@@ -35,13 +34,11 @@ export interface TScopedRealm {
   previousRow: ReadonlyMap<string | symbol, Value.Value> | undefined;
   inferContext: TScopedInferContext;
   statementId?: string;
-  expressionCache: ExpressionCache<Value.Value>;
   externalData: ExternalDataMap;
   setExternalData: (externalData: ExternalDataMap) => void;
   maybeGetTypeAt(node: AST.Node): Type | undefined;
   getTypeAt(node: AST.Node): Type;
   push(nameOfNewReal: string): TScopedRealm;
-  clearCacheForSymbols(symbols: string[]): void;
   utils: ContextUtils;
   depth: number;
   toString(): string;

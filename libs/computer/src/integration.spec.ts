@@ -1,10 +1,12 @@
 import { expect, describe, it } from 'vitest';
-import { getDefined } from '@decipad/utils';
+import { getDefined, timeout } from '@decipad/utils';
 import { N } from '@decipad/number';
 // eslint-disable-next-line no-restricted-imports
 import { materializeResult } from '@decipad/language';
 import { Computer } from './computer';
-import { getIdentifiedBlocks } from './testUtils';
+import { getIdentifiedBlock, getIdentifiedBlocks } from './testUtils';
+import { Result } from '@decipad/language-interfaces';
+import { getExprRef } from './exprRefs';
 
 describe('cache', () => {
   it('epoch starts in 1', async () => {
@@ -430,5 +432,63 @@ describe('meta labels', () => {
         ],
       ]
     `);
+  });
+});
+
+describe('expressionResultFromText$', () => {
+  it('column smart refs in expressionResultFromText$ updates', async () => {
+    const computer = new Computer();
+    const program = getIdentifiedBlocks(
+      `Table1 = { A = [1, 2, 3]}`,
+      `Table1.B = [1, 2, 3]`
+    );
+
+    let lastResult: Result.AnyResult | undefined;
+    await computer.pushComputeDelta({ program: { upsert: program } });
+
+    const sub = computer
+      .expressionResultFromText$(`sum(${getExprRef('block-1')})`)
+      .subscribe((r) => {
+        lastResult = r;
+      });
+
+    await timeout(500);
+
+    expect(lastResult).toMatchInlineSnapshot(`
+      {
+        "type": {
+          "kind": "number",
+          "unit": null,
+        },
+        "value": DeciNumber {
+          "d": 1n,
+          "infinite": false,
+          "n": 6n,
+          "s": 1n,
+        },
+      }
+    `);
+
+    const lastBlock = getIdentifiedBlock(`Table1.B = [4, 5, 6]`, 1);
+    await computer.pushComputeDelta({ program: { upsert: [lastBlock] } });
+
+    await timeout(500);
+
+    expect(lastResult).toMatchInlineSnapshot(`
+      {
+        "type": {
+          "kind": "number",
+          "unit": null,
+        },
+        "value": DeciNumber {
+          "d": 1n,
+          "infinite": false,
+          "n": 15n,
+          "s": 1n,
+        },
+      }
+    `);
+
+    sub.unsubscribe();
   });
 });

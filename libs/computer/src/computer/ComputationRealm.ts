@@ -69,7 +69,6 @@ export class ComputationRealm {
       if (sym) {
         this.interpreterRealm.stack.delete(sym);
         this.inferContext.stack.delete(sym);
-        this.interpreterRealm.clearCacheForSymbols([sym]);
       }
     }
   }

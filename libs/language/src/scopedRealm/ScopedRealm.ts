@@ -15,7 +15,6 @@ import type {
   TStackFrame,
 } from './stack';
 import { createStack } from './stack';
-import { ExpressionCache } from '../expression-cache';
 import type { TScopedRealm, TScopedInferContext } from './types';
 import { simpleExpressionEvaluate } from '../interpreter/simpleExpressionEvaluate';
 import { internalInferFunction } from '../infer/functions';
@@ -29,7 +28,6 @@ export class ScopedRealm implements TScopedRealm {
     undefined;
   inferContext: TScopedInferContext;
   private _statementId?: string;
-  expressionCache: ExpressionCache<ValueTypes.Value>;
   utils: ContextUtils;
 
   constructor(
@@ -41,9 +39,6 @@ export class ScopedRealm implements TScopedRealm {
     this.name = name;
     this.parent = parent;
     this.inferContext = inferContext;
-    this.expressionCache = new ExpressionCache<ValueTypes.Value>(
-      this.parent?.expressionCache
-    );
     this.stack = createStack<ValueTypes.Value>(
       undefined,
       tableItemsToTable,
@@ -91,10 +86,6 @@ export class ScopedRealm implements TScopedRealm {
       nameOfNewRealm,
       this.utils
     );
-  }
-
-  clearCacheForSymbols(symbols: string[]): void {
-    this.expressionCache.clearCacheResultsForSymbols(symbols);
   }
 
   get statementId(): string | undefined {
