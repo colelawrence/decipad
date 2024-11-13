@@ -162,7 +162,7 @@
     "@storybook/react-vite": "^8.4.2",
     "@stripe/react-stripe-js": "^2.9.0",
     "@stripe/stripe-js": "^4.9.0",
-    "@swc/plugin-emotion": "^4.0.0",
+    "@swc/plugin-emotion": "^7.0.0",
     "@testing-library/jest-dom": "^6.6.2",
     "@testing-library/react-hooks": "^8.0.1",
     "@types/debug": "^4.1.8",
