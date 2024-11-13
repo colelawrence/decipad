@@ -24,11 +24,11 @@ export const getDataRangeUrlFromSheetAndIslands = (
   });
 
   const subSheet =
-    sheetMeta.sheets.find(
+    sheetMeta.sheets?.find(
       (sheet) =>
         sheet.properties.sheetId === gid ||
         sheet.properties.sheetId === Number(gid)
-    ) ?? sheetMeta.sheets[Number(gid)];
+    ) ?? sheetMeta.sheets?.[Number(gid)];
   const subSheetName = subSheet?.properties.title ?? 'Sheet1';
 
   const range = islandToRange(subSheetName, island);

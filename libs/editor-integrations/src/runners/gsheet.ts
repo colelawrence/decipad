@@ -62,8 +62,8 @@ export class GSheetRunner extends Runner<T, O> {
     });
 
     const subSheet =
-      sheetMeta.sheets.find((sheet) => sheet.properties.sheetId === gid) ??
-      sheetMeta.sheets[gid];
+      sheetMeta.sheets?.find((sheet) => sheet.properties.sheetId === gid) ??
+      sheetMeta.sheets?.[gid];
 
     const subSheetName =
       (subSheet?.properties.title &&

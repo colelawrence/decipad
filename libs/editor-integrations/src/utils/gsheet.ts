@@ -16,7 +16,7 @@ export type SheetMeta = {
     sheetId: number;
     title: string;
   };
-  sheets: SheetMeta[];
+  sheets?: SheetMeta[];
 };
 
 const getSheetRequestDataFromApiUrl = (sheetUrl: URL): SheetRequestData => {

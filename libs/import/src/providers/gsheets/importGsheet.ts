@@ -102,7 +102,7 @@ const loadAllSubsheets = async (
   const meta = await getSheetMeta(sheetId, params);
   const loader = loadSheet(params, options);
   const results: ImportResult[] = [];
-  for (const subsheet of meta.sheets) {
+  for (const subsheet of meta.sheets ?? []) {
     const url = getDataUrlFromSheetMeta(
       meta.spreadsheetId,
       subsheet.properties.sheetId,
@@ -196,11 +196,11 @@ export interface GoogleSheetMeta {
 
 export const getGsheetMeta = async (
   params: ImportParams
-): Promise<Array<GoogleSheetMeta>> => {
+): Promise<Array<GoogleSheetMeta> | undefined> => {
   const { sheetId } = getSheetRequestDataFromUrl(params.url);
   const meta = await getSheetMeta(sheetId, params);
 
-  return meta.sheets.map((s) => ({
+  return meta.sheets?.map((s) => ({
     sheetId: s.properties.sheetId,
     sheetName: s.properties.title,
   }));

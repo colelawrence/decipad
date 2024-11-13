@@ -18,7 +18,7 @@ export interface SheetMeta {
     sheetId: number;
     title: string;
   };
-  sheets: SheetMeta[];
+  sheets?: SheetMeta[];
 }
 
 export type ErrorWithCode = Error & {
