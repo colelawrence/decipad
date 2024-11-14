@@ -32,6 +32,7 @@ const makeParagraph = (text = ''): MyElement[] =>
   [
     {
       type: ELEMENT_PARAGRAPH,
+      id: 'id',
       children: [{ text }],
     },
   ] as MyElement[];

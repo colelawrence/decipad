@@ -524,7 +524,8 @@ export interface DrawElement extends BaseElement {
 
 export interface BaseElement extends TElement {
   type: ElementKind;
-  id?: string;
+  id: string;
+
   isHidden?: boolean;
   endpointUrlSecretName?: string;
 }
@@ -565,14 +566,17 @@ export interface DividerElement extends BaseElement {
 
 // Media Blocks
 export interface ImageElement extends TImageElement, BaseElement {
+  id: string;
   type: typeof ELEMENT_IMAGE;
   children: [EmptyText];
 }
 export interface MediaEmbedElement extends TMediaEmbedElement, BaseElement {
+  id: string;
   type: typeof ELEMENT_MEDIA_EMBED;
   children: [EmptyText];
 }
 export interface IframeEmbedElement extends TImageElement, BaseElement {
+  id: string;
   type: typeof ELEMENT_IFRAME;
   url: string;
   children: [EmptyText];

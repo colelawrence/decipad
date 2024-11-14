@@ -106,10 +106,12 @@ describe('Integrations between BlockProcessor and EditorController', () => {
         type: ELEMENT_DATA_TAB_CHILDREN,
         children: [
           {
+            id: 'calc-name-1',
             type: ELEMENT_STRUCTURED_VARNAME,
             children: [{ text: 'My Var Name' }],
           },
           {
+            id: 'calc-code-1',
             type: ELEMENT_CODE_LINE_V2_CODE,
             children: [{ text: '5' }],
           },

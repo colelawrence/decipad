@@ -241,11 +241,13 @@ const insertEditingBlock = (
   }
 
   const editedVarName: CodeLineV2Element['children'][0] = {
+    id: nanoid(),
     type: ELEMENT_STRUCTURED_VARNAME,
     children: structuredClone(varNameChildren),
   };
 
   const editedCode: CodeLineV2Element['children'][1] = {
+    id: nanoid(),
     type: ELEMENT_CODE_LINE_V2_CODE,
     children: structuredClone(codeChildren),
   };

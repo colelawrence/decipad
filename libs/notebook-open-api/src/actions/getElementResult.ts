@@ -48,7 +48,7 @@ export const getElementResult: Action<'getElementResult'> = {
     if (!isElement(element)) {
       throw notFound('not an element');
     }
-    const result = computer.getBlockIdResult(element.id ?? '');
+    const result = computer.getBlockIdResult(element.id);
     if (!result || !result.result) {
       throw notFound('no result');
     }

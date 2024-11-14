@@ -34,7 +34,7 @@ export const DataView: PlateComponent<{ variableName: string }> = ({
   assertElementType(element, ELEMENT_DATA_VIEW);
   const editor = useMyEditorRef();
   const computer = useComputer();
-  const computing = useIsBeingComputed(element.id ?? '');
+  const computing = useIsBeingComputed(element.id);
 
   const path = useNodePath(element);
   const saveIcon = usePathMutatorCallback(editor, path, 'icon', 'DataView');

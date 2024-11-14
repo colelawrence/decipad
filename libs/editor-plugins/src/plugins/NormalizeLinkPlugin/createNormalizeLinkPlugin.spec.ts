@@ -21,6 +21,7 @@ it('is not a link without a url', () => {
   editor.children = [
     {
       type: ELEMENT_PARAGRAPH,
+      id: 'p',
       children: [
         {
           type: ELEMENT_LINK,
@@ -33,6 +34,7 @@ it('is not a link without a url', () => {
   expect(editor.children).toEqual([
     {
       type: ELEMENT_PARAGRAPH,
+      id: 'p',
       children: [{ text: 'text' }],
     },
   ] as MyElement[]);

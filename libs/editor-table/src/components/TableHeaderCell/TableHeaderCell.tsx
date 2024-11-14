@@ -30,7 +30,7 @@ export const TableHeaderCell: PlateComponent = ({
     element.id
   );
 
-  const formulaIsSelected = useIsFormulaSelected(element.id ?? '');
+  const formulaIsSelected = useIsFormulaSelected(element.id);
   const isHeaderSelected = useSelection();
   const { ai } = useResourceUsage();
 
@@ -79,11 +79,11 @@ export const TableHeaderCell: PlateComponent = ({
         [columnIndex, onAddColumnHere]
       )}
       onRemoveColumn={useCallback(
-        () => onRemoveColumn?.(element.id ?? ''),
+        () => onRemoveColumn?.(element.id),
         [element.id, onRemoveColumn]
       )}
       onPopulateColumn={useCallback(
-        () => onPopulateColumn?.(element.id ?? ''),
+        () => onPopulateColumn?.(element.id),
         [element.id, onPopulateColumn]
       )}
       onSelectColumn={useCallback(

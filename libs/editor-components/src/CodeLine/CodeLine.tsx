@@ -75,7 +75,7 @@ export const CodeLine: PlateComponent = ({ attributes, children, element }) => {
       const newDisplayElement: DisplayElement = {
         id: nanoid(),
         type: ELEMENT_DISPLAY,
-        blockId: element.id ?? '',
+        blockId: element.id,
         children: [{ text: '' }],
       };
 

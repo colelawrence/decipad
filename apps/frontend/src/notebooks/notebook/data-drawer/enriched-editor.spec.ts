@@ -10,13 +10,16 @@ const makeChildren = (
   children: (PlainText | SmartRefElement)[]
 ): DataDrawerEditorValue => [
   {
+    id: 'code_line_v2',
     type: 'code_line_v2',
     children: [
       {
+        id: 'structured_varname',
         type: 'structured_varname',
         children: [{ text: 'myName' }],
       },
       {
+        id: 'code_line_v2_code',
         type: 'code_line_v2_code',
         children,
       },
@@ -261,6 +264,7 @@ describe('Selection helper enriched editor', () => {
                   "text": "myName",
                 },
               ],
+              "id": "structured_varname",
               "type": "structured_varname",
             },
             {
@@ -297,9 +301,11 @@ describe('Selection helper enriched editor', () => {
                   "text": "T)EXTC",
                 },
               ],
+              "id": "code_line_v2_code",
               "type": "code_line_v2_code",
             },
           ],
+          "id": "code_line_v2",
           "type": "code_line_v2",
         },
       ]
@@ -323,6 +329,7 @@ describe('Selection helper enriched editor', () => {
                   "text": "myName",
                 },
               ],
+              "id": "structured_varname",
               "type": "structured_varname",
             },
             {
@@ -359,9 +366,11 @@ describe('Selection helper enriched editor', () => {
                   "text": ")TEXTC",
                 },
               ],
+              "id": "code_line_v2_code",
               "type": "code_line_v2_code",
             },
           ],
+          "id": "code_line_v2",
           "type": "code_line_v2",
         },
       ]

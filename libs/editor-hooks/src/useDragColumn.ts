@@ -16,7 +16,7 @@ export const useDragColumn = (
   onCellDragEnd: UseDragNodeOptions['end']
 ) => {
   const [{ isDragging }, dragSource, dragPreview] = useDragNode(editor, {
-    id: element.id ?? '',
+    id: element.id,
     type: elementType,
     end: onCellDragEnd,
   });

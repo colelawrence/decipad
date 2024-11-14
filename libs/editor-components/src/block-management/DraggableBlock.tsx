@@ -231,7 +231,7 @@ export const DraggableBlock: React.FC<DraggableBlockProps> = forwardRef<
 
     const onMouseDown = useCallback(() => {
       if (element.type === ELEMENT_TABLE) {
-        dndPreviewActions.draggingId(element.id ?? '');
+        dndPreviewActions.draggingId(element.id);
       }
     }, [element.id, element.type]);
 
@@ -433,7 +433,7 @@ export const DraggableBlock: React.FC<DraggableBlockProps> = forwardRef<
             document.getElementById('annotations-container') &&
             createPortal(
               <BlockAnnotations
-                blockId={element.id ?? ''}
+                blockId={element.id}
                 blockRef={blockRef}
                 setBlockHighlighted={setBlockHighlighted}
               />,
@@ -443,7 +443,7 @@ export const DraggableBlock: React.FC<DraggableBlockProps> = forwardRef<
       );
     }
 
-    const isBeingDragged = isDragging || draggingIds.has(element.id ?? '');
+    const isBeingDragged = isDragging || draggingIds.has(element.id);
 
     return (
       <>
@@ -511,7 +511,7 @@ export const DraggableBlock: React.FC<DraggableBlockProps> = forwardRef<
           {document.getElementById('annotations-container') &&
             createPortal(
               <BlockAnnotations
-                blockId={element.id ?? ''}
+                blockId={element.id}
                 blockRef={blockRef}
                 setBlockHighlighted={setBlockHighlighted}
               />,
