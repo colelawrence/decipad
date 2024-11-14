@@ -1,11 +1,8 @@
 import {
   count,
   firstOrUndefined,
-  from,
   fromGeneratorPromise,
   map,
-  memoizing,
-  slice,
   trace,
 } from '@decipad/generator-utils';
 import type {
@@ -17,7 +14,7 @@ import type {
 import { isColumnLike } from './ColumnLike';
 import { lowLevelGet } from './lowLevelGet';
 import type { PromiseOrType } from '@decipad/utils';
-import { getDefined, once } from '@decipad/utils';
+import { once } from '@decipad/utils';
 import { buildResult } from '../utils/buildResult';
 import { lowLowLevelGet } from './lowLowLevelGet';
 import { ColumnBase } from './ColumnBase';
@@ -32,8 +29,6 @@ type MapFunction<T = Result.OneResult> = (
   previous?: T
 ) => PromiseOrType<Result.OneResult>;
 
-const MAX_GENERATOR_MEMO_ELEMENTS = Infinity;
-
 export class FMappedColumn<T = Result.OneResult>
   extends ColumnBase
   implements TFMappedColumn
@@ -41,8 +36,6 @@ export class FMappedColumn<T = Result.OneResult>
   private gen: PromiseOrType<Result.GenericResultGenerator<T>>;
   private map: MapFunction<T>;
   private type: SerializedType;
-  private memo: undefined | Array<Value.Value>;
-  private partialMemo: undefined | boolean;
   private desc: string;
 
   public meta: undefined | (() => Result.ResultMetadataColumn | undefined);
@@ -94,16 +87,10 @@ export class FMappedColumn<T = Result.OneResult>
   }
 
   async atIndex(i: number): Promise<Value.Value | undefined> {
-    if (this.memo && i < this.memo.length) {
-      return this.memo[i];
-    }
     return firstOrUndefined(this.values(i, i + 1));
   }
 
   async getRowCount() {
-    if (this.memo) {
-      return this.memo.length;
-    }
     return count(this.values());
   }
 
@@ -115,28 +102,9 @@ export class FMappedColumn<T = Result.OneResult>
     start = 0,
     end = Infinity
   ): Promise<AsyncGenerator<Value.Value>> {
-    if (
-      this.memo != null &&
-      (end < this.memo.length || !getDefined(this.partialMemo))
-    ) {
-      return trace(slice(from(this.memo), start, end), this.desc);
-    }
     return trace(
-      slice(
-        memoizing(
-          map((await this.gen)(), async (r, i, previous) =>
-            resultToValue(
-              buildResult(this.type, await this.map(r, i, previous))
-            )
-          ),
-          (all, partial) => {
-            this.memo = all;
-            this.partialMemo = partial;
-          },
-          MAX_GENERATOR_MEMO_ELEMENTS
-        ),
-        start,
-        end
+      map((await this.gen)(start, end), async (r, i, previous) =>
+        resultToValue(buildResult(this.type, await this.map(r, i, previous)))
       ),
       this.desc
     );

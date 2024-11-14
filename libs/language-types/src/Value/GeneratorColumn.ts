@@ -12,7 +12,7 @@ import type { ValueGeneratorFunction } from './ValueGenerator';
 import { columnValueToResultValue } from '../utils/columnValueToResultValue';
 import { lowLevelGet } from './lowLevelGet';
 import type { PromiseOrType } from '@decipad/utils';
-import { getDefined, once } from '@decipad/utils';
+import { once } from '@decipad/utils';
 import { getResultGenerator } from '../utils/getResultGenerator';
 import { lowLowLevelGet } from './lowLowLevelGet';
 import { ColumnBase } from './ColumnBase';
@@ -26,7 +26,6 @@ const MAX_GENERATOR_MEMO_ELEMENTS = Infinity;
 export class GeneratorColumn extends ColumnBase implements TGeneratorColumn {
   private gen: PromiseOrType<ValueGeneratorFunction>;
   private memo: undefined | Array<Value.Value>;
-  private partialMemo: undefined | boolean;
   private desc: string;
 
   public meta: undefined | (() => undefined | ResultMetadataColumn);
@@ -87,19 +86,15 @@ export class GeneratorColumn extends ColumnBase implements TGeneratorColumn {
   }
 
   private async asyncValues(start = 0, end = Infinity) {
-    if (
-      this.memo != null &&
-      (end < this.memo.length || !getDefined(this.partialMemo))
-    ) {
+    if (this.memo != null && end <= this.memo.length) {
       return trace(slice(from(this.memo), start, end), this.desc);
     }
     return trace(
       slice(
         memoizing(
           (await this.gen)(),
-          (all, partial) => {
+          (all) => {
             this.memo = all;
-            this.partialMemo = partial;
           },
           MAX_GENERATOR_MEMO_ELEMENTS
         ),

@@ -13,5 +13,6 @@ export const all = async <T>(
   for await (const v of gen) {
     acc.push(v);
   }
+  gen.__fromArray = acc;
   return acc;
 };
