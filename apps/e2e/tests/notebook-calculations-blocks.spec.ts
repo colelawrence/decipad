@@ -227,14 +227,10 @@ test.describe('structured input and calculations @calculation-blocks @snapshot',
       // eslint-disable-next-line playwright/no-wait-for-timeout
       await page.waitForTimeout(Timeouts.computerDelay);
 
-      // Drag origin and drop target have 2 * DragMe ! yay
+      // Drag origin and drop target have 2 + DragMe ! yay
       expect(
-        (
-          await page
-            .getByRole('textbox')
-            .getByTestId('number-result:1,120')
-            .all()
-        ).length
+        (await page.getByRole('textbox').getByTestId('number-result:562').all())
+          .length
       ).toBe(1);
 
       // Drag into a paragraph -> creates a magic number

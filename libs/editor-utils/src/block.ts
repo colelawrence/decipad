@@ -1,11 +1,14 @@
 import {
   ELEMENT_BLOCKQUOTE,
   ELEMENT_CALLOUT,
+  ELEMENT_CODE_LINE,
+  ELEMENT_CODE_LINE_V2_CODE,
   ELEMENT_IFRAME,
   ELEMENT_IMAGE,
   ELEMENT_INLINE_NUMBER,
   ELEMENT_LIC,
   ELEMENT_PARAGRAPH,
+  ELEMENT_TABLE_COLUMN_FORMULA,
   type ElementKind,
   type InlineNumberElement,
   type MyEditor,
@@ -71,6 +74,12 @@ export const RICH_TEXT_BLOCK_TYPES: ReadonlyArray<ElementKind> = [
   ELEMENT_LIC,
   ELEMENT_BLOCKQUOTE,
   ELEMENT_CALLOUT,
+];
+
+export const CODE_BLOCK_TYPES: ReadonlyArray<ElementKind> = [
+  ELEMENT_CODE_LINE_V2_CODE,
+  ELEMENT_CODE_LINE,
+  ELEMENT_TABLE_COLUMN_FORMULA,
 ];
 
 export const allowsTextStyling = (

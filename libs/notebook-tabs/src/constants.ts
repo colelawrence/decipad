@@ -1,6 +1,8 @@
-export const TITLE_INDEX = 0;
-export const DATA_TAB_INDEX = 1;
-export const FIRST_TAB_INDEX = 2;
+export {
+  TITLE_INDEX,
+  DATA_TAB_INDEX,
+  FIRST_TAB_INDEX,
+} from '@decipad/editor-types';
 
 // We have Title, DataTab and only then the content tabs
 // This means our's path's are off by 2.

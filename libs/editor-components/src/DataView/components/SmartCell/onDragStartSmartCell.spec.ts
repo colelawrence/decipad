@@ -3,7 +3,7 @@ import type React from 'react';
 import { DeciNumber } from '@decipad/number';
 import { dndPreviewActions } from '@decipad/react-contexts';
 import { onDragStartSmartCell } from './onDragStartSmartCell';
-import { DRAG_SMART_CELL } from '@decipad/editor-types';
+import { DEPRECATED_DRAG_EXPRESSION_IN_FRAGMENT } from '@decipad/editor-types';
 
 vi.mock('@udecode/plate-common', async (requireActual) => ({
   ...((await requireActual()) as object),
@@ -41,11 +41,11 @@ describe('onDragStartSmartCell', () => {
     };
   });
 
-  it('should set editor.dragging to "smart-ref"', () => {
+  it('should set editor.dragging to DEPRECATED_DRAG_EXPRESSION_IN_FRAGMENT', () => {
     onDragStartSmartCell(editor)({ computer, expression: '', result })(
       dragEvent
     );
-    expect(editor.dragging).toBe(DRAG_SMART_CELL);
+    expect(editor.dragging).toBe(DEPRECATED_DRAG_EXPRESSION_IN_FRAGMENT);
   });
 
   it('should call dndPreviewActions.previewText if element is present', () => {

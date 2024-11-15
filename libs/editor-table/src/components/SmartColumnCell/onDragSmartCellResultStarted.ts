@@ -1,21 +1,22 @@
-import type { MyEditor } from '@decipad/editor-types';
 import type { DragEvent } from 'react';
 import type { Result } from '@decipad/language-interfaces';
 import { dndPreviewActions } from '@decipad/react-contexts';
 import { formatResult } from '@decipad/format';
-
-export const DRAG_SMART_CELL_RESULT = 'smart-cell-result';
-export const DRAG_SMART_CELL_RESULT_CONTENT_TYPE = 'text/x-smart-cell-result';
+import {
+  type MyEditor,
+  DRAG_EXPRESSION,
+  DRAG_EXPRESSION_CONTENT_TYPE,
+} from '@decipad/editor-types';
 
 export const onDragSmartCellResultStarted =
   (editor: MyEditor) =>
   ({ expression, result }: { expression: string; result: Result.Result }) =>
   (e: DragEvent) => {
     // eslint-disable-next-line no-param-reassign
-    editor.dragging = DRAG_SMART_CELL_RESULT;
+    editor.dragging = DRAG_EXPRESSION;
     // This is needed to make it draggable.
     e.dataTransfer.setData('text', '');
-    e.dataTransfer.setData(DRAG_SMART_CELL_RESULT_CONTENT_TYPE, expression);
+    e.dataTransfer.setData(DRAG_EXPRESSION_CONTENT_TYPE, expression);
 
     if (editor.previewRef?.current) {
       dndPreviewActions.previewText(

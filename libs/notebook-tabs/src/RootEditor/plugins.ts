@@ -18,12 +18,10 @@ import {
   ELEMENT_BLOCKQUOTE,
   MARK_MAGICNUMBER,
   PlainText,
-  DataTabChildrenElement,
   ELEMENT_DATA_TAB_CHILDREN,
-  ELEMENT_STRUCTURED_VARNAME,
-  ELEMENT_CODE_LINE_V2_CODE,
   ELEMENT_DATA_TAB_WORKSPACE_RESULT,
   DataTabWorkspaceResultElement,
+  RootEditor,
 } from '@decipad/editor-types';
 import { nanoid } from 'nanoid';
 import { IsDataTab, IsTab, IsTitle } from '../utils';
@@ -35,9 +33,10 @@ import {
   Value,
 } from '@udecode/plate-common';
 import { getExprRef, isExprRef } from '@decipad/computer';
-import { assert, generatedNames } from '@decipad/utils';
+import { assert } from '@decipad/utils';
 import { isFirstOfOldNodes } from './utils';
 import { DATA_TAB_INDEX, FIRST_TAB_INDEX } from '../constants';
+import { convertExpressionToSmartRef } from '@decipad/editor-utils';
 
 type NormalizePlugin = (entry: TNodeEntry) => boolean;
 type CurriedNormalizePlugin = <T extends Value = Value>(
@@ -532,28 +531,13 @@ const migrateInlineNumbers: CurriedNormalizerPluginWithIdGenerator =
     }
 
     for (const [childPath, content] of childrenToMigrate) {
-      const dataTabDefinitionId = idGenerator();
-
-      editor.apply({
-        type: 'insert_node',
-        path: [DATA_TAB_INDEX, 0],
-        node: {
-          type: ELEMENT_DATA_TAB_CHILDREN,
-          id: dataTabDefinitionId,
-          children: [
-            {
-              id: idGenerator(),
-              type: ELEMENT_STRUCTURED_VARNAME,
-              children: [{ text: generatedNames() }],
-            },
-            {
-              id: idGenerator(),
-              type: ELEMENT_CODE_LINE_V2_CODE,
-              children: [{ text: content.text }],
-            },
-          ],
-        } satisfies DataTabChildrenElement,
-      });
+      const dataTabDefinitionId = convertExpressionToSmartRef(
+        editor as RootEditor,
+        {
+          expression: content.text,
+          idGenerator,
+        }
+      );
 
       const inlineNumberPath = [...path, ...childPath];
 

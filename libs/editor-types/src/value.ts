@@ -815,6 +815,10 @@ export type TopLevelValue =
   | SubmitForm
   | IntegrationBlock;
 
+export const TITLE_INDEX = 0;
+export const DATA_TAB_INDEX = 1;
+export const FIRST_TAB_INDEX = 2;
+
 export type NotebookValue = [
   TitleElement,
   DataTabElement,

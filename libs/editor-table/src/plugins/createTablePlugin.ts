@@ -29,7 +29,6 @@ import { createNormalizeTableFormulaAndSeriesCellsPlugin } from './createNormali
 import { createNormalizeTablesPlugin } from './createNormalizeTablesPlugin';
 import { createNormalizeTdPlugin } from './createNormalizeTdPlugin';
 import { createClearCellPlugin } from './createClearCellPlugin';
-import { onDropSmartCellResult } from './onDropSmartCellResult';
 import { onKeyDownTable } from './onKeyDownTable';
 import { withTable } from './withTable';
 import { getEmptyCellNode, type TablePlugin } from '@udecode/plate-table';
@@ -76,7 +75,6 @@ export const createTablePlugin = <
   renderAboveEditable: TableAboveEditable,
   withOverrides: withTable(),
   handlers: {
-    onDrop: onDropSmartCellResult() as any,
     onKeyDown: onKeyDownTable(),
   },
   plugins: [

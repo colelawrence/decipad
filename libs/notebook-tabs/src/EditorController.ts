@@ -8,7 +8,6 @@ import { Subject, filter } from 'rxjs';
 import type {
   EElement,
   ENode,
-  PlateEditor,
   TDescendant,
   TEditor,
   TInsertNodeOperation,
@@ -44,6 +43,7 @@ import {
   ELEMENT_TITLE,
   TopLevelValue,
   ELEMENT_LAYOUT,
+  RootEditor,
 } from '@decipad/editor-types';
 import { assert, assertEqual, getDefined } from '@decipad/utils';
 import {
@@ -120,7 +120,7 @@ export class EditorController implements RootEditorController {
   private tabEditors: Array<MyTabEditor> = [];
   private selectedTab = 0;
   private editorPlugins: Array<MyPlatePlugin>;
-  private mirrorEditor: PlateEditor<NotebookValue>;
+  private mirrorEditor: RootEditor;
 
   public dataTabEditor: DataTabEditor;
 
@@ -187,7 +187,7 @@ export class EditorController implements RootEditorController {
     return titleEditor;
   }
 
-  private createMirrorEditor(): PlateEditor<NotebookValue> {
+  private createMirrorEditor(): RootEditor {
     const mirrorEditor = createPlateEditor<NotebookValue>({
       plugins: [],
     });
@@ -1031,6 +1031,7 @@ export class EditorController implements RootEditorController {
     editor.tabName = tabName;
     editor.icon = tabIcon;
     editor.isHidden = tabIsHidden;
+    editor.rootEditor = this.mirrorEditor;
 
     return editor as MyTabEditor;
   }

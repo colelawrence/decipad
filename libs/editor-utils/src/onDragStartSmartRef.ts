@@ -1,14 +1,13 @@
-import type {
+import {
   CodeLineElement,
   CodeLineV2Element,
   MyEditor,
+  DRAG_BLOCK_ID,
+  DRAG_BLOCK_ID_CONTENT_TYPE,
 } from '@decipad/editor-types';
 import { formatResult } from '@decipad/format';
 import { dndPreviewActions } from '@decipad/react-contexts';
 import type { Result } from '@decipad/language-interfaces';
-
-export const DRAG_SMART_REF = 'smart-ref';
-export const DRAG_BLOCK_ID_CONTENT_TYPE = 'text/x-block-id';
 
 export type SmartRefDragCallback = (opts: {
   blockId?: string;
@@ -27,7 +26,7 @@ export const onDragStartSmartRef =
   ({ blockId, element, asText, result }) =>
   (e: React.DragEvent) => {
     // eslint-disable-next-line no-param-reassign
-    editor.dragging = DRAG_SMART_REF;
+    editor.dragging = DRAG_BLOCK_ID;
 
     const id = element?.id ?? blockId!;
 

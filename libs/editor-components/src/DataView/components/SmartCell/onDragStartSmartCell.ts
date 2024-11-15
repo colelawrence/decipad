@@ -1,7 +1,10 @@
 import type { Computer } from '@decipad/computer-interfaces';
 import type { Result } from '@decipad/language-interfaces';
-import { DRAG_SMART_CELL, type MyEditor } from '@decipad/editor-types';
 import { setSlateFragment } from '@decipad/editor-utils';
+import {
+  type MyEditor,
+  DEPRECATED_DRAG_EXPRESSION_IN_FRAGMENT,
+} from '@decipad/editor-types';
 import type { DragEvent } from 'react';
 import { dndPreviewActions } from '@decipad/react-contexts';
 import { formatResult } from '@decipad/format';
@@ -18,7 +21,7 @@ export const onDragStartSmartCell =
   }) =>
   (e: DragEvent) => {
     // eslint-disable-next-line no-param-reassign
-    editor.dragging = DRAG_SMART_CELL;
+    editor.dragging = DEPRECATED_DRAG_EXPRESSION_IN_FRAGMENT;
 
     setSlateFragment(e.dataTransfer, [expression]);
 

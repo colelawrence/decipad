@@ -2,10 +2,8 @@ import { beforeEach, expect, describe, it, vi } from 'vitest';
 import type React from 'react';
 import { DeciNumber } from '@decipad/number';
 import { dndPreviewActions } from '@decipad/react-contexts';
-import {
-  DRAG_SMART_CELL_RESULT,
-  onDragSmartCellResultStarted,
-} from './onDragSmartCellResultStarted';
+import { onDragSmartCellResultStarted } from './onDragSmartCellResultStarted';
+import { DRAG_EXPRESSION } from '@decipad/editor-types';
 
 vi.mock('@udecode/plate-common', async (requireActual) => ({
   ...((await requireActual()) as object),
@@ -42,9 +40,9 @@ describe('onDragSmartCellResultStarted', () => {
     };
   });
 
-  it('should set editor.dragging to "smart-ref"', () => {
+  it('should set editor.dragging to DRAG_EXPRESSION', () => {
     onDragSmartCellResultStarted(editor)({ expression: '', result })(dragEvent);
-    expect(editor.dragging).toBe(DRAG_SMART_CELL_RESULT);
+    expect(editor.dragging).toBe(DRAG_EXPRESSION);
   });
 
   it('should call dndPreviewActions.previewText if element is present', () => {

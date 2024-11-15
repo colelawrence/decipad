@@ -2,6 +2,7 @@ import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { N } from '@decipad/number';
 import { dndPreviewActions } from '@decipad/react-contexts';
 import { onDragStartSmartRef } from './onDragStartSmartRef';
+import { DRAG_BLOCK_ID } from '@decipad/editor-types';
 
 vi.mock('@udecode/plate-common', async (importOriginal) => ({
   ...((await importOriginal()) as object),
@@ -37,9 +38,9 @@ describe('onDragStartSmartRef', () => {
     };
   });
 
-  it('should set editor.dragging to "smart-ref"', () => {
+  it('should set editor.dragging to DRAG_BLOCK_ID', () => {
     onDragStartSmartRef(editor)({ asText: '' } as any)(dragEvent);
-    expect(editor.dragging).toBe('smart-ref');
+    expect(editor.dragging).toBe(DRAG_BLOCK_ID);
   });
 
   it('should call dndPreviewActions.previewText if element is present', () => {

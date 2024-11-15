@@ -61,15 +61,16 @@ export type MyGenericEditor<TV extends Value> = PlateEditor<TV> & {
   previewRef?: RefObject<HTMLDivElement>;
 } & UndoEditor;
 
+export type RootEditor = MyGenericEditor<NotebookValue>;
+
 export type MyEditor = MyGenericEditor<MyValue>;
 export type MyTabEditor = MyEditor & {
   tabName: string;
   icon?: UserIconKey;
   isHidden?: boolean;
+  rootEditor: RootEditor;
 };
 export type MyReactEditor = TReactEditor<MyValue>;
-
-export type RootEditor = MyGenericEditor<NotebookValue>;
 
 export type MinimalRootEditor = Pick<
   TEditor<NotebookValue>,
