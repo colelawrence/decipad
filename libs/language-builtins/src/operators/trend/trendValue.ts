@@ -79,7 +79,7 @@ const compareColumns = (
   if (columnType.type === 'number') {
     return compareNumberColumns(columnA, columnB);
   }
-  return columnA;
+  return columnB;
   // TODO: endure the values are the exact same
   // return ensureSame(columnA, columnB);
 };
