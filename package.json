@@ -561,6 +561,7 @@
     "rollup": "4.26.0",
     "cookie": "1.0.0",
     "serve-handler": "6.1.6",
+    "cross-spawn": "7.0.5",
     "micromatch": "4.0.8"
   }
 }
