@@ -99,11 +99,6 @@ users
   hide_checklist Boolean
   onboarded Boolean
 
-userprofiles
-  user_id *String
-  github_login String
-  encrypt true
-
 userkeys
   id *String
   user_id String
@@ -123,12 +118,6 @@ connections
   user_id String
   encrypt true
   expires_at TTL
-
-collabs
-  id *String
-  user_id String
-  room String
-  encrypt true
 
 permissions
   id *String
@@ -338,12 +327,6 @@ anonusers
   username String
   pad_id String
 
-scenarios
-  id *String
-  scenario_name String
-  pad_id String
-  user_id String
-
 # Big composite key
 # /resource_type/sub_type/field_name/[users/workspaces]/id
 # /openai/gpt-4-1106/users
@@ -374,12 +357,6 @@ anonusers
 connections
   room *String
   name byRoom
-
-collabs
-  room *String
-
-collabs
-  conn *String
 
 invites
   resource_uri *String
@@ -550,14 +527,6 @@ annotations
   alias_id *String
   name byAliasId
 
-scenarios
-  pad_id *String
-  name byPadId
-
-scenarios
-  pad_id *String
-  scenario_name **String
-  name byPadIdAndName
 resourceusagehistory
   resource_uri *String
   name byResource
