@@ -1,7 +1,10 @@
 import { it, expect, beforeEach, describe, vi } from 'vitest';
-import type { TableElement } from '@decipad/editor-types';
+import type {
+  TableElement,
+  VariableDropdownElement,
+} from '@decipad/editor-types';
 import { getComputer } from '@decipad/computer';
-import utils from './utils';
+import { clone } from './clone';
 
 vi.mock('nanoid', () => ({
   nanoid: () => 'mocked-nano-id',
@@ -14,7 +17,56 @@ describe('Clone proxy', () => {
     computer = getComputer();
   });
 
-  it('deduplicates the IDs in category values in tables', async () => {
+  it('deduplicates the IDs in dropdown widget', () => {
+    const dropdownElement: VariableDropdownElement = {
+      type: 'def',
+      id: '0',
+      variant: 'dropdown',
+      children: [
+        { type: 'caption', id: '1', children: [{ text: '' }] },
+        {
+          type: 'dropdown',
+          id: '2',
+          options: [{ id: 'option-id-1', value: 'hello world' }],
+          children: [{ text: '' }],
+        },
+      ],
+    };
+
+    expect(clone(computer, dropdownElement)).toMatchObject({
+      children: [
+        {
+          children: [
+            {
+              text: 'Copy',
+            },
+          ],
+          id: 'mocked-nano-id',
+          type: 'caption',
+        },
+        {
+          children: [
+            {
+              text: '',
+            },
+          ],
+          id: 'mocked-nano-id',
+          options: [
+            {
+              id: 'mocked-nano-id',
+              value: 'hello world',
+            },
+          ],
+          type: 'dropdown',
+        },
+      ],
+      id: 'mocked-nano-id',
+      type: 'def',
+      variant: 'dropdown',
+    });
+  });
+
+  it('deduplicates the IDs in category values in tables', () => {
     const tableElement: TableElement = {
       type: 'table',
       id: '0',
@@ -55,7 +107,7 @@ describe('Clone proxy', () => {
       ],
     };
 
-    expect(await utils.cloneProxy(computer, tableElement)).toMatchObject({
+    expect(clone(computer, tableElement)).toMatchObject({
       children: [
         {
           children: [

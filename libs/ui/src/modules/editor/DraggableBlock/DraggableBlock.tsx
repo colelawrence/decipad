@@ -1,22 +1,16 @@
 /* eslint decipad/css-prop-named-variable: 0 */
-import type { BlockDependents } from '@decipad/remote-computer';
 import { css, SerializedStyles } from '@emotion/react';
-import { ComponentProps, FC, HTMLProps, ReactNode, Ref, useState } from 'react';
+import { ComponentProps, FC, ReactNode } from 'react';
 import { ConnectDragSource } from 'react-dnd';
 
-import { TabElement } from '@decipad/editor-types';
 import { hideOnPrint, slimBlockWidth } from 'libs/ui/src/styles/editor-layout';
-import { Path } from 'slate';
-import { Rotate } from '../../../icons';
 import {
   cssVar,
   largestDesktop,
   mouseMovingOverTransitionDelay,
   shortAnimationDuration,
 } from '../../../primitives';
-import { MenuItem, MenuList, TriggerMenuItem } from '../../../shared';
 import { blockAlignment, editorLayout } from '../../../styles';
-import { BlockDragHandle } from '../BlockDragHandle/BlockDragHandle';
 import { EditorBlock } from '../EditorBlock/EditorBlock';
 import { NewElementLine } from '../NewElementLine/NewElementLine';
 
@@ -37,35 +31,10 @@ export interface DraggableBlockProps
   readonly isSelected?: boolean;
   readonly isHidden?: boolean;
   readonly isBeingDragged?: boolean;
-  readonly path?: Path;
-
   readonly dragSource?: ConnectDragSource;
-  readonly blockRef?: Ref<HTMLDivElement>;
-  readonly dependenciesForBlock?: BlockDependents[];
-
   readonly draggableCss?: SerializedStyles;
-
-  readonly onMouseDown?: HTMLProps<HTMLDivElement>['onMouseDown'];
-  readonly onShowHide?: (action: 'show' | 'hide') => void;
-  readonly onAnnotation?: () => void;
-  readonly onDelete?: (() => void) | 'none';
-  readonly onDuplicate?: () => void;
   readonly onAdd?: () => void;
-  readonly onPlus?: () => void;
-  readonly onCopyHref?: () => void;
-  readonly onMoveToTab?: (tabId: string) => void;
-  readonly onMakeFullWidth?: () => void;
-  readonly tabs?: Array<TabElement>;
   readonly showLine?: boolean;
-
-  readonly onTurnInto?: (value: string) => void;
-  readonly aiPanel?: {
-    text: string;
-    readonly visible: boolean;
-    readonly toggle: () => void;
-  };
-
-  readonly turnInto?: { title: string; value: string }[];
 
   readonly children: ReactNode;
 
@@ -79,67 +48,33 @@ export interface DraggableBlockProps
   readonly isCentered?: boolean;
   readonly hasPreviousSibling?: boolean;
 
-  // Downloadable
-  readonly isDownloadable?: boolean;
-  readonly onDownload?: () => void;
-  readonly handleDownloadChart?: () => void;
-  readonly needsUpgrade?: boolean;
-
   readonly elementId?: string;
+
+  readonly DragHandle: ReactNode;
 }
 // eslint-disable-next-line complexity
 export const DraggableBlock = ({
-  isSelected = false,
-  isHidden = false,
-  isBeingDragged = false,
-
-  elementId,
-
-  dragSource,
-  blockRef,
-
+  DragHandle,
   draggableCss,
-  tabs = [],
-
-  onMoveToTab,
-  onMakeFullWidth,
-  onMouseDown,
-  onAnnotation,
-  onDelete,
-  onDuplicate,
-  onAdd,
-  onPlus,
-  showLine = true,
-  onShowHide,
-  onCopyHref,
-
-  dependenciesForBlock,
-
-  onTurnInto,
-  turnInto,
-
+  isCentered,
+  insideLayout,
+  isSelected,
   blockKind,
+  hasPadding,
+  isHidden,
+  fullWidth,
+  fullHeight,
+  elementId,
+  isBeingDragged,
+  dragSource,
   children,
-
-  isMultipleSelection = false,
-  insideLayout = false,
-  hasPadding = false,
-  fullWidth = false,
-  fullHeight = false,
-  isCentered = false,
+  onAdd,
+  showLine,
   hasPreviousSibling,
-
-  aiPanel,
-
-  isDownloadable,
-  onDownload,
-  handleDownloadChart,
-  needsUpgrade = false,
-  path,
-  ...props
+  layoutDirection,
+  slateAttributes,
+  blockRef,
 }: DraggableBlockProps): ReturnType<FC> => {
-  const [menuOpen, setMenuOpen] = useState(false);
-
   const { typography } = blockAlignment[blockKind];
 
   const handleInset = typography
@@ -152,6 +87,8 @@ export const DraggableBlock = ({
       )`
     : 0;
 
+  const menuOpen = false;
+
   const showEyeLabel = isHidden && !menuOpen;
 
   return (
@@ -160,8 +97,9 @@ export const DraggableBlock = ({
       blockKind={blockKind}
       fullWidth={fullWidth}
       fullHeight={fullHeight}
-      ref={blockRef}
-      {...props}
+      layoutDirection={layoutDirection}
+      slateAttributes={slateAttributes}
+      blockRef={blockRef}
     >
       <div
         data-element-id={elementId}
@@ -222,52 +160,7 @@ export const DraggableBlock = ({
             },
           ]}
         >
-          <BlockDragHandle
-            menuOpen={menuOpen}
-            isHidden={isHidden}
-            isMultipleSelection={isMultipleSelection}
-            dependenciesForBlock={dependenciesForBlock}
-            onMouseDown={onMouseDown}
-            onChangeMenuOpen={setMenuOpen}
-            onPlus={onPlus}
-            onAnnotation={onAnnotation}
-            onDelete={onDelete}
-            onDuplicate={onDuplicate}
-            onShowHide={onShowHide}
-            onMoveToTab={onMoveToTab}
-            onMakeFullWidth={onMakeFullWidth}
-            tabs={tabs}
-            showEyeLabel={showEyeLabel}
-            showAddBlock={!isHidden && !insideLayout}
-            onCopyHref={onCopyHref}
-            aiPanel={aiPanel}
-            isDownloadable={isDownloadable}
-            onDownload={onDownload}
-            handleDownloadChart={handleDownloadChart}
-            needsUpgrade={needsUpgrade}
-            path={path}
-          >
-            {!isMultipleSelection &&
-              turnInto != null &&
-              turnInto.length > 0 && (
-                <MenuList
-                  itemTrigger={
-                    <TriggerMenuItem icon={<Rotate />}>
-                      Turn into
-                    </TriggerMenuItem>
-                  }
-                >
-                  {turnInto.map((option) => (
-                    <MenuItem
-                      key={option.value}
-                      onSelect={() => onTurnInto?.(option.value)}
-                    >
-                      {option.title}
-                    </MenuItem>
-                  ))}
-                </MenuList>
-              )}
-          </BlockDragHandle>
+          {DragHandle}
         </div>
         <div
           css={[
@@ -284,10 +177,12 @@ export const DraggableBlock = ({
         >
           <NewElementLine
             onAdd={onAdd}
-            show={showLine}
+            show={Boolean(showLine)}
             hasPreviousSibling={hasPreviousSibling}
           />
-          <div css={selectedBlockStyles(menuOpen, fullHeight)}>{children}</div>
+          <div css={selectedBlockStyles(menuOpen, Boolean(fullHeight))}>
+            {children}
+          </div>
         </div>
       </div>
     </EditorBlock>

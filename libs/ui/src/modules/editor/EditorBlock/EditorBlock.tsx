@@ -2,9 +2,10 @@
 import { useIsEditorReadOnly } from '@decipad/react-contexts';
 import { css } from '@emotion/react';
 import { hideOnPrint, slimBlockWidth } from 'libs/ui/src/styles/editor-layout';
-import { forwardRef, ReactNode } from 'react';
+import { FC, ReactNode, Ref } from 'react';
 import { cssVar, p16Regular } from '../../../primitives';
 import { blockAlignment } from '../../../styles';
+import { ElementAttributes } from '@decipad/editor-types';
 
 // Server as the base vertical space between elements. It's the same height as a 1-liner paragraph.
 const defaultVerticalSpacing = `calc(${p16Regular.lineHeight})`;
@@ -75,18 +76,20 @@ const isHiddenStyles = css({
   display: 'none',
 });
 
-export interface EditorBlockProps {
-  readonly blockKind: keyof typeof blockAlignment;
-  readonly children: ReactNode;
-  readonly isHidden?: boolean;
-  readonly fullWidth?: boolean;
-  readonly fullHeight?: boolean;
-  // This component is one of the main points of contact when integrating between editor and UI. As
-  // such, we'll allow it to receive an arbitrary amount of props in order to facilitate said
-  // integration.
-  readonly [prop: string]: unknown;
-  readonly onAnnotation?: () => void;
-}
+export type EditorBlockProps = {
+  blockKind: keyof typeof blockAlignment;
+  children: ReactNode;
+  isHidden?: boolean;
+  fullWidth?: boolean;
+  fullHeight?: boolean;
+
+  'data-testId'?: string;
+
+  layoutDirection?: 'rows' | 'columns';
+  contentEditable?: boolean;
+  slateAttributes?: ElementAttributes;
+  blockRef?: Ref<HTMLDivElement>;
+};
 
 const editorBlockOffset = 30;
 const fullWidthPadding = 60;
@@ -110,15 +113,32 @@ const fullWidthStyles = css({
   )`,
 });
 
-export const EditorBlock: React.FC<EditorBlockProps> = forwardRef<
-  HTMLDivElement,
-  EditorBlockProps
->(({ blockKind, children, isHidden, fullWidth, fullHeight, ...props }, ref) => {
+export const EditorBlock: FC<EditorBlockProps> = ({
+  blockKind,
+  children,
+  isHidden,
+  fullWidth,
+  fullHeight,
+  'data-testId': dataTestId,
+  layoutDirection,
+  contentEditable,
+  slateAttributes,
+  blockRef,
+}) => {
   const readOnly = useIsEditorReadOnly();
+
+  const additionalHtmlProps: { [key: string]: any } = slateAttributes ?? {};
+  if (dataTestId != null) {
+    additionalHtmlProps['data-testid'] = dataTestId;
+  }
+
+  if (contentEditable != null) {
+    additionalHtmlProps.contentEditable = contentEditable;
+  }
 
   return (
     <div
-      {...props}
+      {...additionalHtmlProps}
       css={[
         readOnly && isHidden && isHiddenStyles,
         isHidden && hideOnPrint,
@@ -133,9 +153,10 @@ export const EditorBlock: React.FC<EditorBlockProps> = forwardRef<
         fullHeight && { height: '100%' },
       ]}
       data-type={blockKind}
-      ref={ref}
+      data-layout={layoutDirection}
+      ref={blockRef ?? slateAttributes?.ref}
     >
       {children}
     </div>
   );
-});
+};

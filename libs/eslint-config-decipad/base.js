@@ -23,6 +23,7 @@ module.exports = {
   ],
   rules: {
     'require-await': 'off',
+    'no-else-return': 'off',
     'import/prefer-default-export': 'off',
     'no-plusplus': 'off',
     'import/extensions': [
@@ -150,4 +151,3 @@ module.exports = {
     },
   ],
 };
-

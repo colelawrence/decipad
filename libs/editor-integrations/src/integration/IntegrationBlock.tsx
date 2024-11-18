@@ -168,10 +168,10 @@ export const IntegrationBlock: PlateComponent = ({
 
   return (
     <DraggableBlock
-      {...attributes}
       element={element}
       blockKind="live"
       hasPreviousSibling={isStructuredElement(prevElement?.[0])}
+      slateAttributes={attributes}
     >
       <UIIntegrationBlock
         meta={

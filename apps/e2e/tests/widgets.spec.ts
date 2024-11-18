@@ -112,7 +112,7 @@ test('dropdown widget', async ({ randomFreeUser }) => {
     await randomFreeUser.notebook.closeSidebar();
     await notebook.focusOnBody();
     await notebook.addDropdownWidget('Dropdown');
-    expect(await page.getByText('Dropdown').count()).toBe(1);
+    expect(await page.getByTestId('dropdown-widget').count()).toBe(1);
   });
 
   await test.step('Open dropdown and view box to add option', async () => {
@@ -324,7 +324,7 @@ test('result widget', async ({ testUser }) => {
   const { page, notebook } = testUser;
   await test.step('creates an empty result widget', async () => {
     await createResultBelow(page);
-    await expect(page.getByText('Result')).toHaveCount(1);
+    await expect(page.getByTestId('result-widget')).toHaveCount(1);
   });
 
   await test.step('shows the available calculations', async () => {

@@ -16,7 +16,11 @@ export const Import: PlateComponent = ({ attributes, element }) => {
   assertElementType(element, ELEMENT_IMPORT);
 
   return (
-    <DraggableBlock blockKind="paragraph" element={element} {...attributes}>
+    <DraggableBlock
+      blockKind="paragraph"
+      element={element}
+      slateAttributes={attributes}
+    >
       <ErrorBoundary FallbackComponent={ErrorAdapter}>
         <Suspense fallback={<Spinner />}>
           <SuspendedImport element={element} />

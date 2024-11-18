@@ -18,6 +18,7 @@ import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { EditorReadOnlyContext } from '@decipad/react-contexts';
 import { BrowserRouter } from 'react-router-dom';
+import { ToastDisplay } from '@decipad/ui';
 
 let editor: PlateEditor;
 let plateProps: Omit<PlateProps, 'children'>;
@@ -43,9 +44,11 @@ beforeEach(() => {
   editor = createPlateEditor({ plugins });
 
   wrapper = ({ children }) => (
-    <DndProvider backend={HTML5Backend}>
-      <BrowserRouter>{children}</BrowserRouter>
-    </DndProvider>
+    <ToastDisplay>
+      <DndProvider backend={HTML5Backend}>
+        <BrowserRouter>{children}</BrowserRouter>
+      </DndProvider>
+    </ToastDisplay>
   );
 });
 

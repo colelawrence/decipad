@@ -25,12 +25,8 @@ export const BeingDragged = (props: DraggableBlockProps) => (
   </DraggableBlock>
 );
 export const DragHoveringAbove = (props: DraggableBlockProps) => (
-  <DraggableBlock {...props} dropLine="top">
-    block
-  </DraggableBlock>
+  <DraggableBlock {...props}>block</DraggableBlock>
 );
 export const DragHoveringBelow = (props: DraggableBlockProps) => (
-  <DraggableBlock {...props} dropLine="bottom">
-    block
-  </DraggableBlock>
+  <DraggableBlock {...props}>block</DraggableBlock>
 );

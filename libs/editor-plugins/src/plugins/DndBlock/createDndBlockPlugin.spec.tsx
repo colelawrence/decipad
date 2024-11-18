@@ -76,6 +76,7 @@ vi.mock('./getDropLocationForMonitor', () => ({
     } satisfies DropLine),
 }));
 
+// TODO: investigate this one
 it('can move the block', async () => {
   const first = {
     type: ELEMENT_PARAGRAPH,

@@ -175,6 +175,7 @@ const PlotWithProviders = ({
   );
 };
 
+// TODO: investigate
 describe.sequential('Plot', () => {
   it('shows nothing if no var has been selected', async () => {
     const { queryByText } = render(<PlotWithProviders />);

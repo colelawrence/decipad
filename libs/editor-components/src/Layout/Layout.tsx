@@ -58,8 +58,6 @@ export const Layout: PlateComponent = ({ attributes, children, element }) => {
   const [availableWidthRef, availableWidth] =
     useElementWidth<HTMLUListElement>();
 
-  const dependencyId = element.children.map((child) => child.id ?? '');
-
   const totalMinWidth = useMemo(() => {
     const sumOfMinWidths = element.children.reduce(
       (sum, { type }) => sum + minColumnWidth(type),
@@ -190,8 +188,7 @@ export const Layout: PlateComponent = ({ attributes, children, element }) => {
       blockKind="layout"
       element={element}
       fullWidth={element.width === 'full'}
-      dependencyId={dependencyId}
-      data-layout={hasSufficientWidth ? 'columns' : 'rows'}
+      layoutDirection={hasSufficientWidth ? 'columns' : 'rows'}
       contextualActions={
         readOnly
           ? []
@@ -214,7 +211,7 @@ export const Layout: PlateComponent = ({ attributes, children, element }) => {
             ]
       }
       isCommentable={false}
-      {...attributes}
+      slateAttributes={attributes}
     >
       <InsideLayoutContext.Provider value={true}>
         <UILayout ref={ref} insufficientWidth={!hasSufficientWidth}>

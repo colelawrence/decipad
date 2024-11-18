@@ -70,6 +70,7 @@ export * from './valuesToMarkdown';
 export * from './withPath';
 export * from './withoutNormalizingAsync';
 export * from './generateBlockNames';
+export * from './openSlashCommands';
 export * from './getHoverDirection';
 export * from './findSwappableColumns';
 export * from './isCellAlignRight';

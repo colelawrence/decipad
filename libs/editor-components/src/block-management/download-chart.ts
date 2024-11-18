@@ -1,6 +1,5 @@
 import html2canvas from 'html2canvas';
-import { poweredBy } from 'libs/ui/src/images';
-import { slimBlockWidth } from 'libs/ui/src/styles/editor-layout';
+import { poweredBy, editorLayout } from '@decipad/ui';
 
 export const handleExportSVGUsingHtml2Canvas = (elementId: string) => () => {
   const element = document.getElementById(elementId);
@@ -15,7 +14,7 @@ export const handleExportSVGUsingHtml2Canvas = (elementId: string) => () => {
 
   const container = document.createElement('div');
   container.style.position = 'relative';
-  container.style.width = `${slimBlockWidth}px`; // Set desired width here
+  container.style.width = `${editorLayout.slimBlockWidth}px`; // Set desired width here
 
   container.appendChild(targetElement.cloneNode(true));
 

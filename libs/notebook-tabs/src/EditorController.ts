@@ -524,7 +524,10 @@ export class EditorController implements RootEditorController {
       // @note the title editor doesn't need to be translated down. Hence
       // the ternary for this check.
       //
-      this.apply({
+      // @note we use `unguardedApply` so we don't send out duplicate operations
+      // to docsync
+      //
+      this.unguardedApply({
         type: 'insert_node',
         path: op.newPath,
         node: nodeToMove as TDescendant,
@@ -532,7 +535,7 @@ export class EditorController implements RootEditorController {
         FROM_MIRROR: true,
       });
 
-      this.apply({
+      this.unguardedApply({
         type: 'remove_node',
         path: op.path,
         node: nodeToMove as TDescendant,

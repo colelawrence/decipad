@@ -10,7 +10,11 @@ import type {
   TopLevelValue,
   MyNode,
 } from '@decipad/editor-types';
-import { requirePathBelowBlock, setSelection } from '@decipad/editor-utils';
+import {
+  clone,
+  requirePathBelowBlock,
+  setSelection,
+} from '@decipad/editor-utils';
 import type { TNodeEntry } from '@udecode/plate-common';
 import {
   findNode,
@@ -27,7 +31,6 @@ import {
   blockSelectionStore,
 } from '@udecode/plate-selection';
 import { useCallback } from 'react';
-import utils from './utils';
 import { useNotebookWithIdState } from '@decipad/notebook-state';
 
 type OnDelete = (() => void) | 'none' | undefined;
@@ -140,7 +143,7 @@ export const useBlockActions = ({ editor, element }: BlockActionParams) => {
     [editor, nodePath, controller, onDelete, moveTab, element]
   );
 
-  const onDuplicate = useCallback(async () => {
+  const onDuplicate = useCallback(() => {
     const [isMultipleSelection, blockSelectedIds] = getSelection();
 
     if (isMultipleSelection) {
@@ -150,8 +153,7 @@ export const useBlockActions = ({ editor, element }: BlockActionParams) => {
         const entry = findNode<MyElement>(editor, { match: { id } });
         if (!entry) continue;
         const [node, path] = entry;
-        // eslint-disable-next-line no-await-in-loop
-        nodes.push(await utils.cloneProxy(computer, node));
+        nodes.push(clone(computer, node));
         if (path[0] > largestPath) {
           [largestPath] = path;
         }
@@ -166,7 +168,7 @@ export const useBlockActions = ({ editor, element }: BlockActionParams) => {
     const path = findNodePath(editor, element);
     if (!path) return;
 
-    const newEl = await utils.cloneProxy(computer, element);
+    const newEl = clone(computer, element);
     insertElements(editor, newEl, {
       at: requirePathBelowBlock(editor, path),
     });

@@ -53,11 +53,7 @@ export const VariableDef: PlateComponent = ({
     <DraggableBlock
       blockKind="interactive"
       element={element}
-      contentEditable={true}
-      suppressContentEditableWarning
-      id={element.id}
-      dependencyId={element.id}
-      {...attributes}
+      slateAttributes={attributes}
     >
       <VariableEditorContextProvider
         value={{

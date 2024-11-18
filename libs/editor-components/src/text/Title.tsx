@@ -5,13 +5,11 @@ import { useIsEditorReadOnly } from '@decipad/react-contexts';
 import { EditorBlock, EditorTitle, isEmbed } from '@decipad/ui';
 import { isElementEmpty } from '@udecode/plate-common';
 
-// TODO Title should probably not be a part of the editor in the first place
-
 export const Title: PlateComponent = ({ attributes, children, element }) => {
   assertElementType(element, ELEMENT_H1);
+
   const editor = useMyEditorRef();
   const readOnly = useIsEditorReadOnly();
-
   const embed = isEmbed();
 
   return (
@@ -21,7 +19,6 @@ export const Title: PlateComponent = ({ attributes, children, element }) => {
           blockKind="title"
           data-testid="notebook-title"
           {...attributes}
-          contentEditable={readOnly ? false : undefined}
         >
           <EditorTitle
             placeholder={

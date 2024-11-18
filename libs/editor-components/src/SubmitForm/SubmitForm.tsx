@@ -8,7 +8,11 @@ export const SubmitForm: PlateComponent = (props) => {
   assertElementType(props.element, ELEMENT_SUBMIT_FORM);
 
   return (
-    <DraggableBlock blockKind="codeLine" element={props.element}>
+    <DraggableBlock
+      blockKind="codeLine"
+      element={props.element}
+      slateAttributes={props.attributes}
+    >
       <SubmitFormComponent {...props} />
       <div style={{ display: 'none' }}>{props.children}</div>
     </DraggableBlock>

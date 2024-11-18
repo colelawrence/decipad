@@ -4,7 +4,6 @@ import { isElement } from '@udecode/plate-common';
 import { nanoid } from 'nanoid';
 import type { MyElement, MyNode } from '@decipad/editor-types';
 import type { Computer } from '@decipad/computer-interfaces';
-import type { PromiseOrType } from '@decipad/utils';
 import { identity } from '@decipad/utils';
 import { deduplicateVarNameInBlock } from './deduplicateVarNameInBlock';
 
@@ -32,10 +31,7 @@ const cloneAndReplaceElementIds = <T extends MyElement>(
 const cloneElement = <T extends MyElement>(computer: Computer, el: T): T =>
   cloneAndReplaceElementIds(el, (e) => deduplicateVarNameInBlock(computer, e));
 
-export const clone = <T extends MyNode>(
-  computer: Computer,
-  node: T
-): PromiseOrType<T> => {
+export const clone = <T extends MyNode>(computer: Computer, node: T): T => {
   if (isElement(node)) {
     return cloneElement(computer, node) as T;
   }

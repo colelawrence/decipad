@@ -1,4 +1,3 @@
-import { getAnalytics } from '@decipad/client-events';
 import {
   useEditorChange,
   useNodePath,
@@ -71,30 +70,22 @@ export const Paragraph: PlateComponent = ({
 
   const editor = useMyEditorRef();
   const path = useNodePath(element);
-  const [showAiPanel, setShowAiPanel] = useState(false);
-  const toggleAiPanel = () => {
-    getAnalytics().then((analytics) =>
-      analytics?.track('Opening paragraph AI panel')
-    );
-    setShowAiPanel((t) => !t);
-  };
+
+  // TODO: We can re-enable AI. But it seems like quite a cheap feature
+  // (and it has bugs :().
+  const [showAiPanel] = useState(false);
 
   return (
     <DraggableBlock
       blockKind="paragraph"
       element={element}
-      aiPanel={{
-        text: 'Rewrite with AI',
-        visible: showAiPanel,
-        toggle: toggleAiPanel,
-      }}
-      {...attributes}
+      slateAttributes={attributes}
     >
       <UIParagraph placeholder={placeholder}>{children}</UIParagraph>
       {showAiPanel && (
         <ParagraphAIPanel
           paragraph={paragraph || ''}
-          toggle={toggleAiPanel}
+          toggle={() => {}}
           updateParagraph={(s, op = 'replace') => {
             if (op === 'replace') {
               insertText(editor, s, { at: findNodePath(editor, element) });
@@ -113,8 +104,6 @@ export const Paragraph: PlateComponent = ({
                 }
               );
             }
-
-            toggleAiPanel();
           }}
         />
       )}

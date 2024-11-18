@@ -21,7 +21,6 @@ import {
   ELEMENT_TR,
 } from '@decipad/editor-types';
 import {
-  forceDownload,
   getNodeEntrySafe,
   insertNodes,
   isElementOfType,
@@ -36,7 +35,6 @@ import {
 import type { InsertNodesOptions, TEditor, Value } from '@udecode/plate-common';
 import {
   getNodeChildren,
-  getNodeString,
   hasNode,
   moveNodes,
   removeNodes,
@@ -46,16 +44,12 @@ import {
 } from '@udecode/plate-common';
 import { useToast } from '@decipad/toast';
 import { nanoid } from 'nanoid';
-import { useCallback, useEffect, useContext } from 'react';
+import { useCallback, useEffect } from 'react';
 import { type Path } from 'slate';
 import * as Sentry from '@sentry/react';
-import { exportCsv } from '@decipad/export';
-import type { Result } from '@decipad/language-interfaces';
-import { materializeResult } from '@decipad/computer';
 import { useRdFetch } from 'libs/editor-components/src/AIPanel/hooks';
 import { getColumnName, setCellText } from '../utils';
 import { changeColumnType } from '../utils/changeColumnType';
-import { ClientEventsContext } from '@decipad/client-events';
 
 export interface TableActions {
   onChangeColumnName: (columnIndex: number, newColumnName: string) => void;
@@ -80,7 +74,6 @@ export interface TableActions {
   onMoveColumn: (fromColumnIndex: number, toColumnIndex: number) => void;
   onSaveIcon: (icon?: string) => void;
   onSaveColor: (color?: string) => void;
-  onDownload: () => void;
 }
 
 export const addColumn = <
@@ -199,8 +192,6 @@ export const useTableActions = (
   editor: MyEditor,
   element: TableElement | null | undefined
 ): TableActions => {
-  const clientEvent = useContext(ClientEventsContext);
-
   const onChangeColumnName = useCallback(
     (columnIndex: number, newColumnName: string) => {
       withPath(editor, element, (path) => {
@@ -569,43 +560,6 @@ export const useTableActions = (
     [editor, path]
   );
 
-  const onDownload = useCallback(async () => {
-    if (element) {
-      const tableName = getNodeString(element.children[0].children[0]);
-      const result = computer.getBlockIdResult(element.id);
-      if (
-        !result ||
-        result.error ||
-        !result.result ||
-        (result.result.type.kind !== 'materialized-table' &&
-          result.result.type.kind !== 'table')
-      ) {
-        toast.error(
-          `Cannot download table data${
-            result?.error ? `: ${result.error}` : ''
-          }`
-        );
-        return;
-      }
-      const rResult = await materializeResult(result.result);
-      if (!rResult) {
-        toast.error('Cannot download table data: no result');
-        return;
-      }
-      const csv = exportCsv(rResult as Result.Result<'materialized-table'>);
-      forceDownload(`${tableName}.csv`, new Blob([csv]));
-      clientEvent({
-        segmentEvent: {
-          type: 'action',
-          action: 'Table CSV Downloaded',
-          props: {
-            analytics_source: 'frontend',
-          },
-        },
-      });
-    }
-  }, [clientEvent, computer, element, toast]);
-
   return {
     onChangeColumnName,
     onChangeColumnType,
@@ -623,6 +577,5 @@ export const useTableActions = (
     onSetHideCellFormulas,
     onSaveIcon,
     onSaveColor,
-    onDownload,
   };
 };

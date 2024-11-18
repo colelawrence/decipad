@@ -11,7 +11,6 @@ import { useIsEditorReadOnly } from '@decipad/react-contexts';
 import { useToast } from '@decipad/toast';
 import { Invisible, PlotBlock } from '@decipad/ui';
 import { useMemo } from 'react';
-import { handleExportSVGUsingHtml2Canvas } from './utils/download-chart';
 import { usePlot } from './utils/usePlot';
 import { useTableFlip } from './utils/useTableFlip';
 
@@ -88,8 +87,6 @@ const Plot: PlateComponent = ({ attributes, element, children }) => {
     return `chart-${element.id}-${new Date().toLocaleDateString('de-DE')}`;
   }, [element.id]);
 
-  const onDownloadChart = handleExportSVGUsingHtml2Canvas(chartUuid);
-
   const plotParams = useMemo(() => {
     return {
       ...plot.plotParams,
@@ -102,8 +99,7 @@ const Plot: PlateComponent = ({ attributes, element, children }) => {
     <DraggableBlock
       element={element}
       blockKind="plot"
-      onDownloadChart={onDownloadChart}
-      {...attributes}
+      slateAttributes={attributes}
     >
       {plot != null && (
         <PlotBlock

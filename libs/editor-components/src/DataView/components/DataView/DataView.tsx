@@ -153,7 +153,7 @@ export const DataView: PlateComponent<{ variableName: string }> = ({
     <DraggableBlock
       element={element}
       blockKind={wideTable ? 'editorWideTable' : 'editorTable'}
-      {...attributes}
+      slateAttributes={attributes}
     >
       <DataViewContextProvider columns={availableColumns}>
         <UIDataView

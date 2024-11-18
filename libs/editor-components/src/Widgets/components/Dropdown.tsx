@@ -25,6 +25,7 @@ export const Dropdown: PlateComponent = ({ attributes, element, children }) => {
       contentEditable={false}
       id={element.id}
       aria-roledescription="dropdown-open"
+      data-testid="dropdown-widget"
     >
       <DropdownMenu
         open={dropdownOpen}

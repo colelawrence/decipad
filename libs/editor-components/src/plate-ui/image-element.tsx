@@ -23,6 +23,7 @@ import {
 import { Caption, CaptionTextarea } from './caption';
 import { assertElementType } from '@decipad/editor-utils';
 import { useInsideLayoutContext } from '@decipad/react-contexts';
+import { DragHandle } from '../block-management/DragHandle';
 
 export const draggableStyles = css({
   paddingTop: 8,
@@ -91,10 +92,7 @@ export const ImageElement: ImageComponent = withHOC(
             blockKind="media"
             element={element as ImageElementType}
             draggableCss={draggableStyles}
-            accept={accept}
-            getAxis={getAxis}
-            onDrop={onDrop}
-            onDelete={() => {}}
+            DragHandle={<DragHandle element={element as ImageElementType} />}
           >
             <figure
               className="block-figure group relative m-0"

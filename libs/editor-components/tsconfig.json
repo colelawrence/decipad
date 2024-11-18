@@ -64,6 +64,9 @@
     },
     {
       "path": "../language-interfaces"
+    },
+    {
+      "path": "../export"
     }
   ]
 }

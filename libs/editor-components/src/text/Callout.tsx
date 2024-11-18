@@ -32,7 +32,11 @@ export const Callout: PlateComponent = ({ attributes, children, element }) => {
   const { color: defaultColor } = useEditorStylesContext();
 
   return (
-    <DraggableBlock blockKind="callout" element={element} {...attributes}>
+    <DraggableBlock
+      blockKind="callout"
+      element={element}
+      slateAttributes={attributes}
+    >
       <UICallout
         icon={element.icon as UserIconKey}
         color={(element.color ?? defaultColor) as AvailableSwatchColor}

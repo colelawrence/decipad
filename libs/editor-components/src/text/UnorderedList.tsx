@@ -12,7 +12,11 @@ export const UnorderedList: PlateComponent = ({
   }
 
   return (
-    <DraggableBlock blockKind="list" element={element} {...attributes}>
+    <DraggableBlock
+      blockKind="list"
+      element={element}
+      slateAttributes={attributes}
+    >
       <UIUnorderedList>{children}</UIUnorderedList>
     </DraggableBlock>
   );

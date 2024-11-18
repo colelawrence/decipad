@@ -11,7 +11,11 @@ export const Blockquote: PlateComponent = ({
   assertElementType(element, 'blockquote');
 
   return (
-    <DraggableBlock blockKind="blockquote" element={element} {...attributes}>
+    <DraggableBlock
+      blockKind="blockquote"
+      element={element}
+      slateAttributes={attributes}
+    >
       <UIBlockquote>{children}</UIBlockquote>
     </DraggableBlock>
   );

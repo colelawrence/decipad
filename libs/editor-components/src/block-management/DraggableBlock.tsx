@@ -1,21 +1,10 @@
-import { ClientEventsContext } from '@decipad/client-events';
 import type { Computer } from '@decipad/computer-interfaces';
-import {
-  useComputer,
-  useFilteredTabs,
-  useNodePath,
-  useNotebookId,
-} from '@decipad/editor-hooks';
-import type {
-  MyEditor,
-  MyElement,
-  MyElementOrText,
-} from '@decipad/editor-types';
+import { useComputer, useNodePath } from '@decipad/editor-hooks';
+import type { MyElement, MyElementOrText } from '@decipad/editor-types';
 import {
   ELEMENT_CODE_LINE,
   ELEMENT_CODE_LINE_V2,
   ELEMENT_PARAGRAPH,
-  ELEMENT_TABLE,
   alwaysWritableElementTypes,
   useMyEditorRef,
 } from '@decipad/editor-types';
@@ -24,10 +13,7 @@ import {
   generateVarName,
   getCodeLineSource,
   insertNodes,
-  isColumnableKind,
-  isTopLevelBlock,
   showColumnBorder,
-  wrapIntoLayout,
 } from '@decipad/editor-utils';
 import { useAnnotations } from '@decipad/notebook-state';
 import {
@@ -45,32 +31,13 @@ import {
   DraggableBlock as UIDraggableBlock,
   useMergedRef,
 } from '@decipad/ui';
-import { noop } from '@decipad/utils';
 import styled from '@emotion/styled';
-import {
-  findNodePath,
-  focusEditor,
-  getEndPoint,
-  getNextNode,
-  getNodeString,
-  getPreviousNode,
-  insertText,
-  select,
-} from '@udecode/plate-common';
+import { getPreviousNode, select } from '@udecode/plate-common';
 import { blockSelectionSelectors } from '@udecode/plate-selection';
-import copyToClipboard from 'copy-to-clipboard';
 import { Chat } from 'libs/ui/src/icons';
 import { nanoid } from 'nanoid';
-import type { ComponentProps, ReactNode } from 'react';
-import {
-  forwardRef,
-  useCallback,
-  useContext,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from 'react';
+import type { ComponentProps, FC, ReactNode } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { Portal } from 'react-portal';
 import { useSelected } from 'slate-react';
@@ -78,7 +45,7 @@ import { BlockErrorBoundary } from '../BlockErrorBoundary';
 import { BlockSelectable } from '../BlockSelection/BlockSelectable';
 import { dndStore, useDnd } from '../utils/useDnd';
 import { DraggableBlockOverlay } from './DraggableBlockOverlay';
-import { useBlockActions } from './hooks';
+import { DragHandle } from './DragHandle';
 
 const DraggableBlockStyled = styled.div<{
   blockHighlighted: boolean;
@@ -90,438 +57,212 @@ const DraggableBlockStyled = styled.div<{
     position: 'relative',
     borderRadius: 8,
     height: fullHeight ? '100%' : undefined,
-    // comment this out for now, because it's causing issues
-    // ...(blockHighlighted
-    //   ? {
-    //       '&:before': {
-    //         content: '""',
-    //         position: 'absolute',
-    //         width: 4,
-    //         height: '100%',
-    //         left: -16,
-    //         background: componentCssVars('ButtonPrimaryDefaultBackground'),
-    //       },
-    //     }
-    //   : {}),
   },
 }));
-
-interface AIPanel {
-  text: string;
-  visible: boolean;
-  toggle: () => void;
-}
 
 type DraggableBlockProps = {
   readonly element: MyElement;
   readonly children: ReactNode;
-  readonly dependencyId?: string | string[]; // block id
-  readonly aiPanel?: AIPanel;
-  readonly needsUpgrade?: boolean;
-  readonly contentEditable?: boolean;
-  readonly suppressContentEditableWarning?: boolean;
-  readonly id?: string; // element id for variable def
-  readonly onceDeleted?: () => void;
   readonly hasPreviousSibling?: boolean; // used for code line blocks
-  readonly onDownloadChart?: () => void;
   readonly contextualActions?: BlockContextualActionsProps['contextualActions'];
   readonly isCommentable?: boolean;
 } & Pick<
   ComponentProps<typeof UIDraggableBlock>,
-  | 'blockKind'
-  | 'onDelete'
-  | 'onTurnInto'
-  | 'turnInto'
-  | 'isCentered'
-  | 'fullWidth'
-  | 'fullHeight'
-  | 'isDownloadable'
-  | 'onDownload'
->;
+  'blockKind' | 'isCentered' | 'fullWidth' | 'fullHeight' | 'slateAttributes'
+> &
+  Partial<Pick<ComponentProps<typeof UIDraggableBlock>, 'layoutDirection'>>;
 
 const PLACEHOLDERS = {
   input: '100$',
   formula: '14 * 3',
 };
 
-/**
- * FIXME: This component is pushing the limit of acceptable complexity as per
- * the `complexity` eslint rule.
- */
+export const DraggableBlock: FC<DraggableBlockProps> = ({
+  children,
+  element,
+  hasPreviousSibling,
+  isCentered,
+  isCommentable: isCommentableProp = true,
+  fullWidth = false,
+  fullHeight = false,
+  contextualActions: contextualActionsProp = [],
+  blockKind,
+  slateAttributes,
+  layoutDirection = 'rows',
+}) => {
+  const editor = useMyEditorRef();
+  const readOnly = useIsEditorReadOnly();
+  const computer = useComputer();
+  const insideLayout = useInsideLayoutContext();
 
-export const DraggableBlock: React.FC<DraggableBlockProps> = forwardRef<
-  HTMLDivElement,
-  DraggableBlockProps
->(
-  (
-    {
-      children,
-      element,
-      onDelete: parentOnDelete,
-      onceDeleted = noop,
-      hasPreviousSibling,
-      isCentered,
-      isCommentable: isCommentableProp = true,
-      dependencyId,
-      fullWidth = false,
-      fullHeight = false,
-      onDownloadChart,
-      contextualActions: contextualActionsProp = [],
-      ...props
-    },
-    forwardedRef
-  ) => {
-    const [deleted, setDeleted] = useState(false);
+  const hasPadding = insideLayout && showColumnBorder(element.type as any);
 
-    const editor = useMyEditorRef();
-    const readOnly = useIsEditorReadOnly();
-    const computer = useComputer();
-    const tabs = useFilteredTabs();
-    const insideLayout = useInsideLayoutContext();
+  const setSidebar = useNotebookMetaData((s) => s.setSidebar);
 
-    const hasPadding = insideLayout && showColumnBorder(element.type as any);
+  const { handleExpandedBlockId, permission } = useAnnotations();
 
-    const notebookId = useNotebookId();
-    const setSidebar = useNotebookMetaData((s) => s.setSidebar);
+  const blockSelectedIds = blockSelectionSelectors.selectedIds() as Set<string>;
+  const isMultipleSelection = blockSelectedIds.size > 1;
 
-    const event = useContext(ClientEventsContext);
+  const selected = useSelected();
+  const path = useNodePath(element);
 
-    const { handleExpandedBlockId, permission } = useAnnotations();
+  // Only show the Blue line to add element on these conditions.
+  // If its a nested element (Such as a list, don't show it in between).
+  const showLine =
+    path &&
+    path.length === 1 &&
+    !(
+      editor.children.length === 2 && editor.children[1].children[0].text === ''
+    );
 
-    const dependencyArray = Array.isArray(dependencyId)
-      ? dependencyId
-      : typeof dependencyId === 'string'
-      ? [dependencyId]
-      : [];
+  const blockRef = useRef<HTMLDivElement>(null);
+  const ref = useMergedRef(slateAttributes?.ref, blockRef);
 
-    const dependenciesForBlock = computer.blocksInUse$.use(...dependencyArray);
+  const { dragRef, isDragging } = useDnd({ element });
 
-    const blockSelectedIds =
-      blockSelectionSelectors.selectedIds() as Set<string>;
-    const isMultipleSelection = blockSelectedIds.size > 1;
+  const draggingIds = dndStore.use.draggingIds();
 
-    const selected = useSelected();
-    const path = useNodePath(element);
+  const previewHtmlRef = useRef<HTMLDivElement>(null);
 
-    // Only show the Blue line to add element on these conditions.
-    // If its a nested element (Such as a list, don't show it in between).
-    const showLine =
-      path &&
-      path.length === 1 &&
-      !(
-        editor.children.length === 2 &&
-        editor.children[1].children[0].text === ''
-      );
+  useEffect(() => {
+    if (!isDragging) {
+      dndPreviewActions.draggingId('');
+    }
+  }, [isDragging]);
 
-    const blockRef = useRef<HTMLDivElement>(null);
+  const canComment = isCommentableProp && !!permission && !insideLayout;
 
-    const ref = useMergedRef(blockRef, forwardedRef);
+  const handleAnnotation = useCallback(() => {
+    if (element.id == null) {
+      return;
+    }
 
-    const { dragRef, isDragging } = useDnd({ element });
+    setSidebar({ type: 'annotations' });
+    handleExpandedBlockId(element.id);
+  }, [element.id, handleExpandedBlockId, setSidebar]);
 
-    const draggingIds = dndStore.use.draggingIds();
-
-    const previewHtmlRef = useRef<HTMLDivElement>(null);
-
-    useEffect(() => {
-      if (!isDragging) {
-        dndPreviewActions.draggingId('');
-      }
-    }, [isDragging]);
-
-    const onMouseDown = useCallback(() => {
-      if (element.type === ELEMENT_TABLE) {
-        dndPreviewActions.draggingId(element.id);
-      }
-    }, [element.id, element.type]);
-
-    const { onDelete, onMoveTab, onDuplicate, onShowHide } = useBlockActions({
-      editor,
-      element,
+  const onAdd = useCallback(() => {
+    if (path == null) return;
+    const entry = getPreviousNode(editor, {
+      at: path,
     });
+    const [prevNode] = entry || [];
+    insertNodes(editor, [insertSameNodeType(prevNode as MyElement, computer)], {
+      at: path,
+    });
+    select(editor, path);
+  }, [path, editor, computer]);
 
-    const handleDelete = useCallback(() => {
-      event({
-        segmentEvent: {
-          type: 'action',
-          action: 'block deleted',
-          props: { blockType: element.type },
-        },
-      });
-      setDeleted(true);
-      onDelete(parentOnDelete);
-      onceDeleted();
-    }, [parentOnDelete, event, element, onDelete, onceDeleted]);
+  const [blockHighlighted, setBlockHighlighted] = useState(false);
 
-    const canComment = isCommentableProp && !!permission && !insideLayout;
+  const contextualActions = [...contextualActionsProp];
+  if (canComment) {
+    contextualActions.unshift({
+      id: 'comment',
+      icon: <Chat />,
+      onClick: handleAnnotation,
+    });
+  }
 
-    const handleAnnotation = useCallback(() => {
-      if (element.id == null) {
-        return;
-      }
-
-      setSidebar({ type: 'annotations' });
-      handleExpandedBlockId(element.id);
-    }, [element.id, handleExpandedBlockId, setSidebar]);
-
-    const handleDuplicate = useCallback(() => {
-      event({
-        segmentEvent: {
-          type: 'action',
-          action: 'block duplicated',
-          props: { blockType: element.type },
-        },
-      });
-      onDuplicate();
-    }, [event, onDuplicate, element]);
-
-    const handleMoveTab = useCallback(
-      (tabId: string) => {
-        event({
-          segmentEvent: {
-            type: 'action',
-            action: 'block moved to other tab',
-            props: { blockType: element.type },
-          },
-        });
-        onMoveTab(tabId);
-      },
-      [event, element, onMoveTab]
-    );
-
-    const showMakeFullWidthButton = useMemo(
-      () =>
-        !insideLayout &&
-        path &&
-        isTopLevelBlock(element, path) &&
-        isColumnableKind(element.type),
-      [insideLayout, path, element]
-    );
-
-    const handleMakeFullWidth = useCallback(() => {
-      if (!path) return;
-      wrapIntoLayout(editor, path, 'full');
-      event({
-        segmentEvent: {
-          type: 'action',
-          action: 'Toggle Width Button Clicked',
-          props: {
-            analytics_source: 'frontend',
-            button_location: 'block menu',
-          },
-        },
-      });
-    }, [editor, event, path]);
-
-    const handleDownloadChart = useCallback(() => {
-      if (!notebookId) {
-        return;
-      }
-      event({
-        segmentEvent: {
-          type: 'action',
-          action: 'Chart Downloaded',
-          props: { notebook_id: notebookId, analytics_source: 'frontend' },
-        },
-      });
-      typeof onDownloadChart === 'function' && onDownloadChart();
-    }, [onDownloadChart, event, notebookId]);
-
-    const handleShowHide = useCallback(
-      (action: 'show' | 'hide') => {
-        event({
-          segmentEvent: {
-            type: 'action',
-            action: `${action} block`,
-            props: { blockType: element.type },
-          },
-        });
-        onShowHide(action);
-      },
-      [event, element, onShowHide]
-    );
-
-    const onAdd = useCallback(() => {
-      if (path == null) return;
-      const entry = getPreviousNode(editor, {
-        at: path,
-      });
-      const [prevNode] = entry || [];
-      insertNodes(
-        editor,
-        [insertSameNodeType(prevNode as MyElement, computer)],
-        {
-          at: path,
-        }
-      );
-      select(editor, path);
-    }, [path, editor, computer]);
-
-    const onPlus = useCallback(() => {
-      openSlashMenu(editor, element);
-      event({
-        segmentEvent: {
-          type: 'action',
-          action: 'click +',
-          props: { blockType: element.type },
-        },
-      });
-    }, [editor, element, event]);
-
-    const onCopyHref = useCallback(() => {
-      const url = new URL(window.location.toString());
-
-      let { pathname } = url;
-      const hash = element.id;
-
-      const pathSegments = pathname.split('/');
-      if (pathSegments.length > 2) {
-        pathSegments.splice(-1, 1);
-        pathname = pathSegments.join('/');
-      }
-
-      const newUrl = `${url.origin}${pathname}#${hash}`;
-      copyToClipboard(newUrl);
-
-      event({
-        segmentEvent: {
-          type: 'action',
-          action: 'copy block href',
-          props: { blockType: element.type },
-        },
-      });
-    }, [element.id, element.type, event]);
-
-    const [blockHighlighted, setBlockHighlighted] = useState(false);
-
-    const contextualActions = [...contextualActionsProp];
-    if (canComment) {
-      contextualActions.unshift({
-        id: 'comment',
-        icon: <Chat />,
-        onClick: handleAnnotation,
-      });
-    }
-
-    if (deleted) {
-      return null;
-    }
-    if (readOnly) {
-      return (
-        <EditorBlock
-          {...props}
-          isHidden={element.isHidden}
-          fullWidth={fullWidth}
-          fullHeight={fullHeight}
-          ref={ref}
-          onAnnotation={handleAnnotation}
-          contentEditable={
-            !readOnly || alwaysWritableElementTypes.includes(element.type)
-          }
-          annotationsHovered={blockHighlighted}
-        >
-          <BlockContextualActions
-            contextualActions={contextualActions}
-            fullHeight={fullHeight}
-          >
-            <BlockErrorBoundary element={element}>
-              {children}
-            </BlockErrorBoundary>
-          </BlockContextualActions>
-
-          {'getElementById' in document &&
-            document.getElementById('annotations-container') &&
-            createPortal(
-              <BlockAnnotations
-                blockId={element.id}
-                blockRef={blockRef}
-                setBlockHighlighted={setBlockHighlighted}
-              />,
-              document.getElementById('annotations-container')!
-            )}
-        </EditorBlock>
-      );
-    }
-
-    const isBeingDragged = isDragging || draggingIds.has(element.id);
-
+  if (readOnly) {
     return (
-      <>
-        {isBeingDragged && (
-          <Portal>
-            <DraggableBlockOverlay
-              element={element}
-              previewHtmlRef={previewHtmlRef}
-            />
-          </Portal>
-        )}
-
-        <UIDraggableBlock
-          {...props}
-          elementId={element.id}
-          isHidden={element.isHidden}
-          isMultipleSelection={isMultipleSelection}
-          isSelected={selected}
-          dragSource={dragRef}
-          blockRef={ref}
-          isBeingDragged={isBeingDragged}
-          onMouseDown={onMouseDown}
-          onDelete={handleDelete}
-          onAnnotation={handleAnnotation}
-          dependenciesForBlock={dependenciesForBlock}
-          onDuplicate={handleDuplicate}
-          onShowHide={handleShowHide}
-          onMoveToTab={handleMoveTab}
-          onMakeFullWidth={
-            showMakeFullWidthButton ? handleMakeFullWidth : undefined
-          }
-          tabs={tabs}
-          onAdd={onAdd}
-          onPlus={onPlus}
-          onCopyHref={onCopyHref}
-          showLine={showLine}
-          isCentered={isCentered}
-          handleDownloadChart={
-            onDownloadChart ? handleDownloadChart : undefined
-          }
-          hasPreviousSibling={hasPreviousSibling}
-          path={path}
-          insideLayout={insideLayout}
-          hasPadding={hasPadding}
-          fullWidth={fullWidth}
+      <EditorBlock
+        blockKind={blockKind}
+        isHidden={element.isHidden}
+        fullWidth={fullWidth}
+        fullHeight={fullHeight}
+        slateAttributes={slateAttributes}
+        contentEditable={
+          !readOnly || alwaysWritableElementTypes.includes(element.type)
+        }
+        blockRef={ref}
+      >
+        <BlockContextualActions
+          contextualActions={contextualActions}
           fullHeight={fullHeight}
         >
-          <DraggableBlockStyled
-            blockHighlighted={blockHighlighted}
-            data-testid="draggable-block"
-            fullHeight={fullHeight}
-          >
-            <BlockSelectable element={element}>
-              <BlockContextualActions
-                contextualActions={contextualActions}
-                fullHeight={fullHeight}
-              >
-                <BlockErrorBoundary element={element}>
-                  <div ref={previewHtmlRef}>{children}</div>
-                </BlockErrorBoundary>
-              </BlockContextualActions>
-            </BlockSelectable>
-          </DraggableBlockStyled>
+          <BlockErrorBoundary element={element}>{children}</BlockErrorBoundary>
+        </BlockContextualActions>
 
-          {document.getElementById('annotations-container') &&
-            createPortal(
-              <BlockAnnotations
-                blockId={element.id}
-                blockRef={blockRef}
-                setBlockHighlighted={setBlockHighlighted}
-              />,
-              document.getElementById('annotations-container')!
-            )}
-        </UIDraggableBlock>
-      </>
+        {'getElementById' in document &&
+          document.getElementById('annotations-container') &&
+          createPortal(
+            <BlockAnnotations
+              blockId={element.id}
+              blockRef={blockRef}
+              setBlockHighlighted={setBlockHighlighted}
+            />,
+            document.getElementById('annotations-container')!
+          )}
+      </EditorBlock>
     );
   }
-);
+
+  const isBeingDragged = isDragging || draggingIds.has(element.id);
+
+  return (
+    <>
+      {isBeingDragged && (
+        <Portal>
+          <DraggableBlockOverlay
+            element={element}
+            previewHtmlRef={previewHtmlRef}
+          />
+        </Portal>
+      )}
+
+      <UIDraggableBlock
+        blockKind={blockKind}
+        elementId={element.id}
+        isHidden={element.isHidden}
+        isMultipleSelection={isMultipleSelection}
+        isSelected={selected}
+        dragSource={dragRef}
+        isBeingDragged={isBeingDragged}
+        onAdd={onAdd}
+        showLine={showLine}
+        isCentered={isCentered}
+        hasPreviousSibling={hasPreviousSibling}
+        insideLayout={insideLayout}
+        hasPadding={hasPadding}
+        fullWidth={fullWidth}
+        fullHeight={fullHeight}
+        DragHandle={<DragHandle element={element} />}
+        slateAttributes={slateAttributes}
+        layoutDirection={layoutDirection}
+        blockRef={ref}
+      >
+        <DraggableBlockStyled
+          blockHighlighted={blockHighlighted}
+          data-testid="draggable-block"
+          fullHeight={fullHeight}
+        >
+          <BlockSelectable element={element}>
+            <BlockContextualActions
+              contextualActions={contextualActions}
+              fullHeight={fullHeight}
+            >
+              <BlockErrorBoundary element={element}>
+                <div ref={previewHtmlRef}>{children}</div>
+              </BlockErrorBoundary>
+            </BlockContextualActions>
+          </BlockSelectable>
+        </DraggableBlockStyled>
+
+        {document.getElementById('annotations-container') &&
+          createPortal(
+            <BlockAnnotations
+              blockId={element.id}
+              blockRef={blockRef}
+              setBlockHighlighted={setBlockHighlighted}
+            />,
+            document.getElementById('annotations-container')!
+          )}
+      </UIDraggableBlock>
+    </>
+  );
+};
 
 const insertSameNodeType = (
   prevNode: MyElement | undefined,
@@ -552,50 +293,5 @@ const insertSameNodeType = (
         type: ELEMENT_PARAGRAPH,
         children: [{ text: '' }],
       };
-  }
-};
-const openSlashMenu = (editor: MyEditor, element: MyElement) => {
-  const currentLine = getNodeString(element);
-  let currentPath = findNodePath(editor, element);
-  if (!currentPath) return;
-  const nextNode = getNextNode(editor, { at: currentPath.slice(0, 1) });
-  const [nextElement, nextPath] = nextNode || [];
-  if (currentLine === '/') return;
-
-  const slashAlreadyCreated =
-    currentLine !== '' && nextElement && getNodeString(nextElement) === '/';
-
-  if (slashAlreadyCreated && nextPath) {
-    select(editor, getEndPoint(editor, nextPath));
-    focusEditor(editor);
-    return;
-  }
-
-  const isParagraph = element.type === ELEMENT_PARAGRAPH;
-  const createNewParagraph = currentLine || !isParagraph;
-
-  if (createNewParagraph && nextPath) {
-    insertNodes(
-      editor,
-      [
-        {
-          id: nanoid(),
-          type: ELEMENT_PARAGRAPH,
-          children: [{ text: '/' }],
-        },
-      ],
-      {
-        at: nextPath,
-      }
-    );
-    select(editor, getEndPoint(editor, nextPath));
-    focusEditor(editor);
-  } else {
-    if (currentLine && currentPath.length > 0) {
-      currentPath = [currentPath[0] + 1];
-    }
-    insertText(editor, '/', { at: currentPath });
-    select(editor, getEndPoint(editor, currentPath));
-    focusEditor(editor);
   }
 };

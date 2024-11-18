@@ -8,7 +8,11 @@ export const Divider: PlateComponent = ({ attributes, element, children }) => {
   }
 
   return (
-    <DraggableBlock blockKind="divider" element={element} {...attributes}>
+    <DraggableBlock
+      blockKind="divider"
+      element={element}
+      slateAttributes={attributes}
+    >
       {children}
       <UIDivider />
     </DraggableBlock>

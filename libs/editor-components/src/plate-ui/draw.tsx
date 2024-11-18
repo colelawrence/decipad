@@ -18,6 +18,7 @@ import type { DraggableBlock } from '@decipad/ui';
 import { blue200, blue300, cssVar } from '@decipad/ui';
 import type { ExcalidrawProps, ExcalidrawRef } from './excalidraw-element';
 import { ExcalidrawElement } from './excalidraw-element';
+import { DragHandle } from '../block-management/DragHandle';
 
 const drawStyles = css({
   display: 'block',
@@ -121,6 +122,7 @@ export const Draw: DrawComponent = ({
       blockKind="draw"
       element={element as DrawElement}
       draggableCss={drawStyles}
+      DragHandle={<DragHandle element={element as DrawElement} />}
       {...attributes}
     >
       <div

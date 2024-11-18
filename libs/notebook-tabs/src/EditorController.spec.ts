@@ -22,7 +22,7 @@ import { nanoid } from 'nanoid';
 import { IsTab } from './utils';
 import { createTrailingParagraphPlugin } from './testPlugins';
 import { DATA_TAB_INDEX, FIRST_TAB_INDEX, TITLE_INDEX } from './constants';
-import { controllerActionsFactory } from './actions';
+import { onMoveToTab } from './actions';
 
 describe.sequential('EditorController', () => {
   vi.mock('nanoid', () => {
@@ -1596,12 +1596,10 @@ describe('Actions', () => {
     });
   });
 
-  it('can move blocks between tabs even if a sub editor normalizes as a side effect', () => {
+  it('can move blocks between tabs even if a sub editor normalizes as a side effect (last element is empty paragraph)', () => {
     controller = new EditorController('id', [createTrailingParagraphPlugin()]);
     controller.forceNormalize();
     controller.insertTab('tab-2');
-
-    const actions = controllerActionsFactory(controller);
 
     expect(controller.children).toHaveLength(4);
     expect(controller.children[FIRST_TAB_INDEX].children).toHaveLength(1);
@@ -1617,10 +1615,15 @@ describe('Actions', () => {
       },
     });
 
-    actions.onMoveToTab('h2', 'tab-2');
+    onMoveToTab(controller, 'h2', 'tab-2');
 
     expect(controller.children[FIRST_TAB_INDEX].children).toHaveLength(1);
-    expect(controller.children[FIRST_TAB_INDEX + 1].children).toHaveLength(3);
+
+    // We expect 2 instead of 3 because:
+    // - The only element before the move is an empty parapraph.
+    // - Therefore, we move it into the empty paragraph's position
+    // - Instead of below it, as this is more expected behavior.
+    expect(controller.children[FIRST_TAB_INDEX + 1].children).toHaveLength(2);
     expect(controller.children[FIRST_TAB_INDEX + 1].children).toContainEqual({
       children: [
         {

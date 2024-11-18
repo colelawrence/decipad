@@ -9,6 +9,7 @@ import styled from '@emotion/styled';
 import { sanitizeInput } from 'libs/ui/src/utils';
 import { ComponentProps, FC, ReactNode } from 'react';
 import { DraggableBlock } from '../DraggableBlock/DraggableBlock';
+import { DragHandle } from 'libs/ui/src/icons';
 
 const draggableStyles = css({
   paddingTop: 8,
@@ -38,7 +39,6 @@ type IframeEmbedComponent = PlateComponent<{
 
 export const IframeEmbed: IframeEmbedComponent = ({
   draggableBlock: Draggable,
-  onDrop,
   ...props
 }) => {
   const { children, element } = props;
@@ -51,7 +51,7 @@ export const IframeEmbed: IframeEmbedComponent = ({
       blockKind="media"
       element={element as IframeEmbedElement}
       draggableCss={draggableStyles}
-      onDrop={onDrop}
+      DragHandle={<DragHandle />}
     >
       <IFrameContainerDiv>
         <ResponsiveIFrame

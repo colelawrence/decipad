@@ -18,6 +18,7 @@ import {
   ELEMENT_VARIABLE_DEF,
 } from '@decipad/editor-types';
 import { getNodeString } from '@udecode/plate-common';
+import { nanoid } from 'nanoid';
 
 function deduplicateVarNameInDef(
   computer: Computer,
@@ -26,6 +27,14 @@ function deduplicateVarNameInDef(
   e.children[0].children[0].text = computer.getAvailableIdentifier(
     `${getNodeString(e.children[0])}Copy`
   );
+
+  if (e.variant !== 'dropdown') {
+    return;
+  }
+
+  for (const option of e.children[1].options) {
+    option.id = nanoid();
+  }
 }
 
 function deduplicateAssignmentVarName(computer: Computer, e: CodeLineElement) {
@@ -62,6 +71,16 @@ function deduplicateTableVarName(computer: Computer, e: TableElement) {
   e.children[0].children[0].children[0].text = computer.getAvailableIdentifier(
     `${varName}Copy`
   );
+
+  for (const tableHeader of e.children[1].children) {
+    if (tableHeader.categoryValues == null) {
+      continue;
+    }
+
+    for (const categoryValue of tableHeader.categoryValues) {
+      categoryValue.id = nanoid();
+    }
+  }
 }
 
 function deduplicateIntegrationVarName(

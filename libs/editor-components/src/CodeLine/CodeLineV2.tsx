@@ -162,8 +162,7 @@ export const CodeLineV2: PlateComponent = ({
     <DraggableBlock
       blockKind="structured"
       element={element}
-      {...attributes}
-      dependencyId={lineId}
+      slateAttributes={attributes}
       isCentered={true}
       hasPreviousSibling={isStructuredElement(prevElement?.[0])}
     >

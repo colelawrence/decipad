@@ -7,7 +7,6 @@ import type { EditorTableContextValue } from '@decipad/react-contexts';
 import {
   EditorTableContext,
   EditorTableResultContext,
-  useCurrentWorkspaceStore,
   useEditorStylesContext,
 } from '@decipad/react-contexts';
 import type { AvailableSwatchColor } from '@decipad/ui';
@@ -37,7 +36,6 @@ export const Table: PlateComponent = ({ attributes, children, element }) => {
     onSetHideCellFormulas,
     onSaveColor,
     onSaveIcon,
-    onDownload,
   } = useTableActions(editor, element);
   const selectedCells = useTableStore().get.selectedCells();
 
@@ -71,18 +69,11 @@ export const Table: PlateComponent = ({ attributes, children, element }) => {
 
   const { color: defaultColor } = useEditorStylesContext();
 
-  const { workspaceInfo } = useCurrentWorkspaceStore();
-
   return (
     <DraggableBlock
       element={element}
       blockKind={wideTable ? 'editorWideTable' : 'editorTable'}
-      {...attributes}
-      dependencyId={blockId}
-      key={blockId}
-      isDownloadable
-      onDownload={onDownload}
-      needsUpgrade={!workspaceInfo.isPremium}
+      slateAttributes={attributes}
     >
       <EditorTableContext.Provider value={contextValue}>
         <EditorTableResultContext.Provider
