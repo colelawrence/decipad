@@ -142,9 +142,10 @@ export const Notebook: FC = () => {
       isFlagEnabled('NAV_SIDEBAR') &&
       ['ADMIN', 'WRITE'].includes(
         notebookMetaData.getPadById.myPermissionType || ''
-      )
+      ) &&
+      !isEmbed
     );
-  }, [notebookMetaData]);
+  }, [isEmbed, notebookMetaData]);
 
   return (
     <NotebookErrorBoundary>

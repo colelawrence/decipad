@@ -86,7 +86,7 @@ const AppEditor: FC<EditorProps> = ({ notebookId, docsync }) => {
           onNotebookTitleChange={onNotebookTitleChange}
           notebookMetaLoaded={actions.notebook != null}
           workspaceId={actions.notebook?.workspace?.id ?? ''}
-          readOnly={actions.isReadOnly}
+          readOnly={actions.isReadOnly || isEmbed}
           connectionParams={actions.connectionParams}
           initialState={actions.initialState}
           getAttachmentForm={actions.getAttachmentForm}
