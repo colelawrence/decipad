@@ -33,7 +33,17 @@ exports[`layoutPowerData > works with two column two groups tree and aggregation
               "n": 1n,
               "s": 1n,
             },
-            "rootAggregation": undefined,
+            "rootAggregation": {
+              "type": {
+                "kind": "number",
+              },
+              "value": DeciNumber {
+                "d": 1n,
+                "infinite": false,
+                "n": 1n,
+                "s": 1n,
+              },
+            },
           },
           Tree {
             "children": [],
@@ -45,16 +55,24 @@ exports[`layoutPowerData > works with two column two groups tree and aggregation
               "n": 3n,
               "s": 1n,
             },
-            "rootAggregation": undefined,
+            "rootAggregation": {
+              "type": {
+                "kind": "number",
+              },
+              "value": DeciNumber {
+                "d": 1n,
+                "infinite": false,
+                "n": 3n,
+                "s": 1n,
+              },
+            },
           },
         ],
         "columns": [
           {
             "aggregation": {
-              "meta": undefined,
               "type": {
                 "kind": "number",
-                "unit": null,
               },
               "value": DeciNumber {
                 "d": 1n,
@@ -72,12 +90,11 @@ exports[`layoutPowerData > works with two column two groups tree and aggregation
           "meta": undefined,
           "type": {
             "kind": "number",
-            "unit": null,
           },
           "value": DeciNumber {
             "d": 1n,
             "infinite": false,
-            "n": 2n,
+            "n": 1n,
             "s": 1n,
           },
         },
@@ -94,16 +111,24 @@ exports[`layoutPowerData > works with two column two groups tree and aggregation
               "n": 2n,
               "s": 1n,
             },
-            "rootAggregation": undefined,
+            "rootAggregation": {
+              "type": {
+                "kind": "number",
+              },
+              "value": DeciNumber {
+                "d": 1n,
+                "infinite": false,
+                "n": 2n,
+                "s": 1n,
+              },
+            },
           },
         ],
         "columns": [
           {
             "aggregation": {
-              "meta": undefined,
               "type": {
                 "kind": "number",
-                "unit": null,
               },
               "value": DeciNumber {
                 "d": 1n,
@@ -121,7 +146,6 @@ exports[`layoutPowerData > works with two column two groups tree and aggregation
           "meta": undefined,
           "type": {
             "kind": "number",
-            "unit": null,
           },
           "value": DeciNumber {
             "d": 1n,
@@ -138,7 +162,6 @@ exports[`layoutPowerData > works with two column two groups tree and aggregation
           "meta": undefined,
           "type": {
             "kind": "number",
-            "unit": null,
           },
           "value": DeciNumber {
             "d": 1n,
@@ -151,10 +174,8 @@ exports[`layoutPowerData > works with two column two groups tree and aggregation
       },
       {
         "aggregation": {
-          "meta": undefined,
           "type": {
             "kind": "number",
-            "unit": null,
           },
           "value": DeciNumber {
             "d": 1n,
@@ -167,7 +188,7 @@ exports[`layoutPowerData > works with two column two groups tree and aggregation
       },
     ],
     "originalCardinality": 1,
-    "root": Symbol(unknown),
+    "root": undefined,
     "rootAggregation": undefined,
   },
 }

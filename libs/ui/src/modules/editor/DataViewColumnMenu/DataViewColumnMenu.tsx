@@ -17,7 +17,7 @@ interface Rounding {
 export interface DataViewColumnMenuProps {
   type: TableCellType;
   selectedAggregation?: string;
-  availableAggregations: Array<{ id: string; name: string }>;
+  availableAggregations: ReadonlyArray<{ id: string; name: string }>;
   availableRoundings: Array<Rounding>;
   selectedRounding?: string;
   onAggregationChange: (aggregation: string | undefined) => void;

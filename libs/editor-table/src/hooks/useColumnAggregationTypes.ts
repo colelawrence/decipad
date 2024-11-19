@@ -15,7 +15,7 @@ interface UseAggregationTypeProps {
 export const useColumnAggregationTypes = ({
   column,
   columnIndex,
-}: UseAggregationTypeProps): AggregationType[] => {
+}: UseAggregationTypeProps): readonly AggregationType[] => {
   const formulaResult = useTableColumnFormulaResultForColumn(columnIndex);
   return useMemo(
     () =>

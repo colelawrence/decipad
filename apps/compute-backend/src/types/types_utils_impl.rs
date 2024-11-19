@@ -1,22 +1,9 @@
 use super::types::DeciResult;
-use std::cmp::Ordering;
-
-impl Ord for DeciResult {
-    fn cmp(&self, other: &Self) -> Ordering {
-        if self == other {
-            Ordering::Equal
-        } else if self > other {
-            Ordering::Greater
-        } else {
-            Ordering::Less
-        }
-    }
-}
 
 // TODO: macro this or something (or use numeric traits if possible)
-impl Into<DeciResult> for f32 {
-    fn into(self) -> DeciResult {
-        let f = fraction::Fraction::from(self);
+impl From<f32> for DeciResult {
+    fn from(val: f32) -> Self {
+        let f = fraction::Fraction::from(val);
         let (num, den) = (
             match f.is_sign_positive() {
                 true => *f.numer().unwrap() as i64,
@@ -27,25 +14,35 @@ impl Into<DeciResult> for f32 {
         DeciResult::Fraction(num, den)
     }
 }
-impl Into<DeciResult> for f64 {
-    fn into(self) -> DeciResult {
-        let f = fraction::Fraction::from(self);
+impl From<f64> for DeciResult {
+    fn from(val: f64) -> Self {
+        let f = fraction::Fraction::from(val);
         f.into()
     }
 }
-impl Into<DeciResult> for bool {
-    fn into(self) -> DeciResult {
-        DeciResult::Boolean(self)
+impl From<i64> for DeciResult {
+    fn from(value: i64) -> Self {
+        Self::Fraction(value, 1)
     }
 }
-impl Into<DeciResult> for fraction::GenericFraction<u64> {
-    fn into(self) -> DeciResult {
+impl From<usize> for DeciResult {
+    fn from(value: usize) -> Self {
+        Self::Fraction(value as _, 1)
+    }
+}
+impl From<bool> for DeciResult {
+    fn from(val: bool) -> Self {
+        DeciResult::Boolean(val)
+    }
+}
+impl From<fraction::GenericFraction<u64>> for DeciResult {
+    fn from(val: fraction::GenericFraction<u64>) -> Self {
         DeciResult::Fraction(
-            match self.is_sign_negative() {
-                true => -(*self.numer().unwrap() as i64),
-                false => *self.numer().unwrap() as i64,
+            match val.is_sign_negative() {
+                true => -(*val.numer().unwrap() as i64),
+                false => *val.numer().unwrap() as i64,
             },
-            *self.denom().unwrap() as i64,
+            *val.denom().unwrap() as i64,
         )
     }
 }
@@ -72,9 +69,9 @@ impl DeciResult {
                 for item in items {
                     match item {
                         DeciResult::Column(_) => {
-                            sum = &sum + &item.sum_frac();
+                            sum += item.sum_frac();
                         }
-                        _ => sum = &sum + item,
+                        _ => sum += item.clone(),
                     }
                 }
                 sum
@@ -86,7 +83,7 @@ impl DeciResult {
     pub fn len(&self) -> usize {
         match self {
             DeciResult::Column(items) => items.len(),
-            _ => 1 as usize,
+            _ => 1,
         }
     }
 

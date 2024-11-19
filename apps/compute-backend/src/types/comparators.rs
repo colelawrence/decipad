@@ -49,23 +49,29 @@ impl Eq for DeciResult {}
 
 impl PartialOrd for DeciResult {
     fn partial_cmp(&self, other: &Self) -> Option<std::cmp::Ordering> {
+        Some(self.cmp(other))
+    }
+}
+
+impl Ord for DeciResult {
+    fn cmp(&self, other: &Self) -> std::cmp::Ordering {
         match (self, other) {
             (DeciResult::Fraction(n1, d1), DeciResult::Fraction(n2, d2)) => {
-                (*n1 * *d2).partial_cmp(&(*n2 * *d1))
+                (*n1 * *d2).cmp(&(*n2 * *d1))
             }
             (DeciResult::Fraction(_n1, _d1), DeciResult::ArbitraryFraction(_n2, _d2)) => {
-                self.to_arb().partial_cmp(other)
+                self.to_arb().cmp(other)
             }
             (DeciResult::ArbitraryFraction(_n1, _d1), DeciResult::Fraction(_n2, _d2)) => {
-                self.partial_cmp(&other.to_arb())
+                self.cmp(&other.to_arb())
             }
             (DeciResult::ArbitraryFraction(n1, d1), DeciResult::ArbitraryFraction(n2, d2)) => {
-                (n1 * d2).partial_cmp(&(n2 * d1))
+                (n1 * d2).cmp(&(n2 * d1))
             }
-            (DeciResult::String(s1), DeciResult::String(s2)) => s1.partial_cmp(&s2),
-            (DeciResult::Boolean(b1), DeciResult::Boolean(b2)) => b1.partial_cmp(b2),
-            (DeciResult::Date(d1), DeciResult::Date(d2)) => d1.partial_cmp(d2),
-            _ => None,
+            (DeciResult::String(s1), DeciResult::String(s2)) => s1.cmp(s2),
+            (DeciResult::Boolean(b1), DeciResult::Boolean(b2)) => b1.cmp(b2),
+            (DeciResult::Date(d1), DeciResult::Date(d2)) => d1.cmp(d2),
+            _ => std::cmp::Ordering::Less,
         }
     }
 }

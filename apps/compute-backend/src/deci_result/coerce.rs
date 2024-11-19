@@ -4,6 +4,7 @@ use crate::{
 };
 use core::f64;
 use fraction::ToPrimitive as _;
+use num_bigint::Sign;
 use std::str::FromStr;
 
 pub trait Coerce<To> {
@@ -119,11 +120,15 @@ impl Into<DeciResult> for String {
 }
 
 impl DeciResult {
+    pub fn try_coerce_or_default(self, to: DeciType) -> DeciResult {
+        self.try_coerce(to).unwrap_or_else(|| to.make_default())
+    }
     pub fn try_coerce(self, to: DeciType) -> Option<DeciResult> {
         if self.deci_type() == Some(to) {
             // just in case we miss self -> self cases further down
             return Some(self);
         }
+
         match self {
             DeciResult::Boolean(inner) => match to {
                 DeciType::Boolean => Some(self),
@@ -152,8 +157,8 @@ impl DeciResult {
                         true => fraction::Sign::Minus,
                         false => fraction::Sign::Plus,
                     },
-                    numer.abs() as u64,
-                    denom.abs() as u64,
+                    numer.unsigned_abs(),
+                    denom.unsigned_abs(),
                 );
                 Some(match to {
                     DeciType::Number => self,
@@ -161,12 +166,36 @@ impl DeciResult {
                     _ => return None,
                 })
             }
-            DeciResult::ArbitraryFraction(_, _) => return None,
-            DeciResult::Column(_) => return None,
-            DeciResult::Date(_date) => return None,
-            DeciResult::Range(_) => return None,
-            DeciResult::Row(_) => return None,
-            _ => return None,
+            DeciResult::ArbitraryFraction(_, _) if matches!(to, DeciType::Number) => Some(self),
+            DeciResult::ArbitraryFraction(numer, denom) => Some(match to {
+                DeciType::String => {
+                    let inner = fraction::GenericFraction::new_raw_signed(
+                        match (numer.sign(), denom.sign()) {
+                            (Sign::Plus, Sign::Minus) | (Sign::Minus, Sign::Plus) => {
+                                fraction::Sign::Minus
+                            }
+                            _ => fraction::Sign::Plus,
+                        },
+                        numer.into_parts().1,
+                        denom.into_parts().1,
+                    );
+
+                    inner.to_f64().unwrap_or(f64::NAN).to_string().into()
+                }
+                _ => return None,
+            }),
+            DeciResult::Column(_) => None,
+            DeciResult::Date(date) => Some(match to {
+                DeciType::String => date
+                    .0
+                    .map(|date| date.to_string())
+                    .unwrap_or_default()
+                    .into(),
+                _ => return None,
+            }),
+            DeciResult::Range(_) => None,
+            DeciResult::Row(_) => None,
+            _ => None,
         }
     }
 }

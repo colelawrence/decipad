@@ -6,25 +6,25 @@ export interface TotalAggregationExpressions {
   sum: string;
 }
 
-export interface AggregationType {
-  id: string;
-  name: string;
-  shortName?: string;
-  expression: (
+export type AggregationType = {
+  readonly id: string;
+  readonly name: string;
+  readonly shortName?: string;
+  readonly expression: (
     colRef: string,
     totalAggregationExpressions: TotalAggregationExpressions
   ) => string;
-  requiresSum?: boolean;
+  readonly requiresSum?: boolean;
   // Use null only when the result type cannot be predicted
-  getResultType: ((cellType: SerializedType) => SerializedType) | null;
-}
+  readonly getResultType: ((cellType: SerializedType) => SerializedType) | null;
+};
 
 const getResultTypeNumber = (): SerializedType => ({
   kind: 'number',
   unit: null,
 });
 
-const aggregationTypes: { [type: string]: AggregationType[] } = {
+const aggregationTypes = {
   boolean: [
     {
       id: 'boolean:count-true',
@@ -52,7 +52,7 @@ const aggregationTypes: { [type: string]: AggregationType[] } = {
         `countif(${colRef} == false) / count(${colRef}) in %`,
       getResultType: getResultTypeNumber,
     },
-  ],
+  ] as const satisfies readonly AggregationType[],
 
   date: [
     {
@@ -74,7 +74,7 @@ const aggregationTypes: { [type: string]: AggregationType[] } = {
       expression: (colRef) => `max(${colRef}) - min(${colRef})`,
       getResultType: null,
     },
-  ],
+  ] as const satisfies readonly AggregationType[],
   number: [
     {
       id: 'number:sum',
@@ -144,7 +144,7 @@ const aggregationTypes: { [type: string]: AggregationType[] } = {
       requiresSum: true,
       getResultType: getResultTypeNumber,
     },
-  ],
+  ] as const satisfies readonly AggregationType[],
   string: [
     {
       id: 'string:count-unique',
@@ -160,7 +160,7 @@ const aggregationTypes: { [type: string]: AggregationType[] } = {
       expression: (colRef) => `count(${colRef})`,
       getResultType: getResultTypeNumber,
     },
-  ],
+  ] as const satisfies readonly AggregationType[],
   trend: [
     {
       id: 'number:sum',
@@ -183,8 +183,11 @@ const aggregationTypes: { [type: string]: AggregationType[] } = {
       expression: (colRef) => `avg(${colRef})`,
       getResultType: identity,
     },
-  ],
-};
+  ] as const satisfies readonly AggregationType[],
+} as const;
+
+export type AggregationIds =
+  typeof aggregationTypes[keyof typeof aggregationTypes][number]['id'];
 
 const typeById = once(() => {
   const types: { [id: string]: AggregationType } = {};
@@ -196,14 +199,15 @@ const typeById = once(() => {
 
 export const availableAggregations = (
   typeOrKind: TableCellType | SerializedType | SerializedType['kind']
-): AggregationType[] => {
+): readonly AggregationType[] => {
   const kind = (() => {
     if (typeof typeOrKind === 'string') return typeOrKind;
     return typeOrKind.kind === 'series'
       ? typeOrKind.seriesType
       : typeOrKind.kind;
   })();
-  return aggregationTypes[kind] ?? [];
+  // TODO: not a fan of this type assertion, but it was working beforehand
+  return aggregationTypes[kind as keyof typeof aggregationTypes] ?? [];
 };
 
 export const hasAggregationId = (id: string): boolean =>

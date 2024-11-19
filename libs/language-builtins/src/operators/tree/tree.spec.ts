@@ -5,7 +5,6 @@ import { makeContext } from '../../utils/testUtils';
 import { getInstanceof } from '@decipad/utils';
 import { N } from '@decipad/number';
 import { tree } from './tree';
-import { Unknown } from '@decipad/language-interfaces';
 
 describe('tree', () => {
   const emptyMeta = () => ({ labels: undefined });
@@ -41,7 +40,7 @@ describe('tree', () => {
       ),
       Value.Tree
     );
-    expect(treeValue.root).toEqual(Unknown);
+    expect(treeValue.root).toEqual(undefined);
     expect(treeValue.columns).toHaveLength(0);
     expect(treeValue.children).toHaveLength(0);
   });
@@ -68,7 +67,7 @@ describe('tree', () => {
       ),
       Value.Tree
     );
-    await expect(treeValue.root).toEqual(Unknown);
+    expect(treeValue.root).toEqual(undefined);
     expect(treeValue.columns).toMatchInlineSnapshot(`
       [
         {
@@ -108,7 +107,7 @@ describe('tree', () => {
       ),
       Value.Tree
     );
-    await expect(treeValue.root).toEqual(Unknown);
+    expect(treeValue.root).toEqual(undefined);
     expect(treeValue.columns).toMatchInlineSnapshot(`
       [
         {
@@ -152,7 +151,7 @@ describe('tree', () => {
       ),
       Value.Tree
     );
-    await expect(treeValue.root).toEqual(Unknown);
+    expect(treeValue.root).toEqual(undefined);
     expect(treeValue.columns).toMatchInlineSnapshot(`
       [
         {
@@ -221,7 +220,7 @@ describe('tree', () => {
       ),
       Value.Tree
     );
-    await expect(treeValue.root).toEqual(Unknown);
+    expect(treeValue.root).toEqual(undefined);
     expect(treeValue.columns).toMatchInlineSnapshot(`
       [
         {

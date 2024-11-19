@@ -3,21 +3,17 @@ import {
   type IdentifiedBlock,
   getExprRef,
   statementToIdentifiedBlock,
-  parseExpression,
 } from '@decipad/remote-computer';
 import type { DataViewElement } from '@decipad/editor-types';
 import { getAggregationById } from '@decipad/language-aggregations';
 import { getColumnRef } from './getColumnRef';
-
-const generateCustomFunctionName = (dataViewId: string, columnName: string) =>
-  `${dataViewId}_${columnName}_function`;
 
 export const generateAggregationDefs = (
   dataView: DataViewElement
 ): IdentifiedBlock[] => {
   const [, headerRow] = dataView.children;
   const aggregationsTableBlockId = `${dataView.id}-aggregations`;
-  const customFunctionBlocksPerColumn: [string, string, IdentifiedBlock][] =
+  const aggregationEntriesPerColumn: [string, string][] =
     headerRow.children.flatMap((header, headerIndex) => {
       if (!header.aggregation) {
         return [];
@@ -26,53 +22,9 @@ export const generateAggregationDefs = (
       if (!aggregation) {
         return [];
       }
-      const aggregationExpression = aggregation.expression('columnValue', {
-        sum: `sum(totalColumnValue)`,
-      });
-      const parsedAggregationExpression = parseExpression(
-        aggregationExpression
-      );
-      if (parsedAggregationExpression.error) {
-        console.error(
-          'Error parsing aggregation expression',
-          aggregationExpression,
-          parsedAggregationExpression.error
-        );
-        return [];
-      }
+
       const columnRef = getColumnRef(header);
-      const customFunctionBlockId = `${aggregationsTableBlockId}-${columnRef}-${headerIndex}-function`;
-      const customFunctionName = generateCustomFunctionName(
-        dataView.id ?? '',
-        columnRef
-      );
-      return [
-        [
-          `${columnRef}_${headerIndex}`,
-          customFunctionName,
-          statementToIdentifiedBlock(customFunctionBlockId, {
-            type: 'function-definition',
-            args: [
-              {
-                type: 'funcdef',
-                args: [customFunctionName],
-              }, // lambda: empty function name
-              {
-                type: 'argument-names',
-                args: [
-                  { type: 'def', args: ['columnValue'] },
-                  { type: 'def', args: ['totalColumnValue'] },
-                ],
-              },
-              {
-                type: 'block',
-                id: `${customFunctionBlockId}-body`,
-                args: [parsedAggregationExpression.solution],
-              },
-            ],
-          }),
-        ],
-      ];
+      return [[`${columnRef}_${headerIndex}`, aggregation.id]];
     });
   const aggregationsTableBlock = statementToIdentifiedBlock(
     aggregationsTableBlockId,
@@ -83,8 +35,8 @@ export const generateAggregationDefs = (
           type: 'tabledef',
           args: [getExprRef(aggregationsTableBlockId)],
         },
-        ...customFunctionBlocksPerColumn.map(
-          ([columnName, functionName]): AST.TableColumn => ({
+        ...aggregationEntriesPerColumn.map(
+          ([columnName, aggId]): AST.TableColumn => ({
             type: 'table-column',
             args: [
               {
@@ -96,44 +48,7 @@ export const generateAggregationDefs = (
                 args: [
                   {
                     type: 'column-items',
-                    args: [
-                      {
-                        type: 'function-definition',
-                        args: [
-                          { type: 'funcdef', args: [''] }, // lambda: empty function name
-                          {
-                            type: 'argument-names',
-                            args: [
-                              { type: 'def', args: ['columnValue'] },
-                              { type: 'def', args: ['totalColumnValue'] },
-                            ],
-                          },
-                          {
-                            type: 'block',
-                            id: `${aggregationsTableBlockId}-${columnName}`,
-                            args: [
-                              {
-                                type: 'function-call',
-                                args: [
-                                  // we always call the round(Column, precision) function, but the second argument varies according to the user's choice
-                                  { type: 'funcref', args: [functionName] },
-                                  {
-                                    type: 'argument-list',
-                                    args: [
-                                      { type: 'ref', args: ['columnValue'] },
-                                      {
-                                        type: 'ref',
-                                        args: ['totalColumnValue'],
-                                      },
-                                    ],
-                                  },
-                                ],
-                              },
-                            ],
-                          },
-                        ],
-                      },
-                    ],
+                    args: [{ type: 'literal', args: ['string', aggId] }],
                   },
                 ],
               },
@@ -146,6 +61,6 @@ export const generateAggregationDefs = (
 
   return [
     aggregationsTableBlock,
-    ...customFunctionBlocksPerColumn.map((cfb) => cfb[2]),
+    // ...aggregationEntriesPerColumn.map((cfb) => cfb[2]),
   ];
 };

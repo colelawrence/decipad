@@ -95,7 +95,7 @@ describe('layoutPowerData', () => {
             },
           ],
           "originalCardinality": 1,
-          "root": Symbol(unknown),
+          "root": undefined,
           "rootAggregation": undefined,
         },
       }
@@ -145,17 +145,16 @@ describe('layoutPowerData', () => {
           Column1 = ["A"]
         }`,
           decilang`Empty = {}`,
-          decilang`Aggregate(x) = count(unique(x))`,
           decilang`Aggregations = {
-          Column1 = Aggregate
+          Column1 = 'string:count-unique'
         }`,
           decilang`Tree = tree(DataTable, Empty, Empty, Aggregations)`,
         ]),
       },
     });
     const tree = getDefined(
-      results?.blockResults['block-4']?.result,
-      'no result for block-4'
+      results?.blockResults['block-3']?.result,
+      'no result for block-3'
     ) as Result.Result<'tree'>;
     expect(tree).toMatchInlineSnapshot(`
       {
@@ -178,7 +177,18 @@ describe('layoutPowerData', () => {
               "columns": [],
               "originalCardinality": 1,
               "root": "A",
-              "rootAggregation": undefined,
+              "rootAggregation": {
+                "meta": undefined,
+                "type": {
+                  "kind": "number",
+                },
+                "value": DeciNumber {
+                  "d": 1n,
+                  "infinite": false,
+                  "n": 1n,
+                  "s": 1n,
+                },
+              },
             },
           ],
           "columns": [
@@ -187,7 +197,6 @@ describe('layoutPowerData', () => {
                 "meta": undefined,
                 "type": {
                   "kind": "number",
-                  "unit": null,
                 },
                 "value": DeciNumber {
                   "d": 1n,
@@ -200,7 +209,7 @@ describe('layoutPowerData', () => {
             },
           ],
           "originalCardinality": 1,
-          "root": Symbol(unknown),
+          "root": undefined,
           "rootAggregation": undefined,
         },
       }
@@ -223,7 +232,7 @@ describe('layoutPowerData', () => {
           "children": [],
           "collapsible": false,
           "elementType": "group",
-          "id": "/a32fd8b31587b9c6354faa86e12756d2e7aca860346be182aacebb91f0b58026",
+          "id": "/e85580031cb9166cd313930d684f09bdda1e3f129191a14419cc70382e41c685",
           "type": {
             "kind": "string",
           },
@@ -236,7 +245,6 @@ describe('layoutPowerData', () => {
           "global": true,
           "type": {
             "kind": "number",
-            "unit": null,
           },
           "value": DeciNumber {
             "d": 1n,
@@ -259,19 +267,17 @@ describe('layoutPowerData', () => {
           Column2 = [3, 2, 1]
         }`,
           decilang`Empty = {}`,
-          decilang`Aggregate1(x) = count(unique(x))`,
-          decilang`Aggregate2(x) = sum(x)`,
           decilang`Aggregations = {
-          Column1 = Aggregate1
-          Column2 = Aggregate2
-        }`,
+            Column1 = 'string:count-unique'
+            Column2 = 'number:sum'
+          }`,
           decilang`Tree = tree(DataTable, Empty, Empty, Aggregations)`,
         ]),
       },
     });
     const tree = getDefined(
-      results?.blockResults['block-5']?.result,
-      'no result for block-5'
+      results?.blockResults['block-3']?.result,
+      'no result for block-3'
     ) as Result.Result<'tree'>;
     expect(tree).toMatchSnapshot();
     expect(
@@ -297,7 +303,6 @@ describe('layoutPowerData', () => {
               "global": false,
               "type": {
                 "kind": "number",
-                "unit": null,
               },
               "value": DeciNumber {
                 "d": 1n,
@@ -309,7 +314,7 @@ describe('layoutPowerData', () => {
           ],
           "collapsible": true,
           "elementType": "group",
-          "id": "/ab2343f77c33a58d1431ce0434a21d3d385f00b3308206522aaef176e539a7cc",
+          "id": "/fcba17fd91a0ff43297ea7b8da8af0b3befbdc4266bb16c79b3b6554b133228d",
           "type": {
             "kind": "string",
           },
@@ -322,10 +327,8 @@ describe('layoutPowerData', () => {
             {
               "aggregationExpression": "sum((filter(filter(TableName, TableName.Column1 == "B"), (filter(TableName, TableName.Column1 == "B")).Column2 == 2)).Column2)",
               "aggregationResult": {
-                "meta": undefined,
                 "type": {
                   "kind": "number",
-                  "unit": null,
                 },
                 "value": DeciNumber {
                   "d": 1n,
@@ -337,7 +340,7 @@ describe('layoutPowerData', () => {
               "children": [],
               "collapsible": false,
               "elementType": "group",
-              "id": "/e6058265454b52c33d07e0394ea71bcebe74c4c386cf92d36494fa1c23fbfed9/b0bc58bdde052273dc781192e21d2539e3dc453f1364463569428c0590b16f32",
+              "id": "/1cdb9533372bfcf35d4e9b973a5d6f181ac200b6bfd7aba38051ee77ac5ac243/a60724359d845e8271fbda9708ee8cd10403c26bbe3c7775fc6fc855cb801170",
               "type": {
                 "kind": "number",
                 "unit": null,
@@ -352,7 +355,7 @@ describe('layoutPowerData', () => {
           ],
           "collapsible": false,
           "elementType": "group",
-          "id": "/e6058265454b52c33d07e0394ea71bcebe74c4c386cf92d36494fa1c23fbfed9",
+          "id": "/1cdb9533372bfcf35d4e9b973a5d6f181ac200b6bfd7aba38051ee77ac5ac243",
           "type": {
             "kind": "string",
           },
@@ -368,7 +371,6 @@ describe('layoutPowerData', () => {
               "global": true,
               "type": {
                 "kind": "number",
-                "unit": null,
               },
               "value": DeciNumber {
                 "d": 1n,
@@ -382,7 +384,6 @@ describe('layoutPowerData', () => {
           "global": true,
           "type": {
             "kind": "number",
-            "unit": null,
           },
           "value": DeciNumber {
             "d": 1n,

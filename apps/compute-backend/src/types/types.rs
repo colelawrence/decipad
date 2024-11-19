@@ -66,7 +66,7 @@ pub struct Tree {
 }
 
 #[suppress_derive_case_warnings]
-#[derive(PartialEq, Debug, Clone, Copy, Serialize, Deserialize, Tsify)]
+#[derive(PartialEq, Eq, PartialOrd, Ord, Debug, Clone, Copy, Serialize, Deserialize, Tsify)]
 #[tsify(into_wasm_abi, from_wasm_abi)]
 #[serde(rename_all = "camelCase")]
 pub enum DateSpecificity {
@@ -81,19 +81,20 @@ pub enum DateSpecificity {
     Millisecond,
 }
 
-#[derive(Clone, Copy, Debug, PartialEq)]
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub struct DeciDate(pub Option<NaiveDateTime>, pub DateSpecificity);
-
 impl PartialOrd for DeciDate {
     fn partial_cmp(&self, other: &Self) -> Option<std::cmp::Ordering> {
-        match (self.0, other.0) {
-            (Some(a), Some(b)) => a.partial_cmp(&b),
-            _ => None,
-        }
+        Some(self.0.cmp(&other.0))
+    }
+}
+impl Ord for DeciDate {
+    fn cmp(&self, other: &Self) -> std::cmp::Ordering {
+        self.0.cmp(&other.0)
     }
 }
 
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, Default)]
 pub enum DeciResult {
     Boolean(bool),
     String(String),
@@ -106,6 +107,7 @@ pub enum DeciResult {
     Range(Vec<DeciResult>),
     Row(Row),
     TypeError,
+    #[default]
     Pending,
     Function {
         name: String,
@@ -135,8 +137,31 @@ impl DeciResult {
     }
 }
 
-impl Into<DeciResult> for DeciDate {
-    fn into(self) -> DeciResult {
-        DeciResult::Date(self)
+impl DeciResult {
+    pub fn as_f64(&self) -> Option<f64> {
+        use fraction::ToPrimitive as _;
+        Some(match self {
+            DeciResult::Fraction(n, d) => (*n as f64) / (*d as f64),
+            DeciResult::ArbitraryFraction(n, d) => {
+                let (num_s, num) = n.clone().into_parts();
+                let (den_s, den) = d.clone().into_parts();
+                let is_neg = matches!(num_s, num_bigint::Sign::Minus)
+                    ^ matches!(den_s, num_bigint::Sign::Minus);
+                return Some(
+                    fraction::BigFraction::new(num, den).to_f64()?
+                        * match is_neg {
+                            true => -1.0,
+                            false => 1.0,
+                        },
+                );
+            }
+            _ => return None,
+        })
+    }
+}
+
+impl From<DeciDate> for DeciResult {
+    fn from(val: DeciDate) -> Self {
+        DeciResult::Date(val)
     }
 }

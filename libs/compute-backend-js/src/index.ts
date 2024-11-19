@@ -5,6 +5,7 @@
 import {
   ComputeBackend,
   console_hook,
+  build_tree,
   DateSpecificity,
   DeciType,
   Kind,
@@ -48,6 +49,7 @@ export {
   computeBackendSingleton,
   serializeResult,
   deserializeResult,
+  build_tree as buildTree,
   encodeResultToBuffer,
   decodeResultBuffer,
   getDeserializeResultArg,
@@ -58,6 +60,7 @@ export type {
   Importer,
   ImportOptions,
   ResultType,
+  Aggregations,
 } from './wasm/compute_backend';
 
 const assert_never = (a: never): never => {

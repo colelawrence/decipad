@@ -1,5 +1,9 @@
+use chrono::Datelike;
 use num_bigint::BigInt;
-use std::ops::{Add, Div, Mul, Sub};
+use std::{
+    mem,
+    ops::{Add, AddAssign, Div, Mul, Sub},
+};
 
 /* ----Implements easy to use zero (mostly good for summing and similar)----  */
 use num::{
@@ -44,9 +48,7 @@ impl DeciResult {
                 DeciResult::Column(_) => {
                     return DeciResult::Column(items.iter().map(|x| x.mean()).collect());
                 }
-                _ => {
-                    return self.sum_frac() * DeciResult::Fraction(1, self.len() as i64);
-                }
+                _ => self.sum_frac() * DeciResult::Fraction(1, self.len() as i64),
             },
             _ => panic!("Can't take mean of a non-column"),
         }
@@ -147,13 +149,13 @@ impl DeciResult {
     pub fn reduce(&mut self) {
         match self {
             DeciResult::Fraction(n, d) => {
-                let gcd = gcd(n.abs() as u64, *d as u64);
+                let gcd = gcd(n.unsigned_abs(), *d as u64);
                 let mut neg = 1;
                 if *n < 0 {
                     neg = -1;
                 }
                 *n = neg * *n / gcd as i64;
-                *d = *d / gcd as i64;
+                *d /= gcd as i64;
             }
             DeciResult::ArbitraryFraction(n, d) => {
                 let gcd = gcd(abs(n.clone()), d.clone());
@@ -226,120 +228,151 @@ impl DeciResult {
     }
 }
 
-impl Add for DeciResult {
-    type Output = DeciResult;
-    fn add(self, other: DeciResult) -> DeciResult {
-        &self + &other
+impl std::iter::Sum for DeciResult {
+    fn sum<I: Iterator<Item = Self>>(iter: I) -> Self {
+        iter.fold(DeciResult::Fraction(0, 1), |a, b| a + b)
     }
 }
 
-impl<'a, 'b> Add<&'b DeciResult> for &'a DeciResult {
-    type Output = DeciResult;
+impl<'a> std::iter::Sum<&'a DeciResult> for DeciResult {
+    fn sum<I: Iterator<Item = &'a Self>>(iter: I) -> Self {
+        iter.fold(DeciResult::Fraction(0, 1), |a, b| a + b)
+    }
+}
 
-    fn add(self, other: &'b DeciResult) -> DeciResult {
-        match (self, other) {
-            (DeciResult::Fraction(n1, d1), DeciResult::Fraction(n2, d2)) => {
+impl AddAssign<DeciResult> for DeciResult {
+    fn add_assign(&mut self, other: Self) {
+        *self = match (mem::take(self), other) {
+            (DeciResult::Fraction(n1, d1), DeciResult::Fraction(n2, d2)) => 'arm: {
                 if d1 == d2 {
-                    let n = n1.checked_add(*n2);
-                    match n {
-                        Some(num) => {
-                            return DeciResult::Fraction(num, *d1);
-                        }
+                    let n = n1.checked_add(n2);
+                    break 'arm match n {
+                        Some(num) => DeciResult::Fraction(num, d1),
                         None => {
-                            return &DeciResult::ArbitraryFraction(
-                                BigInt::from_i64(*n1).unwrap(),
-                                BigInt::from_i64(*d1).unwrap(),
-                            ) + &DeciResult::ArbitraryFraction(
-                                BigInt::from_i64(*n2).unwrap(),
-                                BigInt::from_i64(*d2).unwrap(),
-                            );
+                            DeciResult::ArbitraryFraction(
+                                BigInt::from_i64(n1).unwrap(),
+                                BigInt::from_i64(d1).unwrap(),
+                            ) + DeciResult::ArbitraryFraction(
+                                BigInt::from_i64(n2).unwrap(),
+                                BigInt::from_i64(d2).unwrap(),
+                            )
                         }
-                    }
+                    };
                 }
 
-                let mylcm = lcm(*d1, *d2);
-                let n_left = n1.checked_mul(mylcm / d1);
-                let n_right = n2.checked_mul(mylcm / d2);
-                let n;
-
-                match (n_left, n_right) {
-                    (Some(l), Some(r)) => {
-                        n = (l).checked_add(r);
-                    }
+                let lcm = lcm(d1, d2);
+                let n_left = n1.checked_mul(lcm / d1);
+                let n_right = n2.checked_mul(lcm / d2);
+                let n = match n_left.zip(n_right) {
+                    Some((l, r)) => (l).checked_add(r),
                     _ => {
-                        let g1 = gcd(*n1, *d1);
-                        let g2 = gcd(*n2, *d2);
-                        if g1 > 1 || g2 > 1 {
-                            return &DeciResult::Fraction(n1 / g1, d1 / g1)
-                                + &DeciResult::Fraction(n2 / g2, d2 / g2);
-                        } else {
-                            return &self.to_arb() + &other.to_arb();
-                        }
+                        let g1 = gcd(n1, d1);
+                        let g2 = gcd(n2, d2);
+                        break 'arm match g1 > 1 || g2 > 1 {
+                            true => {
+                                DeciResult::Fraction(n1 / g1, d1 / g1)
+                                    + DeciResult::Fraction(n2 / g2, d2 / g2)
+                            }
+                            false => {
+                                DeciResult::ArbitraryFraction(
+                                    BigInt::from_i64(n1).unwrap(),
+                                    BigInt::from_i64(d1).unwrap(),
+                                ) + DeciResult::ArbitraryFraction(
+                                    BigInt::from_i64(n2).unwrap(),
+                                    BigInt::from_i64(d2).unwrap(),
+                                )
+                            }
+                        };
                     }
-                }
-                let den = mylcm;
+                };
+
+                let den = lcm;
                 match n {
-                    Some(a) => {
-                        let mygcd = gcd(a, den);
-                        return DeciResult::Fraction(a / mygcd, den / mygcd);
+                    Some(n) => {
+                        let gcd = gcd(n, den);
+                        DeciResult::Fraction(n / gcd, den / gcd)
                     }
                     None => {
-                        let g1 = gcd(*n1, *d1);
-                        let g2 = gcd(*n2, *d2);
-                        if g1 > 1 || g2 > 1 {
-                            return &DeciResult::Fraction(n1 / g1, d1 / g1)
-                                + &DeciResult::Fraction(n2 / g2, d2 / g2);
-                        } else {
-                            return &self.to_arb() + &other.to_arb();
+                        let g1 = gcd(n1, d1);
+                        let g2 = gcd(n2, d2);
+                        match g1 > 1 || g2 > 1 {
+                            true => {
+                                DeciResult::Fraction(n1 / g1, d1 / g1)
+                                    + DeciResult::Fraction(n2 / g2, d2 / g2)
+                            }
+                            false => {
+                                DeciResult::ArbitraryFraction(
+                                    BigInt::from_i64(n1).unwrap(),
+                                    BigInt::from_i64(d1).unwrap(),
+                                ) + DeciResult::ArbitraryFraction(
+                                    BigInt::from_i64(n2).unwrap(),
+                                    BigInt::from_i64(d2).unwrap(),
+                                )
+                            }
                         }
                     }
                 }
             }
-            (DeciResult::Fraction(_n1, _d1), DeciResult::ArbitraryFraction(_n2, _d2)) => {
-                &self.to_arb() + other
+            (DeciResult::ArbitraryFraction(n1, d1), DeciResult::Fraction(n2, d2))
+            | (DeciResult::Fraction(n2, d2), DeciResult::ArbitraryFraction(n1, d1)) => {
+                DeciResult::ArbitraryFraction(n1, d1)
+                    + DeciResult::ArbitraryFraction(
+                        BigInt::from_i64(n2).unwrap(),
+                        BigInt::from_i64(d2).unwrap(),
+                    )
             }
-            (DeciResult::Fraction(_n, _d), DeciResult::Column(items)) => {
-                DeciResult::Column(items.iter().map(|x| x + self).collect())
-            }
-            (DeciResult::ArbitraryFraction(_n1, _d1), DeciResult::Fraction(_n2, _d2)) => {
-                self + &other.to_arb()
-            }
-            (DeciResult::ArbitraryFraction(n1, d1), DeciResult::ArbitraryFraction(n2, d2)) => {
-                if *d1 == *d2 {
-                    let n = n1 + n2;
-                    return DeciResult::ArbitraryFraction(n, d1.clone());
+
+            (
+                DeciResult::ArbitraryFraction(n1, d1),
+                DeciResult::ArbitraryFraction(n2, d2),
+            ) => 'arm: {
+                if d1 == d2 {
+                    let n = n1.clone() + &n2.clone();
+                    break 'arm DeciResult::ArbitraryFraction(n, d1.clone());
                 }
 
                 let denlcm = lcm(d1.clone(), d2.clone());
-                let num = (&denlcm * n1 / d1) + (&denlcm * n2 / d2);
+                let num = (denlcm.clone() * n1.clone() / d1.clone()) + (denlcm.clone() * n2 / d2);
 
-                return DeciResult::ArbitraryFraction(num, denlcm);
+                DeciResult::ArbitraryFraction(num, denlcm)
             }
-            (DeciResult::ArbitraryFraction(_n, _d), DeciResult::Column(items)) => {
-                DeciResult::Column(items.iter().map(|x| x + self).collect())
+
+            (frac @ DeciResult::Fraction(_, _), DeciResult::Column(items))
+            | (DeciResult::Column(items), frac @ DeciResult::Fraction(_, _)) => {
+                DeciResult::Column(items.into_iter().map(|item| frac.clone() + item).collect())
             }
-            (DeciResult::Column(items), DeciResult::Fraction(_n, _d)) => {
-                DeciResult::Column(items.iter().map(|x| x + other).collect())
+
+            (frac @ DeciResult::ArbitraryFraction(_, _), DeciResult::Column(items))
+            | (DeciResult::Column(items), frac @ DeciResult::ArbitraryFraction(_, _)) => {
+                DeciResult::Column(items.into_iter().map(|item| frac.clone() + item).collect())
             }
-            (DeciResult::Column(items), DeciResult::ArbitraryFraction(_n, _d)) => {
-                DeciResult::Column(items.iter().map(|x| x + other).collect())
+            (DeciResult::Column(items1), DeciResult::Column(items2)) => {
+                DeciResult::Column(items1.into_iter().zip(items2).map(|(a, b)| a + b).collect())
             }
-            (DeciResult::Column(items1), DeciResult::Column(items2)) => DeciResult::Column(
-                items1
-                    .iter()
-                    .zip(items2.iter())
-                    .map(|(a, b)| a + b)
-                    .collect(),
-            ),
-            (DeciResult::Column(items), DeciResult::String(_s)) => {
-                DeciResult::Column(items.iter().map(|x| x + other).collect())
+            (DeciResult::Column(items), other @ DeciResult::String(_))
+            | (other @ DeciResult::String(_), DeciResult::Column(items)) => {
+                DeciResult::Column(items.into_iter().map(|x| x + other.clone()).collect())
             }
-            (DeciResult::String(a), DeciResult::String(b)) => DeciResult::String(a.to_owned() + b),
-            (DeciResult::String(_s), DeciResult::Column(items)) => {
-                DeciResult::Column(items.iter().map(|x| self + x).collect())
-            }
-            _ => panic!("Cannot add these types"),
+            (DeciResult::String(a), DeciResult::String(b)) => DeciResult::String(a + &b),
+            (a, b) => panic!("Cannot add these types - ({:?} & {:?})", a, b),
         }
+    }
+}
+
+impl Add for DeciResult {
+    type Output = DeciResult;
+    fn add(mut self, other: DeciResult) -> DeciResult {
+        self += other;
+        self
+    }
+}
+
+impl<'a> Add<&'a DeciResult> for DeciResult {
+    type Output = DeciResult;
+
+    fn add(mut self, other: &'a DeciResult) -> DeciResult {
+        self += other.clone();
+        self
     }
 }
 
@@ -347,7 +380,70 @@ impl Sub for DeciResult {
     type Output = DeciResult;
 
     fn sub(self, other: DeciResult) -> DeciResult {
-        &self + &other.negate()
+        match (self, other) {
+            (DeciResult::Date(date_a), DeciResult::Date(date_b)) => match (date_a.0, date_b.0) {
+                (a, None) | (None, a) => DeciDate(a, date_a.1).into(),
+                (Some(a), Some(b)) => {
+                    let diff = a - b;
+                    match date_a.1.max(date_b.1) {
+                        spec @ (DateSpecificity::Year
+                        | DateSpecificity::Quarter
+                        | DateSpecificity::Month) => {
+                            let month_diff = ((a.year() * 12) + a.month() as i32)
+                                - ((b.year() * 12) + b.month() as i32);
+                            match spec {
+                                DateSpecificity::Year => (month_diff as f64 / 12.0).into(),
+                                DateSpecificity::Quarter => (month_diff as f64 / 3.0).into(),
+                                DateSpecificity::Month => (month_diff as usize).into(),
+                                _ => unreachable!("by outer match arm"),
+                            }
+                        }
+                        DateSpecificity::None => diff.num_days().into(),
+                        DateSpecificity::Day => diff.num_days().into(),
+                        DateSpecificity::Hour => diff.num_hours().into(),
+                        DateSpecificity::Minute => diff.num_minutes().into(),
+                        DateSpecificity::Second => diff.num_seconds().into(),
+                        DateSpecificity::Millisecond => diff.num_milliseconds().into(),
+                    }
+                }
+            },
+
+            (a, b) => a + &b.negate(),
+        }
+    }
+}
+
+impl Mul<usize> for DeciResult {
+    type Output = DeciResult;
+    fn mul(self, rhs: usize) -> Self::Output {
+        match self {
+            DeciResult::Fraction(num, den) => {
+                if let Some(new_num) = num.checked_mul(rhs as i64) {
+                    DeciResult::Fraction(new_num, den)
+                } else {
+                    DeciResult::ArbitraryFraction(
+                        BigInt::from_i64(num).unwrap() * rhs,
+                        BigInt::from_i64(den).unwrap()
+                    )
+                }
+            }
+            DeciResult::ArbitraryFraction(num, den) => {
+                DeciResult::ArbitraryFraction(num * rhs, den)
+            }
+            _ => panic!("Cannot multiply these types"),
+        }
+    }
+}
+impl Mul<usize> for &DeciResult {
+    type Output = DeciResult;
+    fn mul(self, rhs: usize) -> Self::Output {
+        match self {
+            DeciResult::Fraction(num, den) => DeciResult::Fraction(num * rhs as i64, *den),
+            DeciResult::ArbitraryFraction(num, den) => {
+                DeciResult::ArbitraryFraction(num * rhs, den.clone())
+            }
+            _ => panic!("Cannot multiply these types"),
+        }
     }
 }
 
@@ -368,9 +464,7 @@ impl<'a, 'b> Mul<&'b DeciResult> for &'a DeciResult {
                 let newden = d1.checked_mul(*d2);
                 match (newnum, newden) {
                     (Some(n), Some(d)) => DeciResult::Fraction(n, d),
-                    _ => {
-                        return &self.to_arb() * &other.to_arb();
-                    }
+                    _ => self.to_arb() * other.to_arb(),
                 }
             }
             (DeciResult::Fraction(_n1, _d1), DeciResult::ArbitraryFraction(_n2, _d2)) => {
@@ -406,6 +500,7 @@ impl<'a, 'b> Mul<&'b DeciResult> for &'a DeciResult {
 impl Div for DeciResult {
     type Output = DeciResult;
 
+    #[allow(clippy::suspicious_arithmetic_impl)]
     fn div(self, other: DeciResult) -> DeciResult {
         &self * &other.reciprocal()
     }

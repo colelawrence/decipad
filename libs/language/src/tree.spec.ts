@@ -17,8 +17,8 @@ describe('tree builtin', () => {
         }
         Empty = {}
         Aggregations = {
-          Col1 = [Max]
-          Col3 = [Sum]
+          Col1 = ['number:max']
+          Col3 = ['number:sum']
         }
         TreeResult = tree(Data, Empty, Empty, Aggregations)
       `,
@@ -33,17 +33,15 @@ describe('tree builtin', () => {
     expect(treeResultType.kind).toBe('tree');
     expect(treeResultType.columnNames).toHaveLength(3);
     expect(treeResultType.columnTypes).toHaveLength(3);
-    expect(treeResultValue.root).toMatchInlineSnapshot(`Symbol(unknown)`);
+    expect(treeResultValue.root).toBe(undefined);
     expect(treeResultValue.rootAggregation).toBe(undefined);
     expect(treeResultValue.columns).toHaveLength(3);
     expect(treeResultValue.columns).toMatchInlineSnapshot(`
       [
         {
           "aggregation": {
-            "meta": undefined,
             "type": {
               "kind": "number",
-              "unit": null,
             },
             "value": DeciNumber {
               "d": 1n,
@@ -60,10 +58,8 @@ describe('tree builtin', () => {
         },
         {
           "aggregation": {
-            "meta": undefined,
             "type": {
               "kind": "number",
-              "unit": null,
             },
             "value": DeciNumber {
               "d": 1n,

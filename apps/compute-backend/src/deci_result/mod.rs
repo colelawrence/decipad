@@ -293,9 +293,7 @@ pub fn serialize_result_iter(
                 // Serialize columns
                 for column in &tree.columns {
                     next_results.push(Some(DeciResult::String(column.name.clone())));
-                    next_results.push(Some(
-                        column.aggregation.clone().unwrap_or(DeciResult::Pending),
-                    ));
+                    next_results.push(column.aggregation.clone());
                 }
 
                 // Serialize child count
