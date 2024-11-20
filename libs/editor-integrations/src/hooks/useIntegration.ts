@@ -40,6 +40,8 @@ export const useIntegration = (
   element: IntegrationTypes.IntegrationBlock
 ): UseIntegraionReturn => {
   const computer = useComputer();
+  const blocks = [...computer.blocks];
+  console.log('blocks', blocks);
   const [importState, setImportState] = useState<ImportState>({
     type: 'unloaded',
   });
@@ -57,7 +59,7 @@ export const useIntegration = (
   );
 
   const filters = (element.filters ?? []).map((filter): Filter => {
-    if (typeof filter.value === 'object') {
+    if (filter.type === 'number') {
       return { ...filter, value: new DeciNumber(filter.value) };
     }
     return filter as Filter;

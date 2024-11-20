@@ -7,6 +7,7 @@ import { isFlagEnabled } from '@decipad/feature-flags';
 import { useNotebookMetaData } from '@decipad/react-contexts';
 import { useNotebookRoute } from '@decipad/routing';
 import { useGetNotebookMetaQuery } from '@decipad/graphql-client';
+import { format } from 'date-fns';
 
 const filtersContainer = css({
   maxWidth: '620px',
@@ -93,13 +94,17 @@ export const Filters = () => {
         </button>
       )}
       {filters?.map((filter) => {
+        const filterString =
+          filter.type === 'date'
+            ? format(new Date(filter.value.time), 'yyyy-MM-dd')
+            : filter.value.toString();
         return (
           <div
             key={`${filter.filterName}-${filter.columnId}`}
             css={filterWrapper}
           >
             <span css={filterName}>{filter.filterName}</span>
-            <span css={filterValue}>{filter.value.toString()}</span>
+            <span css={filterValue}>{filterString}</span>
             {!isReadOnly && (
               <button css={filterDelete} onClick={() => deleteFilter(filter)}>
                 <Close />

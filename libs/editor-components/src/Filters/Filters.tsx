@@ -19,12 +19,12 @@ import {
   Filter as FilterIcon,
 } from 'libs/ui/src/icons';
 import { DraftFilterForm, DraftFilter } from './DraftFilter';
-import { omit } from 'lodash';
 import { ErrorBoundary } from '@sentry/react';
 import { isFlagEnabled } from '@decipad/feature-flags';
 import { useNotebookMetaData } from '@decipad/react-contexts';
 import { useNotebookRoute } from '@decipad/routing';
 import { useGetNotebookMetaQuery } from '@decipad/graphql-client';
+import { format } from 'date-fns';
 
 const containerStyles = css({
   display: 'flex',
@@ -101,6 +101,32 @@ const filterNameStyles = css(p13Medium, {
   flex: '1',
 });
 
+const editableFilterToDraftFilter = (filter: EditableFilter): DraftFilter => {
+  switch (filter.type) {
+    case 'string':
+      return {
+        filterName: filter.filterName,
+        columnId: filter.columnId,
+        type: 'string',
+        value: filter.value,
+      };
+    case 'number':
+      return {
+        filterName: filter.filterName,
+        columnId: filter.columnId,
+        type: 'number',
+        value: filter.value.toString(),
+      };
+    case 'date':
+      return {
+        filterName: filter.filterName,
+        columnId: filter.columnId,
+        type: 'date',
+        value: format(new Date(filter.value.time), 'yyyy-MM-dd'),
+      };
+  }
+};
+
 const FilterListItem = ({
   filter,
   deleteFilter,
@@ -126,15 +152,19 @@ const FilterListItem = ({
 
   const isBeingEdited = draftFilter?.id === filter.id;
   const handleEdit = useCallback(() => {
-    setDraftFilter(filter);
+    setDraftFilter(editableFilterToDraftFilter(filter));
   }, [filter, setDraftFilter]);
 
   const handleDuplicate = useCallback(() => {
-    setDraftFilter(omit(filter, 'id'));
+    setDraftFilter(editableFilterToDraftFilter(filter));
   }, [filter, setDraftFilter]);
 
   return isBeingEdited ? (
-    <DraftFilterForm filter={draftFilter} setDraftFilter={setDraftFilter} />
+    <DraftFilterForm
+      filter={draftFilter}
+      setDraftFilter={setDraftFilter as Dispatch<SetStateAction<DraftFilter>>}
+      closeForm={() => setDraftFilter(undefined)}
+    />
   ) : (
     <div css={filterListItemStyles}>
       <FilterIcon css={filterIconStyles} />
@@ -249,7 +279,10 @@ export const Filters = () => {
         {draftFilter && draftFilter.id === undefined ? (
           <DraftFilterForm
             filter={draftFilter}
-            setDraftFilter={setDraftFilter}
+            setDraftFilter={
+              setDraftFilter as Dispatch<SetStateAction<DraftFilter>>
+            }
+            closeForm={() => setDraftFilter(undefined)}
           />
         ) : (
           <div css={addButtonContainerStyles}>

@@ -1,3 +1,4 @@
+import { Time } from '@decipad/language-interfaces';
 import type {
   BaseElement,
   PlainText,
@@ -10,8 +11,20 @@ export type SerializedFilter = {
   id: string;
   filterName: string;
   columnId: string;
-  value: string | { n: bigint; d: bigint; s: bigint; infinite: boolean };
-};
+} & (
+  | {
+      type: 'string';
+      value: string;
+    }
+  | {
+      type: 'number';
+      value: { n: bigint; d: bigint; s: bigint; infinite: boolean };
+    }
+  | {
+      type: 'date';
+      value: { time: number; specificity: Time.Specificity };
+    }
+);
 
 export interface CodeBlockIntegration {
   type: 'codeconnection';

@@ -2,6 +2,7 @@ import type {
   Constant,
   SerializedType,
   SerializedTypes,
+  Time,
   Unit,
 } from '@decipad/language-interfaces';
 import type { TElement } from '@udecode/plate-common';
@@ -103,8 +104,23 @@ export type Filter = {
   id: string;
   filterName: string;
   columnId: string;
-  value: string | DeciNumber;
-};
+} & (
+  | {
+      type: 'string';
+      value: string;
+    }
+  | {
+      type: 'number';
+      value: DeciNumber;
+    }
+  | {
+      type: 'date';
+      value: {
+        time: number;
+        specificity: Time.Specificity;
+      };
+    }
+);
 
 export type SeriesType = 'date' | 'number';
 

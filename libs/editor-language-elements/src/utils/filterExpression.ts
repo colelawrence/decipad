@@ -1,89 +1,88 @@
+import { Filter } from '@decipad/editor-types';
 import { type AST } from '@decipad/language-interfaces';
-import {
-  type DeciNumberInput,
-  fromNumber,
-  isDeciNumberInput,
-} from '@decipad/number';
+import { fromNumber } from '@decipad/number';
+import { dateToAST } from 'libs/parse/src/utils/dateToAST';
 
-interface Filter {
-  columnId: string;
-  value: string | number | DeciNumberInput;
-}
-
-const getLiteral = (value: string | DeciNumberInput): AST.Literal => {
-  if (typeof value === 'string') {
-    return {
-      type: 'literal',
-      args: ['string', value],
-    };
+const getLiteral = (filter: Filter): AST.Literal | AST.Date => {
+  switch (filter.type) {
+    case 'date': {
+      return dateToAST(
+        {
+          kind: 'date',
+          date: filter.value.specificity,
+        },
+        BigInt(filter.value.time)
+      );
+    }
+    case 'number': {
+      return {
+        type: 'literal',
+        args: ['number', fromNumber(filter.value)],
+      };
+    }
+    case 'string': {
+      return {
+        type: 'literal',
+        args: ['string', filter.value],
+      };
+    }
   }
-
-  if (isDeciNumberInput(value)) {
-    return {
-      type: 'literal',
-      args: ['number', fromNumber(value)],
-    };
-  }
-  throw new Error(
-    `Could not get literal for value of type ${typeof value}: ${String(value)}`
-  );
 };
 
 const getComparisonArguments = (filter: Filter): AST.ArgList => {
-  if (isDeciNumberInput(filter.value)) {
-    return {
-      type: 'argument-list',
-      args: [
-        {
-          type: 'externalref',
-          args: [filter.columnId],
-        },
-        getLiteral(filter.value),
-      ],
-    };
+  switch (filter.type) {
+    case 'date':
+    case 'number': {
+      return {
+        type: 'argument-list',
+        args: [
+          {
+            type: 'externalref',
+            args: [filter.columnId],
+          },
+          getLiteral(filter),
+        ],
+      };
+    }
+    case 'string': {
+      return {
+        type: 'argument-list',
+        args: [
+          {
+            type: 'function-call',
+            args: [
+              {
+                type: 'funcref',
+                args: ['lowercase'],
+              },
+              {
+                type: 'argument-list',
+                args: [
+                  {
+                    type: 'externalref',
+                    args: [filter.columnId],
+                  },
+                ],
+              },
+            ],
+          },
+          {
+            type: 'function-call',
+            args: [
+              {
+                type: 'funcref',
+                args: ['lowercase'],
+              },
+              {
+                type: 'argument-list',
+                args: [getLiteral(filter)],
+              },
+            ],
+          },
+        ],
+      };
+    }
   }
-  if (typeof filter.value === 'string') {
-    return {
-      type: 'argument-list',
-      args: [
-        {
-          type: 'function-call',
-          args: [
-            {
-              type: 'funcref',
-              args: ['lowercase'],
-            },
-            {
-              type: 'argument-list',
-              args: [
-                {
-                  type: 'externalref',
-                  args: [filter.columnId],
-                },
-              ],
-            },
-          ],
-        },
-        {
-          type: 'function-call',
-          args: [
-            {
-              type: 'funcref',
-              args: ['lowercase'],
-            },
-            {
-              type: 'argument-list',
-              args: [getLiteral(filter.value)],
-            },
-          ],
-        },
-      ],
-    };
-  }
-
-  throw new Error(
-    `Could not get comparison arguments for filter value of type ${typeof filter}`
-  );
 };
 
 export const filterExpression = (

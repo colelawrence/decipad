@@ -25,13 +25,16 @@ import { nanoid } from 'nanoid';
 import { css } from '@emotion/react';
 import DeciNumber from '@decipad/number';
 
-export type DraftFilter = Partial<
-  Filter & {
-    integrationId: string;
-    integrationName: string;
-    columnName: string;
-  }
->;
+export type DraftFilter = Partial<{
+  id: string;
+  filterName: string;
+  columnId: string;
+  type: 'string' | 'number' | 'date';
+  value: string;
+  integrationId: string;
+  integrationName: string;
+  columnName: string;
+}>;
 
 type TableResult = {
   varName: string;
@@ -72,9 +75,11 @@ type Errors = Partial<{
 export const DraftFilterForm = ({
   filter,
   setDraftFilter,
+  closeForm,
 }: {
   filter: DraftFilter;
-  setDraftFilter: Dispatch<SetStateAction<DraftFilter | undefined>>;
+  setDraftFilter: Dispatch<SetStateAction<DraftFilter>>;
+  closeForm: () => void;
 }) => {
   const computer = useComputer();
   const controller = useNotebookWithIdState((s) => s.controller!);
@@ -113,6 +118,8 @@ export const DraftFilterForm = ({
     }
   );
 
+  let inputFieldType: Parameters<typeof InputField>[0]['type'];
+
   // If the ref changes, we need to recompute columnName and integrationName
   const filterIdRef = useRef(filter.id);
   useEffect(() => {
@@ -139,8 +146,29 @@ export const DraftFilterForm = ({
     }
   }, [filter, tableResults, filterIdRef, computer, setDraftFilter]);
 
+  const types = Object.fromEntries(
+    tableResults.flatMap(({ varName, result }) => {
+      return result.type.columnNames.map((colName) => {
+        const key = `${varName}.${colName}`;
+        const varResult = computer.getVarResult$.use(key);
+
+        const type = varResult?.result?.type;
+        const colType = type?.kind === 'column' ? type.cellType : undefined;
+
+        return [key, colType] as const;
+      });
+    })
+  );
+
   const handleSave = useCallback(() => {
-    const { filterName, columnId, integrationId, value } = filter;
+    const {
+      filterName,
+      columnId,
+      integrationName,
+      columnName,
+      integrationId,
+      value,
+    } = filter;
 
     const validationErrors: Errors = {};
     if (!filterName || filterName?.trim() === '') {
@@ -178,23 +206,71 @@ export const DraftFilterForm = ({
       throw new Error('Invalid integration type');
     }
 
-    const newFilter = {
-      id: filter.id ?? nanoid(),
-      columnId,
-      filterName,
-      value,
-    };
+    if (filter.value === undefined) {
+      throw new Error('Filter value is undefined');
+    }
+    const id = filter.id ?? nanoid();
+    let newFilter: Filter;
+    switch (filter.type) {
+      case 'string': {
+        newFilter = {
+          id,
+          filterName,
+          columnId,
+          type: 'string',
+          value: filter.value,
+        };
+        break;
+      }
+      case 'number': {
+        newFilter = {
+          id,
+          filterName,
+          columnId,
+          type: 'number',
+          value: new DeciNumber(filter.value),
+        };
+        break;
+      }
+      case 'date': {
+        const column = computer.getVarResult$.get(
+          `${integrationName}.${columnName}`
+        );
+        if (column?.type !== 'computer-result') {
+          throw new Error('Invalid integration');
+        }
+        const type = column?.result?.type;
+        const colType = type?.kind === 'column' ? type.cellType : undefined;
+        if (colType?.kind !== 'date') {
+          throw new Error('Invalid column type');
+        }
+
+        newFilter = {
+          id,
+          filterName,
+          columnId,
+          type: 'date',
+          value: {
+            time: new Date(filter.value).getTime(),
+            specificity: colType.date,
+          },
+        };
+        break;
+      }
+      default:
+        // I'm not sure why this has to be here, but according to TS it does.
+        throw new Error('Invalid filter type');
+    }
 
     const filters: Filter[] = filter.id
       ? elementFilters(block).map((f): Filter => {
-          return f.id === filter.id
-            ? ({
-                id: filter.id,
-                filterName: filter.filterName,
-                columnId: filter.columnId,
-                value: filter.value,
-              } as Filter)
-            : f;
+          if (f.id !== filter.id) {
+            return f;
+          }
+          if (typeof filter.value !== 'string') {
+            throw new Error('Invalid filter value');
+          }
+          return newFilter;
         })
       : [...elementFilters(block), newFilter];
 
@@ -209,25 +285,10 @@ export const DraftFilterForm = ({
       },
     });
 
-    setDraftFilter(undefined);
-  }, [filter, setDraftFilter, controller]);
+    closeForm();
+  }, [filter, controller, computer.getVarResult$, closeForm]);
 
-  const types = Object.fromEntries(
-    tableResults.flatMap(({ varName, result }) => {
-      return result.type.columnNames.map((colName) => {
-        const key = `${varName}.${colName}`;
-        const varResult = computer.getVarResult$.use(key);
-
-        const type = varResult?.result?.type;
-        const colType = type?.kind === 'column' ? type.cellType : undefined;
-
-        return [key, colType?.kind] as const;
-      });
-    })
-  );
-
-  let inputFieldType: Parameters<typeof InputField>[0]['type'];
-  switch (types[`${filter.integrationName}.${filter.columnName}`]) {
+  switch (types[`${filter.integrationName}.${filter.columnName}`]?.kind) {
     case 'date':
       inputFieldType = 'date';
       break;
@@ -314,29 +375,26 @@ export const DraftFilterForm = ({
         placeholder="Filter value"
         value={filter.value?.toString()}
         onChange={(text) => {
-          switch (inputFieldType) {
-            case 'number':
-              return setDraftFilter((dFilter) => {
-                return {
-                  ...dFilter,
-                  value: new DeciNumber(text),
-                };
-              });
-            case 'text':
-              return setDraftFilter((dFilter) => {
-                return {
-                  ...dFilter,
-                  value: text,
-                };
-              });
-            default:
-              return setDraftFilter((dFilter) => {
-                return {
-                  ...dFilter,
-                  value: text,
-                };
-              });
-          }
+          setDraftFilter((dFilter: DraftFilter) => {
+            let type: DraftFilter['type'];
+            switch (inputFieldType) {
+              case 'number':
+              case 'date':
+                type = inputFieldType;
+                break;
+              case 'text':
+                type = 'string';
+                break;
+              default: {
+                throw new Error('Invalid input field type');
+              }
+            }
+            return {
+              ...dFilter,
+              type,
+              value: text,
+            };
+          });
         }}
         testId="draft-filter-value"
       />
@@ -345,7 +403,7 @@ export const DraftFilterForm = ({
         <Button type="text" onClick={handleSave}>
           Save filter
         </Button>
-        <Button type="text" onClick={() => setDraftFilter(undefined)}>
+        <Button type="text" onClick={closeForm}>
           Cancel
         </Button>
       </div>

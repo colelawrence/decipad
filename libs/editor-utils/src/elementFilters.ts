@@ -6,19 +6,22 @@ export const elementFilters = (element: IntegrationBlock): Filter[] => {
   if (!element.filters) return [];
 
   return element.filters.map((filter): Filter => {
-    if (typeof filter.value === 'string') {
-      return {
-        ...filter,
-        value: filter.value,
-      };
+    switch (filter.type) {
+      case 'string':
+        return {
+          ...filter,
+          value: filter.value,
+        };
+      case 'number':
+        return {
+          ...filter,
+          value: new DeciNumber(filter.value),
+        };
+      case 'date':
+        return {
+          ...filter,
+          value: filter.value,
+        };
     }
-    if (typeof filter.value === 'object') {
-      const value = new DeciNumber(filter.value);
-      return {
-        ...filter,
-        value,
-      };
-    }
-    throw new Error('Invalid filter');
   });
 };

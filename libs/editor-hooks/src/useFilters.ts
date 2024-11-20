@@ -46,23 +46,29 @@ export const useFilters = (
 
       return (
         grandchild.filters?.map((filter, i): EditableFilter => {
-          if (typeof filter.value === 'string') {
-            return {
-              ...filter,
-              value: filter.value,
-              integrationId: grandchild.id as string,
-              filterIndex: i,
-            };
+          switch (filter.type) {
+            case 'string':
+              return {
+                ...filter,
+                value: filter.value,
+                integrationId: grandchild.id as string,
+                filterIndex: i,
+              };
+            case 'number':
+              return {
+                ...filter,
+                value: new DeciNumber(filter.value),
+                integrationId: grandchild.id as string,
+                filterIndex: i,
+              };
+            case 'date':
+              return {
+                ...filter,
+                value: filter.value,
+                integrationId: grandchild.id as string,
+                filterIndex: i,
+              };
           }
-          if (typeof filter.value === 'object') {
-            return {
-              ...filter,
-              value: new DeciNumber(filter.value),
-              integrationId: grandchild.id as string,
-              filterIndex: i,
-            };
-          }
-          throw new Error('Invalid filter value');
         }) || []
       );
     });
