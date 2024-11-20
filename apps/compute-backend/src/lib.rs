@@ -354,9 +354,18 @@ impl ComputeBackend {
         &self,
         res_a: js_sys::Object,
         res_b: js_sys::Object,
-        _second_arg_percentage: bool,
+        second_arg_percentage: bool,
     ) -> Object {
-        serialize_result(deserialize_result(res_a).unwrap() - deserialize_result(res_b).unwrap())
+        if second_arg_percentage {
+            serialize_result(
+                deserialize_result(res_a).unwrap()
+                    * (DeciResult::Fraction(1, 1) - deserialize_result(res_b).unwrap()),
+            )
+        } else {
+            serialize_result(
+                deserialize_result(res_a).unwrap() - deserialize_result(res_b).unwrap(),
+            )
+        }
     }
 
     pub fn multiply_results(

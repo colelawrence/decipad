@@ -1,17 +1,12 @@
-import type { DeciNumberBase } from '@decipad/number';
-import { ONE } from '@decipad/number';
-// eslint-disable-next-line no-restricted-imports
-import type { Type } from '@decipad/language-types';
-import type { Result } from '@decipad/language-interfaces';
-import { coerceToFraction } from '../utils/coerceToFraction';
 import { overloadBuiltin } from '../overloadBuiltin';
-import { secondArgIsPercentage } from '../utils/secondArgIsPercentage';
 import { dateOverloads } from '../dateOverloads';
 import type { FullBuiltinSpec } from '../types';
-import { binopBuiltin } from '../utils/binopBuiltin';
 import { scalarNumericBinopFunctor } from '../utils/scalarNumericBinopFunctor';
-import { reverseBinopPrimitiveEval } from '../utils/reverseBinopPrimitiveEval';
+import { wasmUniversalBinopEval } from '../utils/wasmUniversalBinopEval';
+import { computeBackendSingleton } from '@decipad/compute-backend-js';
+import { binOpBuiltinForUniversalEval } from '../utils/binopBuiltinForUniversalEval';
 
+/*
 const subtractPrimitive = async (
   n1: Result.OneResult,
   n2: Result.OneResult,
@@ -23,16 +18,20 @@ const subtractPrimitive = async (
 
   return coerceToFraction(n1).sub(coerceToFraction(n2));
 };
+*/
+
+const subUniversalEval = wasmUniversalBinopEval((...args) =>
+  computeBackendSingleton.computeBackend.subtract_results(...args)
+);
 
 export const subtract: FullBuiltinSpec = overloadBuiltin(
   '-',
   2,
   [
-    ...binopBuiltin('-', {
+    ...binOpBuiltinForUniversalEval({
       primitiveFunctor: scalarNumericBinopFunctor,
       primitiveReverseFunctor: scalarNumericBinopFunctor,
-      primitiveEval: subtractPrimitive,
-      primitiveReverseEval: reverseBinopPrimitiveEval(subtractPrimitive),
+      universalEval: subUniversalEval,
     }),
     ...dateOverloads['-'],
   ],

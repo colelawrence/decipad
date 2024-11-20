@@ -1,14 +1,14 @@
 // eslint-disable-next-line no-restricted-imports
 import { Type, Value, buildType } from '@decipad/language-types';
-import { coerceToFraction } from '../utils/coerceToFraction';
-import { binopBuiltin } from '../utils/binopBuiltin';
 import { overloadBuiltin } from '../overloadBuiltin';
 import type { Functor } from '../types';
-import { reverseFunctor } from '../utils/reverseFunctor';
 import { getDefined } from '@decipad/utils';
 import { Result, Value as ValueTypes } from '@decipad/language-interfaces';
+import { wasmUniversalBinopEval } from '../utils/wasmUniversalBinopEval';
+import { computeBackendSingleton } from '@decipad/compute-backend-js';
+import { binOpBuiltinForUniversalEval } from '../utils/binopBuiltinForUniversalEval';
 
-const divFunctor: Functor = async ([a, b]) => {
+const singleDivFunctor = async ([a, b]: Type[]) => {
   return Type.either(
     (await Type.combine(a.isTrend(), b.isTrend())).mapType(async () => {
       return buildType.trend({
@@ -27,6 +27,48 @@ const divFunctor: Functor = async ([a, b]) => {
   );
 };
 
+const divFunctorNums: Functor = async ([a, b]) => {
+  return singleDivFunctor([a, b]);
+};
+
+const divFunctorNumsReverse: Functor = async ([b, a]) => {
+  return singleDivFunctor([a, b]);
+};
+
+const divUniversalEval = async (
+  a: Result.OneResult,
+  b: Result.OneResult,
+  [aType, bType]: Type[]
+): Promise<ValueTypes.Value> => {
+  if (Value.isTrendValue(a)) {
+    return primitiveTrendEval(a, b);
+  } else {
+    return divNumEval(a, b, [aType, bType]);
+  }
+};
+
+const divNumEval = wasmUniversalBinopEval((...args) =>
+  computeBackendSingleton.computeBackend.divide_results(...args)
+);
+
+const divFunctorCols: Functor = async ([a, b]) => {
+  const divRes = await singleDivFunctor([
+    await a.reducedToLowest(),
+    await b.reducedToLowest(),
+  ]);
+
+  return divRes.mapType(async (t) => buildType.column(t, a.indexedBy));
+};
+
+const divFunctorColsReverse: Functor = async ([a, b]) => {
+  const divRes = await singleDivFunctor([
+    await a.reducedToLowest(),
+    await b.reducedToLowest(),
+  ]);
+
+  return divRes.mapType(async (t) => buildType.column(t, b.indexedBy));
+};
+
 const primitiveTrendEval = (
   n1: Result.OneResult,
   n2: Result.OneResult
@@ -39,18 +81,21 @@ const primitiveTrendEval = (
   );
 };
 
+const divBinopPrimitiveFunctor: Functor = async (...args) =>
+  Type.either(divFunctorNums(...args), divFunctorCols(...args));
+
+const divBinopPrimitiveFunctorReverse: Functor = async (...args) =>
+  Type.either(divFunctorNumsReverse(...args), divFunctorColsReverse(...args));
+
 export const div = overloadBuiltin(
   '/',
   2,
-  binopBuiltin('/', {
-    primitiveEval: (n1, n2) =>
-      Value.isTrendValue(n1)
-        ? primitiveTrendEval(n1, n2)
-        : coerceToFraction(n1).div(coerceToFraction(n2)),
-    primitiveReverseEval: (n1, n2) =>
-      coerceToFraction(n2).div(coerceToFraction(n1)),
-    primitiveFunctor: divFunctor,
-    primitiveReverseFunctor: reverseFunctor(divFunctor),
-  }),
+  [
+    ...binOpBuiltinForUniversalEval({
+      primitiveFunctor: divBinopPrimitiveFunctor,
+      primitiveReverseFunctor: divBinopPrimitiveFunctorReverse,
+      universalEval: divUniversalEval,
+    }),
+  ],
   'infix'
 );

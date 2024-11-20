@@ -1,5 +1,6 @@
 use chrono::Datelike;
 use num_bigint::BigInt;
+use wasm_bindgen::prelude::wasm_bindgen;
 use std::{
     mem,
     ops::{Add, AddAssign, Div, Mul, Sub},
@@ -11,6 +12,12 @@ use num::{
     integer::{gcd, lcm},
     FromPrimitive,
 };
+
+#[wasm_bindgen]
+extern "C" {
+    #[wasm_bindgen(js_namespace = console)]
+    fn log(s: &str);
+}
 
 use super::types::{DateSpecificity, DeciDate, DeciResult};
 
@@ -478,6 +485,9 @@ impl<'a, 'b> Mul<&'b DeciResult> for &'a DeciResult {
             }
             (DeciResult::ArbitraryFraction(n1, d1), DeciResult::ArbitraryFraction(n2, d2)) => {
                 DeciResult::ArbitraryFraction(n1 * n2, d1 * d2)
+            }
+            (DeciResult::ArbitraryFraction(_n1, _n2), DeciResult::Column(items)) => {
+                DeciResult::Column(items.iter().map(|x| x * self).collect())
             }
             (DeciResult::Column(items), DeciResult::Fraction(_n, _d)) => {
                 DeciResult::Column(items.iter().map(|x| x * other).collect())

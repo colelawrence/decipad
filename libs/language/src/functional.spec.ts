@@ -2381,9 +2381,7 @@ describe('multi-dim ops', () => {
 
     expect(result).toMatchInlineSnapshot(`
       {
-        "meta": {
-          "labels": Promise {},
-        },
+        "meta": [Function],
         "type": Type {
           "anythingness": false,
           "atParentIndex": null,
