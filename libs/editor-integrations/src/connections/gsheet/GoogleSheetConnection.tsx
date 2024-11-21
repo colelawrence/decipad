@@ -5,8 +5,8 @@ import { Loading, OAuthConnections } from '../shared';
 import { FromUrl } from './FromUrl';
 import styled from '@emotion/styled';
 import { assert } from '@decipad/utils';
-import { GSheetRunner } from '../../runners';
 import { debounce } from 'lodash';
+import { GSheetRunner } from '@decipad/notebook-tabs';
 
 export const GoogleSheetConnection: FC<ConnectionProps> = (props) => {
   assert(props.runner instanceof GSheetRunner);

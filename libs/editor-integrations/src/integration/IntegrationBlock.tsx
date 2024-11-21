@@ -4,7 +4,7 @@ import {
   setNodes,
 } from '@udecode/plate-common';
 import type { ComponentProps } from 'react';
-import { useCallback, useEffect, useRef } from 'react';
+import { useCallback } from 'react';
 import { useClientEvents } from '@decipad/client-events';
 import {
   DraggableBlock,
@@ -14,6 +14,7 @@ import {
 } from '@decipad/editor-components';
 import { useComputer, useNodePath } from '@decipad/editor-hooks';
 import type {
+  IntegrationTypes,
   MarkType,
   MyElement,
   PlateComponent,
@@ -32,14 +33,11 @@ import {
 import { Result, getExprRef } from '@decipad/remote-computer';
 import {
   AnimatedIcon,
-  CodeError,
   CodeResult,
   IntegrationBlock as UIIntegrationBlock,
   icons,
 } from '@decipad/ui';
-import { useToast } from '@decipad/toast';
-import { dequal } from '@decipad/utils';
-import { useIntegration } from '../hooks/useIntegration';
+import { assert } from '@decipad/utils';
 
 function canBePlotted(result: Result.Result | undefined): boolean {
   return (
@@ -57,31 +55,6 @@ export const IntegrationBlock: PlateComponent = ({
 }) => {
   assertElementType(element, ELEMENT_INTEGRATION);
 
-  const { onRefresh, importState } = useIntegration(element);
-  const onRefreshRef = useRef(onRefresh);
-  const filtersRef = useRef(element.filters);
-  useEffect(() => {
-    // HACK don't like this one bit, but if we don't do it, we always get a
-    // stale onRefresh that only sees old filters value
-    if (onRefreshRef.current === onRefresh) {
-      return;
-    }
-    onRefreshRef.current = onRefresh;
-    if (dequal(filtersRef.current, element.filters)) {
-      return;
-    }
-    filtersRef.current = element.filters;
-    onRefresh();
-  }, [element.filters, onRefresh]);
-
-  // error handling
-  const toast = useToast();
-  useEffect(() => {
-    if (importState.type === 'error') {
-      toast.error(`Error in integration: ${importState.message}`);
-    }
-  }, [importState, toast]);
-
   const [setSidebar] = useNotebookMetaData((s) => [s.setSidebar]);
 
   const editor = useMyEditorRef();
@@ -90,7 +63,19 @@ export const IntegrationBlock: PlateComponent = ({
   const computer = useComputer();
   const readOnly = useIsEditorReadOnly();
 
-  const result = computer.getBlockIdResult$.use(element.id!)?.result;
+  const onRefresh = () => {
+    assert(path != null);
+
+    setNodes(
+      editor,
+      {
+        timeOfLastRun: Date.now().toString(),
+      } satisfies Partial<IntegrationTypes.IntegrationBlock>,
+      { at: path }
+    );
+  };
+
+  const result = computer.getBlockIdResult$.use(element.id)?.result;
 
   const onAddDataViewButtonPress = useCallback(() => {
     return (
@@ -184,13 +169,7 @@ export const IntegrationBlock: PlateComponent = ({
         buttons={[
           {
             children: (
-              <AnimatedIcon
-                icon={<icons.Refresh />}
-                animated={
-                  importState.type === 'loading-cache' ||
-                  importState.type === 'loading-fetch'
-                }
-              />
+              <AnimatedIcon icon={<icons.Refresh />} animated={false} />
             ),
             onClick: handleClick,
             tooltip: (
@@ -229,9 +208,6 @@ export const IntegrationBlock: PlateComponent = ({
       >
         {children}
       </UIIntegrationBlock>
-      {importState.type === 'error' && (
-        <CodeError message={importState.message} />
-      )}
     </DraggableBlock>
   );
 };

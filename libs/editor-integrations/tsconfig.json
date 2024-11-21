@@ -39,6 +39,9 @@
     },
     {
       "path": "../editor-plugin-factories"
+    },
+    {
+      "path": "../notebook-tabs"
     }
   ]
 }

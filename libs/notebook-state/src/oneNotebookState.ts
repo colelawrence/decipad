@@ -143,6 +143,7 @@ export const createNotebookStore = (
         const blockProcessor = new BlockProcessor(
           controller,
           computer,
+          notebookId,
           COMPUTER_DEBOUNCE
         );
 

@@ -11,18 +11,18 @@ import { useClientEvents } from '@decipad/client-events';
 import { useComputer } from '@decipad/editor-hooks';
 import { nanoid } from 'nanoid';
 import { getExprRef } from '@decipad/computer';
-import {
-  CodeRunner,
-  CSVRunner,
-  GSheetRunner,
-  RunnerFactoryParams,
-  useRunner,
-} from '../runners';
 import { useCreateIntegration } from '../hooks';
 import { assertInstanceOf } from '@decipad/utils';
 import { TypeMap } from 'libs/editor-types/src/integrations';
 import { pushDeleteExternalData } from '@decipad/computer-utils';
 import { useToast } from '@decipad/toast';
+import {
+  CSVRunner,
+  CodeRunner,
+  GSheetRunner,
+  RunnerFactoryParams,
+  useRunner,
+} from '@decipad/notebook-tabs';
 
 export const useConcreteIntegration = (
   props: ConcreteIntegrationProps
@@ -120,7 +120,7 @@ export const useConcreteIntegration = (
     }
 
     await runner
-      .import()
+      .import(computer)
       .then(() => {
         onExecute((v) => [...v, { status: 'success', ok: true }]);
         toast.success('Integration loaded successfully!');
@@ -137,7 +137,7 @@ export const useConcreteIntegration = (
 
         logSub.unsubscribe();
       });
-  }, [queries, runner, toast, externalData]);
+  }, [queries, runner, toast, externalData, computer]);
 
   useEffect(() => {
     runner.name = varName;
@@ -173,9 +173,9 @@ export const useConcreteIntegration = (
       }
 
       runner.setTypes(types);
-      runner.import();
+      runner.import(computer);
     }
-  }, [type, runner, props.integrationBlock]);
+  }, [type, runner, props.integrationBlock, computer]);
 
   //
   // If we are creating an integration and the user decides to
@@ -271,7 +271,7 @@ export const useConcreteIntegration = (
     onChangeVarName: setVarName,
 
     onChangeColumnName(originalColumnName, desiredColumnName) {
-      runner.renameColumn(originalColumnName, desiredColumnName);
+      runner.renameColumn(computer, originalColumnName, desiredColumnName);
     },
 
     onToggleHideColumn(columnName) {

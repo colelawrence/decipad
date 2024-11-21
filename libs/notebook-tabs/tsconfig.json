@@ -11,6 +11,10 @@
     { "path": "../editor-plugin-factories" },
     { "path": "../routing" },
     { "path": "../editor-language-elements" },
-    { "path": "../computer-interfaces" }
+    { "path": "../computer-interfaces" },
+    { "path": "../language-interfaces" },
+    { "path": "../utils" },
+    { "path": "../number" },
+    { "path": "../import" }
   ]
 }

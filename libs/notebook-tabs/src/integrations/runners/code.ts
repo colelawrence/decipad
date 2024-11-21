@@ -1,7 +1,6 @@
 import { assert, BackendUrl } from '@decipad/utils';
 import { Options, PartialOptions, Runner } from './runner';
 import { Computer } from '@decipad/computer-interfaces';
-import { getNotebookStore } from '@decipad/notebook-state';
 import { ErrorMessageType, ResultMessageType, SafeJs } from '@decipad/safejs';
 import DeciNumber, { safeNumberForPrecision } from '@decipad/number';
 import { codePlaceholder } from '@decipad/editor-utils';
@@ -94,9 +93,9 @@ export class CodeRunner extends Runner<T, O> {
 
     return resultMap;
   }
-  override async import(): Promise<string> {
+
+  override async import(computer: Computer): Promise<string> {
     assert(this.name !== undefined);
-    const computer = getNotebookStore(this.padId).getState().computer!;
     const options = this.assertedOptions();
     const value = await this.worker.execute(
       options.runner.code,
@@ -125,5 +124,9 @@ export class CodeRunner extends Runner<T, O> {
     const result = await importFromJSONAndCoercions(computer, value, []);
     await pushResultToComputer(computer, this.id, this.name, result);
     return this.id;
+  }
+
+  override clean() {
+    this.worker.kill();
   }
 }

@@ -21,9 +21,9 @@ import { workspaces } from '@decipad/routing';
 import { assertInstanceOf } from '@decipad/utils';
 import { useWorkspaceConnections } from '../../hooks/useWorkspaceConnections';
 import styled from '@emotion/styled';
-import { SQLRunner, varIdentifierRegex } from '../../runners/mysql';
 import { PortalledPreview } from '../ResultPreview';
 import { css } from '@emotion/react';
+import { SQLRunner, varIdentifierRegex } from '@decipad/notebook-tabs';
 
 const SQL: Array<ExternalProvider> = [
   'mysql',

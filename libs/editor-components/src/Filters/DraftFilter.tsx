@@ -1,6 +1,10 @@
 import { BlockResult, IdentifiedResult } from '@decipad/computer-interfaces';
 import { useComputer } from '@decipad/editor-hooks';
-import { ELEMENT_INTEGRATION, type Filter } from '@decipad/editor-types';
+import {
+  ELEMENT_INTEGRATION,
+  IntegrationTypes,
+  type Filter,
+} from '@decipad/editor-types';
 import {
   Button,
   cssVar,
@@ -24,6 +28,7 @@ import { elementFilters } from '@decipad/editor-utils';
 import { nanoid } from 'nanoid';
 import { css } from '@emotion/react';
 import DeciNumber from '@decipad/number';
+import { SerializedFilter } from 'libs/editor-types/src/integrations';
 
 export type DraftFilter = Partial<{
   id: string;
@@ -277,12 +282,18 @@ export const DraftFilterForm = ({
     controller.apply({
       type: 'set_node',
       path,
-      properties: omit(block, 'children'),
+      properties: omit(
+        block,
+        'children'
+      ) satisfies Partial<IntegrationTypes.IntegrationBlock>,
       // Warning: here be yolo types
       newProperties: {
         ...omit(block, 'children'),
-        filters,
-      },
+        filters: filters as SerializedFilter[],
+
+        // You need to update timeOfLastRun for the integration to refresh automatically.
+        timeOfLastRun: Date.now().toString(),
+      } satisfies Partial<IntegrationTypes.IntegrationBlock>,
     });
 
     closeForm();

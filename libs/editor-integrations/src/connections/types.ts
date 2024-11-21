@@ -4,7 +4,7 @@ import type {
 } from '@decipad/editor-types';
 import { ExternalDataSourceFragmentFragment } from '@decipad/graphql-client';
 import { Dataset, TExecution } from '@decipad/interfaces';
-import { Runner } from '../runners/runner';
+import { Runner } from '@decipad/notebook-tabs';
 
 export interface ConnectionProps {
   workspaceId: string;

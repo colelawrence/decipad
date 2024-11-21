@@ -55,7 +55,7 @@ describe('Integrations between BlockProcessor and EditorController', () => {
   it('Computes the program from an editor change', async () => {
     const computer = getComputer();
     const controller = new EditorController('id', []);
-    new BlockProcessor(controller, computer, 0);
+    new BlockProcessor(controller, computer, 'id', 0);
 
     const getResult = promisifyBlockId(computer);
 
@@ -92,7 +92,7 @@ describe('Integrations between BlockProcessor and EditorController', () => {
   it('Computes the program from the data tab', async () => {
     const computer = getComputer();
     const controller = new EditorController('id', []);
-    new BlockProcessor(controller, computer, 0);
+    new BlockProcessor(controller, computer, 'id', 0);
 
     const getResult = promisifyBlockId(computer);
 

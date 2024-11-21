@@ -12,12 +12,22 @@ import {
   type AnyElement,
   ELEMENT_TAB,
   ELEMENT_DATA_TAB,
+  IntegrationTypes,
+  ELEMENT_INTEGRATION,
 } from '@decipad/editor-types';
 import { editorToProgram } from '@decipad/editor-language-elements';
 import { fnQueue } from '@decipad/fnqueue';
 import { affectedPaths } from './affectedPaths';
 import { allBlockIds } from './allBlockIds';
 import type { RootEditorController } from './types';
+import {
+  createIntegrationManager,
+  removeFromComputer,
+  renameResultInComputer,
+  withComputerCacheIntegration,
+  withControllerSideEffects,
+} from './integrations';
+import { EditorController } from './EditorController';
 
 export class BlockProcessor {
   private rootEditor: RootEditorController;
@@ -31,9 +41,13 @@ export class BlockProcessor {
 
   private sendQueue = fnQueue();
 
+  private insertIntegration: (block: IntegrationTypes.IntegrationBlock) => void;
+  private removeIntegration: (block: IntegrationTypes.IntegrationBlock) => void;
+
   constructor(
     rootEditor: RootEditorController,
     computer: Computer,
+    notebookId: string,
     debounceEditorChangesMs: number
   ) {
     this.isFirst = true;
@@ -41,6 +55,18 @@ export class BlockProcessor {
     this.Computer = computer;
 
     this.DirtyBlocksSet = new Map();
+
+    const { insertIntegration, removeIntegration } = createIntegrationManager(
+      withControllerSideEffects(
+        rootEditor as EditorController,
+        withComputerCacheIntegration(notebookId, computer)
+      ),
+      renameResultInComputer(notebookId, computer),
+      removeFromComputer(computer)
+    );
+
+    this.insertIntegration = insertIntegration;
+    this.removeIntegration = removeIntegration;
 
     this.DebouncedComputeCompute = debounce(
       this.PushCompute.bind(this),
@@ -102,6 +128,7 @@ export class BlockProcessor {
     );
 
     await this.Computer.pushComputeDelta({ program: { upsert: wholeProgram } });
+    this.processSpecial(Array.from(this.DirtyBlocksSet.values()), []);
 
     this.DirtyBlocksSet.clear();
   }
@@ -119,6 +146,30 @@ export class BlockProcessor {
     }
   }
 
+  private processSpecial(
+    blocksToProcess: Array<EElement<NotebookValue>>,
+    blocksToRemoveIds: Array<string>
+  ): void {
+    blocksToProcess
+      .filter(isElement)
+      .filter(
+        (block): block is IntegrationTypes.IntegrationBlock =>
+          block.type === ELEMENT_INTEGRATION
+      )
+      .forEach(this.insertIntegration);
+
+    const blocksToRemove = blocksToRemoveIds
+      .map((id) => this.rootEditor.findNodeById(id))
+      .filter((block): block is EElement<NotebookValue> => block != null);
+
+    blocksToRemove
+      .filter(
+        (block): block is IntegrationTypes.IntegrationBlock =>
+          (block as any).type === ELEMENT_INTEGRATION
+      )
+      .forEach(this.removeIntegration);
+  }
+
   private async PushCompute() {
     return this.sendQueue.push(async () => {
       if (this.isFirst) {
@@ -127,18 +178,19 @@ export class BlockProcessor {
         return;
       }
 
-      const dirtyOnes = [
-        ...this.DirtyBlocksSet.values(),
-      ] as Iterable<AnyElement>;
+      const dirtyOnes = [...this.DirtyBlocksSet.values()];
       this.DirtyBlocksSet.clear();
+
       const removedOnes = [...this.RemovedNodes];
       this.RemovedNodes = [];
 
       const changedProgram = await editorToProgram(
         this.rootEditor,
-        dirtyOnes,
+        dirtyOnes as Iterable<AnyElement>,
         this.Computer
       );
+
+      this.processSpecial(dirtyOnes, removedOnes);
 
       await this.Computer.pushComputeDelta({
         program: {

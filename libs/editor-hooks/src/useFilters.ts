@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { assert } from '@decipad/utils';
 import { EditorController } from 'libs/notebook-tabs/src/EditorController';
-import { Filter } from '@decipad/editor-types';
+import { Filter, IntegrationTypes } from '@decipad/editor-types';
 import { omit } from 'lodash';
 import DeciNumber from '@decipad/number';
 
@@ -83,13 +83,19 @@ export const useFilters = (
       controller.apply({
         type: 'set_node',
         path,
-        properties: omit(block, 'children'),
+        properties: omit(
+          block,
+          'children'
+        ) satisfies Partial<IntegrationTypes.IntegrationBlock>,
         newProperties: {
           ...omit(block, 'children'),
           filters: filters.filter(({ id }) => {
             return id !== filter.id;
-          }),
-        },
+          }) as IntegrationTypes.SerializedFilter[],
+
+          // Update timeOfLastRun to refresh the integration.
+          timeOfLastRun: Date.now().toString(),
+        } satisfies Partial<IntegrationTypes.IntegrationBlock>,
       });
     },
     [filters, controller]

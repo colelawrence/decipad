@@ -15,7 +15,7 @@ import { ConnectionProps, IntegrationProps } from '../connections';
 import { useNotebookWithIdState } from '@decipad/notebook-state';
 import omit from 'lodash/omit';
 import { useClientEvents } from '@decipad/client-events';
-import { Runner } from '../runners';
+import { Runner } from '@decipad/notebook-tabs';
 
 /**
  * Returns the attachment ID from a file handle

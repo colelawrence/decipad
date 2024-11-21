@@ -7,7 +7,7 @@ import {
   SheetMeta,
   getExternalDataUrl,
   getSheetRequestDataFromUrl,
-} from '../utils';
+} from './utils';
 
 type T = 'gSheets';
 type O = Omit<IntegrationTypes.GoogleSheetIntegration, 'type'>;

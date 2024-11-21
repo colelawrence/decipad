@@ -16,10 +16,10 @@ import { Play } from 'libs/ui/src/icons/Play';
 import { assertInstanceOf } from '@decipad/utils';
 import { ConnectionProps } from '../types';
 import styled from '@emotion/styled';
-import { CodeRunner } from '../../runners';
 import { codePlaceholder } from '@decipad/editor-utils';
 import { PortalledPreview } from '../ResultPreview';
 import { css } from '@emotion/react';
+import { CodeRunner } from '@decipad/notebook-tabs';
 
 const AVAILABLE_TABS = [
   { id: 'code', label: 'Code' },

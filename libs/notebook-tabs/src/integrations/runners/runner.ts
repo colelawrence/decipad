@@ -3,11 +3,12 @@ import {
   DeciType,
   Importer,
 } from '@decipad/compute-backend-js';
+import { Computer } from '@decipad/computer-interfaces';
 import { pushExtraData, pushResultNameChange } from '@decipad/computer-utils';
 import { filterExpression } from '@decipad/editor-language-elements';
 import { Filter, SimpleTableCellType } from '@decipad/editor-types';
-import { getNotebookStore } from '@decipad/notebook-state';
-import { astNode, hydrateType, Unknown } from '@decipad/remote-computer';
+import { astNode, hydrateType } from '@decipad/remote-computer';
+import { Unknown } from '@decipad/language-interfaces';
 import { assert } from '@decipad/utils';
 import {
   IntegrationTypes,
@@ -104,6 +105,7 @@ export abstract class Runner<
   }
 
   public async renameColumn(
+    computer: Computer,
     currentColumnName: string,
     desiredColumnName: string
   ): Promise<void> {
@@ -129,8 +131,6 @@ export abstract class Runner<
     type.desiredName = sanitizedColumnName;
 
     this.setTypeAt(columnId, type);
-
-    const computer = getNotebookStore(this.padId).getState().computer!;
 
     await pushResultNameChange(computer, this.id, sanitizedColumnName, {
       type: 'column',
@@ -197,15 +197,14 @@ export abstract class Runner<
     return this._types;
   }
 
-  protected abstract fetchData(): Promise<Uint8Array>;
+  protected abstract fetchData(computer: Computer): Promise<Uint8Array>;
 
   public abstract assertedOptions(): Pick<Options<T, O>, 'runner' | 'importer'>;
   public abstract intoIntegrationType(): IntegrationTypes;
 
-  public async import(): Promise<string> {
+  public async import(computer: Computer): Promise<string> {
     assert(!!this.name);
     const options = this.assertedOptions();
-    const computer = getNotebookStore(this.padId).getState().computer!;
 
     // TODO: Is this correct? I think we need more on program field.
     // Also clean up on errors.
@@ -240,7 +239,7 @@ export abstract class Runner<
       },
     });
 
-    const data = await this.fetchData();
+    const data = await this.fetchData(computer);
 
     const importedResult = await computer.importExternalData({
       data,
@@ -323,9 +322,7 @@ export abstract class Runner<
     return importedResult.id;
   }
 
-  public async rename(newName: string): Promise<void> {
-    const computer = getNotebookStore(this.padId).getState().computer!;
-
+  public async rename(computer: Computer, newName: string): Promise<void> {
     return pushResultNameChange(computer, this.id, newName, {
       type: 'table',
       columnNameToIds: this.nameToColumnId ?? {},
@@ -333,5 +330,9 @@ export abstract class Runner<
         .filter(([, v]) => v?.isHidden)
         .map(([k]) => k),
     });
+  }
+
+  public clean() {
+    // Clean any resources used by specific runners.
   }
 }

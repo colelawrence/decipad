@@ -2,7 +2,6 @@ import type { Filter, IntegrationTypes } from '@decipad/editor-types';
 import type { Computer } from '@decipad/computer-interfaces';
 import { Runner } from './runner';
 import { CSVRunner } from './csv';
-import { IntegrationBlock } from 'libs/editor-types/src/integrations';
 import { CodeRunner } from './code';
 import { useEffect, useMemo, useState } from 'react';
 import { SQLRunner } from './mysql';
@@ -32,11 +31,11 @@ export type RunnerFactoryParams = {
     }
 );
 
-function getRunner(options: RunnerFactoryParams): Runner {
+export function getRunner(options: RunnerFactoryParams): Runner {
   const integrationType = options.integration
     ? options.integration?.integrationType
     : ({ type: options.integrationType } as Partial<
-        IntegrationBlock['integrationType']
+        IntegrationTypes.IntegrationBlock['integrationType']
       >);
 
   switch (integrationType.type) {

@@ -6,7 +6,7 @@ import { UploadCSV, OptionsList } from '@decipad/ui';
 import { assertInstanceOf } from '@decipad/utils';
 import { Loading } from '../shared';
 import { useWorkspaceDatasets } from '../../hooks/useWorkspaceDatasets';
-import { CSVRunner } from '../../runners/csv';
+import { CSVRunner } from '@decipad/notebook-tabs';
 
 const Wrapper = styled.div({
   display: 'flex',

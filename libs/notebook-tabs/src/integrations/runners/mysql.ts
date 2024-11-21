@@ -2,8 +2,8 @@ import { assert } from '@decipad/utils';
 import { Options, Runner } from './runner';
 import { IntegrationTypes } from '@decipad/editor-types';
 import { getVariablesFromComputer } from '@decipad/computer-utils';
-import { getNotebookStore } from '@decipad/notebook-state';
-import { applyToTemplate } from '../utils/applyToTemplate';
+import { applyToTemplate } from './utils';
+import { Computer } from '@decipad/computer';
 
 /** Matches on `{{var_name}}` etc. */
 export const varIdentifierRegex = /{{\s*([_$a-z][_$a-z0-9]*)\s*}}/gi;
@@ -31,10 +31,9 @@ export class SQLRunner extends Runner<T, O> {
     };
   }
 
-  protected async fetchData(): Promise<Uint8Array> {
+  protected async fetchData(computer: Computer): Promise<Uint8Array> {
     const options = this.assertedOptions();
 
-    const computer = getNotebookStore(this.padId!).getState().computer!;
     const variables = getVariablesFromComputer(computer);
 
     const res = await fetch(options.runner.url, {

@@ -1,6 +1,6 @@
 import type { IntegrationTypes } from '@decipad/editor-types';
 import { ELEMENT_INTEGRATION } from '@decipad/editor-types';
-import { Runner } from '../runners/runner';
+import { Runner } from '@decipad/notebook-tabs';
 
 export function getNotionDbLink(url: string): string | undefined {
   const parsedUrl = url.match(/notion.so\/.*\?v=/);

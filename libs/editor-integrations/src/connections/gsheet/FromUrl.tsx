@@ -2,7 +2,7 @@ import { Button, cssVar, Input, isValidURL, sanitizeInput } from '@decipad/ui';
 import styled from '@emotion/styled';
 import { FC, useMemo, useState } from 'react';
 import { ConnectionProps } from '../types';
-import { isRunnerOfType } from '../../runners';
+import { isRunnerOfType } from '@decipad/notebook-tabs';
 
 export const FromUrl: FC<ConnectionProps> = ({ runner, onRun }) => {
   const [url, setUrl] = useState<string>('');

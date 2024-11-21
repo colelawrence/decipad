@@ -1,18 +1,18 @@
 /* eslint-disable no-param-reassign */
 import { FC, useEffect, useState } from 'react';
 import { ConnectionProps } from '../types';
-import {
-  getExternalDataReqUrl,
-  getExternalDataUrl,
-  getNotionQueryDbLink,
-} from '../../utils';
 import { LoadingIndicator, MenuItem, MenuList } from '@decipad/ui';
 import { Styles } from './styles';
 import { CaretDown, CaretUp } from 'libs/ui/src/icons';
 import { ExternalDataSourceFragmentFragment } from '@decipad/graphql-client';
 import { importDatabases } from '@decipad/import';
-import { NotionRunner } from '../../runners';
 import { assertInstanceOf } from '@decipad/utils';
+import {
+  NotionRunner,
+  getExternalDataReqUrl,
+  getExternalDataUrl,
+  getNotionQueryDbLink,
+} from '@decipad/notebook-tabs';
 
 const DATABASES_CACHE = new Map<string, Array<{ id: string; name: string }>>();
 
