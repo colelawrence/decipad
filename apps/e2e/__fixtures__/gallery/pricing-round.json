@@ -1,0 +1,2116 @@
+{
+  "children": [
+    {
+      "children": [
+        {
+          "text": "[Template] A founder's guide to pricing your first VC round"
+        }
+      ],
+      "type": "title",
+      "id": "XvfbAwu8ZX_0DlGMnzk6b"
+    },
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "Lime"
+                }
+              ],
+              "id": "QAxLGZMFCgXG_onXt9lwv",
+              "type": "structured_varname"
+            },
+            {
+              "children": [
+                {
+                  "text": "ESOP15Percentage"
+                }
+              ],
+              "id": "Hu5F6efu8PNJSu2OolWHL",
+              "type": "code_line_v2_code"
+            }
+          ],
+          "type": "data-tab-children",
+          "id": "sRF3VYysOfb7b2MCc0FUT"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "GiftMulberry"
+                }
+              ],
+              "id": "n-FzBItN-x3ZjdenpXuNc",
+              "type": "structured_varname"
+            },
+            {
+              "children": [
+                {
+                  "text": "OptionPool"
+                }
+              ],
+              "id": "XDmPCRSxBxph-gOtsBw9Z",
+              "type": "code_line_v2_code"
+            }
+          ],
+          "type": "data-tab-children",
+          "id": "lrr4N_Ur75F-euWDUPkRl"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "Lemon"
+                }
+              ],
+              "id": "7w4yVJBrnUXfn3i2A4atQ",
+              "type": "structured_varname"
+            },
+            {
+              "children": [
+                {
+                  "text": "OptionPool"
+                }
+              ],
+              "id": "7TE8rONo4-r-f8lwseiKx",
+              "type": "code_line_v2_code"
+            }
+          ],
+          "type": "data-tab-children",
+          "id": "yv6DkhLIxhKH8SsAxWhBk"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "JoyKoala"
+                }
+              ],
+              "id": "qsBK_u6MeAavZDQnFe0CY",
+              "type": "structured_varname"
+            },
+            {
+              "children": [
+                {
+                  "text": "OptionPool"
+                }
+              ],
+              "id": "oqBY6bgA88QusQHwP_IRT",
+              "type": "code_line_v2_code"
+            }
+          ],
+          "type": "data-tab-children",
+          "id": "Pka01QmpdOsMhloU06tWL"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "Mango"
+                }
+              ],
+              "id": "v5X1lqj7K2E7e9dchChzP",
+              "type": "structured_varname"
+            },
+            {
+              "children": [
+                {
+                  "text": "OptionPool"
+                }
+              ],
+              "id": "wCTyDqfvJ7SduBBFgJGya",
+              "type": "code_line_v2_code"
+            }
+          ],
+          "type": "data-tab-children",
+          "id": "7vgCVXCgt6YgmWOqFeSfa"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "Cherry"
+                }
+              ],
+              "id": "mNOJoGvmkeEU6oG0A84FF",
+              "type": "structured_varname"
+            },
+            {
+              "children": [
+                {
+                  "text": "OptionPool"
+                }
+              ],
+              "id": "Z3N4HKnLoiekUtg8vtiqj",
+              "type": "code_line_v2_code"
+            }
+          ],
+          "type": "data-tab-children",
+          "id": "1-Ke-xma6ElaVgEpF2KOg"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "HopeApple"
+                }
+              ],
+              "id": "TIVCTl82L875UzmPJWaBK",
+              "type": "structured_varname"
+            },
+            {
+              "children": [
+                {
+                  "text": "OptionPool"
+                }
+              ],
+              "id": "F_ItMg8Zkz0unba-SF4uA",
+              "type": "code_line_v2_code"
+            }
+          ],
+          "type": "data-tab-children",
+          "id": "GlW75Ykya2s2wdAV85eD9"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "Peach"
+                }
+              ],
+              "id": "pzQ5f8F81TXXfj4zf7WaC",
+              "type": "structured_varname"
+            },
+            {
+              "children": [
+                {
+                  "text": "PostMoney"
+                }
+              ],
+              "id": "E5O_pr4PPr2nER-5EecsP",
+              "type": "code_line_v2_code"
+            }
+          ],
+          "type": "data-tab-children",
+          "id": "Jx3WniPAPe7fVlZYtOp-U"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "Mango"
+                }
+              ],
+              "id": "KgfY_BovdwH1DvixnH4hl",
+              "type": "structured_varname"
+            },
+            {
+              "children": [
+                {
+                  "text": "AdditionalInvestment"
+                }
+              ],
+              "id": "LkkHQsp7H84KoQwd335ry",
+              "type": "code_line_v2_code"
+            }
+          ],
+          "type": "data-tab-children",
+          "id": "VWu-aZFtP0922XqaE4Nhr"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "NiceChipmunk"
+                }
+              ],
+              "id": "DRO1pw0CJibyUV8CG8fK1",
+              "type": "structured_varname"
+            },
+            {
+              "children": [
+                {
+                  "text": "LeadInvestment"
+                }
+              ],
+              "id": "cswWjGQcjzG7HlNHdYkfN",
+              "type": "code_line_v2_code"
+            }
+          ],
+          "type": "data-tab-children",
+          "id": "jwC_PPrxCVsaacij2xAW6"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "NicePanda"
+                }
+              ],
+              "id": "zJwOFNHUmhPH2f9mtFsJi",
+              "type": "structured_varname"
+            },
+            {
+              "children": [
+                {
+                  "text": "RoundSize"
+                }
+              ],
+              "id": "MDJ-oVF74m-wlxj72ZEAI",
+              "type": "code_line_v2_code"
+            }
+          ],
+          "type": "data-tab-children",
+          "id": "Euf-ECYUiMPt3Lp3Ux8sr"
+        }
+      ],
+      "type": "data-tab",
+      "id": "6pSDcCv1bXuFOvkk3GyS6"
+    },
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "text": "This template was created by our co-founder Nuno, as a guide on how to understand and price your first fundraising round. It's quite a complex topic that a lot of founders struggle with, so we dissect it down to help you better understand the numbers behind the terms.\n\nYou can duplicate this template and start editing to customize it to your circumstances."
+            }
+          ],
+          "id": "2Hlf-Bej1fzkGH8YVefc4",
+          "type": "callout",
+          "color": "Catskill",
+          "icon": "Paperclip"
+        },
+        {
+          "children": [
+            {
+              "text": "When the first term sheet arrives the round gets started. You should make sure you have shares in the region of the millions, so to avoid large volumes of fractional shares that can become challenging to manage. "
+            }
+          ],
+          "type": "p",
+          "id": "UunLIXeMK0K1CpeYFsKes"
+        },
+        {
+          "children": [
+            {
+              "text": "It is a bit overwhelming, so let's dissect it. "
+            }
+          ],
+          "type": "p",
+          "id": "LYYfD4MBBTn70Z3Bday5Q"
+        },
+        {
+          "children": [
+            {
+              "text": "Before you negotiate your first VC round, you might have a simple cap table like the below:"
+            }
+          ],
+          "type": "p",
+          "id": "DKCAM6ZOtHzCaLEAu-Nya"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "text": "FounderCap"
+                    }
+                  ],
+                  "id": "GbfDjI-0oOyITfxINXvE_",
+                  "type": "table-var-name"
+                },
+                {
+                  "children": [
+                    {
+                      "text": " "
+                    },
+                    {
+                      "children": [
+                        {
+                          "text": ""
+                        }
+                      ],
+                      "id": "1V0Wb11fkTekTgFACBDyN",
+                      "type": "smart-ref",
+                      "blockId": "0DBoyr4122I2gSK7J_8f-",
+                      "columnId": null,
+                      "lastSeenVariableName": "Shares"
+                    },
+                    {
+                      "text": " / sum("
+                    },
+                    {
+                      "children": [
+                        {
+                          "text": ""
+                        }
+                      ],
+                      "id": "wk3RQLXwWNGeIhdV2gpFy",
+                      "type": "smart-ref",
+                      "blockId": "nsggyzPifj38GxnFoGljf",
+                      "columnId": "0DBoyr4122I2gSK7J_8f-",
+                      "lastSeenVariableName": "FounderCap.Shares"
+                    },
+                    {
+                      "text": ") in %"
+                    }
+                  ],
+                  "id": "wM1DzRb8xxC6H88Q7KTYy",
+                  "type": "table-column-formula",
+                  "columnId": "rTRU9HPA_Rt6NSsOSzqsd"
+                }
+              ],
+              "id": "DZ-aFWm2YbBVsWI4-tUrt",
+              "type": "table-caption"
+            },
+            {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "text": "Founder"
+                    }
+                  ],
+                  "id": "tUwB3q5H5YIpBRJP4L4iI",
+                  "type": "th",
+                  "cellType": {
+                    "kind": "string"
+                  }
+                },
+                {
+                  "children": [
+                    {
+                      "text": "Shares"
+                    }
+                  ],
+                  "id": "0DBoyr4122I2gSK7J_8f-",
+                  "type": "th",
+                  "cellType": {
+                    "kind": "number",
+                    "unit": [
+                      {
+                        "unit": "shares",
+                        "exp": "1",
+                        "multiplier": "1",
+                        "known": false
+                      }
+                    ]
+                  },
+                  "aggregation": "number:sum"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "Percentage"
+                    }
+                  ],
+                  "id": "rTRU9HPA_Rt6NSsOSzqsd",
+                  "type": "th",
+                  "cellType": {
+                    "kind": "table-formula"
+                  },
+                  "aggregation": "Sum"
+                }
+              ],
+              "id": "yw6Kcyd7O0ktW1B6qzxfT",
+              "type": "tr"
+            },
+            {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "text": "Mary"
+                    }
+                  ],
+                  "id": "Krcv4RhIXGwVpYQTdPYU4",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "7500000"
+                    }
+                  ],
+                  "id": "FiM-XLdz5y50fpff_gNC3",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": ""
+                    }
+                  ],
+                  "id": "7fzfqmsjNN_OW6DEvqhlm",
+                  "type": "td"
+                }
+              ],
+              "id": "oHwmnDn1f6tUD_JUZAXbx",
+              "type": "tr"
+            },
+            {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "text": "Joan"
+                    }
+                  ],
+                  "id": "87vYox9ueQE5CEedaa0RF",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "10000000"
+                    }
+                  ],
+                  "id": "UDz7GMst95OCDxTPi2BOY",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": ""
+                    }
+                  ],
+                  "id": "EeIt1vspqTbYso_M5I5Zs",
+                  "type": "td"
+                }
+              ],
+              "id": "A7TSKSpi08l0lfF8-2pQy",
+              "type": "tr"
+            },
+            {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "text": "Alice"
+                    }
+                  ],
+                  "id": "cGdZtXJV-8IAr0Dt54Gm3",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "7500000"
+                    }
+                  ],
+                  "id": "Js_uTUQhr7zjNFsELniwE",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": ""
+                    }
+                  ],
+                  "id": "ZDsA8_JBp0y1Vgq-ZOOzy",
+                  "type": "td"
+                }
+              ],
+              "id": "Gt1h8T0NRpVcpI-BFeTEO",
+              "type": "tr"
+            }
+          ],
+          "isHidden": false,
+          "type": "table",
+          "id": "nsggyzPifj38GxnFoGljf",
+          "hideFormulas": true,
+          "version": 2
+        },
+        {
+          "children": [
+            {
+              "text": "FounderShares = sum("
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "DAnXDz21fPSvZ7uNLJzmS",
+              "type": "smart-ref",
+              "blockId": "nsggyzPifj38GxnFoGljf",
+              "columnId": "0DBoyr4122I2gSK7J_8f-",
+              "lastSeenVariableName": "FounderCap.Shares"
+            },
+            {
+              "text": ")"
+            }
+          ],
+          "isHidden": false,
+          "type": "code_line",
+          "id": "4ZFsBuPz77bFBgwZD8-AI"
+        },
+        {
+          "children": [
+            {
+              "text": ""
+            }
+          ],
+          "id": "f7709_vLCEa8fL-5Wlrxm",
+          "type": "plot",
+          "title": "Founder Shares %",
+          "sourceVarName": "exprRef_nsggyzPifj38GxnFoGljf",
+          "xColumnName": "Founder",
+          "yColumnName": "",
+          "markType": "arc",
+          "thetaColumnName": "Percentage",
+          "sizeColumnName": "",
+          "colorColumnName": "Founder",
+          "colorScheme": "monochrome_purple",
+          "y2ColumnName": "",
+          "yColumnNames": ["Shares"],
+          "yColumnChartTypes": ["bar"],
+          "showDataLabel": false,
+          "orientation": "horizontal",
+          "grid": true,
+          "startFromZero": true,
+          "mirrorYAxis": false,
+          "flipTable": false,
+          "groupByX": true,
+          "barVariant": "grouped",
+          "lineVariant": "simple",
+          "arcVariant": "simple",
+          "schema": "jun-2024"
+        },
+        {
+          "children": [
+            {
+              "text": "Round size"
+            }
+          ],
+          "type": "h2",
+          "id": "QVs8Ju2aeYX-UXXCabmJx"
+        },
+        {
+          "children": [
+            {
+              "text": ""
+            }
+          ],
+          "id": "c3Eu_2xfa14g_Q17zepQ-",
+          "type": "divider"
+        },
+        {
+          "children": [
+            {
+              "text": "The first thing to understand is the round size. "
+            }
+          ],
+          "type": "p",
+          "id": "3N4NTz5VLQVFaTbY4SprQ"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "text": "RoundSize"
+                    }
+                  ],
+                  "id": "VxL1ZTgiTsjwNQ7Z20lPP",
+                  "type": "caption",
+                  "color": "Malibu",
+                  "icon": "DollarCircle"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "£3M"
+                    }
+                  ],
+                  "id": "u8B2oDE7-sDmE9FHosgI4",
+                  "type": "exp"
+                }
+              ],
+              "id": "ZNICaEDLRePwj8asTLIFD",
+              "type": "def",
+              "variant": "expression"
+            },
+            {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "text": "LeadInvestment"
+                    }
+                  ],
+                  "id": "YzTAwB-xMbdiXv3PqpmeC",
+                  "type": "caption",
+                  "color": "Malibu",
+                  "icon": "Crown"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "£2M"
+                    }
+                  ],
+                  "id": "gSWOhrxPiy1CDClAlBOHQ",
+                  "type": "exp"
+                }
+              ],
+              "id": "LBNjgxYp_JTq7CAmThJ7q",
+              "type": "def",
+              "variant": "expression"
+            }
+          ],
+          "id": "-vOAXAZR-8Ih5wxYeO2WU",
+          "type": "columns"
+        },
+        {
+          "children": [
+            {
+              "text": "You may have a term sheet with a paragraph similar to the following. "
+            }
+          ],
+          "type": "p",
+          "id": "1Y_06NbRuGJN04VH2t-mI"
+        },
+        {
+          "children": [
+            {
+              "text": "Financing: \n"
+            },
+            {
+              "text": "exprRef_Euf_ECYUiMPt3Lp3Ux8sr",
+              "magicnumberz": true
+            },
+            {
+              "text": " of which lead VC shall invest a minimum of "
+            },
+            {
+              "text": "exprRef_jwC_PPrxCVsaacij2xAW6",
+              "magicnumberz": true
+            },
+            {
+              "text": " and up to an additional "
+            },
+            {
+              "text": "exprRef_VWu_aZFtP0922XqaE4Nhr",
+              "magicnumberz": true
+            },
+            {
+              "text": " which may be invested by additional investors approved by lead VC and the Company (“Additional Investor”)."
+            }
+          ],
+          "id": "qK0lYQzMpVi2MVj0b3LEb",
+          "type": "blockquote",
+          "color": "Catskill",
+          "icon": "Wallet"
+        },
+        {
+          "children": [
+            {
+              "text": "In here, you can see a couple of different things happening: "
+            }
+          ],
+          "type": "p",
+          "id": "vENWc1lcss4USJUy-rXtf"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "text": "Your Lead VC commits to a minimum investment of, in this case "
+                    },
+                    {
+                      "text": "LeadInvestment",
+                      "magicnumberz": true
+                    },
+                    {
+                      "text": " "
+                    }
+                  ],
+                  "type": "lic",
+                  "id": "uDBpYQojScqEJWbtzGhSN"
+                }
+              ],
+              "type": "li",
+              "id": "ULQ7SlwwryGgKQStTye_2"
+            },
+            {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "text": "The Lead VC put's a limitation on how much you can additionally raise (the \"Additional Investment\") under the terms of this term sheet, in this case "
+                    },
+                    {
+                      "text": "AdditionalInvestment",
+                      "magicnumberz": true
+                    },
+                    {
+                      "text": " "
+                    }
+                  ],
+                  "type": "lic",
+                  "id": "U6kPwiGXQtqqNbFeJK4Fk"
+                }
+              ],
+              "type": "li",
+              "id": "Rqnz80_ph1YXXU9CYBTZJ"
+            }
+          ],
+          "type": "ol",
+          "id": "iSj2sir9vE6JDdfhEYlwO"
+        },
+        {
+          "children": [
+            {
+              "text": "AdditionalInvestment = "
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "pQScQj7dTIWX1bQ2PEw8h",
+              "type": "smart-ref",
+              "blockId": "ZNICaEDLRePwj8asTLIFD",
+              "lastSeenVariableName": "RoundSize"
+            },
+            {
+              "text": " - "
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "9Byhhw6P-0cnpxip_VkMV",
+              "type": "smart-ref",
+              "blockId": "LBNjgxYp_JTq7CAmThJ7q",
+              "lastSeenVariableName": "LeadInvestment"
+            },
+            {
+              "text": ""
+            }
+          ],
+          "type": "code_line",
+          "isHidden": false,
+          "id": "GjG9mrmhY3yIjWHXFkZbl"
+        },
+        {
+          "children": [
+            {
+              "text": ""
+            }
+          ],
+          "type": "p",
+          "id": "V2QhTXgUPKTKsB2gEsDA0"
+        },
+        {
+          "children": [
+            {
+              "text": "Price and Valuation"
+            }
+          ],
+          "type": "h2",
+          "id": "fU4zBjKmgiYCW9ln0DvmY"
+        },
+        {
+          "children": [
+            {
+              "text": ""
+            }
+          ],
+          "id": "q9bpSD73whf_gHsHoVzU4",
+          "type": "divider"
+        },
+        {
+          "children": [
+            {
+              "text": "Next comes the price of the round. This translates to a price per share. However, the language varies significantly and can get quite confusing. You will start to hear terms like post-money, pre-money and ESOP (Employee Stock Option Pool)"
+            }
+          ],
+          "type": "p",
+          "id": "0obP0rNi3zjM1WzR6kyUI"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "PostMoneyValuation"
+                }
+              ],
+              "id": "A3atNfZICut-IFHvYxY2J",
+              "type": "caption",
+              "icon": "Card",
+              "color": "Malibu"
+            },
+            {
+              "children": [
+                {
+                  "text": "£10M"
+                }
+              ],
+              "id": "oCDJJpWmFKngiQSXjJpnN",
+              "type": "exp"
+            }
+          ],
+          "id": "HigqzxG0alAwRdqG1ldgr",
+          "type": "def",
+          "variant": "expression"
+        },
+        {
+          "children": [
+            {
+              "text": "The "
+            },
+            {
+              "text": "post-money valuation ",
+              "bold": true
+            },
+            {
+              "text": "is the value of your company before getting the investment (i.e. pre-money valuation) "
+            },
+            {
+              "text": "plus ",
+              "bold": true
+            },
+            {
+              "text": "the money invested"
+            },
+            {
+              "text": " ",
+              "bold": true
+            },
+            {
+              "text": "in the business. "
+            }
+          ],
+          "type": "p",
+          "id": "fuV-mmLqsmZACJJ8HgbZ_"
+        },
+        {
+          "children": [
+            {
+              "text": "So, to calculate what your pre-money valuation is:"
+            }
+          ],
+          "type": "p",
+          "id": "qS9rkKEEG-p3xXI7R8awD"
+        },
+        {
+          "children": [
+            {
+              "text": "PreMoney = "
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "IC1ZvvH7xIVNdW--TAOMh",
+              "type": "smart-ref",
+              "blockId": "HigqzxG0alAwRdqG1ldgr",
+              "lastSeenVariableName": "PostMoneyValuation"
+            },
+            {
+              "text": " - "
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "U73vNWU3FF6nuh90BwxIO",
+              "type": "smart-ref",
+              "blockId": "ZNICaEDLRePwj8asTLIFD",
+              "lastSeenVariableName": "RoundSize"
+            },
+            {
+              "text": ""
+            }
+          ],
+          "type": "code_line",
+          "id": "2oCcIzZl_KM_eiD_YpQ95"
+        },
+        {
+          "children": [
+            {
+              "text": "The price per share is calculated on a pre-money basis, as follows:"
+            }
+          ],
+          "type": "p",
+          "id": "s3VPEGE66wRznCJZgX0j8"
+        },
+        {
+          "children": [
+            {
+              "text": "Price = "
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "99u8N8UCPXdL76F6KIPJE",
+              "type": "smart-ref",
+              "blockId": "2oCcIzZl_KM_eiD_YpQ95",
+              "lastSeenVariableName": "PreMoney"
+            },
+            {
+              "text": " / ("
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "9ulEEfV7arDyQ5CEb4hE_",
+              "type": "smart-ref",
+              "blockId": "4ZFsBuPz77bFBgwZD8-AI",
+              "lastSeenVariableName": "FounderShares"
+            },
+            {
+              "text": " + "
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "uvT6zZ7Cw9905oBTTh_dw",
+              "type": "smart-ref",
+              "blockId": "QI8430xxqbjR1j7N20ELL",
+              "lastSeenVariableName": "ESOPShares"
+            },
+            {
+              "text": " )"
+            }
+          ],
+          "type": "code_line",
+          "id": "ZPE1Z--ZJxOXnKKJOHtmy"
+        },
+        {
+          "children": [
+            {
+              "text": "You will notice that the above price per share calculation includes something called "
+            },
+            {
+              "text": "ESOP Shares",
+              "bold": true
+            },
+            {
+              "text": ". These are shares set aside for the employee stock option pool. We will get back to that later in the notebook. "
+            }
+          ],
+          "type": "p",
+          "id": "BJpGrbe3K-kefldg6hU69"
+        },
+        {
+          "children": [
+            {
+              "text": "For now, let's start by calculating how many shares will the investors get in the business for their capital:"
+            }
+          ],
+          "type": "p",
+          "id": "EUdgYIBoV2UPHUVKWHiu8"
+        },
+        {
+          "children": [
+            {
+              "text": "LeadShares = "
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "b74ZQNw-WVZEZYPKMK0EV",
+              "type": "smart-ref",
+              "blockId": "LBNjgxYp_JTq7CAmThJ7q",
+              "lastSeenVariableName": "LeadInvestment"
+            },
+            {
+              "text": " / "
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "AYdQ-SdccEvckUGl3IEW5",
+              "type": "smart-ref",
+              "blockId": "ZPE1Z--ZJxOXnKKJOHtmy",
+              "lastSeenVariableName": "Price"
+            },
+            {
+              "text": ""
+            }
+          ],
+          "type": "code_line",
+          "isHidden": false,
+          "id": "iFruxwSjxAfXatqxXbktJ"
+        },
+        {
+          "children": [
+            {
+              "text": "AdditionalShares = "
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "MUoYoZ-0hAANSDOPh5Ua_",
+              "type": "smart-ref",
+              "blockId": "GjG9mrmhY3yIjWHXFkZbl",
+              "columnId": null,
+              "lastSeenVariableName": "AdditionalInvestment"
+            },
+            {
+              "text": " /"
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "ESyvaFEhLG6ISzb-0tTZ7",
+              "type": "smart-ref",
+              "blockId": "ZPE1Z--ZJxOXnKKJOHtmy",
+              "columnId": null,
+              "lastSeenVariableName": "Price"
+            },
+            {
+              "text": ""
+            }
+          ],
+          "type": "code_line",
+          "isHidden": false,
+          "id": "YCdfe7iO6z91nxqYsBE4o"
+        },
+        {
+          "children": [
+            {
+              "text": "PreferenceShares = "
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "PeuMZS6LzUqLrTDhHmYTm",
+              "type": "smart-ref",
+              "blockId": "iFruxwSjxAfXatqxXbktJ",
+              "lastSeenVariableName": "LeadShares"
+            },
+            {
+              "text": " + "
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "dpKvXj_GNZePgQ7BkieBh",
+              "type": "smart-ref",
+              "blockId": "YCdfe7iO6z91nxqYsBE4o",
+              "lastSeenVariableName": "AdditionalShares"
+            },
+            {
+              "text": ""
+            }
+          ],
+          "type": "code_line",
+          "id": "mcbL7jBDZql7OLlrUqjzn",
+          "isHidden": false
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "text": "InvestorCap"
+                    }
+                  ],
+                  "id": "Xtmp0Nt0nBg7GpfmScTXO",
+                  "type": "table-var-name"
+                },
+                {
+                  "children": [
+                    {
+                      "text": " ["
+                    },
+                    {
+                      "children": [
+                        {
+                          "text": ""
+                        }
+                      ],
+                      "lastSeenVariableName": "LeadShares",
+                      "id": "YR71P7ehlPq6poRlv1wk-",
+                      "type": "smart-ref",
+                      "blockId": "iFruxwSjxAfXatqxXbktJ"
+                    },
+                    {
+                      "text": " ,"
+                    },
+                    {
+                      "children": [
+                        {
+                          "text": ""
+                        }
+                      ],
+                      "lastSeenVariableName": "AdditionalShares",
+                      "id": "zBrDuNUZWZJK6aMQ32az3",
+                      "type": "smart-ref",
+                      "blockId": "YCdfe7iO6z91nxqYsBE4o"
+                    },
+                    {
+                      "text": " ]"
+                    }
+                  ],
+                  "id": "4BmWtoOgpBVolm7Y3iT6p",
+                  "type": "table-column-formula",
+                  "columnId": "gyeDSJe7bKhvuK1Ru5QX0"
+                },
+                {
+                  "children": [
+                    {
+                      "text": " Shares * "
+                    },
+                    {
+                      "children": [
+                        {
+                          "text": ""
+                        }
+                      ],
+                      "lastSeenVariableName": "Price",
+                      "id": "IdvV-JyfFnw9TzZGZswh5",
+                      "type": "smart-ref",
+                      "blockId": "ZPE1Z--ZJxOXnKKJOHtmy"
+                    },
+                    {
+                      "text": ""
+                    }
+                  ],
+                  "id": "FWiGfl3ct9RsGKVi9J9W5",
+                  "type": "table-column-formula",
+                  "columnId": "fMzYmZOGvZORz_FjtrxZd"
+                }
+              ],
+              "id": "613DXoFz3w-j4hqkK2kpu",
+              "type": "table-caption"
+            },
+            {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "text": "Name"
+                    }
+                  ],
+                  "id": "FWZHNKrYQngn50rISigEb",
+                  "type": "th",
+                  "cellType": {
+                    "kind": "anything"
+                  }
+                },
+                {
+                  "children": [
+                    {
+                      "text": "Share"
+                    }
+                  ],
+                  "id": "gyeDSJe7bKhvuK1Ru5QX0",
+                  "type": "th",
+                  "cellType": {
+                    "kind": "table-formula"
+                  },
+                  "aggregation": "number:sum"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "Value"
+                    }
+                  ],
+                  "id": "fMzYmZOGvZORz_FjtrxZd",
+                  "type": "th",
+                  "cellType": {
+                    "kind": "table-formula"
+                  },
+                  "aggregation": "number:sum"
+                }
+              ],
+              "id": "4nV00D_kdTv2zb26CiobJ",
+              "type": "tr"
+            },
+            {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "text": "Lead"
+                    }
+                  ],
+                  "id": "NimVlP8VNDkuG8HLAUEpM",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": ""
+                    }
+                  ],
+                  "id": "KSL6YexDY5hZzTaPkNC1d",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": ""
+                    }
+                  ],
+                  "id": "7SjlfRixrPKCvgKZcSu5O",
+                  "type": "td"
+                }
+              ],
+              "id": "x5Fc_I1nRatoHDprp10Rp",
+              "type": "tr"
+            },
+            {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "text": "Additional"
+                    }
+                  ],
+                  "id": "IQ705LhIqm1X-RPCVo7EB",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": ""
+                    }
+                  ],
+                  "id": "EaxB7EHPZLhM30uS-t0ju",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": ""
+                    }
+                  ],
+                  "id": "pKDR7aOlcHrbPtSz_F2ql",
+                  "type": "td"
+                }
+              ],
+              "id": "1f8wv5M5YvqSwIOis3UEi",
+              "type": "tr"
+            }
+          ],
+          "version": 2,
+          "id": "BHtB_O5gACAPcGALll9Iv",
+          "type": "table",
+          "hideFormulas": true
+        },
+        {
+          "children": [
+            {
+              "text": "The VCs are effectively buying 30% of your business. Typically, VC's try to buy between 20-30% of a business at each round. Founder and employee dilution are important to calculate and understand as you raise each subsequent round. "
+            }
+          ],
+          "type": "p",
+          "id": "RWVz9aEXnor8ymLuc89x-"
+        },
+        {
+          "children": [
+            {
+              "text": "But, to look at dilution properly,  let's get back to the ESOP (employee stock option pool). "
+            }
+          ],
+          "type": "p",
+          "id": "DRfLOfFZ2pE0OOw24V8z2"
+        },
+        {
+          "children": [
+            {
+              "text": ""
+            }
+          ],
+          "type": "p",
+          "id": "55W8StNQk5ekOnSgICaRg"
+        },
+        {
+          "children": [
+            {
+              "text": "ESOP"
+            }
+          ],
+          "type": "h2",
+          "id": "I0qh1lGyOQ-PhH_8lbBGO"
+        },
+        {
+          "children": [
+            {
+              "text": ""
+            }
+          ],
+          "id": "wu2PQufgS90bJ6v4WmlKr",
+          "type": "divider"
+        },
+        {
+          "children": [
+            {
+              "text": "The employee stock option pool is a vital part of the price negotiation. "
+            }
+          ],
+          "type": "p",
+          "id": "fSg31Ay_UxV67Dm7Uiu99"
+        },
+        {
+          "children": [
+            {
+              "text": "Both founders and investors are likely aligned in wanting a sufficient ESOP to compensate and attract early employees."
+            }
+          ],
+          "type": "p",
+          "id": "5tHczPWtYHroj5fqsiAl4"
+        },
+        {
+          "children": [
+            {
+              "text": "However, to be able to give stock options to your employees, you need to create a pool of shares from which those options will be given. In other words, you have to issue those shares when you get your investment."
+            }
+          ],
+          "type": "p",
+          "id": "OeHZMTaHYkeOyhLB9iEdz"
+        },
+        {
+          "children": [
+            {
+              "text": "Technically, they dilute all existing shareholders’ ownership. But, investors often insist that you create a pool "
+            },
+            {
+              "text": "before",
+              "underline": true
+            },
+            {
+              "text": " they invest, so your first employee option pool usually only dilutes your shares. And, dilution can start to add up quickly if you don't keep track.  "
+            }
+          ],
+          "type": "p",
+          "id": "PraZD2wPQQgY64VyebJbr"
+        },
+        {
+          "children": [
+            {
+              "text": "If you are new to stock options, see the following video:"
+            }
+          ],
+          "type": "p",
+          "id": "oCveZ-eqcG2EV-XPVuDon"
+        },
+        {
+          "children": [
+            {
+              "text": ""
+            }
+          ],
+          "id": "N_aPIUF93Wh28p39-6tkF",
+          "type": "media_embed",
+          "url": "https://www.youtube.com/embed/0kjwAbCFjSY"
+        },
+        {
+          "children": [
+            {
+              "text": "Because ESOP has implications on your capitalization table, it's important to accurately reflect the ESOP in your calculations. Let's go through how they are calculated assuming the employee option pool is created before investors invest."
+            }
+          ],
+          "type": "p",
+          "id": "K2edClj2NUsSs9FY6oLKY"
+        },
+        {
+          "children": [
+            {
+              "text": " Typically, options pools are anywhere from 10% to 15% of the Founder Shares. "
+            }
+          ],
+          "type": "p",
+          "id": "W_Cf2pwNHcPPCRhuwfgT0"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "OptionPool"
+                }
+              ],
+              "id": "j7_fSOKc4pCjK-l8IzVZ_",
+              "type": "caption",
+              "icon": "Percentage",
+              "color": "Malibu"
+            },
+            {
+              "children": [
+                {
+                  "text": "15 %"
+                }
+              ],
+              "id": "XESP9hTWfvYrt_5f-6hz2",
+              "type": "exp"
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "EJ_HZaPE7F7SUw2Zcm5EE",
+              "type": "slider",
+              "max": "20",
+              "min": "5",
+              "step": "1"
+            }
+          ],
+          "id": "bZqX3suEshl4jeu2bvZWE",
+          "type": "def",
+          "variant": "slider",
+          "coerceToType": {
+            "kind": "number",
+            "date": "day"
+          }
+        },
+        {
+          "children": [
+            {
+              "text": "ESOPShares = "
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "hIKdz8xeHZ5xtYbp6hYvl",
+              "type": "smart-ref",
+              "blockId": "bZqX3suEshl4jeu2bvZWE",
+              "lastSeenVariableName": "OptionPool"
+            },
+            {
+              "text": "*"
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "YdaBNP3T6ibLkIF5num4y",
+              "type": "smart-ref",
+              "blockId": "4ZFsBuPz77bFBgwZD8-AI",
+              "columnId": null,
+              "lastSeenVariableName": "FounderShares"
+            },
+            {
+              "text": ""
+            }
+          ],
+          "type": "code_line",
+          "id": "QI8430xxqbjR1j7N20ELL"
+        },
+        {
+          "children": [
+            {
+              "text": "One thing to notice is that this is not the same as "
+            },
+            {
+              "text": "exprRef_1_Ke_xma6ElaVgEpF2KOg",
+              "magicnumberz": true
+            },
+            {
+              "text": " of the original shares you and your founders have, it is "
+            },
+            {
+              "text": "exprRef_7vgCVXCgt6YgmWOqFeSfa",
+              "magicnumberz": true
+            },
+            {
+              "text": " after the dilution caused by the round. It means before the round is closed, the CAP table would look something like:"
+            }
+          ],
+          "type": "p",
+          "id": "yb8qwegbYVK8wEBNw1fD3"
+        },
+        {
+          "children": [
+            {
+              "text": "CommonShares = "
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "GjdxRuqaYc8z0kk7eTZhu",
+              "type": "smart-ref",
+              "blockId": "QI8430xxqbjR1j7N20ELL",
+              "lastSeenVariableName": "ESOPShares"
+            },
+            {
+              "text": " + "
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "3sWR4ahdDJ4yKXtkFi9wP",
+              "type": "smart-ref",
+              "blockId": "4ZFsBuPz77bFBgwZD8-AI",
+              "lastSeenVariableName": "FounderShares"
+            },
+            {
+              "text": ""
+            }
+          ],
+          "type": "code_line",
+          "isHidden": false,
+          "id": "LlX4aWFSaJW_zKeIPVDoT"
+        },
+        {
+          "children": [
+            {
+              "text": "ESOPCap = {\n  Name = [\"Founders\", \"ESOP\"]\n  Shares = ["
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "Uw2dVBYye-18zMpzdmE8V",
+              "type": "smart-ref",
+              "blockId": "4ZFsBuPz77bFBgwZD8-AI",
+              "lastSeenVariableName": "FounderShares"
+            },
+            {
+              "text": ", "
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "IbQ89dpHiIQL6mpaok1MM",
+              "type": "smart-ref",
+              "blockId": "QI8430xxqbjR1j7N20ELL",
+              "lastSeenVariableName": "ESOPShares"
+            },
+            {
+              "text": "]\n  Value = Shares * "
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "sGD-Ivm1pRzRJ8LeqSvmk",
+              "type": "smart-ref",
+              "blockId": "ZPE1Z--ZJxOXnKKJOHtmy",
+              "lastSeenVariableName": "Price"
+            },
+            {
+              "text": "\n  Percentage = round(Shares / "
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "5y0kwxme_xP1yXd2wNf2N",
+              "type": "smart-ref",
+              "blockId": "LlX4aWFSaJW_zKeIPVDoT",
+              "lastSeenVariableName": "CommonShares"
+            },
+            {
+              "text": ", 1) in %\n}"
+            }
+          ],
+          "type": "code_line",
+          "isHidden": false,
+          "id": "13eYfc2cuG402eS23xwZ5"
+        },
+        {
+          "children": [
+            {
+              "text": ""
+            }
+          ],
+          "id": "VWpKpc57UIUhGh-SHnzII",
+          "type": "plot",
+          "title": "ESOP shares",
+          "sourceVarName": "exprRef_13eYfc2cuG402eS23xwZ5",
+          "xColumnName": "Name",
+          "yColumnName": "",
+          "markType": "arc",
+          "thetaColumnName": "Percentage",
+          "sizeColumnName": "",
+          "colorColumnName": "Name",
+          "colorScheme": "monochrome_purple",
+          "y2ColumnName": "",
+          "yColumnNames": ["Shares"],
+          "yColumnChartTypes": ["bar"],
+          "showDataLabel": false,
+          "orientation": "horizontal",
+          "grid": true,
+          "startFromZero": true,
+          "mirrorYAxis": false,
+          "flipTable": false,
+          "groupByX": true,
+          "barVariant": "grouped",
+          "lineVariant": "simple",
+          "arcVariant": "simple",
+          "schema": "jun-2024"
+        },
+        {
+          "children": [
+            {
+              "text": "You are actually allocating more than "
+            },
+            {
+              "text": "exprRef_Pka01QmpdOsMhloU06tWL",
+              "magicnumberz": true
+            },
+            {
+              "text": " to the ESOP. The extra percentage points had no effects on the ownership percentage of your investors. This is because their investment comes after you created the shares designated to give out to your employees."
+            }
+          ],
+          "type": "p",
+          "id": "1A48UJbrP5NgnFvSCiu3m"
+        },
+        {
+          "children": [
+            {
+              "text": "If your objective was to have employees own "
+            },
+            {
+              "text": "exprRef_yv6DkhLIxhKH8SsAxWhBk",
+              "magicnumberz": true
+            },
+            {
+              "text": " of the business"
+            },
+            {
+              "text": " before",
+              "bold": true
+            },
+            {
+              "text": " the round, you need to calculate the corresponding percentage and adjust the price:"
+            }
+          ],
+          "type": "p",
+          "id": "wHC2mIhI1k3-9MMGXdKl5"
+        },
+        {
+          "children": [
+            {
+              "text": "ESOP15Percentage = round("
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "zJckaR6doZ3h5uesUSw0N",
+              "type": "smart-ref",
+              "blockId": "QI8430xxqbjR1j7N20ELL",
+              "columnId": null,
+              "lastSeenVariableName": "ESOPShares"
+            },
+            {
+              "text": " /("
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "mw_ea8naniPAJ801MEdkj",
+              "type": "smart-ref",
+              "blockId": "4ZFsBuPz77bFBgwZD8-AI",
+              "lastSeenVariableName": "FounderShares"
+            },
+            {
+              "text": " + "
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "bnvGRfkjq1Mzwxz2YagjN",
+              "type": "smart-ref",
+              "blockId": "mcbL7jBDZql7OLlrUqjzn",
+              "lastSeenVariableName": "PreferenceShares"
+            },
+            {
+              "text": "),2) in %"
+            }
+          ],
+          "type": "code_line",
+          "id": "XHs4vFrQh3Vl3ssdE6m5R"
+        },
+        {
+          "children": [
+            {
+              "text": "For example, if you wanted the ESOP to be "
+            },
+            {
+              "text": "exprRef_lrr4N_Ur75F_euWDUPkRl",
+              "magicnumberz": true
+            },
+            {
+              "text": " on a "
+            },
+            {
+              "text": "pre-money",
+              "bold": true
+            },
+            {
+              "text": " basis, you would issue an option pool of "
+            },
+            {
+              "text": "exprRef_sRF3VYysOfb7b2MCc0FUT",
+              "magicnumberz": true
+            },
+            {
+              "text": " instead. That's why the ESOP is mentioned in the price, it's not a coincidence."
+            }
+          ],
+          "type": "p",
+          "id": "v8N_0U-P91aRO7p911Jo9"
+        },
+        {
+          "children": [
+            {
+              "text": "This really depends on what was the objective you had, but shows how hard it can be to read legal documents and reason with numbers."
+            }
+          ],
+          "type": "p",
+          "id": "cHCpfvjyRdsmt3V6af8gs"
+        },
+        {
+          "children": [
+            {
+              "text": "We can now see the full cap table after the round is complete."
+            }
+          ],
+          "type": "p",
+          "id": "jbAWi7LtyAci0wqvpj7qz"
+        },
+        {
+          "children": [
+            {
+              "text": "Updated cap table"
+            }
+          ],
+          "type": "h2",
+          "id": "oki_bWMNEe283zzblwCga"
+        },
+        {
+          "children": [
+            {
+              "text": ""
+            }
+          ],
+          "id": "IkojZZ9l4ukCicjGLNQFi",
+          "type": "divider"
+        },
+        {
+          "children": [
+            {
+              "text": "Cap = {\n  Name = [\"Founders\", \"ESOP\", \"Lead\", \"Additional\"]\n  Shares = ["
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "EdeWHOOYc1la2ds4ljzzT",
+              "type": "smart-ref",
+              "blockId": "4ZFsBuPz77bFBgwZD8-AI",
+              "lastSeenVariableName": "FounderShares"
+            },
+            {
+              "text": ", "
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "Yi6rCFCrP_wCNuSsUFiMu",
+              "type": "smart-ref",
+              "blockId": "QI8430xxqbjR1j7N20ELL",
+              "lastSeenVariableName": "ESOPShares"
+            },
+            {
+              "text": ", "
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "HAXpPi8YUuQsWKd9PPJHQ",
+              "type": "smart-ref",
+              "blockId": "iFruxwSjxAfXatqxXbktJ",
+              "lastSeenVariableName": "LeadShares"
+            },
+            {
+              "text": ", "
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "DKpZ7O4n4dHZdJEWbUHm8",
+              "type": "smart-ref",
+              "blockId": "YCdfe7iO6z91nxqYsBE4o",
+              "lastSeenVariableName": "AdditionalShares"
+            },
+            {
+              "text": "]\n  Class = [\"Common\",\"Common\",\"Preference\",\"Preference\"]\n  TotalShares = sum("
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "t5XPHGic_u3Q4mLsQ7Ijo",
+              "type": "smart-ref",
+              "blockId": "Isf6spK-uTg72GOAKQQIc",
+              "columnId": "Isf6spK-uTg72GOAKQQIc_1",
+              "lastSeenVariableName": "Cap"
+            },
+            {
+              "text": ")\n  Value = Shares * "
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "NnomvyUjkmkjYsxV6OD9G",
+              "type": "smart-ref",
+              "blockId": "ZPE1Z--ZJxOXnKKJOHtmy",
+              "lastSeenVariableName": "Price"
+            },
+            {
+              "text": "\n  Percentage = Shares / TotalShares in %\n}"
+            }
+          ],
+          "type": "code_line",
+          "isHidden": false,
+          "id": "Isf6spK-uTg72GOAKQQIc"
+        },
+        {
+          "children": [
+            {
+              "text": ""
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "5XAepjfNfTEYkJIXidWl-",
+              "type": "smart-ref",
+              "blockId": "Isf6spK-uTg72GOAKQQIc",
+              "lastSeenVariableName": "Cap"
+            },
+            {
+              "text": ""
+            }
+          ],
+          "id": "pUxKqJGEEf688oIs9YnAK",
+          "type": "code_line"
+        },
+        {
+          "children": [
+            {
+              "text": ""
+            }
+          ],
+          "y2ColumnName": "",
+          "id": "T5_4ymgCpM9a7bR-RrGsj",
+          "type": "plot",
+          "title": "Cap shares",
+          "sourceVarName": "exprRef_Isf6spK_uTg72GOAKQQIc",
+          "xColumnName": "Name",
+          "yColumnName": "",
+          "markType": "arc",
+          "thetaColumnName": "Percentage",
+          "sizeColumnName": "",
+          "colorColumnName": "Name",
+          "colorScheme": "monochrome_purple",
+          "yColumnNames": ["Shares"],
+          "yColumnChartTypes": ["bar"],
+          "showDataLabel": false,
+          "orientation": "horizontal",
+          "grid": true,
+          "startFromZero": true,
+          "mirrorYAxis": false,
+          "flipTable": false,
+          "groupByX": true,
+          "barVariant": "grouped",
+          "lineVariant": "simple",
+          "arcVariant": "simple",
+          "schema": "jun-2024"
+        },
+        {
+          "children": [
+            {
+              "text": "Now we can understand if our investors are buying within their equity ownership targets:"
+            }
+          ],
+          "type": "p",
+          "id": "qblGdykWj34jwO8muLWhc"
+        },
+        {
+          "children": [
+            {
+              "text": "sumif(Cap.Percentage, Cap.Class==\"Preference\")"
+            }
+          ],
+          "type": "code_line",
+          "id": "XcYCkJylfiVQ0mUvzswO6"
+        },
+        {
+          "children": [
+            {
+              "text": "Investment = round(sum(InvestorCap.Value), 2)"
+            }
+          ],
+          "type": "code_line",
+          "id": "wMsA4SBk6Ovw-LdFcuBNf"
+        },
+        {
+          "children": [
+            {
+              "text": "The investors would buy "
+            },
+            {
+              "text": "exprRef_XcYCkJylfiVQ0mUvzswO6",
+              "magicnumberz": true
+            },
+            {
+              "text": " for "
+            },
+            {
+              "text": "exprRef_wMsA4SBk6Ovw_LdFcuBNf",
+              "magicnumberz": true
+            },
+            {
+              "text": "."
+            }
+          ],
+          "type": "p",
+          "id": "as3sqhK7aYrolLSOw1aCq"
+        },
+        {
+          "children": [
+            {
+              "text": "These are complex topics that even seasoned investors struggle with. If you have any feedback or suggestions on how to improve this notebook to help founders better understand the numbers behind the terms, please contact "
+            },
+            {
+              "text": "support@decipad.com",
+              "bold": true
+            },
+            {
+              "text": ". "
+            }
+          ],
+          "type": "p",
+          "id": "T6MGbVJgndPjod7FDEDcM"
+        },
+        {
+          "children": [
+            {
+              "text": ""
+            }
+          ],
+          "id": "iLcbwOaWE-Qn62YkvoeIE",
+          "type": "p"
+        },
+        {
+          "children": [
+            {
+              "text": ""
+            }
+          ],
+          "type": "p",
+          "id": "FpdJAgfFlKeVwItwrw1zB"
+        }
+      ],
+      "type": "tab",
+      "id": "NrsiVeRwxBdjyLCFdzsie",
+      "name": "First tab"
+    }
+  ]
+}

@@ -1881,6 +1881,12 @@ export class Notebook {
           `broken blocks visible`
         ).toBeHidden();
 
+        // check for error screen
+        await expect(
+          this.page.getByText('Sorry, we did something wrong'),
+          `error page visible`
+        ).toBeHidden();
+
         // check for results that didn't load or magic errors, the code base uses loading-results & loading-animation
         await expect(
           this.page.getByTestId('loading-results'),

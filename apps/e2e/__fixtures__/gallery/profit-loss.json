@@ -1,0 +1,5756 @@
+{
+	"children": [
+		{
+			"children": [
+				{
+					"text": "[Template] SaaS Profit & Loss Forecast"
+				}
+			],
+			"type": "title",
+			"id": "23a0pEkpDkqYYKCX8pLHa"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Grape"
+								}
+							],
+							"id": "9Ymehpw65Bv5Nb5979pIi",
+							"type": "structured_varname"
+						},
+						{
+							"children": [
+								{
+									"text": "ActualSubscriptionRevenue"
+								}
+							],
+							"id": "Y5ceub-6iVkm1ySshRN3A",
+							"type": "code_line_v2_code"
+						}
+					],
+					"type": "data-tab-children",
+					"id": "onXnlBi4WEBUzAQQCdiqJ"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Chipmunk"
+								}
+							],
+							"id": "2l7SwOzA24azT2ZD1pOnE",
+							"type": "structured_varname"
+						},
+						{
+							"children": [
+								{
+									"text": "ActualServicesRevenue"
+								}
+							],
+							"id": "BZpTd85gCXdTNOjBvzDgJ",
+							"type": "code_line_v2_code"
+						}
+					],
+					"type": "data-tab-children",
+					"id": "vPSS3fBewwFiPmcsR77OF"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Koala"
+								}
+							],
+							"id": "rsjscq79noavs9p3AgN38",
+							"type": "structured_varname"
+						},
+						{
+							"children": [
+								{
+									"text": "GrowthRate"
+								}
+							],
+							"id": "mA6N-LXRVrIdH7ioVjio6",
+							"type": "code_line_v2_code"
+						}
+					],
+					"type": "data-tab-children",
+					"id": "HDcknkYh_6R4nUEy7lTqF"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Apple"
+								}
+							],
+							"id": "B8_03BFH5wAwNsniV-WdW",
+							"type": "structured_varname"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "snxfkoP2NVGg75UMl8rOo",
+									"type": "smart-ref",
+									"blockId": "RempHv8x6iQDz8TOCVXLs",
+									"columnId": "T761DBNMi0XemkYwh3j_h"
+								},
+								{
+									"text": ""
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "g7ZNM3LrqadKH1U5nTcAB",
+									"type": "smart-ref",
+									"blockId": "RempHv8x6iQDz8TOCVXLs",
+									"columnId": "T761DBNMi0XemkYwh3j_h"
+								},
+								{
+									"text": "max("
+								},
+								{
+									"text": ""
+								},
+								{
+									"text": ") - min(ProfitandLoss.CalendarMonth)"
+								}
+							],
+							"id": "syIns1DAA_wq49t5RV-xD",
+							"type": "code_line_v2_code"
+						}
+					],
+					"type": "data-tab-children",
+					"id": "0Fcr6MmcjWpy3Hy-ApJ39"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Apple"
+								}
+							],
+							"id": "R2pC3V3x_JJBnQRLVYKCx",
+							"type": "structured_varname"
+						},
+						{
+							"children": [
+								{
+									"text": "max(ProfitandLoss.TotalRevenue)"
+								}
+							],
+							"id": "W0vtFY1_w4ugXaQY_yvn0",
+							"type": "code_line_v2_code"
+						}
+					],
+					"type": "data-tab-children",
+					"id": "dVu-59xFUfRnZmGvmmexB"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": ""
+								},
+								{
+									"text": ""
+								}
+							],
+							"id": "qZoHLsZiO_9MOGhKBCMDo",
+							"type": "structured_varname"
+						}
+					],
+					"type": "data-tab-children",
+					"id": "YsyxvkJZO14pCIDYayDac"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Average OpEx"
+								}
+							],
+							"type": "structured_varname",
+							"id": "WQPv5uBgKSmu_VJywGI4p"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"type": "code_line_v2_code",
+							"id": "Zi_YGQ40MXgu9-mxC40Q4"
+						}
+					],
+					"type": "data-tab-children",
+					"id": "Qutnwn5xcJW1FxyVlrYU7"
+				}
+			],
+			"type": "data-tab",
+			"id": "ItbhNHVjJMtOKA7v3O9RE"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "‍A "
+						},
+						{
+							"text": "Profit and Loss (P&L) forecast ",
+							"bold": true
+						},
+						{
+							"text": "helps you project your company's profitability over a specific period. It incorporates revenue projections from your SaaS products or services, and accounts for associated costs - including operational expenses (OpEx) and the cost of goods sold (CoGS). \n\nDuplicate this Decipad template and adapt it to your own business!\n"
+						}
+					],
+					"id": "JfrHN-29wj1tQndvHc_mN",
+					"type": "p",
+					"color": "Catskill",
+					"icon": "Deci"
+				},
+				{
+					"children": [
+						{
+							"text": "Summary"
+						}
+					],
+					"type": "h3",
+					"id": "A46I0qaamobkpyk3LvtKW"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"id": "4osj_vfkcM9lwMG2m6fDA",
+					"type": "divider"
+				},
+				{
+					"children": [
+						{
+							"text": "We currently make "
+						},
+						{
+							"text": "exprRef_HQ_6pbJOVOF003jxT_LbQ",
+							"magicnumberz": true
+						},
+						{
+							"text": " in monthly recurring revenue (MRR) from our SaaS subscription model."
+						}
+					],
+					"type": "p",
+					"id": "Q6IujTGIAsne18uOZo9i2"
+				},
+				{
+					"children": [
+						{
+							"text": "We are forecasting our current MRR to increase by "
+						},
+						{
+							"text": "exprRef_TDU_tOQp5kaBGYSD7N20w",
+							"magicnumberz": true
+						},
+						{
+							"text": " every month, so we are expecting to hit an MRR of  "
+						},
+						{
+							"text": "exprRef__8PK05dvoR8qB9d5Tz4ZM",
+							"magicnumberz": true
+						},
+						{
+							"text": " in 12 months from now. "
+						}
+					],
+					"type": "p",
+					"id": "_mJqUiC12dRoV9gxOItHG"
+				},
+				{
+					"children": [
+						{
+							"text": "Our operating costs (OpEx) will remain fairly consistent during this time, averaging around "
+						},
+						{
+							"text": "exprRef_grLsxu6HHuXk3AN063fef",
+							"magicnumberz": true
+						},
+						{
+							"text": " per month.\n"
+						}
+					],
+					"type": "p",
+					"id": "3TiOSZWAQwwygffQx_5P1"
+				},
+				{
+					"children": [
+						{
+							"text": "Inputs & Assumptions"
+						}
+					],
+					"id": "p4gMyBecGk_dl-pSJlepG",
+					"type": "h3"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"id": "6gQG2Q-Aym8GEn5z1rlYl",
+					"type": "divider"
+				},
+				{
+					"children": [
+						{
+							"text": "Play around with the input widgets and easily visualize different what-if scenarios."
+						}
+					],
+					"id": "cIKsLnOG_6zM8XaXAX_lR",
+					"type": "callout",
+					"icon": "Message"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "StartDate"
+								}
+							],
+							"id": "AvT7sDNqeNkI-LmHbdi_F",
+							"type": "caption",
+							"icon": "Clock"
+						},
+						{
+							"children": [
+								{
+									"text": "2024-10-01"
+								}
+							],
+							"id": "-JklYSbZQQhg4o5K3LeV3",
+							"type": "exp"
+						}
+					],
+					"id": "FOlWqGwCirGGD5L5bnb1u",
+					"type": "def",
+					"variant": "date",
+					"coerceToType": {
+						"kind": "date",
+						"date": "day"
+					}
+				},
+				{
+					"children": [
+						{
+							"text": "🚀 1) How much do we currently make in a month? ",
+							"bold": true
+						}
+					],
+					"type": "p",
+					"id": "kZYrelbhPIUoZsbm5DO6G",
+					"icon": "Coin",
+					"color": "Sun"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"children": [
+										{
+											"text": "SubscriptionRevenue"
+										}
+									],
+									"id": "sObRbyCwKxOQ4psBRV96i",
+									"type": "caption",
+									"color": "Sun",
+									"icon": "Coin"
+								},
+								{
+									"children": [
+										{
+											"text": "$80k"
+										}
+									],
+									"id": "r5ruwfvdrtDJH-eWx7UYr",
+									"type": "exp"
+								}
+							],
+							"id": "HQ-6pbJOVOF003jxT_LbQ",
+							"type": "def",
+							"variant": "expression",
+							"coerceToType": {
+								"kind": "number",
+								"date": "day"
+							}
+						},
+						{
+							"children": [
+								{
+									"children": [
+										{
+											"text": "GrowthRate"
+										}
+									],
+									"id": "r_DQbX3vCnJkgUJLOwGC1",
+									"type": "caption",
+									"icon": "Coin",
+									"color": "Sun"
+								},
+								{
+									"children": [
+										{
+											"text": "5.6%"
+										}
+									],
+									"id": "Kk7Mv5gjQW8iX7yM-EKoc",
+									"type": "exp"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "3DET5AemRADd7oCeSE0MN",
+									"type": "slider",
+									"max": "50",
+									"min": "0",
+									"step": "0.5"
+								}
+							],
+							"id": "TDU-tOQp5kaBGYSD7N20w",
+							"type": "def",
+							"variant": "slider",
+							"coerceToType": {
+								"kind": "number",
+								"date": "day"
+							}
+						}
+					],
+					"id": "FgPNfkVURiWbeBw3ML6Rb",
+					"type": "columns"
+				},
+				{
+					"children": [
+						{
+							"text": "🏃‍♂️ 2) What are the costs related to our day-to-day business operations (OpEx)?",
+							"bold": true
+						}
+					],
+					"id": "eDxMaVzOcKKuACDRf5GCV",
+					"color": "Sun",
+					"type": "p"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"children": [
+										{
+											"text": "MarketingMonthlySpend"
+										}
+									],
+									"type": "caption",
+									"id": "yaeOptV7v2QX0BhfbwOrm",
+									"color": "Sun",
+									"icon": "Card"
+								},
+								{
+									"children": [
+										{
+											"text": "$20k"
+										}
+									],
+									"type": "exp",
+									"id": "zvowjoxmaM_CxSxKOEt-j"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "E0_99mnqbOXxQCd4_8S0i",
+									"type": "slider",
+									"max": "50",
+									"min": "0",
+									"step": "5"
+								}
+							],
+							"id": "Qhg6oRFDUMkF87D-yRech",
+							"type": "def",
+							"variant": "slider",
+							"coerceToType": {
+								"kind": "number",
+								"date": "day"
+							}
+						},
+						{
+							"children": [
+								{
+									"children": [
+										{
+											"text": "CostMonthlyRent"
+										}
+									],
+									"id": "90leRPBdRfg2ltdYLdOSi",
+									"type": "caption",
+									"color": "Sun",
+									"icon": "Card"
+								},
+								{
+									"children": [
+										{
+											"text": "$2650"
+										}
+									],
+									"id": "cq2ESAiANEKFfOZgEp36H",
+									"type": "exp"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "ws6uAXNypjtiQkhr7G-BC",
+									"type": "slider",
+									"max": "10000",
+									"min": "0",
+									"step": "50"
+								}
+							],
+							"id": "kVT_PJWZhWATMSfRutv-v",
+							"type": "def",
+							"variant": "slider"
+						}
+					],
+					"id": "qYMQGeH1hkRQ0PfRXHDID",
+					"type": "columns"
+				},
+				{
+					"children": [
+						{
+							"text": "💵 3) What are the costs related to building and running our product (CoGS)? ",
+							"bold": true
+						}
+					],
+					"type": "p",
+					"id": "CnEDnbt-mz25pxb1V3H8I"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"children": [
+										{
+											"text": "CloudMonthlyCost"
+										}
+									],
+									"id": "BEOEYlGc-oJ2SviR3W85U",
+									"type": "caption",
+									"color": "Sun",
+									"icon": "Cloud"
+								},
+								{
+									"children": [
+										{
+											"text": "2000$"
+										}
+									],
+									"id": "UmeMDG-bWljVs9PwE13rm",
+									"type": "exp"
+								}
+							],
+							"id": "5rGF-YKiA8VK3Dm8EYken",
+							"type": "def",
+							"variant": "expression",
+							"coerceToType": {
+								"kind": "number",
+								"date": "day"
+							}
+						},
+						{
+							"children": [
+								{
+									"children": [
+										{
+											"text": "PaymentProcessingFee"
+										}
+									],
+									"type": "caption",
+									"id": "Adl_O2AqV_aX8-CIeOMWA",
+									"color": "Sun",
+									"icon": "Cloud"
+								},
+								{
+									"children": [
+										{
+											"text": "2%"
+										}
+									],
+									"type": "exp",
+									"id": "VwZIhsW490GLUkLBDgEXE"
+								}
+							],
+							"id": "XAvSCDODsm0MrlP6ORqwS",
+							"type": "def",
+							"variant": "expression",
+							"coerceToType": {
+								"kind": "number",
+								"date": "day"
+							}
+						}
+					],
+					"id": "I-jpwGHw0us55dhvjWxMr",
+					"type": "columns"
+				},
+				{
+					"children": [
+						{
+							"text": "\n📈 Results"
+						}
+					],
+					"type": "h2",
+					"id": "H4lJ1A47Xj3te9oixnA4Q"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"id": "-SPGomY56ymuDFDVEPpDU",
+					"type": "divider"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"id": "BTjz_3-9cKvJIGl3HmPfz",
+					"blockId": "-8PK05dvoR8qB9d5Tz4ZM",
+					"type": "display",
+					"color": "Malibu",
+					"varName": "MRRFinal"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "2xOq6QMKORSyGSKuf2zQi",
+							"blockId": "NWcySjmItPJc5nJ4tFyfq",
+							"type": "display",
+							"varName": "NetMarginFinal",
+							"color": "Malibu"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "VQ4ani-sNc2m2bkXtebwi",
+							"blockId": "o_f-be-2rbA9CF7-RYroZ",
+							"type": "display",
+							"varName": "EBITFinal",
+							"color": "Malibu"
+						}
+					],
+					"id": "q2-CqfmHdp6I0pXAfrE-8",
+					"type": "columns"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"yColumnNames": [
+								"OpEx"
+							],
+							"orientation": "horizontal",
+							"grid": true,
+							"startFromZero": true,
+							"mirrorYAxis": false,
+							"flipTable": false,
+							"groupByX": false,
+							"showDataLabel": true,
+							"barVariant": "grouped",
+							"lineVariant": "simple",
+							"arcVariant": "simple",
+							"yColumnChartTypes": [
+								"bar"
+							],
+							"schema": "jun-2024",
+							"id": "xX_Hb7TozkcWLc2mrQp29",
+							"type": "plot",
+							"title": "OpEx over time ",
+							"sourceVarName": "exprRef_RempHv8x6iQDz8TOCVXLs",
+							"xColumnName": "CalendarMonth",
+							"yColumnName": "TotalOpEx",
+							"markType": "bar",
+							"thetaColumnName": "TotalCoGS",
+							"sizeColumnName": "",
+							"colorColumnName": "CalendarMonth",
+							"y2ColumnName": "None",
+							"colorScheme": "multicolor_blue",
+							"labelColumnName": "",
+							"yAxisLabel": "",
+							"xAxisLabel": ""
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "tKioKJbvB5zf3OcxYXeX2",
+							"type": "plot",
+							"title": "MRR over time ",
+							"sourceVarName": "exprRef_RempHv8x6iQDz8TOCVXLs",
+							"xColumnName": "CalendarMonth",
+							"yColumnName": "TotalRevenue",
+							"markType": "line",
+							"thetaColumnName": "Spend",
+							"sizeColumnName": "",
+							"colorColumnName": "Item",
+							"y2ColumnName": "None",
+							"colorScheme": "multicolor_orange",
+							"orientation": "horizontal",
+							"grid": true,
+							"startFromZero": true,
+							"mirrorYAxis": false,
+							"flipTable": false,
+							"groupByX": false,
+							"showDataLabel": true,
+							"barVariant": "grouped",
+							"lineVariant": "simple",
+							"arcVariant": "simple",
+							"yColumnChartTypes": [
+								"bar",
+								"bar",
+								"bar",
+								"bar",
+								"bar"
+							],
+							"schema": "jun-2024",
+							"yColumnNames": [
+								"MRR"
+							],
+							"labelColumnName": "",
+							"yAxisLabel": "",
+							"xAxisLabel": ""
+						}
+					],
+					"id": "kwoY4L5DhjalgaS8fY783",
+					"type": "columns"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"children": [
+										{
+											"text": "ProfitandLoss"
+										}
+									],
+									"id": "w_S6TuyMzmeYg-2OMGtpG",
+									"type": "table-var-name"
+								},
+								{
+									"children": [
+										{
+											"text": " [1.. 12]  months"
+										}
+									],
+									"id": "LwVLlqcn0Ozb35sNZ4D5w",
+									"type": "table-column-formula",
+									"columnId": "FDdsC57KD1UsrQ_4Il8qq"
+								},
+								{
+									"children": [
+										{
+											"text": "round("
+										},
+										{
+											"children": [
+												{
+													"text": ""
+												}
+											],
+											"id": "eRNclE-5iT57oVk_awmkI",
+											"type": "smart-ref",
+											"blockId": "FOlWqGwCirGGD5L5bnb1u",
+											"columnId": null,
+											"lastSeenVariableName": "StartDate"
+										},
+										{
+											"text": "  +"
+										},
+										{
+											"children": [
+												{
+													"text": ""
+												}
+											],
+											"id": "aF0ART-mgs9w01rErzpAk",
+											"type": "smart-ref",
+											"blockId": "FDdsC57KD1UsrQ_4Il8qq",
+											"columnId": null,
+											"decoration": "cell",
+											"lastSeenVariableName": "Month"
+										},
+										{
+											"text": ",month)"
+										}
+									],
+									"id": "WV7HuBrGTTM5wJ42YSTyM",
+									"type": "table-column-formula",
+									"columnId": "T761DBNMi0XemkYwh3j_h"
+								},
+								{
+									"children": [
+										{
+											"text": "previous("
+										},
+										{
+											"children": [
+												{
+													"text": ""
+												}
+											],
+											"id": "OsGzM7_jrp6wTXPFa3t_f",
+											"type": "smart-ref",
+											"blockId": "HQ-6pbJOVOF003jxT_LbQ",
+											"columnId": null,
+											"lastSeenVariableName": "SubscriptionRevenue"
+										},
+										{
+											"text": ")*(1+"
+										},
+										{
+											"children": [
+												{
+													"text": ""
+												}
+											],
+											"id": "2ipCwguzveWWZUcsK2INi",
+											"type": "smart-ref",
+											"blockId": "TDU-tOQp5kaBGYSD7N20w",
+											"columnId": null,
+											"lastSeenVariableName": "GrowthRate"
+										},
+										{
+											"text": " )"
+										}
+									],
+									"id": "pU6LpZAOpXZ5emx1yR0TA",
+									"type": "table-column-formula",
+									"columnId": "if-Ya6bsSpg6YSywuyjRR"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "XMk-nQ7pHiwZd31uTae45",
+									"type": "table-column-formula",
+									"columnId": "FDdsC57KD1UsrQ_4Il8qq"
+								},
+								{
+									"children": [
+										{
+											"text": " "
+										},
+										{
+											"children": [
+												{
+													"text": ""
+												}
+											],
+											"id": "2UARlJ98NGeyBYZECQisA",
+											"type": "smart-ref",
+											"blockId": "iMDzHreONK-siSRYklSfq",
+											"columnId": "HL7ClZYkAPKrAlDRhb7WR",
+											"lastSeenVariableName": "OpEx.TotalOpex"
+										},
+										{
+											"text": " "
+										}
+									],
+									"id": "hEImMJjzkXkaDL6T2MMLa",
+									"type": "table-column-formula",
+									"columnId": "I7h-EwvifqAv_xoN41pq6"
+								},
+								{
+									"children": [
+										{
+											"text": " round(("
+										},
+										{
+											"children": [
+												{
+													"text": ""
+												}
+											],
+											"id": "gKgCcruZvnqB_61tVJWxJ",
+											"type": "smart-ref",
+											"blockId": "if-Ya6bsSpg6YSywuyjRR",
+											"columnId": null,
+											"decoration": "cell",
+											"lastSeenVariableName": "MRR"
+										},
+										{
+											"text": " *"
+										},
+										{
+											"children": [
+												{
+													"text": ""
+												}
+											],
+											"id": "xUDymdbWB674q0xJycp1Z",
+											"type": "smart-ref",
+											"blockId": "XAvSCDODsm0MrlP6ORqwS",
+											"columnId": null,
+											"lastSeenVariableName": "PaymentProcessingFee"
+										},
+										{
+											"text": " )+"
+										},
+										{
+											"children": [
+												{
+													"text": ""
+												}
+											],
+											"id": "3HzB7NihCfozfFwvrTkTh",
+											"type": "smart-ref",
+											"blockId": "5rGF-YKiA8VK3Dm8EYken",
+											"columnId": null,
+											"lastSeenVariableName": "CloudMonthlyCost"
+										},
+										{
+											"text": " )"
+										}
+									],
+									"id": "MCPi-PFTflwcxB-j0x382",
+									"type": "table-column-formula",
+									"columnId": "XJkS0DXW-0ShONtmvg-pX"
+								},
+								{
+									"children": [
+										{
+											"text": " "
+										},
+										{
+											"children": [
+												{
+													"text": ""
+												}
+											],
+											"id": "lu9qIo16yAhKon-f1YY4Y",
+											"type": "smart-ref",
+											"blockId": "if-Ya6bsSpg6YSywuyjRR",
+											"columnId": null,
+											"decoration": "cell",
+											"lastSeenVariableName": "MRR"
+										},
+										{
+											"text": "  -"
+										},
+										{
+											"children": [
+												{
+													"text": ""
+												}
+											],
+											"id": "XlrWRrQNHU8WdijESNx6-",
+											"type": "smart-ref",
+											"blockId": "I7h-EwvifqAv_xoN41pq6",
+											"columnId": null,
+											"decoration": "cell",
+											"lastSeenVariableName": "OpEx"
+										},
+										{
+											"text": "  -"
+										},
+										{
+											"children": [
+												{
+													"text": ""
+												}
+											],
+											"id": "rgyU3k6aIwBt8nNdeuta8",
+											"type": "smart-ref",
+											"blockId": "XJkS0DXW-0ShONtmvg-pX",
+											"columnId": null,
+											"decoration": "cell",
+											"lastSeenVariableName": "CoGS"
+										},
+										{
+											"text": " "
+										}
+									],
+									"id": "dE94UU3rvk7ojFOXy5dX_",
+									"type": "table-column-formula",
+									"columnId": "3CwiLpjwB2zgdJmWaCJ4k"
+								},
+								{
+									"children": [
+										{
+											"text": "( "
+										},
+										{
+											"children": [
+												{
+													"text": ""
+												}
+											],
+											"id": "3cD3H1EPlY5Vmw8wUZiPK",
+											"type": "smart-ref",
+											"blockId": "if-Ya6bsSpg6YSywuyjRR",
+											"columnId": null,
+											"decoration": "cell",
+											"lastSeenVariableName": "MRR"
+										},
+										{
+											"text": " -"
+										},
+										{
+											"children": [
+												{
+													"text": ""
+												}
+											],
+											"id": "U5Af50nXjsKLYlYGM9-wq",
+											"type": "smart-ref",
+											"blockId": "XJkS0DXW-0ShONtmvg-pX",
+											"columnId": null,
+											"decoration": "cell",
+											"lastSeenVariableName": "CoGS"
+										},
+										{
+											"text": " )/"
+										},
+										{
+											"children": [
+												{
+													"text": ""
+												}
+											],
+											"id": "_6GMRjQ1h1Yw4OQglKPer",
+											"type": "smart-ref",
+											"blockId": "if-Ya6bsSpg6YSywuyjRR",
+											"columnId": null,
+											"decoration": "cell",
+											"lastSeenVariableName": "MRR"
+										},
+										{
+											"text": " in %"
+										}
+									],
+									"id": "mYHQQlJXAc6v4imqpHe7b",
+									"type": "table-column-formula",
+									"columnId": "saUIfWuo2vRLgEVG-FHiR"
+								},
+								{
+									"children": [
+										{
+											"text": " "
+										},
+										{
+											"children": [
+												{
+													"text": ""
+												}
+											],
+											"id": "nYw6xwPMeB8u-vFWOwUge",
+											"type": "smart-ref",
+											"blockId": "3CwiLpjwB2zgdJmWaCJ4k",
+											"columnId": null,
+											"decoration": "cell",
+											"lastSeenVariableName": "EBIT"
+										},
+										{
+											"text": " /"
+										},
+										{
+											"children": [
+												{
+													"text": ""
+												}
+											],
+											"id": "xMJssB2-o_SOqryigLBEx",
+											"type": "smart-ref",
+											"blockId": "if-Ya6bsSpg6YSywuyjRR",
+											"columnId": null,
+											"decoration": "cell",
+											"lastSeenVariableName": "MRR"
+										},
+										{
+											"text": " in %"
+										}
+									],
+									"id": "Gw_z1DnVlxi5N0o9tjy_T",
+									"type": "table-column-formula",
+									"columnId": "jl4MkEPDSUaYNIClpmoj3"
+								}
+							],
+							"id": "9f3DD4Qlo4ZMOAFaqCXi0",
+							"type": "table-caption",
+							"colorScheme": "multicolor_purple"
+						},
+						{
+							"children": [
+								{
+									"children": [
+										{
+											"text": "Month"
+										}
+									],
+									"id": "FDdsC57KD1UsrQ_4Il8qq",
+									"type": "th",
+									"cellType": {
+										"kind": "table-formula"
+									}
+								},
+								{
+									"children": [
+										{
+											"text": "CalendarMonth"
+										}
+									],
+									"id": "T761DBNMi0XemkYwh3j_h",
+									"type": "th",
+									"cellType": {
+										"kind": "table-formula"
+									}
+								},
+								{
+									"children": [
+										{
+											"text": "MRR"
+										}
+									],
+									"id": "if-Ya6bsSpg6YSywuyjRR",
+									"type": "th",
+									"cellType": {
+										"kind": "table-formula"
+									},
+									"aggregation": "number:max"
+								},
+								{
+									"children": [
+										{
+											"text": "OpEx"
+										}
+									],
+									"id": "I7h-EwvifqAv_xoN41pq6",
+									"type": "th",
+									"cellType": {
+										"kind": "table-formula"
+									},
+									"aggregation": "number:max"
+								},
+								{
+									"children": [
+										{
+											"text": "CoGS"
+										}
+									],
+									"id": "XJkS0DXW-0ShONtmvg-pX",
+									"type": "th",
+									"cellType": {
+										"kind": "table-formula"
+									},
+									"aggregation": "number:max"
+								},
+								{
+									"children": [
+										{
+											"text": "EBIT"
+										}
+									],
+									"id": "3CwiLpjwB2zgdJmWaCJ4k",
+									"type": "th",
+									"cellType": {
+										"kind": "table-formula"
+									},
+									"aggregation": "number:max"
+								},
+								{
+									"children": [
+										{
+											"text": "GrossMargin"
+										}
+									],
+									"id": "saUIfWuo2vRLgEVG-FHiR",
+									"type": "th",
+									"cellType": {
+										"kind": "table-formula"
+									}
+								},
+								{
+									"children": [
+										{
+											"text": "NetMargin"
+										}
+									],
+									"id": "jl4MkEPDSUaYNIClpmoj3",
+									"type": "th",
+									"cellType": {
+										"kind": "table-formula"
+									},
+									"aggregation": "number:max"
+								}
+							],
+							"id": "rm2FAO9Ebir6sL55J_PcJ",
+							"type": "tr",
+							"colorScheme": "multicolor_purple"
+						},
+						{
+							"children": [
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "LXKbmvQ-ZuZ8IVNkm6RI4",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "biq03j6j3ZrcUunHts7Lo",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "LSN5WZbpAh4X9AQw_N9yg",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "u-W5WZ9SnN6hg27w1e_M7",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "5FHWCT-OHZxwyihFUdJdD",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "4U5zPQjIRM02sxJVe4jQT",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "JYgex3bJ9y2joi3Zg6kup",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "Mp4OBtof7F5bAhyD5m3Zf",
+									"type": "td"
+								}
+							],
+							"id": "lA9gILhg1u8QzKLADzn8k",
+							"type": "tr"
+						},
+						{
+							"children": [
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "hKEJM04-pdFqUzII8C2YE",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "ldevZ9V993Hn9hyHb-jEH",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "w_AU7eRwpO1xA4qr9qbg8",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "gBV0YpMX4D4rCBnWpIHwt",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "MwdNEai5rehGh74wETY59",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "xgRGTcoVZ-IJxxqhdqrHV",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "EP0CWY51pvSaPFh1CuwE6",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "NkAAGGllS9BSFWdtubmNb",
+									"type": "td"
+								}
+							],
+							"id": "GaP7mwm8M7uUl7G3Wqzfd",
+							"type": "tr"
+						},
+						{
+							"children": [
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "lgTjFL73SrE_c074mPwFU",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "YkStSUd7POCO0v3C6z-yo",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "l-6a9bMDoItQhJc-F16e_",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "1bvlrNXesyeY8KQol4ahw",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "yTrVZ0j-nTxmS48AcM27g",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "sDpKdMIGdY_OEU9ZRwzqj",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "OVM6GKpqF6sLmm2GbGFfE",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "R5GYsY5vFaznnA6ghQxWD",
+									"type": "td"
+								}
+							],
+							"id": "S4QHp3v98MomH6_Qp4Ivt",
+							"type": "tr"
+						},
+						{
+							"children": [
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "OlUj2RSdY6T0QkkttgCzC",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "irXzYDb9Qp5kiZHw4Wbrl",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "23FRDNkCcKmTao1vhG1RH",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "vBtIRa3lg4NA5bAgkF8Pu",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "DjMA2FblU9_iHnmFaQ5vO",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "SD046_noI6oPe9sUsy8sq",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "uTvUcgOKR4q54Flo2BcTh",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "jGytRmprhf3oDg1vEmaC_",
+									"type": "td"
+								}
+							],
+							"id": "jUdFzvkMkvnfklBSV_4wc",
+							"type": "tr"
+						},
+						{
+							"children": [
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "3sS7ELE30BTO08ydtKjhs",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "ku4ng4p6u_9OR0uVSfbi9",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "ASwYhcjlij-LkOgO-TsWi",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "IYBN4J2yWxKGakKCCoiQX",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "JmZlJvBxTGwyMwo4vMBCD",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "kFGjsNjVJYHEd7J1mjTPG",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "B26FjeYOkeZhb3jZmfLmL",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "ExWCd83KCCEsv2lZWVMM2",
+									"type": "td"
+								}
+							],
+							"id": "bNhh2s7YMwvci4wbeh5kj",
+							"type": "tr"
+						},
+						{
+							"children": [
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "LpC9pmvh-KQaovBE1A6Ae",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "lg317JZT0I3K7GAxtttrk",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "GwjVCljPVCltI4MN6Lzac",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "J3mYnAyW4JkqSpE25JII6",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "MuQn9acIF7CPeoJa7GYhY",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "WWtLunpDcQQf4aNyJlAhZ",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "9LE3Ar2V5KplMlKk53daZ",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "zSQCLxJGytcMySlVf-cZq",
+									"type": "td"
+								}
+							],
+							"id": "Xjqw0BOVVbOMlw8jBpGN-",
+							"type": "tr"
+						},
+						{
+							"children": [
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "t_aa8DZ6tqCll0uAqF0L2",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "1VQDUBnYUU9ZZZ83vERHb",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "6sGZKt0J89H3TaRD4_mON",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "7IT0nzySw5ZFh2-lwkzW8",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "lxIx4qjlc1wn_2sTXIApz",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "lULgG95fSW_fycg-qiYgC",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "-fpxTMFB28lqdg7DMXiZZ",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "c9XkTdqAGoJfsVY5R6Ku5",
+									"type": "td"
+								}
+							],
+							"id": "ujpJ9lghyROUxp611XH2s",
+							"type": "tr"
+						},
+						{
+							"children": [
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "Vo3i8E9FuJaAngRp0Hq0q",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "4Bl_gqc2TGU4IkVvLwj1n",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "6RfgBAUO_a8Pfi8RGbwmQ",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "NMhuy2OCVMFkuFOHmq85_",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "HVdhhRRG5kH0Da7H_3a2i",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "TUkD6F0LEzoZ0HVMbDY9C",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "TCyzF8u8f_3bAKmFzlBaR",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "M2Fg4DULvO7-0BgQD7L3K",
+									"type": "td"
+								}
+							],
+							"id": "R_zsc4imUEeoIX11IXsuo",
+							"type": "tr"
+						},
+						{
+							"children": [
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "20JiFPQj9kOaDH-NiVHRT",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "X3vELqWdUhSKZC9_cx3b6",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "V-lRgYFNpibVHgb5f3spo",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "gpyEOfz5kZN8T4wVGffdC",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "lV063eu3XSlApAvzu5l1Q",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "edhF4_d7Usl1phoGzhWLw",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "2FnSz-yHBy_eK51zuW_FD",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "Fe7vGmkTTqY-SK6aKd7V1",
+									"type": "td"
+								}
+							],
+							"id": "espcxn0kn8yt0IgD22JkJ",
+							"type": "tr"
+						},
+						{
+							"children": [
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "cHDP1GXxLORGMjXtY78GU",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "hn53RXW-9mfDxM_Qr7bJH",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "aIKmggVTxCiW_1I2ZvLOx",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "MHwAfqS91Tr6hCo_J8nIz",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "ZIjJkh1jozUxGPnkNsWCF",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "tS_GdWS4hUqkddVJaifFs",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "kYFoWpTQoOf_MIQ9lPZbo",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "6utS09ce5eGIoxadetdre",
+									"type": "td"
+								}
+							],
+							"id": "KWVgO5HndoRC9O1l6SanH",
+							"type": "tr"
+						},
+						{
+							"children": [
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "GNuVZi_xmsNgYjDagmbZ9",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "wHuQwxH9Y__iyr6YwcyaR",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "-MpPcmkH9mLP5gwFsOMCN",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "7dSKa04paHNiO7OROXJmn",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "tCNW0J2k81fc1Ib69itPX",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "RvYwbFWPZjIwnP6cAP9R9",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "JAm_SM2ro-brk96dxC2_E",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "5AE6OuSkcjqMf4VYzyNuh",
+									"type": "td"
+								}
+							],
+							"id": "uQ64jq9SqOjfNvwSBcMtJ",
+							"type": "tr"
+						},
+						{
+							"children": [
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "XOjk8JGKBf8X3s-HGHfA_",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "jxAHScqgH_1ku2y1bTVXr",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "OnIr69v9_NuoCtutp5zdM",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "skJevFSkH4ZhYj1retOfs",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "_2OPwj2EZf3uj32nPZvIg",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "GWpavFe6K00Z0lyORqQeb",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "u8B-_38GuUof0cZDOWz-a",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "yZyp-dfGycLNzTtcyUmhO",
+									"type": "td"
+								}
+							],
+							"id": "4jJmClJjQoUTv8U1G3B1v",
+							"type": "tr"
+						}
+					],
+					"colorScheme": "multicolor_blue",
+					"id": "RempHv8x6iQDz8TOCVXLs",
+					"type": "table",
+					"version": 2,
+					"hideFormulas": true,
+					"hideCellFormulas": true,
+					"isCollapsed": false,
+					"color": "Perfume"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "MRRFinal"
+								}
+							],
+							"type": "structured_varname",
+							"id": "yDop-0ShOKAa0hBE9NXq9"
+						},
+						{
+							"children": [
+								{
+									"text": "max("
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "yX5UOQTejGJ70n1DuSKS6",
+									"type": "smart-ref",
+									"blockId": "RempHv8x6iQDz8TOCVXLs",
+									"columnId": "if-Ya6bsSpg6YSywuyjRR",
+									"lastSeenVariableName": "ProfitandLoss.MRR"
+								},
+								{
+									"text": " )"
+								}
+							],
+							"type": "code_line_v2_code",
+							"id": "b3UIl6wtQPHIub9tGAUxn"
+						}
+					],
+					"id": "-8PK05dvoR8qB9d5Tz4ZM",
+					"type": "code_line_v2",
+					"isHidden": true
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "NetMarginFinal"
+								}
+							],
+							"type": "structured_varname",
+							"id": "lxbLU9peYyQ9d5tGtX_YA"
+						},
+						{
+							"children": [
+								{
+									"text": "max("
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "KfbMZM857gwRiVPqDJwGY",
+									"type": "smart-ref",
+									"blockId": "RempHv8x6iQDz8TOCVXLs",
+									"columnId": "jl4MkEPDSUaYNIClpmoj3",
+									"lastSeenVariableName": "ProfitandLoss.NetMargin"
+								},
+								{
+									"text": " )"
+								}
+							],
+							"type": "code_line_v2_code",
+							"id": "k_o3fWpZB-qcL4kzR8hlR"
+						}
+					],
+					"id": "NWcySjmItPJc5nJ4tFyfq",
+					"type": "code_line_v2",
+					"isHidden": true
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "EBITFinal"
+								}
+							],
+							"type": "structured_varname",
+							"id": "GCf2UIvbR6sjpi-S2whkZ",
+							"colorScheme": "multicolor_purple"
+						},
+						{
+							"children": [
+								{
+									"text": "max("
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "0O4qJqpcGaUVB_WICLRaT",
+									"type": "smart-ref",
+									"blockId": "RempHv8x6iQDz8TOCVXLs",
+									"columnId": "3CwiLpjwB2zgdJmWaCJ4k",
+									"lastSeenVariableName": "ProfitandLoss.EBIT"
+								},
+								{
+									"text": "  )"
+								}
+							],
+							"type": "code_line_v2_code",
+							"id": "VNlkUlFgGHsvA3FJcaRcu",
+							"colorScheme": "multicolor_purple"
+						}
+					],
+					"id": "o_f-be-2rbA9CF7-RYroZ",
+					"type": "code_line_v2",
+					"isHidden": true
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "OpexFinal"
+								}
+							],
+							"type": "structured_varname",
+							"id": "9YUDpaoFfVvHyo85yLfRQ"
+						},
+						{
+							"children": [
+								{
+									"text": "max("
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "r3stpFlSmgJbKwKMconSo",
+									"type": "smart-ref",
+									"blockId": "RempHv8x6iQDz8TOCVXLs",
+									"columnId": "I7h-EwvifqAv_xoN41pq6",
+									"lastSeenVariableName": "ProfitandLoss.OpEx"
+								},
+								{
+									"text": " )"
+								}
+							],
+							"type": "code_line_v2_code",
+							"id": "dSm5GxVBQOnkDgmBqgd-V"
+						}
+					],
+					"id": "y1HCU7uG1mrZIo6GFgK7S",
+					"type": "code_line_v2",
+					"isHidden": true
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "OpexAverage"
+								}
+							],
+							"type": "structured_varname",
+							"id": "21e2IOVPlDFNsQp0mcyqI"
+						},
+						{
+							"children": [
+								{
+									"text": "average("
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "RnSOSWgK6187clfgoL6GJ",
+									"type": "smart-ref",
+									"blockId": "RempHv8x6iQDz8TOCVXLs",
+									"columnId": "I7h-EwvifqAv_xoN41pq6",
+									"lastSeenVariableName": "ProfitandLoss.OpEx"
+								},
+								{
+									"text": " )"
+								}
+							],
+							"type": "code_line_v2_code",
+							"id": "B8LmPEnsgZLs0cPN_gN7z"
+						}
+					],
+					"id": "grLsxu6HHuXk3AN063fef",
+					"type": "code_line_v2",
+					"isHidden": true
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"type": "p",
+					"id": "QekBgJZ0qhuhevyRqnA58"
+				}
+			],
+			"type": "tab",
+			"name": "P&L Summary",
+			"id": "8eti85uxgScfxDWfTihXf"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "Operating Expenses (OpEx)"
+						}
+					],
+					"id": "guHCFE1gnARQEsR1e7ZGQ",
+					"type": "h3"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"children": [
+										{
+											"text": "OpEx"
+										}
+									],
+									"id": "oeRfk7FL5ml87kHhQ3Gc-",
+									"type": "table-var-name"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										},
+										{
+											"children": [
+												{
+													"text": ""
+												}
+											],
+											"lastSeenVariableName": "SalariesbyMonth.CalendarMonth",
+											"id": "CMnN4SDDWj_wtZc0tlybn",
+											"type": "smart-ref",
+											"blockId": "2jBhjj-jqmG8_UlKwr3Cv",
+											"columnId": "IkVVDixwa5gSnpOWuPLhi"
+										},
+										{
+											"text": " "
+										}
+									],
+									"id": "zFjfFoDGkOFLeDteGEC7I",
+									"type": "table-column-formula",
+									"columnId": "yAy2696sip6LDtq7Y3W4x"
+								},
+								{
+									"children": [
+										{
+											"text": " "
+										},
+										{
+											"children": [
+												{
+													"text": ""
+												}
+											],
+											"id": "C6l3jtmBG1r-PphLEB_sv",
+											"type": "smart-ref",
+											"blockId": "2jBhjj-jqmG8_UlKwr3Cv",
+											"columnId": "Og80bkeTpkgWvU4p269_J",
+											"lastSeenVariableName": "SalariesbyMonth.TotalSalarybyMonth"
+										},
+										{
+											"text": " "
+										}
+									],
+									"id": "omm3sw0PIb9s56WbU0PVB",
+									"type": "table-column-formula",
+									"columnId": "LLPafTtKg6iDoZMtfIjG_"
+								},
+								{
+									"children": [
+										{
+											"text": " sum("
+										},
+										{
+											"children": [
+												{
+													"text": ""
+												}
+											],
+											"id": "ZTqGSXoELf2onj_AqjPTX",
+											"type": "smart-ref",
+											"blockId": "Sdecet8A_gRVJgb49ptw1",
+											"columnId": "dkfYq7a0NpcpDWyrABn2c",
+											"lastSeenVariableName": "Consultants.MonthlyCost"
+										},
+										{
+											"text": " )"
+										}
+									],
+									"id": "YegSUCPzYkB2tb4p--uWm",
+									"type": "table-column-formula",
+									"columnId": "oIyWXaWGCF9e5lcyJOqeh"
+								},
+								{
+									"children": [
+										{
+											"text": " sum("
+										},
+										{
+											"children": [
+												{
+													"text": ""
+												}
+											],
+											"id": "_7UoevdMplOtYt09DchuC",
+											"type": "smart-ref",
+											"blockId": "z4ppDiT4kKtAOAp6Mg011",
+											"columnId": "2Tc5UFnl1u7DMb-4F5m9l",
+											"lastSeenVariableName": "Services.MonthlyCost"
+										},
+										{
+											"text": " )"
+										}
+									],
+									"id": "bmetNvOSOxwyR5dIBCGt4",
+									"type": "table-column-formula",
+									"columnId": "gqAthn_b_muhgEAdU3W4U"
+								},
+								{
+									"children": [
+										{
+											"text": " "
+										},
+										{
+											"children": [
+												{
+													"text": ""
+												}
+											],
+											"id": "dPd3KJWY3MhljEM9VR0Lt",
+											"type": "smart-ref",
+											"blockId": "LLPafTtKg6iDoZMtfIjG_",
+											"columnId": null,
+											"decoration": "cell",
+											"lastSeenVariableName": "SalariesCost"
+										},
+										{
+											"text": " +"
+										},
+										{
+											"children": [
+												{
+													"text": ""
+												}
+											],
+											"id": "rSRn7OV_65DUl3laSq5GN",
+											"type": "smart-ref",
+											"blockId": "oIyWXaWGCF9e5lcyJOqeh",
+											"columnId": null,
+											"decoration": "cell",
+											"lastSeenVariableName": "ConsultantsCost"
+										},
+										{
+											"text": " +"
+										},
+										{
+											"children": [
+												{
+													"text": ""
+												}
+											],
+											"id": "D2eT9J7E449Inpa2xnDIV",
+											"type": "smart-ref",
+											"blockId": "gqAthn_b_muhgEAdU3W4U",
+											"columnId": null,
+											"decoration": "cell",
+											"lastSeenVariableName": "ServicesCost"
+										},
+										{
+											"text": " +"
+										},
+										{
+											"children": [
+												{
+													"text": ""
+												}
+											],
+											"id": "fRFDytCa_TLpfFl6Bdlwj",
+											"type": "smart-ref",
+											"blockId": "Sly-Q96CBXSeuufMUKmqy",
+											"columnId": null,
+											"decoration": "cell",
+											"lastSeenVariableName": "MarketingCost"
+										},
+										{
+											"text": "+"
+										},
+										{
+											"children": [
+												{
+													"text": ""
+												}
+											],
+											"id": "GbJnOwTsXB_ilF-I6Xsc6",
+											"type": "smart-ref",
+											"blockId": "6APB1I5OG4f3JKzmaK43U",
+											"columnId": null,
+											"decoration": "cell",
+											"lastSeenVariableName": "MonthlyRent"
+										},
+										{
+											"text": " "
+										}
+									],
+									"id": "3-6L4AoX3OYz_9r0PrT3S",
+									"type": "table-column-formula",
+									"columnId": "HL7ClZYkAPKrAlDRhb7WR"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										},
+										{
+											"children": [
+												{
+													"text": ""
+												}
+											],
+											"id": "lUQyGatnfDaX4cl0ppcAE",
+											"type": "smart-ref",
+											"blockId": "kVT_PJWZhWATMSfRutv-v",
+											"columnId": null,
+											"lastSeenVariableName": "CostMonthlyRent"
+										},
+										{
+											"text": " "
+										}
+									],
+									"id": "t9m8vhAj4_Jgdd-ckG2QV",
+									"type": "table-column-formula",
+									"columnId": "6APB1I5OG4f3JKzmaK43U"
+								},
+								{
+									"children": [
+										{
+											"text": " "
+										},
+										{
+											"children": [
+												{
+													"text": ""
+												}
+											],
+											"id": "3jktYW7g_DdFHwvCCQyxq",
+											"type": "smart-ref",
+											"blockId": "Qhg6oRFDUMkF87D-yRech",
+											"columnId": null,
+											"lastSeenVariableName": "MarketingMonthlySpend"
+										},
+										{
+											"text": " "
+										}
+									],
+									"id": "Rrp6cNyFKoCLhph5qltSE",
+									"type": "table-column-formula",
+									"columnId": "Sly-Q96CBXSeuufMUKmqy"
+								}
+							],
+							"id": "CjJYLQWJ2WibgaKs-8w5H",
+							"type": "table-caption"
+						},
+						{
+							"children": [
+								{
+									"children": [
+										{
+											"text": "CalendarMonth"
+										}
+									],
+									"id": "yAy2696sip6LDtq7Y3W4x",
+									"type": "th",
+									"cellType": {
+										"kind": "table-formula"
+									}
+								},
+								{
+									"children": [
+										{
+											"text": "MarketingCost"
+										}
+									],
+									"id": "Sly-Q96CBXSeuufMUKmqy",
+									"type": "th",
+									"cellType": {
+										"kind": "table-formula"
+									},
+									"aggregation": "number:sum"
+								},
+								{
+									"children": [
+										{
+											"text": "MonthlyRent"
+										}
+									],
+									"id": "6APB1I5OG4f3JKzmaK43U",
+									"type": "th",
+									"cellType": {
+										"kind": "table-formula"
+									}
+								},
+								{
+									"children": [
+										{
+											"text": "SalariesCost"
+										}
+									],
+									"id": "LLPafTtKg6iDoZMtfIjG_",
+									"type": "th",
+									"cellType": {
+										"kind": "table-formula"
+									},
+									"aggregation": "number:sum"
+								},
+								{
+									"children": [
+										{
+											"text": "ConsultantsCost"
+										}
+									],
+									"id": "oIyWXaWGCF9e5lcyJOqeh",
+									"type": "th",
+									"cellType": {
+										"kind": "table-formula"
+									},
+									"aggregation": "number:sum"
+								},
+								{
+									"children": [
+										{
+											"text": "ServicesCost"
+										}
+									],
+									"id": "gqAthn_b_muhgEAdU3W4U",
+									"type": "th",
+									"cellType": {
+										"kind": "table-formula"
+									},
+									"aggregation": "number:sum"
+								},
+								{
+									"children": [
+										{
+											"text": "TotalOpex"
+										}
+									],
+									"id": "HL7ClZYkAPKrAlDRhb7WR",
+									"type": "th",
+									"cellType": {
+										"kind": "table-formula"
+									},
+									"aggregation": "number:sum"
+								}
+							],
+							"id": "K0dxMUwD1zpZoQokjuMpu",
+							"type": "tr"
+						},
+						{
+							"children": [
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "hO6z9o5-ki-HOIUS6WChz",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "8w5ZtHONST3F-QuoZ8RyY",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "4oYA7nNpnNgFm_xJJl4Mn",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "FNPqzjYhNlG5kuTN7m0lq",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "wJb_0SrdleddnvEJiZfv6",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "ddlPT-dAPyHtBWflE-f7H",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "hKeJ_7n-JCyuHjMiFMLEP",
+									"type": "td"
+								}
+							],
+							"id": "GBj4tlFLrhTdyE7r3eMCW",
+							"type": "tr"
+						},
+						{
+							"children": [
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "0TC0_Jx7idRBkyUYcYY4x",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "2VmcR_AyUO5S5Way6OdvE",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "U9aSTN1L1FvgBxdH8SdlW",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "bPK7iG-La2aqJpRu0SI7A",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "aSOMboGVjQ5XABSStGzes",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "JgRj9aDGkWwGremBOF8Ym",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "ISUvHKPYQbZMXkpbRQa64",
+									"type": "td"
+								}
+							],
+							"id": "NxOMAnj80vW-8iLKnWXi-",
+							"type": "tr"
+						},
+						{
+							"children": [
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "nDyMItGRLr6J5wTidvkJa",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "kGK-5bpFy4QUSMyPdq1fp",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "w5CbWPS_AiKs76gLErsXs",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "WzIWOzoeDk3wCrm3oLDdL",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "ry4iWje9RWJTYH5bq5bgq",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "FsrSrTp4sbqp3_TBrmM-t",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "4Ma_qE8dubEbhxQMevxjI",
+									"type": "td"
+								}
+							],
+							"id": "ZOzk3BnGfOW1tFvqu0VKr",
+							"type": "tr"
+						},
+						{
+							"children": [
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "rCJosmF0Qz3-Lg4RymEDL",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "2nPUB4Z8TbblSmXWQNhR5",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "yP4hPKNn6H2EA7Hk2_0Qu",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "rrWA7Vf5nMlHAx5Dgo6i_",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "ExWtqHOomT-rNbbjUHme8",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "n8Bv9QTEO-N0qpS0NaIY2",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "noYLCOEirFSlrNo9VC0OT",
+									"type": "td"
+								}
+							],
+							"id": "sv5r08D1defYyyvnX5G6U",
+							"type": "tr"
+						},
+						{
+							"children": [
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "jvvhEAYRELwvBjC3MsAOj",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "yUMllmGYpTa8kcMM9GOHE",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "JgCApYgmmXSRIFiBA2K-Q",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "twJbh42SqEtHC49b2mf5c",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "U6J7ewXQtg714CEOJx6UL",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "h1yhLNYOQJvCMhOpj9MAV",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "PItJpMgkgGCe3k8N7niUF",
+									"type": "td"
+								}
+							],
+							"id": "eeuQbVKQKfSzi20dl2W_F",
+							"type": "tr"
+						},
+						{
+							"children": [
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "BEC72p9NtWSqcxw2j5sVU",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "qWedZ9uzvHSSohDMJscfN",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "q6-dLstYeYEOEJ-WcAFoj",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "Utavd-WttAw06_qPV49Ny",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "lS9dWrMlguF76ErSekSWT",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "OGjsSBykwrOfnTqEdNRey",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "2FO1oR5u5iorUdLuyt62F",
+									"type": "td"
+								}
+							],
+							"id": "rYQNbsBnWFbTRENRumg_x",
+							"type": "tr"
+						},
+						{
+							"children": [
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "npiql7XUr0mSk7qZIGHht",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "TV-mYBdzSWovIiCWcUeGA",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "CoAjhvhu7cUSKKOIwIH9g",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "ChCnS0cjDypXJokWMjeRj",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "HJxKk9-3mvnuhtbtrE0jg",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "1x2yKc6f3QTGqVXuMw6F6",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "yIQgQCsifDj8sGG5BeqR-",
+									"type": "td"
+								}
+							],
+							"id": "-OVcwoLBszCxA_2q_rlCv",
+							"type": "tr"
+						},
+						{
+							"children": [
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "2OkGTskKRLZIollyH7VU0",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "a2-UsjXnkNLYfKjK4AwmQ",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "i96i4pAi9Gq6RAhyaUdTX",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "_PWZqmaD2tgcX9WBpURK9",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "YFJ3GCQRnFPrvWExHRppP",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "mvE2E2akyN0jlVkj-4wor",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "Bzz7cSCNmQX3Rzn-rQfD8",
+									"type": "td"
+								}
+							],
+							"id": "kvbhpCAslqRgSYvvFSmnz",
+							"type": "tr"
+						},
+						{
+							"children": [
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "PHf-jAbpRLluEJsoYBGlp",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "mcXC4A-9TsxiLgwouHSZD",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "4QGIQ_iLGUG9V_59-Zd_9",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "CXa5KCHPCvyFEvxcUF0uf",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "_C7pIAiDhqVkLIUztlOBO",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "CpH8qi7I7CqOa9xb8pH-d",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "OB3KxXkg5AsY7sKALJH_f",
+									"type": "td"
+								}
+							],
+							"id": "DIF79RBegvyFuM5IM9PYD",
+							"type": "tr"
+						},
+						{
+							"children": [
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "G5kpVmbxS2qjPriKcid0u",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "_dcEe6-wWVBN7DnJZfwxT",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "FlaKnmESTv_MCFjUjI4fm",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "tlNwoSjzjJfQ-m1az4nhh",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "X0D4rMm_WhCDA6HzCK5fD",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "RTZbFHJKT4DE1Vff8MK0U",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "ULtkXtO8meWSaJlc4wdYT",
+									"type": "td"
+								}
+							],
+							"id": "mbggsmjqZ8wkIFoNpVnB3",
+							"type": "tr"
+						},
+						{
+							"children": [
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "Bh-2ztGnZRasKT_-7bx0K",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "L7ri0BzlmJ7OwYuY9lgD4",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "wMdDXwtwSFpSX3gHE4Oq4",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "1IrCpX7mDIwvTabld-7MB",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "7uo8a18jZ2rGuZ9ym1lre",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "gDy5SFOxRfC6qOcCYp3qK",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "aPRadxizUfOfKI2b6GoAy",
+									"type": "td"
+								}
+							],
+							"id": "IOlwJHx4jUaCEA644pruA",
+							"type": "tr"
+						},
+						{
+							"children": [
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "c2Uk2g0fUyuR2LDmsXtDW",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "W8vGVnSa5mcoyR1YCy3Yo",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "n7awfe-eg8i22ui1gQQ7R",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "Sn1qKibyk21u9hZap7rO8",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "83ngrxXhO5wvLfdsg6nfL",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "jBWEbETHuO20agkwsERRK",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "G25Q8V2DYQTLn_b9tgfL9",
+									"type": "td"
+								}
+							],
+							"id": "IzZZEkhT0TadUg0i5Gmtu",
+							"type": "tr"
+						}
+					],
+					"id": "iMDzHreONK-siSRYklSfq",
+					"type": "table",
+					"version": 2,
+					"hideFormulas": true
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"id": "C1WbWKh07VTMVbSTVDunU",
+					"type": "divider"
+				},
+				{
+					"children": [
+						{
+							"text": "1. Salaries "
+						}
+					],
+					"id": "StwwfWlbEchAw6W2Cl42E",
+					"type": "h3"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"children": [
+										{
+											"text": "Salaries"
+										}
+									],
+									"id": "k-Q6lD4vW3nupxTtUOUAg",
+									"type": "table-var-name"
+								},
+								{
+									"children": [
+										{
+											"text": "round("
+										},
+										{
+											"children": [
+												{
+													"text": ""
+												}
+											],
+											"id": "Nc-jEgelQeUqtdhmF2uvJ",
+											"type": "smart-ref",
+											"blockId": "q37S5rGD5znRdQ7Yc0CL0",
+											"columnId": null,
+											"decoration": "cell",
+											"lastSeenVariableName": "GrossMonthly"
+										},
+										{
+											"text": " *15%)"
+										}
+									],
+									"id": "gdfZGKwrnQ6gl0te-VbdQ",
+									"type": "table-column-formula",
+									"columnId": "s3QR_zZPuTlxAiBGBIfYw"
+								},
+								{
+									"children": [
+										{
+											"text": " "
+										},
+										{
+											"children": [
+												{
+													"text": ""
+												}
+											],
+											"id": "aND7EhQOyFWeckxsWlEtN",
+											"type": "smart-ref",
+											"blockId": "q37S5rGD5znRdQ7Yc0CL0",
+											"columnId": null,
+											"decoration": "cell",
+											"lastSeenVariableName": "GrossMonthly"
+										},
+										{
+											"text": " + "
+										},
+										{
+											"children": [
+												{
+													"text": ""
+												}
+											],
+											"id": "HTNimqkHnBVR5n8eTfgpW",
+											"type": "smart-ref",
+											"blockId": "s3QR_zZPuTlxAiBGBIfYw",
+											"columnId": null,
+											"decoration": "cell",
+											"lastSeenVariableName": "TaxesAndCosts"
+										},
+										{
+											"text": " "
+										}
+									],
+									"id": "sk2pw_3ipm6Hfkb3Azy21",
+									"type": "table-column-formula",
+									"columnId": "ipsPblGRaNEbhOKUUIF-R"
+								}
+							],
+							"type": "table-caption",
+							"id": "q72-yA7h2JgaWpyj8HQ2o"
+						},
+						{
+							"children": [
+								{
+									"children": [
+										{
+											"text": "Name"
+										}
+									],
+									"id": "rYgxOgwlqsCPP1n05ihLp",
+									"type": "th",
+									"cellType": {
+										"kind": "anything"
+									}
+								},
+								{
+									"children": [
+										{
+											"text": "GrossMonthly"
+										}
+									],
+									"id": "q37S5rGD5znRdQ7Yc0CL0",
+									"type": "th",
+									"cellType": {
+										"kind": "number",
+										"unit": [
+											{
+												"unit": "$",
+												"exp": {
+													"n": "1",
+													"d": "1",
+													"s": "1",
+													"infinite": false
+												},
+												"multiplier": {
+													"n": "1",
+													"d": "1",
+													"s": "1",
+													"infinite": false
+												},
+												"known": true,
+												"baseQuantity": "USD",
+												"baseSuperQuantity": "currency"
+											}
+										]
+									},
+									"aggregation": "number:sum"
+								},
+								{
+									"children": [
+										{
+											"text": "TaxesAndCosts"
+										}
+									],
+									"id": "s3QR_zZPuTlxAiBGBIfYw",
+									"type": "th",
+									"cellType": {
+										"kind": "table-formula"
+									},
+									"aggregation": "number:sum"
+								},
+								{
+									"children": [
+										{
+											"text": "TotalCost"
+										}
+									],
+									"id": "ipsPblGRaNEbhOKUUIF-R",
+									"type": "th",
+									"cellType": {
+										"kind": "table-formula"
+									},
+									"aggregation": "number:sum"
+								},
+								{
+									"children": [
+										{
+											"text": "Team"
+										}
+									],
+									"id": "NEWoyhc5xsStCMeld_O9e",
+									"type": "th",
+									"cellType": {
+										"kind": "category"
+									},
+									"categoryValues": [
+										{
+											"id": "IMY8opt-aLI1dzVuHWvmt",
+											"value": "Tech"
+										},
+										{
+											"id": "6HHZryCGwbAv5sHcqIRRU",
+											"value": "Marketing & Sales"
+										},
+										{
+											"id": "yXlXXJSBH7PkvheGI-FuY",
+											"value": "Support"
+										},
+										{
+											"id": "zJi1currjQyrg-kI_Z_c5",
+											"value": "G&A"
+										}
+									]
+								},
+								{
+									"children": [
+										{
+											"text": "StartDate"
+										}
+									],
+									"id": "7TmwwqOg72h0u25EtNz3n",
+									"type": "th",
+									"cellType": {
+										"kind": "date",
+										"date": "month"
+									}
+								},
+								{
+									"children": [
+										{
+											"text": "Started"
+										}
+									],
+									"id": "GnOVhHW6wX_mS63C_oZiB",
+									"type": "th",
+									"cellType": {
+										"kind": "boolean"
+									}
+								}
+							],
+							"type": "tr",
+							"id": "y3P7uD5ndeB6HXvVoXFS3"
+						},
+						{
+							"children": [
+								{
+									"children": [
+										{
+											"text": "John"
+										}
+									],
+									"id": "ip_kmWdtlW8DCtXMQlrve",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "3400"
+										}
+									],
+									"id": "UAmtjoTXnSMmomX4-rDQQ",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "aa6LfrI_pSnxzcV8oxYt3",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "rF4U_K0cbBy9lCku8NxXx",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "IMY8opt-aLI1dzVuHWvmt"
+										}
+									],
+									"id": "xZbQusnAv_-R48CKsOq5y",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "2024-02"
+										}
+									],
+									"id": "XuQ86pLpNP4zPnYFnrDF5",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "true"
+										}
+									],
+									"id": "xmze4h9hHUf5jgboZW5zC",
+									"type": "td"
+								}
+							],
+							"type": "tr",
+							"id": "JhYGGEocmGtfYV0QWo3nq"
+						},
+						{
+							"children": [
+								{
+									"children": [
+										{
+											"text": "Jane"
+										}
+									],
+									"id": "u0EkwvTK0YP986oOhVf4h",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "3248"
+										}
+									],
+									"id": "rPZFgEFN-5hLw6MMug8zk",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "PRzEPq1chVlQcZC2XIRtU",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "0cTd-R_Vh6kPhKTycreSa",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "IMY8opt-aLI1dzVuHWvmt"
+										}
+									],
+									"id": "Ibjqu5z1d8eYWZ1fLDhLZ",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "2023-05"
+										}
+									],
+									"id": "sj6QaLVt5ojof8RA4IHoc",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "true"
+										}
+									],
+									"id": "lPWEtpKnJc_TTimUxDmL2",
+									"type": "td"
+								}
+							],
+							"type": "tr",
+							"id": "U-8dWF8Qy_7A0RJqQ5fvk"
+						},
+						{
+							"children": [
+								{
+									"children": [
+										{
+											"text": "Mike"
+										}
+									],
+									"id": "FqFonRN3bnfXSTbdkk1KJ",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "5000"
+										}
+									],
+									"id": "Q-Q-NdH4mdBBbSyJnZo2z",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "t8fWS1SvN96IXcBH1Lpkb",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "vUi8he7EpXF210nB0B7vi",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "IMY8opt-aLI1dzVuHWvmt"
+										}
+									],
+									"id": "I-zrOEITTiJdmr4YhcyOh",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "2024-09"
+										}
+									],
+									"id": "hkITdPfxSpUIuOQFZz0_U",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "true"
+										}
+									],
+									"id": "O0W4FXX73tdsLA3MfEbsb",
+									"type": "td"
+								}
+							],
+							"type": "tr",
+							"id": "YbPIkbgoD7hk9xQu9uiO4"
+						},
+						{
+							"children": [
+								{
+									"children": [
+										{
+											"text": "Molly"
+										}
+									],
+									"id": "E0xsyQ2bDf0oO71FLDCQY",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "8540"
+										}
+									],
+									"id": "-OhXMa4qdqityi5Y1NG72",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "mac-oedbQw7_cIvcaWtxj",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "-lVFfyXOJhA75RcKBCXm6",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "zJi1currjQyrg-kI_Z_c5"
+										}
+									],
+									"id": "MHgchYA8oWLp8kJChbxd7",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "2022-06"
+										}
+									],
+									"id": "5X79pfsBSGl6YENKCis9v",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "true"
+										}
+									],
+									"id": "0rGjj_dyLUYElClnBRw_S",
+									"type": "td"
+								}
+							],
+							"id": "ZHrfmOORJvyZY3ihD_0QP",
+							"type": "tr"
+						},
+						{
+							"children": [
+								{
+									"children": [
+										{
+											"text": "Thomas"
+										}
+									],
+									"id": "Ib23hzlmDpafkofHIVA3J",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "8100"
+										}
+									],
+									"id": "R74OV17A2Dm1qQC9OWPxL",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "L6xwtRQ97_Wy-krWHGsMf",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "luw2gVSqNIzCYtmV2ushq",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "zJi1currjQyrg-kI_Z_c5"
+										}
+									],
+									"id": "iGnfIZBC9fa0kNjC-ZNAi",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "2022-01"
+										}
+									],
+									"id": "Vnqk_c9Y4Ae0lnF0XESgQ",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "true"
+										}
+									],
+									"id": "tfxDrMv8GC_ORIlJvxkJl",
+									"type": "td"
+								}
+							],
+							"id": "sUW0by6fY7BP2viJtkRqL",
+							"type": "tr"
+						},
+						{
+							"children": [
+								{
+									"children": [
+										{
+											"text": "Sarah"
+										}
+									],
+									"id": "qQYZ5Hn-SC99WunOacLHz",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "1500"
+										}
+									],
+									"id": "uqJuzB_t-_bYJqnmll67v",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "m0PJBqbQVak5_HeGXoU2c",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "rXXjHpHKQbgeYwE44kWK9",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "6HHZryCGwbAv5sHcqIRRU"
+										}
+									],
+									"id": "FWtAhhLXuwv6UO6H43Vrp",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "2022-02"
+										}
+									],
+									"id": "bT-x8oloDwa6UifYJHNIG",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "true"
+										}
+									],
+									"id": "ps3CVTKui_8HAEWeSvnMB",
+									"type": "td"
+								}
+							],
+							"type": "tr",
+							"id": "j7_lnQJs_Je1y1TUxecUu"
+						},
+						{
+							"children": [
+								{
+									"children": [
+										{
+											"text": "David"
+										}
+									],
+									"id": "5Ye5zl-OZBguKcucD-w1P",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "6500"
+										}
+									],
+									"id": "Qvff73OtZeNPMMttALd60",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "PyxDC5smj_KovRBjBy6zt",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "qLQES27DB6Va9Xin94ppB",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "6HHZryCGwbAv5sHcqIRRU"
+										}
+									],
+									"id": "bCeR74LByy0V3LTcdVrNT",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "2024-08"
+										}
+									],
+									"id": "KcULb9-si0R6QrvITy0iz",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "true"
+										}
+									],
+									"id": "dCuNE2uk7G1wpPWFQWgS8",
+									"type": "td"
+								}
+							],
+							"type": "tr",
+							"id": "FiQJICO50FkHYRCoY2q2b"
+						},
+						{
+							"children": [
+								{
+									"children": [
+										{
+											"text": "Alice"
+										}
+									],
+									"id": "tG1E6qfh4h_Au-2NJpkg1",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "4500"
+										}
+									],
+									"id": "ZT4jpRP9nOxIJ7WdnewIM",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "WJN3-YHbQ6ZjCZQ1Ui8_M",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "YshzVlmaoLpOes3nk_XCC",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "6HHZryCGwbAv5sHcqIRRU"
+										}
+									],
+									"id": "G9NrpwGQ0xneRFupcy50r",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "2024-04"
+										}
+									],
+									"id": "TgLlhTaXRrzG5Uu-78uxw",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "true"
+										}
+									],
+									"id": "5OgA0P1iz1jjZDg5Z4ff1",
+									"type": "td"
+								}
+							],
+							"type": "tr",
+							"id": "drbnw6PcqisWmSIsF_0Nq"
+						},
+						{
+							"children": [
+								{
+									"children": [
+										{
+											"text": "Ben"
+										}
+									],
+									"id": "qU7gGYAjUHJaYMAI4jjbi",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "2000"
+										}
+									],
+									"id": "b4n-ddqgIAFMeiNljjwJ9",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "bEKmp4PQsuYTOmTrKQgg-",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "u3mvon_-KHvGbjsbI1OYj",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "yXlXXJSBH7PkvheGI-FuY"
+										}
+									],
+									"id": "QEDs3ZERnnEIjH1avBZph",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "2024-01"
+										}
+									],
+									"id": "AK7AIE4lkvxEAD6OviDBh",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "true"
+										}
+									],
+									"id": "X51QZGLi44crAC6uAC1IU",
+									"type": "td"
+								}
+							],
+							"type": "tr",
+							"id": "gSLPre1v6Za8GvTKfI6BZ"
+						},
+						{
+							"children": [
+								{
+									"children": [
+										{
+											"text": "Operations Support"
+										}
+									],
+									"id": "Oha-PEZc7MfBU7zgCtRsd",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "5000"
+										}
+									],
+									"id": "iNlrBJneuGoEXFjbSsiDG",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "lnh-i7QfKtg82_IBPdrl1",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "JLMbZGQkjIkQs5hA93eBR",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "yXlXXJSBH7PkvheGI-FuY"
+										}
+									],
+									"id": "jtYQP_KaaPTdo6jvwueFz",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "2024-11"
+										}
+									],
+									"id": "l9KLukuPJOJBrI5vcEHNM",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "false"
+										}
+									],
+									"id": "SvEIHVLChiHC1ewpfuBqi",
+									"type": "td"
+								}
+							],
+							"id": "qVt_6OptUcKPbhaAdcayC",
+							"type": "tr"
+						},
+						{
+							"children": [
+								{
+									"children": [
+										{
+											"text": "Sales Executive"
+										}
+									],
+									"id": "FZSU56LfO3xUEH8sRVh2S",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "5120"
+										}
+									],
+									"id": "bHlbvDpnSpc9JZK689n85",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "Tddi0BZTb8H3LYJb6ozEs",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "X-siLfqlb4TwfC3-wS17q",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "6HHZryCGwbAv5sHcqIRRU"
+										}
+									],
+									"id": "Y82nzlp-_AbSLzvN2MQPR",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "2024-12"
+										}
+									],
+									"id": "bkhdAloZw2yvB6qh_cMsK",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "zXSntIGZhYBjeG5die-4G",
+									"type": "td"
+								}
+							],
+							"id": "oPilhRi1r2kQYnirbzLCd",
+							"type": "tr"
+						},
+						{
+							"children": [
+								{
+									"children": [
+										{
+											"text": "Software Engineer"
+										}
+									],
+									"id": "5MuVxF789FPjxMx0VQJ2b",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "7500"
+										}
+									],
+									"id": "TtegY4J5I_nt6fUITg5ke",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "IEY3L55Gp_-KTJgSfSOnO",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "m0TAyAdu-TJDYqBh4N7JP",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "IMY8opt-aLI1dzVuHWvmt"
+										}
+									],
+									"id": "34slIipNyrIfczPvBEtlq",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "2025-02"
+										}
+									],
+									"id": "Xhmog79m5ObBvJdyDLWsU",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "false"
+										}
+									],
+									"id": "2N9iz9ESWzu2UAQoPzdcL",
+									"type": "td"
+								}
+							],
+							"id": "8EQSw1yuj1t6jEA3cRSzI",
+							"type": "tr"
+						}
+					],
+					"hideFormulas": false,
+					"type": "table",
+					"id": "y1xVP6XEOqTrZbXTls77g",
+					"isCollapsed": false,
+					"version": 2
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"children": [
+										{
+											"text": "SalariesbyMonth"
+										}
+									],
+									"id": "gq-4AEbVt6Rfkr1j_W6Lw",
+									"type": "table-var-name"
+								},
+								{
+									"children": [
+										{
+											"text": " [1.. 12]  months"
+										}
+									],
+									"id": "M7NUy-TjWKE6TQdNe1z34",
+									"type": "table-column-formula",
+									"columnId": "DmFVdibGcZSuLtLkaVy1a"
+								},
+								{
+									"children": [
+										{
+											"text": " round("
+										},
+										{
+											"children": [
+												{
+													"text": ""
+												}
+											],
+											"id": "tGHXkH3J5joZd6OfYo8oM",
+											"type": "smart-ref",
+											"blockId": "FOlWqGwCirGGD5L5bnb1u",
+											"columnId": null,
+											"lastSeenVariableName": "StartDate"
+										},
+										{
+											"text": "  +"
+										},
+										{
+											"children": [
+												{
+													"text": ""
+												}
+											],
+											"id": "aF0ART-mgs9w01rErzpAk",
+											"type": "smart-ref",
+											"blockId": "FDdsC57KD1UsrQ_4Il8qq",
+											"columnId": null,
+											"decoration": "cell",
+											"lastSeenVariableName": "Month"
+										},
+										{
+											"text": ",month)"
+										}
+									],
+									"id": "x-vUq8iUnwguXGkItK2mO",
+									"type": "table-column-formula",
+									"columnId": "IkVVDixwa5gSnpOWuPLhi"
+								},
+								{
+									"children": [
+										{
+											"text": " sum(filter("
+										},
+										{
+											"children": [
+												{
+													"text": ""
+												}
+											],
+											"id": "tKMYVHCqn7dqJP5l5MUA7",
+											"type": "smart-ref",
+											"blockId": "y1xVP6XEOqTrZbXTls77g",
+											"columnId": null,
+											"lastSeenVariableName": "Salaries"
+										},
+										{
+											"text": ","
+										},
+										{
+											"children": [
+												{
+													"text": ""
+												}
+											],
+											"id": "aAfRkYp42u8EegB1aqYme",
+											"type": "smart-ref",
+											"blockId": "y1xVP6XEOqTrZbXTls77g",
+											"columnId": "7TmwwqOg72h0u25EtNz3n",
+											"lastSeenVariableName": "Salaries.StartDate"
+										},
+										{
+											"text": " <= "
+										},
+										{
+											"children": [
+												{
+													"text": ""
+												}
+											],
+											"id": "Lvf8j5GZOupbtR_xHKJRZ",
+											"type": "smart-ref",
+											"blockId": "IkVVDixwa5gSnpOWuPLhi",
+											"columnId": null,
+											"decoration": "cell",
+											"lastSeenVariableName": "CalendarMonth"
+										},
+										{
+											"text": ").TotalCost)"
+										}
+									],
+									"id": "AaVCYzwROSFAWoPjufHQf",
+									"type": "table-column-formula",
+									"columnId": "Og80bkeTpkgWvU4p269_J"
+								}
+							],
+							"id": "BbAFibciiFg45Uc7slQxa",
+							"type": "table-caption"
+						},
+						{
+							"children": [
+								{
+									"children": [
+										{
+											"text": "Month"
+										}
+									],
+									"id": "DmFVdibGcZSuLtLkaVy1a",
+									"type": "th",
+									"cellType": {
+										"kind": "table-formula"
+									}
+								},
+								{
+									"children": [
+										{
+											"text": "CalendarMonth"
+										}
+									],
+									"id": "IkVVDixwa5gSnpOWuPLhi",
+									"type": "th",
+									"cellType": {
+										"kind": "table-formula"
+									}
+								},
+								{
+									"children": [
+										{
+											"text": "TotalSalarybyMonth"
+										}
+									],
+									"id": "Og80bkeTpkgWvU4p269_J",
+									"type": "th",
+									"cellType": {
+										"kind": "table-formula"
+									}
+								}
+							],
+							"id": "zbj3nDLL4fLj3e9_qhinA",
+							"type": "tr"
+						},
+						{
+							"children": [
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "L_26skLNTvfh450n81UH6",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "CmlDlpAL2Ld3jZhUFcYzD",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "6zDz7bc4KtwUcb8e8PRrF",
+									"type": "td"
+								}
+							],
+							"id": "DVrnH0JaUb6lmbP52snDd",
+							"type": "tr"
+						},
+						{
+							"children": [
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "1TSXXUNE-qBrQ8kKbjw34",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "o1pZkdVEswx231F98g5vk",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "AqKWx4JYF7CYACTBaq_C_",
+									"type": "td"
+								}
+							],
+							"id": "PXkZLRKAbFIfJRqlNZmfG",
+							"type": "tr"
+						},
+						{
+							"children": [
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "5rNRU_ZyKMjGYdXuCe6_O",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "z7TQVXNzMSe2tQPoNFPl5",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "QyEL8C7Tty8AxHEBMlkYY",
+									"type": "td"
+								}
+							],
+							"id": "rnKnxQD6V4LqkV2WORmk_",
+							"type": "tr"
+						},
+						{
+							"children": [
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "l72V0H0H-Omk6Hc1b917A",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "JGrZ72Ri2e7Gxc7rmop9F",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "ENAeMaMoJwW3jsIO22_Gi",
+									"type": "td"
+								}
+							],
+							"id": "YeVlpgDKxsnCwdN8ij2B6",
+							"type": "tr"
+						},
+						{
+							"children": [
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "upq65ufml82-Kipjm2Sgs",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "l3_eQDPW8qJHtWf_bI3U8",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "vZQkzOUtgIhG3HOwtGDyC",
+									"type": "td"
+								}
+							],
+							"id": "0et6j1BPIAStL4-OC5zeB",
+							"type": "tr"
+						},
+						{
+							"children": [
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "U2IJ9j8Aws3-DFTyQonGI",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "j27uOAFshu-V7t4sYqhwU",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "Clg5jMB-IQAGmAnGx4aSq",
+									"type": "td"
+								}
+							],
+							"id": "aT9gnU94pVUeJfedGxQ9w",
+							"type": "tr"
+						},
+						{
+							"children": [
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "WUqsAb2l7_fZp7WJ3AjVE",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "-0FBmNwPJEvFr1_IIniWp",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "jmKBOKOY9r8G_eRn5PgcN",
+									"type": "td"
+								}
+							],
+							"id": "fbf7J0-f6TisR8db-Wp3h",
+							"type": "tr"
+						},
+						{
+							"children": [
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "FetkzndEmRRz2r1DAx1R6",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "ZMjeHXevy6yVD4bPPusER",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "8it4HduNZujxaqdcrvkDY",
+									"type": "td"
+								}
+							],
+							"id": "cZDSi8euANiTMxyI2tOBq",
+							"type": "tr"
+						},
+						{
+							"children": [
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "D4uPb-T1KrWvlKh0KBih6",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "QZwBeLr3zoX5Z446l0Qbu",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "Sj7JcqOhPG-rUD30qMxAd",
+									"type": "td"
+								}
+							],
+							"id": "esmk0FRAkEUkU4RLvTN-E",
+							"type": "tr"
+						},
+						{
+							"children": [
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "OQXfuygEEiZpM62AyYD12",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "cb5dMqheQEtbQ4ZWU2lGz",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "38xzo9I7XEjS_UTR0MaJe",
+									"type": "td"
+								}
+							],
+							"id": "ErV6jp8wJf5vE55njzYZd",
+							"type": "tr"
+						},
+						{
+							"children": [
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "vVDxW8vjc2dOQLhtxrEcK",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "lX86j7aZm5sOwFaUH52Kh",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "YQpGGlt7eGMUXcG5fZkay",
+									"type": "td"
+								}
+							],
+							"id": "uBSUQZJOUFYhIVjHb8Wkc",
+							"type": "tr"
+						},
+						{
+							"children": [
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "mtDz4PPvQLSeIudq_4Kjk",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "q0DHZLU1g8V1PGBb_ZjGg",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "Ft8qUikgqF5UvRVQP3A-e",
+									"type": "td"
+								}
+							],
+							"id": "5jL5LHT8FPEejeUHASiRn",
+							"type": "tr"
+						}
+					],
+					"id": "2jBhjj-jqmG8_UlKwr3Cv",
+					"type": "table",
+					"version": 2,
+					"hideFormulas": true
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"id": "xh4Gvq5bHwgF1g8UyFHJQ",
+					"type": "divider"
+				},
+				{
+					"children": [
+						{
+							"text": "2. Consultants"
+						}
+					],
+					"id": "ft3m4OpZF-fIueWU190f4",
+					"type": "h3"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"children": [
+										{
+											"text": "Consultants"
+										}
+									],
+									"id": "7lbymptWz-efr5AkQ_PBm",
+									"type": "table-var-name"
+								}
+							],
+							"type": "table-caption",
+							"id": "2q2xHyixLHro5r4vo1Ino"
+						},
+						{
+							"children": [
+								{
+									"children": [
+										{
+											"text": "Name"
+										}
+									],
+									"type": "th",
+									"id": "znGASAR5XXVbzNqM199gA",
+									"cellType": {
+										"kind": "anything"
+									}
+								},
+								{
+									"children": [
+										{
+											"text": "MonthlyCost"
+										}
+									],
+									"type": "th",
+									"id": "dkfYq7a0NpcpDWyrABn2c",
+									"cellType": {
+										"kind": "number",
+										"unit": [
+											{
+												"unit": "$",
+												"exp": {
+													"n": "1",
+													"d": "1",
+													"s": "1",
+													"infinite": false
+												},
+												"multiplier": {
+													"n": "1",
+													"d": "1",
+													"s": "1",
+													"infinite": false
+												},
+												"known": true,
+												"baseQuantity": "USD",
+												"baseSuperQuantity": "currency"
+											}
+										]
+									},
+									"aggregation": "number:sum"
+								}
+							],
+							"type": "tr",
+							"id": "TEUYvxjHZrVV_-Sudu5AJ"
+						},
+						{
+							"children": [
+								{
+									"children": [
+										{
+											"text": "Dana"
+										}
+									],
+									"type": "td",
+									"id": "4CKmzQl5oIm3UYd0h_Sb3"
+								},
+								{
+									"children": [
+										{
+											"text": "3000"
+										}
+									],
+									"type": "td",
+									"id": "QXyBBT9vMnxuSTp4a7jf5"
+								}
+							],
+							"type": "tr",
+							"id": "avNNcQC50_zZMxa3kacUM"
+						},
+						{
+							"children": [
+								{
+									"children": [
+										{
+											"text": "Mary"
+										}
+									],
+									"type": "td",
+									"id": "NNzVNkH4Z_vu9eWwea7VZ"
+								},
+								{
+									"children": [
+										{
+											"text": "4500"
+										}
+									],
+									"type": "td",
+									"id": "hlpyZznJftZ7wrSy_Mksn"
+								}
+							],
+							"type": "tr",
+							"id": "mrLw4a6k-G4QMUtbH3LMf"
+						},
+						{
+							"children": [
+								{
+									"children": [
+										{
+											"text": "David"
+										}
+									],
+									"type": "td",
+									"id": "d_I3Hd0uPHnGeIaWgqnm5"
+								},
+								{
+									"children": [
+										{
+											"text": "2400"
+										}
+									],
+									"type": "td",
+									"id": "OQ3LgLe1fqrSEjpnkiRbZ"
+								}
+							],
+							"type": "tr",
+							"id": "XBYTpjT2YM97zISfoGCNh"
+						},
+						{
+							"children": [
+								{
+									"children": [
+										{
+											"text": "Sarah"
+										}
+									],
+									"type": "td",
+									"id": "80K63ylseN-lvHFeoLoQa"
+								},
+								{
+									"children": [
+										{
+											"text": "10000"
+										}
+									],
+									"type": "td",
+									"id": "AeEu4YMKYc3u88FobormJ"
+								}
+							],
+							"type": "tr",
+							"id": "eWZPtV0SuAzZx4WIbxMjU"
+						},
+						{
+							"children": [
+								{
+									"children": [
+										{
+											"text": "Michael"
+										}
+									],
+									"type": "td",
+									"id": "nzdg4JKfehhb4clP6IiwS"
+								},
+								{
+									"children": [
+										{
+											"text": "5500"
+										}
+									],
+									"type": "td",
+									"id": "PtrffLtNDQkofc-8o4o_g"
+								}
+							],
+							"type": "tr",
+							"id": "Uax6GUB8qMMLvtg_q1V4u"
+						},
+						{
+							"children": [
+								{
+									"children": [
+										{
+											"text": "Samuel"
+										}
+									],
+									"id": "25m0_OfbBPK9d45UMABR_",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "4000"
+										}
+									],
+									"id": "IkSpSWLeZTVAR9NPQkvp-",
+									"type": "td"
+								}
+							],
+							"type": "tr",
+							"id": "n122Tfs6ObUBjEeHGUXOk"
+						},
+						{
+							"children": [
+								{
+									"children": [
+										{
+											"text": "Isaac"
+										}
+									],
+									"id": "3UCX0XVJiXAFhNv6s33Dr",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "3000"
+										}
+									],
+									"id": "tBOVrdCQHSThMGTy8c4iB",
+									"type": "td"
+								}
+							],
+							"type": "tr",
+							"id": "giYXLNvCD4-4fAi1h962g"
+						}
+					],
+					"type": "table",
+					"id": "Sdecet8A_gRVJgb49ptw1",
+					"version": 2,
+					"hideFormulas": false
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"id": "fL1UD04F8ro30xJbsU-ZD",
+					"type": "divider"
+				},
+				{
+					"children": [
+						{
+							"text": "3. Services "
+						}
+					],
+					"id": "uCGiacRpMfSaHTr1t8JuW",
+					"type": "h3"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"children": [
+										{
+											"text": "Services"
+										}
+									],
+									"id": "hV9Wa_7VuFgk5Q1CN4Xv5",
+									"type": "table-var-name"
+								}
+							],
+							"type": "table-caption",
+							"id": "tGV7voEVTQ0lJIOSgg2n8"
+						},
+						{
+							"children": [
+								{
+									"children": [
+										{
+											"text": "Name"
+										}
+									],
+									"type": "th",
+									"cellType": {
+										"kind": "string"
+									},
+									"id": "x9mfvNbbMb0FrRCEi68D6"
+								},
+								{
+									"children": [
+										{
+											"text": "MonthlyCost"
+										}
+									],
+									"type": "th",
+									"cellType": {
+										"kind": "number",
+										"unit": [
+											{
+												"unit": "$",
+												"exp": {
+													"n": "1",
+													"d": "1",
+													"s": "1",
+													"infinite": false
+												},
+												"multiplier": {
+													"n": "1",
+													"d": "1",
+													"s": "1",
+													"infinite": false
+												},
+												"known": true,
+												"baseQuantity": "USD",
+												"baseSuperQuantity": "currency"
+											}
+										]
+									},
+									"id": "2Tc5UFnl1u7DMb-4F5m9l",
+									"aggregation": "number:sum"
+								}
+							],
+							"type": "tr",
+							"id": "QnP1tXgae7dwzOX4WioGT"
+						},
+						{
+							"children": [
+								{
+									"children": [
+										{
+											"text": "Legal"
+										}
+									],
+									"id": "Uwtpek41bkxectlyRZRZJ",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "2500"
+										}
+									],
+									"id": "flKitCuMiHhGITXUHKpDw",
+									"type": "td"
+								}
+							],
+							"type": "tr",
+							"id": "WCdjIMzc-Q8hGHtO-Oerd"
+						},
+						{
+							"children": [
+								{
+									"children": [
+										{
+											"text": "Accountants"
+										}
+									],
+									"id": "D-go9aZrc8WmcI2NiATb2",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "1000"
+										}
+									],
+									"id": "lAPC0OMnZYwBTghuTAPis",
+									"type": "td"
+								}
+							],
+							"type": "tr",
+							"id": "bAPREhVVwbz4733jt00_9"
+						},
+						{
+							"children": [
+								{
+									"children": [
+										{
+											"text": "SaaS Suite"
+										}
+									],
+									"id": "rwfyvz4kZeA47j9H_mnlv",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "300"
+										}
+									],
+									"id": "CHtPCj_Gp_4a1PCsIuy0E",
+									"type": "td"
+								}
+							],
+							"type": "tr",
+							"id": "TQHIGGVUjY6gEYBfm44P9"
+						},
+						{
+							"children": [
+								{
+									"children": [
+										{
+											"text": "Certification"
+										}
+									],
+									"id": "veon-k6qQg-LnKVjSJUo2",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "1000"
+										}
+									],
+									"id": "v5Y4DXDsY1JfMQbEnj5zK",
+									"type": "td"
+								}
+							],
+							"type": "tr",
+							"id": "REmDXWTdZGPxm3F-wm1X8"
+						},
+						{
+							"children": [
+								{
+									"children": [
+										{
+											"text": "Bills"
+										}
+									],
+									"id": "dUlf2Jh4N6qDOCKE5N8Jm",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "200"
+										}
+									],
+									"id": "s1l2YwjV90ENmKSYTcfnw",
+									"type": "td"
+								}
+							],
+							"type": "tr",
+							"id": "yofEtjiZJRNI7mi-yI4HK"
+						},
+						{
+							"children": [
+								{
+									"children": [
+										{
+											"text": "Audit Costs"
+										}
+									],
+									"id": "DD7dMR25HW7CU9c1ybzL0",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "2500"
+										}
+									],
+									"id": "ZeQKJCMEyKra2EfPVyg6b",
+									"type": "td"
+								}
+							],
+							"type": "tr",
+							"id": "Ctcx8CV2HLYVqUvBEWxKZ"
+						}
+					],
+					"type": "table",
+					"id": "z4ppDiT4kKtAOAp6Mg011",
+					"version": 2,
+					"hideFormulas": false
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"type": "p",
+					"id": "iH4rI3JGObewcu4pVcmO8"
+				}
+			],
+			"type": "tab",
+			"name": "OpEx Worksheet",
+			"id": "_kIohj1PckBrM7eiswXzO"
+		}
+	]
+}
