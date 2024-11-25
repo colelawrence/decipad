@@ -40,9 +40,6 @@ export interface NotebookOptionsProps {
   readonly sections?: Section[];
   readonly popupSide?: 'bottom' | 'left' | 'right' | 'top';
   readonly popupAlign?: 'center' | 'end' | 'start';
-
-  // Custom onDuplicate for redirecting purposes.
-  readonly onDuplicate: (workspaceId: string) => void;
   readonly permissionType: NotebookMetaDataFragment['myPermissionType'];
 
   /* Optionals */
@@ -67,7 +64,6 @@ export const NotebookOptions: FC<NotebookOptionsProps> = ({
   canDelete = true,
   actions,
   sections,
-  onDuplicate,
   popupSide = 'bottom',
   popupAlign = 'end',
 }) => {
@@ -111,7 +107,7 @@ export const NotebookOptions: FC<NotebookOptionsProps> = ({
                 <MenuItem
                   key={workspace.id}
                   onSelect={() => {
-                    onDuplicate(workspace.id);
+                    actions.onDuplicateNotebook(id, workspace.id, false);
                     setIsOpen(false);
                   }}
                 >
@@ -123,7 +119,11 @@ export const NotebookOptions: FC<NotebookOptionsProps> = ({
             <MenuItem
               icon={<Duplicate />}
               onSelect={() => {
-                onDuplicate(workspaceForDuplicate ?? workspaceId);
+                actions.onDuplicateNotebook(
+                  id,
+                  workspaceForDuplicate ?? workspaceId,
+                  false
+                );
                 setIsOpen(false);
               }}
             >

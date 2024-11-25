@@ -88,9 +88,6 @@ export const NotebookList: FC<NotebookListProps> = ({
               actions={actions}
               notebookId={n.id}
               workspaceId={workspaceId}
-              onDuplicate={(workspace: string) => {
-                actions.onDuplicateNotebook(n.id, workspace, false);
-              }}
             />
           </li>
         );

@@ -26,7 +26,6 @@ const args: ComponentProps<typeof NotebookTopbar> = {
       permissionType="ADMIN"
       isArchived={false}
       workspaces={[]}
-      onDuplicate={() => {}}
       trigger={
         <div
           // eslint-disable-next-line decipad/css-prop-named-variable

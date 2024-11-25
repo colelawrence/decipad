@@ -17,7 +17,6 @@ import {
   WorkspaceNumber,
   WorkspaceSwitcherWorkspaceFragment,
 } from '@decipad/graphql-client';
-import { NotebookMetaActionsReturn } from '@decipad/interfaces';
 import { AutocompleteName } from '@decipad/language-interfaces';
 import {
   useNotebookState,
@@ -29,16 +28,16 @@ import {
   SQLBlockIntegration,
   IntegrationTypes,
 } from 'libs/editor-types/src/integrations';
-import { FC, useCallback, useMemo, useState } from 'react';
+import { FC, memo, useCallback, useMemo, useState } from 'react';
 import { ErrorBoundary } from '@sentry/react';
 import { WorkspaceNumbers } from './WorkspaceNumbers';
 import { isFlagEnabled } from '@decipad/feature-flags';
+import { useNotebookMetaActions } from '../../hooks';
 
 type NavigationSidebarProps = {
   notebookId: string;
   workspaceId: string;
   workspaces: Array<WorkspaceSwitcherWorkspaceFragment>;
-  actions: NotebookMetaActionsReturn;
 };
 
 type DefinedNavigationSidebarProps = NavigationSidebarProps & {
@@ -58,144 +57,147 @@ type DefinedNavigationSidebarProps = NavigationSidebarProps & {
 // Without this, we will get a very long cascading loading animation.
 //
 
-const DefinedNavigationSidebar: FC<DefinedNavigationSidebarProps> = ({
-  notebookId,
-  workspaceId,
-  workspaces,
-  actions,
-  controller,
-  editor,
-  workspaceNumbers,
-}) => {
-  const [result] = useGetWorkspacesWithSharedNotebooksQuery();
-  const { data, fetching } = result;
-  const isFetching = fetching || !data;
-
-  const [wsNotebookResult] = useGetWorkspaceNotebooksQuery({
-    variables: { workspaceId },
-    pause: !workspaceId,
-  });
-
-  const itemsTypesForNumberCatalog = ['var'];
-
-  const onDragStart = useMemo(
-    () => editor && onDragStartSmartRef(editor),
-    [editor]
-  );
-
-  const onDragEnd = useOnDragEnd();
-
-  const computer = useComputer();
-
-  const [setAddVariable, setEditingVariable] = useNotebookState(
+const DefinedNavigationSidebar: FC<DefinedNavigationSidebarProps> = memo(
+  ({
     notebookId,
-    (s) => [s.setAddVariable, s.setEditingVariable] as const
-  );
+    workspaceId,
+    workspaces,
+    controller,
+    editor,
+    workspaceNumbers,
+  }) => {
+    const [result] = useGetWorkspacesWithSharedNotebooksQuery();
+    const { data, fetching } = result;
+    const isFetching = fetching || !data;
 
-  const catalog = useMemo(
-    () => catalogItems(editor, controller),
-    [editor, controller]
-  );
+    const [wsNotebookResult] = useGetWorkspaceNotebooksQuery({
+      variables: { workspaceId },
+      pause: !workspaceId,
+    });
 
-  const items = computer.getNamesDefined$
-    .useWithSelectorDebounced(
-      catalogDebounceTimeMs,
-      useCallback(
-        (_items: AutocompleteName[]) => {
-          const mappedItems = _items.map((_item) => {
-            let integrationProvider;
+    const actions = useNotebookMetaActions();
 
-            const elementFromBlockId = _item.blockId
-              ? controller.findNodeById(_item.blockId)
-              : undefined;
+    const itemsTypesForNumberCatalog = ['var'];
 
-            if (elementFromBlockId?.integrationType) {
-              const integType = (
-                elementFromBlockId.integrationType as IntegrationTypes
-              ).type;
-
-              if (integType === 'mysql') {
-                integrationProvider = (
-                  elementFromBlockId.integrationType as SQLBlockIntegration
-                ).provider;
-              } else {
-                integrationProvider = integType;
-              }
-            }
-
-            return {
-              ..._item,
-              blockType: elementFromBlockId?.type,
-              integrationProvider,
-            };
-          });
-
-          return catalog(selectCatalogNames(mappedItems).map(toVar));
-        },
-        [catalog, controller]
-      )
-    )
-    .filter((item) => itemsTypesForNumberCatalog.includes(item.type));
-
-  const sections = data?.workspaces?.find(
-    (workspace) => workspace.id === workspaceId
-  )?.sections;
-
-  const [search, setSearch] = useState('');
-
-  const filteredItems = useMemo(
-    () =>
-      items.filter((item) =>
-        item.name.toLowerCase().includes(search.toLowerCase())
-      ),
-    [items, search]
-  );
-
-  const filteredNotebooks = useMemo(() => {
-    const workspaceNotebooks = wsNotebookResult.data?.pads.items ?? [];
-    return workspaceNotebooks.filter((nb) =>
-      nb.name.toLowerCase().includes(search)
+    const onDragStart = useMemo(
+      () => editor && onDragStartSmartRef(editor),
+      [editor]
     );
-  }, [search, wsNotebookResult.data?.pads.items]);
 
-  const groupedItems = useMemo(
-    () => groupByTab(filteredItems),
-    [filteredItems]
-  );
+    const onDragEnd = useOnDragEnd();
 
-  return (
-    <ErrorBoundary fallback={<>Could not get notebook list</>}>
-      <NavigationComponentSidebar
-        notebookId={notebookId}
-        workspaceId={workspaceId}
-        items={filteredItems}
-        search={search}
-        setSearch={setSearch}
-        workspaces={workspaces}
-        actions={actions}
-        toggleAddNewVariable={setAddVariable}
-        isFetching={isFetching}
-        sections={sections ?? []}
-        workspaceNotebooks={filteredNotebooks}
-      >
-        <UINumberCatalog
-          items={groupedItems}
-          onDragStart={onDragStart}
-          onDragEnd={onDragEnd}
-          editVariable={setEditingVariable}
-        />
-        {isFlagEnabled('WORKSPACE_NUMBERS') && (
-          <WorkspaceNumbers
-            controller={controller}
-            workspaceNumbers={workspaceNumbers}
+    const computer = useComputer();
+
+    const [setAddVariable, setEditingVariable] = useNotebookState(
+      notebookId,
+      (s) => [s.setAddVariable, s.setEditingVariable] as const
+    );
+
+    const catalog = useMemo(
+      () => catalogItems(editor, controller),
+      [editor, controller]
+    );
+
+    const items = computer.getNamesDefined$
+      .useWithSelectorDebounced(
+        catalogDebounceTimeMs,
+        useCallback(
+          (_items: AutocompleteName[]) => {
+            const mappedItems = _items.map((_item) => {
+              let integrationProvider;
+
+              const elementFromBlockId = _item.blockId
+                ? controller.findNodeById(_item.blockId)
+                : undefined;
+
+              if (elementFromBlockId?.integrationType) {
+                const integType = (
+                  elementFromBlockId.integrationType as IntegrationTypes
+                ).type;
+
+                if (integType === 'mysql') {
+                  integrationProvider = (
+                    elementFromBlockId.integrationType as SQLBlockIntegration
+                  ).provider;
+                } else {
+                  integrationProvider = integType;
+                }
+              }
+
+              return {
+                ..._item,
+                blockType: elementFromBlockId?.type,
+                integrationProvider,
+              };
+            });
+
+            return catalog(selectCatalogNames(mappedItems).map(toVar));
+          },
+          [catalog, controller]
+        )
+      )
+      .filter((item) => itemsTypesForNumberCatalog.includes(item.type));
+
+    const sections = data?.workspaces?.find(
+      (workspace) => workspace.id === workspaceId
+    )?.sections;
+
+    const [search, setSearch] = useState('');
+
+    const filteredItems = useMemo(
+      () =>
+        items.filter((item) =>
+          item.name.toLowerCase().includes(search.toLowerCase())
+        ),
+      [items, search]
+    );
+
+    const filteredNotebooks = useMemo(() => {
+      const workspaceNotebooks = wsNotebookResult.data?.pads.items ?? [];
+      return workspaceNotebooks.filter((nb) =>
+        nb.name.toLowerCase().includes(search)
+      );
+    }, [search, wsNotebookResult.data?.pads.items]);
+
+    const groupedItems = useMemo(
+      () => groupByTab(filteredItems),
+      [filteredItems]
+    );
+
+    return (
+      <ErrorBoundary fallback={<>Could not get notebook list</>}>
+        <NavigationComponentSidebar
+          notebookId={notebookId}
+          workspaceId={workspaceId}
+          items={filteredItems}
+          search={search}
+          setSearch={setSearch}
+          workspaces={workspaces}
+          toggleAddNewVariable={setAddVariable}
+          isFetching={isFetching}
+          sections={sections ?? []}
+          workspaceNotebooks={filteredNotebooks}
+          actions={actions}
+        >
+          <UINumberCatalog
+            items={groupedItems}
+            onDragStart={onDragStart}
+            onDragEnd={onDragEnd}
+            editVariable={setEditingVariable}
           />
-        )}
-      </NavigationComponentSidebar>
-    </ErrorBoundary>
-  );
-};
+          {isFlagEnabled('WORKSPACE_NUMBERS') && (
+            <WorkspaceNumbers
+              controller={controller}
+              workspaceNumbers={workspaceNumbers}
+            />
+          )}
+        </NavigationComponentSidebar>
+      </ErrorBoundary>
+    );
+  }
+);
 
-const NavigationSidebar: FC<NavigationSidebarProps> = (props) => {
+const NavigationSidebar: FC<NavigationSidebarProps> = memo((props) => {
   const editor = useActiveEditor();
   const controller = useNotebookWithIdState((s) => s.controller);
 
@@ -222,6 +224,6 @@ const NavigationSidebar: FC<NavigationSidebarProps> = (props) => {
       workspaceNumbers={workspaceNumbers}
     />
   );
-};
+});
 
 export default NavigationSidebar;

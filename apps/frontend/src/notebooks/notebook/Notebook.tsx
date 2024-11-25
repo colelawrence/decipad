@@ -24,12 +24,9 @@ import {
   NotebookListPlaceholder,
 } from '@decipad/ui';
 import { getAnonUserMetadata } from '@decipad/utils';
-import { FC, Suspense, useCallback, useEffect, useMemo } from 'react';
+import { FC, memo, Suspense, useCallback, useEffect, useMemo } from 'react';
 import { createPortal } from 'react-dom';
-import {
-  useInitializeResourceUsage,
-  useNotebookMetaActions,
-} from '../../hooks';
+import { useInitializeResourceUsage } from '../../hooks';
 import { useEditorClientEvents } from '../../hooks/useEditorClientEvents';
 import { DataDrawer } from './data-drawer';
 import { NotebookErrorBoundary } from './Errors';
@@ -51,11 +48,10 @@ import {
  *
  * This is the only component that should contain suspend barriers.
  */
-export const Notebook: FC = () => {
+export const Notebook: FC = memo(() => {
   const { notebookId, isEmbed, aliasId } = useNotebookRoute();
   const { setWorkspacePlan } = useNotebookMetaData();
   const canUseDom = useCanUseDom();
-  const actions = useNotebookMetaActions();
 
   const [setPermission, isDataDrawerOpen] = useNotebookWithIdState(
     (s) => [s.setPermission, s.isDataDrawerOpen] as const
@@ -124,13 +120,29 @@ export const Notebook: FC = () => {
   const docsync = useNotebookWithIdState((s) => s.editor);
 
   const articleRef = useSetCssVarWidth('editorWidth');
-  const props = {
-    notebookId,
-    docsync,
-    workspaceId: workspaceInfo.id ?? '',
-    workspaces: notebookMetaData?.workspaces ?? [],
-    actions,
-  };
+
+  const props = useMemo(() => {
+    return {
+      notebookId,
+      docsync,
+      workspaceId: workspaceInfo.id ?? '',
+    };
+  }, [notebookId, docsync, workspaceInfo.id]);
+
+  const notebookSideBarProps = useMemo(() => {
+    return {
+      notebookId,
+      workspaceId: workspaceInfo.id ?? '',
+      workspaces: notebookMetaData?.workspaces ?? [],
+    };
+  }, [workspaceInfo.id, notebookMetaData?.workspaces, notebookId]);
+
+  const topBarProps = useMemo(() => {
+    return {
+      notebookId,
+      docsync,
+    };
+  }, [notebookId, docsync]);
 
   const editorClientEvents = useEditorClientEvents(notebookId);
 
@@ -165,13 +177,13 @@ export const Notebook: FC = () => {
           leftSidebar={
             <Suspense fallback={<NotebookListPlaceholder />}>
               {shouldRenderNavigationSidebar && (
-                <NavigationSidebar {...props} />
+                <NavigationSidebar {...notebookSideBarProps} />
               )}
             </Suspense>
           }
           topbar={
             <Suspense fallback={<TopbarPlaceholder />}>
-              <Topbar {...props} />
+              <Topbar {...topBarProps} />
             </Suspense>
           }
           sidebar={
@@ -224,6 +236,6 @@ export const Notebook: FC = () => {
         createPortal(<Toolbar />, document.getElementById('root')!)}
     </NotebookErrorBoundary>
   );
-};
+});
 
 export default Notebook;

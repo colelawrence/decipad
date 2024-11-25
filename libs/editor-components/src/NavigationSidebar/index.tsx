@@ -20,11 +20,11 @@ interface NavigationSidebarProps {
   readonly search: string;
   readonly setSearch: Dispatch<SetStateAction<string>>;
   readonly workspaces: Array<WorkspaceSwitcherWorkspaceFragment>;
-  readonly actions: NotebookMetaActionsReturn;
   readonly toggleAddNewVariable: () => void;
   readonly isFetching?: boolean;
   readonly sections: Array<WorkspaceSectionFragment>;
   readonly workspaceNotebooks: Array<WorkspaceNotebookFragment>;
+  readonly actions: NotebookMetaActionsReturn;
 }
 
 export const NavigationSidebar: FC<NavigationSidebarProps> = ({
@@ -32,13 +32,13 @@ export const NavigationSidebar: FC<NavigationSidebarProps> = ({
   children,
   notebookId,
   workspaces,
-  actions,
   search,
   setSearch,
   toggleAddNewVariable,
   isFetching,
   sections,
   workspaceNotebooks,
+  actions,
 }) => {
   if (isFetching) {
     return <Spinner />;
@@ -47,10 +47,6 @@ export const NavigationSidebar: FC<NavigationSidebarProps> = ({
   if (!sections) {
     return <>Could not get folder information</>;
   }
-
-  const onDuplicate = (wsId: string) => {
-    actions.onDuplicateNotebook(notebookId, wsId);
-  };
 
   return (
     <ErrorBoundary fallback={<></>}>
@@ -61,11 +57,10 @@ export const NavigationSidebar: FC<NavigationSidebarProps> = ({
         notebooks={workspaceNotebooks}
         workspaceId={workspaceId}
         workspaces={workspaces}
-        onDuplicate={onDuplicate}
-        actions={actions}
         toggleAddNewVariable={toggleAddNewVariable}
         search={search}
         setSearch={setSearch}
+        actions={actions}
       />
     </ErrorBoundary>
   );

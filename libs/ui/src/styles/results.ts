@@ -15,7 +15,6 @@ export const resultBubbleStyles: CSSObject = {
 };
 
 export const characterLimitStyles = css({
-  display: 'inline-block',
   textOverflow: 'ellipsis',
   overflow: 'hidden',
   whiteSpace: 'nowrap',

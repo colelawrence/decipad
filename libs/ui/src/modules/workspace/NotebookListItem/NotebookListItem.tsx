@@ -143,7 +143,6 @@ export const NotebookListItem: FC<NotebookListItemProps> = memo(
     icon = 'Deci',
     iconColor = 'Catskill',
     workspaceId,
-    onDuplicate,
   }) {
     const href = notebooks({}).notebook({ notebook: { id, name } }).$;
     const [{ isDragging }, drag, preview] = useCustomDrag(
@@ -206,7 +205,6 @@ export const NotebookListItem: FC<NotebookListItemProps> = memo(
             />
             <NotebookOptions
               permissionType={permissionType}
-              onDuplicate={onDuplicate}
               trigger={
                 <div css={mainIconWrapper} data-testid="list-notebook-options">
                   <Ellipsis />

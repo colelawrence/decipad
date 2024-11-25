@@ -304,13 +304,6 @@ const contentWrapper = css(p14Medium, {
   overflow: 'hidden',
   minWidth: 0,
   justifyContent: 'space-between',
-
-  '> span:first-of-type': {
-    maxWidth: '200px',
-    textOverflow: 'ellipsis',
-    overflow: 'hidden',
-    display: 'inline-block',
-  },
 });
 
 const contentWrapperStatic = css(contentWrapper, {
@@ -323,5 +316,6 @@ const contentWrapperStatic = css(contentWrapper, {
 const contentWrapperDraggable = css(contentWrapper, {
   '> span:last-of-type': {
     color: cssVar('textSubdued'),
+    display: 'inline-grid',
   },
 });

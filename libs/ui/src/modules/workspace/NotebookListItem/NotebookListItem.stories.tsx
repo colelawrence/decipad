@@ -34,7 +34,6 @@ const args: ComponentProps<typeof NotebookListItem> = {
   isArchived: false,
   workspaces: [],
   workspaceId: '456',
-  onDuplicate: () => {},
 };
 
 export default {

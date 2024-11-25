@@ -40,7 +40,6 @@ const props: ComponentProps<typeof NotebookListItem> = {
   isArchived: false,
   workspaces: [],
   workspaceId: '456',
-  onDuplicate: () => {},
 };
 
 const WithContexts: FC<PropsWithChildren> = ({ children }) => (

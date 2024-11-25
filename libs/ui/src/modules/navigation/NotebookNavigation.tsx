@@ -102,7 +102,6 @@ export const NotebookNavigation: FC<NotebookNavigationProps> = ({
   workspaces,
   actions,
   notebook,
-  onDuplicate,
   href,
   sections,
 }) => {
@@ -167,7 +166,6 @@ export const NotebookNavigation: FC<NotebookNavigationProps> = ({
           {id === currentNotebookId && (
             <NotebookOptions
               permissionType={myPermissionType as PermissionType}
-              onDuplicate={onDuplicate}
               trigger={
                 <Styled.EllipsisWrapper data-testid="list-notebook-options">
                   <Ellipsis />

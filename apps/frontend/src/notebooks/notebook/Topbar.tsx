@@ -24,7 +24,7 @@ import styled from '@emotion/styled';
 import { Ellipsis } from 'libs/ui/src/icons';
 import { useSession } from 'next-auth/react';
 import type { FC } from 'react';
-import { useContext, useMemo } from 'react';
+import { memo, useContext, useMemo } from 'react';
 import { useNotebookMetaActions } from '../../hooks';
 import {
   useBackActions,
@@ -56,7 +56,7 @@ export const MenuItemButton = styled.div<{ isReadOnly?: boolean }>(
  *
  * Responsible for loading topbar dependencies, and all its elements.
  */
-const Topbar: FC<TopbarProps> = ({ notebookId, docsync }) => {
+const Topbar: FC<TopbarProps> = memo(({ notebookId, docsync }) => {
   const actions = useNotebookMetaActions();
 
   const sidebarData = useNotebookMetaData((state) => ({
@@ -146,9 +146,6 @@ const Topbar: FC<TopbarProps> = ({ notebookId, docsync }) => {
           creationDate={new Date(data?.createdAt)}
           workspaceId={data?.workspace?.id ?? ''}
           workspaceForDuplicate={workspaceForDuplicate}
-          onDuplicate={(workspaceId) =>
-            actions.onDuplicateNotebook(notebookId, workspaceId, true)
-          }
         />
       }
       UndoButtons={
@@ -255,6 +252,6 @@ const Topbar: FC<TopbarProps> = ({ notebookId, docsync }) => {
       }
     />
   );
-};
+});
 
 export default Topbar;
