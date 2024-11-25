@@ -298,14 +298,11 @@ const resolvers: Resolvers = {
         return Buffer.from(initialState).toString('base64');
       }
 
-      // TODO: Refactor before merge.
-      // if you see this in code review, dont approve :)
-
       const snapshotName =
-        (permissionType == null || permissionType === 'READ') &&
-        !context.snapshotName
+        permissionType == null && !context.snapshotName
           ? PublishedVersionName.Published
           : context.snapshotName;
+
       const initialState = await getNotebookInitialState(pad.id, snapshotName);
       if (initialState.length >= MAX_INITIAL_STATE_PAYLOAD_SIZE) {
         return null;
