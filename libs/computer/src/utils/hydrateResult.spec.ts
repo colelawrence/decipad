@@ -36,6 +36,7 @@ describe('hydrateResult result', () => {
       })
     ).toMatchInlineSnapshot(`
       {
+        "meta": undefined,
         "type": {
           "kind": "number",
           "unit": [
@@ -125,6 +126,7 @@ describe('hydrateResult result', () => {
     );
     expect(await materializeResult(hydratedResult)).toMatchInlineSnapshot(`
       {
+        "meta": undefined,
         "type": {
           "atParentIndex": null,
           "cellType": {
@@ -231,6 +233,7 @@ describe('hydrateResult result', () => {
     );
     expect(await materializeResult(hydratedResult)).toMatchInlineSnapshot(`
       {
+        "meta": undefined,
         "type": {
           "columnNames": [
             "Column1",
@@ -322,6 +325,7 @@ describe('hydrateResult result', () => {
     );
     expect(await materializeResult(hydratedResult)).toMatchInlineSnapshot(`
       {
+        "meta": undefined,
         "type": {
           "columnNames": [
             "Column1",
@@ -393,6 +397,7 @@ describe('hydrateResult result', () => {
     );
     expect(await materializeResult(hydratedResult)).toMatchInlineSnapshot(`
       {
+        "meta": undefined,
         "type": {
           "columnNames": [
             "Column1",

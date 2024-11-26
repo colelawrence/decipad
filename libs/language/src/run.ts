@@ -6,15 +6,13 @@ import {
   type Type,
 } from '@decipad/language-interfaces';
 // eslint-disable-next-line no-restricted-imports
-import { isErrorType, materializeOneResult } from '@decipad/language-types';
-import type { TRealm, TScopedInferContext } from '.';
 import {
-  ScopedRealm,
-  isExpression,
-  makeInferContext,
-  prettyPrintAST,
+  isErrorType,
+  materializeOneResult,
   validateResult,
-} from '.';
+} from '@decipad/language-types';
+import type { TRealm, TScopedInferContext } from '.';
+import { ScopedRealm, isExpression, makeInferContext, prettyPrintAST } from '.';
 import { inferBlock } from './infer';
 import { run } from './interpreter';
 import { parseBlock } from './parser';

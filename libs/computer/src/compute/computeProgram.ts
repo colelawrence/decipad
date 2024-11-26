@@ -79,7 +79,7 @@ const internalComputeStatement = async (
         ) as [string, string]
     );
 
-  if (valueType.pending) {
+  if (valueType.pending || isErrorType(valueType)) {
     value = Value.UnknownValue;
   } else if (!isErrorType(valueType) || isFunctionType(valueType)) {
     realm.interpreterRealm.statementId = getExprRef(blockId);

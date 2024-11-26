@@ -1,4 +1,3 @@
-import { getDefined } from '@decipad/utils';
 import type { Result, SerializedTypes } from '@decipad/language-interfaces';
 import type { Validate } from './types';
 
@@ -21,11 +20,5 @@ export const validateColumnResult = (
     typeof value === 'function',
     `column value is not a function: ${value}`
   );
-  const { cellType } = type;
-  return async function* validateColumnResult(start?: number, end?: number) {
-    for await (const v of getDefined(value)(start, end)) {
-      const newValue = validate(cellType, v);
-      yield newValue ?? v;
-    }
-  };
+  return value as Result.ResultGenerator;
 };

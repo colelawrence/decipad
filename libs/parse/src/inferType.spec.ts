@@ -1093,6 +1093,7 @@ describe('Infers tables', () => {
       )
     ).resolves.toMatchInlineSnapshot(`
           {
+            "meta": undefined,
             "type": {
               "columnNames": [
                 "A",
@@ -1133,6 +1134,7 @@ describe('Infers tables', () => {
       )
     ).resolves.toMatchInlineSnapshot(`
           {
+            "meta": undefined,
             "type": {
               "columnNames": [
                 "A",
@@ -1171,6 +1173,7 @@ describe('Infers tables', () => {
       )
     ).resolves.toMatchInlineSnapshot(`
           {
+            "meta": undefined,
             "type": {
               "columnNames": [
                 "A",

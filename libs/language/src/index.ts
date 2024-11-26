@@ -41,7 +41,6 @@ export {
   SyntaxError,
 } from './parser';
 export { prettyPrintAST } from './parser/utils';
-export { validateResult } from './validateResult';
 export * from './run';
 // eslint-disable-next-line no-restricted-imports
 export {

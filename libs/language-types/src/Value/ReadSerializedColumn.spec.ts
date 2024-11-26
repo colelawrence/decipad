@@ -1,6 +1,6 @@
 import { expect, describe, it } from 'vitest';
 import { all } from '@decipad/generator-utils';
-import { N } from '@decipad/number';
+import DeciNumber, { N } from '@decipad/number';
 // eslint-disable-next-line no-restricted-imports
 import { createResizableArrayBuffer } from '@decipad/language-utils';
 import type { ReadSerializedColumnDecoder } from './ReadSerializedColumn';
@@ -12,8 +12,8 @@ describe('SerializedColumn', () => {
     labels: undefined,
   });
 
-  const decoder: ReadSerializedColumnDecoder<bigint> = (buffer, offset) => [
-    buffer.getBigInt64(offset),
+  const decoder: ReadSerializedColumnDecoder<DeciNumber> = (buffer, offset) => [
+    N(Number(buffer.getBigInt64(offset))),
     offset + 8,
   ];
 
@@ -36,7 +36,7 @@ describe('SerializedColumn', () => {
 
     const values = await all(getResultGenerator(await column.getData())());
     for (let i = 0; i < count; i++) {
-      expect(values[i]).toBe(BigInt(i));
+      expect(values[i]).toEqual(N(i));
     }
 
     const valuesValues = await all(column.values());
@@ -66,9 +66,7 @@ describe('SerializedColumn', () => {
     const values = await all(
       getResultGenerator(await column.getData())(50, 61)
     );
-    expect(values).toEqual(
-      Array.from({ length: 11 }, (_, i) => BigInt(i + 50))
-    );
+    expect(values).toEqual(Array.from({ length: 11 }, (_, i) => N(i + 50)));
 
     const valuesValues = await all(column.values(50, 61));
     expect(

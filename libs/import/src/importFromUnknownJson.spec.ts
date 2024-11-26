@@ -13,28 +13,29 @@ it('allows different "types" to be in the same columns', async () => {
       )
     )
   ).resolves.toMatchInlineSnapshot(`
-    {
-      "type": {
-        "columnNames": [
-          "hello",
-        ],
-        "columnTypes": [
           {
-            "kind": "string",
-          },
-        ],
-        "indexName": "hello",
-        "kind": "table",
-      },
-      "value": [
-        [
-          "100",
-          "200",
-          "not a number",
-        ],
-      ],
-    }
-  `);
+            "meta": undefined,
+            "type": {
+              "columnNames": [
+                "hello",
+              ],
+              "columnTypes": [
+                {
+                  "kind": "string",
+                },
+              ],
+              "indexName": "hello",
+              "kind": "table",
+            },
+            "value": [
+              [
+                "100",
+                "200",
+                "not a number",
+              ],
+            ],
+          }
+        `);
 });
 
 describe('Inferring types', () => {
@@ -48,44 +49,45 @@ describe('Inferring types', () => {
         )
       )
     ).resolves.toMatchInlineSnapshot(`
-      {
-        "type": {
-          "columnNames": [
-            "hello",
-          ],
-          "columnTypes": [
             {
-              "kind": "number",
-              "unit": null,
-            },
-          ],
-          "indexName": "hello",
-          "kind": "table",
-        },
-        "value": [
-          [
-            DeciNumber {
-              "d": 1n,
-              "infinite": false,
-              "n": 100n,
-              "s": 1n,
-            },
-            DeciNumber {
-              "d": 1n,
-              "infinite": false,
-              "n": 200n,
-              "s": 1n,
-            },
-            DeciNumber {
-              "d": 1n,
-              "infinite": false,
-              "n": 300n,
-              "s": 1n,
-            },
-          ],
-        ],
-      }
-    `);
+              "meta": undefined,
+              "type": {
+                "columnNames": [
+                  "hello",
+                ],
+                "columnTypes": [
+                  {
+                    "kind": "number",
+                    "unit": null,
+                  },
+                ],
+                "indexName": "hello",
+                "kind": "table",
+              },
+              "value": [
+                [
+                  DeciNumber {
+                    "d": 1n,
+                    "infinite": false,
+                    "n": 100n,
+                    "s": 1n,
+                  },
+                  DeciNumber {
+                    "d": 1n,
+                    "infinite": false,
+                    "n": 200n,
+                    "s": 1n,
+                  },
+                  DeciNumber {
+                    "d": 1n,
+                    "infinite": false,
+                    "n": 300n,
+                    "s": 1n,
+                  },
+                ],
+              ],
+            }
+          `);
   });
 
   it('Infers number columns with units', async () => {
@@ -99,6 +101,7 @@ describe('Inferring types', () => {
       )
     ).resolves.toMatchInlineSnapshot(`
             {
+              "meta": undefined,
               "type": {
                 "columnNames": [
                   "price",
@@ -128,6 +131,7 @@ describe('single json values and infers correct type', () => {
     await expect(importFromUnknownJson(getComputer(), 'hello', {})).resolves
       .toMatchInlineSnapshot(`
       {
+        "meta": undefined,
         "type": {
           "kind": "string",
         },
@@ -139,6 +143,7 @@ describe('single json values and infers correct type', () => {
     await expect(importFromUnknownJson(getComputer(), '250', {})).resolves
       .toMatchInlineSnapshot(`
       {
+        "meta": undefined,
         "type": {
           "kind": "number",
           "unit": null,
@@ -156,6 +161,7 @@ describe('single json values and infers correct type', () => {
     await expect(importFromUnknownJson(getComputer(), 'true', {})).resolves
       .toMatchInlineSnapshot(`
       {
+        "meta": undefined,
         "type": {
           "kind": "boolean",
         },
@@ -176,39 +182,40 @@ describe('Nested objects', () => {
         )
       )
     ).resolves.toMatchInlineSnapshot(`
-      {
-        "type": {
-          "columnNames": [
-            "hello",
-          ],
-          "columnTypes": [
             {
-              "columnNames": [
-                "world",
+              "meta": undefined,
+              "type": {
+                "columnNames": [
+                  "hello",
+                ],
+                "columnTypes": [
+                  {
+                    "columnNames": [
+                      "world",
+                    ],
+                    "columnTypes": [
+                      {
+                        "kind": "string",
+                      },
+                    ],
+                    "indexName": "world",
+                    "kind": "table",
+                  },
+                ],
+                "indexName": "hello",
+                "kind": "table",
+              },
+              "value": [
+                [
+                  [
+                    [
+                      "a string",
+                    ],
+                  ],
+                ],
               ],
-              "columnTypes": [
-                {
-                  "kind": "string",
-                },
-              ],
-              "indexName": "world",
-              "kind": "table",
-            },
-          ],
-          "indexName": "hello",
-          "kind": "table",
-        },
-        "value": [
-          [
-            [
-              [
-                "a string",
-              ],
-            ],
-          ],
-        ],
-      }
-    `);
+            }
+          `);
   });
 
   it('can import some nested objects', async () => {
@@ -221,57 +228,58 @@ describe('Nested objects', () => {
         )
       )
     ).resolves.toMatchInlineSnapshot(`
-      {
-        "type": {
-          "columnNames": [
-            "col1",
-            "col2",
-          ],
-          "columnTypes": [
             {
-              "kind": "number",
-              "unit": null,
-            },
-            {
-              "kind": "number",
-              "unit": null,
-            },
-          ],
-          "indexName": "col1",
-          "kind": "table",
-        },
-        "value": [
-          [
-            DeciNumber {
-              "d": 1n,
-              "infinite": false,
-              "n": 123n,
-              "s": 1n,
-            },
-          ],
-          [
-            DeciNumber {
-              "d": 1n,
-              "infinite": false,
-              "n": 500n,
-              "s": 1n,
-            },
-            DeciNumber {
-              "d": 1n,
-              "infinite": false,
-              "n": 600n,
-              "s": 1n,
-            },
-            DeciNumber {
-              "d": 1n,
-              "infinite": false,
-              "n": 890n,
-              "s": 1n,
-            },
-          ],
-        ],
-      }
-    `);
+              "meta": undefined,
+              "type": {
+                "columnNames": [
+                  "col1",
+                  "col2",
+                ],
+                "columnTypes": [
+                  {
+                    "kind": "number",
+                    "unit": null,
+                  },
+                  {
+                    "kind": "number",
+                    "unit": null,
+                  },
+                ],
+                "indexName": "col1",
+                "kind": "table",
+              },
+              "value": [
+                [
+                  DeciNumber {
+                    "d": 1n,
+                    "infinite": false,
+                    "n": 123n,
+                    "s": 1n,
+                  },
+                ],
+                [
+                  DeciNumber {
+                    "d": 1n,
+                    "infinite": false,
+                    "n": 500n,
+                    "s": 1n,
+                  },
+                  DeciNumber {
+                    "d": 1n,
+                    "infinite": false,
+                    "n": 600n,
+                    "s": 1n,
+                  },
+                  DeciNumber {
+                    "d": 1n,
+                    "infinite": false,
+                    "n": 890n,
+                    "s": 1n,
+                  },
+                ],
+              ],
+            }
+          `);
   });
 });
 
@@ -280,6 +288,7 @@ describe('edge cases', () => {
     await expect(importFromUnknownJson(getComputer(), 'aaa55ff', {})).resolves
       .toMatchInlineSnapshot(`
       {
+        "meta": undefined,
         "type": {
           "kind": "string",
         },
@@ -294,6 +303,7 @@ describe('Infers dates', () => {
     await expect(importFromUnknownJson(getComputer(), '2024-04-16', {}))
       .resolves.toMatchInlineSnapshot(`
       {
+        "meta": undefined,
         "type": {
           "date": "day",
           "kind": "date",

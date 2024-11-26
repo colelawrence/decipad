@@ -2,6 +2,7 @@
 
 exports[`import performance > imports big(ish) csv > bigish1.csv-import-result 1`] = `
 {
+  "meta": undefined,
   "type": {
     "columnNames": [
       "Id",

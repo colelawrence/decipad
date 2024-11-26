@@ -456,6 +456,7 @@ describe('expressionResultFromText$', () => {
 
     expect(lastResult).toMatchInlineSnapshot(`
       {
+        "meta": undefined,
         "type": {
           "kind": "number",
           "unit": null,
@@ -476,6 +477,7 @@ describe('expressionResultFromText$', () => {
 
     expect(lastResult).toMatchInlineSnapshot(`
       {
+        "meta": undefined,
         "type": {
           "kind": "number",
           "unit": null,

@@ -20,3 +20,5 @@ export * from './utils';
 export { type ContextUtils } from './ContextUtils';
 export * from './autoconvert/autoconvert';
 export * from './hydrateType';
+export * from './utils/buildResult';
+export * from './validateResult/validate';
