@@ -11,7 +11,11 @@ import {
   MARK_MAGICNUMBER,
 } from '@decipad/editor-types';
 import { createWorker as createLiveConnectWorker } from '@decipad/live-connect';
-import { BlockProcessor, EditorController } from '@decipad/notebook-tabs';
+import {
+  BlockProcessor,
+  EditorController,
+  elementNormalizersDataTab,
+} from '@decipad/notebook-tabs';
 import { createRemoteComputerClient } from '@decipad/remote-computer';
 import { isServerSideRendering } from '@decipad/support';
 import { once } from '@decipad/utils';
@@ -139,7 +143,11 @@ export const createNotebookStore = (
           throw new Error('Where is my computer');
         }
 
-        const controller = new EditorController(notebookId, plugins);
+        const controller = new EditorController(
+          notebookId,
+          plugins,
+          elementNormalizersDataTab
+        );
         const blockProcessor = new BlockProcessor(
           controller,
           computer,

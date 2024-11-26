@@ -44,6 +44,7 @@ import {
   TopLevelValue,
   ELEMENT_LAYOUT,
   RootEditor,
+  MyNodeEntry,
 } from '@decipad/editor-types';
 import { assert, assertEqual, getDefined } from '@decipad/utils';
 import {
@@ -108,6 +109,7 @@ const getOffsetIndex = (index: number) => index - SUB_EDITOR_OFFSET;
  *
  * Important, the `children` object is shared between the controller and the sub editors.
  * This means its shared state (but should not be changed by this class).
+ *
  */
 export class EditorController implements RootEditorController {
   public id: string;
@@ -128,7 +130,11 @@ export class EditorController implements RootEditorController {
    * Constructor initalizes a basic slate text editor, and
    * adds the first children element, linked to the title element.
    */
-  constructor(id: string, editorPlugins: Array<MyPlatePlugin> = []) {
+  constructor(
+    id: string,
+    editorPlugins: Array<MyPlatePlugin> = [],
+    dataTabPlugins: Array<(_: TEditor) => (__: MyNodeEntry) => boolean> = []
+  ) {
     this.id = id;
     this.isMoving = false;
 
@@ -136,7 +142,7 @@ export class EditorController implements RootEditorController {
     this.events = new Subject();
     this.titleEditor = this.createTitleEditor();
     this.mirrorEditor = this.createMirrorEditor();
-    this.dataTabEditor = this.createDataTabEditor();
+    this.dataTabEditor = this.createDataTabEditor(dataTabPlugins);
 
     this.activeEditorIndex = -1;
   }
@@ -233,10 +239,15 @@ export class EditorController implements RootEditorController {
     return mirrorEditor;
   }
 
-  private createDataTabEditor(): DataTabEditor {
+  private createDataTabEditor(
+    plugins: Array<(_: TEditor) => (__: MyNodeEntry) => boolean> = []
+  ): DataTabEditor {
     const dataTabEditor = withReact(createEditor()) as DataTabEditor;
 
-    dataTabEditor.normalize = normalizeCurried(dataTabEditor, []);
+    dataTabEditor.normalize = normalizeCurried(
+      dataTabEditor,
+      plugins.map((plugin) => plugin(dataTabEditor as unknown as TEditor))
+    );
 
     const { apply, onChange } = dataTabEditor;
 
