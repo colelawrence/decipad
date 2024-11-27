@@ -10,7 +10,6 @@ import {
   ELEMENT_STRUCTURED_VARNAME,
   MARK_MAGICNUMBER,
 } from '@decipad/editor-types';
-import { createWorker as createLiveConnectWorker } from '@decipad/live-connect';
 import {
   BlockProcessor,
   EditorController,
@@ -18,7 +17,6 @@ import {
 } from '@decipad/notebook-tabs';
 import { createRemoteComputerClient } from '@decipad/remote-computer';
 import { isServerSideRendering } from '@decipad/support';
-import { once } from '@decipad/utils';
 import { captureException } from '@sentry/browser';
 import * as idb from 'lib0/indexeddb';
 import { DATA_TAB_INDEX } from 'libs/notebook-tabs/src/constants';
@@ -87,7 +85,6 @@ const initialState = (): Omit<
     resolveNotebookLoadedPromise: () => {
       return resolveNotebookLoadedPromise;
     },
-    liveConnectionWorker: once(() => createLiveConnectWorker()),
     editorChanges: new Subject(),
     interactionsSubscription: undefined,
     dataDrawerMode: {
@@ -355,14 +352,8 @@ export const createNotebookStore = (
       },
 
       destroy: () => {
-        const {
-          syncClientState,
-          editor,
-          liveConnectionWorker,
-          interactionsSubscription,
-        } = get();
+        const { syncClientState, editor, interactionsSubscription } = get();
         if (syncClientState === 'created') {
-          liveConnectionWorker().terminate();
           editor?.disconnect();
           editor?.destroy();
           set({ ...initialState(), destroyed: true });

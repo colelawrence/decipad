@@ -9,6 +9,5 @@ export DISABLE_ESLINT_PLUGIN=true
 export TSC_COMPILE_ON_ERROR=true
 export VITE_DECI_APP_URL_BASE=http://localhost:3000
 
-node build-live-connect-worker.mjs
 (cd ../../; yarn build:wasm)
 yarn vite

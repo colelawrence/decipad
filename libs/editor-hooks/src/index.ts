@@ -23,7 +23,6 @@ export * from './useWorker';
 export * from './useGeneratedName';
 export * from './useComputer';
 export * from './useNotebookId';
-export * from './useLiveConnectionWorker';
 export * from './usePersistentVariableName';
 export * from './useIsBeingComputed';
 export * from './useFilters';

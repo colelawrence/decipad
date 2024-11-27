@@ -38,7 +38,7 @@ export const findSwappableColumns = (
   );
 
   const targetColumnIndex = isElement(column)
-    ? columns.findIndex((col) => column.id === (col[0] as AnyElement).id ?? '')
+    ? columns.findIndex((col) => column.id === (col[0] as AnyElement).id)
     : -1;
 
   if (sourceColumnIndex >= 0 && targetColumnIndex >= 0) {

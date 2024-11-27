@@ -3,7 +3,6 @@ import type { Computer } from '@decipad/computer-interfaces';
 import type { DocSyncEditor, DocSyncOptions } from '@decipad/docsync';
 import type { BlockProcessor, EditorController } from '@decipad/notebook-tabs';
 import type { MyPlatePlugin } from '@decipad/editor-types';
-import type { LiveConnectionWorker } from '@decipad/live-connect';
 import { Subject, Subscription } from 'rxjs';
 import {
   GetNotebookAnnotationsQuery,
@@ -86,7 +85,6 @@ export type EditorState = {
   controller: EditorController | undefined;
   editor?: DocSyncEditor | undefined;
   computer: Computer | undefined;
-  liveConnectionWorker: () => LiveConnectionWorker;
   initEditor: (props: {
     notebookId: string;
     options: InitNotebookStateOptions;

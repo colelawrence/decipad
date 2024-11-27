@@ -35,9 +35,6 @@
       "path": "../notebook-state"
     },
     {
-      "path": "../live-connect"
-    },
-    {
       "path": "../computer-utils"
     }
   ]
