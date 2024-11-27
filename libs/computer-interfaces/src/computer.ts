@@ -46,6 +46,7 @@ export type ComputerImportExternalDataOptions = {
 export type ImportedExternalDataResult = {
   id: string;
   columnNamesToId: Record<string, string>;
+  rowCount?: number;
 };
 
 export interface Computer {

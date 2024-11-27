@@ -260,7 +260,8 @@ export class Computer implements ComputerInterface {
         const table: Result.Result = {
           type: {
             kind: 'table',
-            columnTypes: tableResult
+            rowCount: tableResult.row_count,
+            columnTypes: tableResult.columns
               .map((col): SerializedType | undefined => {
                 const columnType = importOptions.column_types?.[col.name];
 
@@ -285,16 +286,16 @@ export class Computer implements ComputerInterface {
                 } as SerializedType;
               })
               .filter((col): col is SerializedType => col != null),
-            columnNames: tableResult
+            columnNames: tableResult.columns
               .map((col) =>
                 metaColumnOptions[col.name]?.isHidden
                   ? undefined
                   : metaColumnOptions[col.name]?.desiredName ?? col.name
               )
               .filter((name): name is string => name != null),
-            indexName: tableResult[0]?.name,
+            indexName: tableResult.columns[0]?.name,
           },
-          value: tableResult
+          value: tableResult.columns
             .map((col) => {
               const metaColumn = metaColumnOptions[col.name];
               if (metaColumn?.isHidden) {
@@ -343,8 +344,9 @@ export class Computer implements ComputerInterface {
 
         return {
           id,
+          rowCount: tableResult.row_count,
           columnNamesToId: Object.fromEntries(
-            tableResult.map((col) => [
+            tableResult.columns.map((col) => [
               metaColumnOptions[col.name]?.desiredName ?? col.name,
               col.name,
             ])

@@ -314,7 +314,8 @@ export abstract class Runner<
       this.name,
       Object.values(nonHiddenColumns),
       Object.keys(nonHiddenColumns),
-      filterExpression(this.filters)
+      filterExpression(this.filters),
+      importedResult.rowCount
     );
 
     this._nameToColumnId = importedResult.columnNamesToId;

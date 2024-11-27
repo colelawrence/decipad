@@ -22,7 +22,8 @@ export async function pushExtraData(
   variableName: string,
   columnIds: string[],
   columnNames: string[],
-  filterExpression?: AST.Expression
+  filterExpression?: AST.Expression,
+  rowCount?: number
 ): Promise<void> {
   const programBlocks: ProgramBlock[] = [];
 
@@ -67,7 +68,9 @@ export async function pushExtraData(
                     filterExpression
                   )
                 )
-              : astNode('externalref', columnId)
+              : astNode('externalref', columnId),
+            undefined,
+            rowCount
           ),
         ],
       },
@@ -107,7 +110,12 @@ export async function pushExternalData(
 
       externalDataMap.set(columnId, {
         type: serializeType(
-          buildType.column(deserializeType(columnType), variableName, index)
+          buildType.column(
+            deserializeType(columnType),
+            variableName,
+            index,
+            computerResult.type.rowCount
+          )
         ),
         value: (computerResult.value as Result.Result<'table'>['value'])[index],
         meta: computerResult.meta,

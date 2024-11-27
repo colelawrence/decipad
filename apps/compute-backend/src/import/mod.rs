@@ -94,11 +94,18 @@ impl DeciResult {
     }
 }
 
+#[derive(Clone)]
 #[wasm_bindgen(getter_with_clone)]
 pub struct ColumnRef {
     pub id: String,
     pub name: String,
     pub column_type: Kind,
+}
+
+#[wasm_bindgen(getter_with_clone)]
+pub struct ColumnsWithSize {
+    pub row_count: Option<usize>,
+    pub columns: Vec<ColumnRef>,
 }
 
 #[wasm_bindgen]
@@ -108,11 +115,17 @@ impl ComputeBackend {
         data: &[u8],
         importer: Importer,
         options: ImportOptions,
-    ) -> Vec<ColumnRef> {
+    ) -> ColumnsWithSize {
         let result = importer.import(data, &options).unwrap_or_else(|err| {
             log!("error importing {importer:?} - {err:?}");
             unreachable!("FIXME: error handling");
         });
+
+        let row_count = if result.is_empty() {
+            None
+        } else {
+            Some(result[0].values.len())
+        };
 
         let column_refs = result.into_iter().map(|col| {
             let id = self
@@ -134,7 +147,10 @@ impl ComputeBackend {
             }
         });
 
-        column_refs.collect()
+        ColumnsWithSize {
+            row_count,
+            columns: column_refs.collect(),
+        }
     }
 
     pub fn release_external_data(&mut self, id: String) {
