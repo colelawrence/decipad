@@ -95,7 +95,7 @@ export async function pushResultNameChange(
               ),
             ],
           },
-          definesVariable: newVarName,
+          definesTableColumn: [newVarName, columnName],
           isArtificial: true,
           artificiallyDerivedFrom: [blockId],
         };
