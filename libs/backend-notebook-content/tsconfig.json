@@ -9,6 +9,7 @@
     { "path": "../tables" },
     { "path": "../utils" },
     { "path": "../backend-config" },
-    { "path": "../editor-types" }
+    { "path": "../editor-types" },
+    { "path": "../services" }
   ]
 }

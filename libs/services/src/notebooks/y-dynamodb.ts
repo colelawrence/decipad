@@ -5,12 +5,10 @@ import { applyUpdate } from 'yjs';
 import { Observable } from 'lib0/observable';
 import { getDefined, getDefinedPromise, noop } from '@decipad/utils';
 import { fnQueue } from '@decipad/fnqueue';
-import {
-  createUpdate,
-  getAllUpdates,
-  compact,
-} from '@decipad/services/pad-content';
-import { getStoredSnapshotUpdate } from '@decipad/services/notebooks';
+import { getStoredSnapshotUpdate } from './snapshot';
+import { getAllUpdates } from '../pad-content/updates';
+import { createUpdate } from '../pad-content/createUpdate';
+import { compact } from '../pad-content/compact';
 
 const DYNAMODB_PERSISTENCE_ORIGIN = 'ddb';
 

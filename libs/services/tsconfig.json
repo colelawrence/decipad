@@ -33,9 +33,6 @@
       "path": "../initial-workspace"
     },
     {
-      "path": "../y-dynamodb"
-    },
-    {
       "path": "../slate-yjs"
     },
     {
@@ -48,10 +45,10 @@
       "path": "../backend-trace"
     },
     {
-      "path": "../backend-notebook-content"
+      "path": "../feature-flags"
     },
     {
-      "path": "../feature-flags"
+      "path": "../fnqueue"
     }
   ]
 }

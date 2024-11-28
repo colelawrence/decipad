@@ -10,6 +10,7 @@
     { "path": "../services" },
     { "path": "../backend-utils" },
     { "path": "../backend-search" },
-    { "path": "../doc-verbalizer" }
+    { "path": "../doc-verbalizer" },
+    { "path": "../backend-notebook-content" }
   ]
 }

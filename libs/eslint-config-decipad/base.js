@@ -77,6 +77,14 @@ module.exports = {
     ],
 
     'import/order': 'off',
+    'no-restricted-properties': [
+      'error',
+      {
+        object: 'data',
+        property: 'docsyncupdates',
+        message: 'Use @decipad/services/pad-content instead',
+      },
+    ],
     'no-restricted-imports': [
       'error',
       {

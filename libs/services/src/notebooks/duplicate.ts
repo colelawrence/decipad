@@ -1,4 +1,3 @@
-import { Buffer } from 'buffer';
 import {
   Doc as YDoc,
   Map as YMap,
@@ -6,9 +5,9 @@ import {
   Text as YText,
   applyUpdate,
 } from 'yjs';
-import tables, { allPages } from '@decipad/tables';
 import { getDefined, noop } from '@decipad/utils';
-import { nanoid } from 'nanoid';
+import { getAllUpdates } from '../pad-content/updates';
+import { createUpdate } from '../pad-content/createUpdate';
 
 function setTitle(doc: YDoc, newTitle: string): void {
   if (!doc.getArray().get(0)) {
@@ -41,37 +40,19 @@ async function duplicateSharedDoc(
   newId: string,
   newTitle: string
 ): Promise<void> {
-  const data = await tables();
   const oldResource = `/pads/${oldId}`;
   const newResource = `/pads/${newId}`;
   const doc = new YDoc();
-  for await (const update of allPages(data.docsyncupdates, {
-    KeyConditionExpression: 'id = :id',
-    ExpressionAttributeValues: {
-      ':id': oldResource,
-    },
-    ConsistentRead: true,
-  })) {
+  for await (const update of await getAllUpdates(oldResource)) {
     if (update) {
-      await data.docsyncupdates.put({
-        id: newResource,
-        seq: update.seq,
-        data: update.data,
-      });
-      applyUpdate(doc, Buffer.from(update.data, 'base64'));
+      await createUpdate(newResource, update);
+      applyUpdate(doc, update);
     }
   }
 
   let flush = Promise.resolve();
   function saveUpdate(update: Uint8Array) {
-    flush = Promise.all([
-      flush,
-      data.docsyncupdates.put({
-        id: newResource,
-        seq: `Date.now():${nanoid()}`,
-        data: Buffer.from(update).toString('base64'),
-      }),
-    ]).then(noop);
+    flush = Promise.all([flush, createUpdate(newResource, update)]).then(noop);
   }
 
   doc.on('update', saveUpdate);

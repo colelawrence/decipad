@@ -1,12 +1,12 @@
 import { badRequest, notFound } from '@hapi/boom';
 import { tables, timestamp } from '@decipad/tables';
-import { getNotebookInitialState } from '@decipad/backend-notebook-content';
 import { nanoid } from 'nanoid';
 import * as Y from 'yjs';
 import { toSlateDoc } from '@decipad/slate-yjs';
 import md5 from 'md5';
 import { canonicalize } from 'json-canonicalize';
 import type { DynamoDbQuery } from '@decipad/backendtypes';
+import { getNotebookInitialState } from './notebookContent';
 
 // ss = snapshot
 const FEATURED_SS_NAME = 'Featured 1';

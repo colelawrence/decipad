@@ -840,10 +840,19 @@ export interface DocSyncRecord extends VersionedTableRecord {
   seq?: number[];
 }
 
-export interface DocSyncUpdateRecord extends TableRecordBase {
-  seq: string;
-  data: string;
-}
+export type DocSyncUpdateRecord = TableRecordBase &
+  ({
+    seq: string;
+  } & (
+    | {
+        data_file_path?: undefined;
+        data: string;
+      }
+    | {
+        data?: undefined;
+        data_file_path: string;
+      }
+  ));
 
 export interface DocSyncSnapshotRecord extends TableRecordBase {
   docsync_id: ID;

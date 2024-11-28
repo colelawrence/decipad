@@ -1,6 +1,5 @@
 /* eslint-disable no-underscore-dangle */
 import { Doc as YDoc } from 'yjs';
-import { nanoid } from 'nanoid';
 import tables from '@decipad/tables';
 import { DynamodbPersistence } from '@decipad/y-dynamodb';
 import {
@@ -20,6 +19,7 @@ import type { APIGatewayProxyResultV2 } from 'aws-lambda';
 import { captureException } from '@decipad/backend-trace';
 import type { ConnectionRecord } from '@decipad/backendtypes';
 import pSeries from 'p-series';
+import { createUpdate } from '@decipad/services/pad-content';
 
 type SyncConnectionRecord = ConnectionRecord & {
   protocol: number;
@@ -83,13 +83,9 @@ async function maybeStoreMessage(
     ) {
       const update = decoding.readVarUint8Array(decoder);
       if (update.length > 0) {
-        const data = await tables();
-        await data.docsyncupdates.put(
-          {
-            id: resource,
-            seq: `${Date.now()}:${nanoid()}`,
-            data: Buffer.from(update).toString('base64'),
-          },
+        await createUpdate(
+          resource,
+          update,
           CREATE_ASYNC_EVENT_FROM_UPDATE_PROBABILITY
         );
       }

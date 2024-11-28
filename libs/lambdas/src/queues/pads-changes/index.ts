@@ -10,6 +10,10 @@ import {
   indexNotebookSnapshot,
   removeNotebookIndex,
 } from '@decipad/backend-search';
+import {
+  getAllUpdateRecords,
+  removeUpdate,
+} from '@decipad/services/pad-content';
 
 export const handler = handle(padsChangesHandler);
 
@@ -62,18 +66,9 @@ async function handlePadDelete({ id }: TableRecordIdentifier) {
     }
   }
 
-  for await (const update of allPages(data.docsyncupdates, {
-    KeyConditionExpression: 'id = :id',
-    ExpressionAttributeValues: {
-      ':id': resource,
-    },
-    ConsistentRead: true,
-  })) {
+  for await (const update of await getAllUpdateRecords(id)) {
     if (update) {
-      await data.docsyncupdates.delete(
-        { id: update.id, seq: update.seq },
-        true
-      );
+      await removeUpdate(update);
     }
   }
 

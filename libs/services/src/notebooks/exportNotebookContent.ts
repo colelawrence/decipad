@@ -1,6 +1,6 @@
 import type { Document, RootDocument } from '@decipad/editor-types';
-import { DynamodbPersistence } from '@decipad/y-dynamodb';
 import { applyUpdate, Doc as YDoc } from 'yjs';
+import { DynamodbPersistence } from './y-dynamodb';
 
 export const exportNotebookContent = <
   T extends RootDocument | Document = Document
