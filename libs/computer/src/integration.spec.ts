@@ -494,3 +494,205 @@ describe('expressionResultFromText$', () => {
     sub.unsubscribe();
   });
 });
+
+describe('concat', () => {
+  it('can concatenate tables', async () => {
+    const computer = new Computer();
+    const program = getIdentifiedBlocks(
+      `Table1 = {
+          Col2 = [5 bananas, 6, 7, 8]
+          Col1 = [1, 2, 3, 4]
+          Col3 = ["hey", "hi", "hello", "hola"]
+          Col4 = Col1 + Col2
+        }`,
+      `Table2 = {
+          Col1 = [9, 10, 11, 12]
+          Col2 = [13 bananas, 14, 15, 16]
+          Col3 = ["yo", "sup", "what's up", "hola"]
+          Col4 = Col1 + Col2
+        }`,
+      `Table3 = concat(Table1, Table2)`
+    );
+    const results = getDefined(
+      await computer.computeDeltaRequest({
+        program: { upsert: program },
+      })
+    );
+
+    const matResults = Object.fromEntries(
+      await Promise.all(
+        Array.from(Object.entries(results.blockResults)).map(
+          async ([key, result]) => [
+            key,
+            await materializeResult(getDefined(result.result)),
+          ]
+        )
+      )
+    );
+
+    expect(matResults['block-2']?.value).toMatchInlineSnapshot(`
+      [
+        [
+          DeciNumber {
+            "d": 1n,
+            "infinite": false,
+            "n": 5n,
+            "s": 1n,
+          },
+          DeciNumber {
+            "d": 1n,
+            "infinite": false,
+            "n": 6n,
+            "s": 1n,
+          },
+          DeciNumber {
+            "d": 1n,
+            "infinite": false,
+            "n": 7n,
+            "s": 1n,
+          },
+          DeciNumber {
+            "d": 1n,
+            "infinite": false,
+            "n": 8n,
+            "s": 1n,
+          },
+          DeciNumber {
+            "d": 1n,
+            "infinite": false,
+            "n": 13n,
+            "s": 1n,
+          },
+          DeciNumber {
+            "d": 1n,
+            "infinite": false,
+            "n": 14n,
+            "s": 1n,
+          },
+          DeciNumber {
+            "d": 1n,
+            "infinite": false,
+            "n": 15n,
+            "s": 1n,
+          },
+          DeciNumber {
+            "d": 1n,
+            "infinite": false,
+            "n": 16n,
+            "s": 1n,
+          },
+        ],
+        [
+          DeciNumber {
+            "d": 1n,
+            "infinite": false,
+            "n": 1n,
+            "s": 1n,
+          },
+          DeciNumber {
+            "d": 1n,
+            "infinite": false,
+            "n": 2n,
+            "s": 1n,
+          },
+          DeciNumber {
+            "d": 1n,
+            "infinite": false,
+            "n": 3n,
+            "s": 1n,
+          },
+          DeciNumber {
+            "d": 1n,
+            "infinite": false,
+            "n": 4n,
+            "s": 1n,
+          },
+          DeciNumber {
+            "d": 1n,
+            "infinite": false,
+            "n": 9n,
+            "s": 1n,
+          },
+          DeciNumber {
+            "d": 1n,
+            "infinite": false,
+            "n": 10n,
+            "s": 1n,
+          },
+          DeciNumber {
+            "d": 1n,
+            "infinite": false,
+            "n": 11n,
+            "s": 1n,
+          },
+          DeciNumber {
+            "d": 1n,
+            "infinite": false,
+            "n": 12n,
+            "s": 1n,
+          },
+        ],
+        [
+          "hey",
+          "hi",
+          "hello",
+          "hola",
+          "yo",
+          "sup",
+          "what's up",
+          "hola",
+        ],
+        [
+          DeciNumber {
+            "d": 1n,
+            "infinite": false,
+            "n": 6n,
+            "s": 1n,
+          },
+          DeciNumber {
+            "d": 1n,
+            "infinite": false,
+            "n": 8n,
+            "s": 1n,
+          },
+          DeciNumber {
+            "d": 1n,
+            "infinite": false,
+            "n": 10n,
+            "s": 1n,
+          },
+          DeciNumber {
+            "d": 1n,
+            "infinite": false,
+            "n": 12n,
+            "s": 1n,
+          },
+          DeciNumber {
+            "d": 1n,
+            "infinite": false,
+            "n": 22n,
+            "s": 1n,
+          },
+          DeciNumber {
+            "d": 1n,
+            "infinite": false,
+            "n": 24n,
+            "s": 1n,
+          },
+          DeciNumber {
+            "d": 1n,
+            "infinite": false,
+            "n": 26n,
+            "s": 1n,
+          },
+          DeciNumber {
+            "d": 1n,
+            "infinite": false,
+            "n": 28n,
+            "s": 1n,
+          },
+        ],
+      ]
+    `);
+  });
+});

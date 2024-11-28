@@ -95,6 +95,5 @@ export const createConcatenatedColumn = async (
     ),
   };
   const dimensions = [concatenatedDim, ...restDims];
-
   return new ConcatenatedColumn(column1, column2, dimensions);
 };

@@ -1,16 +1,31 @@
-import { dequal, getDefined, zip } from '@decipad/utils';
+import { dequal, getDefined, produce, zip } from '@decipad/utils';
 // eslint-disable-next-line no-restricted-imports
 import { Type, buildType as t, Value } from '@decipad/language-types';
 import type { Evaluator, Functor } from '../../types';
 
-export const concatTablesFunctor: Functor = async ([tab1, tab2]) =>
-  (await Type.combine(tab1.isTable(), tab2.isTable())).mapType(() => {
-    if (!dequal(new Set(tab1.columnNames), new Set(tab2.columnNames))) {
+export const concatTablesFunctor: Functor = async ([tab1, _tab2]) =>
+  (await Type.combine(tab1.isTable(), _tab2.isTable())).mapType(() => {
+    if (!dequal(new Set(tab1.columnNames), new Set(_tab2.columnNames))) {
       return t.impossible('Incompatible tables');
     }
-    if (tab1.columnTypes?.length !== tab2.columnTypes?.length) {
+    if (tab1.columnTypes?.length !== _tab2.columnTypes?.length) {
       return t.impossible('Incompatible tables');
     }
+
+    const tab2 = produce(_tab2, (draft) => {
+      const names1 = getDefined(tab1.columnNames);
+      const names2 = getDefined(_tab2.columnNames);
+      const cols2 = getDefined(_tab2.columnTypes);
+      const tab2NamesAndTypes = zip(names2, cols2).sort((a, b) => {
+        const aIndex = names1.indexOf(a[0]);
+        const bIndex = names1.indexOf(b[0]);
+        if (aIndex < bIndex) return -1;
+        if (aIndex > bIndex) return 1;
+        return 0;
+      });
+      draft.columnNames = tab2NamesAndTypes.map((x) => x[0]);
+      draft.columnTypes = tab2NamesAndTypes.map((x) => x[1]);
+    });
 
     // Check that column types match, even though we don't care about column order
     for (const tab1ColIndex in tab1.columnNames as string[]) {
@@ -29,7 +44,26 @@ export const concatTablesFunctor: Functor = async ([tab1, tab2]) =>
       }
     }
 
-    return tab1;
+    return produce(tab1, (draft) => {
+      draft.rowCount =
+        tab2.rowCount != null && tab1.rowCount != null
+          ? tab1.rowCount + tab2.rowCount
+          : undefined;
+
+      draft.columnTypes =
+        draft.columnTypes?.map((tab1Coltype, index) =>
+          produce(tab1Coltype, (tab1Coltype) => {
+            const tab2ColType = tab2.columnTypes?.[index];
+
+            tab1Coltype.cellCount =
+              tab1Coltype?.cellCount != null && tab2ColType?.cellCount != null
+                ? tab1Coltype.cellCount + tab2ColType.cellCount
+                : undefined;
+
+            return tab1Coltype;
+          })
+        ) ?? null;
+    });
   });
 
 export const concatTablesValues: Evaluator = async (tables) => {
