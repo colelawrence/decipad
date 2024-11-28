@@ -61,7 +61,11 @@ function isDate(type: SerializedType) {
   return type.kind === 'date';
 }
 
-const validTypes = [isNumber, isBoolean, isString, isDate];
+function isRange(type: SerializedType) {
+  return type.kind === 'range';
+}
+
+const validTypes = [isNumber, isBoolean, isString, isDate, isRange];
 
 function isValidType(type: SerializedType) {
   return validTypes.some((guard) => guard(type));

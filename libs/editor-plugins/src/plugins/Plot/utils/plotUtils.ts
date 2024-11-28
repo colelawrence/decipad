@@ -18,6 +18,19 @@ function relevantColumnNames(displayProps: BasePlotProps): string[] {
   ].filter(Boolean);
 }
 
+function rangeToString(
+  range: Result.ResultRange,
+  rangeOf: SerializedType
+): string {
+  const [from, to] = range;
+
+  return `${formatResult('en-US', from, rangeOf)} -> ${formatResult(
+    'en-US',
+    to,
+    rangeOf
+  )}`;
+}
+
 function toPlotColumn(
   type: SerializedType,
   column: Array<Result.OneResult>
@@ -30,16 +43,23 @@ function toPlotColumn(
       return rounded;
     });
   }
-  if (type.kind === 'date') {
-    return (column as Array<bigint>).map((d) => formatResult('en-US', d, type));
+
+  switch (type.kind) {
+    case 'date':
+      return (column as Array<bigint>).map((d) =>
+        formatResult('en-US', d, type)
+      );
+    case 'boolean':
+      return (column as Array<boolean>).map((d) => (d ? 'True' : 'False'));
+    case 'string':
+      return column as Array<string>;
+    case 'range':
+      return (column as Array<Result.ResultRange>).map((d) =>
+        rangeToString(d, type.rangeOf)
+      );
+    default:
+      return null;
   }
-  if (type.kind === 'boolean') {
-    return (column as Array<boolean>).map((d) => (d ? 'True' : 'False'));
-  }
-  if (type.kind === 'string') {
-    return column as Array<string>;
-  }
-  return null;
 }
 
 function makeWide(
