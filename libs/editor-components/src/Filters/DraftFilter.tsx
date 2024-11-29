@@ -151,17 +151,17 @@ export const DraftFilterForm = ({
     }
   }, [filter, tableResults, filterIdRef, computer, setDraftFilter]);
 
+  const tableIds = tableResults.map(({ id }) => id);
+
+  // TODO: Doesn't find anything unless integrations are refreshed on page load :/
+  const columns = computer.getNamesDefined$.use().filter((x) => {
+    return x.kind === 'column' && tableIds.includes(x.blockId as string);
+  });
+
   const types = Object.fromEntries(
-    tableResults.flatMap(({ varName, result }) => {
-      return result.type.columnNames.map((colName) => {
-        const key = `${varName}.${colName}`;
-        const varResult = computer.getVarResult$.use(key);
-
-        const type = varResult?.result?.type;
-        const colType = type?.kind === 'column' ? type.cellType : undefined;
-
-        return [key, colType] as const;
-      });
+    columns.map((column) => {
+      const key = column.name;
+      return [key, column.serializedType] as const;
     })
   );
 
