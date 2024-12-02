@@ -90,9 +90,14 @@ impl<'a> LayerTree<'a> {
     pub fn as_recursive(&self, table: &Table, root_aggregation: Vec<TreeColumn>) -> Tree {
         let layers = &self.layers;
 
-        let children = (0..layers[0].len())
-            .map(|i| Self::to_recursive_inner(table, layers, (0, i)))
-            .collect();
+        let children = layers
+            .first()
+            .map(|l| {
+                (0..l.len())
+                    .map(|i| Self::to_recursive_inner(table, layers, (0, i)))
+                    .collect()
+            })
+            .unwrap_or_default();
 
         Tree {
             root_aggregation: None,
