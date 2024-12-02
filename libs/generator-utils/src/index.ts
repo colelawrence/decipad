@@ -10,6 +10,7 @@ export * from './from';
 export * from './fromGeneratorPromise';
 export * from './generate';
 export * from './generatorOfPromisesToGenerator';
+export * from './isLonger';
 export * from './map';
 export * from './maxOf';
 export * from './memoizing';

@@ -13,8 +13,14 @@ export const slice = async function* slice<T>(
   let n = -1;
   for await (const v of gen) {
     n += 1;
-    if (n >= start && n < end) {
-      yield v;
+    if (n < start) {
+      continue;
     }
+
+    if (n >= end) {
+      return;
+    }
+
+    yield v;
   }
 };

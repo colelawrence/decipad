@@ -2,7 +2,7 @@
 import { Computer, NotebookResults } from '@decipad/computer-interfaces';
 import { createCache } from '@decipad/client-cache';
 import { ComputerResultsCache } from './types';
-import { debounceTime, shareReplay } from 'rxjs';
+import { debounceTime, mergeMap, shareReplay } from 'rxjs';
 import { captureException } from '@sentry/browser';
 import { putRemoteResult } from '@decipad/remote-computer-cache/worker';
 import { SerializedNotebookResults } from '../types/serializedTypes';
@@ -12,8 +12,12 @@ import { encodeRemoteNotebookResults } from './encodeRemoteNotebookResults';
 import { PROTOCOL_VERSION } from '../constants';
 import { debug } from '../debug';
 import { resultsWithCachedIndicator } from '../utils/resultsWithCachedIndicator';
+import { shortenLongResults } from '../utils/shortenLongResults';
 
 const CACHE_RESULTS_DEBOUNCE_TIME_MS = 3000;
+
+const MAX_CACHE_COLUMN_LENGTH = 20;
+const filterResults = shortenLongResults(MAX_CACHE_COLUMN_LENGTH);
 
 const testing = !!(process.env.VITEST_WORKER_ID ?? process.env.VITEST);
 
@@ -84,7 +88,11 @@ export const createComputerResultsCache = (
 
   const resultsSubscription = computer.results
     .asObservable()
-    .pipe(shareReplay(2), debounceTime(CACHE_RESULTS_DEBOUNCE_TIME_MS))
+    .pipe(
+      shareReplay(2),
+      debounceTime(CACHE_RESULTS_DEBOUNCE_TIME_MS),
+      mergeMap(filterResults)
+    )
     .subscribe(onNewResults);
 
   const fetchAndEmitLocalCacheResults = async () => {
