@@ -154,6 +154,7 @@ test('Loading and snapshot of big notebook @snapshot', async ({
         .locator('th')
         .filter({ hasText: 'Mar' })
         .locator('span')
+        .nth(1)
     ).toBeVisible();
 
     await snapshot(

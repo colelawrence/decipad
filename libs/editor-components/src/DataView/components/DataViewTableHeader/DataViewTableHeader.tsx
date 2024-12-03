@@ -8,15 +8,16 @@ import {
 } from '@decipad/ui';
 import { css } from '@emotion/react';
 import { deselect } from '@udecode/plate-common';
-import { Folder, FolderOpen } from 'libs/ui/src/icons';
+import { CaretDown, CaretRight } from 'libs/ui/src/icons';
 import type { FC } from 'react';
 import { useCallback } from 'react';
 import type { HeaderProps } from '../../types';
 import { GroupAggregation } from '../GroupAggregation/GroupAggregation';
 
 const iconStyles = css({
-  height: '24px',
-  width: '24px',
+  height: '16px',
+  width: '16px',
+  marginRight: '4px',
 });
 
 interface DataViewTableHeaderProps extends HeaderProps {
@@ -93,6 +94,13 @@ export const DataViewTableHeader: FC<DataViewTableHeaderProps> = ({
     >
       <div onClick={handleCollapseGroupButtonPress} css={resultWrapperStyles}>
         <>
+          {collapsible ? (
+            <span css={iconStyles} data-testid="data-view-row-expander">
+              {groupIsExpanded ? <CaretDown /> : <CaretRight />}
+            </span>
+          ) : (
+            <span css={iconStyles}></span>
+          )}
           <CodeResult
             value={value as Result.Result['value']}
             variant="inline"
@@ -100,11 +108,6 @@ export const DataViewTableHeader: FC<DataViewTableHeaderProps> = ({
             meta={undefined}
             element={element}
           />
-          {collapsible && (
-            <span css={iconStyles} data-testid="data-view-row-expander">
-              {groupIsExpanded ? <FolderOpen /> : <Folder />}
-            </span>
-          )}
         </>
       </div>
       {aggregationType && (!collapsible || !groupIsExpanded) ? (
