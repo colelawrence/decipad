@@ -47,6 +47,7 @@ test('workspaces', (ctx) => {
       created: Date.now(),
       data: {
         object: {
+          adaptive_pricing: null,
           client_secret: 'client_secret',
           payment_link: null,
           saved_payment_method_options: null,
