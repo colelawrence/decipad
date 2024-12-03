@@ -106,7 +106,12 @@ export const DraftFilterForm = ({
         })
         .forEach((block) => {
           const resultKind = block.result.type.kind;
-          const integrationName = computer.getSymbolDefinedInBlock(block.id);
+
+          const entry = controller.getEntryFromId(block.id);
+          if (!entry || entry[0].type !== ELEMENT_INTEGRATION) {
+            return;
+          }
+          const integrationName = entry[0].children[0].text;
           if (
             integrationName &&
             (resultKind === 'table' || resultKind === 'materialized-table')
@@ -345,34 +350,30 @@ export const DraftFilterForm = ({
         noValueSelected={noValueSelected}
       >
         {tableResults.flatMap(({ varName, id, result }) => {
-          return result.type.columnNames
-            .map((colName) => {
-              const key = `${varName}.${colName}`;
-              const columnId = computer.getVarBlockId(key);
-              return [columnId, key, colName];
-            })
-            .filter(([columnId]) => columnId)
-            .map(([columnId, key, colName]) => {
-              return (
-                <MenuItem
-                  key={key}
-                  onSelect={() =>
-                    setDraftFilter((dFilter): DraftFilter => {
-                      return {
-                        ...dFilter,
-                        columnId,
-                        columnName: colName,
-                        integrationName: varName,
-                        integrationId: id,
-                      };
-                    })
-                  }
-                  selected={filter?.columnId === key}
-                >
-                  {varName}.{colName}
-                </MenuItem>
-              );
-            });
+          return result.type.columnNames.map((colName) => {
+            const key = `${varName}.${colName}`;
+            const columnId = `${id}--${colName}`;
+
+            return (
+              <MenuItem
+                key={key}
+                onSelect={() =>
+                  setDraftFilter((dFilter): DraftFilter => {
+                    return {
+                      ...dFilter,
+                      columnId,
+                      columnName: colName,
+                      integrationName: varName,
+                      integrationId: id,
+                    };
+                  })
+                }
+                selected={filter?.columnId === key}
+              >
+                {varName}.{colName}
+              </MenuItem>
+            );
+          });
         })}
       </DropdownField>
 
