@@ -32,6 +32,13 @@ export const checkAttachments = async (notebookId: string) => {
     throw new Error(`Could not find pad with id ${notebookId}`);
   }
 
+  if (pad.gist?.toLowerCase() === 'ai') {
+    // AI pads don't have attachments.
+    // eslint-disable-next-line no-console
+    console.log(`skipping pad with id ${notebookId}, 'as it was created by AI`);
+    return;
+  }
+
   if (pad.workspace_id == null) {
     throw new Error(`Pad with ID ${notebookId} does not have a workspace`);
   }
