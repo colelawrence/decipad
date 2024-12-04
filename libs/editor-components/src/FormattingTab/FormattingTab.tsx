@@ -15,10 +15,5 @@ export const FormattingTab = ({
 }: FormattingTabProps) => {
   const form = useFormattingTabForm(editor);
 
-  return (
-    <>
-      <NotebookFormatting {...notebookFormattingProps} />
-      {form}
-    </>
-  );
+  return form ?? <NotebookFormatting {...notebookFormattingProps} />;
 };
