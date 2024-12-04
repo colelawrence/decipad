@@ -4,10 +4,13 @@ import { hideOnPrint, slimBlockWidth } from 'libs/ui/src/styles/editor-layout';
 import {
   componentCssVars,
   cssVar,
+  p10Bold,
   p12Bold,
   p12Regular,
   p13Medium,
+  p14Medium,
   smallScreenQuery,
+  tabletScreenQuery,
   tinyPhone,
 } from '../../../primitives';
 import { closeButtonStyles } from '../../../styles/buttons';
@@ -106,32 +109,6 @@ export const TitleContainer = styled.div({
       width: '16px',
       height: '16px',
     },
-  },
-  'div:nth-of-type(2)': {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: '0px 8px',
-    gap: '4px',
-    borderRadius: '6px',
-    outline: `2px solid ${cssVar('backgroundAccent')}`,
-  },
-});
-
-export const AiContainer = styled.div({
-  display: 'flex',
-  // To make the items overlap slightly.
-  gap: '-6px',
-  backgroundColor: componentCssVars('ButtonTertiaryAltDefaultBackground'),
-  borderRadius: '6px',
-  color: cssVar('textDefault'),
-  height: '100%',
-  textTransform: 'capitalize',
-
-  'div:nth-of-type(1)': {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
   },
   'div:nth-of-type(2)': {
     display: 'flex',
@@ -337,6 +314,12 @@ export const HideSmallScreen = styled.div({
   },
 });
 
+export const HideTabletScreen = styled.div({
+  [tabletScreenQuery]: {
+    display: 'none',
+  },
+});
+
 export const ReadOnlyWritingTrigger = styled.div({
   display: 'flex',
   alignItems: 'center',
@@ -365,4 +348,96 @@ export const ReadOnlyWritingWrapper = styled.div({
     ...p12Regular,
     color: componentCssVars('TooltipText'),
   },
+});
+
+export const LeftSidebarContainer = styled.div({
+  display: 'grid',
+  gridTemplateColumns: '32px auto 32px',
+  width: '228px',
+  alignItems: 'center',
+});
+
+export const WorkspaceNameContainer = styled.p(p14Medium, {
+  color: cssVar('textDefault'),
+  overflow: 'hidden',
+  textOverflow: 'ellipsis',
+  whiteSpace: 'nowrap',
+});
+
+export const WorkspaceInfoContainer = styled.div({
+  overflow: 'hidden',
+  paddingLeft: 8,
+});
+
+export const WorkspaceMembersContainer = styled.p(p12Regular, {
+  display: 'inline-flex',
+});
+
+type BadgeProps = {
+  isPremium: boolean;
+};
+
+type CollapseExpandIconProps = {
+  isNavBarVisible: boolean;
+};
+
+export const Badge = styled.span<BadgeProps>((props) => [
+  p10Bold,
+  {
+    display: 'inline-block',
+    padding: '2px 4px',
+    borderRadius: 4,
+    marginLeft: 4,
+    lineHeight: 1,
+    fontWeight: 500,
+    textTransform: 'uppercase',
+    color: props.isPremium
+      ? componentCssVars('ButtonPrimaryDefaultText')
+      : cssVar('textDefault'),
+    backgroundColor: props.isPremium
+      ? componentCssVars('ButtonPrimaryDefaultBackground')
+      : cssVar('backgroundHeavy'),
+  },
+]);
+
+export const DeciLogo = styled.div({
+  width: 32,
+  height: 32,
+  borderRadius: 8,
+  padding: '4px',
+  overflow: 'hidden',
+  backgroundColor: componentCssVars('ButtonPrimaryDefaultBackground'),
+  color: componentCssVars('ButtonPrimaryDefaultText'),
+  marginRight: 8,
+});
+
+export const CollapseExpandIconContainer = styled.div<CollapseExpandIconProps>(
+  (props) => [
+    {
+      color: cssVar('textDisabled'),
+      height: '32px',
+      width: '32px',
+      padding: '6px',
+      ':hover': {
+        backgroundColor: cssVar('backgroundHeavy'),
+        color: cssVar('textDefault'),
+        borderRadius: '6px',
+      },
+    },
+    !props.isNavBarVisible && {
+      backgroundColor: cssVar('backgroundHeavier'),
+      color: cssVar('textDefault'),
+      borderRadius: '6px',
+      marginRight: 0,
+    },
+  ]
+);
+
+export const GroupIconsWrapper = styled.div({
+  backgroundColor: componentCssVars('ButtonTertiaryAltDefaultBackground'),
+  gap: 2,
+  display: 'flex',
+  alignItems: 'center',
+  borderRadius: 6,
+  padding: 2,
 });

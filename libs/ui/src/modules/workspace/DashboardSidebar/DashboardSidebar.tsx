@@ -12,9 +12,13 @@ import * as Styled from './styles';
 import { WorkspaceMenu } from '../WorkspaceMenu/WorkspaceMenu';
 import { WorkspaceSelector } from '../WorkspaceSelector/WorkspaceSelector';
 
-import { useLocalStorage, useStripePlans } from '@decipad/react-utils';
+import {
+  getStripePlanTitle,
+  useLocalStorage,
+  useStripePlans,
+} from '@decipad/react-utils';
 import { workspaces as workspaceRouting } from '@decipad/routing';
-import { Sidebar } from 'libs/ui/src/icons';
+import { SidebarLeft } from 'libs/ui/src/icons';
 import { SectionRecord } from 'libs/ui/src/types/workspaces';
 import { useLocation } from 'react-router-dom';
 import { useRouteParams } from 'typesafe-routes/react-router';
@@ -43,10 +47,7 @@ type DashboardSidebarProps = {
 const getPlanTitle =
   (stripePlans: ReturnType<typeof useStripePlans>) =>
   (workspace: ShallowWorkspaceFragment): string => {
-    const title = stripePlans.find((p) => p?.key === workspace.plan);
-
-    // small hack to support the old plan name
-    return title?.title ?? (workspace.isPremium ? 'Pro (Legacy)' : 'Free');
+    return getStripePlanTitle(stripePlans, workspace.plan, workspace.isPremium);
   };
 
 export const DashboardSidebar = ({
@@ -114,7 +115,7 @@ export const DashboardSidebar = ({
       >
         <Drawer.Trigger asChild>
           <Styled.ToggleButton>
-            <Sidebar />
+            <SidebarLeft />
           </Styled.ToggleButton>
         </Drawer.Trigger>
         <Drawer.Portal>

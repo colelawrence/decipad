@@ -92,7 +92,7 @@ test('check invited collaborators can edit notebook', async ({
     await testUser.page.getByTestId('send-invitation').click();
 
     await anotherTestUser.page.goto(notebookURL);
-    await anotherTestUser.aiAssistant.closePannel();
+    await anotherTestUser.aiAssistant.closePanel();
     await anotherTestUser.notebook.waitForEditorToLoad();
 
     expect(
@@ -146,7 +146,7 @@ test('check collaborator gets updates', async ({
     await testUser.page.getByTestId('send-invitation').click();
 
     await anotherTestUser.page.goto(notebookURL);
-    await anotherTestUser.aiAssistant.closePannel();
+    await anotherTestUser.aiAssistant.closePanel();
     await anotherTestUser.notebook.waitForEditorToLoad();
 
     expect(

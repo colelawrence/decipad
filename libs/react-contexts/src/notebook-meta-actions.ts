@@ -36,8 +36,10 @@ export interface NotebookMetaDataType {
   readonly pushSidebar: (component: SidebarComponent) => void;
   readonly popSidebar: () => void;
 
-  readonly isSidebarOpen: () => boolean;
-
+  readonly isDefaultSidebarOpen: () => boolean;
+  readonly isAiOpen: () => boolean;
+  readonly isSidebarClosed: () => boolean;
+  readonly isAnnotationsOpen: () => boolean;
   // Should the user be able to alter their notebook?
   // Used for preventing errored notebooks from being editable.
   readonly canEdit: boolean;
@@ -63,9 +65,24 @@ export const useNotebookMetaData = create<NotebookMetaDataType>()(
         sidebarComponent: { type: isE2E() ? 'closed' : 'default-sidebar' },
         sidebarHistory: [],
 
-        isSidebarOpen() {
+        isDefaultSidebarOpen() {
           const { sidebarComponent } = get();
-          return sidebarComponent.type !== 'closed';
+          return sidebarComponent.type === 'default-sidebar';
+        },
+
+        isAnnotationsOpen() {
+          const { sidebarComponent } = get();
+          return sidebarComponent.type === 'annotations';
+        },
+
+        isSidebarClosed() {
+          const { sidebarComponent } = get();
+          return sidebarComponent.type === 'closed';
+        },
+
+        isAiOpen() {
+          const { sidebarComponent } = get();
+          return sidebarComponent.type === 'ai';
         },
 
         toggleSidebar(sidebarComponent) {

@@ -415,6 +415,7 @@ export interface ComponentCssVariables {
   ButtonTertiaryHoverText: string;
   ButtonTertiaryDisabledBackground: string;
   ButtonTertiaryDisabledText: string;
+  ButtonTertiaryAltSelectedBackground: string;
 
   ButtonTertiaryAltDefaultBackground: string;
   ButtonTertiaryAltDefaultText: string;
@@ -580,6 +581,7 @@ export const ComponentColors: Record<'Light' | 'Dark', ComponentCssVariables> =
       ButtonTertiaryAltHoverText: grey600.hex,
       ButtonTertiaryAltDisabledBackground: grey200.hex,
       ButtonTertiaryAltDisabledText: grey400.hex,
+      ButtonTertiaryAltSelectedBackground: white.hex,
 
       ButtonBorderlessDefaultBackground: fullTransparent.rgba,
       ButtonBorderlessDefaultText: blackWhiteBlack.hex,
@@ -700,6 +702,7 @@ export const ComponentColors: Record<'Light' | 'Dark', ComponentCssVariables> =
       ButtonTertiaryAltHoverText: dark400.hex,
       ButtonTertiaryAltDisabledBackground: dark400.hex,
       ButtonTertiaryAltDisabledText: dark500.hex,
+      ButtonTertiaryAltSelectedBackground: dark700.hex,
 
       ButtonBorderlessDefaultBackground: fullTransparent.rgba,
       ButtonBorderlessDefaultText: dark400.hex,

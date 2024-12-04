@@ -24,7 +24,15 @@ import {
   NotebookListPlaceholder,
 } from '@decipad/ui';
 import { getAnonUserMetadata } from '@decipad/utils';
-import { FC, memo, Suspense, useCallback, useEffect, useMemo } from 'react';
+import {
+  FC,
+  memo,
+  Suspense,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 import { createPortal } from 'react-dom';
 import { useInitializeResourceUsage } from '../../hooks';
 import { useEditorClientEvents } from '../../hooks/useEditorClientEvents';
@@ -52,6 +60,7 @@ export const Notebook: FC = memo(() => {
   const { notebookId, isEmbed, aliasId } = useNotebookRoute();
   const { setWorkspacePlan } = useNotebookMetaData();
   const canUseDom = useCanUseDom();
+  const [isNavBarVisible, setIsNavBarVisible] = useState(true);
 
   const [setPermission, isDataDrawerOpen] = useNotebookWithIdState(
     (s) => [s.setPermission, s.isDataDrawerOpen] as const
@@ -60,6 +69,11 @@ export const Notebook: FC = memo(() => {
   const [{ data: notebookMetaData }] = useGetNotebookMetaQuery({
     variables: { id: notebookId },
   });
+
+  const isNavigationSidebarEnabled = useMemo(
+    () => isFlagEnabled('NAV_SIDEBAR'),
+    []
+  );
 
   useEffect(() => {
     setPermission(notebookMetaData?.getPadById?.myPermissionType ?? undefined);
@@ -137,27 +151,41 @@ export const Notebook: FC = memo(() => {
     };
   }, [workspaceInfo.id, notebookMetaData?.workspaces, notebookId]);
 
-  const topBarProps = useMemo(() => {
-    return {
-      notebookId,
-      docsync,
-    };
-  }, [notebookId, docsync]);
-
-  const editorClientEvents = useEditorClientEvents(notebookId);
-
   const shouldRenderNavigationSidebar = useMemo(() => {
     if (!notebookMetaData?.getPadById) {
       return false;
     }
     return (
-      isFlagEnabled('NAV_SIDEBAR') &&
+      isNavigationSidebarEnabled &&
       ['ADMIN', 'WRITE'].includes(
         notebookMetaData.getPadById.myPermissionType || ''
       ) &&
+      isNavBarVisible &&
       !isEmbed
     );
-  }, [isEmbed, notebookMetaData]);
+  }, [isEmbed, notebookMetaData, isNavBarVisible, isNavigationSidebarEnabled]);
+  const toggleNavBarVisibility = useCallback(
+    () => setIsNavBarVisible((v) => !v),
+    []
+  );
+
+  const topBarProps = useMemo(() => {
+    return {
+      notebookId,
+      docsync,
+      isNavBarVisible,
+      shouldRenderNavigationSidebar: isNavigationSidebarEnabled,
+      toggleNavBarVisibility,
+    };
+  }, [
+    notebookId,
+    docsync,
+    isNavBarVisible,
+    isNavigationSidebarEnabled,
+    toggleNavBarVisibility,
+  ]);
+
+  const editorClientEvents = useEditorClientEvents(notebookId);
 
   return (
     <NotebookErrorBoundary>
@@ -175,7 +203,7 @@ export const Notebook: FC = memo(() => {
            */
           shouldRenderNavigationSidebar={shouldRenderNavigationSidebar}
           leftSidebar={
-            <Suspense fallback={<NotebookListPlaceholder />}>
+            <Suspense fallback={<NotebookListPlaceholder bgColour="heavy" />}>
               {shouldRenderNavigationSidebar && (
                 <NavigationSidebar {...notebookSideBarProps} />
               )}

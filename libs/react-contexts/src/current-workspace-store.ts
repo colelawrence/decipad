@@ -1,10 +1,12 @@
+import { SubscriptionPlansNames } from '@decipad/graphql-client';
 import { create } from 'zustand';
 
 export type WorkspaceInfo = {
   id?: string;
-  isPremium: boolean;
-  plan?: string;
+  isPremium: boolean | null;
+  plan?: SubscriptionPlansNames | null;
   name?: string;
+  membersCount?: number;
 };
 
 interface CurrentWorkspaceStore {

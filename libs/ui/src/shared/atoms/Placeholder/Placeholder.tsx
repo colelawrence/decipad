@@ -6,7 +6,6 @@ const styles = css({
   display: 'flex',
   minHeight: '8px',
 
-  backgroundColor: cssVar('backgroundDefault'),
   borderRadius: '4px',
 });
 const lessRoundStyles = css({
@@ -15,12 +14,26 @@ const lessRoundStyles = css({
 
 interface PlaceholderProps {
   lessRound?: boolean;
+  bgColour?: 'default' | 'heavy';
 }
+
+const backgroundColors = {
+  default: {
+    backgroundColor: cssVar('backgroundDefault'),
+  },
+  heavy: {
+    backgroundColor: cssVar('backgroundHeavy'),
+  },
+};
 
 export const Placeholder = ({
   lessRound = false,
+  bgColour = 'default',
 }: PlaceholderProps): ReturnType<React.FC> => {
   return (
-    <div role="presentation" css={[styles, lessRound && lessRoundStyles]} />
+    <div
+      role="presentation"
+      css={[backgroundColors[bgColour], styles, lessRound && lessRoundStyles]}
+    />
   );
 };

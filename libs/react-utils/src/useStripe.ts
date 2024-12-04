@@ -1,4 +1,7 @@
-import type { SubPlansFragment } from '@decipad/graphql-client';
+import type {
+  SubPlansFragment,
+  SubscriptionPlansNames,
+} from '@decipad/graphql-client';
 import { useGetSubscriptionsPlansQuery } from '@decipad/graphql-client';
 import { useMemo } from 'react';
 
@@ -51,6 +54,19 @@ export const useStripePlans = (): Array<UseStripePlansReturn> => {
   }, [linkedPlans]);
 
   return sortedPlans;
+};
+
+export const getStripePlanTitle = (
+  plans: Array<UseStripePlansReturn>,
+  plan?: SubscriptionPlansNames | null,
+  isWorkspacePremium?: boolean | null
+) => {
+  if (!plan) return 'Free';
+
+  return (
+    plans.find((p) => p?.key === plan)?.title ??
+    (isWorkspacePremium ? 'Pro (Legacy)' : 'Free')
+  );
 };
 
 export const useStripeCollaborationRules = (

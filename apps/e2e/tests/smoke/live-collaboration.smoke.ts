@@ -38,7 +38,7 @@ smoketest(
         await userBPage.goto(notebookURL);
         await userBNotebook.checkNotebookTitle(notebookTitle);
         await userBNotebook.waitForEditorToLoad();
-        await userB.aiAssistant.closePannel();
+        await userB.aiAssistant.closePanel();
         notebookJsonUserB = await userBNotebook.download();
       }
     );

@@ -51,16 +51,17 @@ const seedRandom = (seed = 1) => {
   return x - Math.floor(x);
 };
 
-export const NotebookListItemPlaceholder: React.FC<{ pos?: number }> = ({
-  pos,
-}) => {
+export const NotebookListItemPlaceholder: React.FC<{
+  pos?: number;
+  bgColour?: 'default' | 'heavy';
+}> = ({ pos, bgColour = 'default' }) => {
   const randomWidth = Math.floor(seedRandom(pos ?? 1) * 142 + 32);
   const tagsCount = Math.floor(seedRandom((pos ?? 1) + 10) * 2 + 1);
 
   return (
     <li role="presentation" css={styles}>
       <div css={[iconStyles, { gridArea: 'icon' }]}>
-        <Placeholder />
+        <Placeholder bgColour={bgColour} />
       </div>
       <span
         css={[
@@ -69,10 +70,10 @@ export const NotebookListItemPlaceholder: React.FC<{ pos?: number }> = ({
           { width: `${randomWidth}px` },
         ]}
       >
-        <Placeholder />
+        <Placeholder bgColour={bgColour} />
       </span>
       <div css={[descriptionStyles, { gridArea: 'description' }]}>
-        <Placeholder />
+        <Placeholder bgColour={bgColour} />
       </div>
       <div css={[middleAndRightStyles, { gridArea: 'tags' }]}>
         {Array(tagsCount)

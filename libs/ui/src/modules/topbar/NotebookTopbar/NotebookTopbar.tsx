@@ -1,6 +1,16 @@
 import { docs } from '@decipad/routing';
-import { FC } from 'react';
-import { Chat, Deci, Home, Show, Sidebar, Templates } from '../../../icons';
+import { FC, memo, useMemo } from 'react';
+import {
+  Chat,
+  Deci,
+  Home,
+  Show,
+  SidebarRight,
+  Templates,
+  ChevronLeft,
+  ChevronRight,
+  Sparkles,
+} from '../../../icons';
 import {
   Button,
   HelpMenu,
@@ -10,6 +20,8 @@ import {
 } from '../../../shared';
 
 import { isFlagEnabled } from '@decipad/feature-flags';
+import { useCurrentWorkspaceStore } from '@decipad/react-contexts';
+import { getStripePlanTitle, useStripePlans } from '@decipad/react-utils';
 import { p13Bold } from '../../../primitives';
 import { Anchor } from '../../../utils';
 import { NotebookAvatars } from '../NotebookAvatars/NotebookAvatars';
@@ -50,9 +62,31 @@ const Help: FC = () => (
   </div>
 );
 
+const AIToggle: FC<TopbarActions> = ({ onToggleAI, isAiOpen }) => (
+  <Styled.HiddenFromSmallScreens>
+    <SegmentButtons
+      variant="darker"
+      buttons={[
+        {
+          children: (
+            <Styled.SidebarToggleTrigger>
+              <Sparkles />
+            </Styled.SidebarToggleTrigger>
+          ),
+          onClick: onToggleAI,
+          selected: isAiOpen,
+          setWhiteBackgroundWhenSelected: true,
+          tooltip: 'Open AI panel',
+          testId: 'top-bar-ai',
+        },
+      ]}
+    />
+  </Styled.HiddenFromSmallScreens>
+);
+
 const SidebarToggle: FC<TopbarActions> = ({
   onToggleSidebar,
-  isSidebarOpen,
+  isDefaultSidebarOpen,
 }) => (
   <Styled.HiddenFromSmallScreens>
     <SegmentButtons
@@ -61,13 +95,36 @@ const SidebarToggle: FC<TopbarActions> = ({
         {
           children: (
             <Styled.SidebarToggleTrigger>
-              <Sidebar />
+              <SidebarRight />
             </Styled.SidebarToggleTrigger>
           ),
           onClick: onToggleSidebar,
-          selected: isSidebarOpen,
-          tooltip: 'Open the sidebar',
+          selected: isDefaultSidebarOpen,
+          setWhiteBackgroundWhenSelected: true,
+          tooltip: 'Open default sidebar',
           testId: 'top-bar-sidebar',
+        },
+      ]}
+    />
+  </Styled.HiddenFromSmallScreens>
+);
+
+const CloseSidebar: FC<TopbarActions> = ({ closeSideBar, isSidebarClosed }) => (
+  <Styled.HiddenFromSmallScreens>
+    <SegmentButtons
+      variant="darker"
+      buttons={[
+        {
+          children: (
+            <Styled.SidebarToggleTrigger>
+              <ChevronRight />
+            </Styled.SidebarToggleTrigger>
+          ),
+          onClick: closeSideBar,
+          selected: isSidebarClosed,
+          setWhiteBackgroundWhenSelected: true,
+          tooltip: 'Close sidebar',
+          testId: 'close-sidebar',
         },
       ]}
     />
@@ -76,7 +133,7 @@ const SidebarToggle: FC<TopbarActions> = ({
 
 const AnnotationsToggle: FC<TopbarActions> = ({
   onToggleAnnotations,
-  isSidebarOpen,
+  isAnnotationsOpen,
 }) => {
   return (
     <Styled.HiddenFromSmallScreens>
@@ -90,7 +147,7 @@ const AnnotationsToggle: FC<TopbarActions> = ({
               </Styled.SidebarToggleTrigger>
             ),
             onClick: onToggleAnnotations,
-            selected: isSidebarOpen,
+            selected: isAnnotationsOpen,
             tooltip: 'Show annotations',
             testId: 'top-bar-annotations',
           },
@@ -178,7 +235,7 @@ const HomeButton: FC<AccessInfo & TopbarActions> = ({
   return (
     <Link href="https://decipad.com">
       <Styled.IconWrap>
-        <Deci />
+        <Deci role="img" aria-label="Deci Logo" />
       </Styled.IconWrap>
     </Link>
   );
@@ -284,9 +341,7 @@ const NoAccessReaderTopbar: FC<TopbarGenericProps> = ({
 const ReaderTopbar: FC<TopbarGenericProps> = ({
   access,
   actions,
-  status,
   authors,
-  NotebookOptions,
   UndoButtons,
   notebookName,
 }) => {
@@ -299,14 +354,8 @@ const ReaderTopbar: FC<TopbarGenericProps> = ({
             <div data-testId="notebook-name-topbar">
               <NotebookPath concatName notebookName={notebookName} />
             </div>
-            <Styled.Status data-testid="notebook-status">
-              {status}
-            </Styled.Status>
           </Styled.TitleContainer>
           {UndoButtons}
-          <Styled.EllipsisButtonContainer>
-            {NotebookOptions}
-          </Styled.EllipsisButtonContainer>
         </Styled.LeftContainer>
 
         <Styled.RightContainer>
@@ -347,43 +396,92 @@ const EmbedTopbar: FC<TopbarGenericProps> = ({ UndoButtons }) => {
 const WriterTopbar: FC<TopbarGenericProps> = ({
   NotebookOptions,
   UndoButtons,
-  AiModeSwitch,
   NotebookPublishing,
   access,
   actions,
   authors,
-  status,
   notebookName,
+  workspaceName,
+  toggleNavBarVisibility,
+  isNavBarVisible = true,
+  shouldRenderNavigationSidebar = true,
 }) => {
+  const { workspaceInfo } = useCurrentWorkspaceStore();
+  const plans = useStripePlans();
+  const planTitle = useMemo(
+    () =>
+      getStripePlanTitle(plans, workspaceInfo.plan, workspaceInfo.isPremium),
+    [plans, workspaceInfo.isPremium, workspaceInfo.plan]
+  );
+
   return (
     <Styled.DefaultTopbarWrapper>
       <Styled.InnerStyles>
         <Styled.LeftContainer>
+          <Styled.HideTabletScreen>
+            {isNavBarVisible && shouldRenderNavigationSidebar && (
+              <Styled.LeftSidebarContainer>
+                <Styled.DeciLogo>
+                  <Deci />
+                </Styled.DeciLogo>
+                <Styled.WorkspaceInfoContainer>
+                  <Styled.WorkspaceNameContainer>
+                    {workspaceName}
+                  </Styled.WorkspaceNameContainer>
+                  <div>
+                    <Styled.WorkspaceMembersContainer>{`${
+                      workspaceInfo.membersCount
+                    } member${
+                      Number(workspaceInfo.membersCount) > 1 ? 's' : ''
+                    }`}</Styled.WorkspaceMembersContainer>
+                    <Styled.Badge isPremium={!!workspaceInfo.isPremium}>
+                      {planTitle}
+                    </Styled.Badge>
+                  </div>
+                </Styled.WorkspaceInfoContainer>
+                <Styled.CollapseExpandIconContainer
+                  isNavBarVisible={isNavBarVisible}
+                  role="button"
+                  onClick={toggleNavBarVisibility}
+                >
+                  {isNavBarVisible ? <ChevronLeft /> : <ChevronRight />}
+                </Styled.CollapseExpandIconContainer>
+              </Styled.LeftSidebarContainer>
+            )}
+            {!isNavBarVisible && shouldRenderNavigationSidebar && (
+              <Styled.CollapseExpandIconContainer
+                isNavBarVisible={isNavBarVisible}
+                role="button"
+                onClick={toggleNavBarVisibility}
+              >
+                {isNavBarVisible ? <ChevronLeft /> : <ChevronRight />}
+              </Styled.CollapseExpandIconContainer>
+            )}
+          </Styled.HideTabletScreen>
           <HomeButton {...access} {...actions} />
           <Styled.TitleContainer>
             <div data-testId="notebook-name-topbar">
               <NotebookPath concatName notebookName={notebookName} />
             </div>
-
-            <Styled.Status data-testid="notebook-status">
-              {status}
-            </Styled.Status>
           </Styled.TitleContainer>
           {UndoButtons}
-          <Styled.HiddenFromSmallScreens>
-            <Styled.AiContainer>{AiModeSwitch}</Styled.AiContainer>
-          </Styled.HiddenFromSmallScreens>
-          <Styled.EllipsisButtonContainer>
-            {NotebookOptions}
-          </Styled.EllipsisButtonContainer>
+          {NotebookOptions && (
+            <Styled.EllipsisButtonContainer>
+              {NotebookOptions}
+            </Styled.EllipsisButtonContainer>
+          )}
         </Styled.LeftContainer>
         <Styled.RightContainer>
+          <TemplatesLink {...actions} />
+          <Help />
           {isFlagEnabled('ENABLE_COMMENTS') && (
             <AnnotationsToggle {...actions} />
           )}
-          <TemplatesLink {...actions} />
-          <Help />
-          <SidebarToggle {...actions} />
+          <Styled.GroupIconsWrapper>
+            <AIToggle {...actions} />
+            <SidebarToggle {...actions} />
+            <CloseSidebar {...actions} />
+          </Styled.GroupIconsWrapper>
           <NotebookAuthors {...authors} />
 
           <Styled.HideSmallScreen>{NotebookPublishing}</Styled.HideSmallScreen>
@@ -419,7 +517,7 @@ const AiGeneratedTopbar: FC<TopbarGenericProps> = ({ access, actions }) => {
   );
 };
 
-export const NotebookTopbar: FC<TopbarGenericProps> = (props) => {
+export const NotebookTopbar: FC<TopbarGenericProps> = memo((props) => {
   if (props.access.isGPTGenerated) {
     return <AiGeneratedTopbar {...props} />;
   }
@@ -440,4 +538,4 @@ export const NotebookTopbar: FC<TopbarGenericProps> = (props) => {
     case 'ADMIN':
       return <WriterTopbar {...props} />;
   }
-};
+});

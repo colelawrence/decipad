@@ -8,14 +8,6 @@ import { User } from './manager/test-users';
 test('notebook actions topbar @notebook', async ({ testUser }) => {
   const { page, notebook } = testUser;
 
-  await test.step('change notebook status', async () => {
-    await expect(notebook.notebookStatus).toHaveText('Draft');
-    await notebook.changeStatus('Review');
-    await expect(notebook.notebookStatus).toHaveText('review');
-    await notebook.changeStatus('Done');
-    await expect(notebook.notebookStatus).toHaveText('done');
-  });
-
   await test.step('can archive and unarchive notebook', async () => {
     await notebook.archive();
     await notebook.unarchive();
@@ -343,7 +335,7 @@ test('check live collaboration same notebook', async ({
     await userBPage.goto(notebookURL);
     await userBNotebook.checkNotebookTitle(notebookTitle);
     await userBNotebook.waitForEditorToLoad();
-    await userB.aiAssistant.closePannel();
+    await userB.aiAssistant.closePanel();
     notebookJsonUserB = await userBNotebook.download();
   });
 

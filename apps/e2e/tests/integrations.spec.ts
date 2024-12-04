@@ -57,7 +57,7 @@ test.skip('make sure our js code templates work @snapshot', async ({
   const { page, notebook, workspace } = randomFreeUser;
 
   await workspace.createNewNotebook();
-  await randomFreeUser.aiAssistant.closePannel();
+  await randomFreeUser.aiAssistant.closePanel();
   await notebook.waitForEditorToLoad();
   await notebook.focusOnBody();
 
@@ -94,7 +94,7 @@ test('reuse variables in JS codeblock and duplicate integrations', async ({
   const { page, notebook, workspace } = randomFreeUser;
 
   await workspace.createNewNotebook();
-  await randomFreeUser.aiAssistant.closePannel();
+  await randomFreeUser.aiAssistant.closePanel();
   await notebook.waitForEditorToLoad();
   await notebook.focusOnBody();
   await randomFreeUser.notebook.closeSidebar();
@@ -181,7 +181,7 @@ test('screenshots the import menu @snapshot', async ({ randomFreeUser }) => {
   const { page, notebook, workspace } = randomFreeUser;
 
   await workspace.createNewNotebook();
-  await randomFreeUser.aiAssistant.closePannel();
+  await randomFreeUser.aiAssistant.closePanel();
   await notebook.waitForEditorToLoad();
   await notebook.focusOnBody();
   await randomFreeUser.notebook.closeSidebar();
@@ -209,7 +209,7 @@ test('checks the ability to change the unit of a response', async ({
   expect(allSources.length).toBeGreaterThan(0);
 
   await workspace.createNewNotebook();
-  await randomFreeUser.aiAssistant.closePannel();
+  await randomFreeUser.aiAssistant.closePanel();
 
   await notebook.waitForEditorToLoad();
   await notebook.focusOnBody();

@@ -3,7 +3,6 @@ import { expect, type Locator, type Page } from '@playwright/test';
 export class AiAssistant {
   readonly page: Page;
   readonly messageInput: Locator;
-  readonly chatToggle: Locator;
   readonly sendMessage: Locator;
   readonly mockUsage = {
     promptTokensUsed: 13099,
@@ -140,7 +139,6 @@ export class AiAssistant {
   constructor(page: Page) {
     this.page = page;
     this.messageInput = this.page.getByTestId('message-input');
-    this.chatToggle = this.page.getByTestId('ai-switch');
     this.sendMessage = this.page.getByRole('button', { name: 'Send' });
   }
 
@@ -266,9 +264,9 @@ export class AiAssistant {
   /**
    * Open AI Assistant Pannel.
    */
-  async openPannel() {
+  async openPanel() {
     await expect(async () => {
-      await this.chatToggle.click();
+      await this.page.getByTestId('segment-button-trigger-top-bar-ai').click();
       await expect(this.messageInput).toBeVisible();
       expect(
         await this.getChatMessages(),
@@ -280,21 +278,19 @@ export class AiAssistant {
   }
 
   /**
-   * Close AI Assistant Pannel.
+   * Close AI Assistant Panel.
    */
-  async closePannel() {
-    // Check if the ai-switch component is disabled
-    const aiSwitch = this.page.getByTestId('ai-switch');
-    const isAiSwitchChecked =
-      (await aiSwitch.getAttribute('data-state')) === 'checked';
-
-    if (!isAiSwitchChecked) {
+  async closePanel() {
+    // Check if the message input is visible; if not, return
+    if (!(await this.messageInput.isVisible())) {
       return;
     }
 
     await expect(async () => {
       await expect(this.messageInput).toBeVisible();
-      await this.chatToggle.click();
+      await this.page
+        .getByTestId('segment-button-trigger-close-sidebar')
+        .click();
       await expect(this.messageInput).toBeHidden();
     }, "AI didn't close").toPass();
   }

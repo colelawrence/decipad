@@ -6,7 +6,7 @@ import { snapshot } from '../utils/src';
 test('snapshot test for AI panel @snapshot', async ({ testUser }) => {
   const { aiAssistant } = testUser;
 
-  await aiAssistant.openPannel();
+  await aiAssistant.openPanel();
   await snapshot(testUser.page, 'AI Chat', {
     mobile: false,
   });
@@ -15,14 +15,14 @@ test('snapshot test for AI panel @snapshot', async ({ testUser }) => {
 test.skip('AI adds variable block @AI', async ({ testUser }) => {
   const { aiAssistant } = testUser;
 
-  await aiAssistant.openPannel();
+  await aiAssistant.openPanel();
   await aiAssistant.mockAddVariable();
 });
 
 test.skip('AI adds basic formula block @AI', async ({ testUser }) => {
   const { aiAssistant } = testUser;
 
-  await aiAssistant.openPannel();
+  await aiAssistant.openPanel();
   await aiAssistant.mockAddFormula();
 });
 
@@ -30,35 +30,35 @@ test.skip('AI adds basic formula block @AI', async ({ testUser }) => {
 test.skip('AI adds input widget @AI', async ({ testUser }) => {
   const { aiAssistant } = testUser;
 
-  await aiAssistant.openPannel();
+  await aiAssistant.openPanel();
   await aiAssistant.mockInputWidget();
 });
 
 test.skip('AI adds slider @AI', async ({ testUser }) => {
   const { aiAssistant } = testUser;
 
-  await aiAssistant.openPannel();
+  await aiAssistant.openPanel();
   await aiAssistant.mockSliderWidget();
 });
 
 test.skip('AI adds notebook paragraph @AI', async ({ testUser }) => {
   const { aiAssistant } = testUser;
 
-  await aiAssistant.openPannel();
+  await aiAssistant.openPanel();
   await aiAssistant.mockParagraph();
 });
 
 test.skip('AI adds table to notebook @AI', async ({ testUser }) => {
   const { aiAssistant } = testUser;
 
-  await aiAssistant.openPannel();
+  await aiAssistant.openPanel();
   await aiAssistant.mockTable();
 });
 
 test.skip('AI clear chat @AI', async ({ testUser }) => {
   const { aiAssistant } = testUser;
 
-  await aiAssistant.openPannel();
+  await aiAssistant.openPanel();
   const initialMessages = await aiAssistant.getChatMessages();
   await aiAssistant.mockAIChat();
   await aiAssistant.clearChat();

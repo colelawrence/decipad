@@ -194,7 +194,7 @@ export const NavigationTitleWrapper = styled.div({
   paddingBottom: '8px',
   alignItems: 'center',
   backgroundColor: cssVar('backgroundAccent'),
-  position: 'fixed',
+  position: 'absolute',
   width: '225px',
   zIndex: '2',
 });

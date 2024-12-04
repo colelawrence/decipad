@@ -88,7 +88,7 @@ export class User {
 
   async createNewNotebook() {
     await this.workspace.createNewNotebook();
-    await this.aiAssistant.closePannel();
+    await this.aiAssistant.closePanel();
     await this.notebook.waitForEditorToLoad();
   }
 

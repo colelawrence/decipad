@@ -29,16 +29,19 @@ export interface TopbarActions {
   readonly onClaimNotebook: () => void;
   readonly onDuplicateNotebook: () => void;
   readonly onToggleAnnotations: () => void;
-
+  readonly onToggleAI: () => void;
   // info
-  readonly isSidebarOpen: boolean;
+  readonly isDefaultSidebarOpen: boolean;
+  readonly isAiOpen: boolean;
+  readonly closeSideBar: () => void;
+  readonly isSidebarClosed: boolean;
+  readonly isAnnotationsOpen: boolean;
 }
 
 export type TopbarGenericProps = {
   // Composition props;
-  readonly NotebookOptions: ReactNode;
+  readonly NotebookOptions?: ReactNode;
   readonly UndoButtons: ReactNode;
-  readonly AiModeSwitch: ReactNode;
   readonly NotebookPublishing: ReactNode;
 
   readonly access: AccessInfo;
@@ -48,5 +51,9 @@ export type TopbarGenericProps = {
 
   readonly isEmbed: boolean;
 
-  readonly status: TColorStatus | 'Archived';
+  readonly status?: TColorStatus | 'Archived';
+  readonly workspaceName?: string | null;
+  readonly toggleNavBarVisibility?: () => void;
+  readonly isNavBarVisible?: boolean;
+  readonly shouldRenderNavigationSidebar?: boolean;
 };

@@ -41,6 +41,7 @@ fragment EditorNotebook on Pad {
     name
     isPremium
     plan
+    membersCount
     workspaceSubscription {
       ...WorkspaceSubscriptionData
     }

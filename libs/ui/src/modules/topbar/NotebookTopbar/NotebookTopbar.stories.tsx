@@ -3,7 +3,6 @@ import { ComponentProps } from 'react';
 import { NotebookTopbar } from './NotebookTopbar';
 
 import { CaretDown } from '../../../icons';
-import { AIModeSwitch } from '../AIModeSwitch/AIModeSwitch';
 import { NotebookOptions } from '../NotebookOptions/NotebookOptions';
 import { NotebookPath } from '../NotebookPath/NotebookPath';
 import { NotebookPublishingPopUp } from '../NotebookPublishingPopUp/NotebookPublishingPopUp';
@@ -78,7 +77,6 @@ const args: ComponentProps<typeof NotebookTopbar> = {
       onRevertChanges={() => {}}
     />
   ),
-  AiModeSwitch: <AIModeSwitch value={false} onChange={() => {}} />,
   NotebookPublishing: (
     <NotebookPublishingPopUp
       notebookName={notebookName}
@@ -123,7 +121,12 @@ const args: ComponentProps<typeof NotebookTopbar> = {
     onClaimNotebook: () => {},
     onDuplicateNotebook: () => {},
     onToggleAnnotations: () => {},
-    isSidebarOpen: false,
+    isDefaultSidebarOpen: false,
+    onToggleAI: () => {},
+    isAiOpen: false,
+    closeSideBar: () => {},
+    isSidebarClosed: true,
+    isAnnotationsOpen: false,
   },
   authors: {
     adminName: 'Me',

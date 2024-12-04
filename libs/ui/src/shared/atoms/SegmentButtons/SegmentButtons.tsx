@@ -16,6 +16,7 @@ export interface SegmentButton {
   readonly visible?: boolean;
   readonly disabled?: boolean;
   readonly selected?: boolean;
+  readonly setWhiteBackgroundWhenSelected?: boolean;
 }
 
 export type SegmentButtonsProps = {
@@ -48,6 +49,7 @@ export const SegmentButtons: FC<SegmentButtonsProps> = ({
           disabled = false,
           selected = false,
           experimentalTooltip = false,
+          setWhiteBackgroundWhenSelected = false,
         } = button;
 
         const hasTooltip = !!tooltip;
@@ -61,6 +63,7 @@ export const SegmentButtons: FC<SegmentButtonsProps> = ({
             selected={selected}
             padding={padding}
             iconSize={iconSize}
+            setWhiteBackgroundWhenSelected={setWhiteBackgroundWhenSelected}
           >
             <div
               data-testid={`segment-button-trigger${
@@ -149,6 +152,7 @@ const FigureButton = styled.figure<{
   padding: SegmentButtonsProps['padding'];
   iconSize: SegmentButtonsProps['iconSize'];
   selected: boolean;
+  setWhiteBackgroundWhenSelected?: boolean;
 }>((props) => ({
   display: 'grid',
   alignItems: 'center',
@@ -157,7 +161,9 @@ const FigureButton = styled.figure<{
   padding: props.padding === 'default' ? '5px' : '4px',
 
   backgroundColor: props.selected
-    ? componentCssVars('ButtonTertiaryAltDefaultBackground')
+    ? props.setWhiteBackgroundWhenSelected
+      ? componentCssVars('ButtonTertiaryAltSelectedBackground')
+      : componentCssVars('ButtonTertiaryAltDefaultBackground')
     : props.variant === 'transparent'
     ? 'transparent'
     : props.variant === 'darker'

@@ -16,8 +16,9 @@ export function useSetWorkspaceQuota(
     setCurrentWorkspaceInfo({
       id: workspace?.id,
       isPremium: Boolean(workspace?.isPremium),
-      plan: workspace?.plan || undefined,
+      plan: workspace?.plan,
       name: workspace?.name,
+      membersCount: workspace?.membersCount || 1,
     });
   }, [workspace, setCurrentWorkspaceInfo]);
 }

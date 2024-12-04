@@ -23,11 +23,9 @@ export class Notebook {
   readonly advancedFomulaBlock: Locator;
   readonly formulaBlockCode: Locator;
   readonly notebookActions: Locator;
-  readonly notebookStatus: Locator;
   readonly notebookIconButton: Locator;
   readonly notebookHelpButton: Locator;
   readonly archiveNotebook: Locator;
-  readonly changeStatusMenu: Locator;
   readonly downloadNotebook: Locator;
   readonly restoreArchiveNotebook: Locator;
   readonly duplicateNotebook: Locator;
@@ -51,7 +49,6 @@ export class Notebook {
     this.advancedFomulaBlock = page.getByTestId('code-line');
     this.formulaBlockCode = page.getByTestId('codeline-code');
     this.notebookActions = page.getByTestId('notebook-actions');
-    this.notebookStatus = page.getByTestId('notebook-status');
     this.notebookIconButton = page.getByTestId('notebook-icon');
     this.notebookHelpButton = page.getByTestId(
       'segment-button-trigger-top-bar-help'
@@ -68,9 +65,6 @@ export class Notebook {
     this.resultWidget = page.getByTestId('result-widget');
     this.republishNotification = page.getByTestId('publish-notification');
     this.publishingSidebar = page.getByTestId('publishing-sidebar');
-    this.changeStatusMenu = page.getByRole('menuitem', {
-      name: 'Change Status',
-    });
 
     this.dataDrawer = page.getByTestId('data-drawer');
     this.dataDrawerWrapper = page.getByTestId('data-drawer-wrapper');
@@ -1575,22 +1569,7 @@ export class Notebook {
     // TODO: we don't use zero-width spaces in magic numbers, so we can remove this
     return content?.replace(/\u2060/gi, '');
   }
-  /**
-   *Returns contents of infline result (magic number)
-   *
-   * **Usage**
-   *
-   * ```js
-   * await notebook.changeStatus('Review');
-   * ```
-   */
-  async changeStatus(newSatus: 'Draft' | 'Review' | 'Approval' | 'Done') {
-    await this.notebookActions.click();
-    await this.changeStatusMenu.click();
-    await this.page.getByRole('menuitem', { name: newSatus }).click();
-    // check menu closed
-    await expect(this.changeStatusMenu).toBeHidden();
-  }
+
   /**
    * Achive notebook using options menu.
    *

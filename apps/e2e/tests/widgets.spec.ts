@@ -107,7 +107,7 @@ test('dropdown widget', async ({ randomFreeUser }) => {
   await test.step('creates an empty dropdown widget', async () => {
     await workspace.newWorkspaceWithPlan('plus');
     await workspace.createNewNotebook();
-    await randomFreeUser.aiAssistant.closePannel();
+    await randomFreeUser.aiAssistant.closePanel();
     await notebook.waitForEditorToLoad();
     await randomFreeUser.notebook.closeSidebar();
     await notebook.focusOnBody();

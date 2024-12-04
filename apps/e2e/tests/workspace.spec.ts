@@ -443,10 +443,6 @@ test.skip('workspace reader checks @workspace @roles', async ({
       'workspace readers shoudnt be able to access notebook options menu'
     ).toBeVisible();
     await expect(
-      randomFreeUser.notebook.changeStatusMenu,
-      "user invited to be notebook reader can't acces change notebook status menu"
-    ).toBeHidden();
-    await expect(
       randomFreeUser.notebook.archiveNotebook,
       "user invited to be notebook reader can't access notebook archive menu"
     ).toBeHidden();

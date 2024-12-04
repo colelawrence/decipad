@@ -1,6 +1,5 @@
 /* eslint decipad/css-prop-named-variable: 0 */
 import { css } from '@emotion/react';
-import { FC } from 'react';
 
 import { NotebookListItemPlaceholder } from '../NotebookListItemPlaceholder/NotebookListItemPlaceholder';
 import { notebookList } from '../../../styles';
@@ -23,14 +22,16 @@ const bodyStyles = css({
   overflow: 'hidden',
 });
 
-export const NotebookListPlaceholder = (): ReturnType<FC> => {
+export const NotebookListPlaceholder: React.FC<{
+  bgColour?: 'default' | 'heavy';
+}> = ({ bgColour = 'default' }) => {
   return (
     <div aria-label="Notebook list loading" css={styles}>
       <ol css={bodyStyles}>
         {Array(numberOfItemPlaceholders)
           .fill(null)
           .map((_, i) => (
-            <NotebookListItemPlaceholder key={i} pos={i} />
+            <NotebookListItemPlaceholder key={i} pos={i} bgColour={bgColour} />
           ))}
       </ol>
     </div>
