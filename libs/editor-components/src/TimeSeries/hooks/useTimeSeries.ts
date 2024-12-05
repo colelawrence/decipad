@@ -80,7 +80,7 @@ export const useTimeSeries = ({
       return element.children[1].children
         .map((timeSeriesColumn) =>
           availableColumns.findIndex(
-            // label is used for newer time-seriess
+            // label is used for newer time-series
             (column) =>
               column.name === timeSeriesColumn.label ||
               column.blockId === timeSeriesColumn.name

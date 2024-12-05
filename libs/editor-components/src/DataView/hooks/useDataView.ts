@@ -8,6 +8,7 @@ import type {
   DataViewElement,
   DataViewFilter,
   MyEditor,
+  TimeSeriesElement,
 } from '@decipad/editor-types';
 import { useResolved } from '@decipad/react-utils';
 import { useCallback, useEffect, useMemo } from 'react';
@@ -20,7 +21,7 @@ import { useDataViewActions } from './useDataViewActions';
 
 interface UseDataViewProps {
   editor: MyEditor;
-  element: DataViewElement;
+  element: DataViewElement | TimeSeriesElement;
 }
 
 interface UseDataViewReturnType {

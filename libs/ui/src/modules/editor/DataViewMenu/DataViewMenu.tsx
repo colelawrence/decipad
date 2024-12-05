@@ -31,9 +31,11 @@ const dataViewMenuWrapperStyles = css({
 });
 
 const menuButtonStyles = css({
+  position: 'relative',
+  top: -4,
   backgroundColor: `${cssVar('backgroundDefault')}`,
-  width: '36px',
-  height: '36px',
+  width: '24px',
+  height: '24px',
   borderRadius: '8px',
   display: 'flex',
   alignItems: 'center',
@@ -67,21 +69,23 @@ export const DataViewMenu = ({
 
   return (
     <div>
-      {!readOnly &&
-        (menuIsOpen ? null : (
-          <button
-            data-testid="add-data-view-column-button"
-            aria-roledescription="Add column"
-            onClick={() => handleMenuClick()}
-            css={[menuButtonStyles, hideOnPrint]}
-          >
-            <Add />
-          </button>
-        ))}
       <div css={dataViewMenuWrapperStyles}>
         <MenuList
           root
-          trigger={<div />}
+          trigger={
+            readOnly ? (
+              <div />
+            ) : (
+              <button
+                data-testid="add-data-view-column-button"
+                aria-roledescription="Add column"
+                onClick={() => handleMenuClick()}
+                css={[menuButtonStyles, hideOnPrint]}
+              >
+                <Add />
+              </button>
+            )
+          }
           open={menuIsOpen}
           onChangeOpen={setMenuIsOpen}
           dropdown
