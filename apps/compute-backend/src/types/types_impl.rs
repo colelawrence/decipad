@@ -1,10 +1,10 @@
 use chrono::Datelike;
 use num_bigint::BigInt;
-use wasm_bindgen::prelude::wasm_bindgen;
 use std::{
     mem,
     ops::{Add, AddAssign, Div, Mul, Sub},
 };
+use wasm_bindgen::prelude::wasm_bindgen;
 
 /* ----Implements easy to use zero (mostly good for summing and similar)----  */
 use num::{
@@ -252,6 +252,25 @@ impl AddAssign<DeciResult> for DeciResult {
     fn add_assign(&mut self, other: Self) {
         *self = match (mem::take(self), other) {
             (DeciResult::Fraction(n1, d1), DeciResult::Fraction(n2, d2)) => 'arm: {
+                if d1 == 0 {
+                    if n1 == 0 {
+                        break 'arm DeciResult::Fraction(0, 0);
+                    }
+                    if d2 == 0 {
+                        if n2 == 0 {
+                            break 'arm DeciResult::Fraction(0, 0);
+                        }
+                        if n1 == n2 {
+                            break 'arm DeciResult::Fraction(n1, d1);
+                        } else {
+                            break 'arm DeciResult::Fraction(0, 0);
+                        }
+                    } else {
+                        break 'arm DeciResult::Fraction(n1, d1);
+                    }
+                } else if d2 == 0 {
+                    break 'arm DeciResult::Fraction(d1, d2);
+                }
                 if d1 == d2 {
                     let n = n1.checked_add(n2);
                     break 'arm match n {
@@ -323,17 +342,40 @@ impl AddAssign<DeciResult> for DeciResult {
             }
             (DeciResult::ArbitraryFraction(n1, d1), DeciResult::Fraction(n2, d2))
             | (DeciResult::Fraction(n2, d2), DeciResult::ArbitraryFraction(n1, d1)) => {
-                DeciResult::ArbitraryFraction(n1, d1)
-                    + DeciResult::ArbitraryFraction(
-                        BigInt::from_i64(n2).unwrap(),
-                        BigInt::from_i64(d2).unwrap(),
-                    )
+                if d2 == 0 {
+                    DeciResult::Fraction(n2, d2)
+                } else {
+                    DeciResult::ArbitraryFraction(n1, d1)
+                        + DeciResult::ArbitraryFraction(
+                            BigInt::from_i64(n2).unwrap(),
+                            BigInt::from_i64(d2).unwrap(),
+                        )
+                }
             }
 
             (
                 DeciResult::ArbitraryFraction(n1, d1),
                 DeciResult::ArbitraryFraction(n2, d2),
             ) => 'arm: {
+                if d1 == BigInt::ZERO {
+                    if n1 == BigInt::ZERO {
+                        break 'arm DeciResult::Fraction(0, 0);
+                    }
+                    if d2 == BigInt::ZERO {
+                        if n2 == BigInt::ZERO {
+                            break 'arm DeciResult::Fraction(0, 0);
+                        }
+                        if n1 == n2 {
+                            break 'arm DeciResult::ArbitraryFraction(n1, d1);
+                        } else {
+                            break 'arm DeciResult::Fraction(0, 0);
+                        }
+                    } else {
+                        break 'arm DeciResult::ArbitraryFraction(n1, d1);
+                    }
+                } else if d2 == BigInt::ZERO {
+                    break 'arm DeciResult::ArbitraryFraction(d1, d2);
+                }
                 if d1 == d2 {
                     let n = n1.clone() + &n2.clone();
                     break 'arm DeciResult::ArbitraryFraction(n, d1.clone());
@@ -432,7 +474,7 @@ impl Mul<usize> for DeciResult {
                 } else {
                     DeciResult::ArbitraryFraction(
                         BigInt::from_i64(num).unwrap() * rhs,
-                        BigInt::from_i64(den).unwrap()
+                        BigInt::from_i64(den).unwrap(),
                     )
                 }
             }
@@ -469,11 +511,23 @@ impl<'a, 'b> Mul<&'b DeciResult> for &'a DeciResult {
     fn mul(self, other: &DeciResult) -> DeciResult {
         match (self, other) {
             (DeciResult::Fraction(n1, d1), DeciResult::Fraction(n2, d2)) => {
-                let newnum = n1.checked_mul(*n2);
-                let newden = d1.checked_mul(*d2);
-                match (newnum, newden) {
-                    (Some(n), Some(d)) => DeciResult::Fraction(n, d),
-                    _ => self.to_arb() * other.to_arb(),
+                if *d1 == 0 || *d2 == 0 {
+                    if *n1 == 0 || *n2 == 0 {
+                        DeciResult::Fraction(0, 0)
+                    } else {
+                        if (*n1 > 0) == (*n2 > 0) {
+                            DeciResult::Fraction(1, 0)
+                        } else {
+                            DeciResult::Fraction(-1, 0)
+                        }
+                    }
+                } else {
+                    let newnum = n1.checked_mul(*n2);
+                    let newden = d1.checked_mul(*d2);
+                    match (newnum, newden) {
+                        (Some(n), Some(d)) => DeciResult::Fraction(n, d),
+                        _ => self.to_arb() * other.to_arb(),
+                    }
                 }
             }
             (DeciResult::Fraction(_n1, _d1), DeciResult::ArbitraryFraction(_n2, _d2)) => {
@@ -486,7 +540,19 @@ impl<'a, 'b> Mul<&'b DeciResult> for &'a DeciResult {
                 self * &other.to_arb()
             }
             (DeciResult::ArbitraryFraction(n1, d1), DeciResult::ArbitraryFraction(n2, d2)) => {
-                DeciResult::ArbitraryFraction(n1 * n2, d1 * d2)
+                if *d1 == BigInt::ZERO || *d2 == BigInt::ZERO {
+                    if *n1 == BigInt::ZERO || *n2 == BigInt::ZERO {
+                        DeciResult::Fraction(0, 0)
+                    } else {
+                        if (*n1 > BigInt::ZERO) == (*n2 > BigInt::ZERO) {
+                            DeciResult::Fraction(1, 0)
+                        } else {
+                            DeciResult::Fraction(-1, 0)
+                        }
+                    }
+                } else {
+                    DeciResult::ArbitraryFraction(n1 * n2, d1 * d2)
+                }
             }
             (DeciResult::ArbitraryFraction(_n1, _n2), DeciResult::Column(items)) => {
                 DeciResult::Column(items.iter().map(|x| x * self).collect())
