@@ -893,30 +893,59 @@ let ParserRules = [
       );
     },
   },
-  { name: 'dateInner$ebnf$1', symbols: ['dateInnerMonth'], postprocess: id },
   {
-    name: 'dateInner$ebnf$1',
+    name: 'dateInner',
+    symbols: ['dateYear'],
+    postprocess: (d) => ({
+      type: 'date',
+      args: ['year', d[0].year],
+    }),
+  },
+  { name: 'dateInner$subexpression$1', symbols: ['dateInnerQuarter'] },
+  { name: 'dateInner$subexpression$1', symbols: ['dateInnerWeek'] },
+  { name: 'dateInner$subexpression$1', symbols: ['dateInnerMonth'] },
+  {
+    name: 'dateInner',
+    symbols: ['dateYear', 'dateInner$subexpression$1'],
+    postprocess: (d) => ({
+      type: 'date',
+      args: ['year', d[0].year],
+      nextDateInner: d[1][0],
+    }),
+  },
+  {
+    name: 'dateInnerWeek$subexpression$1$ebnf$1',
+    symbols: [{ literal: '-' }],
+    postprocess: id,
+  },
+  {
+    name: 'dateInnerWeek$subexpression$1$ebnf$1',
     symbols: [],
     postprocess: function (d) {
       return null;
     },
   },
   {
-    name: 'dateInner',
-    symbols: ['dateYear', 'dateInner$ebnf$1'],
-    postprocess: (d) => ({
-      type: 'date',
-      args: ['year', d[0].year],
-      nextDateInner: d[1],
-    }),
+    name: 'dateInnerWeek$subexpression$1$subexpression$1',
+    symbols: [{ literal: 'w' }],
   },
   {
-    name: 'dateInner',
-    symbols: ['dateYear', 'dateInnerQuarter'],
+    name: 'dateInnerWeek$subexpression$1$subexpression$1',
+    symbols: [{ literal: 'W' }],
+  },
+  {
+    name: 'dateInnerWeek$subexpression$1',
+    symbols: [
+      'dateInnerWeek$subexpression$1$ebnf$1',
+      'dateInnerWeek$subexpression$1$subexpression$1',
+    ],
+  },
+  {
+    name: 'dateInnerWeek',
+    symbols: ['dateInnerWeek$subexpression$1', 'dateWeek'],
     postprocess: (d) => ({
       type: 'date',
-      args: ['year', d[0].year],
-      nextDateInner: d[1],
+      args: ['week', d[1].week],
     }),
   },
   { name: 'dateInnerQuarter$subexpression$1', symbols: [{ literal: 'q' }] },
@@ -1067,6 +1096,11 @@ let ParserRules = [
     postprocess: makeDateFragmentReader('month', 2, 1, 12),
   },
   { name: 'dateMonth', symbols: ['literalMonth'], postprocess: id },
+  {
+    name: 'dateWeek',
+    symbols: [tokenizer.has('digits') ? { type: 'digits' } : digits],
+    postprocess: makeDateFragmentReader('week', 2, 1, 53),
+  },
   {
     name: 'dateDay',
     symbols: [tokenizer.has('digits') ? { type: 'digits' } : digits],

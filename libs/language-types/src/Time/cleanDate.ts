@@ -26,16 +26,17 @@ export const cleanDate = (
   if (date == null) {
     return undefined;
   }
+  if (specificity === 'quarter' || specificity === 'week') {
+    // we must treat quarters and weeks specially because
+    // they must end on the beginning of the period
+    // otherwise, comparisons with roundings will fail.
+    return startOfDate(BigInt(date), specificity);
+  }
+
   const necessarySegments = dateToArray(date).slice(
     0,
     timeUnitToJSTimeIndex[specificity] + 1
   );
 
-  if (specificity === 'quarter') {
-    // we must treat quarters specially because
-    // they must end on the beginning of the first month
-    // otherwise, comparisons with roundings will fail.
-    return startOfDate(BigInt(date), specificity);
-  }
   return arrayToDate(necessarySegments);
 };

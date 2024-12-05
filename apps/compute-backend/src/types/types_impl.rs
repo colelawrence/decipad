@@ -135,6 +135,7 @@ impl DeciResult {
                 DateSpecificity::Year => date.unwrap().format("%Y").to_string(),
                 DateSpecificity::Quarter => date.unwrap().format("%Y-%m").to_string(),
                 DateSpecificity::Month => date.unwrap().format("%Y-%m-%d").to_string(),
+                DateSpecificity::Week => date.unwrap().format("%Y-W%W").to_string(),
                 DateSpecificity::Day => date.unwrap().format("%Y-%m-%d").to_string(),
                 DateSpecificity::Hour => date.unwrap().format("%Y-%m-%d %H").to_string(),
                 DateSpecificity::Minute => date.unwrap().format("%Y-%m-%d %H:%M").to_string(),
@@ -407,6 +408,7 @@ impl Sub for DeciResult {
                         }
                         DateSpecificity::None => diff.num_days().into(),
                         DateSpecificity::Day => diff.num_days().into(),
+                        DateSpecificity::Week => diff.num_weeks().into(),
                         DateSpecificity::Hour => diff.num_hours().into(),
                         DateSpecificity::Minute => diff.num_minutes().into(),
                         DateSpecificity::Second => diff.num_seconds().into(),

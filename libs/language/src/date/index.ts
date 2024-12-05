@@ -4,6 +4,7 @@ import { Time } from '@decipad/language-types';
 // eslint-disable-next-line no-restricted-imports
 import { n, pairwise } from '@decipad/language-utils';
 import { getDefined } from '@decipad/utils';
+import { DateTime } from 'luxon';
 
 export { Time };
 
@@ -115,27 +116,52 @@ export const dateNodeToTimeUnit = (
   return lowestSegment;
 };
 
+const getDateFromAstFormQuarter = (
+  segments: AST.Date['args']
+): [bigint | undefined, Time.Specificity] => {
+  const quarter = (Number(segments[3]) - 1) * 3 + 1;
+  const [dateNum] = getDateFromAstForm([
+    'year',
+    segments[1],
+    'month',
+    BigInt(quarter),
+  ]);
+  return [dateNum, 'quarter'];
+};
+
+const getDateFromAstFormWeek = (
+  segments: AST.Date['args']
+): [bigint | undefined, Time.Specificity] => {
+  const year = Number(segments[1]);
+  const week = Number(segments[3]);
+  const dateNum = BigInt(
+    DateTime.fromObject(
+      { weekYear: year, weekNumber: week },
+      { zone: 'utc' }
+    ).toMillis()
+  );
+  return [dateNum, 'week'];
+};
+
 export const getDateFromAstForm = (
   segments: AST.Date['args']
 ): [bigint | undefined, Time.Specificity] => {
-  if (segments[2] === 'quarter') {
-    const quarter = (Number(segments[3]) - 1) * 3 + 1;
-    const [dateNum] = getDateFromAstForm([
-      'year',
-      segments[1],
-      'month',
-      BigInt(quarter),
-    ]);
-    return [dateNum, 'quarter'];
+  const secondSegment = segments[2];
+  switch (secondSegment) {
+    case 'quarter':
+      return getDateFromAstFormQuarter(segments);
+    case 'week':
+      return getDateFromAstFormWeek(segments);
+    default: {
+      const dateNum = Time.arrayToDate([
+        segments[1],
+        segments[3],
+        segments[5],
+        segments[7],
+        segments[9],
+        segments[11],
+      ]);
+      return [dateNum, dateNodeToSpecificity(segments)];
+    }
   }
-  const dateNum = Time.arrayToDate([
-    segments[1],
-    segments[3],
-    segments[5],
-    segments[7],
-    segments[9],
-    segments[11],
-  ]);
-
-  return [dateNum, dateNodeToSpecificity(segments)];
 };

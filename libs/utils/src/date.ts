@@ -26,7 +26,7 @@ export const parseDate = (text: string, format: string): bigint | undefined => {
   return BigInt(utcDate.toMillis());
 };
 
-export type TimeSpecificity = 'quarter'; // only quarter for now
+export type TimeSpecificity = 'quarter' | 'week';
 
 export const formatDate = (date: bigint, format: string) =>
   dateFromMillis(date).toFormat(format);

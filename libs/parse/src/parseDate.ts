@@ -71,6 +71,14 @@ export const dateFormats = once((): Record<Time.Specificity, DateFormat[]> => {
     undefined: [''],
     year: ['yy', 'yyyy'],
     quarter: ["yyyy'q'q", "yyyy'Q'q", "yyyy'q'qq", "yyyy'Q'qq"],
+    week: [
+      "yyyy'w'W",
+      "yyyy'W'W",
+      "yyyy'-w'WW",
+      "yyyy'-W'WW",
+      "yyyy'w'WW",
+      "yyyy'W'WW",
+    ],
     month: [
       'yyyy-MM',
       'MM-yyyy',

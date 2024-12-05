@@ -54,6 +54,9 @@ const valueToString = (result: Result.Result): string => {
       case 'month':
         fmt = 'yyyy/MM';
         break;
+      case 'week':
+        fmt = "yyyy'-W'WW";
+        break;
       case 'day':
         fmt = 'yyyy/MM/dd';
         break;

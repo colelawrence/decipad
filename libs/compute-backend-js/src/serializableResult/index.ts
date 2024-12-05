@@ -674,16 +674,18 @@ const timeSpecificityToNumber = (specificity: Specificity): number => {
       return 2;
     case 'month':
       return 3;
-    case 'day':
+    case 'week':
       return 4;
-    case 'hour':
+    case 'day':
       return 5;
-    case 'minute':
+    case 'hour':
       return 6;
-    case 'second':
+    case 'minute':
       return 7;
-    case 'millisecond':
+    case 'second':
       return 8;
+    case 'millisecond':
+      return 9;
   }
 };
 
@@ -698,14 +700,16 @@ const numberToTimeSpecificity = (number: number): Specificity => {
     case 3:
       return 'month';
     case 4:
-      return 'day';
+      return 'week';
     case 5:
-      return 'hour';
+      return 'day';
     case 6:
-      return 'minute';
+      return 'hour';
     case 7:
-      return 'second';
+      return 'minute';
     case 8:
+      return 'second';
+    case 9:
       return 'millisecond';
     default:
       throw new Error(`Invalid time specificity number: ${number}`);

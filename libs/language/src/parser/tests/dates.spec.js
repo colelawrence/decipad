@@ -121,6 +121,46 @@ runTests({
     ],
   },
 
+  'week date': {
+    source: 'date(1978w01)',
+    ast: [
+      {
+        type: 'date',
+        args: ['year', 1978n, 'week', 1n],
+        start: {
+          char: 0,
+          line: 1,
+          column: 1,
+        },
+        end: {
+          char: 12,
+          line: 1,
+          column: 13,
+        },
+      },
+    ],
+  },
+
+  'week date 2': {
+    source: 'date(1978-W01)',
+    ast: [
+      {
+        type: 'date',
+        args: ['year', 1978n, 'week', 1n],
+        start: {
+          char: 0,
+          line: 1,
+          column: 1,
+        },
+        end: {
+          char: 13,
+          line: 1,
+          column: 14,
+        },
+      },
+    ],
+  },
+
   'day date': {
     source: 'date(2010-01-04)',
     ast: [

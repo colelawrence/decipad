@@ -36,6 +36,7 @@ export type Specificity =
   | 'year'
   | 'quarter'
   | 'month'
+  | 'week'
   | 'day'
   | 'hour'
   | 'minute'

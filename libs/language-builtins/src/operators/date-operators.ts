@@ -47,6 +47,9 @@ export const dateOperators: Record<string, BuiltinSpec> = {
         throw new RuntimeError('undefined date');
       }
       const luxonDate = DateTime.fromMillis(Number(d), { zone: 'UTC' });
+      if (unitName === 'week') {
+        return Value.NumberValue.fromValue(luxonDate.weekNumber);
+      }
       return Value.NumberValue.fromValue(luxonDate.get(unitName));
     },
     explanation:

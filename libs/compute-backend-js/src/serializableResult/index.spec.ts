@@ -203,7 +203,7 @@ describe('serializeResult', () => {
     });
 
     const data = new Uint8Array(9);
-    data.set([4], 0);
+    data.set([5], 0);
     data.set(new Uint8Array(new BigInt64Array([1704067200000n]).buffer), 1);
 
     expect(result).toEqual({
@@ -221,7 +221,7 @@ describe('serializeResult', () => {
 
     expect(result).toEqual({
       type: new BigUint64Array([4n, 0n, 1n]),
-      data: new Uint8Array([4]),
+      data: new Uint8Array([5]),
     });
   });
 
@@ -1094,7 +1094,7 @@ describe('deserializeResult', () => {
 
   it('should deserialize a date with a value', () => {
     const data = new Uint8Array(9);
-    data.set([4], 0);
+    data.set([5], 0);
     data.set(new Uint8Array(new BigInt64Array([1704067200000n]).buffer), 1);
 
     const serializedDate = {
@@ -1112,7 +1112,7 @@ describe('deserializeResult', () => {
   it('should deserialize a date with no value', () => {
     const serializedDate = {
       type: new BigUint64Array([4n, 0n, 1n]),
-      data: new Uint8Array([4]),
+      data: new Uint8Array([5]),
     };
 
     const result = deserializeResult(serializedDate);
@@ -1518,7 +1518,7 @@ describe('deserializeResult', () => {
 
   it('should deserialize a date that has a value', () => {
     const data = new Uint8Array(9);
-    data.set([4], 0);
+    data.set([5], 0);
     data.set(new Uint8Array(new BigInt64Array([1704067200000n]).buffer), 1);
 
     const serializedDate: SerializedResult = {
@@ -1536,7 +1536,7 @@ describe('deserializeResult', () => {
   it('should deserialize a date that has no value', () => {
     const serializedDate: SerializedResult = {
       type: new BigUint64Array([4n, 0n, 1n]),
-      data: new Uint8Array([4]),
+      data: new Uint8Array([5]),
     };
 
     const result = deserializeResult(serializedDate);

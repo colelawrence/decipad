@@ -21,6 +21,10 @@ export const DateResult = ({
       format = "yyyy'Q'q";
       break;
     }
+    case 'week': {
+      format = "kkkk'-W'WW";
+      break;
+    }
     case 'month': {
       format = 'MMM yyyy';
       break;

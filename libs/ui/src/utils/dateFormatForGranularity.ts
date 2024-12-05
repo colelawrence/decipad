@@ -5,6 +5,7 @@ const dateFormatsForType: Record<Time.Specificity, string> = {
   year: 'yyyy',
   quarter: "yyyy'Q'q",
   month: 'yyyy-MM',
+  week: "yyyy'-W'WW",
   day: 'yyyy-MM-dd',
   hour: 'yyyy-MM-dd HH',
   minute: 'yyyy-MM-dd HH:mm',

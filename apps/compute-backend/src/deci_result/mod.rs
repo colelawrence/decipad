@@ -470,11 +470,12 @@ pub fn deserialize_data_iter(
                 1 => DateSpecificity::Year,
                 2 => DateSpecificity::Quarter,
                 3 => DateSpecificity::Month,
-                4 => DateSpecificity::Day,
-                5 => DateSpecificity::Hour,
-                6 => DateSpecificity::Minute,
-                7 => DateSpecificity::Second,
-                8 => DateSpecificity::Millisecond,
+                4 => DateSpecificity::Week,
+                5 => DateSpecificity::Day,
+                6 => DateSpecificity::Hour,
+                7 => DateSpecificity::Minute,
+                8 => DateSpecificity::Second,
+                9 => DateSpecificity::Millisecond,
                 _ => return Err(JsValue::from_str("Invalid DateSpecificity value")),
             };
 

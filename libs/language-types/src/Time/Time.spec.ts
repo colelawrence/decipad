@@ -12,7 +12,7 @@ it('can turn any kind of time unit into date specificities', () => {
   expect(getSpecificity('second')).toEqual('second');
   expect(getSpecificity('quarter')).toEqual('quarter');
   expect(getSpecificity('decade')).toEqual('year');
-  expect(getSpecificity('week')).toEqual('day');
+  expect(getSpecificity('week')).toEqual('week');
 
   expect(() => getSpecificity('nonsense' as TimeUnit)).toThrow();
 });
@@ -24,7 +24,7 @@ it('can sort specificities', () => {
 
   expect(
     sortSpecificities(['second', 'month', 'quarter', 'day', 'week', 'second'])
-  ).toEqual(['quarter', 'month', 'day', 'second']);
+  ).toEqual(['quarter', 'month', 'week', 'day', 'second']);
 });
 
 it('can parse a date from an array of elements', () => {

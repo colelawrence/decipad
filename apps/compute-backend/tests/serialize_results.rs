@@ -205,7 +205,7 @@ fn test_serialize_date_with_value() {
     assert_eq!(result.type_array().to_vec(), vec![4, 0, 9]);
     assert_eq!(
         result.data().to_vec(),
-        vec![4, 192, 167, 107, 219, 144, 1, 0, 0]
+        vec![5, 192, 167, 107, 219, 144, 1, 0, 0]
     );
 }
 
@@ -214,7 +214,7 @@ fn test_serialize_date_without_value() {
     let result =
         serialize_result_internal(DeciResult::Date(DeciDate(None, DateSpecificity::Day))).unwrap();
     assert_eq!(result.type_array().to_vec(), vec![4, 0, 1]);
-    assert_eq!(result.data().to_vec(), vec![4]);
+    assert_eq!(result.data().to_vec(), vec![5]);
 }
 
 #[wasm_bindgen_test]

@@ -11,7 +11,6 @@ export const getSpecificity = (thing?: string | Unit): Specificity => {
     if (unit === 'millennium') return 'year';
     if (unit === 'century') return 'year';
     if (unit === 'decade') return 'year';
-    if (unit === 'week') return 'day';
 
     if (allSpecificities.includes(unit as Specificity)) {
       return unit as Specificity;

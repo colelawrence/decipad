@@ -58,29 +58,38 @@ date -> %beginDate _ dateInner _ %endDate               {%
                                                         }
                                                         %}
 
-dateInner -> dateYear dateInnerMonth:?                  {%
+dateInner -> dateYear                                   {%
                                                         (d) => ({
                                                           type: 'date',
                                                           args: [
                                                             'year',
                                                             d[0].year,
                                                           ],
-                                                          nextDateInner: d[1],
                                                         })
                                                         %}
 
-dateInner -> dateYear dateInnerQuarter                 {%
+dateInner -> dateYear (dateInnerQuarter | dateInnerWeek | dateInnerMonth)               {%
                                                         (d) => ({
                                                           type: 'date',
                                                           args: [
                                                             'year',
                                                             d[0].year,
                                                           ],
-                                                          nextDateInner: d[1],
+                                                          nextDateInner: d[1][0],
                                                         })
                                                         %}
 
-dateInnerQuarter -> ("q" | "Q") dateQuarter            {%
+dateInnerWeek -> ("-":? ("w" | "W")) dateWeek     {%
+                                                        (d) => ({
+                                                          type: 'date',
+                                                          args: [
+                                                            'week',
+                                                            d[1].week,
+                                                          ],
+                                                        })
+                                                        %}
+
+dateInnerQuarter -> ("q" | "Q") dateQuarter             {%
                                                         (d) => ({
                                                           type: 'date',
                                                           args: [
@@ -160,6 +169,7 @@ dateYear -> %digits                                     {% makeDateFragmentReade
 dateQuarter -> %digits                                  {% makeDateFragmentReader('quarter', 1, 1, 4) %}
 dateMonth -> %digits                                    {% makeDateFragmentReader('month', 2, 1, 12) %}
 dateMonth -> literalMonth                               {% id %}
+dateWeek -> %digits                                     {% makeDateFragmentReader('week', 2, 1, 53) %}
 dateDay -> %digits                                      {% makeDateFragmentReader('day', 2, 1, 31) %}
 dateHour -> %digits                                     {% makeDateFragmentReader('hour', 2, 0, 23) %}
 dateMinute -> %digits                                   {% makeDateFragmentReader('minute', 2, 0, 59) %}

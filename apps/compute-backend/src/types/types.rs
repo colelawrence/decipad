@@ -74,6 +74,7 @@ pub enum DateSpecificity {
     Year,
     Quarter,
     Month,
+    Week,
     Day,
     Hour,
     Minute,

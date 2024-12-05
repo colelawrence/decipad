@@ -1582,6 +1582,9 @@ ${'' /* Get capital needed */}
           Minute = round(Date, minute)
           Hour = round(Date, hour)
           Day = round(Date, day)
+          Week = round(Date, week)
+          Week2 = date(2023W19)
+          WeekMatches = Week == Week2
           Month = round(Date, month)
           Quarter = round(Date, quarter)
           Year = round(Date, year)
@@ -1594,6 +1597,9 @@ ${'' /* Get capital needed */}
           'Minute',
           'Hour',
           'Day',
+          'Week',
+          'Week2',
+          'WeekMatches',
           'Quarter',
           'Month',
           'Year',
@@ -1615,6 +1621,12 @@ ${'' /* Get capital needed */}
         },
         Minute: {
           date: 'minute',
+        },
+        Week: {
+          date: 'week',
+        },
+        Week2: {
+          date: 'week',
         },
         Month: {
           date: 'month',
@@ -1640,6 +1652,9 @@ ${'' /* Get capital needed */}
         Minute: fromDate('2023-05-14T11:53:00.000Z'),
         Hour: fromDate('2023-05-14T11:00:00.000Z'),
         Day: fromDate('2023-05-14T00:00:00.000Z'),
+        Week: fromDate('2023-05-08T00:00:00.000Z'),
+        Week2: fromDate('2023-05-08T00:00:00.000Z'),
+        WeekMatches: true,
         Month: fromDate('2023-05-01T00:00:00.000Z'),
         Quarter: fromDate('2023-04-01T00:00:00.000Z'),
         Quarter2: fromDate('2023-04-01T00:00:00.000Z'),

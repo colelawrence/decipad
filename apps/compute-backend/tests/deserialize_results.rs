@@ -165,7 +165,7 @@ fn test_deserialize_really_big_arbitrary_fraction() {
 #[wasm_bindgen_test]
 fn test_deserialize_date_with_value() {
     let serializde =
-        create_serialized_result(vec![4, 0, 9], vec![4, 192, 167, 107, 219, 144, 1, 0, 0]);
+        create_serialized_result(vec![4, 0, 9], vec![5, 192, 167, 107, 219, 144, 1, 0, 0]);
     let result = deserialize_result_internal(serializde).unwrap();
     assert_eq!(
         result,
@@ -178,7 +178,7 @@ fn test_deserialize_date_with_value() {
 }
 #[wasm_bindgen_test]
 fn test_deserialize_date_without_value() {
-    let serialized = create_serialized_result(vec![4, 0, 1], vec![4]);
+    let serialized = create_serialized_result(vec![4, 0, 1], vec![5]);
     let result = deserialize_result_internal(serialized).unwrap();
     assert_eq!(
         result,
