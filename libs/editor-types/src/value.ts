@@ -21,6 +21,13 @@ import type {
   DataViewHeaderRowElement,
   DataViewNameElement,
 } from './data-view';
+import type {
+  TimeSeriesCaptionElement,
+  TimeSeriesElement,
+  TimeSeriesHeader,
+  TimeSeriesHeaderRowElement,
+  TimeSeriesNameElement,
+} from './time-series';
 import {
   DEPRECATED_ELEMENT_CODE_BLOCK,
   DEPRECATED_ELEMENT_INPUT,
@@ -71,6 +78,7 @@ import {
   ELEMENT_UL,
   ELEMENT_CODE_LINE_V2,
   ELEMENT_DATA_VIEW,
+  ELEMENT_TIME_SERIES,
   ELEMENT_DISPLAY,
   ELEMENT_DRAW,
   ELEMENT_IFRAME,
@@ -759,6 +767,9 @@ export type BlockElement =
   | DataViewElement
   | DataViewHeaderRowElement
   | DataViewHeader
+  | TimeSeriesElement
+  | TimeSeriesHeaderRowElement
+  | TimeSeriesHeader
   | DropdownElement
   | StructuredInputElement
   | StructuredInputElementChildren
@@ -828,6 +839,7 @@ export type TopLevelValue =
   | LayoutElement
   | InteractiveElement
   | DataViewElement
+  | TimeSeriesElement
   | IframeEmbedElement
   | SubmitForm
   | IntegrationBlock;
@@ -874,7 +886,11 @@ export type AnyElement =
   | CodeLineV2ElementCode
   | StructuredVarnameElement
   | DataViewCaptionElement
-  | DataViewNameElement;
+  | DataViewNameElement
+  | TimeSeriesCaptionElement
+  | TimeSeriesHeader
+  | TimeSeriesHeaderRowElement
+  | TimeSeriesNameElement;
 
 export type FilterableElement =
   | TableElement
@@ -899,6 +915,7 @@ export const topLevelBlockKinds: string[] = [
   DEPRECATED_ELEMENT_TABLE_INPUT,
   ELEMENT_TABLE,
   ELEMENT_DATA_VIEW,
+  ELEMENT_TIME_SERIES,
   ELEMENT_PLOT,
   ELEMENT_LAYOUT,
   ELEMENT_VARIABLE_DEF,

@@ -12,6 +12,7 @@ import { removeTableRow } from './removeTableRow';
 import { updateTableCell } from './updateTableCell';
 import type { Actions } from './types';
 import { appendDataView } from './appendDataView';
+import { appendTimeSeries } from './appendTimeSeries';
 import { appendCodeLine } from './appendCodeLine';
 import { updateCodeLine } from './updateCodeLine';
 import { appendSliderVariable } from './appendSliderVariable';
@@ -48,6 +49,7 @@ export const actions: Partial<Actions> = {
   removeTableRow,
   updateTableCell,
   appendDataView,
+  appendTimeSeries,
   appendSliderVariable,
   updateSliderVariable,
   appendPlot,

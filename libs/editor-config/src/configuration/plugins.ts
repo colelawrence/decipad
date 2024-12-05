@@ -61,6 +61,7 @@ import {
   createCrashingBlock,
   createDataViewPlugin,
   createMigrateDisplayPlugin,
+  createTimeSeriesPlugin,
 } from '@decipad/editor-plugins';
 import {
   createCodeLineV2Plugin,
@@ -206,6 +207,7 @@ export const plugins = ({
       // tables
       createTablePlugin(computer),
       createDataViewPlugin(),
+      createTimeSeriesPlugin(),
 
       // plots
       createPlotPlugin(),

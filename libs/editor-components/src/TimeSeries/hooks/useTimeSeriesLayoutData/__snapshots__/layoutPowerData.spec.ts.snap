@@ -1,0 +1,195 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`layoutPowerData > works with two column two groups tree and aggregation 1`] = `
+{
+  "meta": undefined,
+  "type": {
+    "columnNames": [
+      "Column1",
+      "Column2",
+    ],
+    "columnTypes": [
+      {
+        "kind": "string",
+      },
+      {
+        "kind": "number",
+        "unit": null,
+      },
+    ],
+    "kind": "tree",
+  },
+  "value": Tree {
+    "children": [
+      Tree {
+        "children": [
+          Tree {
+            "children": [],
+            "columns": [],
+            "originalCardinality": 1,
+            "root": DeciNumber {
+              "d": 1n,
+              "infinite": false,
+              "n": 1n,
+              "s": 1n,
+            },
+            "rootAggregation": {
+              "type": {
+                "kind": "number",
+              },
+              "value": DeciNumber {
+                "d": 1n,
+                "infinite": false,
+                "n": 1n,
+                "s": 1n,
+              },
+            },
+          },
+          Tree {
+            "children": [],
+            "columns": [],
+            "originalCardinality": 1,
+            "root": DeciNumber {
+              "d": 1n,
+              "infinite": false,
+              "n": 3n,
+              "s": 1n,
+            },
+            "rootAggregation": {
+              "type": {
+                "kind": "number",
+              },
+              "value": DeciNumber {
+                "d": 1n,
+                "infinite": false,
+                "n": 3n,
+                "s": 1n,
+              },
+            },
+          },
+        ],
+        "columns": [
+          {
+            "aggregation": {
+              "type": {
+                "kind": "number",
+              },
+              "value": DeciNumber {
+                "d": 1n,
+                "infinite": false,
+                "n": 4n,
+                "s": 1n,
+              },
+            },
+            "name": "Column2",
+          },
+        ],
+        "originalCardinality": 2,
+        "root": "A",
+        "rootAggregation": {
+          "meta": undefined,
+          "type": {
+            "kind": "number",
+          },
+          "value": DeciNumber {
+            "d": 1n,
+            "infinite": false,
+            "n": 1n,
+            "s": 1n,
+          },
+        },
+      },
+      Tree {
+        "children": [
+          Tree {
+            "children": [],
+            "columns": [],
+            "originalCardinality": 1,
+            "root": DeciNumber {
+              "d": 1n,
+              "infinite": false,
+              "n": 2n,
+              "s": 1n,
+            },
+            "rootAggregation": {
+              "type": {
+                "kind": "number",
+              },
+              "value": DeciNumber {
+                "d": 1n,
+                "infinite": false,
+                "n": 2n,
+                "s": 1n,
+              },
+            },
+          },
+        ],
+        "columns": [
+          {
+            "aggregation": {
+              "type": {
+                "kind": "number",
+              },
+              "value": DeciNumber {
+                "d": 1n,
+                "infinite": false,
+                "n": 2n,
+                "s": 1n,
+              },
+            },
+            "name": "Column2",
+          },
+        ],
+        "originalCardinality": 1,
+        "root": "B",
+        "rootAggregation": {
+          "meta": undefined,
+          "type": {
+            "kind": "number",
+          },
+          "value": DeciNumber {
+            "d": 1n,
+            "infinite": false,
+            "n": 1n,
+            "s": 1n,
+          },
+        },
+      },
+    ],
+    "columns": [
+      {
+        "aggregation": {
+          "meta": undefined,
+          "type": {
+            "kind": "number",
+          },
+          "value": DeciNumber {
+            "d": 1n,
+            "infinite": false,
+            "n": 2n,
+            "s": 1n,
+          },
+        },
+        "name": "Column1",
+      },
+      {
+        "aggregation": {
+          "type": {
+            "kind": "number",
+          },
+          "value": DeciNumber {
+            "d": 1n,
+            "infinite": false,
+            "n": 6n,
+            "s": 1n,
+          },
+        },
+        "name": "Column2",
+      },
+    ],
+    "originalCardinality": 1,
+    "root": undefined,
+    "rootAggregation": undefined,
+  },
+}
+`;

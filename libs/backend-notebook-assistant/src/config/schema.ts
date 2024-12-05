@@ -241,6 +241,44 @@ type VariableSliderElement = VariableBaseElement<
     icon?: string;
   }`,
 
+  'time-series-tr': `interface TimeSeriesHeaderRowElement {
+    id: string,
+    type: 'time-series-tr';
+    children: Array<TimeSeriesHeader>;
+  }`,
+
+  'time-series-th': `interface TimeSeriesHeader {
+    id: string;
+    type: 'time-series-th';
+    cellType: SimpleTableCellType;
+    aggregation?: 'average' | 'max' | 'median' | 'min' | 'span' | 'sum';
+    rounding?: string;
+    name: string;
+    label: string;
+    children: [EmptyText];
+  }`,
+
+  'time-series-name': `interface TimeSeriesNameElement {
+    id: string;
+    type: 'time-series-name';
+    children: [Text];
+  }`,
+
+  'time-series-caption': `interface TimeSeriesCaptionElement {
+    id: string;
+    type: 'time-series-caption';
+    children: [TimeSeriesNameElement];
+  }`,
+
+  'time-series': `export interface TimeSeriesElement {
+    id: string;
+    type: 'time-series';
+    children: [TimeSeriesCaptionElement, TimeSeriesHeaderRowElement];
+    varName?: string; // contains the table block id
+    color?: string;
+    icon?: string;
+  }`,
+
   plot: `interface PlotElement {
     id: string;
     type: 'plot';

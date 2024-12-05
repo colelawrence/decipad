@@ -164,6 +164,35 @@ export interface NotebookOpenApi {
     columnNames: string[];
   }) => GenericSummaryResult;
 
+  // time series
+  appendTimeSeries: (params: {
+    tableId: string;
+    columns: Array<{
+      name: string;
+      aggregation:
+        | 'average'
+        | 'max'
+        | 'median'
+        | 'min'
+        | 'span'
+        | 'sum'
+        | 'stddev';
+      round: string;
+    }>;
+  }) => GenericSummaryResult<CreateResult>;
+  addColumnToTimeSeries: (params: {
+    dataviewId: string;
+    columnName: string;
+  }) => GenericSummaryResult;
+  removeColumnFromTimeSeries: (params: {
+    dataviewId: string;
+    columnName: string;
+  }) => GenericSummaryResult;
+  setTimeSeriesColumns: (params: {
+    dataviewId: string;
+    columnNames: string[];
+  }) => GenericSummaryResult;
+
   // plots
   appendPlot: (params: {
     tableId: string;

@@ -24,6 +24,7 @@ import {
 import { deleteText, removeNodes } from '@udecode/plate-common';
 import type { Location, Path } from 'slate';
 import { insertDataViewBelow } from './data-view';
+import { insertTimeSeriesBelow } from './time-series';
 import { insertDrawBelow } from './draw';
 import {
   insertDisplayBelow,
@@ -111,6 +112,9 @@ export const execute = async ({
         break;
       case 'data-view':
         await insertDataViewBelow(editor, path, computer);
+        break;
+      case 'time-series':
+        await insertTimeSeriesBelow(editor, path, computer);
         break;
       case 'open-integration':
         pushSidebar({ type: 'integrations' });

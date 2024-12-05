@@ -23,5 +23,6 @@ export * from './plate-ui';
 export * from './SubmitForm/SubmitForm';
 export * from './Widgets';
 export * from './DataView';
+export * from './TimeSeries';
 export * from './text';
 export * from './utils';

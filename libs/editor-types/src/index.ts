@@ -8,6 +8,7 @@ import type { TableCellType } from './value';
 export * from './uncolumnable-kinds';
 export * from './components';
 export * from './data-view';
+export * from './time-series';
 export * from './decorator-kinds';
 export * from './element-kinds';
 export * from './icons';

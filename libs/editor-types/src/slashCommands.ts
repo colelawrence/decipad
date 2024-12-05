@@ -11,6 +11,7 @@ export type SlashCommand =
   | 'dropdown'
   | 'table'
   | 'data-view'
+  | 'time-series'
   | 'open-integration'
   | 'pie-chart'
   | 'line-chart'

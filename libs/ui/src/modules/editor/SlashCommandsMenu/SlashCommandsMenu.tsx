@@ -177,6 +177,14 @@ const mostFrequentlyUsedGroup = {
 const visualisationGroup = {
   title: 'Visualizations',
   items: [
+    {
+      command: 'time-series',
+      title: 'Time Series',
+      description: 'Visualise date over time in a table',
+      icon: <CommandDataView />,
+      extraSearchTerms: ['time', 'series', 'table', 'pivot', 'data', 'view'],
+      enabled: true,
+    },
     pivotCmd,
     {
       command: 'line-chart',

@@ -52,3 +52,4 @@ export * from './TabSelectionPlugin';
 export * from './SubmitForm';
 export * from './Math';
 export * from './Components';
+export * from './TimeSeries';
