@@ -155,12 +155,14 @@ const NumberCatalogItemWithResult: FC<NumberCatalogItemWithResultProps> = ({
     >
       <span css={nameGroupStyles}>
         <span css={combinedStyles}>
-          {name}
-          {!isSelected && (
-            <span css={pencilIconStyles}>
-              <Pencil />
-            </span>
-          )}
+          <span className="catalog-item-name">{name}</span>
+          <span>
+            {!isSelected && (
+              <span css={pencilIconStyles}>
+                <Pencil />
+              </span>
+            )}
+          </span>
         </span>
       </span>
       {isSelected ? (
@@ -304,6 +306,13 @@ const contentWrapper = css(p14Medium, {
   overflow: 'hidden',
   minWidth: 0,
   justifyContent: 'space-between',
+
+  '.catalog-item-name': {
+    maxWidth: '95px',
+    textOverflow: 'ellipsis',
+    overflow: 'hidden',
+    display: 'inline-block',
+  },
 });
 
 const contentWrapperStatic = css(contentWrapper, {
