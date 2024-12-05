@@ -226,7 +226,6 @@ export const PlotParams = ({
     tableVarName,
     xColumnName,
     yColumnNames,
-    yColumnNames.length,
   ]);
 
   const onToggleValue = useCallback(

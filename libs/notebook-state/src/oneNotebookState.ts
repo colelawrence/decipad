@@ -14,6 +14,7 @@ import {
   BlockProcessor,
   EditorController,
   elementNormalizersDataTab,
+  generalEditorNormalizers,
 } from '@decipad/notebook-tabs';
 import { createRemoteComputerClient } from '@decipad/remote-computer';
 import { isServerSideRendering } from '@decipad/support';
@@ -142,7 +143,7 @@ export const createNotebookStore = (
 
         const controller = new EditorController(
           notebookId,
-          plugins,
+          [generalEditorNormalizers, ...plugins],
           elementNormalizersDataTab
         );
         const blockProcessor = new BlockProcessor(

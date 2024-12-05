@@ -4,3 +4,5 @@ import { createNormalizer } from './element-normalizer';
 export const elementNormalizersDataTab = [
   createNormalizer(ELEMENT_DATA_TAB_CHILDREN),
 ];
+
+export * from './to-plate-plugin';

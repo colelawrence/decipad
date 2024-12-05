@@ -1,4 +1,7 @@
-export { elementNormalizersDataTab } from './RootEditor/element-normalizers';
+export {
+  elementNormalizersDataTab,
+  generalEditorNormalizers,
+} from './RootEditor/element-normalizers';
 
 export * from './BlockProcessor';
 export * from './EditorController';

@@ -2,7 +2,9 @@ import { vi, describe, it, expect, beforeEach } from 'vitest';
 import {
   ELEMENT_CODE_LINE_V2_CODE,
   ELEMENT_DATA_TAB_CHILDREN,
+  ELEMENT_PLOT,
   ELEMENT_STRUCTURED_VARNAME,
+  PlotElement,
 } from '@decipad/editor-types';
 import { TEditor } from '@udecode/plate-common';
 import { createEditor } from 'slate';
@@ -31,7 +33,9 @@ describe('element type map', () => {
                   "text": "",
                 },
               ],
+              "endpointUrlSecretName": "some-string-that-is-hard-to-guess",
               "id": "mocked-id",
+              "isHidden": "some-string-that-is-hard-to-guess",
               "type": "structured_varname",
             },
             {
@@ -40,12 +44,49 @@ describe('element type map', () => {
                   "text": "",
                 },
               ],
+              "endpointUrlSecretName": "some-string-that-is-hard-to-guess",
               "id": "mocked-id",
+              "isHidden": "some-string-that-is-hard-to-guess",
               "type": "code_line_v2_code",
             },
           ],
+          "endpointUrlSecretName": "some-string-that-is-hard-to-guess",
           "id": "mocked-id",
+          "isHidden": "some-string-that-is-hard-to-guess",
           "type": "data-tab-children",
+        },
+        "plot": {
+          "arcVariant": "simple",
+          "barVariant": "grouped",
+          "children": [
+            {
+              "text": "",
+            },
+          ],
+          "colorScheme": "some-string-that-is-hard-to-guess",
+          "endpointUrlSecretName": "some-string-that-is-hard-to-guess",
+          "flipTable": false,
+          "grid": false,
+          "groupByX": false,
+          "id": "mocked-id",
+          "isHidden": "some-string-that-is-hard-to-guess",
+          "labelColumnName": "some-string-that-is-hard-to-guess",
+          "lineVariant": "area",
+          "markType": "line",
+          "mirrorYAxis": false,
+          "orientation": "vertical",
+          "schema": "jun-2024",
+          "showDataLabel": false,
+          "sizeColumnName": "some-string-that-is-hard-to-guess",
+          "sourceVarName": "some-string-that-is-hard-to-guess",
+          "startFromZero": false,
+          "title": "some-string-that-is-hard-to-guess",
+          "type": "plot",
+          "xAxisLabel": "some-string-that-is-hard-to-guess",
+          "xColumnName": "some-string-that-is-hard-to-guess",
+          "yAxisLabel": "some-string-that-is-hard-to-guess",
+          "yColumnChartTypes": [],
+          "yColumnNames": [],
         },
       }
     `);
@@ -223,6 +264,7 @@ describe('Normalizes on an actual editor', () => {
               "type": "code_line_v2_code",
             },
           ],
+          "id": "mocked-id",
           "type": "data-tab-children",
         },
       ]
@@ -273,9 +315,232 @@ describe('Normalizes on an actual editor', () => {
               "type": "code_line_v2_code",
             },
           ],
+          "id": "mocked-id",
           "type": "data-tab-children",
         },
       ]
+    `);
+  });
+
+  it('adds required element properties', () => {
+    editor.normalize = normalizeCurried(editor, [
+      createNormalizer(ELEMENT_PLOT)(editor),
+    ]);
+
+    editor.children = [
+      {
+        type: ELEMENT_PLOT,
+        children: [{ text: '' }],
+      },
+    ];
+
+    editor.normalize();
+
+    expect(editor.children).toMatchInlineSnapshot(`
+      [
+        {
+          "arcVariant": "simple",
+          "barVariant": "grouped",
+          "children": [
+            {
+              "text": "",
+            },
+          ],
+          "flipTable": false,
+          "grid": false,
+          "groupByX": false,
+          "id": "mocked-id",
+          "lineVariant": "area",
+          "markType": "line",
+          "mirrorYAxis": false,
+          "orientation": "vertical",
+          "schema": "jun-2024",
+          "showDataLabel": false,
+          "startFromZero": false,
+          "type": "plot",
+          "yColumnChartTypes": [],
+          "yColumnNames": [],
+        },
+      ]
+    `);
+  });
+
+  it('removes extra properties', () => {
+    editor.normalize = normalizeCurried(editor, [
+      createNormalizer(ELEMENT_PLOT)(editor),
+    ]);
+
+    editor.children = [
+      {
+        type: ELEMENT_PLOT,
+        children: [{ text: '' }],
+        erronousProperty: 5,
+      },
+    ];
+
+    editor.normalize();
+
+    expect(editor.children[0].erronousProperty).toBeUndefined();
+
+    expect(editor.children).toMatchInlineSnapshot(`
+      [
+        {
+          "arcVariant": "simple",
+          "barVariant": "grouped",
+          "children": [
+            {
+              "text": "",
+            },
+          ],
+          "flipTable": false,
+          "grid": false,
+          "groupByX": false,
+          "id": "mocked-id",
+          "lineVariant": "area",
+          "markType": "line",
+          "mirrorYAxis": false,
+          "orientation": "vertical",
+          "schema": "jun-2024",
+          "showDataLabel": false,
+          "startFromZero": false,
+          "type": "plot",
+          "yColumnChartTypes": [],
+          "yColumnNames": [],
+        },
+      ]
+    `);
+  });
+
+  it('doesnt change a normal element', () => {
+    editor.normalize = normalizeCurried(editor, [
+      createNormalizer(ELEMENT_PLOT)(editor),
+    ]);
+
+    const goodPlot: PlotElement = {
+      arcVariant: 'simple',
+      barVariant: 'grouped',
+      children: [
+        {
+          text: '',
+        },
+      ],
+      flipTable: true,
+      grid: true,
+      groupByX: true,
+      id: 'my_id',
+      lineVariant: 'area',
+      markType: 'line',
+      mirrorYAxis: false,
+      orientation: 'vertical',
+      schema: 'jun-2024',
+      showDataLabel: false,
+      startFromZero: false,
+      type: 'plot',
+      yColumnChartTypes: [],
+      yColumnNames: ['my', 'names'],
+    };
+
+    editor.children = [goodPlot];
+
+    editor.normalize();
+
+    expect(editor.children[0]).toEqual(goodPlot);
+  });
+
+  it('distinguishes between array and object', () => {
+    editor.normalize = normalizeCurried(editor, [
+      createNormalizer(ELEMENT_PLOT)(editor),
+    ]);
+
+    editor.children = [
+      {
+        type: ELEMENT_PLOT,
+        children: [{ text: '' }],
+        yColumnNames: {},
+      },
+    ];
+
+    editor.normalize();
+
+    expect(editor.children[0].yColumnNames).toBeInstanceOf(Array);
+  });
+
+  it('allows optional types to remain', () => {
+    editor.normalize = normalizeCurried(editor, [
+      createNormalizer(ELEMENT_PLOT)(editor),
+    ]);
+
+    editor.children = [
+      {
+        type: ELEMENT_PLOT,
+        children: [{ text: '' }],
+        title: 'title',
+      },
+    ];
+
+    editor.normalize();
+
+    expect(editor.children[0].title).toBe('title');
+  });
+
+  it('doesnt break old charts', () => {
+    editor.normalize = normalizeCurried(editor, [
+      createNormalizer(ELEMENT_PLOT)(editor),
+    ]);
+
+    editor.children = [
+      {
+        id: 'plot_id',
+        type: ELEMENT_PLOT,
+        children: [
+          {
+            text: '',
+          },
+        ],
+        title: 'Table 9 Bar Simple',
+        sourceVarName: 'exprRef_JUmkupotEfOVRJ3mrWagC',
+        xColumnName: 'Column1',
+        yColumnName: 'Column2',
+        markType: 'bar',
+        thetaColumnName: '',
+        sizeColumnName: '',
+        colorColumnName: 'Column1',
+        colorScheme: 'multicolor_yellow',
+        y2ColumnName: 'Column3BigLabelSizeTestingColumn3BigLabelSizeTesting',
+      },
+    ];
+
+    editor.normalize();
+
+    expect(editor.children[0]).toMatchInlineSnapshot(`
+      {
+        "arcVariant": "simple",
+        "barVariant": "grouped",
+        "children": [
+          {
+            "text": "",
+          },
+        ],
+        "colorScheme": "multicolor_yellow",
+        "flipTable": false,
+        "grid": false,
+        "groupByX": false,
+        "id": "plot_id",
+        "lineVariant": "area",
+        "markType": "bar",
+        "mirrorYAxis": false,
+        "orientation": "vertical",
+        "schema": "jun-2024",
+        "showDataLabel": false,
+        "sizeColumnName": "",
+        "sourceVarName": "exprRef_JUmkupotEfOVRJ3mrWagC",
+        "startFromZero": false,
+        "title": "Table 9 Bar Simple",
+        "type": "plot",
+        "xColumnName": "Column1",
+        "yColumnChartTypes": [],
+        "yColumnNames": [],
+      }
     `);
   });
 });
