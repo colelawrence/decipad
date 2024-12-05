@@ -84,8 +84,8 @@ export const EllipsisButtonContainer = styled.div({
     alignItems: 'center',
     justifyContent: 'center',
     svg: {
-      width: '20px',
-      height: '20px',
+      width: '16px',
+      height: '16px',
     },
   },
 });
@@ -304,8 +304,24 @@ export const SpanTinyPhoneHide = styled.span({
 });
 
 export const SidebarToggleTrigger = styled.div({
-  width: '20px',
-  height: '20px',
+  width: '22px',
+  height: '22px',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+
+  '> svg': {
+    width: '16px',
+    height: '16px',
+  },
+});
+
+export const ButtonWrapper = styled.div({
+  width: '32px',
+  height: '32px',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
 });
 
 export const HideSmallScreen = styled.div({

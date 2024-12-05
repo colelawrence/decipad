@@ -172,6 +172,8 @@ const FigureButton = styled.figure<{
     ? componentCssVars('ButtonTertiaryDefaultBackground')
     : cssVar('backgroundSubdued'),
 
+  margin: props.setWhiteBackgroundWhenSelected ? '-2px' : '0px',
+
   ':disabled': {
     cursor: 'not-allowed',
     backgroundColor: componentCssVars('ButtonTertiaryAltDisabledBackground'),
