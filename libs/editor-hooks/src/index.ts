@@ -27,3 +27,4 @@ export * from './usePersistentVariableName';
 export * from './useIsBeingComputed';
 export * from './useFilters';
 export * from './useDragColumn';
+export * from './useDelayedResult';

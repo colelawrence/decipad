@@ -1,5 +1,5 @@
 /* eslint decipad/css-prop-named-variable: 0 */
-import { keyframes } from '@emotion/react';
+import { css, keyframes } from '@emotion/react';
 import { FC, ReactNode } from 'react';
 
 const loadingKeyframes = keyframes`
@@ -20,19 +20,24 @@ const loadingKeyframes = keyframes`
   }
 `;
 
-export const LoadingFilter: FC<{ children: ReactNode; loading: boolean }> = ({
-  children,
-  loading,
-}) => {
-  return (
-    <div
-      css={
-        loading && {
-          animation: `${loadingKeyframes} linear 1.5s infinite`,
-        }
-      }
-    >
-      {children}
-    </div>
-  );
+const loadingStyles = css({
+  animation: `${loadingKeyframes} linear 1.5s infinite`,
+});
+
+const loadingStylesWithWidth = css(loadingStyles, {
+  width: '100%',
+  height: '100%',
+});
+
+export const LoadingFilter: FC<{
+  children: ReactNode;
+  loading: boolean;
+  variant?: 'default' | 'fullWidth';
+}> = ({ children, loading, variant = 'default' }) => {
+  switch (variant) {
+    case 'default':
+      return <div css={loading && loadingStyles}>{children}</div>;
+    case 'fullWidth':
+      return <div css={loading && loadingStylesWithWidth}>{children}</div>;
+  }
 };

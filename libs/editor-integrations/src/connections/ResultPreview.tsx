@@ -3,6 +3,7 @@ import { ReactNode, type FC } from 'react';
 import {
   CodeResult,
   EmptyDataSet,
+  LoadingFilter,
   LoadingIndicator,
   VariableTypeMenu,
 } from '@decipad/ui';
@@ -18,8 +19,11 @@ import {
   ChangableVariableOptions,
   ConnectionTable,
 } from '../integration/ConnectionTable/ConnectionTable';
-import { useComputer } from '@decipad/editor-hooks';
 import { ConnectionProps } from './types';
+import {
+  UseDelayedResultReturn,
+  useDelayedResult,
+} from '@decipad/editor-hooks';
 
 type ResultPreviewCommonProps = {
   id: string;
@@ -104,28 +108,43 @@ const isRectangularTable = (result: Result.Result): boolean => {
   );
 };
 
-export const ResultPreview: FC<
-  ResultPreviewCommonProps & ChangableVariableOptions & ChangableTableOptions
-> = (props) => {
-  const computer = useComputer();
-  const result = computer.getBlockIdResult$.use(props.id);
-
-  if (result?.result == null) {
+const ResultPreviewWithResult: FC<
+  ResultPreviewCommonProps &
+    ChangableVariableOptions &
+    ChangableTableOptions &
+    UseDelayedResultReturn
+> = ({ result, ...props }) => {
+  if (result == null) {
     return null;
   }
 
-  switch (result.result.type.kind) {
+  switch (result.type.kind) {
     case 'pending':
       return <ResultPreviewPending />;
     case 'table':
-      return isRectangularTable(result.result) ? (
-        <ResultPreviewTable {...props} result={result?.result} />
+      return isRectangularTable(result) ? (
+        <ResultPreviewTable {...props} result={result} />
       ) : (
         <>Non rectangular table</>
       );
     default:
-      return <ResultPreviewVariable {...props} result={result?.result} />;
+      return <ResultPreviewVariable {...props} result={result} />;
   }
+};
+
+export const ResultPreview: FC<
+  ResultPreviewCommonProps & ChangableVariableOptions & ChangableTableOptions
+> = (props) => {
+  const resultState = useDelayedResult(props.id);
+
+  return (
+    <LoadingFilter
+      loading={resultState.state === 'loading'}
+      variant="fullWidth"
+    >
+      <ResultPreviewWithResult {...props} {...resultState} />
+    </LoadingFilter>
+  );
 };
 
 export const PortalledPreview: FC<
@@ -140,10 +159,7 @@ export const PortalledPreview: FC<
   hiddenColumns,
   varNameInput,
 }) => {
-  const computer = useComputer();
-  const res = computer.getBlockIdResult$.use(id);
-
-  if (res == null || id == null) {
+  if (id == null) {
     return <EmptyDataSet />;
   }
 
