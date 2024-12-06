@@ -173,9 +173,16 @@ export const useConcreteIntegration = (
       }
 
       runner.setTypes(types);
-      runner.import(computer);
+      (async () => {
+        try {
+          await runner.import(computer);
+        } catch (err) {
+          console.error('error importing:', err);
+          toast.error(`Error importing integration: ${(err as Error).message}`);
+        }
+      })();
     }
-  }, [type, runner, props.integrationBlock, computer]);
+  }, [type, runner, props.integrationBlock, computer, toast]);
 
   //
   // If we are creating an integration and the user decides to

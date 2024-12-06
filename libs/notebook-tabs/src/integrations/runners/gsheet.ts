@@ -110,7 +110,7 @@ export class GSheetRunner extends Runner<T, O> {
     const dataUrl = this.getDataURL(sheetId, gid, meta);
 
     const res = await fetch(dataUrl);
-    if (res.status !== 200) {
+    if (!res.ok) {
       const json = await res.json().catch((_) => ({}));
       console.error('failed to get gsheets data: ', json);
       throw new Error(

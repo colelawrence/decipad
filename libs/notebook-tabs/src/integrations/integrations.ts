@@ -19,11 +19,11 @@ const hasValidResult = (computer: Computer, resultId: string): boolean => {
   return result != null && result.type === 'computer-result';
 };
 
-const pushIntegration = (
+const pushIntegration = async (
   notebookId: string,
   computer: Computer,
   block: IntegrationTypes.IntegrationBlock
-): void => {
+): Promise<void> => {
   const variableName = getNodeString(block.children[0]);
   const { id, typeMappings, filters } = block;
 
@@ -45,7 +45,11 @@ const pushIntegration = (
     filters: hydratedFilters,
   });
 
-  runner.import(computer);
+  await runner.import(computer).catch((err) => {
+    console.error('error importing:', err);
+    // TODO: error handling in the runner
+    throw err;
+  });
   runner.clean();
 };
 
@@ -57,7 +61,7 @@ export const removeFromComputer =
 
 export const renameResultInComputer =
   (notebookId: string, computer: Computer) =>
-  (block: IntegrationTypes.IntegrationBlock) => {
+  async (block: IntegrationTypes.IntegrationBlock) => {
     const newVariableName = getNodeString(block.children[0]);
     const computerResult = computer.getBlockIdResult(block.id);
     assert(
@@ -71,7 +75,7 @@ export const renameResultInComputer =
     ) {
       // Try to push the result again if we have an error.
       // Or if we have a simple result (like a single value, or column).
-      pushIntegration(notebookId, computer, block);
+      await pushIntegration(notebookId, computer, block);
       return;
     }
 
