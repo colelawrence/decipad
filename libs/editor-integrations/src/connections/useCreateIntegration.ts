@@ -116,7 +116,9 @@ export const useConcreteIntegration = (
     onExecute((v) => [...v, { status: 'run' }]);
 
     if (externalData != null && runner instanceof GSheetRunner) {
-      runner.setExternalDataId(externalData.id);
+      runner.setOptions({
+        runner: { externalDataId: externalData.id ?? undefined },
+      });
     }
 
     await runner

@@ -26,6 +26,10 @@ export type SerializedFilter = {
     }
 );
 
+export interface WithExternalData {
+  externalDataId?: string;
+}
+
 export interface CodeBlockIntegration {
   type: 'codeconnection';
   code: string;
@@ -38,13 +42,13 @@ export interface SQLBlockIntegration {
   query: string;
 }
 
-export interface NotionBlockIntegration {
+export interface NotionBlockIntegration extends WithExternalData {
   type: 'notion';
 
   notionUrl: string;
 }
 
-export interface GoogleSheetIntegration {
+export interface GoogleSheetIntegration extends WithExternalData {
   type: 'gsheets';
   spreadsheetUrl: string;
   range?: string;

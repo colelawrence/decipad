@@ -66,6 +66,7 @@ export function getRunner(options: RunnerFactoryParams): Runner {
         runner: {
           spreadsheetUrl: integrationType.spreadsheetUrl,
           range: integrationType.range,
+          externalDataId: integrationType.externalDataId,
         },
         importer: {
           isFirstHeaderRow: options.integration?.isFirstRowHeader ?? true,

@@ -15,7 +15,6 @@ type O = Omit<IntegrationTypes.GoogleSheetIntegration, 'type'>;
 export class GSheetRunner extends Runner<T, O> {
   public type = 'gSheets' as const;
 
-  public externalDataId: string | undefined = undefined;
   public resourceName: { sheet: string; subsheet: string } | undefined =
     undefined;
 
@@ -36,9 +35,6 @@ export class GSheetRunner extends Runner<T, O> {
     this.options.runner.spreadsheetUrl = url;
   }
 
-  public setExternalDataId(externalDataId: string) {
-    this.externalDataId = externalDataId;
-  }
   public setResourceName(resourceName: Partial<GSheetRunner['resourceName']>) {
     this.resourceName = {
       sheet: '',
@@ -72,11 +68,13 @@ export class GSheetRunner extends Runner<T, O> {
 
     const dataUrl = `https://content-sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${subSheetName}?${queryString}`;
 
-    if (this.externalDataId == null) {
+    const { externalDataId } = this.options.runner;
+
+    if (externalDataId == null) {
       return dataUrl;
     }
 
-    return getExternalDataUrl(this.externalDataId, { url: dataUrl });
+    return getExternalDataUrl(externalDataId, { url: dataUrl });
   }
 
   private async fetchSheetMetaData(): Promise<SheetMeta> {
@@ -91,9 +89,11 @@ export class GSheetRunner extends Runner<T, O> {
       key: googleSheets.apiKey,
     });
 
+    const { externalDataId } = this.options.runner;
+
     return fetch(
-      this.externalDataId
-        ? getExternalDataUrl(this.externalDataId, {
+      externalDataId
+        ? getExternalDataUrl(externalDataId, {
             url: `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}?${queryString}`,
           })
         : `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}?${queryString}`
