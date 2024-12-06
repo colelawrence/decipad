@@ -1,0 +1,13 @@
+diff --git a/node_modules/chunk-text/package.json b/node_modules/chunk-text/package.json
+index 0f2ec1b..ef35f49 100644
+--- a/node_modules/chunk-text/package.json
++++ b/node_modules/chunk-text/package.json
+@@ -2,7 +2,7 @@
+   "name": "chunk-text",
+   "version": "2.0.1",
+   "description": "🔪 chunk/split a string by length without cutting/truncating words.",
+-  "type": "commonJs",
++  "type": "commonjs",
+   "module": "./dist/index.js",
+   "main": "./dist/index.js",
+   "exports": {
