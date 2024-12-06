@@ -18,7 +18,7 @@ import tables, { paginate } from '@decipad/tables';
 import { create as createResourcePermission } from '@decipad/services/permissions';
 import { create as createUser } from '@decipad/services/users';
 import { auth as authConfig, app as appConfig } from '@decipad/backend-config';
-import { timestamp } from '@decipad/backend-utils';
+import { getBoolean, timestamp } from '@decipad/backend-utils';
 import { requireUser, isAuthenticatedAndAuthorized } from '../authorization';
 
 const { urlBase } = appConfig();
@@ -84,7 +84,7 @@ const resolvers = {
         .map((p) => ({
           user_id: p.user_id,
           permissionType: p.type,
-          canComment: p.can_comment,
+          canComment: getBoolean(p.can_comment),
         }));
 
       // Get roles
@@ -103,7 +103,7 @@ const resolvers = {
       const roles = rolePermissions.map((p) => ({
         role_id: p.role_id,
         permissionType: p.type,
-        canComment: p.can_comment,
+        canComment: getBoolean(p.can_comment),
       }));
 
       // Get pending invitations

@@ -8,6 +8,7 @@ import type {
 import tables from '@decipad/tables';
 import { getDefined } from '@decipad/utils';
 import by from './utils/by';
+import { getBoolean } from '@decipad/backend-utils';
 
 export function access<
   RecordT extends ConcreteRecord,
@@ -41,7 +42,7 @@ export function access<
           roleId: p.role_id,
           resourceId: parentId,
           permission: p.type,
-          canComment: p.can_comment,
+          canComment: getBoolean(p.can_comment),
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           role: {} as any, // Picked up by sub resolvers
         })
@@ -55,7 +56,7 @@ export function access<
           userId: p.user_id,
           resourceId: parentId,
           permission: p.type,
-          canComment: p.can_comment,
+          canComment: getBoolean(p.can_comment),
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           user: {} as any, // Picked up by sub resolvers
         })
@@ -70,7 +71,7 @@ export function access<
       .map((p) => ({
         secret: getDefined(p.secret),
         permission: p.type,
-        canComment: p.can_comment,
+        canComment: getBoolean(p.can_comment),
         createdAt: p.createdAt,
       }))
       .sort(by('permission'));

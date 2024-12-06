@@ -1,3 +1,4 @@
+import { getBoolean } from '@decipad/backend-utils';
 import type { PermissionType } from '@decipad/backendtypes';
 import tables from '@decipad/tables';
 
@@ -65,7 +66,7 @@ export async function create(args: ResourceCreateArgs) {
     secret: secret || 'null',
     given_by_user_id: givenByUserId,
     parent_resource_uri: parentResourceUri,
-    can_comment: canComment,
+    can_comment: getBoolean(canComment),
     type,
   };
 

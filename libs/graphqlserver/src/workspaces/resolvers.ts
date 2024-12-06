@@ -48,6 +48,7 @@ import {
   getPlanInfoFromStripe,
   maybeThrowForbidden,
 } from './helpers';
+import { getBoolean } from '@decipad/backend-utils';
 
 const workspaces = resource('workspace');
 
@@ -67,7 +68,7 @@ async function getUsersFromRole(
         userId: user.id,
         user: user as User,
         permission: r.type,
-        canComment: r.can_comment,
+        canComment: getBoolean(r.can_comment),
       };
     })
   );
@@ -461,7 +462,7 @@ const resolvers: Resolvers = {
           (p): RoleAccess => ({
             roleId: p.role_id,
             permission: p.type,
-            canComment: p.can_comment,
+            canComment: getBoolean(p.can_comment),
             role: {} as unknown as Role, // Subresolver will catch this
           })
         )
@@ -473,7 +474,7 @@ const resolvers: Resolvers = {
           (p): UserAccess => ({
             userId: p.user_id,
             permission: p.type,
-            canComment: p.can_comment,
+            canComment: getBoolean(p.can_comment),
           })
         )
         .sort(by('permission'));
