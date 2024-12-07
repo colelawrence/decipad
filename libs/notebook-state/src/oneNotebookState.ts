@@ -1,5 +1,5 @@
 /* eslint-disable no-labels */
-import { getExprRef } from '@decipad/computer';
+import { getComputer, getExprRef } from '@decipad/computer';
 import { type Computer } from '@decipad/computer-interfaces';
 import type { DocSyncEditor, OnLoadedCallback } from '@decipad/docsync';
 import { createDocSyncEditor } from '@decipad/docsync';
@@ -30,6 +30,7 @@ import { cursorAwareness } from './cursors';
 import { closeDataDrawerAnimation } from './dataDrawer';
 import { isNewNotebook } from './isNewNotebook';
 import type { EnhancedPromise, NotebookState } from './state';
+import { once } from '@decipad/utils';
 
 const LOAD_TIMEOUT_MS = 5000;
 const HAS_NOT_SAVED_IN_A_WHILE_TIMEOUT_MS = 5 * 60 * 1000; // 5 minutes
@@ -94,13 +95,33 @@ const initialState = (): Omit<
   };
 };
 
-const createComputer = (notebookId: string): Computer =>
-  createRemoteComputerClient(notebookId, (err) => {
+const isSafari = once(() => {
+  // Primary check using newer API
+  if ('userAgentData' in navigator) {
+    return (navigator as any).userAgentData.brands.some(
+      (brand: { brand: string }) => brand.brand.includes('Safari')
+    );
+  }
+  // Fallback to feature detection
+  return (
+    !('chrome' in window) &&
+    /Safari/.test(navigator.userAgent) &&
+    !/Chrome/.test(navigator.userAgent)
+  );
+});
+
+const createComputer = (notebookId: string): Computer => {
+  if (isSafari()) {
+    console.warn('notebook store: Using local computer in Safari');
+    return getComputer();
+  }
+  return createRemoteComputerClient(notebookId, (err) => {
     if (err) {
       console.error('notebook store: Error in remote computer client', err);
       captureException(err);
     }
   });
+};
 
 export const createNotebookStore = (
   notebookId: string,
