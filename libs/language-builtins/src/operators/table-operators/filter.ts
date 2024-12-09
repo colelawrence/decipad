@@ -13,11 +13,17 @@ export const filterFunctorNoAutomap: FullBuiltinSpec['functorNoAutomap'] =
         subject.isTable(),
         produce((table) => {
           table.indexName = null;
+          table.rowCount = undefined;
+          return table;
         })
       ),
       Type.combine(
         (await (await column.isColumn()).reduced()).isScalar('boolean'),
-        subject.isColumn()
+        subject.isColumn(),
+        produce((column) => {
+          column.cellCount = undefined;
+          return column;
+        })
       )
     );
 

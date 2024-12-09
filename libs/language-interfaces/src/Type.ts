@@ -26,6 +26,7 @@ export interface Type {
 
   // Column
   cellType: Type | null;
+  cellCount?: number;
   atParentIndex: number | null;
 
   // Table

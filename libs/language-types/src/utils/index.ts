@@ -8,3 +8,5 @@ export * from './resultToValue';
 export * from './isResultGenerator';
 export * from './getResultGenerator';
 export * from './buildResult';
+export * from './rowIsEqual';
+export * from './uniqueConsecutiveRows';

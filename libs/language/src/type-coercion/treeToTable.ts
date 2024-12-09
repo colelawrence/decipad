@@ -6,6 +6,7 @@ import {
   resultToValue,
   serializeType,
   buildType as t,
+  uniqueConsecutiveRows,
 } from '@decipad/language-types';
 import type {
   Result,
@@ -20,7 +21,13 @@ const treeToTableType = (_realm: TRealm, source: Type): Type => {
   return t.table({
     indexName: columnNames[0],
     columnNames,
-    columnTypes,
+    rowCount: undefined,
+    columnTypes: columnTypes.map(
+      produce((col) => {
+        col.cellCount = undefined;
+        return col;
+      })
+    ),
   });
 };
 
@@ -122,7 +129,7 @@ const treeToTableValue = async (
   }
 
   // we have to remove the first column because it's the root, which only has Unknown values
-  const columns = (
+  const columns = uniqueConsecutiveRows(
     await treeToColumnsValue(
       sourceType,
       sourceValue,

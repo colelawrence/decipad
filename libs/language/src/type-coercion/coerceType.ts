@@ -17,7 +17,11 @@ export const coerceType = async (
   const target = normalizeTarget(_target);
   if (target === 'table') {
     if (!(await source.isTable()).errorCause) {
-      return source;
+      return source.mapType((table) => {
+        table.rowCount = undefined;
+        table.cellCount = undefined;
+        return table;
+      });
     }
     if (!(await source.isColumn()).errorCause) {
       return columnToTable.type(realm, source);
