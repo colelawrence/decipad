@@ -14,10 +14,12 @@ export const onDragStartInlineResult =
     editor: MyEditor,
     {
       element,
+      variableName,
       asText = '',
       result,
     }: {
       element: CodeLineElement | CodeLineV2Element;
+      variableName?: string;
       asText?: string;
       result: Result.Result;
     }
@@ -25,6 +27,7 @@ export const onDragStartInlineResult =
   (e: React.DragEvent) => {
     onDragStartSmartRef(editor)({
       element,
+      variableName,
       asText,
       result,
     })(e);

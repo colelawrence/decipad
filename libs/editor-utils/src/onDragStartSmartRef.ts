@@ -4,6 +4,7 @@ import {
   MyEditor,
   DRAG_BLOCK_ID,
   DRAG_BLOCK_ID_CONTENT_TYPE,
+  DRAG_VARIABLE_NAME_CONTENT_TYPE,
 } from '@decipad/editor-types';
 import { formatResult } from '@decipad/format';
 import { dndPreviewActions } from '@decipad/react-contexts';
@@ -11,6 +12,7 @@ import type { Result } from '@decipad/language-interfaces';
 
 export type SmartRefDragCallback = (opts: {
   blockId?: string;
+  variableName?: string;
   element?: CodeLineElement | CodeLineV2Element;
   asText: string;
   result: Result.Result;
@@ -23,7 +25,7 @@ export type SmartRefDragCallback = (opts: {
  */
 export const onDragStartSmartRef =
   (editor: MyEditor): SmartRefDragCallback =>
-  ({ blockId, element, asText, result }) =>
+  ({ blockId, variableName, element, asText, result }) =>
   (e: React.DragEvent) => {
     // eslint-disable-next-line no-param-reassign
     editor.dragging = DRAG_BLOCK_ID;
@@ -47,4 +49,8 @@ export const onDragStartSmartRef =
 
     e.dataTransfer.setData(DRAG_BLOCK_ID_CONTENT_TYPE, id);
     e.dataTransfer.setData('text/plain', asText);
+
+    if (variableName) {
+      e.dataTransfer.setData(DRAG_VARIABLE_NAME_CONTENT_TYPE, variableName);
+    }
   };

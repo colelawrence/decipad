@@ -41,6 +41,7 @@ const magicNumberAllowedTypes = [
 export type InsertSmartRefOptions = {
   computer: Computer;
   at: Point;
+  variableName?: string;
   // For testing only
   convertExpressionToSmartRef?: typeof actualConvertExpressionToSmartRef;
 } & (
@@ -56,6 +57,7 @@ export const insertSmartRef = (
     convertExpressionToSmartRef = actualConvertExpressionToSmartRef,
     expression,
     blockId,
+    variableName,
   }: InsertSmartRefOptions
 ) => {
   const [blockAbove, blockAbovePath] =
@@ -140,7 +142,7 @@ export const insertSmartRef = (
         blockId: safeBlockId,
         comparisonBlockId: '',
         comparisonDescription: '',
-        caption: 'Metric',
+        caption: variableName || 'Metric',
         children: [{ text: '' }],
       };
 

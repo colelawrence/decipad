@@ -11,6 +11,7 @@ import type {
   CodeLineV2Element,
   MyElement,
   PlateComponent,
+  StructuredVarnameElement,
 } from '@decipad/editor-types';
 import {
   ELEMENT_CODE_LINE_V2,
@@ -107,6 +108,10 @@ export const CodeLineV2: PlateComponent = ({
       lineId
     );
 
+  const variableName = getNodeString(
+    element.children[0] satisfies StructuredVarnameElement
+  );
+
   const isReadOnly = useIsEditorReadOnly();
   const insideLayout = useInsideLayoutContext();
 
@@ -121,9 +126,10 @@ export const CodeLineV2: PlateComponent = ({
         ? undefined
         : onDragStartInlineResult(editor, {
             element,
+            variableName,
             result: lineResult?.result as any,
           }),
-    [editor, element, isReadOnly, lineResult]
+    [editor, element, variableName, isReadOnly, lineResult]
   );
 
   const childrenArray = Children.toArray(children);
@@ -226,7 +232,8 @@ export const CodeLineV2Varname: PlateComponent = (props) => {
   const errorMessage = useEnsureValidVariableName(props.element, [
     varResult?.id,
   ]);
-  const empty = getNodeString(props.element).trim() === '';
+  const variableName = getNodeString(props.element);
+  const empty = variableName.trim() === '';
 
   const blurred = useEventEditorSelectors.blur();
   useEffect(() => {
@@ -241,9 +248,10 @@ export const CodeLineV2Varname: PlateComponent = (props) => {
         ? undefined
         : onDragStartInlineResult(editor, {
             element,
+            variableName,
             result: lineResult?.result as any,
           }),
-    [editor, element, isReadOnly, lineResult]
+    [editor, element, variableName, isReadOnly, lineResult]
   );
 
   const onEditorChange = useCallback(() => {

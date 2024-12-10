@@ -6,6 +6,7 @@ import {
   DRAG_BLOCK_ID_CONTENT_TYPE,
   DRAG_EXPRESSION,
   DRAG_EXPRESSION_CONTENT_TYPE,
+  DRAG_VARIABLE_NAME_CONTENT_TYPE,
 } from '@decipad/editor-types';
 import {
   getCollapsedSelection,
@@ -45,6 +46,9 @@ export const onDropSmartRef =
     const at = getCollapsedSelection(editor);
     if (!at) return;
 
+    const variableName =
+      event.dataTransfer.getData(DRAG_VARIABLE_NAME_CONTENT_TYPE) || undefined;
+
     switch (dragType) {
       case DRAG_BLOCK_ID:
         const blockId = event.dataTransfer.getData(DRAG_BLOCK_ID_CONTENT_TYPE);
@@ -54,6 +58,7 @@ export const onDropSmartRef =
           computer,
           at,
           blockId,
+          variableName,
         });
 
         break;
@@ -68,6 +73,7 @@ export const onDropSmartRef =
           computer,
           at,
           expression,
+          variableName,
         });
 
         break;
@@ -88,6 +94,7 @@ export const onDropSmartRef =
           computer,
           at,
           expression: text,
+          variableName,
         });
         break;
     }
