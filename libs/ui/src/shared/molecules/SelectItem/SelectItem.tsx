@@ -35,6 +35,7 @@ const wrapper = css({
 const textStyles = css(p14Medium, {
   textAlign: 'start',
   overflow: 'hidden',
+  textOverflow: 'ellipsis',
   whiteSpace: 'nowrap',
   flexGrow: 0,
 });
@@ -60,6 +61,7 @@ const itemIconStyles = css({
   height: '16px',
   display: 'grid',
   borderRadius: '6px',
+  flexShrink: 0,
 });
 
 const nameWrapper = css({
@@ -155,6 +157,8 @@ export const SelectItem: FC<SelectItemProps> = ({
     );
   }
 
+  const text = item.itemName ?? item.item;
+
   return (
     <div
       css={[
@@ -170,7 +174,9 @@ export const SelectItem: FC<SelectItemProps> = ({
     >
       <div css={nameWrapper}>
         {item.icon && <div css={itemIconStyles}>{item.icon}</div>}
-        <span css={textStyles}>{item.itemName ?? item.item}</span>
+        <span css={textStyles} title={text}>
+          {text}
+        </span>
         {isEditAllowed && (
           <aside css={iconWrapper}>
             <div

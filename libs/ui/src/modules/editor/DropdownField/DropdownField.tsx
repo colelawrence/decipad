@@ -16,6 +16,7 @@ const iconWrapperStyles = (squareIcon: boolean) =>
     alignItems: 'center',
     width: squareIcon ? '16px' : undefined,
     height: '16px',
+    flexShrink: 0,
   });
 
 const triggerStyles = (noValueSelected?: boolean) =>
@@ -32,12 +33,26 @@ const triggerStyles = (noValueSelected?: boolean) =>
       border: `1px solid ${cssVar('borderSubdued')}`,
       borderRadius: '6px',
       backgroundColor: cssVar('backgroundMain'),
+      textOverflow: 'ellipsis',
 
       ':hover, :focus-visible': {
         backgroundColor: cssVar('backgroundSubdued'),
       },
     },
   ]);
+
+const triggerTextStyles = css({
+  overflow: 'hidden',
+  textOverflow: 'ellipsis',
+  textWrap: 'nowrap',
+  textAlign: 'left',
+  /**
+   * flexGrow: 1 and width: 0 prevents the parent container from resizing when
+   * the text is too long.
+   */
+  flexGrow: 1,
+  width: 0,
+});
 
 const containerStyles = css({
   display: 'grid',
@@ -54,7 +69,7 @@ interface DropdownFieldProps {
   readonly label?: ReactNode;
   readonly icon?: ReactNode;
   readonly squareIcon?: boolean;
-  readonly triggerText: ReactNode;
+  readonly triggerText: string;
   readonly children: ReactNode;
   readonly error?: string;
   readonly noValueSelected?: boolean;
@@ -120,7 +135,7 @@ export interface DropdownFieldTriggerProps {
   readonly id: string;
   readonly icon?: ReactNode;
   readonly squareIcon?: boolean;
-  readonly children: ReactNode;
+  readonly children: string;
   readonly noValueSelected?: boolean;
 }
 
@@ -133,7 +148,9 @@ export const DropdownFieldTrigger = ({
 }: DropdownFieldTriggerProps) => (
   <button id={id} type="button" css={triggerStyles(noValueSelected)}>
     {icon && <span css={iconWrapperStyles(squareIcon)}>{icon}</span>}
-    {children}
-    <CaretDown css={{ width: '12px', marginLeft: 'auto' }} />
+    <span css={triggerTextStyles} title={children}>
+      {children}
+    </span>
+    <CaretDown css={{ width: '12px', marginLeft: 'auto', flexShrink: 0 }} />
   </button>
 );

@@ -30,21 +30,33 @@ export const useResults = (options: UseResultsOptions) => {
 
   return useMemo(
     (): SelectItems[] =>
-      [...namesDefined, ...calculations].map((name, i) => ({
-        index: i,
-        item: name.name,
-        blockId: name.columnId ?? name.blockId,
-        blockType: name.serializedType,
-        group: {
-          variable: 'Variables',
-          function: 'Functions',
-          column: 'Columns',
-          calculation: 'Calculations',
-        }[name.autocompleteGroup],
-        icon: <ResultIcon kind={name.kind} />,
-      })),
+      [...namesDefined, ...calculations].map(selectedItemForName),
     [namesDefined, calculations]
   );
+};
+
+const selectedItemForName = (
+  name: AutocompleteNameWithSerializedType,
+  index: number
+): SelectItems => {
+  // Group columns by table name
+  const [tableName = undefined, columnName = undefined] = name.columnId
+    ? name.name.split('.')
+    : [];
+
+  return {
+    index,
+    item: columnName ?? name.name,
+    blockId: name.columnId ?? name.blockId,
+    blockType: name.serializedType,
+    group: {
+      variable: 'Variables',
+      function: 'Functions',
+      column: tableName,
+      calculation: 'Calculations',
+    }[name.autocompleteGroup],
+    icon: <ResultIcon kind={name.kind} />,
+  };
 };
 
 const useCalculations = (): AutocompleteNameWithSerializedType[] => {
