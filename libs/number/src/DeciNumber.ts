@@ -260,7 +260,7 @@ export class DeciNumber implements TDeciNumber {
       const resultNumber = this.valueOf() ** b.valueOf();
       if (Number.isNaN(resultNumber)) {
         throw new TypeError(
-          `**: result of raising to ${b.toString()} is not rational`
+          `**: result of raising ${this.valueOf()} to ${b.valueOf()} is not rational`
         );
       }
       return N(resultNumber) as unknown as Fraction;
