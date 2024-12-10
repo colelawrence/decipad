@@ -294,9 +294,12 @@ describe('getValue', () => {
       c('implicit*', n('literal', 'number', N(1, 10)), r('kilometer'))
     );
 
-    expect(
-      await testGetType(getType, quantity, n('generic-identifier', '%'))
-    ).toMatchObject({
+    const type = await testGetType(
+      getType,
+      quantity,
+      n('generic-identifier', '%')
+    );
+    expect(type.cellType).toMatchObject({
       type: 'number',
       unit: null,
       numberFormat: 'percentage',

@@ -33,13 +33,15 @@ const getNumberType = async (
   buildType: (numberType: Type) => Type = identity
 ): Promise<Type> => {
   if (representsPercentage(unitExpr)) {
-    return Dimension.automapTypes(
-      ctx.utils,
-      [await (await expressionType.reducedToLowest()).isScalar('number')],
-      (): Type => {
-        return buildType(t.number(null, 'percentage'));
-      }
-    );
+    const reducedToLowest = await (
+      await expressionType.reducedToLowest()
+    ).isScalar('number');
+    if (reducedToLowest.errorCause) {
+      return reducedToLowest;
+    }
+    return Dimension.automapTypes(ctx.utils, [expressionType], (): Type => {
+      return buildType(t.number(null, 'percentage'));
+    });
   }
 
   const unitExpressionType = await (
