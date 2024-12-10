@@ -23,6 +23,7 @@ export * from './Floating';
 export { FloatingButton } from './FloatingButton/FloatingButton';
 export { IconButton } from './IconButton/IconButton';
 export { InputField } from './InputField/InputField';
+export { InputFieldDate } from './InputFieldDate/InputFieldDate';
 export { Input } from './Input/Input';
 export {
   InputFieldHorizontal,

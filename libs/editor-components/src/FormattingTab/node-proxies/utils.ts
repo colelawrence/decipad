@@ -37,11 +37,12 @@ export const setNodeText = (
 };
 
 export const mapVariableProperties = (node: VariableDefinitionElement) => {
-  const [caption] = node.children;
+  const [caption, expression] = node.children;
   return {
     name: caption.children[0].text,
     variant: node.variant,
     color: (caption.color ?? 'auto') as ColorSwatchOrAuto,
+    value: expression.children[0].text,
   };
 };
 
@@ -64,6 +65,11 @@ export const variableActions = {
       'color',
       color === 'auto' ? undefined : color
     ),
+  setValue: (
+    node: VariableDefinitionElement,
+    editor: MyEditor,
+    value: string
+  ) => setNodeText(editor, node.children[1], value),
 };
 
 const normalizeNumber = (value: string, allowNegative: boolean) => {

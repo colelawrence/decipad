@@ -126,7 +126,7 @@ const hiddenChildrenStyles = css({
   display: 'none',
 });
 
-interface MetricProps {
+export interface MetricProps {
   readonly children?: ReactNode;
   readonly readOnly?: boolean;
   readonly caption: string;

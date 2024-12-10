@@ -3,8 +3,7 @@ import type { SerializedType } from '@decipad/remote-computer';
 import { useThemeFromStore } from '@decipad/react-contexts';
 import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
-import { Children, FC, ReactNode, useCallback, useMemo } from 'react';
-import { useSelected } from 'slate-react';
+import { Children, FC, ReactNode, useCallback, useMemo, useState } from 'react';
 import { DatePickerWrapper, Toggle } from '../../../shared';
 import {
   cssVar,
@@ -172,8 +171,7 @@ export const VariableEditor = ({
   const childrenArray = Children.toArray(children);
   const [darkTheme] = useThemeFromStore();
   const baseSwatches = useMemo(() => swatchesThemed(darkTheme), [darkTheme]);
-
-  const selected = useSelected();
+  const [datePickerOpen, setDatePickerOpen] = useState<boolean>(false);
 
   const editor = useCallback(() => {
     if (variant === 'display' || childrenArray.length === 0) {
@@ -191,9 +189,18 @@ export const VariableEditor = ({
         <DatePickerWrapper
           granularity={type && 'date' in type ? type.date : undefined}
           value={value ?? ''}
-          open={selected}
-          onChange={onChangeValue}
-          customInput={wrappedChildren}
+          open={datePickerOpen}
+          onChange={(newDate) => {
+            onChangeValue(newDate);
+            setDatePickerOpen(false);
+          }}
+          customInput={
+            <>
+              <div onClick={() => setDatePickerOpen(true)}>
+                {wrappedChildren}
+              </div>
+            </>
+          }
         />
       );
     }
@@ -214,7 +221,7 @@ export const VariableEditor = ({
     }
 
     return wrappedChildren;
-  }, [childrenArray, onChangeValue, selected, type, value, variant])();
+  }, [childrenArray, onChangeValue, type, value, variant, datePickerOpen])();
 
   return (
     <div

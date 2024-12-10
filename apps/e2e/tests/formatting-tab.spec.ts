@@ -20,7 +20,7 @@ test('Formatting tab', async ({ testUser }) => {
 
   await test.step('rename input widget', async () => {
     await notebook.selectBlocks(0, 0);
-    await page.getByLabel('Variable name').fill('Renamed Input');
+    await page.getByLabel('Label').fill('Renamed Input');
     await page.keyboard.press('Enter');
     await expect(page.getByTestId('input-widget-name').nth(0)).toContainText(
       'RenamedInput'
@@ -35,8 +35,8 @@ test('Formatting tab', async ({ testUser }) => {
 
   await test.step('select all three sliders', async () => {
     await notebook.selectBlocks(0, 2);
-    await expect(page.getByLabel('Variable name')).toBeDisabled();
-    await expect(page.getByLabel('Variable name')).toHaveAttribute(
+    await expect(page.getByLabel('Label')).toBeDisabled();
+    await expect(page.getByLabel('Label')).toHaveAttribute(
       'placeholder',
       'Multiple'
     );
@@ -54,7 +54,7 @@ test('Formatting tab', async ({ testUser }) => {
 
   await test.step('select widgets of mixed variants', async () => {
     await notebook.selectBlocks(2, 3);
-    await expect(page.getByLabel('Variable name')).toBeVisible();
+    await expect(page.getByLabel('Label')).toBeVisible();
     await expect(page.getByLabel('Variable color')).toBeVisible();
     await expect(page.getByLabel('Minimum value')).toBeHidden();
   });
@@ -70,7 +70,7 @@ test('Formatting tab', async ({ testUser }) => {
   await test.step('select blocks of mixed types', async () => {
     await notebook.selectBlocks(3, 4);
     await expect(page.getByLabel('Notebook title')).toBeVisible();
-    await expect(page.getByLabel('Variable name')).toBeHidden();
+    await expect(page.getByLabel('Label')).toBeHidden();
   });
 
   await test.step('select paragraph', async () => {

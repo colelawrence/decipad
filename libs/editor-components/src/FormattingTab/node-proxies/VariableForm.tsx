@@ -14,7 +14,7 @@ export const VariableForm: FC<
   <FormWrapper>
     <ProxyStringField
       editor={editor}
-      label="Variable name"
+      label="Label"
       property={properties.name}
       onChange={actions.setName}
       disabled={nodes.length > 1}

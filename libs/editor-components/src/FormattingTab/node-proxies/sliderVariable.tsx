@@ -65,6 +65,13 @@ export const SliderVariableForm: FC<
 
   return (
     <VariableForm editor={editor} proxy={proxy}>
+      <ProxyStringField
+        editor={editor}
+        label="Value"
+        property={properties.value}
+        onChange={actions.setValue}
+      />
+
       <InputFieldHorizontalGroup>
         <ProxyStringField
           editor={editor}

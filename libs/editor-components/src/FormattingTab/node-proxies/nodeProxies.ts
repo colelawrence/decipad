@@ -7,9 +7,11 @@ import {
   dropdownVariableConfig,
 } from './dropdownVariable';
 import { MetricForm, metricConfig } from './metric';
+import { dateVariableConfig, DateVariableForm } from './dateVariable';
 
 // The first proxy factory that matches all selected nodes will be used
 export const proxyFactories = [
+  dateVariableConfig,
   sliderVariableConfig,
   dropdownVariableConfig,
   genericVariableConfig,
@@ -18,6 +20,7 @@ export const proxyFactories = [
 ] satisfies AnyProxyFactoryConfig[];
 
 export const proxyFormsByKey: ProxyFormsByKey<typeof proxyFactories> = {
+  dateVariable: DateVariableForm,
   sliderVariable: SliderVariableForm,
   dropdownVariable: DropdownVariableForm,
   genericVariable: GenericVariableForm,
