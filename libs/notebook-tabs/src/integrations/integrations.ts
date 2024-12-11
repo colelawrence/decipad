@@ -130,6 +130,7 @@ export const withComputerCacheIntegration = (
   let hasTriedCache = false;
 
   const blocksToProcess = new Map<string, IntegrationTypes.IntegrationBlock>();
+  const rename = renameResultInComputer(notebookId, computer);
 
   computer
     .waitForTriedCache()
@@ -137,6 +138,7 @@ export const withComputerCacheIntegration = (
     .finally(() => {
       for (const block of blocksToProcess.values()) {
         if (hasValidResult(computer, block.id)) {
+          rename(block);
           continue;
         }
 

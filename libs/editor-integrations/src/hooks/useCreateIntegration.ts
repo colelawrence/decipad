@@ -129,12 +129,14 @@ export const useCreateIntegration = (
         properties: childlessNode,
         newProperties: {
           ...childlessNode,
+          integrationType: runner.intoIntegrationType(),
           isFirstRowHeader:
             'isFirstHeaderRow' in runner.options.importer &&
             typeof runner.options.importer.isFirstHeaderRow === 'boolean'
               ? runner.options.importer.isFirstHeaderRow
               : false,
           typeMappings: runner.types,
+          timeOfLastRun: Date.now().toString(),
         } satisfies Omit<IntegrationTypes.IntegrationBlock, 'children'>,
       });
     },

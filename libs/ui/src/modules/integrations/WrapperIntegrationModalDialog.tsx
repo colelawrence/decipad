@@ -48,9 +48,16 @@ const childrenStyles = css({
   width: '100%',
   flexGrow: 1,
   display: 'flex',
+  gap: '8px',
   flexDirection: 'column',
   '& > span': {
     flexGrow: 1,
+  },
+  '& > label:not(:first-of-type)': {
+    paddingTop: '8px',
+  },
+  '& > button': {
+    padding: '7px 0',
   },
 });
 

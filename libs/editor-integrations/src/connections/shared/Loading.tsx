@@ -1,4 +1,4 @@
-import { LoadingIndicator, p14Bold } from '@decipad/ui';
+import { cssVar, p14Regular } from '@decipad/ui';
 import styled from '@emotion/styled';
 import { FC } from 'react';
 import { ConnectionProps } from '../types';
@@ -19,34 +19,29 @@ export const Loading: FC<Pick<ConnectionProps, 'info'>> = ({ info }) => {
 
   switch (lastLog.status) {
     case 'run':
-      return (
-        <LoadingDiv>
-          Loading <LoadingIndicator />
-        </LoadingDiv>
-      );
     case 'success':
-      // return <LoadingDiv>Integration loaded successfully!</LoadingDiv>;
       return <></>;
     case 'warning':
     case 'error':
-      return (
-        <LoadingDiv>
-          There was an error loading the integration: <br />
-          {extractError(lastLog.err)}
-        </LoadingDiv>
-      );
+      return <LoadingDiv>{extractError(lastLog.err)}</LoadingDiv>;
     case 'unset':
     case 'log':
       return null;
   }
 };
 
-const LoadingDiv = styled.div(p14Bold, {
+const LoadingDiv = styled.div(p14Regular, {
   display: 'flex',
   marginTop: '8px',
+  wordBreak: 'break-word',
   gap: '8px',
   svg: {
     width: '16px',
     height: '16px',
   },
+  color: cssVar('stateDangerText'),
+  border: `1px solid ${cssVar('stateDangerBackground')}`,
+  borderRadius: '8px',
+  background: cssVar('stateDangerBackground'),
+  padding: '4px 8px',
 });

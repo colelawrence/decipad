@@ -24,9 +24,9 @@ export const ResultPreviewTableWrapper = styled.div(
   {
     padding: 0,
     borderRadius: 0,
-    width: '100%',
+    maxWidth: '100%',
     flexDirection: 'column',
-    height: '100%',
+    maxHeight: '100%',
   }
 );
 
@@ -58,15 +58,10 @@ export const ChangeVariableTypeButton = styled.button(p12Medium, hideOnPrint, {
   },
 });
 
-export const PreviewActionsWrapper = styled.div({
-  display: 'flex',
-  flexDirection: 'column',
-  gap: '8px',
-  div: {
-    display: 'flex',
-    alignItems: 'center',
-    width: '100%',
-    justifyContent: 'space-between',
+export const PreviewActionsWrapper = styled.ul({
+  display: 'contents',
+  li: {
+    display: 'contents',
   },
 });
 
@@ -86,28 +81,6 @@ export const ActiveDataSetsWrapper = styled.div({
     padding: '0 8px',
     color: cssVar('textDisabled'),
   },
-});
-
-export const DatasetCollapsibleTrigger = css(p14Medium, {
-  display: 'flex',
-  flexDirection: 'row',
-  alignItems: 'center',
-  color: cssVar('textDisabled'),
-  svg: {
-    width: '16px',
-    height: '16px',
-    padding: '4px',
-    boxSizing: 'content-box',
-  },
-  '& > *:last-child': {
-    marginLeft: '8px',
-  },
-});
-export const DatasetBadge = css({
-  marginTop: '1px',
-  lineHeight: 'normal',
-  padding: '0.1em 0.4em',
-  backgroundColor: cssVar('backgroundHeavy'),
 });
 
 export const AllServicesWrapper = styled.div({

@@ -19,7 +19,6 @@ export interface ConnectionProps {
   setExternalData: (_: ExternalDataSourceFragmentFragment | undefined) => void;
 
   type: 'create' | 'edit';
-  stage: 'connect' | 'map';
 
   id: string;
 
@@ -50,7 +49,6 @@ export type IntegrationProps =
 
 export type UseConcreteIntegrationReturn = {
   onClose: () => void;
-  stage: 'connect' | 'map';
   connectionProps: ConnectionProps;
   onContinue: () => void;
   onBack: () => void;

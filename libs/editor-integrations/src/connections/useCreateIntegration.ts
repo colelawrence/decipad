@@ -52,10 +52,6 @@ export const useConcreteIntegration = (
   const [externalData, setExternalData] =
     useState<ConnectionProps['externalData']>(undefined);
 
-  const [stage, setStage] = useState<ConnectionProps['stage']>(
-    props.type === 'create' && existingDataset == null ? 'connect' : 'map'
-  );
-
   const computer = useComputer();
 
   const [blockId] = useState(nanoid());
@@ -142,8 +138,10 @@ export const useConcreteIntegration = (
   }, [queries, runner, toast, externalData, computer]);
 
   useEffect(() => {
-    runner.name = varName;
-  }, [runner, varName]);
+    const name = varName.trim();
+    if (name.length === 0 || /\s/.test(name)) return;
+    runner.rename(computer, name);
+  }, [runner, computer, varName]);
 
   useEffect(() => {
     if (existingDataset === undefined) {
@@ -207,53 +205,61 @@ export const useConcreteIntegration = (
 
   const onBack = () => {
     if (type === 'create') {
-      if (stage === 'map' && existingDataset == null) {
-        setStage('connect');
-      } else {
-        onReset();
-      }
+      onReset();
     } else {
       throw new Error('Unreachable');
     }
   };
 
-  const onContinue = () => {
-    if (
-      type === 'create' &&
-      stage === 'connect' &&
-      existingDataset == null &&
-      connectionType !== 'mysql' &&
-      connectionType !== 'codeconnection'
-    ) {
-      setStage('map');
-    } else {
-      shouldDelete.current = false;
+  const onContinue = async () => {
+    shouldDelete.current = false;
 
-      const newTypes: TypeMap = {};
-      for (const [k, v] of Object.entries(runner.types)) {
-        newTypes[k] = v;
-      }
-
-      for (const column of hiddenColumns) {
-        if (column in newTypes) {
-          newTypes[column] = { ...newTypes[column], isHidden: true };
-        } else {
-          newTypes[column] = { isHidden: true };
-        }
-      }
-
-      for (const [k, v] of Object.entries(newTypes)) {
-        if (!hiddenColumns.includes(k) && v?.isHidden) {
-          newTypes[k] = { ...v, isHidden: false };
-        }
-      }
-
-      runner.setTypes(newTypes);
-
-      run().then(() => {
-        onCreateIntegration(connectionProps);
-      });
+    const newTypes: TypeMap = {};
+    for (const [k, v] of Object.entries(runner.types)) {
+      newTypes[k] = v;
     }
+
+    for (const column of hiddenColumns) {
+      if (column in newTypes) {
+        newTypes[column] = { ...newTypes[column], isHidden: true };
+      } else {
+        newTypes[column] = { isHidden: true };
+      }
+    }
+
+    for (const [k, v] of Object.entries(newTypes)) {
+      if (!hiddenColumns.includes(k) && v?.isHidden) {
+        newTypes[k] = { ...v, isHidden: false };
+      }
+    }
+
+    runner.setTypes(newTypes);
+
+    onCreateIntegration(connectionProps);
+
+    // TODO: for some reason this is merging columns with the last result we had??
+    // const result = computer.getBlockIdResult(blockId);
+    // if (
+    //  type === 'create' ||
+    //  result === undefined ||
+    //  result.type === 'identified-error' ||
+    //  result.result.type.kind === 'pending' ||
+    //  result.result.type.kind === 'type-error'
+    // ) {
+    //  return;
+    // }
+    // await pushResultToComputer(
+    //  computer,
+    //  props.integrationBlock.id,
+    //  getNodeString(props.integrationBlock.children[0]),
+    //  { type: { kind: 'pending' }, value: undefined }
+    // );
+    // pushResultToComputer(
+    //  computer,
+    //  props.integrationBlock.id,
+    //  getNodeString(props.integrationBlock.children[0]),
+    //  result.result
+    // );
   };
 
   const connectionProps: ConnectionProps = {
@@ -270,8 +276,6 @@ export const useConcreteIntegration = (
 
     externalData,
     setExternalData,
-
-    stage,
 
     varName,
 
@@ -293,9 +297,8 @@ export const useConcreteIntegration = (
   };
 
   return {
-    stage,
     onClose: () => {
-      setSidebar({ type: 'default-sidebar' });
+      setSidebar({ type: 'integrations' });
     },
     connectionProps,
     onContinue,

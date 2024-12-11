@@ -25,9 +25,6 @@ const EmptyDataSetStyled = styled.div({
   justifyContent: 'center',
   alignItems: 'center',
 
-  borderRadius: '16px',
-  border: `1px solid ${cssVar('borderDefault')}`,
-
   'div:first-child': {
     width: '40px',
     height: '40px',
@@ -43,5 +40,6 @@ const EmptyDataSetStyled = styled.div({
 
   'p:last-child': {
     color: cssVar('textSubdued'),
+    padding: '0 10%',
   },
 });

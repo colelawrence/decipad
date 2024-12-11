@@ -149,11 +149,9 @@ return this.${generatedVarName};`;
 
     await page.getByTestId('text-icon-button:Run').click();
     await expect(page.getByTestId('code-successfully-run')).toBeVisible();
-    await page.getByText('Preview').last().click();
     await expect(page.getByTestId('number-result:100')).toBeVisible();
 
-    await page.getByText('Preview').last().click();
-    await page.getByTestId('result-preview-input').click();
+    await page.getByPlaceholder('Name of your integration').click();
     await page.keyboard.press(
       os.platform() === 'darwin' ? 'Meta+a' : 'Control+a',
       { delay: Timeouts.typing }
@@ -231,17 +229,8 @@ test('checks the ability to change the unit of a response', async ({
 
   await page.getByTestId('text-icon-button:Run').click();
   await expect(page.getByTestId('code-successfully-run')).toBeVisible();
-  await page.getByText('Preview').last().click();
 
-  const generatedVarName = await page.evaluate(
-    getClearText,
-    await page.getByTestId('result-preview-input').innerHTML()
-  );
-
-  await page
-    .getByTestId('result-preview-input')
-    .getByText(generatedVarName)
-    .dblclick();
+  await page.getByPlaceholder('Name of your integration').dblclick();
   await page.keyboard.press('Backspace');
   await page.keyboard.type('F');
 
@@ -365,14 +354,14 @@ test('checks google sheet integrations with link works', async ({
     await testUser.page.getByTestId('select-integration:Google Sheets').click();
     // fill with wrong usl
     await testUser.page
-      .getByPlaceholder('Google Sheet URL')
+      .getByPlaceholder('e.g https://docs.google.com/')
       // eslint-disable-next-line no-script-url
       .fill("javascript:alert('xss')");
     await expect(
       testUser.page.getByRole('button', { name: 'Import' })
     ).toBeDisabled();
     await testUser.page
-      .getByPlaceholder('Google Sheet URL')
+      .getByPlaceholder('e.g https://docs.google.com/')
       .fill(
         'https://docs.google.com/spreadsheets/d/15ZrP05Qqa84XdAOAh-iFwbe04KErLJeCTPu_OCITUT4/edit?gid=0#gid=0'
       );
@@ -382,10 +371,6 @@ test('checks google sheet integrations with link works', async ({
     ).toBeVisible();
     await testUser.page.getByTestId('integration-modal-continue').click();
 
-    await expect(
-      testUser.page.getByText('11 rows, previewing rows 1 to 10')
-    ).toBeVisible();
-    await testUser.page.getByTestId('integration-modal-continue').click();
     await expect(
       testUser.page.getByText('11 rows, previewing rows 1 to 10')
     ).toBeVisible();

@@ -1,40 +1,60 @@
 import { css } from '@emotion/react';
-import { cssVar, p12Medium, p8Medium } from 'libs/ui/src/primitives';
+import { cssVar, p12Medium, p14Medium, p8Medium } from 'libs/ui/src/primitives';
 
 export const IntegrationItemStyled = css({
   display: 'grid',
-  // padding: '8px',
   alignItems: 'center',
   gap: '0 12px',
   // height: '56px',
 
   gridTemplateColumns: '40px 1fr max-content',
   gridTemplateRows: 'min-content 1fr',
-  '&[data-single="true"]': {
-    gridTemplateRows: '1fr',
-  },
 
-  '&[data-variant=sidebar]': {
-    cursor: 'pointer',
-  },
-
-  '&[data-variant=modal]': {
-    border: `1px solid ${cssVar('borderSubdued')}`,
-    padding: '8px',
-  },
+  cursor: 'pointer',
 
   borderRadius: '8px',
+  // border: `1px solid ${cssVar('borderSubdued')}`,
 
   'h2, p': {
     gridColumn: '2/3',
-    // lineHeight: '0.8rem',
   },
 
-  span: {
-    gridArea: '3/4/1/3',
+  '& > span': {
     display: 'flex',
-    flexDirection: 'row',
     gap: '8px',
+    flexDirection: 'row',
+    gridRow: '1/3',
+  },
+
+  '&[data-variant=modal]': {
+    padding: '8px',
+    border: `1px solid ${cssVar('borderSubdued')}`,
+    gridTemplateRows: '1fr 1fr',
+    rowGap: '4px',
+    h2: {
+      ...p14Medium,
+      lineHeight: '0.8rem',
+      color: cssVar('textHeavy'),
+      alignSelf: 'end',
+    },
+    p: {
+      alignSelf: 'start',
+    },
+
+    '& > span': {
+      gridColumn: '3/4',
+    },
+
+    '&:hover': {
+      background: cssVar('backgroundHeavy'),
+    },
+  },
+
+  '&[data-single=true]': {
+    gridTemplateRows: '1fr',
+    h2: {
+      alignSelf: 'center',
+    },
   },
 });
 
@@ -126,7 +146,12 @@ export const IntegrationSoonTag = css(p8Medium, {
   backgroundColor: cssVar('backgroundHeavier'),
 });
 
-export const IntegrationActionItemStyled = css(IntegrationItemStyled);
+export const IntegrationActionItemStyled = css(IntegrationItemStyled, {
+  cursor: 'default',
+  '&[data-variant=modal]:hover': {
+    backgroundColor: 'inherit',
+  },
+});
 
 export const IntegrationButton = css({
   justifySelf: 'flex-end',

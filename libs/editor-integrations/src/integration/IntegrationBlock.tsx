@@ -108,7 +108,6 @@ export const IntegrationBlock: PlateComponent = ({
       onClick: () => {
         setSidebar({ type: 'integrations', blockId: element.id });
       },
-      icon: <icons.Edit />,
     },
     ...(!canBePlotted(result)
       ? []
@@ -151,6 +150,9 @@ export const IntegrationBlock: PlateComponent = ({
       ? element.integrationType.provider
       : element.integrationType.type;
 
+  const lastRun = element.timeOfLastRun && parseInt(element.timeOfLastRun, 10);
+  const lastRunFmt =
+    !lastRun || isNaN(lastRun) ? null : new Date(lastRun).toLocaleString();
   return (
     <DraggableBlock
       element={element}
@@ -161,7 +163,12 @@ export const IntegrationBlock: PlateComponent = ({
       <UIIntegrationBlock
         meta={
           element.timeOfLastRun
-            ? [{ label: 'Last run', value: element.timeOfLastRun }]
+            ? [
+                {
+                  label: 'Last run',
+                  value: lastRunFmt ?? element.timeOfLastRun,
+                },
+              ]
             : []
         }
         text={ImportElementSourcePretty[integrationTypeText]}

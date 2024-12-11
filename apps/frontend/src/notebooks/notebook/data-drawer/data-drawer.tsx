@@ -57,6 +57,10 @@ const DataDrawerResizer: FC<DataDrawerResizerProps> = ({
   parentRef,
   onCommitNewHeight,
 }) => {
+  if (parentRef == null) {
+    return null;
+  }
+
   return (
     <DragPill
       onMouseDown={(e) => {

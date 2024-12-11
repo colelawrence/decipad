@@ -108,6 +108,7 @@ export const DatabaseConnectionScreen: FC<DatabaseConnectionProps> = ({
             <IntegrationActionItem
               icon={<ThumbnailSql />}
               title={externalData.dataSourceName ?? ''}
+              variant="modal"
               description=""
               onEdit={() => {
                 if (!externalData.externalId) {

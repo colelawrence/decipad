@@ -832,9 +832,18 @@ test('Premium Feature - Allow duplicate, prevent users from duplicating', async 
     ).toBeVisible();
   });
 
+  await test.step('Original user can go back and allow duplication', async () => {
+    await testUser.page.locator('text="Allow readers to duplicate"').click();
+  });
+
   await test.step('Logged in user cannot duplicate', async () => {
     await anotherTestUser.page.goto(notebookLink!);
-    await expect(anotherTestUser.notebook.duplicateNotebook).toBeHidden();
+    await expect(
+      anotherTestUser.page.getByText('Welcome to Decipad!')
+    ).toBeVisible();
+    await expect(
+      anotherTestUser.notebook.topRightDuplicateNotebook
+    ).toBeHidden();
   });
 
   await test.step('Original user can go back and allow duplication', async () => {
@@ -843,6 +852,9 @@ test('Premium Feature - Allow duplicate, prevent users from duplicating', async 
 
   await test.step('Logged in user can now duplicate', async () => {
     await anotherTestUser.page.reload();
+    await expect(
+      anotherTestUser.page.getByText('Welcome to Decipad!')
+    ).toBeVisible();
     await expect(
       anotherTestUser.notebook.topRightDuplicateNotebook
     ).toBeVisible();

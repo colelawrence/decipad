@@ -9,14 +9,26 @@ import { OptionsList } from '@decipad/ui';
 import { ConnectionProps } from '../types';
 import { useWorkspaceConnections } from '../../hooks/useWorkspaceConnections';
 import { getExternalDataAuthUrl } from '@decipad/notebook-tabs';
+import { labelStyle } from 'libs/ui/src/shared/atoms/Input/Input';
 
 function onAuth(externalDataId: string) {
   window.location.replace(getExternalDataAuthUrl(externalDataId));
 }
 
 export const OAuthConnections: FC<
-  ConnectionProps & { provider: ExternalProvider; label: string }
-> = ({ workspaceId, provider, label, externalData, setExternalData }) => {
+  ConnectionProps & {
+    provider: ExternalProvider;
+    label: string;
+    placeholder: string;
+  }
+> = ({
+  workspaceId,
+  provider,
+  label,
+  placeholder,
+  externalData,
+  setExternalData,
+}) => {
   const conn = useWorkspaceConnections(workspaceId, provider);
 
   const [, createDataSource] = useCreateExternalDataSourceMutation();
@@ -43,15 +55,18 @@ export const OAuthConnections: FC<
   }
 
   return (
-    <OptionsList
-      name={externalData?.name}
-      label={label}
-      selections={conn}
-      extraOption={{
-        callback: onConnectIntegration,
-        label: '+ Add New Connection',
-      }}
-      onSelect={setExternalData}
-    />
+    <>
+      <label css={labelStyle}>{label}</label>
+      <OptionsList
+        name={externalData?.name}
+        label={placeholder}
+        selections={conn}
+        extraOption={{
+          callback: onConnectIntegration,
+          label: '+ Add New Connection',
+        }}
+        onSelect={setExternalData}
+      />
+    </>
   );
 };

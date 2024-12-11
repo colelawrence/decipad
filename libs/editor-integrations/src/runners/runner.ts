@@ -3,12 +3,10 @@ import {
   DeciType,
   Importer,
 } from '@decipad/compute-backend-js';
-import { Computer } from '@decipad/computer-interfaces';
 import { pushExtraData, pushResultNameChange } from '@decipad/computer-utils';
-import { filterExpression } from '@decipad/editor-language-elements';
-import { Filter, SimpleTableCellType } from '@decipad/editor-types';
-import { astNode, hydrateType } from '@decipad/remote-computer';
-import { Unknown } from '@decipad/language-interfaces';
+import { SimpleTableCellType } from '@decipad/editor-types';
+import { getNotebookStore } from '@decipad/notebook-state';
+import { astNode, hydrateType, Unknown } from '@decipad/remote-computer';
 import { assert } from '@decipad/utils';
 import {
   IntegrationTypes,
@@ -24,7 +22,6 @@ export type Options<T extends ImporterTypes, O extends Record<string, any>> = {
   /** Options specific to the JS-land runner */
   runner: O;
   padId: string;
-  filters: Filter[];
   /** Desired column types for inference.
    *
    * If a column is not defined, its type will be guessed.
@@ -68,19 +65,15 @@ export abstract class Runner<
   private _nameToColumnId: Record<string, string | undefined> | undefined =
     undefined;
 
-  public filters: Filter[];
-
   constructor(
     id: string,
-    { name, types, importer, padId, runner, filters }: PartialOptions<T, O>
+    { name, types, importer, padId, runner }: PartialOptions<T, O>
   ) {
     this.name = name;
     this._id = id;
 
     this.options = { importer, runner };
     this.padId = padId;
-
-    this.filters = filters;
 
     if (types != null) {
       this.setTypes(types);
@@ -105,7 +98,6 @@ export abstract class Runner<
   }
 
   public async renameColumn(
-    computer: Computer,
     currentColumnName: string,
     desiredColumnName: string
   ): Promise<void> {
@@ -131,6 +123,8 @@ export abstract class Runner<
     type.desiredName = sanitizedColumnName;
 
     this.setTypeAt(columnId, type);
+
+    const computer = getNotebookStore(this.padId).getState().computer!;
 
     await pushResultNameChange(computer, this.id, sanitizedColumnName, {
       type: 'column',
@@ -197,14 +191,15 @@ export abstract class Runner<
     return this._types;
   }
 
-  protected abstract fetchData(computer: Computer): Promise<Uint8Array>;
+  protected abstract fetchData(): Promise<Uint8Array>;
 
   public abstract assertedOptions(): Pick<Options<T, O>, 'runner' | 'importer'>;
   public abstract intoIntegrationType(): IntegrationTypes;
 
-  public async import(computer: Computer): Promise<string> {
+  public async import(): Promise<string> {
     assert(!!this.name);
     const options = this.assertedOptions();
+    const computer = getNotebookStore(this.padId).getState().computer!;
 
     // TODO: Is this correct? I think we need more on program field.
     // Also clean up on errors.
@@ -239,7 +234,7 @@ export abstract class Runner<
       },
     });
 
-    const data = await this.fetchData(computer);
+    const data = await this.fetchData();
 
     const importedResult = await computer.importExternalData({
       data,
@@ -313,9 +308,7 @@ export abstract class Runner<
       this.id,
       this.name,
       Object.values(nonHiddenColumns),
-      Object.keys(nonHiddenColumns),
-      filterExpression(this.filters),
-      importedResult.rowCount
+      Object.keys(nonHiddenColumns)
     );
 
     this._nameToColumnId = importedResult.columnNamesToId;
@@ -323,8 +316,9 @@ export abstract class Runner<
     return importedResult.id;
   }
 
-  public async rename(computer: Computer, newName: string): Promise<void> {
-    this.name = newName;
+  public async rename(newName: string): Promise<void> {
+    const computer = getNotebookStore(this.padId).getState().computer!;
+
     return pushResultNameChange(computer, this.id, newName, {
       type: 'table',
       columnNameToIds: this.nameToColumnId ?? {},
@@ -332,9 +326,5 @@ export abstract class Runner<
         .filter(([, v]) => v?.isHidden)
         .map(([k]) => k),
     });
-  }
-
-  public clean() {
-    // Clean any resources used by specific runners.
   }
 }

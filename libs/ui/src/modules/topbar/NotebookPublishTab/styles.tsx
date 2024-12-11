@@ -328,11 +328,6 @@ export const PublishedDate: FC<{
   );
 };
 
-export const Text = styled.span({
-  ...p13Medium,
-  color: cssVar('textDefault'),
-});
-
 export const PublishingControlsWrapper = styled.div({
   display: 'flex',
   flexDirection: 'column',
@@ -346,6 +341,10 @@ export const PublishingControlsItem = styled.div({
   alignItems: 'center',
   paddingTop: '6px',
   paddingBottom: '6px',
+  'button > p': {
+    ...p13Medium,
+    color: cssVar('textDefault'),
+  },
 });
 
 export const Badge = styled.div(p10Bold, {

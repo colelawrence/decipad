@@ -33,7 +33,8 @@ export const FromUrl: FC<ConnectionProps> = ({ runner, onRun }) => {
         value={url}
         onChangeValue={setUrl}
         type="text"
-        placeholder="Google Sheet URL"
+        label="Paste public or private URL"
+        placeholder="e.g https://docs.google.com/spreadsheets/d/..."
       />
       <Button type="primary" onClick={onImportUrl} disabled={!isValidUrl}>
         Import
@@ -43,15 +44,18 @@ export const FromUrl: FC<ConnectionProps> = ({ runner, onRun }) => {
 };
 
 const Wrapper = styled.div({
-  display: 'flex',
+  display: 'grid',
   gap: '8px',
+  paddingTop: '8px',
 
   button: {
+    gridColumn: '2/3',
     width: '120px',
   },
 
   input: {
     width: '100%',
+    gridColumn: '1/2',
 
     backgroundColor: cssVar('backgroundDefault'),
     borderRadius: '6px',

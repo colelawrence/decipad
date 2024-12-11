@@ -80,4 +80,9 @@ const Trigger = styled.div(p14Regular, {
   padding: '8px 12px',
   overflow: 'hidden',
   svg: { width: '16px', height: '16px' },
+  span: {
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
+  },
 });

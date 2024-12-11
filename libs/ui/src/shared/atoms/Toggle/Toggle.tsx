@@ -8,6 +8,7 @@ import { Check } from '../../../icons';
 import {
   componentCssVars,
   cssVar,
+  p14Regular,
   shortAnimationDuration,
 } from '../../../primitives';
 
@@ -18,83 +19,99 @@ const CheckSVGString = encodeURIComponent(
 const CheckSVGStringDataURI = `url("data:image/svg+xml,${CheckSVGString}")`;
 
 const makeCheckbox = css({
-  backgroundColor: cssVar('backgroundSubdued'),
-  border: `1px solid ${cssVar('borderDefault')}`,
-  width: '16px',
-  height: '16px',
-  display: 'flex',
-  borderRadius: '4px',
-  alignItems: 'center',
-  position: 'relative',
-  backgroundRepeat: 'no-repeat',
-  '&[aria-checked="true"]': {
-    backgroundColor: cssVar('iconColorHeavy'),
-    borderColor: cssVar('iconColorHeavy'),
-  },
-  '&[aria-disabled="true"]': {
-    backgroundColor: cssVar('backgroundDefault'),
-    borderColor: cssVar('borderDefault'),
-  },
-  span: {
-    width: '14px',
-    height: '14px',
+  '> span': {
+    backgroundColor: cssVar('backgroundSubdued'),
+    border: `1px solid ${cssVar('borderDefault')}`,
+    width: '16px',
+    height: '16px',
     display: 'flex',
+    borderRadius: '4px',
     alignItems: 'center',
     position: 'relative',
     backgroundRepeat: 'no-repeat',
     '&[aria-checked="true"]': {
-      background: CheckSVGStringDataURI,
+      backgroundColor: cssVar('iconColorHeavy'),
+      borderColor: cssVar('iconColorHeavy'),
+    },
+    '&[aria-disabled="true"]': {
+      backgroundColor: cssVar('backgroundDefault'),
+      borderColor: cssVar('borderDefault'),
+    },
+    '> span': {
+      width: '14px',
+      height: '14px',
+      display: 'flex',
+      alignItems: 'center',
+      position: 'relative',
+      backgroundRepeat: 'no-repeat',
+      '&[aria-checked="true"]': {
+        background: CheckSVGStringDataURI,
+      },
     },
   },
 });
 
 const makeToggle = css({
-  backgroundColor: componentCssVars('ToggleOffBackgroundColor'),
-  borderRadius: '100vmax',
   display: 'flex',
-  alignItems: 'center',
-  padding: '2px',
-  transition: `background-color ${shortAnimationDuration} ease-in-out`,
-  position: 'relative',
-  '&[aria-checked="true"]': {
-    backgroundColor: componentCssVars('ToggleOnBackgroundColor'),
+  flexDirection: 'row',
+  width: '100%',
+  '> p': {
+    ...p14Regular,
+    flexGrow: '1',
+    textAlign: 'left',
   },
-  '&[aria-disabled="true"]': {
-    backgroundColor: cssVar('backgroundMain'),
-  },
-  span: {
+  '> span': {
+    backgroundColor: componentCssVars('ToggleOffBackgroundColor'),
     borderRadius: '100vmax',
-    position: 'absolute',
-    left: '2px',
-    transition: `left ${shortAnimationDuration} ease-out`,
-    backgroundColor: cssVar('backgroundMain'),
+    display: 'flex',
+    alignItems: 'center',
+    padding: '2px',
+    transition: `background-color ${shortAnimationDuration} ease-in-out`,
+    position: 'relative',
     '&[aria-checked="true"]': {
+      backgroundColor: componentCssVars('ToggleOnBackgroundColor'),
+    },
+    '&[aria-disabled="true"]': {
       backgroundColor: cssVar('backgroundMain'),
-      left: `calc(100% - 20px)`,
+    },
+    '> span': {
+      borderRadius: '100vmax',
+      position: 'absolute',
+      left: '2px',
+      transition: `left ${shortAnimationDuration} ease-out`,
+      backgroundColor: cssVar('backgroundMain'),
+      '&[aria-checked="true"]': {
+        backgroundColor: cssVar('backgroundMain'),
+        left: `calc(100% - 20px)`,
+      },
     },
   },
 });
 
 const makeNormalToggle = css(makeToggle, {
-  width: '46px',
-  height: '24px',
-  span: {
-    width: '18px',
-    height: '18px',
-    '&[aria-checked="true"]': {
-      left: `calc(100% - 20px)`,
+  '> span': {
+    width: '46px',
+    height: '24px',
+    '> span': {
+      width: '18px',
+      height: '18px',
+      '&[aria-checked="true"]': {
+        left: `calc(100% - 20px)`,
+      },
     },
   },
 });
 
 const makeSmallToggle = css(makeToggle, {
-  width: '34px',
-  height: '18px',
-  span: {
-    width: '14px',
-    height: '14px',
-    '&[aria-checked="true"]': {
-      left: `calc(100% - 16px)`,
+  '> span': {
+    width: '34px',
+    height: '18px',
+    '> span': {
+      width: '14px',
+      height: '14px',
+      '&[aria-checked="true"]': {
+        left: `calc(100% - 16px)`,
+      },
     },
   },
 });
@@ -104,6 +121,7 @@ export interface ToggleProps {
   onChange?: (newActive: boolean) => void;
   ariaRoleDescription?: string;
   disabled?: boolean;
+  label?: string;
   variant?: 'checkbox' | 'toggle' | 'small-toggle';
   testId?: string;
 }
@@ -113,6 +131,7 @@ const CheckboxToggle: FC<Omit<ToggleProps, 'variant'>> = ({
   active,
   onChange = noop,
   disabled = false,
+  label,
 }) => {
   return (
     <button
@@ -125,7 +144,10 @@ const CheckboxToggle: FC<Omit<ToggleProps, 'variant'>> = ({
       aria-checked={active}
       data-testid="toggle-cell-editor"
     >
-      <span role="checkbox" aria-checked={active} />
+      {label && <p>{label}</p>}
+      <span aria-checked={active}>
+        <span role="checkbox" aria-checked={active} />
+      </span>
     </button>
   );
 };
@@ -135,6 +157,7 @@ const NormalToggle: FC<ToggleProps> = ({
   active,
   onChange = noop,
   disabled = false,
+  label,
 }) => {
   return (
     <button
@@ -147,7 +170,10 @@ const NormalToggle: FC<ToggleProps> = ({
       aria-checked={active}
       data-testid="toggle-cell-editor"
     >
-      <span role="checkbox" aria-checked={active} />
+      {label && <p>{label}</p>}
+      <span aria-checked={active}>
+        <span role="checkbox" aria-checked={active} />
+      </span>
     </button>
   );
 };
@@ -157,6 +183,7 @@ const SmallToggle: FC<ToggleProps> = ({
   active,
   onChange = noop,
   disabled = false,
+  label,
 }) => {
   return (
     <button
@@ -169,7 +196,10 @@ const SmallToggle: FC<ToggleProps> = ({
       aria-checked={active}
       data-testid="toggle-cell-editor"
     >
-      <span role="checkbox" aria-checked={active} />
+      {label && <p>{label}</p>}
+      <span aria-checked={active}>
+        <span role="checkbox" aria-checked={active} />
+      </span>
     </button>
   );
 };

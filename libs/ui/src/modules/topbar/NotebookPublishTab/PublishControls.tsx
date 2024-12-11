@@ -27,8 +27,8 @@ export const PublishControls: FC<PublishControlsProps> = ({
   return (
     <S.PublishingControlsWrapper>
       <S.PublishingControlsItem>
-        <S.Text>Allow readers to duplicate</S.Text>
         <Toggle
+          label="Allow readers to duplicate"
           active={allowDuplicate}
           variant="small-toggle"
           onChange={(newActive) =>

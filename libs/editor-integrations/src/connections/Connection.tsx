@@ -6,7 +6,7 @@ import { CSVConnection } from './csv';
 import { SQLConnection, SQLConnectionPicker } from './sql';
 import { NotionConnection } from './notion';
 import { GoogleSheetConnection } from './gsheet';
-import { Logs } from '@decipad/ui';
+import { Input } from '@decipad/ui';
 import { useNotebookWithIdState } from '@decipad/notebook-state';
 import { createPortal } from 'react-dom';
 
@@ -41,14 +41,9 @@ const ConnectionDataDrawerPortal: FC<ConnectionProps> = (props) => {
 const ConnectionSidebar: FC<ConnectionProps> = (props) => {
   switch (props.connectionType) {
     case 'codeconnection':
-      return <Logs logs={props.info} type="javascript" />;
+      return <></>;
     case 'mysql':
-      return (
-        <>
-          <SQLConnectionPicker {...props} />
-          <Logs logs={props.info} type="sql" />
-        </>
-      );
+      return <SQLConnectionPicker {...props} />;
     case 'notion':
       return <NotionConnection {...props} />;
     case 'gsheets':
@@ -62,12 +57,20 @@ const ConnectionSidebar: FC<ConnectionProps> = (props) => {
 
 // Component used for different types of connection. A bridge.
 export const Connection: FC<ConnectionProps> = (props) => {
-  if (props.stage !== 'connect') {
-    return null;
-  }
-
   return (
     <>
+      {props.type === 'create' && (
+        <Input
+          variant="small"
+          label="Integration Name"
+          placeholder="Name of your integration"
+          pattern="\S*" // no whitespace
+          required
+          title="Required (no whitespace)"
+          value={props.varName}
+          onChangeValue={props.onChangeVarName}
+        />
+      )}
       <ConnectionSidebar {...props} />
       <ConnectionDataDrawerPortal {...props} />
     </>

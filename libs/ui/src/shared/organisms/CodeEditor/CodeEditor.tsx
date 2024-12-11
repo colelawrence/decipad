@@ -5,7 +5,13 @@ import { css } from '@emotion/react';
 import CodeMirror, { useCodeMirror } from '@uiw/react-codemirror';
 import { ComponentProps, FC, useCallback, useEffect, useRef } from 'react';
 import { Code } from '../../../icons';
-import { codeLog, cssVar, jsCode, componentCssVars } from '../../../primitives';
+import {
+  codeLog,
+  cssVar,
+  jsCode,
+  componentCssVars,
+  p12Regular,
+} from '../../../primitives';
 import { defaultScrollbarWidth } from '../../../styles/scrollbars';
 import { themeStore } from '@decipad/utils';
 import { TExecution } from '@decipad/interfaces';
@@ -79,6 +85,57 @@ export const Logs: FC<{
   );
 };
 
+const statusLineStyle = css(p12Regular, {
+  padding: '4px 2px',
+  paddingLeft: '8px',
+});
+
+export const StatusLine: FC<{
+  type: CodeEditorProps['lang'];
+  logs: Array<TExecution>;
+}> = ({ logs, type }) => {
+  if (logs.length === 0) {
+    return null;
+  }
+  const logEntry = logs[logs.length - 1];
+  return (
+    <div css={statusLineStyle} key={JSON.stringify(logEntry)}>
+      {logEntry.status === 'run' && (
+        <>
+          <span css={runExecutionStyles}>&#8505;&#65039;</span> Running
+        </>
+      )}
+      {logEntry.status === 'error' && (
+        <>
+          <span css={outputErrorLabel}>&#9888;&#65039;</span>{' '}
+          {logEntry.err.toString()}
+        </>
+      )}
+      {logEntry.status === 'success' && (
+        <>
+          <span
+            css={successExecutionStyles}
+            data-testid="code-successfully-run"
+          >
+            &#9989;
+          </span>{' '}
+          {type === 'sql' ? 'Query' : 'Code'} ran successfully!
+        </>
+      )}
+      {logEntry.status === 'warning' && (
+        <>
+          <span css={warningExecutionStyles}>&#9888;&#65039;</span>{' '}
+          {logEntry.err.toString()}
+        </>
+      )}
+      {logEntry.status === 'log' && (
+        <>
+          <span css={logExecutionStyles}>➤</span> {logEntry.log}
+        </>
+      )}
+    </div>
+  );
+};
 export const CodeEditor: FC<CodeEditorProps> = ({ code, setCode, lang }) => {
   const handleCode = useCallback<
     NonNullable<ComponentProps<typeof CodeMirror>['onChange']>
@@ -126,21 +183,16 @@ export const CodeEditor: FC<CodeEditorProps> = ({ code, setCode, lang }) => {
 const mainStyles = css(jsCode, {
   width: '100%',
 
-  // cursed??? Sets the height to 100% and respects flex properties
-  height: 0,
-  flexGrow: 1,
+  height: '100%',
 
-  borderRadius: '0 0 12px 12px',
-  borderBottom: `1px solid ${cssVar('borderDefault')}`,
   '> div:first-of-type': {
     height: '100%',
   },
   '.cm-focused': {
     outline: 0,
   },
-  '.cm-gutters, .cm-content': {
-    borderTopLeftRadius: '12px',
-    borderBottomLeftRadius: '12px',
+  '.cm-content': {
+    paddingRight: '5em',
   },
   '.cm-theme, .cm-editor,': {
     borderRadius: '12px',

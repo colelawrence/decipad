@@ -47,7 +47,7 @@ const variantStyles: {
   regular: css(commonStyles),
 };
 
-const labelStyle = css(inputLabel, { marginBottom: 0 });
+export const labelStyle = css(inputLabel, { marginBottom: 0 });
 
 export const Input: FC<InputProps> = (props) => {
   const { variant = 'regular', label, onChange, onChangeValue } = props;

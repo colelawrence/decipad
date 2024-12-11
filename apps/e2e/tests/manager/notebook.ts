@@ -1176,12 +1176,19 @@ export class Notebook {
         });
     }
 
-    // uploading the file
-    // eslint-disable-next-line playwright/no-wait-for-timeout
-    await this.page.waitForTimeout(5_000);
-    await this.page.getByTestId('integration-modal-continue').click();
-
     await expect(this.page.getByTestId('result-preview')).toBeVisible();
+
+    if (option.varName != null) {
+      // eslint-disable-next-line playwright/no-wait-for-timeout
+      await this.page.waitForTimeout(Timeouts.tableDelay);
+      await this.page.getByPlaceholder('Name of your integration').click();
+      await this.page.keyboard.press(
+        os.platform() === 'darwin' ? 'Meta+a' : 'Control+a',
+        { delay: Timeouts.typing }
+      );
+      await this.page.keyboard.press('Backspace', { delay: Timeouts.typing });
+      await this.page.keyboard.type(option.varName, { delay: 100 });
+    }
 
     if (option.firstRowHeader != null && !option.firstRowHeader) {
       await this.page.getByTestId('toggle-cell-editor').click();
@@ -1189,14 +1196,6 @@ export class Notebook {
       // importing
       // eslint-disable-next-line playwright/no-wait-for-timeout
       await this.page.waitForTimeout(5_000);
-    }
-
-    if (option.varName != null) {
-      // eslint-disable-next-line playwright/no-wait-for-timeout
-      await this.page.waitForTimeout(Timeouts.tableDelay);
-      await this.page.getByTestId('result-preview-input').dblclick();
-      await this.page.keyboard.type(option.varName, { delay: 100 });
-      await expect(this.page.getByText(option.varName).first()).toBeVisible();
     }
 
     // A request is made before creating the integration. Which has to be waited for

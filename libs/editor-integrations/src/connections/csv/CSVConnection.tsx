@@ -1,22 +1,17 @@
-import { type FC } from 'react';
+import type { FC } from 'react';
 import styled from '@emotion/styled';
 import { UpgradeWarningBlock } from '@decipad/editor-components';
-import { type ConnectionProps } from '../types';
+import type { ConnectionProps } from '../types';
 import { UploadCSV, OptionsList } from '@decipad/ui';
 import { assertInstanceOf } from '@decipad/utils';
 import { Loading } from '../shared';
 import { useWorkspaceDatasets } from '../../hooks/useWorkspaceDatasets';
 import { CSVRunner } from '@decipad/notebook-tabs';
+import { labelStyle } from 'libs/ui/src/shared/atoms/Input/Input';
 
-const Wrapper = styled.div({
+const Wrapper = styled.section({
   display: 'flex',
-  flexDirection: 'column',
-  gap: '8px',
-
-  '& > section': {
-    display: 'flex',
-    gap: '4px',
-  },
+  gap: '4px',
 });
 
 const getDatasetNameAndId = (
@@ -45,8 +40,9 @@ export const CSVConnection: FC<ConnectionProps> = ({
   const selections = workspaceDatasets.map(getDatasetNameAndId);
 
   return (
-    <Wrapper>
-      <section>
+    <>
+      <label css={labelStyle}>Select or upload CSV</label>
+      <Wrapper>
         <OptionsList
           name={runner.resourceName ?? 'Select CSV'}
           label="Select CSV"
@@ -68,7 +64,7 @@ export const CSVConnection: FC<ConnectionProps> = ({
           type="secondary"
           text="+"
         />
-      </section>
+      </Wrapper>
 
       <Loading info={info} />
 
@@ -78,6 +74,6 @@ export const CSVConnection: FC<ConnectionProps> = ({
         workspaceId={workspaceId}
         noun="MBs"
       />
-    </Wrapper>
+    </>
   );
 };

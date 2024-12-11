@@ -148,7 +148,7 @@ export const ResultPreview: FC<
 };
 
 export const PortalledPreview: FC<
-  ConnectionProps & { varNameInput: ReactNode }
+  ConnectionProps & { varNameInput?: ReactNode }
 > = ({
   varName,
   id,

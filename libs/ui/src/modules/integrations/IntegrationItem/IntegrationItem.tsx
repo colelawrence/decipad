@@ -34,22 +34,17 @@ export const IntegrationItem: FC<IntegrationItemProps> = ({
   return (
     <div
       css={IntegrationItemStyled}
+      data-testid={testId}
+      onClick={onClick}
       data-variant={variant}
-      data-testid={variant === 'sidebar' && testId}
-      onClick={() => {
-        if (variant !== 'sidebar') return;
-        onClick();
-      }}
     >
       <div css={IntegrationItemIconWrapper}>{icon}</div>
       <h2 css={p14Medium}>{title}</h2>
       {description.length > 0 && <p css={p12Regular}>{description}</p>}
       <span>
-        {variant === 'modal' && (
-          <Button type="secondary" onClick={onClick} testId={testId}>
-            Connect
-          </Button>
-        )}
+        <Button onClick={onClick} type="secondary">
+          Connect
+        </Button>
       </span>
     </div>
   );
