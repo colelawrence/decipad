@@ -17,9 +17,10 @@ export const CellEditorDropdown = (cellProps: CellProps) => {
   const [open, setOpen] = useState(false);
   const wasOpenRef = useRef(open);
 
-  const groups: Array<SelectItems> = useMemo(
+  const items: Array<SelectItems> = useMemo(
     () =>
       dropdownOptions?.options.map((option) => ({
+        id: option.id,
         item: option.id,
         itemName: option.value,
       })) ?? [],
@@ -57,7 +58,7 @@ export const CellEditorDropdown = (cellProps: CellProps) => {
           onChange?.(i.item);
           setOpen(false);
         }}
-        groups={groups}
+        items={items}
       >
         <div css={{ display: 'flex', alignItems: 'center' }}>
           {dropdownOptions?.result && (

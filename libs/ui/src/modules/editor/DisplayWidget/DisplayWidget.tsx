@@ -147,11 +147,9 @@ export const DisplayWidget: FC<DisplayWidgetDropdownProps> = ({
         open={openMenu}
         setOpen={!readOnly ? onChangeOpen : noop}
         onExecute={onExecute}
-        groups={allResults}
+        items={allResults}
         isReadOnly={readOnly}
-        selectedIndex={allResults.findIndex(
-          (i) => i.blockId === lineResult?.id
-        )}
+        selectedId={lineResult?.id}
       >
         <div
           css={triggerStyles(readOnly, openMenu)}

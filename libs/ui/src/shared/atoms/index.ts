@@ -16,6 +16,7 @@ export { DatePickerWrapper } from './DatePickerWrapper/DatePickerWrapper';
 export { Divider } from './Divider/Divider';
 export { Dot } from './Dot/Dot';
 export { Dropdown } from './Dropdown/Dropdown';
+export { DropdownInput } from './DropdownInput/DropdownInput';
 export { JellyBeans } from './Jellybeans/Jellybeans';
 
 export { ExternalHrefIcon } from './ExternalHrefIcon/ExternalHrefIcon';

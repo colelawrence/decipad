@@ -26,7 +26,7 @@ export const CellEditorCategory: FC<CellProps> = (cellProps) => {
   assertCellType(cellType!, 'category');
 
   const [open, setOpen] = useState(false);
-  const [groups, setGroups] = useState<Array<SelectItems>>([]);
+  const [items, setItems] = useState<Array<SelectItems>>([]);
 
   const editor = useMyEditorRef();
   const computer = useComputer();
@@ -80,8 +80,9 @@ export const CellEditorCategory: FC<CellProps> = (cellProps) => {
   const updateList = useCallback(() => {
     const categories = getCategories();
     if (categories) {
-      setGroups(
+      setItems(
         categories.map((e) => ({
+          id: e.id,
           item: e.value,
           blockId: e.id,
         }))
@@ -118,7 +119,7 @@ export const CellEditorCategory: FC<CellProps> = (cellProps) => {
           if (o.blockId) removeCategory(o.blockId);
           updateList();
         }}
-        groups={groups}
+        items={items}
         isEditingAllowed={!isReadOnly}
       >
         <div css={outterCellStyles}>

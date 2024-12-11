@@ -5,7 +5,7 @@ export { BetaBadge } from './BetaBadge/BetaBadge';
 export { ColorThemeSwitch } from './ColorThemeSwitch/ColorThemeSwitch';
 export { DeleteWithDepsMenuItem } from './DeleteWithDepsMenuItem/DeleteWithDepsMenuItem';
 export { Dialog } from './Dialog/Dialog';
-export { DropdownOption } from './DropdownOption/DropdownOption';
+export { DropdownEditOption } from './DropdownEditOption/DropdownEditOption';
 
 export { FilterBubbles } from './FilterBubbles/FilterBubbles';
 export { IconPopover } from './IconPopover/IconPopover';

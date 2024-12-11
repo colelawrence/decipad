@@ -7,17 +7,24 @@ type DropdownMenuGroupProps = EditItemsOptions & {
   readonly items: Array<SelectItems>;
   readonly title?: string;
   readonly isEditingAllowed?: boolean;
-  readonly focusedItem?: number;
+  readonly focusedId?: string;
+  readonly selectedId?: string;
 };
 
 export const DropdownMenuGroup: FC<DropdownMenuGroupProps> = ({
   items,
   title,
   isEditingAllowed = false,
+  focusedId,
+  selectedId,
   ...itemProps
 }) => {
   return (
-    <div css={{ padding: '4px 4px' }}>
+    <div
+      css={{ padding: '4px 4px' }}
+      role={title ? 'group' : undefined}
+      aria-label={title}
+    >
       {title && (
         <p
           css={[
@@ -30,11 +37,13 @@ export const DropdownMenuGroup: FC<DropdownMenuGroupProps> = ({
           {title}
         </p>
       )}
-      {items.map((elem, i) => (
+      {items.map((item, i) => (
         <SelectItem
-          key={`${elem.item}-${i}`}
-          item={elem}
+          key={`${item.item}-${i}`}
+          item={item}
           isEditAllowed={isEditingAllowed}
+          focused={item.id === focusedId}
+          selected={item.id === selectedId}
           {...itemProps}
         />
       ))}

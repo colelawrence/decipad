@@ -36,18 +36,19 @@ export const useResults = (options: UseResultsOptions) => {
 };
 
 const selectedItemForName = (
-  name: AutocompleteNameWithSerializedType,
-  index: number
+  name: AutocompleteNameWithSerializedType
 ): SelectItems => {
   // Group columns by table name
   const [tableName = undefined, columnName = undefined] = name.columnId
     ? name.name.split('.')
     : [];
 
+  const blockId = name.columnId ?? name.blockId;
+
   return {
-    index,
+    id: blockId ?? '',
     item: columnName ?? name.name,
-    blockId: name.columnId ?? name.blockId,
+    blockId,
     blockType: name.serializedType,
     group: {
       variable: 'Variables',

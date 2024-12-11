@@ -54,6 +54,7 @@ export const useDropdown = (element: DropdownElement): UseDropdownResult => {
 
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [selectedOption, setSelectedOption] = useState<SelectItems>({
+    id: preSelectedBlockId ?? '',
     blockId: preSelectedBlockId ?? '',
     item: preSelectedOptionText ?? 'Selected',
   });
@@ -61,6 +62,7 @@ export const useDropdown = (element: DropdownElement): UseDropdownResult => {
   const dropdownIds: Array<SelectItems> = useMemo(
     () =>
       element.options.map((n) => ({
+        id: n.id,
         item: n.value,
         blockId: n.id,
         focused: n.value === selectedOption.item,
@@ -243,27 +245,30 @@ export const useDropdown = (element: DropdownElement): UseDropdownResult => {
             ? `${c.readableTableName}.${c.columnName}`
             : `${c.tableName}.${c.columnName}`;
           return {
+            id: c.blockId ?? '',
             group: 'Table column',
             item: `${c.tableName}.${c.columnName}`,
             itemName,
             blockType: c.result.type.cellType,
             blockId: c.blockId,
             type: 'column',
-            focused:
-              element.selectedColumn === `${c.tableName}.${c.columnName}`,
             icon: <icons.TableSmall />,
-          };
+          } satisfies SelectItems;
         }),
       ...(colValues
         ? uniqBy(
             [
-              ...colValues.result.value.map((v) => ({
-                group: 'Values',
-                blockId: v?.toString(),
-                item: formatResultPreview(
-                  buildResult(colValues.result.type.cellType, v)
-                ),
-              })),
+              ...colValues.result.value.map(
+                (v) =>
+                  ({
+                    id: v?.toString() ?? '',
+                    group: 'Values',
+                    blockId: v?.toString(),
+                    item: formatResultPreview(
+                      buildResult(colValues.result.type.cellType, v)
+                    ),
+                  } satisfies SelectItems)
+              ),
             ],
             'item'
           )

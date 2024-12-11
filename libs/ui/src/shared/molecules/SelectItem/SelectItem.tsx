@@ -5,7 +5,7 @@ import { noop } from '@decipad/utils';
 import { useWindowListener } from '@decipad/react-utils';
 import { cssVar, p14Medium } from '../../../primitives';
 import { Edit, Trash } from '../../../icons';
-import { DropdownOption } from '../DropdownOption/DropdownOption';
+import { DropdownEditOption } from '../DropdownEditOption/DropdownEditOption';
 import { useEventNoEffect } from '../../../utils/useEventNoEffect';
 import { CellValueType } from '@decipad/editor-types';
 import type { SerializedType } from '@decipad/language-interfaces';
@@ -74,7 +74,7 @@ const nameWrapper = css({
 export type SelectItemTypes = 'column';
 
 export interface SelectItems {
-  index?: number;
+  id: string;
   item: string;
   itemName?: string;
   group?: string;
@@ -94,8 +94,11 @@ export type EditItemsOptions = {
 type SelectItemProps = EditItemsOptions & {
   readonly item: SelectItems;
   readonly isEditAllowed?: boolean;
-  readonly focusedItem?: number;
+  readonly focused?: boolean;
+  readonly selected?: boolean;
 };
+
+export const selectItemDOMId = (id: string) => `select-item-${id}`;
 
 /*
  * SelectItem is a component used in the DropdownMenu to display a menu of options
@@ -107,7 +110,8 @@ type SelectItemProps = EditItemsOptions & {
 export const SelectItem: FC<SelectItemProps> = ({
   item,
   onExecute,
-  focusedItem = -1,
+  focused = false,
+  selected = false,
   isEditAllowed = false,
   onRemoveOption = noop,
   onEditOption = noop,
@@ -127,11 +131,11 @@ export const SelectItem: FC<SelectItemProps> = ({
         } else {
           setEditingError(true);
         }
-      } else if (event.key === 'Enter' && item.index === focusedItem) {
+      } else if (event.key === 'Enter' && focused) {
         onExecute(item);
       }
     },
-    [onEditOption, editing, item, newValue, focusedItem, onExecute]
+    [onEditOption, editing, item, newValue, focused, onExecute]
   );
   useWindowListener('keydown', keydown, true);
 
@@ -149,7 +153,7 @@ export const SelectItem: FC<SelectItemProps> = ({
 
   if (editing) {
     return (
-      <DropdownOption
+      <DropdownEditOption
         value={newValue}
         setValue={setNewValue}
         error={editingError}
@@ -163,14 +167,17 @@ export const SelectItem: FC<SelectItemProps> = ({
     <div
       css={[
         wrapper,
-        focusedItem === item.index && {
+        focused && {
           backgroundColor: cssVar('backgroundDefault'),
           borderRadius: '6px',
         },
       ]}
       onClick={() => onExecute(item)}
-      aria-roledescription="dropdownOption"
       data-testid="dropdown-option"
+      role="option"
+      id={selectItemDOMId(item.id)}
+      aria-selected={selected}
+      aria-label={text}
     >
       <div css={nameWrapper}>
         {item.icon && <div css={itemIconStyles}>{item.icon}</div>}
@@ -179,20 +186,22 @@ export const SelectItem: FC<SelectItemProps> = ({
         </span>
         {isEditAllowed && (
           <aside css={iconWrapper}>
-            <div
+            <button
+              type="button"
               css={iconStyles}
               onClick={onEdit}
-              aria-roledescription="dropdown-edit"
+              data-testid="dropdown-edit"
             >
               <Edit />
-            </div>
-            <div
+            </button>
+            <button
+              type="button"
               css={iconStyles}
               onClick={onRemove}
-              aria-roledescription="dropdown-delete"
+              data-testid="dropdown-delete"
             >
               <Trash />
-            </div>
+            </button>
           </aside>
         )}
       </div>

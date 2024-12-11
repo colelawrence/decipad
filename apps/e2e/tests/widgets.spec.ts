@@ -141,9 +141,7 @@ test('dropdown widget', async ({ randomFreeUser }) => {
 
   await test.step('Select option', async () => {
     await page.getByText('50%').click();
-    const dropdownOptions = page.locator(
-      '[aria-roledescription="dropdownOption"]'
-    );
+    const dropdownOptions = page.getByTestId('dropdown-option');
     // Dropdown should have hidden.
     expect(await dropdownOptions.count()).toBe(0);
   });
@@ -152,10 +150,8 @@ test('dropdown widget', async ({ randomFreeUser }) => {
     await page.getByText('50%').click();
     await page.getByTestId('dropdown-option').getByText('50%').hover();
     await page
-      .getByRole('dialog')
-      .getByRole('complementary')
-      .locator('div')
-      .filter({ hasText: 'Edit' })
+      .getByRole('listbox')
+      .getByRole('button', { name: 'Edit' })
       .click();
     await page.keyboard.press('ControlOrMeta+A');
     await page.keyboard.press('Delete');
@@ -170,10 +166,8 @@ test('dropdown widget', async ({ randomFreeUser }) => {
     await page.getByText('55%').click();
     await page.getByTestId('dropdown-option').getByText('55%').hover();
     await page
-      .getByRole('dialog')
-      .getByRole('complementary')
-      .locator('div')
-      .filter({ hasText: 'Edit' })
+      .getByRole('listbox')
+      .getByRole('button', { name: 'Edit' })
       .click();
     await page.keyboard.press('ControlOrMeta+A');
     await page.keyboard.press('Delete');
@@ -198,14 +192,9 @@ test('dropdown widget', async ({ randomFreeUser }) => {
     await expect(page.getByTestId('dropdown-editor')).toHaveCount(3);
     await clickCell(page, 1, 2);
 
-    const dropdownOptions = page.locator(
-      '[aria-roledescription="dropdownOption"]'
-    );
+    const dropdownOptions = page.getByTestId('dropdown-option');
     expect(await dropdownOptions.count()).toBe(2);
-    await page
-      .locator('[aria-roledescription="dropdownOption"]')
-      .getByText('50%')
-      .click();
+    await page.getByTestId('dropdown-option').getByText('50%').click();
     await expect(dropdownOptions).toBeHidden();
     // eslint-disable-next-line playwright/no-wait-for-timeout
     await page.waitForTimeout(Timeouts.computerDelay);
@@ -215,16 +204,11 @@ test('dropdown widget', async ({ randomFreeUser }) => {
   await test.step('Changing original dropdown value, also changes the cells value', async () => {
     await page.locator('[aria-roledescription="dropdown-open"]').click();
 
-    await page
-      .locator('[aria-roledescription="dropdownOption"]')
-      .getByText('50%')
-      .hover();
+    await page.getByTestId('dropdown-option').getByText('50%').hover();
 
     await page
-      .getByRole('dialog')
-      .getByRole('complementary')
-      .locator('div')
-      .filter({ hasText: 'Edit' })
+      .getByRole('listbox')
+      .getByRole('button', { name: 'Edit' })
       .click();
 
     await page.keyboard.press('ArrowLeft');
@@ -257,18 +241,17 @@ test('dropdown widget', async ({ randomFreeUser }) => {
       ]);
     }).toPass();
 
-    await page
-      .locator('[aria-roledescription="dropdownOption"] >> nth=0')
-      .click();
+    await page.getByTestId('dropdown-option').nth(0).click();
 
     await page
-      .locator('[aria-roledescription="dropdownOption"] >> nth=1')
+      .getByTestId('dropdown-option')
+      .nth(1)
       .waitFor({ state: 'visible', timeout: 5000 });
 
     await expect(async () => {
       const items = await Promise.all(
         (
-          await page.locator('[aria-roledescription="dropdownOption"]').all()
+          await page.getByTestId('dropdown-option').all()
         ).map((e) => e.innerText())
       );
 
@@ -277,9 +260,7 @@ test('dropdown widget', async ({ randomFreeUser }) => {
       expect(items[3]).toBe('Three');
     }).toPass();
 
-    await page
-      .locator('[aria-roledescription="dropdownOption"] >> nth=1')
-      .click();
+    await page.getByTestId('dropdown-option').nth(1).click();
 
     await expect(page.getByTestId('dropdown-display')).toHaveText(/One/);
   });
@@ -304,17 +285,12 @@ test('dropdown widget', async ({ randomFreeUser }) => {
   await test.step('check table dropdown is still linked to the dropdown that was moved', async () => {
     await expect(page.getByTestId('dropdown-editor')).toHaveCount(3);
     await clickCell(page, 2, 2);
-    const dropdownOptions = page.locator(
-      '[aria-roledescription="dropdownOption"]'
-    );
+    const dropdownOptions = page.getByTestId('dropdown-option');
     expect(
       await dropdownOptions.count(),
       "Dropdown on table isn't showing all options"
     ).toBe(2);
-    await page
-      .locator('[aria-roledescription="dropdownOption"]')
-      .getByText('75%')
-      .click();
+    await page.getByTestId('dropdown-option').getByText('75%').click();
     await expect(dropdownOptions).toBeHidden();
     expect(await getFromTable(page, 2, 2)).toBe('75%');
   });

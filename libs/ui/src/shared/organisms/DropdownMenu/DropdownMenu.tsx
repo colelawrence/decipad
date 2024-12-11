@@ -8,12 +8,19 @@ import {
   ReactNode,
   useCallback,
   useEffect,
+  useId,
+  useLayoutEffect,
   useMemo,
   useRef,
   useState,
 } from 'react';
-import { Add } from 'libs/ui/src/icons';
-import { DropdownOption, EditItemsOptions, SelectItems } from '../../molecules';
+import { Add, MagnifyingGlass } from 'libs/ui/src/icons';
+import {
+  DropdownEditOption,
+  EditItemsOptions,
+  SelectItems,
+  selectItemDOMId,
+} from '../../molecules';
 import {
   cssVar,
   mediumShadow,
@@ -22,6 +29,7 @@ import {
 } from '../../../primitives';
 import { deciOverflowYStyles } from '../../../styles/scrollbars';
 import { DropdownMenuGroup } from '../DropdownMenuGroup/DropdownMenuGroup';
+import { DropdownInput } from '../../atoms';
 
 const styles = css({
   display: 'flex',
@@ -96,12 +104,13 @@ export type DropdownMenuProps = EditItemsOptions & {
   readonly open: boolean;
   readonly setOpen: (a: boolean) => void;
   readonly isReadOnly?: boolean;
+  readonly isCombobox?: boolean;
   /** The title will define a category for the items */
-  readonly groups: Array<SelectItems>;
+  readonly items: Array<SelectItems>;
   readonly isEditingAllowed?: boolean;
   readonly addOption?: (a: string) => void;
   readonly children?: ReactNode;
-  readonly selectedIndex?: number;
+  readonly selectedId?: string;
   readonly renderEmpty?: ReactNode;
 };
 
@@ -112,32 +121,57 @@ export const DropdownMenu: FC<DropdownMenuProps> = ({
   open,
   setOpen,
   isReadOnly = false,
-  groups,
+  isCombobox = false,
+  items,
   addOption = noop,
   onExecute,
   onEditOption,
   onRemoveOption,
   isEditingAllowed = false,
   children,
-  selectedIndex,
+  selectedId,
   renderEmpty,
 }) => {
   const ref = useRef<HTMLInputElement>(null);
 
+  const [search, setSearch] = useState('');
   const [inputValue, setInputValue] = useState('');
   const [addingNew, setAddingNew] = useState(false);
   const [error, setError] = useState(false);
-  const [focusedItem, setFocusedItem] = useState(selectedIndex);
+  const [focusedId, setFocusedId] = useState(selectedId);
 
-  const showInput = isEditingAllowed && (addingNew || groups.length === 0);
+  const itemsLength = items.length;
+  const showInput = isEditingAllowed && (addingNew || itemsLength === 0);
+  const trimmedSearch = search.replaceAll(/\s+/g, '').toLowerCase();
+
+  useLayoutEffect(() => {
+    if (open) {
+      setFocusedId(selectedId);
+    } else {
+      setSearch('');
+    }
+  }, [open, selectedId]);
+
+  const filteredItems = useMemo(
+    () =>
+      items.filter(
+        ({ item, group }) =>
+          !trimmedSearch ||
+          item.toLowerCase().includes(trimmedSearch) ||
+          group?.toLowerCase().includes(trimmedSearch)
+      ),
+    [items, trimmedSearch]
+  );
+
+  const filteredItemsLength = filteredItems.length;
 
   /**
    * Splits the given content into various groups.
    */
-  const splitGroupEntries = useMemo(
+  const groups = useMemo(
     () =>
       Object.entries(
-        groups.reduce((prev, next) => {
+        filteredItems.reduce((prev, next) => {
           if (!next.group) {
             if (!prev['']) {
               /* eslint no-param-reassign: "error" */
@@ -156,14 +190,53 @@ export const DropdownMenu: FC<DropdownMenuProps> = ({
           return prev;
         }, {} as Record<string, Array<SelectItems>>)
       ),
+    [filteredItems]
+  );
+
+  // A flat list of items in the same order as they appear in groups
+  const orderedItems = useMemo(
+    () => groups.flatMap(([, groupItems]) => groupItems),
     [groups]
   );
 
-  useEffect(() => {
-    if (open) {
-      setFocusedItem(selectedIndex);
+  const setFocusedIndex = useCallback(
+    (setter: (focusedIndex?: number) => number) => {
+      const currentFocusedIndex = orderedItems.findIndex(
+        ({ id }) => id === focusedId
+      );
+      const newFocusedIndex = setter(
+        currentFocusedIndex === -1 ? undefined : currentFocusedIndex
+      );
+      setFocusedId(orderedItems[newFocusedIndex]?.id);
+    },
+    [orderedItems, focusedId]
+  );
+
+  const focusFirst = useCallback(
+    () => setFocusedIndex(() => 0),
+    [setFocusedIndex]
+  );
+
+  const moveDown = useCallback(() => {
+    setFocusedIndex(
+      (focusedIndex = 0) => (focusedIndex + 1) % filteredItemsLength
+    );
+  }, [setFocusedIndex, filteredItemsLength]);
+
+  const moveUp = useCallback(() => {
+    setFocusedIndex((focusedIndex = 0) =>
+      focusedIndex === 0 ? filteredItemsLength - 1 : focusedIndex - 1
+    );
+  }, [setFocusedIndex, filteredItemsLength]);
+
+  // Focus first when search changes
+  const previousSearch = useRef(search);
+  useLayoutEffect(() => {
+    if (open && search && search !== previousSearch.current) {
+      focusFirst();
     }
-  }, [open, selectedIndex]);
+    previousSearch.current = search;
+  }, [open, search, focusFirst]);
 
   // Handles keyboard selection of items (up and down), as well as
   // Enter press when user is adding new option
@@ -172,7 +245,7 @@ export const DropdownMenu: FC<DropdownMenuProps> = ({
       if (!open) return;
       switch (true) {
         case event.key === 'Enter' && inputValue.length > 0 && showInput:
-          if (groups.some((i) => i.item === inputValue)) {
+          if (items.some((i) => i.item === inputValue)) {
             setError(true);
           } else {
             addOption(inputValue);
@@ -186,17 +259,16 @@ export const DropdownMenu: FC<DropdownMenuProps> = ({
           setOpen(false);
           break;
         case event.key === 'ArrowDown':
-          setFocusedItem(((focusedItem ?? 0) + 1) % groups.length);
+          event.preventDefault();
+          moveDown();
           break;
         case event.key === 'ArrowUp':
-          if (focusedItem == null || focusedItem === 0) {
-            setFocusedItem(groups.length - 1);
-            break;
-          }
-          setFocusedItem((focusedItem ?? 0) - 1);
+          event.preventDefault();
+          moveUp();
+          break;
       }
     },
-    [open, focusedItem, inputValue, showInput, groups, setOpen, addOption]
+    [open, inputValue, showInput, items, setOpen, addOption, moveUp, moveDown]
   );
 
   useWindowListener('keydown', onKeyDown);
@@ -207,32 +279,59 @@ export const DropdownMenu: FC<DropdownMenuProps> = ({
     }
   }, [showInput, open]);
 
+  const id = useId();
+  const activeDescendant = focusedId && selectItemDOMId(focusedId);
+
   return (
     <Popover.Root open={open} onOpenChange={setOpen}>
       <Popover.Trigger css={{ width: '100%', cursor: 'inherit' }}>
         {children}
       </Popover.Trigger>
       <Popover.Portal>
-        <Popover.Content style={{ zIndex: '100' }}>
+        <Popover.Content
+          style={{ zIndex: '100' }}
+          role="listbox"
+          aria-activedescendant={activeDescendant}
+          id={id}
+        >
           <div css={styles}>
             <div css={mainStyles}>
-              {splitGroupEntries.map(([key, items]) => (
+              {isCombobox && (
+                <DropdownInput
+                  value={search}
+                  onChange={(event) => setSearch(event.target.value)}
+                  placeholder="Search"
+                  aria-label="Search"
+                  role="combobox"
+                  aria-activedescendant={activeDescendant}
+                  aria-expanded={true}
+                  aria-controls={id}
+                  aria-autocomplete="list"
+                  autoFocus
+                  iconLeft={<MagnifyingGlass />}
+                />
+              )}
+
+              {groups.map(([key, groupItems]) => (
                 <DropdownMenuGroup
                   key={key}
                   title={key.length === 0 ? undefined : key}
-                  items={items}
+                  items={groupItems}
                   onExecute={onExecute}
                   onEditOption={onEditOption}
                   onRemoveOption={onRemoveOption}
                   isEditingAllowed={isEditingAllowed}
-                  focusedItem={focusedItem}
+                  focusedId={focusedId}
+                  selectedId={selectedId}
                 />
               ))}
-              {splitGroupEntries.length === 0 && renderEmpty && (
+
+              {groups.length === 0 && renderEmpty && (
                 <div css={emptyStyle}>{renderEmpty}</div>
               )}
+
               {!isReadOnly && showInput && (
-                <DropdownOption
+                <DropdownEditOption
                   value={inputValue}
                   setValue={setInputValue}
                   error={error}

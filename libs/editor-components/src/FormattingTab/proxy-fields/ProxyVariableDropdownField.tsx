@@ -59,9 +59,10 @@ export const ProxyVariableDropdownField = ({
         open={open}
         setOpen={setOpen}
         onExecute={onExecute}
-        groups={filteredResults}
-        selectedIndex={result?.index}
+        items={filteredResults}
+        selectedId={result?.id}
         renderEmpty="No variables"
+        isCombobox
       >
         <DropdownFieldTrigger id={id} icon={result?.icon}>
           {triggerText}

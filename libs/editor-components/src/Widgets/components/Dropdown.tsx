@@ -31,7 +31,7 @@ export const Dropdown: PlateComponent = ({ attributes, element, children }) => {
         open={dropdownOpen}
         setOpen={setDropdownOpen}
         isReadOnly={readOnly}
-        groups={
+        items={
           readOnly
             ? dropdownIds.filter((elem) => !elem.group?.includes('Table'))
             : dropdownIds
