@@ -22,7 +22,7 @@ export interface DataViewColumnMenuProps {
   selectedRounding?: string;
   onAggregationChange: (aggregation: string | undefined) => void;
   onRoundingChange: (aggregation: string | undefined) => void;
-  onDeleteColumn: () => void;
+  onDeleteColumn: (() => void) | undefined;
   columnName?: string;
   columns: Column[] | undefined;
   columnIndex: number | undefined;
@@ -160,12 +160,16 @@ export const DataViewColumnMenu: FC<DataViewColumnMenuProps> = ({
         columnIndex={columnIndex}
       />
 
-      <div role="presentation" css={hrStyles}>
-        <Divider />
-      </div>
-      <MenuItem onSelect={onDeleteColumn} icon={<Trash />}>
-        Remove column
-      </MenuItem>
+      {onDeleteColumn && (
+        <>
+          <div role="presentation" css={hrStyles}>
+            <Divider />
+          </div>
+          <MenuItem onSelect={onDeleteColumn} icon={<Trash />}>
+            Remove column
+          </MenuItem>
+        </>
+      )}
     </MenuList>
   );
 };

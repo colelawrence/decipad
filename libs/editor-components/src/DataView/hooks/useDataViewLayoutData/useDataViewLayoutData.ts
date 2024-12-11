@@ -1,4 +1,5 @@
-import { useMemo } from 'react';
+/* eslint-disable react-hooks/exhaustive-deps */
+import { DependencyList, useMemo } from 'react';
 import { useResolved } from '@decipad/react-utils';
 import { type Result } from '@decipad/language-interfaces';
 import { Value } from '@decipad/language-types';
@@ -14,9 +15,10 @@ interface UseDataViewLayoutDataProps {
   aggregationTypes: Array<AggregationKind | undefined>;
   roundings: Array<string | undefined>;
   filters: Array<DataViewFilter | undefined>;
-  expandedGroups: string[] | undefined;
+  expandedGroups: string[] | boolean | undefined;
   includeTotal?: boolean;
   preventExpansion: boolean;
+  deps?: string;
 }
 
 export const useDataViewLayoutData = ({
@@ -29,6 +31,7 @@ export const useDataViewLayoutData = ({
   expandedGroups,
   includeTotal = true,
   preventExpansion = false,
+  deps = '',
 }: UseDataViewLayoutDataProps): DataGroup[] | undefined => {
   const treeIdentResult = useComputer().getBlockIdResult$.use(
     `${blockId}_shadow`
@@ -62,6 +65,7 @@ export const useDataViewLayoutData = ({
       filters,
       tableName,
       treeIdentResult,
+      deps, // Since tree is updated by reference using a deps prop allow us to force updates
     ])
   );
 };

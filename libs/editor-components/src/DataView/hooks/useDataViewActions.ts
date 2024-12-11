@@ -7,6 +7,9 @@ import type {
   DataViewHeaderRowElement,
   MyEditor,
   TableCellType,
+  TimeSeriesElement,
+  TimeSeriesHeader,
+  TimeSeriesHeaderRowElement,
 } from '@decipad/editor-types';
 import { ELEMENT_DATA_VIEW_TH } from '@decipad/editor-types';
 import { insertNodes, withPath } from '@decipad/editor-utils';
@@ -45,7 +48,7 @@ export interface TableActions {
 
 export const useDataViewActions = (
   editor: MyEditor,
-  element: DataViewElement | undefined
+  element: DataViewElement | TimeSeriesElement | undefined
 ): TableActions => {
   const onDelete = useCallback(() => {
     withPath(editor, element, (path) => {
@@ -67,14 +70,19 @@ export const useDataViewActions = (
         return;
       }
       lastDataColumns.current = columns;
-      const headerRow: DataViewHeaderRowElement | undefined =
-        element?.children[1];
+      const headerRow:
+        | DataViewHeaderRowElement
+        | TimeSeriesHeaderRowElement
+        | undefined = element?.children[1];
       const headerRowPath = headerRow && findNodePath(editor, headerRow);
+
       if (!headerRowPath) {
         return;
       }
-      const existingColumns: DataViewHeader[] | undefined =
-        headerRow.children.filter((node) => !isText(node));
+
+      const existingColumns = headerRow.children.filter(
+        (node) => !isText(node)
+      );
 
       withoutNormalizing(editor, () => {
         const setColumnTypes = () => {
@@ -140,8 +148,9 @@ export const useDataViewActions = (
         if (!headerRowPath) {
           return;
         }
-        const existingColumns: DataViewHeader[] | undefined =
-          headerRow.children.filter((node) => !isText(node));
+        const existingColumns = headerRow.children.filter(
+          (node) => !isText(node)
+        );
         if (!existingColumns) {
           return;
         }

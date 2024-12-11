@@ -16,11 +16,11 @@ import {
   CodeResult,
   IconPopover,
   TableToolbar,
-  DataViewMenu as TimeSeriesMenu,
+  DataViewMenu,
   VariableNameSelector,
 } from '@decipad/ui';
 import { getNodeString } from '@udecode/plate-common';
-import { Children, useEffect, useMemo } from 'react';
+import { Children, ReactNode, useEffect, useMemo } from 'react';
 import { WIDE_MIN_COL_COUNT } from '../../constants';
 import { TimeSeriesContextProvider } from '../TimeSeriesContext';
 import { DraggableBlock } from '../../../block-management';
@@ -29,8 +29,13 @@ import {
   useTimeSeriesData,
 } from '../../hooks/useTimeSeriesData';
 import * as userIcons from 'libs/ui/src/icons/user-icons';
-import { useDataView } from 'libs/editor-components/src/DataView/hooks';
+import {
+  useDataView,
+  useDataViewLayoutData,
+} from 'libs/editor-components/src/DataView/hooks';
 import { useTimeSeriesLayoutData } from '../../hooks';
+import { TimeSeriesColumnHeader } from '../TimeSeriesColumnHeader';
+import styled from '@emotion/styled';
 
 export const TimeSeries: PlateComponent<{ variableName: string }> = ({
   attributes,
@@ -38,7 +43,9 @@ export const TimeSeries: PlateComponent<{ variableName: string }> = ({
   element,
 }) => {
   assertElementType(element, ELEMENT_TIME_SERIES);
-  console.log('🚀 ~ element:', element);
+
+  const readOnly = useIsEditorReadOnly();
+  const [_caption, theadElement] = element.children;
 
   const editor = useMyEditorRef();
   const computer = useComputer();
@@ -83,32 +90,36 @@ export const TimeSeries: PlateComponent<{ variableName: string }> = ({
     return getNodeString(element.children[0]).length === 0;
   }, [element.children]);
 
-  const timeSeriesData = useTimeSeriesData(element, sortedColumns);
-  const numericalColumns = timeSeriesData?.data?.numericalColumns || [];
-  const categoricalColumns = timeSeriesData?.data?.categoricalColumns || [];
+  const categoricalColumns = theadElement.children.filter((x) =>
+    ['string', 'boolean', 'date'].includes(x?.cellType?.kind)
+  );
+  const numericalColumns = theadElement.children.filter((x) =>
+    ['number'].includes(x?.cellType?.kind)
+  );
 
-  const groups = useTimeSeriesLayoutData({
-    tableName,
+  const categoricalColumnsLabels = categoricalColumns.map((x) => x.label);
+  const numericalColumnsLabels = numericalColumns.map((x) => x.label);
+
+  const groups = useDataViewLayoutData({
+    tableName: tableName ?? '',
     blockId: element.id,
-    columns: sortedColumns,
+    columns: sortedColumns ?? [],
     aggregationTypes: selectedAggregationTypes,
     roundings: selectedRoundings,
     filters: selectedFilters,
-    expandedGroups: element.expandedGroups,
+    expandedGroups: true,
     includeTotal: true,
     preventExpansion: false,
+    deps: theadElement.children.map((x) => x.label).join(','),
   });
-  console.log('🚀 ~ sortedColumns:', sortedColumns);
 
-  // TODO GET AT numerical columns from unique values from first level of date children
   const firstCategorical = groups?.flatMap((group) =>
-    group?.children.filter((x) => x.elementType === 'group').map((x) => x.value)
+    group?.children
+      .filter((x) => x.elementType === 'group')
+      .map((x) => String(x.value))
   );
   const uniqueFirstCategorical = [...new Set(firstCategorical)];
-  const [caption, thead, addNewColumnComponent] = Children.toArray(children);
-  console.log('🚀 ~ thead:', thead);
-
-  const readOnly = useIsEditorReadOnly();
+  const [caption, thead] = Children.toArray(children);
 
   const variableName = element.varName || '';
   const empty = isEmpty;
@@ -119,11 +130,27 @@ export const TimeSeries: PlateComponent<{ variableName: string }> = ({
 
   const availableNumericColumns = availableColumns
     ?.filter((x) => ['number', 'boolean'].includes(x.type.kind))
-    .filter((x) => !numericalColumns.includes(x.name));
+    .filter((x) => !numericalColumnsLabels.includes(x.name) && !!x.blockId);
 
-  const availableCategoricalColumns = availableColumns
-    ?.filter((x) => ['string', 'date'].includes(x.type.kind))
-    .filter((x) => !categoricalColumns.includes(x.name));
+  const availableCategoricalColumns = availableColumns?.filter(
+    (x) =>
+      (categoricalColumnsLabels.length ? ['string'] : ['date']).includes(
+        x.type.kind
+      ) &&
+      !!x.blockId &&
+      !categoricalColumnsLabels.includes(x.name)
+  );
+
+  const hasSourceTable = !!tableName;
+  const showAddColumn =
+    hasSourceTable &&
+    !!availableCategoricalColumns?.length &&
+    categoricalColumnsLabels?.length < 2;
+  const showAddRow =
+    categoricalColumnsLabels.length > 1 && // It should have a date and a categorical column selected.
+    !!availableNumericColumns?.length; // Must have at least one numeric column.
+
+  const showTable = categoricalColumns.length + numericalColumns.length > 0;
 
   return (
     <DraggableBlock
@@ -169,133 +196,182 @@ export const TimeSeries: PlateComponent<{ variableName: string }> = ({
 
         <div style={{ display: 'none' }}>{thead}</div>
 
-        {addNewColumnComponent}
+        <TableWrapper contentEditable={false}>
+          {showTable && (
+            <HorizontalScroll>
+              <table
+                style={{ opacity: computing ? 0.5 : 1 }}
+                css={{
+                  'th, td': {
+                    border: '1px solid #eee',
+                    padding: '4px 8px',
+                    verticalAlign: 'middle',
+                  },
+                }}
+                contentEditable={false}
+              >
+                <thead>
+                  <tr>
+                    {categoricalColumns?.map(
+                      (header, index) =>
+                        path && (
+                          <th
+                            css={{ background: 'whitesmoke' }}
+                            key={header.label}
+                          >
+                            <TimeSeriesColumnHeader
+                              element={header}
+                              attributes={{
+                                'data-slate-node': 'element',
+                                'data-slate-void': true,
+                                ref: undefined,
+                              }}
+                              overridePath={[...path, 1, index]}
+                              showDelete={
+                                categoricalColumns.length - 1 === index
+                              }
+                            />
+                          </th>
+                        )
+                    )}
 
-        <>
-          <table
-            css={{
-              'th, td': {
-                border: '1px solid #eee',
-                padding: '4px 8px',
-                verticalAlign: 'middle',
-              },
-            }}
-            contentEditable={false}
-          >
-            <thead>
-              <tr>
-                {/* <th css={{ background: 'whitesmoke' }}>Date</th> */}
-                {categoricalColumns?.map((column, index) => (
-                  <th css={{ background: 'whitesmoke' }} key={column}>
-                    {column}
-                  </th>
-                ))}
-                <th>
-                  {!!availableCategoricalColumns?.length && (
-                    <TimeSeriesMenu
-                      availableColumns={availableCategoricalColumns}
-                      onInsertColumn={onInsertColumn}
-                    />
-                  )}
-                </th>
-                {groups
-                  ?.filter((x) => x.elementType === 'group')
-                  .map((date) => (
-                    <td key={String(date.value)}>
-                      {date?.type && (
-                        <CodeResult
-                          value={date.value}
-                          variant="inline"
-                          type={date?.type}
-                          meta={undefined}
-                          element={element}
-                        />
-                      )}
-                    </td>
-                  ))}
-              </tr>
-            </thead>
-
-            <tbody>
-              {uniqueFirstCategorical &&
-                numericalColumns?.map(
-                  (numericColumnName, numericColumnNameIndex) =>
-                    uniqueFirstCategorical?.map((category, categoryIndex) => {
-                      return (
-                        <tr>
-                          {categoryIndex === 0 && (
-                            <th
-                              css={{ background: 'whitesmoke' }}
-                              rowSpan={uniqueFirstCategorical.length}
-                            >
-                              {numericColumnName}
-                            </th>
+                    {/* Date headers */}
+                    {groups
+                      ?.filter((x) => x.elementType === 'group')
+                      .map((date) => (
+                        <td key={String(date.value)}>
+                          {date?.type && (
+                            <CodeResult
+                              value={date.value}
+                              variant="inline"
+                              type={date?.type}
+                              meta={undefined}
+                              element={element}
+                            />
                           )}
+                        </td>
+                      ))}
+                  </tr>
+                </thead>
 
-                          {categoricalColumns?.map((column, colIndex) => {
-                            // const uniqueValuesCount =
+                <tbody>
+                  {uniqueFirstCategorical &&
+                    numericalColumns?.map((numericColumn, numericColumnIndex) =>
+                      uniqueFirstCategorical?.map((category, categoryIndex) => {
+                        const numericColumnRealIndex =
+                          categoricalColumns.length + numericColumnIndex; // Assuming sequential indexes. First categorical then numerical.
 
-                            // if (!row[`${column}IsFirst`]) return null;
+                        const isTheLastColumn =
+                          categoricalColumns.length +
+                            numericalColumns.length -
+                            1 ===
+                          numericColumnRealIndex;
 
-                            return (
+                        return (
+                          <tr key={numericColumn.label + category}>
+                            {/* Numeric columns headers names */}
+                            {categoryIndex === 0 && (
                               <th
-                                key={column}
-                                // rowSpan={row[`${column}Span`]}
+                                css={{ background: 'whitesmoke' }}
+                                rowSpan={uniqueFirstCategorical.length}
                               >
-                                {category}
+                                {path && (
+                                  <TimeSeriesColumnHeader
+                                    element={numericColumn}
+                                    attributes={{
+                                      'data-slate-node': 'element',
+                                      'data-slate-void': true,
+                                      ref: undefined,
+                                    }}
+                                    overridePath={[
+                                      ...path,
+                                      1,
+                                      numericColumnRealIndex,
+                                    ]}
+                                    showDelete={isTheLastColumn}
+                                  />
+                                )}
                               </th>
-                            );
-                          })}
+                            )}
 
-                          {categoricalColumns?.map((column, colIndex) => {
-                            // const uniqueValuesCount =
+                            {/* Categorical columns values */}
+                            {categoricalColumnsLabels
+                              ?.slice(1) // Ignores first date column.
+                              .map((column) => {
+                                return <th key={column}>{category}</th>;
+                              })}
 
-                            // if (!row[`${column}IsFirst`]) return null;
-
-                            return groups
-                              ?.filter((x) => x.elementType === 'group')
-                              .map((date) => {
-                                const child = date.children?.find(
-                                  (x) => x.value === category
-                                );
-
-                                const item =
-                                  child &&
-                                  getChildAtLevel(
-                                    child,
-                                    0,
-                                    numericColumnNameIndex + 1
+                            {/* Value cells */}
+                            {categoricalColumnsLabels?.slice(1).map(() => {
+                              return groups
+                                ?.filter((x) => x.elementType === 'group')
+                                .map((date) => {
+                                  const child = date.children?.find(
+                                    (x) => x.value === category
                                   );
-                                return (
-                                  <td key={String(date.value)}>
-                                    {item?.type && (
-                                      <CodeResult
-                                        value={item?.value}
-                                        variant="inline"
-                                        type={item?.type}
-                                        meta={undefined}
-                                        element={element}
-                                      />
-                                    )}
-                                  </td>
-                                );
-                              });
-                          })}
-                        </tr>
-                      );
-                    })
-                )}
-            </tbody>
-          </table>
 
-          {!!availableNumericColumns?.length && (
-            <TimeSeriesMenu
+                                  const item =
+                                    child &&
+                                    getChildAtLevel(
+                                      child,
+                                      0,
+                                      numericColumnIndex + 1
+                                    );
+
+                                  return (
+                                    <td key={String(date.value)}>
+                                      {item?.type && (
+                                        <CodeResult
+                                          value={item?.value}
+                                          variant="inline"
+                                          type={item?.type}
+                                          meta={undefined}
+                                          element={element}
+                                        />
+                                      )}
+                                    </td>
+                                  );
+                                });
+                            })}
+                          </tr>
+                        );
+                      })
+                    )}
+                </tbody>
+              </table>
+            </HorizontalScroll>
+          )}
+
+          {showAddColumn && (
+            <div css={{ position: 'sticky', top: '0', margin: -4 }}>
+              <DataViewMenu
+                availableColumns={availableCategoricalColumns}
+                onInsertColumn={onInsertColumn}
+              />
+            </div>
+          )}
+        </TableWrapper>
+
+        {/* Add numeric row */}
+        {showAddRow && (
+          <div css={{ position: 'sticky', top: '0', marginLeft: -8 }}>
+            <DataViewMenu
               availableColumns={availableNumericColumns}
               onInsertColumn={onInsertColumn}
             />
-          )}
-        </>
+          </div>
+        )}
       </TimeSeriesContextProvider>
     </DraggableBlock>
   );
 };
+
+const TableWrapper = styled.div`
+  position: relative;
+  display: flex;
+`;
+const HorizontalScroll = styled.div`
+  position: relative;
+  max-width: 100%;
+  overflow-y: auto;
+`;

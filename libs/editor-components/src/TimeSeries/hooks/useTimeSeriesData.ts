@@ -10,7 +10,12 @@ import {
   useNodePath,
   usePathMutatorCallback,
 } from '@decipad/editor-hooks';
-import { MyElement, PlotElement, useMyEditorRef } from '@decipad/editor-types';
+import {
+  MyElement,
+  PlotElement,
+  TimeSeriesElement,
+  useMyEditorRef,
+} from '@decipad/editor-types';
 import {
   SerializedType,
   AutocompleteName,
@@ -52,7 +57,7 @@ function isValidType(type: SerializedType) {
 }
 
 export const useTimeSeriesData = (
-  element: MyElement,
+  element: TimeSeriesElement,
   sortedColumns?: Column[]
 ) => {
   const editor = useMyEditorRef();
@@ -74,8 +79,10 @@ export const useTimeSeriesData = (
   //   'usePlot'
   // );
 
-  // TODO "Table" HARDCODED FOR NOW
-  const source = computer.getVarResult$.use('Table')?.result;
+  const blockId = element.varName || '';
+  const tableName = computer.getSymbolDefinedInBlock$.use(blockId);
+
+  const source = computer.getVarResult$.use(tableName ?? '')?.result;
   // const source = computer.getVarResult$.use(element.varName ?? '')?.result;
   const sourceType: SerializedType | undefined = source?.type;
 
