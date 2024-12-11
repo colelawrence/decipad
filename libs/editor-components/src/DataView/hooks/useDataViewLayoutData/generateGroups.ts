@@ -44,7 +44,9 @@ export const generateGroups = async ({
   const dataGroups = await Promise.all(
     tree.value.children.map(async (child) => {
       const groupId = `${parentGroupId}/${await generateHash(child)}`;
-      const isExpanded = expandedGroups.includes(groupId);
+      const isExpanded = Array.isArray(expandedGroups)
+        ? expandedGroups.includes(groupId)
+        : expandedGroups;
       const hideSmartRow = child.columns.every(
         (col) => col.aggregation == null
       );

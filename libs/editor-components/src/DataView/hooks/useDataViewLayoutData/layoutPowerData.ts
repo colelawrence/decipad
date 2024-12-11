@@ -12,7 +12,7 @@ interface LayoutPowerDataProps {
   aggregationTypes: Array<AggregationKind | undefined>;
   roundings: Array<string | undefined>;
   filters: Array<DataViewFilter | undefined>;
-  expandedGroups: string[] | undefined;
+  expandedGroups: string[] | boolean | undefined;
   includeTotal?: boolean;
   preventExpansion: boolean;
 }

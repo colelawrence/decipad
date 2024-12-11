@@ -23,7 +23,7 @@ export interface HeaderProps {
   alignRight?: boolean;
   isFullWidthRow?: boolean;
   groupId: string;
-  expandedGroups: string[] | undefined;
+  expandedGroups: string[] | boolean | undefined;
   onChangeExpandedGroups: (expandedGroups: string[]) => void;
   groupLength: number;
   index: number;

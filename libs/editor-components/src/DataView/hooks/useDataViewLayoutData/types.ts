@@ -19,7 +19,7 @@ export interface GenerateGroupsProps {
   parentGroupId?: string;
   preventExpansion: boolean;
   indent?: number;
-  expandedGroups?: string[];
+  expandedGroups?: string[] | boolean;
 }
 
 export type GenerateGroups = (
