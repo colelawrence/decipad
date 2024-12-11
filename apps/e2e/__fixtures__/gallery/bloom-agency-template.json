@@ -1,0 +1,5355 @@
+{
+	"children": [
+		{
+			"children": [
+				{
+					"text": "[Template] Design Agency Revenue Forecast"
+				}
+			],
+			"type": "title",
+			"id": "IEmUFv0k4-LZYy4YMTwks"
+		},
+		{
+			"children": [],
+			"type": "data-tab",
+			"id": "8sFyYyJmayA2IZu5_zm-N",
+			"name": "New Tab"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "🗒️"
+						},
+						{
+							"text": " All calculations are effective from January 1st, 2025, and are based on biweekly client billing.",
+							"italic": true
+						}
+					],
+					"type": "p",
+					"id": "TdErufKAnxMPm9M8U5Pnn"
+				},
+				{
+					"children": [
+						{
+							"text": "Summary "
+						}
+					],
+					"id": "sibl5UbGmplNliq2Aj97S",
+					"type": "h2"
+				},
+				{
+					"children": [
+						{
+							"text": "Our revenue goal for 2025 is "
+						},
+						{
+							"text": "exprRef_gjpj_6yKWntL8y4IO1mda",
+							"magicnumberz": true
+						},
+						{
+							"text": " , and right now "
+						},
+						{
+							"text": "exprRef_cpOsjaLGxtlU5OIe1oUoY",
+							"magicnumberz": true
+						},
+						{
+							"text": " .\nDifference between our current state and our goal is "
+						},
+						{
+							"text": "exprRef_LZiTJOMMue_sPkiU2ziOU",
+							"magicnumberz": true
+						},
+						{
+							"text": " ."
+						}
+					],
+					"type": "p",
+					"id": "a38CDwr46Cw2WsYL0rPqr"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"id": "0E28m8_qdU2iF8NgkhXwh",
+					"blockId": "Vw0po0XMfHxEkuE8mKSbG",
+					"type": "display",
+					"varName": "YearRevenue",
+					"icon": "Bookmark"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "Oa5ns_ZbPeq1B7ECTQGcg",
+							"blockId": "QVaG8ryIRDk4pFb-aaGt_",
+							"type": "display",
+							"varName": "Q1",
+							"color": "Perfume",
+							"icon": "TableSmall"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "kpknKqZYV9OQkGtD_8TgG",
+							"blockId": "dIrfKn2EfLpUHfAVhQDcy",
+							"type": "display",
+							"varName": "Q2",
+							"color": "Perfume",
+							"icon": "TableSmall"
+						}
+					],
+					"id": "_kvrcKcGMoN2KW9c_J225",
+					"type": "columns"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "P_RwIpAtj0XIzJ9_Xxt7j",
+							"blockId": "wFtvlqBsgM4TmuKpmDxJU",
+							"type": "display",
+							"varName": "Q3",
+							"icon": "TableSmall",
+							"color": "Perfume"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "_LX_PcOXDl2FfoTCtyQ4u",
+							"blockId": "zBReLc3Wps-7Ad8XFG1YE",
+							"type": "display",
+							"varName": "Q4",
+							"icon": "TableSmall",
+							"color": "Perfume"
+						}
+					],
+					"id": "nIVjmyTXvN0JCe55SE7uZ",
+					"type": "columns"
+				},
+				{
+					"children": [
+						{
+							"text": "Based on prognosis our best quarter happens to be "
+						},
+						{
+							"text": "exprRef_CV1BgxqSMsC0h1vFnKMiB",
+							"magicnumberz": true
+						},
+						{
+							"text": " with "
+						},
+						{
+							"text": "exprRef_wHZqkDBcPoLny98gfH_X5",
+							"magicnumberz": true
+						},
+						{
+							"text": " revenue. Performance difference between worst and best performing quarters is "
+						},
+						{
+							"text": "exprRef_K_W32YUi4wJEjAljG9YDx",
+							"magicnumberz": true
+						},
+						{
+							"text": " %."
+						}
+					],
+					"id": "HTM3au1OZoMffLxyKZE6y",
+					"type": "p"
+				},
+				{
+					"children": [
+						{
+							"text": "If we keep the same momentum without getting any new clients, our 2025 revenue will be around "
+						},
+						{
+							"text": "exprRef_Vw0po0XMfHxEkuE8mKSbG",
+							"magicnumberz": true
+						},
+						{
+							"text": " ."
+						}
+					],
+					"type": "p",
+					"id": "VirNi9Sk677DNj9kgi7_e"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"id": "QH3fj2cyZN6v4x6iPM7yk",
+					"type": "p"
+				},
+				{
+					"children": [
+						{
+							"text": "Dashboards"
+						}
+					],
+					"id": "yWbBrfqTdAkMcC5xtXOx0",
+					"type": "h2"
+				},
+				{
+					"children": [
+						{
+							"text": "Biweekly Revenue Forecast"
+						}
+					],
+					"id": "_LAMnl4ojkur-mExUSApP",
+					"type": "h3"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"id": "K4bGyfskCtTetw1tDHO16",
+					"type": "plot",
+					"xAxisLabel": "",
+					"yAxisLabel": "",
+					"labelColumnName": "",
+					"markType": "line",
+					"sizeColumnName": "",
+					"barVariant": "grouped",
+					"lineVariant": "simple",
+					"arcVariant": "simple",
+					"orientation": "horizontal",
+					"grid": true,
+					"startFromZero": true,
+					"mirrorYAxis": false,
+					"flipTable": false,
+					"groupByX": false,
+					"schema": "jun-2024",
+					"showDataLabel": false,
+					"colorScheme": "monochrome_brand",
+					"title": "Biweekly Revenue Forecast",
+					"xColumnName": "Range",
+					"sourceVarName": "exprRef_kU5914_zlUltT3i72_Ghp",
+					"yColumnNames": [
+						"BillAmount"
+					],
+					"yColumnChartTypes": [
+						"bar"
+					]
+				},
+				{
+					"children": [
+						{
+							"text": "General Data"
+						}
+					],
+					"id": "fmAJ_E0os1dnNRW5AuAFV",
+					"type": "h3"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"type": "p",
+					"id": "XWh29LTHRP8xhCSM0KXvF"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "1jVnCOd_6qIN1xOK3BH4l",
+							"type": "plot",
+							"title": "Quarterly Forecast",
+							"sourceVarName": "exprRef_kU5914_zlUltT3i72_Ghp",
+							"xColumnName": "Quarter",
+							"xAxisLabel": "",
+							"yAxisLabel": "",
+							"labelColumnName": "",
+							"markType": "bar",
+							"sizeColumnName": "",
+							"yColumnNames": [
+								"BillAmount"
+							],
+							"yColumnChartTypes": [
+								"bar"
+							],
+							"barVariant": "grouped",
+							"lineVariant": "simple",
+							"arcVariant": "simple",
+							"orientation": "horizontal",
+							"grid": true,
+							"startFromZero": true,
+							"mirrorYAxis": false,
+							"flipTable": false,
+							"showDataLabel": false,
+							"groupByX": true,
+							"colorScheme": "multicolor_green",
+							"schema": "jun-2024"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "uQrTKryKdyiEZ4t7ybjYZ",
+							"type": "plot",
+							"xColumnName": "Name",
+							"xAxisLabel": "",
+							"yAxisLabel": "",
+							"labelColumnName": "",
+							"markType": "arc",
+							"sizeColumnName": "",
+							"barVariant": "grouped",
+							"lineVariant": "simple",
+							"arcVariant": "simple",
+							"orientation": "horizontal",
+							"grid": true,
+							"startFromZero": true,
+							"mirrorYAxis": false,
+							"flipTable": false,
+							"showDataLabel": false,
+							"groupByX": false,
+							"colorScheme": "monochrome_purple",
+							"schema": "jun-2024",
+							"title": "Client Portion Based on Hours",
+							"yColumnChartTypes": [
+								"bar"
+							],
+							"sourceVarName": "exprRef_Pjyh1js0AK7YUsRpvR3B5",
+							"yColumnNames": [
+								"HoursPerWeek"
+							]
+						}
+					],
+					"id": "bYyA8k0omX8pUmCceJFSD",
+					"type": "columns"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"id": "pS1CVA_iXar0jk_V-PrAH",
+					"type": "divider"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"type": "p",
+					"id": "gnGZwgfDGftlFBONcjRw2"
+				},
+				{
+					"children": [
+						{
+							"text": "Hours Allocation Across Company"
+						}
+					],
+					"id": "Duaqc7xGHPdOSJD11KCPk",
+					"type": "h3"
+				},
+				{
+					"children": [
+						{
+							"text": "This table shows how much hours we need on biweekly basis on all accounts, and how much we have available based on our team size."
+						}
+					],
+					"id": "wzrhQk_SB05Hmf6ly7_t3",
+					"type": "p"
+				},
+				{
+					"children": [
+						{
+							"text": "This chart shows when we'll need to fire hiring, or get more work to balance the difference between required and available hours.",
+							"italic": true
+						}
+					],
+					"type": "p",
+					"id": "aWsDI3ekh-B8S_3qer0g_"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"id": "fBauRttRcz2ywvbj9YwDy",
+					"type": "plot",
+					"title": "HoursRequired vs Available",
+					"sourceVarName": "exprRef_kU5914_zlUltT3i72_Ghp",
+					"xColumnName": "Range",
+					"xAxisLabel": "",
+					"yAxisLabel": "",
+					"labelColumnName": "",
+					"markType": "combo",
+					"sizeColumnName": "",
+					"yColumnNames": [
+						"TotalRequiredHours",
+						"TotalAvailableHours"
+					],
+					"yColumnChartTypes": [
+						"bar",
+						"line"
+					],
+					"barVariant": "grouped",
+					"lineVariant": "simple",
+					"arcVariant": "simple",
+					"orientation": "horizontal",
+					"grid": true,
+					"startFromZero": true,
+					"mirrorYAxis": false,
+					"flipTable": false,
+					"showDataLabel": false,
+					"groupByX": false,
+					"colorScheme": "multicolor_orange",
+					"schema": "jun-2024"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"type": "p",
+					"id": "rNv6zan8Swh0EOchMg3vy"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"type": "p",
+					"id": "v3lzuX7oruZd8KEfS1675"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"type": "p",
+					"id": "I4HF8F6Z6VNMcjqJxsvfZ"
+				}
+			],
+			"type": "tab",
+			"id": "tDPfN0UIRCEiYyvKWzAnO",
+			"name": "Dashboard",
+			"icon": "Coin"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "Client Database"
+						}
+					],
+					"id": "oKK-FJ8zOHlSZpVN0qqlC",
+					"type": "h2"
+				},
+				{
+					"children": [
+						{
+							"text": "Client information table"
+						}
+					],
+					"id": "R7VGbpwrrCLEK0M_vHhDc",
+					"type": "h3"
+				},
+				{
+					"children": [
+						{
+							"text": "Storing data on hourly rate, contract size and length with each client."
+						}
+					],
+					"type": "p",
+					"id": "yYog8UKM3OJvjxbJV5kAV"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"children": [
+										{
+											"text": "Clients"
+										}
+									],
+									"id": "wkNWUQRqB34TznoDnwLdL",
+									"type": "table-var-name"
+								},
+								{
+									"children": [
+										{
+											"text": "( "
+										},
+										{
+											"children": [
+												{
+													"text": ""
+												}
+											],
+											"id": "T7NP_o1CohDr08zA2aFZP",
+											"type": "smart-ref",
+											"blockId": "scOZCwFtuRsVqGjTscXs3",
+											"columnId": null,
+											"decoration": "cell",
+											"lastSeenVariableName": "HoursPerWeek"
+										},
+										{
+											"text": " /5)*"
+										},
+										{
+											"children": [
+												{
+													"text": ""
+												}
+											],
+											"id": "SOyl46G1tV73K86eR_Md6",
+											"type": "smart-ref",
+											"blockId": "DVK0LWATcBWvU7ke9uPuW",
+											"columnId": null,
+											"decoration": "cell",
+											"lastSeenVariableName": "HourlyPrice"
+										},
+										{
+											"text": " "
+										}
+									],
+									"id": "jTxSU0tDacIjdPNqftp-q",
+									"type": "table-column-formula",
+									"columnId": "tqGmVD1djpDeLMk7GWPyC"
+								},
+								{
+									"children": [
+										{
+											"text": " "
+										},
+										{
+											"children": [
+												{
+													"text": ""
+												}
+											],
+											"id": "fmae6HP5hb0VFF566xGnf",
+											"type": "smart-ref",
+											"blockId": "scOZCwFtuRsVqGjTscXs3",
+											"columnId": null,
+											"decoration": "cell",
+											"lastSeenVariableName": "HoursPerWeek"
+										},
+										{
+											"text": " *"
+										},
+										{
+											"children": [
+												{
+													"text": ""
+												}
+											],
+											"id": "d-I8k_SKgHdLThJaGIReg",
+											"type": "smart-ref",
+											"blockId": "DVK0LWATcBWvU7ke9uPuW",
+											"columnId": null,
+											"decoration": "cell",
+											"lastSeenVariableName": "HourlyPrice"
+										},
+										{
+											"text": " "
+										}
+									],
+									"id": "XXG2xyors4iH8_GLeI2ho",
+									"type": "table-column-formula",
+									"columnId": "FqcQk7Ge6DeWrk4WOPNzA"
+								}
+							],
+							"id": "UjZsTM3fgBJgsiZmfN0Vi",
+							"type": "table-caption"
+						},
+						{
+							"children": [
+								{
+									"children": [
+										{
+											"text": "Name"
+										}
+									],
+									"id": "-Wu9oz3MTeEmI1TIu83qH",
+									"type": "th",
+									"cellType": {
+										"kind": "anything"
+									},
+									"width": 175
+								},
+								{
+									"children": [
+										{
+											"text": "HoursPerWeek"
+										}
+									],
+									"id": "scOZCwFtuRsVqGjTscXs3",
+									"type": "th",
+									"cellType": {
+										"kind": "anything"
+									},
+									"width": 148
+								},
+								{
+									"children": [
+										{
+											"text": "HourlyPrice"
+										}
+									],
+									"id": "DVK0LWATcBWvU7ke9uPuW",
+									"type": "th",
+									"cellType": {
+										"kind": "number",
+										"unit": [
+											{
+												"exp": {
+													"n": "1",
+													"d": "1",
+													"s": "1",
+													"infinite": false
+												},
+												"multiplier": {
+													"n": "1",
+													"d": "1",
+													"s": "1",
+													"infinite": false
+												},
+												"known": true,
+												"unit": "usdollar",
+												"baseSuperQuantity": "currency",
+												"baseQuantity": "usdollar"
+											}
+										]
+									}
+								},
+								{
+									"children": [
+										{
+											"text": "DailyRevenue"
+										}
+									],
+									"id": "tqGmVD1djpDeLMk7GWPyC",
+									"type": "th",
+									"cellType": {
+										"kind": "table-formula"
+									}
+								},
+								{
+									"children": [
+										{
+											"text": "WeeklyRevenue"
+										}
+									],
+									"id": "FqcQk7Ge6DeWrk4WOPNzA",
+									"type": "th",
+									"cellType": {
+										"kind": "table-formula"
+									}
+								},
+								{
+									"children": [
+										{
+											"text": "StartDate"
+										}
+									],
+									"id": "Oz8KLGtrKKL7pORzSQYlz",
+									"type": "th",
+									"cellType": {
+										"kind": "date",
+										"date": "day"
+									}
+								},
+								{
+									"children": [
+										{
+											"text": "EndDate"
+										}
+									],
+									"id": "ammMKmIzm9awvm85U8ao9",
+									"type": "th",
+									"cellType": {
+										"kind": "date",
+										"date": "day"
+									}
+								}
+							],
+							"id": "X_kAQibndajFquUeEgzAs",
+							"type": "tr"
+						},
+						{
+							"children": [
+								{
+									"children": [
+										{
+											"text": "Client A"
+										}
+									],
+									"id": "xAyvYIGLxjxTEFeC9fn1F",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "120"
+										}
+									],
+									"id": "8_MXgjQsF0tcbW8OnYHD3",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "180"
+										}
+									],
+									"id": "VWybHbC2qLfcJImjfo5TK",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "GlobTgu_jfVumu45lpN3k",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "wmCBtv1ea5BxWVZK2gcx8",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "2025-01-06"
+										}
+									],
+									"id": "ohDs9duijdjNvLYjMja-3",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "2025-12-31"
+										}
+									],
+									"id": "N4bKboyV0rMQ5O1sqEmV0",
+									"type": "td"
+								}
+							],
+							"id": "2XMY7hgBFUb9CWaNBSTu5",
+							"type": "tr"
+						},
+						{
+							"children": [
+								{
+									"children": [
+										{
+											"text": "Client B"
+										}
+									],
+									"id": "uhbMDGLSFwY3FOE9YmMrv",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "40"
+										}
+									],
+									"id": "UuRbBpM27g9LDBCCfH-eI",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "195"
+										}
+									],
+									"id": "09tzIw_K_QenU-qF_yeg7",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "q8XyobJ-jGB6sDUpKPJJi",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "X564YgiHerk4RmnK86e3l",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "2025-01-06"
+										}
+									],
+									"id": "AzWBLoEUrUVczd0B7dopV",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "2025-06-01"
+										}
+									],
+									"id": "09qCyQrYqNcUkGmmbpC_-",
+									"type": "td"
+								}
+							],
+							"id": "WIRqR0IF0xTRJ1N65OSEJ",
+							"type": "tr"
+						},
+						{
+							"children": [
+								{
+									"children": [
+										{
+											"text": "Client C"
+										}
+									],
+									"id": "XrhZclvEc5nhKpqMtQMpz",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "80"
+										}
+									],
+									"id": "oMCcw6aitEwb-zr_pp8Ey",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "180"
+										}
+									],
+									"id": "oOa__S9lSeYhbTe7ksIG4",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "h7ud4jv7uWRM2YOHibNci",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "bp53AV_LKHT_0HZmU7HiM",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "2025-03-31"
+										}
+									],
+									"id": "NbB3482OqvzEVKZN361hi",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "2025-12-31"
+										}
+									],
+									"id": "zlJABfvGQ65Tk_aWCBKFb",
+									"type": "td"
+								}
+							],
+							"id": "qJMtincL1oWDnQOXVPQ79",
+							"type": "tr"
+						},
+						{
+							"children": [
+								{
+									"children": [
+										{
+											"text": "Client D"
+										}
+									],
+									"id": "OTdB2q2nXQMnbC3E1vI4J",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "60"
+										}
+									],
+									"id": "vtZDoxemTI5Bfimsvr8xf",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "175"
+										}
+									],
+									"id": "scH2irkeap0PCTNiTRiz1",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "lnJXU544xNdFCBwRMHPP_",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "-vH_Ez1iMQrdMKpzIyTWT",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "2025-06-02"
+										}
+									],
+									"id": "0WUJMXF4sg_2IvxGH2Ykx",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "2025-12-31"
+										}
+									],
+									"id": "BYGPMdgihzKMIh11GCR1Q",
+									"type": "td"
+								}
+							],
+							"id": "_dLjjLw_MhLqKvp-a6YFY",
+							"type": "tr"
+						},
+						{
+							"children": [
+								{
+									"children": [
+										{
+											"text": "Client E"
+										}
+									],
+									"id": "6lRZ2WK5cwhvu0kdVKgkM",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "100"
+										}
+									],
+									"id": "k-RbBMUxk5aoP8wpcfudQ",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "180"
+										}
+									],
+									"id": "a3JWvt0vCXQhiDrUwRsAc",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "bceEWqHpoQU8dalysF8ZD",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "yx34xcWfHEZ6Eearfcg6k",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "2025-09-22"
+										}
+									],
+									"id": "pTrvNQL-EgZNUGDP4lWlv",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "2025-12-19"
+										}
+									],
+									"id": "HYNafYt1levLhHcYaXX4B",
+									"type": "td"
+								}
+							],
+							"id": "B4eQF3ka0Wa2wEngDcKfs",
+							"type": "tr"
+						}
+					],
+					"id": "Pjyh1js0AK7YUsRpvR3B5",
+					"type": "table",
+					"version": 2,
+					"hideFormulas": true,
+					"color": "Perfume"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"id": "NQCZlQk14CK9OPG5_KLll",
+					"type": "divider"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"type": "p",
+					"id": "OMcyhuZ_lInwpZ3-PUIc3"
+				},
+				{
+					"children": [
+						{
+							"text": "Biweekly Data 2025"
+						}
+					],
+					"id": "dfxwZsbY34zC6LCDKUSgo",
+					"type": "h2"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"children": [
+										{
+											"text": "BiweeklyData2025"
+										}
+									],
+									"id": "opoEg9BLZ7Xc2P4wNA2Ku",
+									"type": "table-var-name"
+								},
+								{
+									"children": [
+										{
+											"text": "calculateTotalWeeklyRevenue("
+										},
+										{
+											"children": [
+												{
+													"text": ""
+												}
+											],
+											"id": "bagB1ISnQY2FTX6jB0lhF",
+											"type": "smart-ref",
+											"blockId": "3hRW6Z0qTfA9xJdn0fdSj",
+											"columnId": null,
+											"decoration": "cell",
+											"lastSeenVariableName": "FirstWeekEnd"
+										},
+										{
+											"text": ") + calculateTotalWeeklyRevenue("
+										},
+										{
+											"children": [
+												{
+													"text": ""
+												}
+											],
+											"id": "7MaJLfPcA3lCVvHL64WtU",
+											"type": "smart-ref",
+											"blockId": "FWhY6AxCDkXRCBiXVIYoa",
+											"columnId": null,
+											"decoration": "cell",
+											"lastSeenVariableName": "SecondWeekEnd"
+										},
+										{
+											"text": ")"
+										}
+									],
+									"id": "WhgJyWKUUi679d54_WuBz",
+									"type": "table-column-formula",
+									"columnId": "0Wk3AsWsRUlWdmfh-0fpa"
+								},
+								{
+									"children": [
+										{
+											"text": " calculateTotalWeeklyRequiredHours("
+										},
+										{
+											"children": [
+												{
+													"text": ""
+												}
+											],
+											"id": "-yecjMfqBZ4zCpDmr8oa2",
+											"type": "smart-ref",
+											"blockId": "3hRW6Z0qTfA9xJdn0fdSj",
+											"columnId": null,
+											"decoration": "cell",
+											"lastSeenVariableName": "FirstWeekEnd"
+										},
+										{
+											"text": ") + calculateTotalWeeklyRequiredHours("
+										},
+										{
+											"children": [
+												{
+													"text": ""
+												}
+											],
+											"id": "4MC9Kq8NfoicqHESGMfqJ",
+											"type": "smart-ref",
+											"blockId": "FWhY6AxCDkXRCBiXVIYoa",
+											"columnId": null,
+											"decoration": "cell",
+											"lastSeenVariableName": "SecondWeekEnd"
+										},
+										{
+											"text": ")"
+										}
+									],
+									"id": "pzdxoSWAbdeJ0fZC-Rco4",
+									"type": "table-column-formula",
+									"columnId": "6OvLaJB-XwggEYyuKmxr1"
+								},
+								{
+									"children": [
+										{
+											"text": " "
+										},
+										{
+											"children": [
+												{
+													"text": ""
+												}
+											],
+											"id": "CbLal2oJ6gcn2zh2dJknk",
+											"type": "smart-ref",
+											"blockId": "esgfPC90XassDlbPMIABR",
+											"columnId": null,
+											"lastSeenVariableName": "TotalAvailableDesignHours"
+										},
+										{
+											"text": " "
+										}
+									],
+									"id": "mUSga0_FgULpIRfocHXb-",
+									"type": "table-column-formula",
+									"columnId": "b7xesnz3Ag-NIpWdiFIvF"
+								},
+								{
+									"children": [
+										{
+											"text": "range("
+										},
+										{
+											"children": [
+												{
+													"text": ""
+												}
+											],
+											"id": "tCaGP_mvXEXR1Rxjj9O2z",
+											"type": "smart-ref",
+											"blockId": "O6i9HdFTEjXDwtaLR201A",
+											"columnId": null,
+											"decoration": "cell",
+											"lastSeenVariableName": "BiWeeklyStart"
+										},
+										{
+											"text": " .. "
+										},
+										{
+											"children": [
+												{
+													"text": ""
+												}
+											],
+											"id": "Wc-ajqc5oLflOzz_yGKYS",
+											"type": "smart-ref",
+											"blockId": "FWhY6AxCDkXRCBiXVIYoa",
+											"columnId": null,
+											"decoration": "cell",
+											"lastSeenVariableName": "SecondWeekEnd"
+										},
+										{
+											"text": ")"
+										}
+									],
+									"id": "UFD8zMa1Id83EZ0-PKytT",
+									"type": "table-column-formula",
+									"columnId": "NotFZJwMDXMUnMKOGk3Cj"
+								}
+							],
+							"id": "e-YTQwtgmh7_y8-2A1dDs",
+							"type": "table-caption"
+						},
+						{
+							"children": [
+								{
+									"children": [
+										{
+											"text": "BiWeeklyStart"
+										}
+									],
+									"id": "O6i9HdFTEjXDwtaLR201A",
+									"type": "th",
+									"cellType": {
+										"kind": "date",
+										"date": "day"
+									}
+								},
+								{
+									"children": [
+										{
+											"text": "FirstWeekEnd"
+										}
+									],
+									"id": "3hRW6Z0qTfA9xJdn0fdSj",
+									"type": "th",
+									"cellType": {
+										"kind": "date",
+										"date": "day"
+									}
+								},
+								{
+									"children": [
+										{
+											"text": "SecondWeekEnd"
+										}
+									],
+									"id": "FWhY6AxCDkXRCBiXVIYoa",
+									"type": "th",
+									"cellType": {
+										"kind": "date",
+										"date": "day"
+									}
+								},
+								{
+									"children": [
+										{
+											"text": "BillAmount"
+										}
+									],
+									"id": "0Wk3AsWsRUlWdmfh-0fpa",
+									"type": "th",
+									"cellType": {
+										"kind": "table-formula"
+									}
+								},
+								{
+									"children": [
+										{
+											"text": "Quarter"
+										}
+									],
+									"id": "1g43kcUFsJgzSTyjhH8Pe",
+									"type": "th",
+									"cellType": {
+										"kind": "string"
+									}
+								},
+								{
+									"children": [
+										{
+											"text": "Month"
+										}
+									],
+									"id": "EtNN-O5ON7rxZ3VOnRzAI",
+									"type": "th",
+									"cellType": {
+										"kind": "anything"
+									}
+								},
+								{
+									"children": [
+										{
+											"text": "TotalRequiredHours"
+										}
+									],
+									"id": "6OvLaJB-XwggEYyuKmxr1",
+									"type": "th",
+									"cellType": {
+										"kind": "table-formula"
+									}
+								},
+								{
+									"children": [
+										{
+											"text": "TotalAvailableHours"
+										}
+									],
+									"id": "b7xesnz3Ag-NIpWdiFIvF",
+									"type": "th",
+									"cellType": {
+										"kind": "table-formula"
+									}
+								},
+								{
+									"children": [
+										{
+											"text": "Range"
+										}
+									],
+									"id": "NotFZJwMDXMUnMKOGk3Cj",
+									"type": "th",
+									"cellType": {
+										"kind": "table-formula"
+									},
+									"width": 200
+								}
+							],
+							"id": "eiXpRLi1zGhmWxavkshCZ",
+							"type": "tr"
+						},
+						{
+							"children": [
+								{
+									"children": [
+										{
+											"text": "2024-12-30"
+										}
+									],
+									"id": "N2xzoIsIikIJQhQ-2EIsL",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "2025-01-03"
+										}
+									],
+									"id": "txL6I3IgRxlgbDuDRxNhZ",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "2025-01-10"
+										}
+									],
+									"id": "6ERd_MFldLBEkpmFXpylh",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "TSngnY6PZOHzKqslAjk_V",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "Q1"
+										}
+									],
+									"id": "usTnKR23KtVTviKjbsqnq",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "Jan"
+										}
+									],
+									"id": "mEWhOj6Qi5NU9pmik8D4q",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "ZWyfaoVc_5nLCextedvcF",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "7mZQx2YBcVOPulqGaMWWH",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "OhRq1Ir-VC7rgtvliX0QM",
+									"type": "td"
+								}
+							],
+							"id": "LexR4wXoRZq1QVRyrQkNO",
+							"type": "tr"
+						},
+						{
+							"children": [
+								{
+									"children": [
+										{
+											"text": "2025-01-13"
+										}
+									],
+									"id": "D6VCnz03tdluw0xR1csSz",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "2025-01-17"
+										}
+									],
+									"id": "Kj0y5OT3eznkaCtdKVQB6",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "2025-01-24"
+										}
+									],
+									"id": "_2kQqYaSoApSQbgQ62mHG",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "5TnMCVjQGktufUAy8fXWg",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "Q1"
+										}
+									],
+									"id": "-AfoXEKhg54QXi9byxuSu",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "Jan"
+										}
+									],
+									"id": "k3fWuVEDiPTA-oJEIn7bE",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "tKr4mfca9Snj-lwEHG70P",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "t1VETaF2bYvo8SemKtcvp",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "LhTrSirw3nbSwLJvVlvQ5",
+									"type": "td"
+								}
+							],
+							"id": "MZYEEpnIZx0voQ0x6aUcN",
+							"type": "tr"
+						},
+						{
+							"children": [
+								{
+									"children": [
+										{
+											"text": "2025-01-27"
+										}
+									],
+									"id": "DoXyhkTqQX3L5BsVkKlZ5",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "2025-01-31"
+										}
+									],
+									"id": "6xxJXjDIh2O4d6Ffydou5",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "2025-02-07"
+										}
+									],
+									"id": "ovXG9lQcsi9TmgRix8QVN",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "5J9wDp9mlvBJo99wbemTh",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "Q1"
+										}
+									],
+									"id": "3dZMUVMZh7E0yieWQe1Np",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "Feb"
+										}
+									],
+									"id": "zpDKO5-UYwp0jys85JG_3",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "eQz5HvsA85bDoeR3mkLyS",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "d26Y0x7iE46fsW5CU7Ymf",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "reg73Arb3jTpHsXLQp3g1",
+									"type": "td"
+								}
+							],
+							"id": "sgOCeehQPNugkhaCSFcav",
+							"type": "tr"
+						},
+						{
+							"children": [
+								{
+									"children": [
+										{
+											"text": "2025-02-10"
+										}
+									],
+									"id": "E5xwuPd8MDGO_eUJT5y6X",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "2025-02-14"
+										}
+									],
+									"id": "223cAELDNF_OiVxliF48-",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "2025-02-21"
+										}
+									],
+									"id": "WmXfGn7mr525tfSPxF94d",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "sGFC__T_SNBafJq4V6A8c",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "Q1"
+										}
+									],
+									"id": "MowqbkWwP557pDqqL5YI-",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "Feb"
+										}
+									],
+									"id": "lB-jzTzdSfCi77qF1Cn9g",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "DmGikMFo5ykD21sCVT7sR",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "J1lR5sfcSEeczpl662Wh2",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "koH9NIA2XquciIhza0VQs",
+									"type": "td"
+								}
+							],
+							"id": "C8cSy_Skn8favyy1G7LLp",
+							"type": "tr"
+						},
+						{
+							"children": [
+								{
+									"children": [
+										{
+											"text": "2025-02-24"
+										}
+									],
+									"id": "CNz_qFpaOYcNhvibPmQ_N",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "2025-02-28"
+										}
+									],
+									"id": "7tBWQjhtaYEoA8VcWPtRs",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "2025-03-07"
+										}
+									],
+									"id": "_X7NLYDmMTap8FEBYK38E",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "C64s4RcE_j7mG3E4LFd2K",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "Q1"
+										}
+									],
+									"id": "AfXWierl-nLhWJUVtjMUL",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "Mar"
+										}
+									],
+									"id": "ZGxZtJyBLb8K1gkhExkwa",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "map1fi7ih6CsJ3TJivp6T",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "CgybhFpGR7AyxIKn1lRrU",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "1rtoOH2sDISqbXYUtM4mH",
+									"type": "td"
+								}
+							],
+							"id": "aCNt8qB4ClYOlPZG7kcXS",
+							"type": "tr"
+						},
+						{
+							"children": [
+								{
+									"children": [
+										{
+											"text": "2025-03-10"
+										}
+									],
+									"id": "oGYfu-X6gQOIeM-LpCCfB",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "2025-03-14"
+										}
+									],
+									"id": "COtGREKotz4bMk2sgPd5C",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "2025-03-21"
+										}
+									],
+									"id": "__6myz2rfGpmy_gxGy6wM",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "FOlpVCc0H0fVFXWBjen5j",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "Q1"
+										}
+									],
+									"id": "h2gtgsISDCROINm4No8NC",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "Mar"
+										}
+									],
+									"id": "S3U_CO9Mt2kxUYkcWRyBx",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "icc1cM7kvcYNFuLP1U1ms",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "0NZDKmP32CvV3_cpKdege",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "lInDiB5iv6ixioaWD_X4u",
+									"type": "td"
+								}
+							],
+							"id": "Ur78BzUWMBdvri07FGfup",
+							"type": "tr"
+						},
+						{
+							"children": [
+								{
+									"children": [
+										{
+											"text": "2025-03-24"
+										}
+									],
+									"id": "Wz3etI9mubU3Iq8_aDOTp",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "2025-03-28"
+										}
+									],
+									"id": "Kp8dgeWZUDRKEdkqHEETc",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "2025-04-04"
+										}
+									],
+									"id": "9yXItzkyyOrrGRHpeC6ZB",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "yuSGIv0Irba-aUpjXAyZp",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "Q2"
+										}
+									],
+									"id": "e1KUJPQ3czmt0mmhRw8pI",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "Apr"
+										}
+									],
+									"id": "Z0q-CVazYCUWdaqbZfSTX",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "1athSY5am9hYk4ImqwTcG",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "BcGEnCtjjWv2cI3HyRhqY",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "3nJVThdYgOh5Y_EpvCrtM",
+									"type": "td"
+								}
+							],
+							"id": "JHtU8yvI_ilz9-5frjk7F",
+							"type": "tr"
+						},
+						{
+							"children": [
+								{
+									"children": [
+										{
+											"text": "2025-04-07"
+										}
+									],
+									"id": "D86BlMa-5i_Kg9Gr6H9ln",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "2025-04-11"
+										}
+									],
+									"id": "lQJxJYkLyWc43ofllaPxM",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "2025-04-18"
+										}
+									],
+									"id": "sLUcp3beOYrTxiIPp-7q0",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "E-9y_JEM6GUrB_q9MKRnU",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "Q2"
+										}
+									],
+									"id": "Hp4i7j5qIpr7nX1DLjGA_",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "Apr"
+										}
+									],
+									"id": "8zdGj0DJZ3217fTRCU38-",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "uX1nDyRY4khUoGnDNIcVE",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "NCJbPh36fPylNlPzQS1CL",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "kmCJivr_P9klfK2Byz9Z5",
+									"type": "td"
+								}
+							],
+							"id": "ctFX8tsPBJQ-ZOP3bRjhy",
+							"type": "tr"
+						},
+						{
+							"children": [
+								{
+									"children": [
+										{
+											"text": "2025-04-21"
+										}
+									],
+									"id": "ZdHs9BoyHnJLlsOT1bWLG",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "2025-04-25"
+										}
+									],
+									"id": "bAedN8psxJovQ0YxHI8jX",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "2025-05-02"
+										}
+									],
+									"id": "aFpIUfzFdPq8IT6pCySXg",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "mOXTjaNWIkdjHEXlP26NH",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "Q2"
+										}
+									],
+									"id": "y3cjjKWYLnkmjOtpxbgm2",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "May"
+										}
+									],
+									"id": "qDLrqQxrsuoXHBUfBaNzQ",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "QZq6A4ibC4hqaKQDVI_7T",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "k1pDonrThDSfNpx5Ke9vo",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "Ki0dGV_-2tArnBKY8S7W1",
+									"type": "td"
+								}
+							],
+							"id": "93wmJKhIjzTxAZW6w4XcM",
+							"type": "tr"
+						},
+						{
+							"children": [
+								{
+									"children": [
+										{
+											"text": "2025-05-05"
+										}
+									],
+									"id": "g3KDZGa2qdI7EOaWJw3uG",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "2025-05-09"
+										}
+									],
+									"id": "ZT3u6L3IbeggImi_vgfaG",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "2025-05-16"
+										}
+									],
+									"id": "DlT75WGTHRwGzljE3gr74",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "3mHlQtcYlGvmESvhvXMMI",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "Q2"
+										}
+									],
+									"id": "UNYYMtzP_25ngSIOtMktF",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "May"
+										}
+									],
+									"id": "5Wx1DNdlutxQ-bJwGOmVH",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "toe6Cp2RsCXggZSS4AKsP",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "IL1Ch1gcXx8w7bfRLJfuX",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "lo1TldlcvjDnUJK5JHPsa",
+									"type": "td"
+								}
+							],
+							"id": "uDMrYdUp-Db787ItOCXRp",
+							"type": "tr"
+						},
+						{
+							"children": [
+								{
+									"children": [
+										{
+											"text": "2025-05-19"
+										}
+									],
+									"id": "u3FzJ0WP2-DzoyfqS5YaM",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "2025-05-23"
+										}
+									],
+									"id": "R78IiiBcaknFJFrkrTu-R",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "2025-05-30"
+										}
+									],
+									"id": "m8Rl6w8lkRyhcXdiJNh2i",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "QPc--61KyFvc-XWHJaxTn",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "Q2"
+										}
+									],
+									"id": "QwdPhUlSCa5G3fNes2gg5",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "May"
+										}
+									],
+									"id": "7bwDyVcH_4JqZHHYkPDc9",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "Ngrs98Fwu0-jZFNpiFcIE",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "b1Q2R--NDRKnBWTxbnQw1",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "Ffgk-u24iuu6wYXUelP1Y",
+									"type": "td"
+								}
+							],
+							"id": "1aboD0z92RfLXzcxRPscf",
+							"type": "tr"
+						},
+						{
+							"children": [
+								{
+									"children": [
+										{
+											"text": "2025-06-02"
+										}
+									],
+									"id": "nha8mlp9jcAQh_CiWzxJQ",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "2025-06-06"
+										}
+									],
+									"id": "67RJiG2eAr5AogXpFC2Tx",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "2025-06-13"
+										}
+									],
+									"id": "ISuXx99DrkMVS_oIyNCp2",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "c6N_Rikkq7zdsY9_t-UFq",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "Q2"
+										}
+									],
+									"id": "INxJV6vfCeDhPpCq6nnZb",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "Jun"
+										}
+									],
+									"id": "Zx-MQj5XxItPomXlsJ4fa",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "0allpUTT4bYyYR1FtjiUK",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "U9CreD-6YIi97a5NID6Zr",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "h-jsfU9QLsowjA4qQlgCn",
+									"type": "td"
+								}
+							],
+							"id": "u9Yf4OYENRHyggLpAGt82",
+							"type": "tr"
+						},
+						{
+							"children": [
+								{
+									"children": [
+										{
+											"text": "2025-06-16"
+										}
+									],
+									"id": "WWbnE2-omzhRRUcUmywJo",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "2025-06-20"
+										}
+									],
+									"id": "Y9-RaXpkMhiKMAP94QoK2",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "2025-06-27"
+										}
+									],
+									"id": "5c2y8fbSYs_hpGQdaTstT",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "Tt7o9ZtlMVdgoRmbLfCqr",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "Q2"
+										}
+									],
+									"id": "l97SmP_KKeCzP_Lw83NsH",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "Jun"
+										}
+									],
+									"id": "C0LkPHVNeItYyk8P2yEL7",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "pdVDsWfLjzpDOFwZlq6K7",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "nVxRANwZw3Aq6brtwWhbg",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "al33ljSZ9Nq4YORag3mmR",
+									"type": "td"
+								}
+							],
+							"id": "WLJdHfFoQEQAd87I6blZU",
+							"type": "tr"
+						},
+						{
+							"children": [
+								{
+									"children": [
+										{
+											"text": "2025-06-30"
+										}
+									],
+									"id": "fA4OEoDLMbj4nX_jwnDOB",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "2025-07-04"
+										}
+									],
+									"id": "ICrTzPVwNQfZjbOPTc53E",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "2025-07-11"
+										}
+									],
+									"id": "SdmaUmKt3iZ8n33pVNu-w",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "QT5ihOOKkxlRTmsfITkVK",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "Q3"
+										}
+									],
+									"id": "72rKUo_IPUjVjaLcZfSKD",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "Jul"
+										}
+									],
+									"id": "Od93HMVVSQZdEUTwp6lwc",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "hLJZGCZSqosZPDSfZi2sB",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "Y3z1QYxCYfOhIo9YoVtPF",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "6LCAe8apBhVGCDegNtZGx",
+									"type": "td"
+								}
+							],
+							"id": "Z-6cwKS0CvyDz2Hn5VKZ4",
+							"type": "tr"
+						},
+						{
+							"children": [
+								{
+									"children": [
+										{
+											"text": "2025-07-14"
+										}
+									],
+									"id": "qJTztAP87O6bsYijw5fJy",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "2025-07-18"
+										}
+									],
+									"id": "E65F6YlRgtgA37zZIAyLz",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "2025-07-25"
+										}
+									],
+									"id": "vaOrcoXzDbweZnDiXcDCy",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "iYQRMEpNovQZvacEh-va5",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "Q3"
+										}
+									],
+									"id": "hovMbvfMDzxv4odwOONIH",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "Jul"
+										}
+									],
+									"id": "WK3uRrIVp2eOy12ueNisv",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "jtXeTSxOYr_5KqXx1X5Kg",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "Qu5gXUWmizslsPlxB8MGF",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "JQpne5TREeX_SFhQj3vhC",
+									"type": "td"
+								}
+							],
+							"id": "BfiQPUdq26uts87S5-FKE",
+							"type": "tr"
+						},
+						{
+							"children": [
+								{
+									"children": [
+										{
+											"text": "2025-07-28"
+										}
+									],
+									"id": "VaiZwiiabJZ1QUlHrUuiw",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "2025-08-01"
+										}
+									],
+									"id": "bpPtp3RS0IcmJak4V-Ox3",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "2025-08-08"
+										}
+									],
+									"id": "Nj-vPSrpk1yRenxxzw2fc",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "hDFl7ZRFWiygQhYdBD4y3",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "Q3"
+										}
+									],
+									"id": "JPXdfoZjs4AyDi-8-N_w3",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "Aug"
+										}
+									],
+									"id": "YmMF2CBRMTOj3EoGwN8ug",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "-RVKX5XRl3BHa6ynUb_rR",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "aG7D3uHJi1MrHh0d4EzhU",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "bOlO7RqVEEmaIZqE6pU4G",
+									"type": "td"
+								}
+							],
+							"id": "nmuN_aUV4Eyer3XjxugBP",
+							"type": "tr"
+						},
+						{
+							"children": [
+								{
+									"children": [
+										{
+											"text": "2025-08-11"
+										}
+									],
+									"id": "VRivHlbofJ9oxvJuk5Szh",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "2025-08-15"
+										}
+									],
+									"id": "Cm1wodh9pTMWcIqPrhBcH",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "2025-08-22"
+										}
+									],
+									"id": "o5XbN6wTacbb6Y8Lg7_pp",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "hxNHKj1OwG_ZbdKqFKzut",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "Q3"
+										}
+									],
+									"id": "oYzhwqsNdVVznbS3P-kuG",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "Aug"
+										}
+									],
+									"id": "RfG5VX4hfZmxowj0jOPwk",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "7TteW2eOiLlTOa1qDhRt2",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "g4IdSvc93NUpEN4DqWrUp",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "gLtwfAtsMClwJ7y0sOijc",
+									"type": "td"
+								}
+							],
+							"id": "Sk5hIKONcCrsYu5FULtbt",
+							"type": "tr"
+						},
+						{
+							"children": [
+								{
+									"children": [
+										{
+											"text": "2025-08-25"
+										}
+									],
+									"id": "1bN42EM0x2UxY3LJ28Pst",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "2025-08-29"
+										}
+									],
+									"id": "wE-iGKanR9YHC68-nhf77",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "2025-09-05"
+										}
+									],
+									"id": "iMpP6bxmv4oiz9D0WK2r1",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "jishDJedErVN_uXHqQccj",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "Q3"
+										}
+									],
+									"id": "3OWZJtXlmrwqfeET0Udc3",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "Sep"
+										}
+									],
+									"id": "WHXhZkrOMCzcwGHRQdc_R",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "BsZr7XowF_A6otNwPiAQp",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "5K-eMn-esW-2LE-_FyKZQ",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "q7of9c5C2k_YpdM5FPMje",
+									"type": "td"
+								}
+							],
+							"id": "RjpzP5tA060pQ3nK6d1Us",
+							"type": "tr"
+						},
+						{
+							"children": [
+								{
+									"children": [
+										{
+											"text": "2025-09-08"
+										}
+									],
+									"id": "MP_tpoPBNwri4rCbD1XVU",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "2025-09-12"
+										}
+									],
+									"id": "F58oAjdsonB84KB8rIZ8S",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "2025-09-19"
+										}
+									],
+									"id": "8tU7KV4rjUPYSAA69efB_",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "uaM3hP9eRdRAvyxfXyy4s",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "Q3"
+										}
+									],
+									"id": "luUiLLPBxac0xzf6U9MkG",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "Sep"
+										}
+									],
+									"id": "3-QEpWAgACi35M1EPt7QW",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "HKLFEKVAtq868mdGXN5kf",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "yaA8Ms6hQsfRPCrnxw7OP",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "V-8FIwOWmHK-Ol5LgMcBC",
+									"type": "td"
+								}
+							],
+							"id": "ysu3qG41zl1xW19rdNMy_",
+							"type": "tr"
+						},
+						{
+							"children": [
+								{
+									"children": [
+										{
+											"text": "2025-09-22"
+										}
+									],
+									"id": "uL6vO6Wc_DPyP03AwQgSN",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "2025-09-26"
+										}
+									],
+									"id": "UdcBgshiRXaN2gBttIug7",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "2025-10-03"
+										}
+									],
+									"id": "lmOlXICPgkTCy-_ARmN-v",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "Bv0NKokBHyYVKl7EL0lRz",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "Q4"
+										}
+									],
+									"id": "zGL6oAsLOHhnrd2kOa_jE",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "Oct"
+										}
+									],
+									"id": "IVnbF-1hIAYI1sr6cA58v",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "5b_CuZggarYTevfej8Snm",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "kdWEK-zH83fl_VPpH-Lo6",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "3eqEIW3WKrNr7XlVemB7U",
+									"type": "td"
+								}
+							],
+							"id": "qkUpTN1f6r7tjWFSj8cGo",
+							"type": "tr"
+						},
+						{
+							"children": [
+								{
+									"children": [
+										{
+											"text": "2025-10-06"
+										}
+									],
+									"id": "0ZTe3MYw-cxLJRZyp0HbL",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "2025-10-10"
+										}
+									],
+									"id": "0Rel13UWFWfn3zBIxAxBi",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "2025-10-17"
+										}
+									],
+									"id": "5H0ZcCc-EFflfX70I1352",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "Dk3I2SxTkBIWxo-_DhbP_",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "Q4"
+										}
+									],
+									"id": "zFIRXH18JcyPLZj45TIxM",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "Oct"
+										}
+									],
+									"id": "V4HiSu4PG8hIIAFv8bkkx",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "joPwkDKhBLLDlSWchYAU2",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "yU4oLB8rsovxPvxiGnrLm",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "EsigBDWfXAydP15nYdOlR",
+									"type": "td"
+								}
+							],
+							"id": "6_jbPRLVeQ7krwDV7CVW5",
+							"type": "tr"
+						},
+						{
+							"children": [
+								{
+									"children": [
+										{
+											"text": "2025-10-20"
+										}
+									],
+									"id": "Fxr174NeE5bLuvzWpzroN",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "2025-10-24"
+										}
+									],
+									"id": "J7gbXrgeffPI3XZTNLZKX",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "2025-10-31"
+										}
+									],
+									"id": "wpzoOhQlYgwR75ILo3LkU",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "1n5-pEtjDRsG9OgwDyG-K",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "Q4"
+										}
+									],
+									"id": "dX1Vha49rRTrTMdpasK81",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "Oct"
+										}
+									],
+									"id": "nU6dQnWBLhH4U98V319bG",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "BOGxDsZMuHi_vGPas5J9p",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "YTVZ-fncj-qBj-l9pJYWc",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "bJm57IbARyTV4BmbJ-ThO",
+									"type": "td"
+								}
+							],
+							"id": "0_8BYm4HSdwDyIyBstDK3",
+							"type": "tr"
+						},
+						{
+							"children": [
+								{
+									"children": [
+										{
+											"text": "2025-11-03"
+										}
+									],
+									"id": "0vcC1cYW9q3aTLlH-iVAY",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "2025-11-07"
+										}
+									],
+									"id": "12f1u6mS5XkyTTqGCrmzb",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "2025-11-14"
+										}
+									],
+									"id": "upscIBUbIJzK0PnmKjCTF",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "feENOMmCaT9b3SOLM5A6x",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "Q4"
+										}
+									],
+									"id": "W5URarOtjhF-_iqiXLWRk",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "Nov"
+										}
+									],
+									"id": "lB--F2U4y1m6BVJ7pXB_T",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "S-E1Z_8TmxqQ7yj_wQ53I",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "EnMbauz5h7QMb9URZCQ8p",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "63jwNCPc4NI8YQkexMyiw",
+									"type": "td"
+								}
+							],
+							"id": "fjkY9gwm6SP1yHJllTNn3",
+							"type": "tr"
+						},
+						{
+							"children": [
+								{
+									"children": [
+										{
+											"text": "2025-11-17"
+										}
+									],
+									"id": "l8eC-PLCABffFeVrxOWyx",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "2025-11-21"
+										}
+									],
+									"id": "kNTwV2ivUZZAr1tR6s-d5",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "2025-11-28"
+										}
+									],
+									"id": "LQwBcdkLBK4uW3U6p45CF",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "zcchOY0uj6iFETvMF0bhR",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "Q4"
+										}
+									],
+									"id": "wEk-cYl_KyIaIn-ucIYqz",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "Nov"
+										}
+									],
+									"id": "4vtO3_oEtZme59KcCEyX7",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "24xrqnjp9vC5DaBgyz58g",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "1nToNjEQSRdNjprmjaAgz",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "Uocn2WIgWFSxnc4ZdGRWv",
+									"type": "td"
+								}
+							],
+							"id": "EstGRy1Iy4fCb4QEqG9Dl",
+							"type": "tr"
+						},
+						{
+							"children": [
+								{
+									"children": [
+										{
+											"text": "2025-12-01"
+										}
+									],
+									"id": "8YvLrcCW0Tt3nhhlXqxa4",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "2025-12-05"
+										}
+									],
+									"id": "z3d6Msf5wqjkrI6dsqnve",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "2025-12-12"
+										}
+									],
+									"id": "sn3LAsCStcsTulOddBvh4",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "FLYhhnTUl8vALLfQ2OYCA",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "Q4"
+										}
+									],
+									"id": "I7RWNUuU7ZJgtIeZS3TUq",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "Dec"
+										}
+									],
+									"id": "EczZgyqKxbgH31x8mc94Y",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "bN9T_biiAnkjk9sBvD1zg",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "aUWAXnj2uF87T0tmddQ5f",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "MUFSf9rqd-N5wJCsxaRIN",
+									"type": "td"
+								}
+							],
+							"id": "JSFemsYWdCuFtx9SC7oeB",
+							"type": "tr"
+						},
+						{
+							"children": [
+								{
+									"children": [
+										{
+											"text": "2025-12-15"
+										}
+									],
+									"id": "b5_a_V-3eUggQlhdDXibL",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "2025-12-19"
+										}
+									],
+									"id": "ZmDK9CJJLbZn0oz-hKylZ",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "2025-12-26"
+										}
+									],
+									"id": "Ewf19QYL6KaCTNUcLyaF6",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "PXsGqe4OtgrF-DvKPxOsD",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "Q4"
+										}
+									],
+									"id": "cpFb15axAXNRxTaKTST_L",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": "Dec"
+										}
+									],
+									"id": "9r92e8T_RobTutkowDB_k",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "3vuaOR9Yv31VN2v7Er5lY",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "ryGiBmMAuEaylReLKp1J6",
+									"type": "td"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "2eAXREFiE0CSO1OETWZg7",
+									"type": "td"
+								}
+							],
+							"id": "sc2ZpYoT-2iNVdmsomn2R",
+							"type": "tr"
+						}
+					],
+					"id": "kU5914_zlUltT3i72_Ghp",
+					"type": "table",
+					"version": 2,
+					"hideFormulas": true,
+					"hideCellFormulas": true
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"type": "p",
+					"id": "gvoOHaui_ZovHkMFppfRf"
+				}
+			],
+			"type": "tab",
+			"name": "ClientDB",
+			"id": "hYKM_o57j6Vo-9QPch3TA",
+			"icon": "Buildings"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "Team"
+						}
+					],
+					"id": "kFhGb6CklN7KHMwe3WzDU",
+					"type": "h2"
+				},
+				{
+					"children": [
+						{
+							"text": "Designers and their availability in terms of hours."
+						}
+					],
+					"type": "p",
+					"id": "H6UeVx00ovuLl4qh1Y_Yc"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"children": [
+										{
+											"text": "DesignerA"
+										}
+									],
+									"id": "KmWT_oz8QbaNf0PGKItEW",
+									"type": "caption"
+								},
+								{
+									"children": [
+										{
+											"text": "40"
+										}
+									],
+									"id": "Q52Lgm9ccTV7GfAtgTT1V",
+									"type": "exp"
+								}
+							],
+							"id": "1LmV--TnctWbA2OBKrYjD",
+							"type": "def",
+							"variant": "expression",
+							"coerceToType": {
+								"kind": "number",
+								"date": "day"
+							}
+						},
+						{
+							"children": [
+								{
+									"children": [
+										{
+											"text": "DesignerB"
+										}
+									],
+									"id": "kh-Ad5OCcNCQCQiuhAyw8",
+									"type": "caption"
+								},
+								{
+									"children": [
+										{
+											"text": "40"
+										}
+									],
+									"id": "Udemt7NWvTyv5t2jiwiXx",
+									"type": "exp"
+								}
+							],
+							"id": "hFU5_O5tEtRlD8_VwJ6-w",
+							"type": "def",
+							"variant": "expression",
+							"coerceToType": {
+								"kind": "number",
+								"date": "day"
+							}
+						},
+						{
+							"children": [
+								{
+									"children": [
+										{
+											"text": "DesignerC"
+										}
+									],
+									"id": "ROvhHHurWsJh_vma3Ucec",
+									"type": "caption"
+								},
+								{
+									"children": [
+										{
+											"text": "40"
+										}
+									],
+									"id": "oySAdtvqcYkQoogRQ9E0p",
+									"type": "exp"
+								}
+							],
+							"id": "lYlEBeewxp-dqREFnexxh",
+							"type": "def",
+							"variant": "expression",
+							"coerceToType": {
+								"kind": "number",
+								"date": "day"
+							}
+						}
+					],
+					"id": "7X61DYAHVbFLiR1FviuHn",
+					"type": "columns"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"children": [
+										{
+											"text": "DesignerD"
+										}
+									],
+									"id": "kWKJt-Rqwl18hgyOQcs3G",
+									"type": "caption"
+								},
+								{
+									"children": [
+										{
+											"text": "40"
+										}
+									],
+									"id": "_olRlmtZr-SLWGISm1_ip",
+									"type": "exp"
+								}
+							],
+							"id": "scHLU28GrYZFuuvt8zq9W",
+							"type": "def",
+							"variant": "expression",
+							"coerceToType": {
+								"kind": "number",
+								"date": "day"
+							}
+						},
+						{
+							"children": [
+								{
+									"children": [
+										{
+											"text": "DesignerE"
+										}
+									],
+									"id": "4HdWJRBAurKGrakHyam8c",
+									"type": "caption"
+								},
+								{
+									"children": [
+										{
+											"text": "40"
+										}
+									],
+									"id": "5iaBJtxk-VVdvxmFTnQ9h",
+									"type": "exp"
+								}
+							],
+							"id": "mt1Mb8xJ26COxv4a8g0Ll",
+							"type": "def",
+							"variant": "expression",
+							"coerceToType": {
+								"kind": "number",
+								"date": "day"
+							}
+						}
+					],
+					"id": "SqTUWTcnBUQ8w4nAnhlTp",
+					"type": "columns"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"children": [
+										{
+											"text": "DesignerF"
+										}
+									],
+									"id": "qSmlzSUTUACYhayUvLmcX",
+									"type": "caption"
+								},
+								{
+									"children": [
+										{
+											"text": "0"
+										}
+									],
+									"id": "FP9nJUIdDDHUBbsJN_zGd",
+									"type": "exp"
+								}
+							],
+							"id": "f2a-06LsdqaYh02bbgdAM",
+							"type": "def",
+							"variant": "expression",
+							"coerceToType": {
+								"kind": "number",
+								"date": "day"
+							}
+						},
+						{
+							"children": [
+								{
+									"children": [
+										{
+											"text": "DesignerG"
+										}
+									],
+									"id": "6pIvX1QTAs33QKIVFWfUB",
+									"type": "caption"
+								},
+								{
+									"children": [
+										{
+											"text": "40"
+										}
+									],
+									"id": "2tGE5r1DV75M2F8cEt3yW",
+									"type": "exp"
+								}
+							],
+							"id": "baYlqW0jSCw2Y5lMaqW97",
+							"type": "def",
+							"variant": "expression",
+							"coerceToType": {
+								"kind": "number",
+								"date": "day"
+							}
+						}
+					],
+					"id": "gijiEtrDF8177hrSvw-Ja",
+					"type": "columns"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"id": "a5nJx1AUkNuzGKknzEV5P",
+					"type": "h2"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"type": "p",
+					"id": "5GtUxj8amC4D3cLniRH0v"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"type": "p",
+					"id": "kAZKawlrdYINt2J0bd-Fj"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"type": "p",
+					"id": "LWP7B1orOi-0U-ZOPBdCd"
+				}
+			],
+			"icon": "Happy",
+			"type": "tab",
+			"name": "Team",
+			"id": "Q4XpawBxSfTq4oHaEpo63"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Q1"
+								}
+							],
+							"type": "structured_varname",
+							"id": "bR6JeWRf9rSFxydCnZhHA"
+						},
+						{
+							"children": [
+								{
+									"text": "calculateRevenuePerQuarter(\"Q1\")"
+								}
+							],
+							"type": "code_line_v2_code",
+							"id": "K2fYKnoPgOO9lbTvH7o-d"
+						}
+					],
+					"id": "QVaG8ryIRDk4pFb-aaGt_",
+					"type": "code_line_v2",
+					"showResult": false
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Q2"
+								}
+							],
+							"type": "structured_varname",
+							"id": "1ozX1njPRlRxtibM_lw0r"
+						},
+						{
+							"children": [
+								{
+									"text": "calculateRevenuePerQuarter(\"Q2\")"
+								}
+							],
+							"type": "code_line_v2_code",
+							"id": "7-1HM06J8v2FFaa8siFcR"
+						}
+					],
+					"id": "dIrfKn2EfLpUHfAVhQDcy",
+					"type": "code_line_v2"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Q3"
+								}
+							],
+							"type": "structured_varname",
+							"id": "r9309O8rY6bfB6zGGFgJn"
+						},
+						{
+							"children": [
+								{
+									"text": "calculateRevenuePerQuarter(\"Q3\")"
+								}
+							],
+							"type": "code_line_v2_code",
+							"id": "rbBJjLD5yWvM79DJIGKVi"
+						}
+					],
+					"id": "wFtvlqBsgM4TmuKpmDxJU",
+					"type": "code_line_v2"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Q4"
+								}
+							],
+							"type": "structured_varname",
+							"id": "l1D_T-87wSUy9DQv-_-oJ"
+						},
+						{
+							"children": [
+								{
+									"text": "calculateRevenuePerQuarter(\"Q4\")"
+								}
+							],
+							"type": "code_line_v2_code",
+							"id": "-q-p24lXYzQVQCN4I8q90"
+						}
+					],
+					"id": "zBReLc3Wps-7Ad8XFG1YE",
+					"type": "code_line_v2"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "YearRevenue"
+								}
+							],
+							"type": "structured_varname",
+							"id": "-PB4O1TOs-usnfp_R5A1j"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "WtdVyC4-OeCUnaXhzghZg",
+									"type": "smart-ref",
+									"blockId": "QVaG8ryIRDk4pFb-aaGt_",
+									"columnId": null,
+									"lastSeenVariableName": "Q1"
+								},
+								{
+									"text": "+"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "qlu9EXVEtFWvooflj1h79",
+									"type": "smart-ref",
+									"blockId": "dIrfKn2EfLpUHfAVhQDcy",
+									"columnId": null,
+									"lastSeenVariableName": "Q2"
+								},
+								{
+									"text": "+"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "a0lhygWuZOWWZqTiKS2Vi",
+									"type": "smart-ref",
+									"blockId": "wFtvlqBsgM4TmuKpmDxJU",
+									"columnId": null,
+									"lastSeenVariableName": "Q3"
+								},
+								{
+									"text": "+"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "-pQWodyqDad_j-sPOi7eW",
+									"type": "smart-ref",
+									"blockId": "zBReLc3Wps-7Ad8XFG1YE",
+									"columnId": null,
+									"lastSeenVariableName": "Q4"
+								},
+								{
+									"text": ""
+								}
+							],
+							"type": "code_line_v2_code",
+							"id": "qifSYVe8rebgCm49sVdGv"
+						}
+					],
+					"id": "Vw0po0XMfHxEkuE8mKSbG",
+					"type": "code_line_v2"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "BestQuarterRevenue"
+								}
+							],
+							"type": "structured_varname",
+							"id": "XPma14oNQZkXZf7khOWDR"
+						},
+						{
+							"children": [
+								{
+									"text": "max(["
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "bMeYkVoPPc61ejHVIiASc",
+									"type": "smart-ref",
+									"blockId": "QVaG8ryIRDk4pFb-aaGt_",
+									"columnId": null,
+									"lastSeenVariableName": "Q1"
+								},
+								{
+									"text": ","
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "L5852K399FxOrpniai8iu",
+									"type": "smart-ref",
+									"blockId": "dIrfKn2EfLpUHfAVhQDcy",
+									"columnId": null,
+									"lastSeenVariableName": "Q2"
+								},
+								{
+									"text": " ,"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "aEQkZ-B3Ib0HyCqJ0cuxA",
+									"type": "smart-ref",
+									"blockId": "wFtvlqBsgM4TmuKpmDxJU",
+									"columnId": null,
+									"lastSeenVariableName": "Q3"
+								},
+								{
+									"text": " ,"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "kXZC7A0p5tH2FMdTTyt_S",
+									"type": "smart-ref",
+									"blockId": "zBReLc3Wps-7Ad8XFG1YE",
+									"columnId": null,
+									"lastSeenVariableName": "Q4"
+								},
+								{
+									"text": " ])"
+								}
+							],
+							"type": "code_line_v2_code",
+							"id": "22fNELzSecEVdRAV_4_WS"
+						}
+					],
+					"id": "wHZqkDBcPoLny98gfH_X5",
+					"type": "code_line_v2"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "BestQuarter"
+								}
+							],
+							"type": "structured_varname",
+							"id": "FA_Bmcg_vCvCA7KUPCjtC"
+						},
+						{
+							"children": [
+								{
+									"text": "if "
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "JMHRSTeNotjScSlmh1g4f",
+									"type": "smart-ref",
+									"blockId": "QVaG8ryIRDk4pFb-aaGt_",
+									"columnId": null,
+									"lastSeenVariableName": "Q1"
+								},
+								{
+									"text": "\n == "
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "iTkwhmjzN6xDdem02KOaM",
+									"type": "smart-ref",
+									"blockId": "wHZqkDBcPoLny98gfH_X5",
+									"columnId": null,
+									"lastSeenVariableName": "BestQuarterRevenue"
+								},
+								{
+									"text": "\n then \"Q1\" else if "
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "dQgxksLjhodEu2t587HKV",
+									"type": "smart-ref",
+									"blockId": "dIrfKn2EfLpUHfAVhQDcy",
+									"columnId": null,
+									"lastSeenVariableName": "Q2"
+								},
+								{
+									"text": "\n == "
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "u29Bw1uCkAn1dHCJ5-EiY",
+									"type": "smart-ref",
+									"blockId": "wHZqkDBcPoLny98gfH_X5",
+									"columnId": null,
+									"lastSeenVariableName": "BestQuarterRevenue"
+								},
+								{
+									"text": "\n then \"Q2\" else if "
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "X7T-u6XQULSy993fTNBbH",
+									"type": "smart-ref",
+									"blockId": "wFtvlqBsgM4TmuKpmDxJU",
+									"columnId": null,
+									"lastSeenVariableName": "Q3"
+								},
+								{
+									"text": "\n == "
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "idfIPEH6l-mfDkPyyP0Mx",
+									"type": "smart-ref",
+									"blockId": "wHZqkDBcPoLny98gfH_X5",
+									"columnId": null,
+									"lastSeenVariableName": "BestQuarterRevenue"
+								},
+								{
+									"text": "\n then \"Q3\" else \"Q4\""
+								}
+							],
+							"type": "code_line_v2_code",
+							"id": "fCTuGipYCNwV_xPS-Mk6q"
+						}
+					],
+					"id": "CV1BgxqSMsC0h1vFnKMiB",
+					"type": "code_line_v2"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "WorstQuarterRevenue"
+								}
+							],
+							"type": "structured_varname",
+							"id": "u3V4UxSdALv-wrbggjiyt"
+						},
+						{
+							"children": [
+								{
+									"text": "min(["
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "E80hkdhZ4le61rFd0IQfN",
+									"type": "smart-ref",
+									"blockId": "QVaG8ryIRDk4pFb-aaGt_",
+									"columnId": null,
+									"lastSeenVariableName": "Q1"
+								},
+								{
+									"text": ","
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "B5M89Kn4hFwrjNMYTPcyf",
+									"type": "smart-ref",
+									"blockId": "dIrfKn2EfLpUHfAVhQDcy",
+									"columnId": null,
+									"lastSeenVariableName": "Q2"
+								},
+								{
+									"text": ","
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "jiVF1qeTg-ADm2lUeYile",
+									"type": "smart-ref",
+									"blockId": "wFtvlqBsgM4TmuKpmDxJU",
+									"columnId": null,
+									"lastSeenVariableName": "Q3"
+								},
+								{
+									"text": ","
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "1pZ-ldAk14GGOmUfLEYwC",
+									"type": "smart-ref",
+									"blockId": "zBReLc3Wps-7Ad8XFG1YE",
+									"columnId": null,
+									"lastSeenVariableName": "Q4"
+								},
+								{
+									"text": "])"
+								}
+							],
+							"type": "code_line_v2_code",
+							"id": "_ZF5ECsM5RJplrDvKZQNP"
+						}
+					],
+					"id": "AvMmcR2H1RneRW4lL4sP5",
+					"type": "code_line_v2"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "DifferenceBetweenMaxMinQuarter"
+								}
+							],
+							"type": "structured_varname",
+							"id": "-fMoeZ4-B6j0nKjwV2xcg"
+						},
+						{
+							"children": [
+								{
+									"text": "(("
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "g6hONfSHLSqinn_uOOtfr",
+									"type": "smart-ref",
+									"blockId": "wHZqkDBcPoLny98gfH_X5",
+									"columnId": null,
+									"lastSeenVariableName": "BestQuarterRevenue"
+								},
+								{
+									"text": " - "
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "6Udk04zajbqbExJ-GfdNF",
+									"type": "smart-ref",
+									"blockId": "AvMmcR2H1RneRW4lL4sP5",
+									"columnId": null,
+									"lastSeenVariableName": "WorstQuarterRevenue"
+								},
+								{
+									"text": " )/"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "KeLQMj5OrYJvUJHuNvAKW",
+									"type": "smart-ref",
+									"blockId": "wHZqkDBcPoLny98gfH_X5",
+									"columnId": null,
+									"lastSeenVariableName": "BestQuarterRevenue"
+								},
+								{
+									"text": "  )*100"
+								}
+							],
+							"type": "code_line_v2_code",
+							"id": "UVnd_mjHgn94iiw4I_nle"
+						}
+					],
+					"id": "K_W32YUi4wJEjAljG9YDx",
+					"type": "code_line_v2"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "TotalAvailableDesignHours"
+								}
+							],
+							"type": "structured_varname",
+							"id": "9OfZ0d0bQA-gr24-_8UA4"
+						},
+						{
+							"children": [
+								{
+									"text": "("
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "x3oUQr0QAbb1paLJLuM-G",
+									"type": "smart-ref",
+									"blockId": "1LmV--TnctWbA2OBKrYjD",
+									"columnId": null,
+									"lastSeenVariableName": "Ruslan"
+								},
+								{
+									"text": "+"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "yT638gQxml8G7wWvpGKnQ",
+									"type": "smart-ref",
+									"blockId": "hFU5_O5tEtRlD8_VwJ6-w",
+									"columnId": null,
+									"lastSeenVariableName": "Julia"
+								},
+								{
+									"text": "+"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "Q5Nduzy--Qb9S6hnH42Yi",
+									"type": "smart-ref",
+									"blockId": "lYlEBeewxp-dqREFnexxh",
+									"columnId": null,
+									"lastSeenVariableName": "Janina"
+								},
+								{
+									"text": "+"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "GPYrNbWuHcFK5aYGhbaPf",
+									"type": "smart-ref",
+									"blockId": "scHLU28GrYZFuuvt8zq9W",
+									"columnId": null,
+									"lastSeenVariableName": "Bowie"
+								},
+								{
+									"text": "+"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "QBXvlgQfg7XZz0I9O8YJc",
+									"type": "smart-ref",
+									"blockId": "mt1Mb8xJ26COxv4a8g0Ll",
+									"columnId": null,
+									"lastSeenVariableName": "Ashley"
+								},
+								{
+									"text": "+"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "EzXHXPvSYXUwA7kQ-ffaH",
+									"type": "smart-ref",
+									"blockId": "f2a-06LsdqaYh02bbgdAM",
+									"columnId": null,
+									"lastSeenVariableName": "Unknown"
+								},
+								{
+									"text": "+"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "SeZ67T-NqcCzMA8iXe-Lm",
+									"type": "smart-ref",
+									"blockId": "baYlqW0jSCw2Y5lMaqW97",
+									"columnId": null,
+									"lastSeenVariableName": "MarcoDesigner"
+								},
+								{
+									"text": ")*2"
+								}
+							],
+							"type": "code_line_v2_code",
+							"id": "ojuDmypmr03vwWJAKSyeG"
+						}
+					],
+					"id": "esgfPC90XassDlbPMIABR",
+					"type": "code_line_v2"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "YearlyRevenueGoal"
+								}
+							],
+							"type": "structured_varname",
+							"id": "MdHkv0dcEAzPlvBhDeJAV"
+						},
+						{
+							"children": [
+								{
+									"text": "$2000000"
+								}
+							],
+							"type": "code_line_v2_code",
+							"id": "OGpq1PrGaUt2FZshwzhqN"
+						}
+					],
+					"id": "gjpj_6yKWntL8y4IO1mda",
+					"type": "code_line_v2"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "HowFarAreWeFromTheGoal"
+								}
+							],
+							"type": "structured_varname",
+							"id": "G0AroqZe2l978La_nnn_k"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "VagWNBNuhmciM7-YJNQjB",
+									"type": "smart-ref",
+									"blockId": "Vw0po0XMfHxEkuE8mKSbG",
+									"columnId": null,
+									"lastSeenVariableName": "YearRevenue"
+								},
+								{
+									"text": " -"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "0w3vS-JPFE4BLXHavJI6F",
+									"type": "smart-ref",
+									"blockId": "gjpj_6yKWntL8y4IO1mda",
+									"columnId": null,
+									"lastSeenVariableName": "YearlyRevenueGoal"
+								},
+								{
+									"text": " "
+								}
+							],
+							"type": "code_line_v2_code",
+							"id": "yeOGluzIcDWLvAhDi_cyf"
+						}
+					],
+					"id": "LZiTJOMMue-sPkiU2ziOU",
+					"type": "code_line_v2"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "AreWeBehind"
+								}
+							],
+							"type": "structured_varname",
+							"id": "gyGwGgFZH4kTgvT7hgMNA"
+						},
+						{
+							"children": [
+								{
+									"text": "if "
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "BtbkBU3Lz6y_vHmChsVbK",
+									"type": "smart-ref",
+									"blockId": "LZiTJOMMue-sPkiU2ziOU",
+									"columnId": null,
+									"lastSeenVariableName": "HowFarAreWeFromTheGoal"
+								},
+								{
+									"text": " > 0 then \"We reached the goal 🔥\" else \"We're a little far from the goal 🎯 \" "
+								}
+							],
+							"type": "code_line_v2_code",
+							"id": "IitXQZy_ohLlhZruDNUBC"
+						}
+					],
+					"id": "cpOsjaLGxtlU5OIe1oUoY",
+					"type": "code_line_v2"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"type": "p",
+					"id": "0lth6Wqxy0ZwQyIEeSIIz"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"type": "p",
+					"id": "HBGCpLpstpa9Y8b8U5eEw"
+				}
+			],
+			"type": "tab",
+			"name": "Variables",
+			"id": "H7iyVM9MXR0MJntaLnNd0",
+			"icon": "CPU"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "Functions"
+						}
+					],
+					"id": "6rIj3v2GkMglJjSFUrW0C",
+					"type": "h2"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"type": "p",
+					"id": "0VXmjqxPwHE_u1d3pXr49"
+				},
+				{
+					"children": [
+						{
+							"text": "Get Date Range Per Client"
+						}
+					],
+					"id": "v3bpWkgaaaaPtzUq8cc-F",
+					"type": "h3"
+				},
+				{
+					"children": [
+						{
+							"text": "Gets date range for a client based on name to determine start and end date of the contract."
+						}
+					],
+					"id": "1_er82YTKHJgBtmffiZlp",
+					"type": "p"
+				},
+				{
+					"children": [
+						{
+							"text": "getDateRangePerClient(client) = range(lookup("
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "H4oVctxsULVzJVgbJZvaI",
+							"type": "smart-ref",
+							"blockId": "Pjyh1js0AK7YUsRpvR3B5",
+							"columnId": "Oz8KLGtrKKL7pORzSQYlz",
+							"lastSeenVariableName": "Clients.StartDate"
+						},
+						{
+							"text": " , "
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "iyNTXeHmt1ODs-Q9wKMP_",
+							"type": "smart-ref",
+							"blockId": "Pjyh1js0AK7YUsRpvR3B5",
+							"columnId": "-Wu9oz3MTeEmI1TIu83qH",
+							"lastSeenVariableName": "Clients.Name"
+						},
+						{
+							"text": " == client) .. lookup("
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "9A5sUXvyohy4NZDOchThs",
+							"type": "smart-ref",
+							"blockId": "Pjyh1js0AK7YUsRpvR3B5",
+							"columnId": "ammMKmIzm9awvm85U8ao9",
+							"lastSeenVariableName": "Clients.EndDate"
+						},
+						{
+							"text": " , "
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "y-oRPIw44rTh4UUDrbGg-",
+							"type": "smart-ref",
+							"blockId": "Pjyh1js0AK7YUsRpvR3B5",
+							"columnId": "-Wu9oz3MTeEmI1TIu83qH",
+							"lastSeenVariableName": "Clients.Name"
+						},
+						{
+							"text": " == client))"
+						}
+					],
+					"id": "dkgO6FEurlmp8z3LUzCW5",
+					"type": "code_line"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"type": "p",
+					"id": "Iija1iu9Lim-EtEzWOEt_"
+				},
+				{
+					"children": [
+						{
+							"text": "Check Date Range"
+						}
+					],
+					"id": "5gS80rxvs6KDSjLcx1ik9",
+					"type": "h3"
+				},
+				{
+					"children": [
+						{
+							"text": "Checks if the given date range contains within client's contract dates."
+						}
+					],
+					"type": "p",
+					"id": "a-4RuHdiE_mPApidiGZFW"
+				},
+				{
+					"children": [
+						{
+							"text": "checkDateRange(client, checkRange) = getDateRangePerClient(client) contains checkRange"
+						}
+					],
+					"id": "st-ZnHj10UQCZTx47EjXt",
+					"type": "code_line"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"type": "p",
+					"id": "hVzjNfvVLZhdDHDkFYdz_"
+				},
+				{
+					"children": [
+						{
+							"text": "Calculate Weekly Revenue"
+						}
+					],
+					"id": "luRbZS-NDuVlrmFnBoYUf",
+					"type": "h3"
+				},
+				{
+					"children": [
+						{
+							"text": "Function to check if client had a billable week within the given week, and then returns their weekly billable rate."
+						}
+					],
+					"type": "p",
+					"id": "sXZpz882MCVvNF1PkeBVc"
+				},
+				{
+					"children": [
+						{
+							"text": "calculateWeeklyRevenue(client, checkRange) = if checkDateRange(client, checkRange) then lookup("
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "lwTfJ1X7CB_eb-mcWzlGi",
+							"type": "smart-ref",
+							"blockId": "Pjyh1js0AK7YUsRpvR3B5",
+							"columnId": "FqcQk7Ge6DeWrk4WOPNzA",
+							"lastSeenVariableName": "Clients.WeeklyRevenue"
+						},
+						{
+							"text": " , "
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "f3avS5W37T_vR8HOwTRp4",
+							"type": "smart-ref",
+							"blockId": "Pjyh1js0AK7YUsRpvR3B5",
+							"columnId": "-Wu9oz3MTeEmI1TIu83qH",
+							"lastSeenVariableName": "Clients.Name"
+						},
+						{
+							"text": " == client) else 0"
+						}
+					],
+					"id": "ImpLZhAXryb9ZabeIkSXk",
+					"type": "code_line"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"type": "p",
+					"id": "aCwD_eZmz7Lr_IUVRr47C"
+				},
+				{
+					"children": [
+						{
+							"text": "Calculate Weekly Required Hours"
+						}
+					],
+					"id": "aqTZ-ltQ_xdDYXkLdcbIu",
+					"type": "h3"
+				},
+				{
+					"children": [
+						{
+							"text": "calculateWeeklyRequiredHours(client, checkRange) = if checkDateRange(client, checkRange) then lookup("
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "q4n2d7SFLqAOgiYBPJir6",
+							"type": "smart-ref",
+							"blockId": "Pjyh1js0AK7YUsRpvR3B5",
+							"columnId": "scOZCwFtuRsVqGjTscXs3",
+							"lastSeenVariableName": "Clients.HoursPerWeek"
+						},
+						{
+							"text": ", "
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "WIFoa9nyYJ6pCILoMjx9w",
+							"type": "smart-ref",
+							"blockId": "Pjyh1js0AK7YUsRpvR3B5",
+							"columnId": "-Wu9oz3MTeEmI1TIu83qH",
+							"lastSeenVariableName": "Clients.Name"
+						},
+						{
+							"text": " == client) else 0"
+						}
+					],
+					"id": "2c2zBzRTYGkAi46P2CIZe",
+					"type": "code_line"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"type": "p",
+					"id": "wPHpBYtkedDsnylPIJPC_"
+				},
+				{
+					"children": [
+						{
+							"text": "Calculate Total Weekly Revenue"
+						}
+					],
+					"id": "93T1B2fiJfPcvzyi3M8qD",
+					"type": "h3"
+				},
+				{
+					"children": [
+						{
+							"text": "Calculates total weekly revenue across all clients per given week."
+						}
+					],
+					"type": "p",
+					"id": "akndfFcgaYsDj_DGEIHvS"
+				},
+				{
+					"children": [
+						{
+							"text": "Right now as I'm not able to use for loop to get all client names and use in function, I'm adding client names manually.\n"
+						},
+						{
+							"text": "Open to better ideas 🙏",
+							"bold": true
+						}
+					],
+					"id": "pKQFkVyY9VQL0nGHym9Lx",
+					"type": "callout",
+					"color": "Sun",
+					"icon": "LightBulb"
+				},
+				{
+					"children": [
+						{
+							"text": "calculateTotalWeeklyRevenue(checkRange) = calculateWeeklyRevenue(\"Client A\", checkRange) + calculateWeeklyRevenue(\"Client B\", checkRange) + calculateWeeklyRevenue(\"Client C\", checkRange) + calculateWeeklyRevenue(\"Client D\", checkRange) + calculateWeeklyRevenue(\"Client E\", checkRange)"
+						}
+					],
+					"id": "GTbIPPF7IW3EaaxMZoIS9",
+					"type": "code_line"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"type": "p",
+					"id": "v7pxAT71Puql7FQsagbF0"
+				},
+				{
+					"children": [
+						{
+							"text": "Calculate Total Weekly Required Hours"
+						}
+					],
+					"id": "PekPHjv_Pl-a_zMP6Jxz5",
+					"type": "h3"
+				},
+				{
+					"children": [
+						{
+							"text": "Calculate Required hours by contracts vs available hours based on designer count in the agency."
+						}
+					],
+					"type": "p",
+					"id": "x1gvAHCQZ_-SsUDt4rINi"
+				},
+				{
+					"children": [
+						{
+							"text": "calculateTotalWeeklyRequiredHours(checkRange) = calculateWeeklyRequiredHours(\"Client A\", checkRange) + calculateWeeklyRequiredHours(\"Client B\", checkRange) + calculateWeeklyRequiredHours(\"Client C\", checkRange) + calculateWeeklyRequiredHours(\"Client D\", checkRange) + calculateWeeklyRequiredHours(\"Client E\", checkRange)"
+						}
+					],
+					"id": "_ajn9SXf481rcAEWKfKRx",
+					"type": "code_line"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"type": "p",
+					"id": "PWXqMAdOuWggMrvHHUDCP"
+				},
+				{
+					"children": [
+						{
+							"text": "Calculate Revenue Per Quarter"
+						}
+					],
+					"id": "IbrVxuVro6nsnL3E9xFD7",
+					"type": "h3"
+				},
+				{
+					"children": [
+						{
+							"text": "calculateRevenuePerQuarter(quarter) = sum(filter("
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "sbknTpD_hk6s0KMx4CTww",
+							"type": "smart-ref",
+							"blockId": "kU5914_zlUltT3i72_Ghp",
+							"columnId": "0Wk3AsWsRUlWdmfh-0fpa",
+							"lastSeenVariableName": "BiweeklyData2025.BillAmount"
+						},
+						{
+							"text": " , "
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "mSPSt4wXzAhwSD2E5sbKn",
+							"type": "smart-ref",
+							"blockId": "kU5914_zlUltT3i72_Ghp",
+							"columnId": "1g43kcUFsJgzSTyjhH8Pe",
+							"lastSeenVariableName": "BiweeklyData2025.Quarter"
+						},
+						{
+							"text": " == quarter))"
+						}
+					],
+					"id": "m63fjm0RacXXSTf-DTdMW",
+					"type": "code_line"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"type": "p",
+					"id": "msKwVSTao9kHSF8-0uEhT"
+				},
+				{
+					"children": [
+						{
+							"text": "Calculate Revenue Per Month"
+						}
+					],
+					"id": "osN_6n1ZwROTNfIAcLjPh",
+					"type": "h3"
+				},
+				{
+					"children": [
+						{
+							"text": "calculateRevenuePerMonth(month) = sum(filter("
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "A3p8GpAmeGCZwyJbf5R5U",
+							"type": "smart-ref",
+							"blockId": "kU5914_zlUltT3i72_Ghp",
+							"columnId": "0Wk3AsWsRUlWdmfh-0fpa",
+							"lastSeenVariableName": "BiweeklyData2025.BillAmount"
+						},
+						{
+							"text": " , "
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "qe1fuwXQ5YvzuSLyBKdRR",
+							"type": "smart-ref",
+							"blockId": "kU5914_zlUltT3i72_Ghp",
+							"columnId": "EtNN-O5ON7rxZ3VOnRzAI",
+							"lastSeenVariableName": "BiweeklyData2025.Month"
+						},
+						{
+							"text": " == month))"
+						}
+					],
+					"id": "yLYggfDZzLLkl0xDdpO5Y",
+					"type": "code_line"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"type": "p",
+					"id": "1x_nNmegcVEw5wCFoXPG-"
+				},
+				{
+					"children": [
+						{
+							"text": "Get More Data on Hours Allocation"
+						}
+					],
+					"id": "rONZoEM_Z5Ce2DDDUNZ-L",
+					"type": "h3"
+				},
+				{
+					"children": [
+						{
+							"text": "getHoursBeingOver = lookup("
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "RJwwyr_qTJAy4N-Jxcghy",
+							"type": "smart-ref",
+							"blockId": "kU5914_zlUltT3i72_Ghp",
+							"columnId": null,
+							"lastSeenVariableName": "BiweeklyData2025"
+						},
+						{
+							"text": " , "
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "omMFcq4xsJ2ztL2rutWu0",
+							"type": "smart-ref",
+							"blockId": "kU5914_zlUltT3i72_Ghp",
+							"columnId": "6OvLaJB-XwggEYyuKmxr1",
+							"lastSeenVariableName": "BiweeklyData2025.TotalRequiredHours"
+						},
+						{
+							"text": "  > "
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "oGY6C2TE1Yw0TUTfE_Zg_",
+							"type": "smart-ref",
+							"blockId": "kU5914_zlUltT3i72_Ghp",
+							"columnId": "b7xesnz3Ag-NIpWdiFIvF",
+							"lastSeenVariableName": "BiweeklyData2025.TotalAvailableHours"
+						},
+						{
+							"text": " ).Range"
+						}
+					],
+					"id": "78eQ8M87DyNauvH4w0qeS",
+					"type": "code_line"
+				},
+				{
+					"children": [
+						{
+							"text": "getHoursBeingBelow = lookup("
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "hZu9ZGPbmaR58AjYtdj4p",
+							"type": "smart-ref",
+							"blockId": "kU5914_zlUltT3i72_Ghp",
+							"columnId": null,
+							"lastSeenVariableName": "BiweeklyData2025"
+						},
+						{
+							"text": " , "
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "sR5GXFxe-m9RHP5dAHh4z",
+							"type": "smart-ref",
+							"blockId": "kU5914_zlUltT3i72_Ghp",
+							"columnId": "6OvLaJB-XwggEYyuKmxr1",
+							"lastSeenVariableName": "BiweeklyData2025.TotalRequiredHours"
+						},
+						{
+							"text": "  < "
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "qsdMklkdoVSg3caNCzhC9",
+							"type": "smart-ref",
+							"blockId": "kU5914_zlUltT3i72_Ghp",
+							"columnId": "b7xesnz3Ag-NIpWdiFIvF",
+							"lastSeenVariableName": "BiweeklyData2025.TotalAvailableHours"
+						},
+						{
+							"text": " ).Range"
+						}
+					],
+					"id": "QlH4JS_N7FMdX7q_bplkG",
+					"type": "code_line"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"type": "p",
+					"id": "nOQAel37SSwg2-wk82_CB"
+				}
+			],
+			"type": "tab",
+			"name": "Functions",
+			"id": "EMkgy2kJ4dHbmKlZrXOGy",
+			"icon": "Bolt"
+		}
+	]
+}
