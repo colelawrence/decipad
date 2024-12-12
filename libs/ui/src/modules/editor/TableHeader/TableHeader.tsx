@@ -35,7 +35,7 @@ interface DropSourceAndTargetProps {
   readonly icon?: ReactNode;
 }
 
-export interface TableHeaderProps extends Partial<DropSourceAndTargetProps> {
+export type TableHeaderProps = Partial<DropSourceAndTargetProps> & {
   width?: number;
   setWidth?: (width: number) => void;
   readonly children?: React.ReactNode;
@@ -61,7 +61,10 @@ export interface TableHeaderProps extends Partial<DropSourceAndTargetProps> {
   readonly error?: string;
   readonly isFirst?: boolean;
   readonly readOnly?: boolean;
-}
+} & React.DetailedHTMLProps<
+    React.ThHTMLAttributes<HTMLTableCellElement>,
+    HTMLTableCellElement
+  >;
 
 const DragHandle = () => {
   return (
@@ -117,6 +120,7 @@ export const TableHeader = ({
   dropDirection,
   onSelectColumn,
   error,
+  ...props
 }: TableHeaderProps): ReturnType<FC> => {
   const [tempWidth, setTempWidth] = useState<number | undefined>(undefined);
   const [open, onChangeOpen] = useState(false);
@@ -217,7 +221,7 @@ export const TableHeader = ({
           boxShadow:
             color && `inset 0px -2px 0px ${themeColor.Background.Default}`,
 
-          '&:hover, &:focus-within, &[data-highlight="true"]': {
+          '&:focus-within, &[data-highlight="true"]': {
             backgroundColor: themeColor.Background.Heavy,
           },
         },
@@ -235,6 +239,7 @@ export const TableHeader = ({
       ref={thRef}
       data-highlight={highlight}
       contentEditable={isEditable}
+      {...props}
     >
       <div css={overrideWithUserSetWith} />
       <div ref={sizeRef} css={[tableHeaderStyles, headerWrapperStyles]}>

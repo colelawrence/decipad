@@ -18,24 +18,32 @@ import {
   TableToolbar,
   DataViewMenu,
   VariableNameSelector,
+  editorLayout,
+  scrollbars,
+  smallScreenQuery,
+  TableSimple,
+  TableCellSimple,
+  TableHeadSimple,
+  ellipsis,
 } from '@decipad/ui';
 import { getNodeString } from '@udecode/plate-common';
-import { Children, ReactNode, useEffect, useMemo } from 'react';
+import { Children, useEffect, useMemo, useRef } from 'react';
 import { WIDE_MIN_COL_COUNT } from '../../constants';
 import { TimeSeriesContextProvider } from '../TimeSeriesContext';
 import { DraggableBlock } from '../../../block-management';
-import {
-  getChildAtLevel,
-  useTimeSeriesData,
-} from '../../hooks/useTimeSeriesData';
+import { getChildAtLevel } from '../../hooks/useTimeSeriesData';
 import * as userIcons from 'libs/ui/src/icons/user-icons';
 import {
   useDataView,
   useDataViewLayoutData,
 } from 'libs/editor-components/src/DataView/hooks';
-import { useTimeSeriesLayoutData } from '../../hooks';
 import { TimeSeriesColumnHeader } from '../TimeSeriesColumnHeader';
-import styled from '@emotion/styled';
+import {
+  slimBlockWidth,
+  wideBlockWidth,
+} from 'libs/ui/src/styles/editor-layout';
+import { css } from '@emotion/react';
+import { useSticky } from '../../hooks/useSticky';
 
 export const TimeSeries: PlateComponent<{ variableName: string }> = ({
   attributes,
@@ -196,165 +204,234 @@ export const TimeSeries: PlateComponent<{ variableName: string }> = ({
 
         <div style={{ display: 'none' }}>{thead}</div>
 
-        <TableWrapper contentEditable={false}>
-          {showTable && (
-            <HorizontalScroll>
-              <table
-                style={{ opacity: computing ? 0.5 : 1 }}
-                css={{
-                  'th, td': {
-                    border: '1px solid #eee',
-                    padding: '4px 8px',
-                    verticalAlign: 'middle',
-                  },
-                }}
-                contentEditable={false}
-              >
-                <thead>
-                  <tr>
-                    {categoricalColumns?.map(
-                      (header, index) =>
-                        path && (
-                          <th
-                            css={{ background: 'whitesmoke' }}
-                            key={header.label}
-                          >
-                            <TimeSeriesColumnHeader
-                              element={header}
-                              attributes={{
-                                'data-slate-node': 'element',
-                                'data-slate-void': true,
-                                ref: undefined,
-                              }}
-                              overridePath={[...path, 1, index]}
-                              showDelete={
-                                categoricalColumns.length - 1 === index
+        <div css={{ position: 'relative' }}>
+          <div css={dataViewTableWrapperStyles} contentEditable={false}>
+            <div css={dataViewTableOverflowStyles} contentEditable={false} />
+
+            <div css={tableScroll}>
+              {showTable && (
+                <TableSimple
+                  style={{ opacity: computing ? 0.5 : 1 }}
+                  contentEditable={false}
+                >
+                  <thead>
+                    <tr>
+                      {categoricalColumns?.map(
+                        (header, index) =>
+                          path && (
+                            <TableHeadSimple
+                              css={[
+                                stickyLeftColumn,
+                                index ? stickySecondLeftColumn : undefined,
+                              ]}
+                              isLeft={!index}
+                              topLeftRadius={!index}
+                              bottomLeftRadius={
+                                !index && !numericalColumns.length // When there's only header and no data.
                               }
-                            />
-                          </th>
-                        )
-                    )}
+                              isTop
+                              key={header.label}
+                            >
+                              <TimeSeriesColumnHeader
+                                element={header}
+                                attributes={{
+                                  'data-slate-node': 'element',
+                                  'data-slate-void': true,
+                                  ref: undefined,
+                                }}
+                                overridePath={[...path, 1, index]}
+                                showDelete={
+                                  categoricalColumns.length - 1 === index
+                                }
+                              />
+                            </TableHeadSimple>
+                          )
+                      )}
 
-                    {/* Date headers */}
-                    {groups
-                      ?.filter((x) => x.elementType === 'group')
-                      .map((date) => (
-                        <td key={String(date.value)}>
-                          {date?.type && (
-                            <CodeResult
-                              value={date.value}
-                              variant="inline"
-                              type={date?.type}
-                              meta={undefined}
-                              element={element}
-                            />
-                          )}
-                        </td>
-                      ))}
-                  </tr>
-                </thead>
-
-                <tbody>
-                  {uniqueFirstCategorical &&
-                    numericalColumns?.map((numericColumn, numericColumnIndex) =>
-                      uniqueFirstCategorical?.map((category, categoryIndex) => {
-                        const numericColumnRealIndex =
-                          categoricalColumns.length + numericColumnIndex; // Assuming sequential indexes. First categorical then numerical.
-
-                        const isTheLastColumn =
-                          categoricalColumns.length +
-                            numericalColumns.length -
-                            1 ===
-                          numericColumnRealIndex;
-
-                        return (
-                          <tr key={numericColumn.label + category}>
-                            {/* Numeric columns headers names */}
-                            {categoryIndex === 0 && (
-                              <th
-                                css={{ background: 'whitesmoke' }}
-                                rowSpan={uniqueFirstCategorical.length}
-                              >
-                                {path && (
-                                  <TimeSeriesColumnHeader
-                                    element={numericColumn}
-                                    attributes={{
-                                      'data-slate-node': 'element',
-                                      'data-slate-void': true,
-                                      ref: undefined,
-                                    }}
-                                    overridePath={[
-                                      ...path,
-                                      1,
-                                      numericColumnRealIndex,
-                                    ]}
-                                    showDelete={isTheLastColumn}
-                                  />
-                                )}
-                              </th>
+                      {/* Date headers */}
+                      {groups
+                        ?.filter((x) => x.elementType === 'group')
+                        .map((date, dateIndex, { length }) => (
+                          <TableCellSimple
+                            isTop
+                            topRightRadius={dateIndex === length - 1}
+                            bottomRightRadius={
+                              dateIndex === length - 1 &&
+                              !numericalColumns.length // When there's only header and no data.
+                            }
+                            key={String(date.value)}
+                          >
+                            {date?.type && (
+                              <CodeResult
+                                value={date.value}
+                                variant="inline"
+                                type={date?.type}
+                                meta={undefined}
+                                element={element}
+                              />
                             )}
+                          </TableCellSimple>
+                        ))}
+                    </tr>
+                  </thead>
 
-                            {/* Categorical columns values */}
-                            {categoricalColumnsLabels
-                              ?.slice(1) // Ignores first date column.
-                              .map((column) => {
-                                return <th key={column}>{category}</th>;
-                              })}
+                  <tbody>
+                    {uniqueFirstCategorical &&
+                      numericalColumns?.map(
+                        (numericColumn, numericColumnIndex) =>
+                          uniqueFirstCategorical?.map(
+                            (category, categoryIndex) => {
+                              const numericColumnRealIndex =
+                                categoricalColumns.length + numericColumnIndex; // Assuming sequential indexes. First categorical then numerical.
 
-                            {/* Value cells */}
-                            {categoricalColumnsLabels?.slice(1).map(() => {
-                              return groups
-                                ?.filter((x) => x.elementType === 'group')
-                                .map((date) => {
-                                  const child = date.children?.find(
-                                    (x) => x.value === category
-                                  );
+                              const isTheLastColumn =
+                                categoricalColumns.length +
+                                  numericalColumns.length -
+                                  1 ===
+                                numericColumnRealIndex;
 
-                                  const item =
-                                    child &&
-                                    getChildAtLevel(
-                                      child,
-                                      0,
-                                      numericColumnIndex + 1
-                                    );
-
-                                  return (
-                                    <td key={String(date.value)}>
-                                      {item?.type && (
-                                        <CodeResult
-                                          value={item?.value}
-                                          variant="inline"
-                                          type={item?.type}
-                                          meta={undefined}
-                                          element={element}
+                              return (
+                                <tr key={numericColumn.label + category}>
+                                  {/* Numeric columns headers names */}
+                                  {categoryIndex === 0 && (
+                                    <TableHeadSimple
+                                      isLeft={!categoryIndex}
+                                      css={
+                                        !categoryIndex
+                                          ? stickyLeftColumn
+                                          : undefined
+                                      }
+                                      isTop={categoryIndex === 0}
+                                      bottomLeftRadius={
+                                        numericColumnIndex ===
+                                        numericalColumns.length - 1
+                                      }
+                                      rowSpan={uniqueFirstCategorical.length}
+                                      data-sticky
+                                    >
+                                      {path && (
+                                        <TimeSeriesColumnHeader
+                                          element={numericColumn}
+                                          attributes={{
+                                            'data-slate-node': 'element',
+                                            'data-slate-void': true,
+                                            ref: undefined,
+                                          }}
+                                          overridePath={[
+                                            ...path,
+                                            1,
+                                            numericColumnRealIndex,
+                                          ]}
+                                          showDelete={isTheLastColumn}
                                         />
                                       )}
-                                    </td>
-                                  );
-                                });
-                            })}
-                          </tr>
-                        );
-                      })
-                    )}
-                </tbody>
-              </table>
-            </HorizontalScroll>
-          )}
+                                    </TableHeadSimple>
+                                  )}
+
+                                  {/* Categorical columns values */}
+                                  {categoricalColumnsLabels
+                                    ?.slice(1) // Ignores first date column.
+                                    .map((column) => {
+                                      return (
+                                        <TableHeadSimple
+                                          isTop={categoryIndex === 0}
+                                          css={[
+                                            stickyLeftColumn,
+                                            stickySecondLeftColumn,
+                                          ]}
+                                          data-sticky
+                                          key={column}
+                                        >
+                                          <div css={[ellipsis, textWidth]}>
+                                            {category}
+                                          </div>
+                                        </TableHeadSimple>
+                                      );
+                                    })}
+
+                                  {/* Value cells */}
+                                  {categoricalColumnsLabels
+                                    ?.slice(1)
+                                    .map(() => {
+                                      return groups
+                                        ?.filter(
+                                          (x) => x.elementType === 'group'
+                                        )
+                                        .map((date, dateIndex, { length }) => {
+                                          const child = date.children?.find(
+                                            (x) => x.value === category
+                                          );
+
+                                          const item =
+                                            child &&
+                                            getChildAtLevel(
+                                              child,
+                                              0,
+                                              numericColumnIndex + 1
+                                            );
+
+                                          const lastCell =
+                                            numericColumnIndex ===
+                                              numericalColumns.length - 1 &&
+                                            categoryIndex ===
+                                              uniqueFirstCategorical.length -
+                                                1 &&
+                                            dateIndex === length - 1;
+
+                                          return (
+                                            <TableCellSimple
+                                              isTop={categoryIndex === 0}
+                                              bottomRightRadius={lastCell}
+                                              key={String(date.value)}
+                                            >
+                                              {item?.type && (
+                                                <CodeResult
+                                                  value={item?.value}
+                                                  variant="inline"
+                                                  type={item?.type}
+                                                  meta={undefined}
+                                                  element={element}
+                                                />
+                                              )}
+                                            </TableCellSimple>
+                                          );
+                                        });
+                                    })}
+                                </tr>
+                              );
+                            }
+                          )
+                      )}
+                  </tbody>
+                </TableSimple>
+              )}
+            </div>
+          </div>
 
           {showAddColumn && (
-            <div css={{ position: 'sticky', top: '0', margin: -4 }}>
+            <div
+              css={[
+                rightAddColumnWrapper,
+                showTable ? undefined : rightAddColumnWhenEmpty,
+              ]}
+            >
               <DataViewMenu
                 availableColumns={availableCategoricalColumns}
                 onInsertColumn={onInsertColumn}
               />
             </div>
           )}
-        </TableWrapper>
+        </div>
 
         {/* Add numeric row */}
         {showAddRow && (
-          <div css={{ position: 'sticky', top: '0', marginLeft: -8 }}>
+          <div
+            css={{
+              position: 'sticky',
+              top: '0',
+              marginLeft: -8,
+            }}
+          >
             <DataViewMenu
               availableColumns={availableNumericColumns}
               onInsertColumn={onInsertColumn}
@@ -366,12 +443,72 @@ export const TimeSeries: PlateComponent<{ variableName: string }> = ({
   );
 };
 
-const TableWrapper = styled.div`
-  position: relative;
-  display: flex;
+const gutterWidth = '40px';
+
+const dataViewTableWrapperStyles = css(
+  {
+    transform: `translateX(calc((((100vw - ${slimBlockWidth}px) / 2)) * -1 ))`,
+    width: '100vw',
+    minWidth: editorLayout.slimBlockWidth,
+    paddingBottom: '2px',
+    paddingRight: 18,
+    position: 'relative',
+    whiteSpace: 'nowrap',
+    display: 'flex',
+    [smallScreenQuery]: {
+      maxWidth: `calc(100vw - ${gutterWidth})`,
+      minWidth: '0',
+      transform: `translateX(0)`,
+    },
+  },
+  scrollbars.deciInsideNotebookOverflowXStyles
+);
+
+const scrollRightOffset = `(((100vw - 1055px) / 2) + 200px)`;
+
+export const tableScroll = css({
+  display: 'flex',
+  flexDirection: 'row',
+  marginLeft: gutterWidth,
+  paddingRight: `calc(${scrollRightOffset})`,
+  [smallScreenQuery]: {
+    paddingRight: '0px',
+    marginLeft: '0px',
+  },
+});
+
+const dataViewTableOverflowStyles = css({
+  display: 'inline-block',
+  height: '20px',
+  minWidth: `calc((100vw - ${wideBlockWidth}px) / 2)`,
+});
+
+const textWidth = css`
+  max-width: 220px;
 `;
-const HorizontalScroll = styled.div`
-  position: relative;
-  max-width: 100%;
-  overflow-y: auto;
-`;
+
+const stickyLeftColumn = css({
+  position: 'sticky',
+  top: 0,
+  left: `calc(100vw / 2 - ${slimBlockWidth}px / 2)`,
+  [smallScreenQuery]: {
+    left: 0,
+  },
+});
+
+const stickySecondLeftColumn = css({
+  left: `calc(100vw / 2 - ${slimBlockWidth}px / 2 + 8px)`,
+});
+
+const rightAddColumnWrapper = css({
+  position: 'absolute',
+  top: -2,
+  left: '100%',
+  transition: 'left .4s',
+  filter:
+    'drop-shadow(0 0 2px white) drop-shadow(0 0 8px white) drop-shadow(0 0 12px white) drop-shadow(0 0 12px white) drop-shadow(0 0 24px white)',
+});
+
+const rightAddColumnWhenEmpty = css({
+  left: -8,
+});

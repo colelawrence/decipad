@@ -8,6 +8,7 @@ export * from './EditorTable/EditorTable';
 export * from './EditableTableCaption/EditableTableCaption';
 export * from './TableData/TableData';
 export * from './CodeLine/CodeLine';
+export * from './TableSimple/TableSimple';
 export * from './TableHeaderRow/TableHeaderRow';
 export * from './Caption/Caption';
 export * from './WidgetDisplay/WidgetDisplay';

@@ -57,4 +57,7 @@ export interface CssVariables {
 
   readonly editorWidth: string;
   readonly dataDrawerHeight: string;
+
+  readonly tableHeaderBackground: string;
+  readonly tableFormulaBackground: string;
 }

@@ -125,4 +125,5 @@ export const TimeSeriesColumnHeader: PlateComponent<{
 const Inline = styled.div`
   display: flex;
   gap: 4px;
+  align-items: center;
 `;

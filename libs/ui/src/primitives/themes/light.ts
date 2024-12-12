@@ -81,4 +81,7 @@ export const theme: CssVariables = {
   dataDrawerHeight: '0px',
 
   focusOutline: brand300.hex,
+
+  tableHeaderBackground: grey100.hex,
+  tableFormulaBackground: grey50.hex,
 };

@@ -10,6 +10,8 @@ import {
   dark600,
   dark700,
   dark800,
+  grey600,
+  grey700,
   offBlack,
   offWhite,
   red600,
@@ -81,4 +83,7 @@ export const theme: CssVariables = {
   dataDrawerHeight: '0px',
 
   focusOutline: teal700.hex,
+
+  tableHeaderBackground: dark600.hex,
+  tableFormulaBackground: grey600.hex,
 };
