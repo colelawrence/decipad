@@ -9,8 +9,8 @@ export const gutterWidth = '40px';
 
 export const dataViewTableWrapperStyles = css(
   {
-    transform: `translateX(calc((((100vw - ${slimBlockWidth}px) / 2)) * -1 ))`,
-    width: '100vw',
+    transform: `translateX(calc((((100cqw - ${slimBlockWidth}px) / 2)) * -1 ))`,
+    width: '100cqw',
     minWidth: editorLayout.slimBlockWidth,
     paddingBottom: '2px',
     paddingRight: 18,
@@ -18,7 +18,7 @@ export const dataViewTableWrapperStyles = css(
     whiteSpace: 'nowrap',
     display: 'flex',
     [smallScreenQuery]: {
-      maxWidth: `calc(100vw - ${gutterWidth})`,
+      maxWidth: `calc(100cqw - ${gutterWidth})`,
       minWidth: '0',
       transform: `translateX(0)`,
     },
@@ -26,7 +26,7 @@ export const dataViewTableWrapperStyles = css(
   scrollbars.deciInsideNotebookOverflowXStyles
 );
 
-export const scrollRightOffset = `(((100vw - 1055px) / 2) + 200px)`;
+export const scrollRightOffset = `(((100cqw - 1055px) / 2) + 200px)`;
 
 export const tableScroll = css({
   display: 'flex',
@@ -42,7 +42,7 @@ export const tableScroll = css({
 export const dataViewTableOverflowStyles = css({
   display: 'inline-block',
   height: '20px',
-  minWidth: `calc((100vw - ${wideBlockWidth}px) / 2)`,
+  minWidth: `calc((100cqw - ${wideBlockWidth}px) / 2)`,
 });
 
 export const textWidth = css`
@@ -52,14 +52,14 @@ export const textWidth = css`
 export const stickyLeftColumn = css({
   position: 'sticky',
   top: 0,
-  left: `calc(100vw / 2 - ${slimBlockWidth}px / 2)`,
+  left: `calc(100cqw / 2 - ${slimBlockWidth}px / 2)`,
   [smallScreenQuery]: {
     left: 0,
   },
 });
 
 export const stickySecondLeftColumn = css({
-  left: `calc(100vw / 2 - ${slimBlockWidth}px / 2 + 8px)`,
+  left: `calc(100cqw / 2 - ${slimBlockWidth}px / 2 + 8px)`,
 });
 
 export const rightAddColumnWrapper = css({

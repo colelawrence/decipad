@@ -22,7 +22,6 @@ import {
   TableCellSimple,
   TableHeadSimple,
   ellipsis,
-  tableScroll,
 } from '@decipad/ui';
 import { getNodeString } from '@udecode/plate-common';
 import { Children, useEffect, useMemo } from 'react';
@@ -44,6 +43,7 @@ import {
   textWidth,
   rightAddColumnWrapper,
   rightAddColumnWhenEmpty,
+  tableScroll,
 } from './time-series-styles';
 import { getChildAtLevel } from './utils';
 
