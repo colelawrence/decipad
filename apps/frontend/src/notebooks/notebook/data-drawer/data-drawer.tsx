@@ -198,9 +198,9 @@ const DataDrawerVariableButtons: FC<
   return (
     <>
       <DataDrawerFormulaHelperWrapper>
-        Formula Helper
         <Toggle
           active={sidebarComponent.type === 'formula-helper'}
+          label="Formula Helper"
           onChange={(v) => {
             if (v) {
               pushSidebar({

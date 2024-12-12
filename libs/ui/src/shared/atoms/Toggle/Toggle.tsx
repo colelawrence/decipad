@@ -55,6 +55,8 @@ const makeToggle = css({
   display: 'flex',
   flexDirection: 'row',
   width: '100%',
+  gap: '8px',
+  alignItems: 'center',
   '> p': {
     ...p14Regular,
     flexGrow: '1',
