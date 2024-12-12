@@ -14,13 +14,13 @@ import { availableAggregations as getAvailableAggregations } from '@decipad/lang
 import { useDeepMemo } from '@decipad/react-utils';
 import { useCallback, useMemo } from 'react';
 import { Path } from 'slate';
-import { useTimeSeriesActions } from '../../hooks';
-import { useTimeSeriesContext } from '../TimeSeriesContext';
-import { availableRoundings } from './availableRoundings';
 import { useIsEditorReadOnly } from '@decipad/react-contexts';
 import { DataViewColumnMenu } from 'libs/ui/src/modules/editor/DataViewColumnMenu/DataViewColumnMenu';
 import styled from '@emotion/styled';
 import { useDataViewNormalizeColumnHeader } from 'libs/editor-components/src/DataView/hooks/useDataViewNormalizeColumnHeader';
+import { useDataViewActions } from 'libs/editor-components/src/DataView/hooks';
+import { useDataViewContext } from 'libs/editor-components/src/DataView/components/DataViewContext';
+import { availableRoundings } from 'libs/editor-components/src/DataView/components/DataViewColumnHeader/availableRoundings';
 
 export const TimeSeriesColumnHeader: PlateComponent<{
   showDelete: boolean;
@@ -32,7 +32,7 @@ export const TimeSeriesColumnHeader: PlateComponent<{
   const computer = useComputer();
   const path = useNodePath(element);
 
-  const { columns } = useTimeSeriesContext();
+  const { columns } = useDataViewContext();
 
   const actualPath = overridePath ?? path;
   const timeSeries: TimeSeriesElement | undefined = useMemo(() => {
@@ -60,7 +60,7 @@ export const TimeSeriesColumnHeader: PlateComponent<{
     'TimeSeriesColumnHeader'
   );
 
-  const { onDeleteColumn } = useTimeSeriesActions(editor, timeSeries);
+  const { onDeleteColumn } = useDataViewActions(editor, timeSeries);
 
   const handleColumnDelete = useCallback(() => {
     if (actualPath) {

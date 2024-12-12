@@ -64,8 +64,6 @@ export interface DataGroupElement {
 
 export type DataGroup = DataGroupElement | SmartRowElement;
 
-export type TimeSeriesDataLayout = DataGroup[];
-
 // Data
 
 export interface Column {

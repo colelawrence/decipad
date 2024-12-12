@@ -10,6 +10,7 @@ const dateRoundings = once(() => [
   { id: 'year', name: 'to the year' },
   { id: 'quarter', name: 'to the quarter' },
   { id: 'month', name: 'to the month' },
+  { id: 'week', name: 'to the week' },
   { id: 'day', name: 'to the day' },
 ]);
 
