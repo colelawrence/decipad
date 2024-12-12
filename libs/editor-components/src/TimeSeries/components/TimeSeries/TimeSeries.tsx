@@ -246,7 +246,9 @@ export const TimeSeries: PlateComponent<{ variableName: string }> = ({
                                 }}
                                 overridePath={[...path, 1, index]}
                                 showDelete={
-                                  categoricalColumns.length - 1 === index
+                                  // Show delete only when is the last column and no numerical columns added yet.
+                                  categoricalColumns.length - 1 === index &&
+                                  !numericalColumns.length
                                 }
                               />
                             </TableHeadSimple>
@@ -327,7 +329,7 @@ export const TimeSeries: PlateComponent<{ variableName: string }> = ({
                                             1,
                                             numericColumnRealIndex,
                                           ]}
-                                          showDelete={isTheLastColumn}
+                                          showDelete
                                         />
                                       )}
                                     </TableHeadSimple>
