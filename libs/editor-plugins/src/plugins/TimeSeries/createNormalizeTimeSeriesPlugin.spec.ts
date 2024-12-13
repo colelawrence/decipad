@@ -42,10 +42,10 @@ describe('createNormalizeTimeSeriesPlugin', () => {
             children: [
               {
                 children: [{ text: '' }],
-                type: 'time-series-name',
+                type: 'data-view-name',
               },
             ],
-            type: 'time-series-caption',
+            type: 'data-view-caption',
           },
           {
             children: [{ text: '' }],

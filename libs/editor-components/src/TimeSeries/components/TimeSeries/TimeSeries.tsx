@@ -289,12 +289,6 @@ export const TimeSeries: PlateComponent<{ variableName: string }> = ({
                               const numericColumnRealIndex =
                                 categoricalColumns.length + numericColumnIndex; // Assuming sequential indexes. First categorical then numerical.
 
-                              const isTheLastColumn =
-                                categoricalColumns.length +
-                                  numericalColumns.length -
-                                  1 ===
-                                numericColumnRealIndex;
-
                               return (
                                 <tr key={numericColumn.label + category}>
                                   {/* Numeric columns headers names */}

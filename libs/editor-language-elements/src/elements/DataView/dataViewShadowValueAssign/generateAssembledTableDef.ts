@@ -3,7 +3,11 @@ import {
   getExprRef,
   statementToIdentifiedBlock,
 } from '@decipad/remote-computer';
-import { TimeSeriesElement, type DataViewElement } from '@decipad/editor-types';
+import {
+  DataViewHeader,
+  TimeSeriesElement,
+  type DataViewElement,
+} from '@decipad/editor-types';
 import { getColumnRef } from './getColumnRef';
 import { isElement } from '@udecode/plate-common';
 
@@ -24,7 +28,7 @@ export const generateAssembledTableDef = (
     ],
   });
 
-  const columnDefs = headerRow.children
+  const columnDefs = (headerRow.children as DataViewHeader[])
     .filter(isElement)
     .flatMap((header, headerIndex) => {
       const columnRef = getColumnRef(header);

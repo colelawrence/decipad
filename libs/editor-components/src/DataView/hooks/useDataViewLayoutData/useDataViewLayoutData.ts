@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { DependencyList, useMemo } from 'react';
+import { useMemo } from 'react';
 import { useResolved } from '@decipad/react-utils';
 import { type Result } from '@decipad/language-interfaces';
 import { Value } from '@decipad/language-types';

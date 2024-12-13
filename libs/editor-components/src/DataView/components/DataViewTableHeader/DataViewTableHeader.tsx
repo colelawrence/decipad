@@ -49,6 +49,8 @@ export const DataViewTableHeader: FC<DataViewTableHeaderProps> = ({
       if (selection) {
         deselect(editor);
       }
+      if (!Array.isArray(expandedGroups)) return;
+
       const matchingGroupIndex = expandedGroups.indexOf(groupId);
 
       if (matchingGroupIndex !== -1) {
@@ -65,7 +67,11 @@ export const DataViewTableHeader: FC<DataViewTableHeaderProps> = ({
     return null;
   }
 
-  const groupIsExpanded = !collapsible || expandedGroups.includes(groupId);
+  const groupIsExpanded =
+    !collapsible ||
+    (Array.isArray(expandedGroups)
+      ? expandedGroups.includes(groupId)
+      : expandedGroups);
 
   const resultWrapperStyles = css({
     display: 'inline-flex',

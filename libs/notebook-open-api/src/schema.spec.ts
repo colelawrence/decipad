@@ -519,6 +519,56 @@ it('tests every action', () => {
         },
       },
       {
+        "description": "appends a time series (pivot table) that summarizes and analyzes the data on a given table",
+        "name": "appendTimeSeries",
+        "parameters": {
+          "properties": {
+            "columns": {
+              "description": "the columns from the table you want to use to the time series",
+              "items": {
+                "properties": {
+                  "aggregation": {
+                    "description": "Aggregates the data from the column",
+                    "enum": [
+                      "average",
+                      "max",
+                      "median",
+                      "min",
+                      "span",
+                      "sum",
+                      "stddev",
+                    ],
+                    "type": "string",
+                  },
+                  "name": {
+                    "description": "Column name",
+                    "type": "string",
+                  },
+                  "round": {
+                    "description": "Optional. The number of decimal places it rounds to. Use negative numbers to round to decimal points. Example: to round to the thousanth use "-3". When using dates you can round to "quarter", "year", "month" or "day"",
+                    "type": "string",
+                  },
+                },
+                "required": [
+                  "name",
+                ],
+                "type": "object",
+              },
+              "type": "array",
+            },
+            "tableId": {
+              "description": "the id of the table you want to use in the time series",
+              "type": "string",
+            },
+          },
+          "required": [
+            "tableId",
+            "columns",
+          ],
+          "type": "object",
+        },
+      },
+      {
         "description": "appends a slider component",
         "name": "appendSliderVariable",
         "parameters": {

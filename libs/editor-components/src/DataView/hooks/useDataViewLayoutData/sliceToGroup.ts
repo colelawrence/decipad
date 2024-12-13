@@ -25,7 +25,7 @@ interface SliceToGroupProps {
   groupId: string;
   preventExpansion: boolean;
   indent?: number;
-  expandedGroups?: string[];
+  expandedGroups?: string[] | boolean;
   aggregationExpression?: string;
   generateGroups: GenerateGroups;
   generateSmartRow: GenerateSmartRow;

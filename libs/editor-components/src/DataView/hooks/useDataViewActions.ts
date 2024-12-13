@@ -8,8 +8,6 @@ import type {
   MyEditor,
   TableCellType,
   TimeSeriesElement,
-  TimeSeriesHeader,
-  TimeSeriesHeaderRowElement,
 } from '@decipad/editor-types';
 import { ELEMENT_DATA_VIEW_TH } from '@decipad/editor-types';
 import { insertNodes, withPath } from '@decipad/editor-utils';
@@ -70,10 +68,9 @@ export const useDataViewActions = (
         return;
       }
       lastDataColumns.current = columns;
-      const headerRow:
+      const headerRow = element?.children[1] as
         | DataViewHeaderRowElement
-        | TimeSeriesHeaderRowElement
-        | undefined = element?.children[1];
+        | undefined;
       const headerRowPath = headerRow && findNodePath(editor, headerRow);
 
       if (!headerRowPath) {
@@ -143,7 +140,9 @@ export const useDataViewActions = (
     }
     editor.withoutCapturingUndo(() => {
       withoutNormalizing(editor, () => {
-        const headerRow = element?.children[1];
+        const headerRow = element?.children[1] as
+          | DataViewHeaderRowElement
+          | undefined;
         const headerRowPath = headerRow && findNodePath(editor, headerRow);
         if (!headerRowPath) {
           return;
