@@ -1,15 +1,14 @@
-// import { createMigrateDataviewPlugin } from '../../Migrations';
 import { createEventInterceptorPluginFactory } from '@decipad/editor-plugin-factories';
 import {
+  ELEMENT_DATA_VIEW_CAPTION,
   ELEMENT_TIME_SERIES,
-  ELEMENT_TIME_SERIES_CAPTION,
   ELEMENT_TIME_SERIES_TH,
   ELEMENT_TIME_SERIES_TR,
 } from '@decipad/editor-types';
 import { createPluginFactory } from '@udecode/plate-common';
 import {
+  DataViewCaption,
   TimeSeries,
-  TimeSeriesCaption,
   TimeSeriesColumnHeader,
   TimeSeriesColumnHeaderRow,
 } from '@decipad/editor-components';
@@ -22,9 +21,9 @@ export const createTimeSeriesPlugin = createPluginFactory({
   component: TimeSeries,
   plugins: [
     {
-      key: ELEMENT_TIME_SERIES_CAPTION,
+      key: ELEMENT_DATA_VIEW_CAPTION,
       isElement: true,
-      component: TimeSeriesCaption,
+      component: DataViewCaption,
     },
     {
       key: ELEMENT_TIME_SERIES_TR,
@@ -44,6 +43,5 @@ export const createTimeSeriesPlugin = createPluginFactory({
       elementTypes: [ELEMENT_TIME_SERIES],
       interceptor: () => true,
     })(),
-    // createMigrateDataviewPlugin(),
   ],
 });

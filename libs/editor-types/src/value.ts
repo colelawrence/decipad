@@ -22,11 +22,9 @@ import type {
   DataViewNameElement,
 } from './data-view';
 import type {
-  TimeSeriesCaptionElement,
   TimeSeriesElement,
   TimeSeriesHeader,
   TimeSeriesHeaderRowElement,
-  TimeSeriesNameElement,
 } from './time-series';
 import {
   DEPRECATED_ELEMENT_CODE_BLOCK,
@@ -887,10 +885,8 @@ export type AnyElement =
   | StructuredVarnameElement
   | DataViewCaptionElement
   | DataViewNameElement
-  | TimeSeriesCaptionElement
   | TimeSeriesHeader
-  | TimeSeriesHeaderRowElement
-  | TimeSeriesNameElement;
+  | TimeSeriesHeaderRowElement;
 
 export type FilterableElement =
   | TableElement

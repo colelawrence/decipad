@@ -4,11 +4,13 @@ import {
   statementToIdentifiedBlock,
   parseExpression,
 } from '@decipad/remote-computer';
-import type { DataViewElement } from '@decipad/editor-types';
+import type { DataViewElement, TimeSeriesElement } from '@decipad/editor-types';
 import { getFilterExpression } from '@decipad/language-filters';
 import { getColumnRef } from './getColumnRef';
 
-export const generateFiltersTableDef = (dataView: DataViewElement) => {
+export const generateFiltersTableDef = (
+  dataView: DataViewElement | TimeSeriesElement
+) => {
   const { varName: sourceVarName } = dataView;
   const [, headerRow] = dataView.children;
   const filtersTableBlockId = `${dataView.id}-filters`;

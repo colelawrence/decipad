@@ -3,11 +3,13 @@ import {
   getExprRef,
   statementToIdentifiedBlock,
 } from '@decipad/remote-computer';
-import type { DataViewElement } from '@decipad/editor-types';
+import type { DataViewElement, TimeSeriesElement } from '@decipad/editor-types';
 import { N } from '@decipad/number';
 import { getColumnRef } from './getColumnRef';
 
-export const generateRoundingsTableDef = (dataView: DataViewElement) => {
+export const generateRoundingsTableDef = (
+  dataView: DataViewElement | TimeSeriesElement
+) => {
   const { varName: sourceVarName } = dataView;
   const [, headerRow] = dataView.children;
   const roundingsTableBlockId = `${dataView.id}-roundings`;

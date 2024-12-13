@@ -258,22 +258,10 @@ type VariableSliderElement = VariableBaseElement<
     children: [EmptyText];
   }`,
 
-  'time-series-name': `interface TimeSeriesNameElement {
-    id: string;
-    type: 'time-series-name';
-    children: [Text];
-  }`,
-
-  'time-series-caption': `interface TimeSeriesCaptionElement {
-    id: string;
-    type: 'time-series-caption';
-    children: [TimeSeriesNameElement];
-  }`,
-
   'time-series': `export interface TimeSeriesElement {
     id: string;
     type: 'time-series';
-    children: [TimeSeriesCaptionElement, TimeSeriesHeaderRowElement];
+    children: [DataViewCaptionElement, TimeSeriesHeaderRowElement];
     varName?: string; // contains the table block id
     color?: string;
     icon?: string;

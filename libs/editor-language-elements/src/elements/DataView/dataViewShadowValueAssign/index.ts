@@ -1,6 +1,6 @@
 import { getExprRef } from '@decipad/remote-computer';
 import type { Program } from '@decipad/computer-interfaces';
-import { type DataViewElement } from '@decipad/editor-types';
+import { TimeSeriesElement, type DataViewElement } from '@decipad/editor-types';
 import { generateAssembledTableDef } from './generateAssembledTableDef';
 import { generateRoundingsTableDef } from './generateRoundingsTableDef';
 import { generateAggregationDefs } from './generateAggregationDefs';
@@ -8,7 +8,7 @@ import { generateTreeFormation } from './generateTreeFormation';
 import { generateFiltersTableDef } from './generateFiltersTableDef';
 
 export const dataViewShadowValueAssign = (
-  dataView: DataViewElement
+  dataView: DataViewElement | TimeSeriesElement
 ): Program => {
   const [assembledTableDef, ...restAssembledTableDefs] =
     generateAssembledTableDef(dataView);

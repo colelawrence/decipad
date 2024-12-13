@@ -1,10 +1,12 @@
-import { type DataViewElement } from '@decipad/editor-types';
+import { TimeSeriesElement, type DataViewElement } from '@decipad/editor-types';
 import { type Program } from '@decipad/computer-interfaces';
 import { shadowExprRef } from '@decipad/remote-computer';
 import { parseElementAsVariableAssignment } from '../../utils/parseElementAsVariableAssignment';
 import { getNodeString } from '@udecode/plate-common';
 
-export const dataViewToOutputAssign = (dataView: DataViewElement): Program =>
+export const dataViewToOutputAssign = (
+  dataView: DataViewElement | TimeSeriesElement
+): Program =>
   parseElementAsVariableAssignment(
     dataView.id ?? '',
     getNodeString(dataView.children[0].children[0]),

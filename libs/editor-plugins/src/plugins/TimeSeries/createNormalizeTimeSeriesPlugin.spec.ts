@@ -2,8 +2,6 @@ import { beforeEach, expect, describe, it } from 'vitest';
 import type { TimeSeriesElement, TableElement } from '@decipad/editor-types';
 import {
   ELEMENT_TIME_SERIES,
-  ELEMENT_TIME_SERIES_CAPTION,
-  ELEMENT_TIME_SERIES_NAME,
   ELEMENT_TIME_SERIES_TH,
   ELEMENT_TIME_SERIES_TR,
   ELEMENT_TABLE,
@@ -14,6 +12,8 @@ import {
   ELEMENT_TH,
   ELEMENT_TR,
   createMyPlateEditor,
+  ELEMENT_DATA_VIEW_CAPTION,
+  ELEMENT_DATA_VIEW_NAME,
 } from '@decipad/editor-types';
 import type { TEditor } from '@udecode/plate-common';
 import { findNode, normalizeEditor } from '@udecode/plate-common';
@@ -111,11 +111,11 @@ describe('createNormalizeTimeSeriesPlugin', () => {
         children: [
           // TimeSeriesCaptionElement
           {
-            type: ELEMENT_TIME_SERIES_CAPTION,
+            type: ELEMENT_DATA_VIEW_CAPTION,
             id: 'dvcaption',
             children: [
               {
-                type: ELEMENT_TIME_SERIES_NAME,
+                type: ELEMENT_DATA_VIEW_NAME,
                 id: 'dvvar',
                 children: [{ text: 'Table 1' }],
               },

@@ -10,8 +10,8 @@ import type {
 import {
   ELEMENT_TIME_SERIES,
   ELEMENT_TIME_SERIES_TR,
-  ELEMENT_TIME_SERIES_CAPTION,
-  ELEMENT_TIME_SERIES_NAME,
+  ELEMENT_DATA_VIEW_CAPTION,
+  ELEMENT_DATA_VIEW_NAME,
 } from '@decipad/editor-types';
 import { insertNodes, requirePathBelowBlock } from '@decipad/editor-utils';
 
@@ -28,11 +28,11 @@ const getInitialTimeSeriesElement = (
     children: [
       {
         id: nanoid(),
-        type: ELEMENT_TIME_SERIES_CAPTION,
+        type: ELEMENT_DATA_VIEW_CAPTION,
         children: [
           {
             id: nanoid(),
-            type: ELEMENT_TIME_SERIES_NAME,
+            type: ELEMENT_DATA_VIEW_NAME,
             children: [
               {
                 text: computer?.getAvailableIdentifier(

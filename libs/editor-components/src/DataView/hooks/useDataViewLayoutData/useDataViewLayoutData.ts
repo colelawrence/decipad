@@ -31,7 +31,6 @@ export const useDataViewLayoutData = ({
   expandedGroups,
   includeTotal = true,
   preventExpansion = false,
-  deps = '',
 }: UseDataViewLayoutDataProps): DataGroup[] | undefined => {
   const treeIdentResult = useComputer().getBlockIdResult$.use(
     `${blockId}_shadow`
@@ -65,7 +64,6 @@ export const useDataViewLayoutData = ({
       filters,
       tableName,
       treeIdentResult,
-      deps, // Since tree is updated by reference using a deps prop allow us to force updates
     ])
   );
 };

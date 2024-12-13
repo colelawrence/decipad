@@ -4,12 +4,12 @@ import {
   getExprRef,
   statementToIdentifiedBlock,
 } from '@decipad/remote-computer';
-import type { DataViewElement } from '@decipad/editor-types';
+import type { DataViewElement, TimeSeriesElement } from '@decipad/editor-types';
 import { getAggregationById } from '@decipad/language-aggregations';
 import { getColumnRef } from './getColumnRef';
 
 export const generateAggregationDefs = (
-  dataView: DataViewElement
+  dataView: DataViewElement | TimeSeriesElement
 ): IdentifiedBlock[] => {
   const [, headerRow] = dataView.children;
   const aggregationsTableBlockId = `${dataView.id}-aggregations`;

@@ -3,12 +3,12 @@ import {
   getExprRef,
   statementToIdentifiedBlock,
 } from '@decipad/remote-computer';
-import { type DataViewElement } from '@decipad/editor-types';
+import { TimeSeriesElement, type DataViewElement } from '@decipad/editor-types';
 import { getColumnRef } from './getColumnRef';
 import { isElement } from '@udecode/plate-common';
 
 export const generateAssembledTableDef = (
-  dataView: DataViewElement
+  dataView: DataViewElement | TimeSeriesElement
 ): IdentifiedBlock[] => {
   const { varName: sourceVarName } = dataView;
   const [, headerRow] = dataView.children;

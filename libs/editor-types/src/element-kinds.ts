@@ -63,8 +63,6 @@ export const ELEMENT_DATA_VIEW_TH = 'data-view-th';
 
 // time series
 export const ELEMENT_TIME_SERIES = 'time-series';
-export const ELEMENT_TIME_SERIES_CAPTION = 'time-series-caption';
-export const ELEMENT_TIME_SERIES_NAME = 'time-series-name';
 export const ELEMENT_TIME_SERIES_TR = 'time-series-tr';
 export const ELEMENT_TIME_SERIES_TH = 'time-series-th';
 

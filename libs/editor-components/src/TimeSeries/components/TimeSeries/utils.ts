@@ -1,3 +1,5 @@
+import { DataGroup } from 'libs/editor-components/src/DataView/types';
+
 export function getChildAtLevel(
   child: DataGroup,
   index: number,

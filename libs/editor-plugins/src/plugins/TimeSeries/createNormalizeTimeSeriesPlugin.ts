@@ -4,18 +4,18 @@ import {
 } from '@decipad/editor-plugin-factories';
 import {
   ELEMENT_TIME_SERIES,
-  ELEMENT_TIME_SERIES_CAPTION,
-  ELEMENT_TIME_SERIES_NAME,
   ELEMENT_TIME_SERIES_TR,
   ELEMENT_TABLE_CAPTION,
   ELEMENT_TABLE_COLUMN_FORMULA,
-  type TimeSeriesCaptionElement,
   type TimeSeriesElement,
   type TimeSeriesHeaderRowElement,
-  type TimeSeriesNameElement,
   type MyEditor,
   type MyNodeEntry,
   type TableColumnFormulaElement,
+  DataViewCaptionElement,
+  ELEMENT_DATA_VIEW_CAPTION,
+  ELEMENT_DATA_VIEW_NAME,
+  DataViewNameElement,
 } from '@decipad/editor-types';
 import { assertElementType, insertNodes } from '@decipad/editor-utils';
 import {
@@ -41,16 +41,16 @@ const normalizeTimeSeriesElement = (
 
   if (node.children.length < 1) {
     return () =>
-      insertNodes<TimeSeriesCaptionElement>(
+      insertNodes<DataViewCaptionElement>(
         editor,
         [
           {
             id: nanoid(),
-            type: ELEMENT_TIME_SERIES_CAPTION,
+            type: ELEMENT_DATA_VIEW_CAPTION,
             children: [
               {
                 id: nanoid(),
-                type: ELEMENT_TIME_SERIES_NAME,
+                type: ELEMENT_DATA_VIEW_NAME,
                 children: [{ text: '' }],
               },
             ],
@@ -74,30 +74,30 @@ const normalizeTimeSeriesElement = (
       );
   }
 
-  if (node.children[0].type !== ELEMENT_TIME_SERIES_CAPTION) {
+  if (node.children[0].type !== ELEMENT_DATA_VIEW_CAPTION) {
     return () =>
       setNodes(
         editor,
-        { type: ELEMENT_TIME_SERIES_CAPTION },
+        { type: ELEMENT_DATA_VIEW_CAPTION },
         { at: [...path, 0] }
       );
   }
 
   if (node.children[0].children.length < 1) {
     return () =>
-      insertNodes<TimeSeriesNameElement>(
+      insertNodes<DataViewNameElement>(
         editor,
         [
           {
             id: nanoid(),
-            type: ELEMENT_TIME_SERIES_NAME,
+            type: ELEMENT_DATA_VIEW_NAME,
             children: [{ text: '' }],
           },
         ],
         { at: [...path, 0, 0] }
       );
   }
-  if (node.children[0].children[0]?.type !== ELEMENT_TIME_SERIES_NAME) {
+  if (node.children[0].children[0]?.type !== ELEMENT_DATA_VIEW_NAME) {
     const timeSeriesName = node.children[0].children[0];
     if (isText(timeSeriesName)) {
       return () =>
@@ -105,7 +105,7 @@ const normalizeTimeSeriesElement = (
           editor,
           {
             id: nanoid(),
-            type: ELEMENT_TIME_SERIES_NAME,
+            type: ELEMENT_DATA_VIEW_NAME,
             children: [timeSeriesName],
           },
           { at: [...path, 0, 0] }
@@ -114,7 +114,7 @@ const normalizeTimeSeriesElement = (
     return () =>
       setNodes(
         editor,
-        { type: ELEMENT_TIME_SERIES_NAME },
+        { type: ELEMENT_DATA_VIEW_NAME },
         { at: [...path, 0, 0] }
       );
   }

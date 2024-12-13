@@ -3,9 +3,9 @@ import type {
   TimeSeriesHeader,
 } from '@decipad/editor-types';
 import {
+  ELEMENT_DATA_VIEW_CAPTION,
+  ELEMENT_DATA_VIEW_NAME,
   ELEMENT_TIME_SERIES,
-  ELEMENT_TIME_SERIES_CAPTION,
-  ELEMENT_TIME_SERIES_NAME,
   ELEMENT_TIME_SERIES_TH,
   ELEMENT_TIME_SERIES_TR,
 } from '@decipad/editor-types';
@@ -101,11 +101,11 @@ export const appendTimeSeries: Action<'appendTimeSeries'> = {
       varName: tableId,
       children: [
         {
-          type: ELEMENT_TIME_SERIES_CAPTION,
+          type: ELEMENT_DATA_VIEW_CAPTION,
           id: nanoid(),
           children: [
             {
-              type: ELEMENT_TIME_SERIES_NAME,
+              type: ELEMENT_DATA_VIEW_NAME,
               id: nanoid(),
               children: [{ text: `Time series for ${tableName}` }],
             },

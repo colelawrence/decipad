@@ -11,7 +11,6 @@ import {
   dark700,
   dark800,
   grey600,
-  grey700,
   offBlack,
   offWhite,
   red600,

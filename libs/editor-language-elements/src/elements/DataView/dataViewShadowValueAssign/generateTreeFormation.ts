@@ -1,11 +1,11 @@
-import { type DataViewElement } from '@decipad/editor-types';
+import { TimeSeriesElement, type DataViewElement } from '@decipad/editor-types';
 import {
   shadowExprRef,
   statementToIdentifiedBlock,
 } from '@decipad/remote-computer';
 
 export const generateTreeFormation = (
-  dataView: DataViewElement,
+  dataView: DataViewElement | TimeSeriesElement,
   assembledTableRef: string,
   filtersTableRef: string,
   roundingsTableRef: string,

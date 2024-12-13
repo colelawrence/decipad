@@ -25,7 +25,6 @@ import {
 } from '@decipad/ui';
 import { getNodeString } from '@udecode/plate-common';
 import { Children, useEffect, useMemo } from 'react';
-import { WIDE_MIN_COL_COUNT } from '../../constants';
 import { DataViewContextProvider } from 'libs/editor-components/src/DataView/components/DataViewContext';
 import { DraggableBlock } from '../../../block-management';
 import * as userIcons from 'libs/ui/src/icons/user-icons';
@@ -95,7 +94,7 @@ export const TimeSeries: PlateComponent<{ variableName: string }> = ({
 
   if (error) console.error(error);
 
-  const wideTable = (sortedColumns?.length || 0) >= WIDE_MIN_COL_COUNT;
+  const wideTable = true;
 
   const { color: defaultColor } = useEditorStylesContext();
 
@@ -123,7 +122,6 @@ export const TimeSeries: PlateComponent<{ variableName: string }> = ({
     expandedGroups: true,
     includeTotal: true,
     preventExpansion: false,
-    deps: theadElement.children.map((x) => x.label).join(','),
   });
 
   const firstCategorical = groups?.flatMap((group) =>
