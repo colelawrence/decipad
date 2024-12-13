@@ -7,6 +7,7 @@ import { assertElementType } from '@decipad/editor-utils';
 import { Metric as UIMetric } from '@decipad/ui';
 import { DraggableBlock } from '../block-management';
 import {
+  useEditorStylesContext,
   useInsideLayoutContext,
   useIsEditorReadOnly,
 } from '@decipad/react-contexts';
@@ -26,7 +27,6 @@ export const Metric: PlateComponent = ({ attributes, element, children }) => {
     aggregation: aggregationId,
     comparisonBlockId,
     comparisonAggregation: comparisonAggregationId,
-    color,
   } = element;
 
   const computer = useComputer();
@@ -66,6 +66,9 @@ export const Metric: PlateComponent = ({ attributes, element, children }) => {
     `trend([${comparisonExpresison}, ${expression}])`
   );
 
+  const { color: defaultColor } = useEditorStylesContext();
+  const { color = defaultColor } = element;
+
   return (
     <div
       {...attributes}
@@ -85,7 +88,7 @@ export const Metric: PlateComponent = ({ attributes, element, children }) => {
           trendResult={trendResult ?? undefined}
           comparisonDescription={element.comparisonDescription}
           formatting={element.formatting}
-          color={color as AvailableSwatchColor | undefined}
+          color={color as AvailableSwatchColor}
           fullHeight={insideLayout}
           onClickEdit={onEdit}
         >

@@ -29,7 +29,7 @@ import {
   yellow700,
   yellow800,
 } from '../primitives';
-import { OpaqueColor } from '@decipad/utils';
+import { OpaqueColor, themeStore } from '@decipad/utils';
 
 export type AvailableSwatchColor =
   | 'Catskill'
@@ -173,3 +173,13 @@ export const bubblesThemed = (
     }
     return store;
   }, {} as ThemedSwatch);
+
+export function useSwatchColor(
+  swatchColor: AvailableSwatchColor,
+  lightVariant: keyof SwatchColor,
+  darkVariant: keyof SwatchColor
+): OpaqueColor {
+  const isDarkMode = themeStore((s) => s.theme);
+  const variant = isDarkMode ? darkVariant : lightVariant;
+  return colorSwatches[swatchColor][variant];
+}

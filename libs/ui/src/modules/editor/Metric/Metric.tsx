@@ -9,7 +9,7 @@ import {
   p14Medium,
   shortAnimationDuration,
 } from '../../../primitives';
-import { AvailableSwatchColor } from '../../../utils';
+import { AvailableSwatchColor, useSwatchColor } from '../../../utils';
 import { ArrowUp2, ArrowDown2, Settings2 } from 'libs/ui/src/icons';
 import { ResultType } from '@decipad/computer-interfaces';
 import { CodeResult } from '../CodeResult/CodeResult';
@@ -134,7 +134,6 @@ export interface MetricProps {
   readonly trendResult?: ResultType;
   readonly comparisonDescription?: string;
   readonly formatting?: NumberFormatting;
-  // TODO: Do something with color
   readonly color?: AvailableSwatchColor;
   readonly fullHeight?: boolean;
   readonly onClickEdit?: () => void;
@@ -148,10 +147,12 @@ export const Metric = ({
   trendResult,
   comparisonDescription,
   formatting,
+  color: colorProp = 'Catskill',
   fullHeight,
   onClickEdit,
 }: MetricProps): ReturnType<FC> => {
   const selected = useSelected();
+  const color = useSwatchColor(colorProp, 'vivid', 'base');
 
   // In full height mode, scale font size and line height with widget height
   const [height, setHeight] = useState(initialFontSizeHeight);
@@ -194,7 +195,7 @@ export const Metric = ({
         )}
       </div>
       <div>
-        <div css={valueStyles(fullHeight ? height : 0)}>
+        <div css={[valueStyles(fullHeight ? height : 0), { color: color.hex }]}>
           {mainResult?.type.kind !== 'type-error' && mainResult ? (
             <CodeResult {...mainResult} formatting={formatting} />
           ) : (
