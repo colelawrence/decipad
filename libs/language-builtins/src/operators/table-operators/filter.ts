@@ -14,6 +14,12 @@ export const filterFunctorNoAutomap: FullBuiltinSpec['functorNoAutomap'] =
         produce((table) => {
           table.indexName = null;
           table.rowCount = undefined;
+          table.columnTypes = table.columnTypes.map(
+            produce((type: Type) => {
+              type.cellCount = undefined;
+              return type;
+            })
+          );
           return table;
         })
       ),
