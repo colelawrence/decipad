@@ -6,12 +6,10 @@ import {
   ELEMENT_TIME_SERIES,
   ELEMENT_TIME_SERIES_TR,
   ELEMENT_TABLE_CAPTION,
-  ELEMENT_TABLE_COLUMN_FORMULA,
   type TimeSeriesElement,
   type TimeSeriesHeaderRowElement,
   type MyEditor,
   type MyNodeEntry,
-  type TableColumnFormulaElement,
   DataViewCaptionElement,
   ELEMENT_DATA_VIEW_CAPTION,
   ELEMENT_DATA_VIEW_NAME,
@@ -19,8 +17,6 @@ import {
 } from '@decipad/editor-types';
 import { assertElementType, insertNodes } from '@decipad/editor-utils';
 import {
-  findNode,
-  getChildren,
   isText,
   removeNodes,
   setNodes,
@@ -140,21 +136,6 @@ const normalizeTimeSeriesHeaders = (
       );
   }
 
-  // Migrate old IDs, which referred to the formula ID, to the column ID
-  for (const [child, childPath] of getChildren([
-    node.children[1],
-    [...path, 1],
-  ])) {
-    const byId = findNode<TableColumnFormulaElement>(editor, {
-      match: { id: child.name },
-    });
-    const formulaEl = byId?.[0];
-    if (formulaEl?.type === ELEMENT_TABLE_COLUMN_FORMULA) {
-      return () =>
-        setNodes(editor, { name: formulaEl.columnId }, { at: childPath });
-    }
-  }
-
   return false;
 };
 
@@ -176,15 +157,7 @@ export const createNormalizeTimeSeriesPlugin = () =>
   createNormalizerPlugin({
     name: 'PLUGIN_NORMALIZE_TIME_SERIES',
     elementType: ELEMENT_TIME_SERIES,
-    acceptableElementProperties: [
-      'expandedGroups',
-      'varName',
-      'color',
-      'icon',
-      'rotate',
-      'alternateRotation',
-      'schema',
-    ],
+    acceptableElementProperties: ['varName', 'color', 'icon', 'schema'],
     acceptableSubElements: [ELEMENT_TABLE_CAPTION, ELEMENT_TIME_SERIES_TR],
     plugin: normalizeTimeSeriesPlugin,
   });

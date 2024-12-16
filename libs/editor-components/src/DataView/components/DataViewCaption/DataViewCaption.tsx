@@ -3,6 +3,7 @@ import type { DataViewElement, PlateComponent } from '@decipad/editor-types';
 import {
   ELEMENT_DATA_VIEW,
   ELEMENT_DATA_VIEW_CAPTION,
+  ELEMENT_TIME_SERIES,
   useMyEditorRef,
 } from '@decipad/editor-types';
 import { assertElementType, getAboveNodeSafe } from '@decipad/editor-utils';
@@ -20,7 +21,10 @@ export const DataViewCaption: PlateComponent = ({
   const parent = getAboveNodeSafe<DataViewElement>(editor, {
     at: path,
     match: (node) => {
-      return isElement(node) && node.type === ELEMENT_DATA_VIEW;
+      return (
+        isElement(node) &&
+        (node.type === ELEMENT_DATA_VIEW || node.type === ELEMENT_TIME_SERIES)
+      );
     },
   });
 
