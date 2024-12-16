@@ -21,6 +21,7 @@ import { useDataViewNormalizeColumnHeader } from 'libs/editor-components/src/Dat
 import { useDataViewActions } from 'libs/editor-components/src/DataView/hooks';
 import { useDataViewContext } from 'libs/editor-components/src/DataView/components/DataViewContext';
 import { availableRoundings } from 'libs/editor-components/src/DataView/components/DataViewColumnHeader/availableRoundings';
+import { cssVar, p12Regular } from '@decipad/ui';
 
 export const TimeSeriesColumnHeader: PlateComponent<{
   showDelete: boolean;
@@ -98,32 +99,45 @@ export const TimeSeriesColumnHeader: PlateComponent<{
   const readOnly = useIsEditorReadOnly();
 
   return (
-    <Inline contentEditable={false}>
+    <Inline contentEditable={false} gap={16}>
       <span>{element.label}</span>
 
-      {!readOnly && (
-        <DataViewColumnMenu
-          columnName={element.label}
-          type={element.cellType}
-          selectedAggregation={element.aggregation}
-          availableAggregations={availableAggregations}
-          onAggregationChange={onAggregationChange}
-          availableRoundings={roundings}
-          onRoundingChange={onRoundingChange}
-          selectedRounding={element.rounding}
-          onDeleteColumn={showDelete ? handleColumnDelete : undefined}
-          columns={columns}
-          columnIndex={actualPath?.at(2)}
-          onFilterChange={onFilterChange}
-          selectedFilter={element.filter}
-        />
-      )}
+      <Inline gap={0}>
+        <SmallLabel>
+          {(element.aggregation && `${element.aggregation.split(':')?.[1]}`) ||
+            null}
+        </SmallLabel>
+
+        {!readOnly && (
+          <DataViewColumnMenu
+            columnName={element.label}
+            type={element.cellType}
+            selectedAggregation={element.aggregation}
+            availableAggregations={availableAggregations}
+            onAggregationChange={onAggregationChange}
+            availableRoundings={roundings}
+            onRoundingChange={onRoundingChange}
+            selectedRounding={element.rounding}
+            onDeleteColumn={showDelete ? handleColumnDelete : undefined}
+            columns={columns}
+            columnIndex={actualPath?.at(2)}
+            onFilterChange={onFilterChange}
+            selectedFilter={element.filter}
+          />
+        )}
+      </Inline>
     </Inline>
   );
 };
 
-const Inline = styled.div`
+const Inline = styled.div<{ gap?: number }>`
   display: flex;
-  gap: 4px;
+  gap: ${({ gap }) => gap ?? 4}px;
   align-items: center;
+  justify-content: space-between;
+`;
+
+const SmallLabel = styled.div`
+  ${p12Regular}
+  color: ${cssVar('textDisabled')};
 `;

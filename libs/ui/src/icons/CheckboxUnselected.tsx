@@ -16,18 +16,25 @@ export const CheckboxUnselected = (props: SVGProps<SVGSVGElement>) => {
         x={2.1}
         y={2.1}
         stroke="currentColor"
-        strokeOpacity={0.6}
+        strokeOpacity={0.5}
         strokeWidth={1.2}
         rx={2.4}
       />
-      <path
-        stroke="currentColor"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        strokeOpacity={0.2}
-        strokeWidth={1.2}
-        d="m5.6 8.002 2 2.4 3.2-4"
-      />
+      <g strokeOpacity={0.5}>
+        <path
+          d="M10 6L5.99988 10.0001"
+          stroke="#4D5664"
+          strokeWidth="1.2"
+          strokeLinecap="round"
+        />
+        <path
+          d="M6 6L10.0001 10.0001"
+          stroke="#4D5664"
+          strokeWidth="1.2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+      </g>
     </svg>
   );
 };

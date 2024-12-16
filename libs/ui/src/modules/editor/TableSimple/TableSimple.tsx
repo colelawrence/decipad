@@ -29,6 +29,8 @@ export const TableCellSimple = styled.td<TableCellProps>`
   font-size: ${14 / 16}rem;
   line-height: 1.2;
 
+  background-color: ${cssVar('backgroundMain')};
+
   border-right: 1px solid ${cssVar('borderSubdued')};
   border-bottom: 1px solid ${cssVar('borderSubdued')};
 
