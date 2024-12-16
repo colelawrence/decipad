@@ -30,7 +30,7 @@ function getButtons(
 ) {
   if (type === 'error') {
     return (
-      <Button type="darkDanger" onClick={onDelete}>
+      <Button type="primary" onClick={onDelete}>
         Delete this block
       </Button>
     );
@@ -80,7 +80,7 @@ export const ErrorBlock: React.FC<ErrorBlockProps> = ({
       {getText(type, message)}
     </div>
     <div css={buttonRow}>
-      <div>{getButtons('warning', onDelete, onUndo)}</div>
+      <div>{getButtons(type, onDelete, onUndo)}</div>
     </div>
   </div>
 );
