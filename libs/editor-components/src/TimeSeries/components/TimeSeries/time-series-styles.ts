@@ -1,4 +1,9 @@
-import { editorLayout, scrollbars, smallScreenQuery } from '@decipad/ui';
+import {
+  cssVar,
+  editorLayout,
+  scrollbars,
+  smallScreenQuery,
+} from '@decipad/ui';
 import { css } from '@emotion/react';
 import {
   slimBlockWidth,
@@ -62,13 +67,26 @@ export const stickySecondLeftColumn = css({
   left: `calc(100cqw / 2 - ${slimBlockWidth}px / 2 + 8px)`,
 });
 
+const background = cssVar('backgroundMain');
+
 export const rightAddColumnWrapper = css({
   position: 'absolute',
-  top: -2,
+  top: 1,
   left: '100%',
   transition: 'left .4s',
-  filter:
-    'drop-shadow(0 0 2px white) drop-shadow(0 0 8px white) drop-shadow(0 0 12px white) drop-shadow(0 0 12px white) drop-shadow(0 0 24px white)',
+  '::before': {
+    content: '""',
+
+    position: 'absolute',
+    top: -4,
+    left: -16,
+    right: -16,
+    bottom: 0,
+
+    display: 'block',
+
+    background: `linear-gradient(270deg, transparent 0%, ${background} 35%, ${background} 65%, transparent 100%)`,
+  },
 });
 
 export const rightAddColumnWhenEmpty = css({
