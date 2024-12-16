@@ -1,5 +1,6 @@
 export { AnimatedIcon } from './AnimatedIcon/AnimatedIcon';
 
+export * from './Alert/Alert';
 export { Avatar } from './Avatar/Avatar';
 export { Badge } from './Badge/Badge';
 export { Button } from './Button/Button';
