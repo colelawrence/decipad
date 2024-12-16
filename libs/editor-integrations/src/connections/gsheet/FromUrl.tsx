@@ -5,7 +5,9 @@ import { ConnectionProps } from '../types';
 import { isRunnerOfType } from '@decipad/notebook-tabs';
 
 export const FromUrl: FC<ConnectionProps> = ({ runner, onRun }) => {
-  const [url, setUrl] = useState<string>('');
+  const [url, setUrl] = useState<string>(
+    runner.options.runner.spreadsheetUrl ?? ''
+  );
 
   const isValidUrl = useMemo(() => {
     return url != null && isValidURL(url);

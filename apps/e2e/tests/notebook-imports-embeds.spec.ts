@@ -207,6 +207,7 @@ test('check calculations from CSVs imported with link work across tabs @imports 
       'CalculationIntegrationTable',
       'count(TableImported.A)'
     );
+    await page.reload();
     await expect(
       page.getByTestId('code-line-result:20').getByTestId('number-result:20')
     ).toBeVisible();

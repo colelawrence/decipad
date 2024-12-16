@@ -151,17 +151,22 @@ return this.${generatedVarName};`;
     await expect(page.getByTestId('code-successfully-run')).toBeVisible();
     await expect(page.getByTestId('number-result:100')).toBeVisible();
 
-    await page.getByPlaceholder('Name of your integration').click();
-    await page.keyboard.press(
-      os.platform() === 'darwin' ? 'Meta+a' : 'Control+a',
-      { delay: Timeouts.typing }
-    );
-    await page.keyboard.press('Backspace', { delay: Timeouts.typing });
-    await page.keyboard.type('MyCode', { delay: Timeouts.typing });
+    await page.getByTestId('integration-modal-continue').click();
     // eslint-disable-next-line playwright/no-wait-for-timeout
     await page.waitForTimeout(Timeouts.liveBlockDelay);
 
-    await page.getByTestId('integration-modal-continue').click();
+    // eslint-disable-next-line playwright/no-wait-for-timeout
+    await page.waitForTimeout(Timeouts.tableDelay);
+    await page
+      .getByTestId('live-code-name')
+      .getByText(/Table/)
+      .last()
+      .dblclick();
+    await page.keyboard.type('MyCode');
+    await expect(
+      page.getByTestId('live-code-name').getByText('MyCode')
+    ).toBeVisible();
+
     // eslint-disable-next-line playwright/no-wait-for-timeout
     await page.waitForTimeout(Timeouts.liveBlockDelay);
   });
@@ -230,10 +235,6 @@ test('checks the ability to change the unit of a response', async ({
   await page.getByTestId('text-icon-button:Run').click();
   await expect(page.getByTestId('code-successfully-run')).toBeVisible();
 
-  await page.getByPlaceholder('Name of your integration').dblclick();
-  await page.keyboard.press('Backspace');
-  await page.keyboard.type('F');
-
   // The column menu button for the API response
   await page.getByTestId('table-column-menu-button:value').click();
 
@@ -243,6 +244,13 @@ test('checks the ability to change the unit of a response', async ({
   await page.getByTestId('integration-modal-continue').click();
   // eslint-disable-next-line playwright/no-wait-for-timeout
   await page.waitForTimeout(Timeouts.liveBlockDelay);
+
+  // rename table
+  // eslint-disable-next-line playwright/no-wait-for-timeout
+  await page.waitForTimeout(Timeouts.tableDelay);
+  await page.getByTestId('live-code-name').getByText(/Table/).last().dblclick();
+  await page.keyboard.type('F');
+  await expect(page.getByTestId('live-code-name').getByText('F')).toBeVisible();
 });
 
 // eslint-disable-next-line playwright/no-skipped-test

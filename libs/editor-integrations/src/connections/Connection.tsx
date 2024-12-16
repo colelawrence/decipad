@@ -6,7 +6,6 @@ import { CSVConnection } from './csv';
 import { SQLConnection, SQLConnectionPicker } from './sql';
 import { NotionConnection } from './notion';
 import { GoogleSheetConnection } from './gsheet';
-import { Input } from '@decipad/ui';
 import { useNotebookWithIdState } from '@decipad/notebook-state';
 import { createPortal } from 'react-dom';
 
@@ -59,18 +58,6 @@ const ConnectionSidebar: FC<ConnectionProps> = (props) => {
 export const Connection: FC<ConnectionProps> = (props) => {
   return (
     <>
-      {props.type === 'create' && (
-        <Input
-          variant="small"
-          label="Integration Name"
-          placeholder="Name of your integration"
-          pattern="\S*" // no whitespace
-          required
-          title="Required (no whitespace)"
-          value={props.varName}
-          onChangeValue={props.onChangeVarName}
-        />
-      )}
       <ConnectionSidebar {...props} />
       <ConnectionDataDrawerPortal {...props} />
     </>

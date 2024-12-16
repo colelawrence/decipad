@@ -8,8 +8,8 @@ export const GoogleSheetConnection: FC<ConnectionProps> = (props) => (
   <>
     <OAuthConnections
       {...props}
-      label="Select or connect account (optional)"
-      placeholder="Anonymous"
+      label="Select or connect account"
+      placeholder="Select a connection"
       provider="gsheets"
     />
     <FromUrl {...props} />

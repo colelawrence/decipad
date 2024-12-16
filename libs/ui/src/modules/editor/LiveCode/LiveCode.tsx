@@ -96,7 +96,9 @@ export const LiveCode = ({
 
   return (
     <div css={liveCodeWrapperStyles} data-testid="live-code">
-      <div css={liveInputStyles}>{children}</div>
+      <div css={liveInputStyles} data-testid="live-code-name">
+        {children}
+      </div>
       <div css={labelStyles} contentEditable={false}>
         <span css={liveIconStyles}>
           {error ? <CodeError message={error.message} /> : nonErrorTooltip}

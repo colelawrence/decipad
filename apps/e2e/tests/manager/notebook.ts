@@ -1178,18 +1178,6 @@ export class Notebook {
 
     await expect(this.page.getByTestId('result-preview')).toBeVisible();
 
-    if (option.varName != null) {
-      // eslint-disable-next-line playwright/no-wait-for-timeout
-      await this.page.waitForTimeout(Timeouts.tableDelay);
-      await this.page.getByPlaceholder('Name of your integration').click();
-      await this.page.keyboard.press(
-        os.platform() === 'darwin' ? 'Meta+a' : 'Control+a',
-        { delay: Timeouts.typing }
-      );
-      await this.page.keyboard.press('Backspace', { delay: Timeouts.typing });
-      await this.page.keyboard.type(option.varName, { delay: 100 });
-    }
-
     if (option.firstRowHeader != null && !option.firstRowHeader) {
       await this.page.getByTestId('toggle-cell-editor').click();
 
@@ -1202,6 +1190,21 @@ export class Notebook {
     // eslint-disable-next-line playwright/no-wait-for-timeout
     await this.page.waitForTimeout(2_000);
     await this.page.getByTestId('integration-modal-continue').click();
+
+    // rename table
+    if (option.varName != null) {
+      // eslint-disable-next-line playwright/no-wait-for-timeout
+      await this.page.waitForTimeout(Timeouts.tableDelay);
+      await this.page
+        .getByTestId('live-code-name')
+        .getByText(/Table/)
+        .last()
+        .dblclick();
+      await this.page.keyboard.type(option.varName);
+      await expect(
+        this.page.getByTestId('live-code-name').getByText(option.varName)
+      ).toBeVisible();
+    }
   }
 
   /**
@@ -1297,12 +1300,12 @@ export class Notebook {
     await this.page.waitForTimeout(Timeouts.typing);
     await this.page.keyboard.press('Tab');
     if (formulaExpression) {
-      await this.page.keyboard.type(formulaExpression);
+      await this.page.keyboard.type(formulaExpression, { delay: 100 });
     }
     await this.formulaBlock.last().click();
     await this.formulaBlock.last().dblclick();
     if (variableName) {
-      await this.page.keyboard.type(variableName);
+      await this.page.keyboard.type(variableName, { delay: 100 });
     }
   }
 

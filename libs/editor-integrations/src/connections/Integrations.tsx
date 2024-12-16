@@ -95,8 +95,13 @@ const ImporterOptions: {
         value: any;
         label: string;
         placeholder?: string;
-        // eslint-disable-next-line unused-imports/no-unused-vars
-        onChange: (val: any, newRunnerOptions?: Record<string, any>) => void;
+        /* eslint-disable unused-imports/no-unused-vars */
+        onChange: (
+          val: any,
+          newRunnerOptions?: Record<string, any>,
+          valid?: boolean
+        ) => void;
+        /* eslint-enable unused-imports/no-unused-vars */
       }>
     | undefined;
 } = {
@@ -121,7 +126,7 @@ const ImporterOptions: {
       />
     );
   },
-  range: ({ onChange, conn, label, placeholder }) => {
+  range: ({ onChange, value, conn, label, placeholder }) => {
     return (
       <Input
         variant="small"
@@ -129,11 +134,14 @@ const ImporterOptions: {
         label={label}
         placeholder={placeholder}
         pattern="([A-z]+\d+):([A-z]+\d+)"
-        onChange={(v) => {
-          const value = v.currentTarget.value.toUpperCase();
-          const range = GSheetRunner.parseRange(value);
-          if (!range) return;
-          onChange(range, { range: value });
+        onChange={(e) => {
+          const newValue = e.currentTarget.value.toUpperCase();
+          const range = GSheetRunner.parseRange(newValue);
+          onChange(
+            range ?? value,
+            { range: newValue },
+            e.currentTarget.checkValidity()
+          );
         }}
       />
     );
@@ -197,7 +205,7 @@ const SidebarPreviewActions: FC<ConnectionProps> = (conn) => {
               label={label}
               placeholder={placeholder}
               value={v}
-              onChange={(importerVal, runnerVal) => {
+              onChange={(importerVal, runnerVal, valid = true) => {
                 const newImporter = { ...options, [k]: importerVal };
                 setOptions(newImporter);
                 conn.runner.setOptions({
@@ -207,7 +215,7 @@ const SidebarPreviewActions: FC<ConnectionProps> = (conn) => {
                     ...runnerVal,
                   },
                 });
-                reload();
+                if (valid) reload();
               }}
             />
           );
