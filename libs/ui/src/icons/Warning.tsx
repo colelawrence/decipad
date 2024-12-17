@@ -6,10 +6,9 @@ export const Warning = (props: SVGProps<SVGSVGElement>) => {
       xmlns="http://www.w3.org/2000/svg"
       fill="none"
       viewBox="0 0 16 16"
-      role="img"
+      role="presentation"
       {...props}
     >
-      <title>Warning</title>
       <path
         stroke="currentColor"
         strokeLinecap="round"

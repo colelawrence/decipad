@@ -6,10 +6,9 @@ export const List = (props: SVGProps<SVGSVGElement>) => {
       xmlns="http://www.w3.org/2000/svg"
       fill="none"
       viewBox="0 0 16 16"
-      role="img"
+      role="presentation"
       {...props}
     >
-      <title>List</title>
       <rect
         width={12}
         height={6}

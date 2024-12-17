@@ -6,10 +6,9 @@ export const TableSmall = (props: SVGProps<SVGSVGElement>) => {
       xmlns="http://www.w3.org/2000/svg"
       fill="none"
       viewBox="0 0 24 24"
-      role="img"
+      role="presentation"
       {...props}
     >
-      <title>TableSmall</title>
       <path
         stroke="currentColor"
         strokeLinecap="round"
