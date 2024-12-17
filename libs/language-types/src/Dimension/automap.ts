@@ -232,7 +232,15 @@ export const automapValues = async (
               await automapValues(
                 ctx,
                 [reducedArgType],
-                [resultToValue(buildResult(serializedReducedArgType, value))],
+                [
+                  resultToValue(
+                    buildResult(
+                      serializedReducedArgType,
+                      value,
+                      argValue.meta?.bind(argValue)
+                    )
+                  ),
+                ],
                 mapFn
               )
             ).getData(),

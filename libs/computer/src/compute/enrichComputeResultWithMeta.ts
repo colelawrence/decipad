@@ -2,6 +2,7 @@ import { all, map } from '@decipad/generator-utils';
 import { type Value as TValue } from '@decipad/language-interfaces';
 // eslint-disable-next-line no-restricted-imports
 import { getResultGenerator, Value } from '@decipad/language-types';
+import { once } from '@decipad/utils';
 
 export const enrichComputeResultWithMeta = <T extends TValue.Value>(
   value: T
@@ -18,7 +19,7 @@ export const enrichComputeResultWithMeta = <T extends TValue.Value>(
     }
     const columnZeroMeta = table.columns[0]?.meta?.bind(table.columns[0]);
 
-    const meta = () => {
+    const meta = once(() => {
       const previousMeta = columnZeroMeta?.();
       if (previousMeta?.labels) {
         console.log('previousMeta.labels', previousMeta.labels);
@@ -38,11 +39,13 @@ export const enrichComputeResultWithMeta = <T extends TValue.Value>(
           }),
         ]),
       };
-    };
+    });
 
     table.meta = meta;
     for (const column of table.columns) {
-      column.meta = meta;
+      if (!column.meta) {
+        column.meta = meta;
+      }
     }
     return table as unknown as T;
   }

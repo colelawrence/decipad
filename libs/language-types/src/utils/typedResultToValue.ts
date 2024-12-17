@@ -5,9 +5,10 @@ import { buildResult } from './buildResult';
 import { resultToValue } from './resultToValue';
 
 export const typedResultToValue = async (
-  type: Type
+  type: Type,
+  meta: undefined | (() => Result.ResultMetadataColumn | undefined)
 ): Promise<(result: Result.OneResult) => Value.Value> => {
   const sType = serializeType(await type.reducedToLowest());
   return (result: Result.OneResult) =>
-    resultToValue(buildResult(sType, result));
+    resultToValue(buildResult(sType, result, meta));
 };

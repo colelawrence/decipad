@@ -47,7 +47,7 @@ export class ReadSerializedColumn<T extends Result.OneResult>
     initialOffset: number,
     meta: undefined | (() => Result.ResultMetadataColumn | undefined)
   ) {
-    this.typedResultToValue = typedResultToValue(deserializeType(type));
+    this.typedResultToValue = typedResultToValue(deserializeType(type), meta);
     this.decode = decode;
     this.buffer = buffer;
     this._dimensions = dimensions;

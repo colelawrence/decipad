@@ -27,7 +27,7 @@ export class ColumnGenerator implements Value.ColumnLikeValue {
     dimensions: Dimension[],
     meta: () => Result.ResultMetadataColumn
   ) {
-    this._typedResultToValue = typedResultToValue(type);
+    this._typedResultToValue = typedResultToValue(type, meta);
     this.gen = gen;
     this._dimensions = dimensions;
     this.meta = meta;

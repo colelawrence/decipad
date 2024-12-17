@@ -60,9 +60,10 @@ export class GeneratorTable implements TableValue {
       throw new RuntimeError(`Missing column ${name}`);
     }
 
-    const colGenPromise = typedResultToValue(this.columnTypes[index]).then(
-      async (value) => this.getColumnOneResultGenFunction(index, value)
-    );
+    const colGenPromise = typedResultToValue(
+      this.columnTypes[index],
+      this.meta?.bind(this)
+    ).then(async (value) => this.getColumnOneResultGenFunction(index, value));
     return GeneratorColumn.fromGenerator(
       fromGeneratorFunctionPromiseToGeneratorFunction(colGenPromise),
       this.meta?.bind(this),
@@ -71,7 +72,9 @@ export class GeneratorTable implements TableValue {
   }
 
   get columns(): ColumnLikeValue[] {
-    const genFnsPromises = this.columnTypes.map(typedResultToValue);
+    const genFnsPromises = this.columnTypes.map(async (columnType) =>
+      typedResultToValue(columnType, this.meta)
+    );
     const genFns = Promise.all(genFnsPromises).then(async (convFns) =>
       this.getColumnsOneResultGenFunctions(convFns)
     );

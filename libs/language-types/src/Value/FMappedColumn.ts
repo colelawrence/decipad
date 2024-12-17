@@ -104,7 +104,9 @@ export class FMappedColumn<T = Result.OneResult>
   ): Promise<AsyncGenerator<Value.Value>> {
     return trace(
       map((await this.gen)(start, end), async (r, i, previous) =>
-        resultToValue(buildResult(this.type, await this.map(r, i, previous)))
+        resultToValue(
+          buildResult(this.type, await this.map(r, i, previous), this.meta)
+        )
       ),
       this.desc
     );

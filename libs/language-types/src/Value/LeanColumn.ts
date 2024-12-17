@@ -114,7 +114,7 @@ export class LeanColumn extends ColumnBase implements TLeanColumn {
       slice(
         memoizing(
           map((await this.gen)(), (r) =>
-            resultToValue(buildResult(this.type, r))
+            resultToValue(buildResult(this.type, r, this.meta))
           ),
           (all, partial) => {
             this.memo = all;

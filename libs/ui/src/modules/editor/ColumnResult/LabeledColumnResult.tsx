@@ -75,11 +75,11 @@ export const LabeledColumnResult: FC<LabeledColumnResultProps> = ({
     () => () =>
       unnestTableRows(
         labels,
-        buildResult(type, value) as
+        buildResult(type, value, meta) as
           | Result.Result<'materialized-column'>
           | Result.Result<'column'>
       ),
-    [labels, type, value]
+    [labels, meta, type, value]
   );
 
   const total = useResolved(useMemo(() => count(all()), [all])) ?? 0;
