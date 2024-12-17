@@ -33,6 +33,8 @@ export const availableFlags = [
 
   'WORKSPACE_NUMBERS',
   'INTEGRATION_FILTERS',
+
+  'TIME_SERIES_BLOCK',
 ] as const;
 
 export type Flag = typeof availableFlags[number];
