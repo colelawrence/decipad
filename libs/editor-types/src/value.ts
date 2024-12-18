@@ -403,6 +403,7 @@ export interface MetricElement extends BaseElement {
   comparisonDescription: string;
   formatting?: NumberFormatting;
   color?: string;
+  migratedFromDisplayElement?: DisplayElement;
 }
 
 /**

@@ -60,6 +60,7 @@ import {
   createAutoFormatCodeLinePlugin,
   createCrashingBlock,
   createDataViewPlugin,
+  createMigrateDisplayPlugin,
 } from '@decipad/editor-plugins';
 import {
   createCodeLineV2Plugin,
@@ -235,6 +236,7 @@ export const plugins = ({
       // Migrations
       createMigrateStructuredInputs(),
       createMigrateTableDropdownToId(),
+      createMigrateDisplayPlugin(),
       createPreventInvalidSelectionPlugin(),
       createTransformH1(),
       createCrashingBlock(),
