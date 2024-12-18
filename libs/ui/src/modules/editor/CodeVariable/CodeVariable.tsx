@@ -9,6 +9,7 @@ import { cssVar } from '../../../primitives';
 import { codeBlock, results } from '../../../styles';
 import { getTypeIcon } from '../../../utils';
 import { Loading } from 'libs/ui/src/shared';
+import { TableSmall } from 'libs/ui/src/icons/user-icons';
 
 export interface CodeVariableProps {
   readonly children?: ReactNode;
@@ -81,10 +82,18 @@ export const CodeVariable = ({
       }
     >
       {isColumn || isCell ? (
-        <span css={{ marginLeft: -4, whiteSpace: 'nowrap' }}>
-          <span css={isColumn && labelStyles} contentEditable={false}>
-            <span css={iconStyles}>{injectErrorChildren || <List />}</span>
-            {isColumn && <span css={liveSpanStyles}>{tableName} |</span>}
+        <span>
+          <span css={isColumn} contentEditable={false}>
+            <span css={iconStyles} style={{ opacity: 0.5 }}>
+              {injectErrorChildren || (isColumn ? <TableSmall /> : <List />)}
+            </span>
+
+            {isColumn && (
+              <>
+                <span style={{ opacity: 0.7 }}>{tableName}</span>
+                <span>.</span>
+              </>
+            )}
           </span>
           {lazyChildren}
         </span>
@@ -116,37 +125,29 @@ export const CodeVariable = ({
   );
 };
 
-const labelStyles = css({
-  marginTop: -4,
-  paddingTop: 4,
-  marginBottom: -8,
-  paddingBottom: 8,
-  padding: 'auto',
-  marginRight: 4,
-  paddingRight: 4,
-});
-
-const liveSpanStyles = css({
-  paddingLeft: 4,
-});
-
 const localVarStyles = css({
   color: cssVar('textSubdued'),
 });
 
 const iconStyles = css({
+  position: 'relative',
+  top: -1,
   mixBlendMode: 'luminosity',
   display: 'inline-block',
-  verticalAlign: 'text-top',
+  verticalAlign: 'baseline',
   height: '16px',
   width: '16px',
-  marginRight: 4,
+  marginRight: '2px',
+  svg: { display: 'inline' },
 });
 
 const typeStyles = css({
-  outline: `solid 1px ${cssVar('borderDefault')}`,
   color: cssVar('textDefault'),
-  backgroundColor: cssVar('backgroundDefault'),
+  backgroundColor: `color-mix(in srgb, ${cssVar(
+    'themeBackgroundSubdued'
+  )} 30%, transparent)`,
+  outline: `solid 1px ${cssVar('themeBackgroundSubdued')}`,
+  outlineOffset: -1,
 });
 
 const selectedStyles = css({

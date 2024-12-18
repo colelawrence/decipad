@@ -88,3 +88,16 @@
 
 @layer base {
 }
+
+/*
+ * Related to this opened issue: "Copy-pasting text with an inline void from Slate to other editors is not working as expected".
+ * https://github.com/ianstormtaylor/slate/issues/4802
+ * This fixes a bug where a new line is added when copying code from the editor when there're smart refs in the text
+ */
+[data-slate-spacer='true'] {
+  display: none !important;
+}
+/* Some table selection tests fails with the solution above, so we restore it for tables */
+table [data-slate-spacer='true'] {
+  display: inline-block !important;
+}

@@ -1,6 +1,6 @@
 export const Height = {
   // Used in  structured inputs and table captions.
-  Bubble: '28px',
+  Bubble: '22px',
 
   // Action buttons on tables.
   ActionButtons: '26px',

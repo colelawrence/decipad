@@ -160,7 +160,7 @@ export const p14Bold: TypographyStyles = {
 export const p15Regular: TypographyStyles = {
   ...pDefault,
   fontSize: `${15 / usualRemPxs}rem`,
-  lineHeight: `${16 / usualRemPxs}rem`,
+  lineHeight: 1.6,
 };
 export const p15Medium: TypographyStyles = {
   ...p15Regular,
@@ -215,7 +215,7 @@ export const jsCode: TypographyStyles = {
   fontStyle: 'normal',
   fontWeight: 'normal',
   fontSize: `${13 / usualRemPxs}rem`,
-  lineHeight: `${16 / usualRemPxs}rem`,
+  lineHeight: 1.6,
   letterSpacing: 'unset',
   fontFeatureSettings: 'unset',
 };
@@ -225,8 +225,8 @@ export const code: TypographyStyles = {
   fontFamily: mFontFamily,
   fontStyle: 'normal',
   fontWeight: 'normal',
-  fontSize: `${14 / usualRemPxs}rem`,
-  lineHeight: `${16 / usualRemPxs}rem`,
+  fontSize: `${13 / usualRemPxs}rem`,
+  lineHeight: 1.6,
   letterSpacing: 'unset',
   fontFeatureSettings: 'unset',
 };

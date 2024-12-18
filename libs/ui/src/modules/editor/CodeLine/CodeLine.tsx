@@ -62,10 +62,10 @@ const codeLineStyles = (
           borderRight: `1px solid ${cssVar('borderSubdued')}`,
 
           backgroundColor: cssVar('backgroundMain'),
-          padding: '6px 12px',
+          padding: '6px 10px',
         }
       : {
-          padding: '0px 12px',
+          padding: '6px 8px',
         }),
 
     // Think this couldn't be done with CSS since one cannot query the next element to influence
@@ -279,7 +279,7 @@ export const CodeLine: FC<CodeLineProps> = ({
         codeLineStyles(variant, hasNextSibling, hasPreviousSibling),
         variant === 'table' && highlight && formulaDrawerHighlightLineStyles,
         highlight && {
-          backgroundColor: transparency(backgroundColor, 0.16).rgba,
+          backgroundColor: transparency(backgroundColor, 0.04).rgba,
         },
       ]}
       spellCheck={false}

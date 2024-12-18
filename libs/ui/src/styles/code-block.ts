@@ -1,8 +1,8 @@
 import { css, CSSObject } from '@emotion/react';
-import { code, cssVar, p14Regular } from '../primitives';
+import { code, cssVar, p13Regular } from '../primitives';
 import { Height } from './spacings';
 
-export const lineHeight = '36px';
+export const lineHeight = '2';
 
 export const variableStyles: CSSObject = {
   ...code,
@@ -12,9 +12,10 @@ export const variableStyles: CSSObject = {
 };
 
 export const varStyles = css(variableStyles, {
-  padding: '4px 8px',
+  padding: '2px 4px',
   borderRadius: '6px',
   fontSize: '13px',
+  whiteSpace: 'nowrap',
   maxWidth: 'min(30vw, 174px)',
   '@media print': {
     background: 'unset',
@@ -23,7 +24,7 @@ export const varStyles = css(variableStyles, {
 });
 
 export const structuredVariableStyles: CSSObject = {
-  ...p14Regular,
+  ...p13Regular,
   lineHeight: '1.6',
   minHeight: Height.Bubble,
 };
