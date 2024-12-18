@@ -9,13 +9,15 @@ import {
   isExpression,
 } from '@decipad/language-utils';
 import { refersToOtherColumnsByName } from './inference';
-import { mapWithPrevious } from '../interpreter/previous';
+import { CURRENT_COLUMN_SYMBOL } from '../interpreter/previous';
 import { evaluate } from '../interpreter';
 import { coerceTableColumnIndices } from './dimensionCoersion';
 import { requiresWholeColumn } from './requiresWholeColumn';
 import { isPrevious } from '../utils/isPrevious';
 import { withPush, type TRealm } from '../scopedRealm';
 import { prettyPrintAST } from '../parser/utils';
+import { all } from '@decipad/generator-utils';
+import { rowIterableFromColumns } from './rowIterable';
 
 const isRecursiveReference = (expr: AST.Expression) =>
   expr.type === 'function-call' &&
@@ -43,6 +45,33 @@ const usesOrdinalReference = (expr: AST.Expression): boolean => {
   return result;
 };
 
+/**
+ * Helper to wrap a generator call around the `first` keyword
+ */
+async function* asFirstRow<T>(realm: TRealm, fn: () => AsyncGenerator<T>) {
+  realm.stack.set('first', Value.Scalar.fromValue(true));
+  yield* fn();
+  realm.stack.set('first', Value.Scalar.fromValue(false));
+}
+
+/**
+ * Sets the current row as the column values (adjacent rows),
+ * and manages previousRow for the next iteration.
+ */
+async function withPreviousAndLocalColumns(
+  realm: TRealm,
+  rowValue: Map<string | symbol, ValueTypes.Value>,
+  fn: () => Promise<ValueTypes.Value>
+) {
+  realm.stack.setMulti(rowValue as Map<string, ValueTypes.Value>);
+  const cell = await fn();
+
+  rowValue.set(CURRENT_COLUMN_SYMBOL, cell);
+  realm.previousRow = rowValue;
+
+  return cell;
+}
+
 export const evaluateTableColumnIteratively = async (
   _realm: TRealm,
   otherColumns: Map<string, ValueTypes.ColumnLikeValue>,
@@ -52,23 +81,44 @@ export const evaluateTableColumnIteratively = async (
   withPush(
     _realm,
     async (realm) => {
-      const cells = await mapWithPrevious(
-        realm,
-        otherColumns,
-        async function* mapper() {
-          for (let index = 0; index < rowCount; index++) {
-            // Make other cells available
-            for (const [otherColName, otherCol] of otherColumns) {
-              // eslint-disable-next-line no-await-in-loop
-              realm.stack.set(otherColName, await otherCol.atIndex(index));
-            }
-            // make ordinal references available
-            realm.stack.set('first', Value.Scalar.fromValue(index === 0));
-            // eslint-disable-next-line no-await-in-loop
-            yield evaluate(realm, column);
+      async function* mapper() {
+        const rowGenerator = rowIterableFromColumns(otherColumns)();
+        realm.previousRow = undefined;
+
+        const evaluatorFunction = async () => evaluate(realm, column);
+
+        yield* asFirstRow(realm, async function* withFirstRow() {
+          const firstRow = await rowGenerator.next();
+          if (firstRow.done) {
+            return;
           }
+
+          yield withPreviousAndLocalColumns(
+            realm,
+            firstRow.value,
+            evaluatorFunction
+          );
+        });
+
+        let counter = 1;
+
+        while (counter < rowCount) {
+          // eslint-disable-next-line no-await-in-loop
+          const currentRow = await rowGenerator.next();
+          if (currentRow.done) {
+            break;
+          }
+
+          yield withPreviousAndLocalColumns(
+            realm,
+            currentRow.value,
+            evaluatorFunction
+          );
+          counter++;
         }
-      );
+      }
+
+      const cells = await all(mapper());
 
       return Value.Column.fromValues(
         cells,
