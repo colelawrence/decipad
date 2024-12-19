@@ -2,7 +2,6 @@ import { UploadFile } from '@decipad/editor-attachments';
 import { BlockLengthSynchronizationProvider } from '@decipad/editor-components';
 import type { MyEditor, MyValue } from '@decipad/editor-types';
 import {
-  CategoriesContextProvider,
   EditorBlockParentRefProvider,
   EditorReadOnlyContext,
 } from '@decipad/react-contexts';
@@ -139,46 +138,44 @@ export const Editor: FC<PropsWithChildren<EditorProps>> = (props) => {
     >
       <LoadingFilter loading={isWritingLocked}>
         <EditorBlockParentRefProvider onRefChange={onRefChange}>
-          <CategoriesContextProvider>
-            <EditorLayout>
-              {props.titleEditor}
-              <div>
-                <Filters />
-              </div>
-              <div ref={containerRef} className="relative">
-                <BlockLengthSynchronizationProvider editor={editor}>
-                  <Plate<MyValue>
-                    key={key}
-                    editor={editor}
-                    onChange={onChange}
-                    readOnly={
-                      // Only respect write locks here and not the readOnly prop.
-                      // Even if !readOnly, we never lock the entire editor but always keep some elements editable.
-                      // The rest are controlled via EditorReadOnlyContext.
-                      isWritingLocked
-                    }
-                    disableCorePlugins={{
-                      history: true,
-                    }}
-                  >
-                    <PlateContent
-                      onCopy={(e) => editorOnCopy(e, editor)}
-                      onPaste={(e) => editorOnPaste(e, editor, computer)}
-                    />
-                    <InsidePlate
-                      {...props}
-                      containerRef={containerRef}
-                      children={children}
-                    />
-                    <UploadFile
-                      workspaceId={workspaceId || ''}
-                      notebookId={notebookId}
-                    />
-                  </Plate>
-                </BlockLengthSynchronizationProvider>
-              </div>
-            </EditorLayout>
-          </CategoriesContextProvider>
+          <EditorLayout>
+            {props.titleEditor}
+            <div>
+              <Filters />
+            </div>
+            <div ref={containerRef} className="relative">
+              <BlockLengthSynchronizationProvider editor={editor}>
+                <Plate<MyValue>
+                  key={key}
+                  editor={editor}
+                  onChange={onChange}
+                  readOnly={
+                    // Only respect write locks here and not the readOnly prop.
+                    // Even if !readOnly, we never lock the entire editor but always keep some elements editable.
+                    // The rest are controlled via EditorReadOnlyContext.
+                    isWritingLocked
+                  }
+                  disableCorePlugins={{
+                    history: true,
+                  }}
+                >
+                  <PlateContent
+                    onCopy={(e) => editorOnCopy(e, editor)}
+                    onPaste={(e) => editorOnPaste(e, editor, computer)}
+                  />
+                  <InsidePlate
+                    {...props}
+                    containerRef={containerRef}
+                    children={children}
+                  />
+                  <UploadFile
+                    workspaceId={workspaceId || ''}
+                    notebookId={notebookId}
+                  />
+                </Plate>
+              </BlockLengthSynchronizationProvider>
+            </div>
+          </EditorLayout>
         </EditorBlockParentRefProvider>
       </LoadingFilter>
     </EditorReadOnlyContext.Provider>

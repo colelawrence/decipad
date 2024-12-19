@@ -7,6 +7,7 @@ import {
 } from '@decipad/graphql-client';
 import { useNotebookWithIdState } from '@decipad/notebook-state';
 import {
+  CategoriesContextProvider,
   useAiCreditsStore,
   useCurrentWorkspaceStore,
   useNotebookMetaData,
@@ -190,72 +191,74 @@ export const Notebook: FC = memo(() => {
   return (
     <NotebookErrorBoundary>
       <ClientEventsContext.Provider value={editorClientEvents}>
-        <NotebookPage
-          articleRef={articleRef}
-          notebook={
-            <Suspense fallback={<EditorPlaceholder />}>
-              <Editor notebookId={notebookId} docsync={docsync} />
-            </Suspense>
-          }
-          /* even if this logic seems redundant please
-           * do not remove it because otherwise this will
-           * break newly created notebooks
-           */
-          shouldRenderNavigationSidebar={shouldRenderNavigationSidebar}
-          leftSidebar={
-            <Suspense fallback={<NotebookListPlaceholder bgColour="heavy" />}>
-              {shouldRenderNavigationSidebar && (
-                <NavigationSidebar {...notebookSideBarProps} />
-              )}
-            </Suspense>
-          }
-          topbar={
-            <Suspense fallback={<TopbarPlaceholder />}>
-              <Topbar {...topBarProps} />
-            </Suspense>
-          }
-          sidebar={
-            <Suspense>
-              <Sidebar {...props} />
-            </Suspense>
-          }
-          tabs={
-            !isEmbed && docsync ? (
-              <Suspense fallback={<></>}>
-                <Tabs
-                  notebookId={notebookId}
-                  controller={docsync}
-                  docsync={docsync}
-                />
+        <CategoriesContextProvider>
+          <NotebookPage
+            articleRef={articleRef}
+            notebook={
+              <Suspense fallback={<EditorPlaceholder />}>
+                <Editor notebookId={notebookId} docsync={docsync} />
               </Suspense>
-            ) : null
-          }
-          dataDrawer={
-            workspaceInfo.id != null && (
-              <DataDrawer workspaceId={workspaceInfo.id} />
-            )
-          }
-          isDataDrawerOpen={isDataDrawerOpen}
-          isEmbed={isEmbed}
-          isReadOnly={docsync?.isReadOnly}
-          permission={notebookMetaData?.getPadById?.myPermissionType}
-        />
-        <Suspense>
-          {isBuyCreditsModalOpen && (
-            <AddCreditsModal
-              closeAction={() => setIsBuyCreditsModalOpen(false)}
-            />
-          )}
-          {isUpgradeWorkspaceModalOpen && (
-            <PaywallModal
-              onClose={() => setIsUpgradeWorkspaceModalOpen(false)}
-              workspaceId={workspaceInfo.id ?? ''}
-              hasFreeWorkspaceSlot={false}
-              currentPlan={workspaceInfo.plan ?? undefined}
-              isCreatingNewWorkspace={false}
-            />
-          )}
-        </Suspense>
+            }
+            /* even if this logic seems redundant please
+             * do not remove it because otherwise this will
+             * break newly created notebooks
+             */
+            shouldRenderNavigationSidebar={shouldRenderNavigationSidebar}
+            leftSidebar={
+              <Suspense fallback={<NotebookListPlaceholder bgColour="heavy" />}>
+                {shouldRenderNavigationSidebar && (
+                  <NavigationSidebar {...notebookSideBarProps} />
+                )}
+              </Suspense>
+            }
+            topbar={
+              <Suspense fallback={<TopbarPlaceholder />}>
+                <Topbar {...topBarProps} />
+              </Suspense>
+            }
+            sidebar={
+              <Suspense>
+                <Sidebar {...props} />
+              </Suspense>
+            }
+            tabs={
+              !isEmbed && docsync ? (
+                <Suspense fallback={<></>}>
+                  <Tabs
+                    notebookId={notebookId}
+                    controller={docsync}
+                    docsync={docsync}
+                  />
+                </Suspense>
+              ) : null
+            }
+            dataDrawer={
+              workspaceInfo.id != null && (
+                <DataDrawer workspaceId={workspaceInfo.id} />
+              )
+            }
+            isDataDrawerOpen={isDataDrawerOpen}
+            isEmbed={isEmbed}
+            isReadOnly={docsync?.isReadOnly}
+            permission={notebookMetaData?.getPadById?.myPermissionType}
+          />
+          <Suspense>
+            {isBuyCreditsModalOpen && (
+              <AddCreditsModal
+                closeAction={() => setIsBuyCreditsModalOpen(false)}
+              />
+            )}
+            {isUpgradeWorkspaceModalOpen && (
+              <PaywallModal
+                onClose={() => setIsUpgradeWorkspaceModalOpen(false)}
+                workspaceId={workspaceInfo.id ?? ''}
+                hasFreeWorkspaceSlot={false}
+                currentPlan={workspaceInfo.plan ?? undefined}
+                isCreatingNewWorkspace={false}
+              />
+            )}
+          </Suspense>
+        </CategoriesContextProvider>
       </ClientEventsContext.Provider>
       {/* Feature flagging the feature flag switcher makes it unreacheable in
       production, even if you press the shortcut, unless you know how */}
