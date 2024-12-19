@@ -118,7 +118,7 @@ export async function createDateBelow(page: Page, identifier: string) {
   await createWithSlashCommand(page, '/date');
 
   await page
-    .locator('[data-testid="widget-caption"] >> text=/Input/')
+    .locator('[data-testid="widget-caption"] >> text=/Date/')
     .last()
     .dblclick();
 

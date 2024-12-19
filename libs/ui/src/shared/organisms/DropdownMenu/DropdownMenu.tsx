@@ -40,10 +40,10 @@ const styles = css({
   left: 0,
   userSelect: 'none',
 
-  marginTop: '8px',
+  marginTop: '4px',
   backgroundColor: cssVar('backgroundMain'),
   border: `1px solid ${cssVar('borderSubdued')}`,
-  borderRadius: '12px',
+  borderRadius: '8px',
   boxShadow: `0px 3px 24px -4px ${mediumShadow.rgba}`,
   width: 'var(--radix-popper-anchor-width)',
   minWidth: '244px',

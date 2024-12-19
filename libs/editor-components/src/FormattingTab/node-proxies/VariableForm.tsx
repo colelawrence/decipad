@@ -18,6 +18,7 @@ export const VariableForm: FC<
       property={properties.name}
       onChange={actions.setName}
       disabled={nodes.length > 1}
+      placeholder="Enter label..."
     />
 
     <ProxyDropdownField

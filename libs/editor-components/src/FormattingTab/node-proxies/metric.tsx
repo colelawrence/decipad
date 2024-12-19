@@ -229,6 +229,7 @@ export const MetricForm: FC<ProxyFormProps<typeof metricConfig>> = ({
       <ProxyStringField
         editor={editor}
         label="Label"
+        placeholder="Enter label..."
         property={properties.caption}
         onChange={actions.setCaption}
       />
@@ -263,6 +264,7 @@ export const MetricForm: FC<ProxyFormProps<typeof metricConfig>> = ({
               label="Comparison description"
               property={properties.comparisonDescription}
               onChange={actions.setComparisonDescription}
+              placeholder="Add description..."
             />
           )}
         </>

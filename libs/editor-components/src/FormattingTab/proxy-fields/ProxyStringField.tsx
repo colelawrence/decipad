@@ -73,6 +73,7 @@ export interface ProxyStringFieldProps extends ProxyFieldProps<string> {
   as?: typeof InputField | typeof InputFieldHorizontal;
   error?: string;
   disabled?: boolean;
+  placeholder?: string;
   normalizeValue?: (value: string) => string;
 }
 
@@ -81,6 +82,7 @@ export const ProxyStringField = ({
   as: Component = InputField,
   label,
   property,
+  placeholder,
   onChange,
   normalizeValue = identity,
   disabled,
@@ -98,7 +100,7 @@ export const ProxyStringField = ({
       label={label}
       value={value}
       error={error}
-      placeholder={property === 'varies' ? 'Multiple' : undefined}
+      placeholder={property === 'varies' ? 'Multiple' : placeholder}
       disabled={disabled}
       onChange={(newValue) => setValue(normalizeValue(newValue))}
       onFocus={onFocus}

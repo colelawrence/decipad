@@ -82,10 +82,11 @@ export const insertInputBelow = (
   editor: MyEditor,
   path: Path,
   kind: SerializedTypeKind,
-  getAvailableIdentifier: GetAvailableIdentifier
+  getAvailableIdentifier: GetAvailableIdentifier,
+  labelPrefix?: string
 ): void => {
   const [variant, placeholder] = getVariantAndHolder(kind);
-  const name = getAvailableIdentifier(generateInputName());
+  const name = getAvailableIdentifier(labelPrefix ?? generateInputName());
 
   const input = getInitialInputElement({
     kind,

@@ -28,6 +28,7 @@ export const GenericVariableForm: FC<
           label="Value"
           property={properties.value}
           onChange={actions.setValue}
+          placeholder="Enter value..."
         />
       )}
     </VariableForm>

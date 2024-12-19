@@ -70,6 +70,7 @@ export const SliderVariableForm: FC<
         label="Value"
         property={properties.value}
         onChange={actions.setValue}
+        placeholder="Enter value..."
       />
 
       <InputFieldHorizontalGroup>
@@ -81,6 +82,7 @@ export const SliderVariableForm: FC<
           onChange={actions.setMin}
           normalizeValue={normalizeRationalNumber}
           error={validationErrors.min}
+          placeholder="Enter value..."
         />
 
         <ProxyStringField
@@ -91,6 +93,7 @@ export const SliderVariableForm: FC<
           onChange={actions.setMax}
           normalizeValue={normalizeRationalNumber}
           error={validationErrors.max}
+          placeholder="Enter value..."
         />
 
         <ProxyStringField
@@ -101,6 +104,7 @@ export const SliderVariableForm: FC<
           onChange={actions.setStep}
           normalizeValue={normalizeNonNegativeNumber}
           error={validationErrors.step}
+          placeholder="Enter value..."
         />
       </InputFieldHorizontalGroup>
     </VariableForm>

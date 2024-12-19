@@ -799,7 +799,7 @@ export class Notebook {
 
     if (name) {
       await this.page
-        .locator('[data-testid="widget-caption"] >> text=/Input/')
+        .locator('[data-testid="widget-caption"] >> text=/Date/')
         .last()
         .dblclick();
 
@@ -1270,7 +1270,7 @@ export class Notebook {
     await this.addBlock('toggle');
 
     await this.page
-      .locator('[data-testid="widget-caption"] >> text=/Input/')
+      .locator('[data-testid="widget-caption"] >> text=/Toggle/')
       .last()
       .dblclick();
 

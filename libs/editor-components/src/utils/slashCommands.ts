@@ -83,10 +83,16 @@ export const execute = async ({
         insertInputBelow(editor, path, 'number', getAvailableIdentifier);
         break;
       case 'toggle':
-        insertInputBelow(editor, path, 'boolean', getAvailableIdentifier);
+        insertInputBelow(
+          editor,
+          path,
+          'boolean',
+          getAvailableIdentifier,
+          'Toggle'
+        );
         break;
       case 'datepicker':
-        insertInputBelow(editor, path, 'date', getAvailableIdentifier);
+        insertInputBelow(editor, path, 'date', getAvailableIdentifier, 'Date');
         break;
       case 'slider':
         insertSliderInputBelow(editor, path, getAvailableIdentifier);

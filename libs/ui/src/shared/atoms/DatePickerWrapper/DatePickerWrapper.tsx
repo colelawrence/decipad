@@ -6,6 +6,7 @@ import 'react-datepicker/dist/react-datepicker.css';
 import { useCanUseDom } from '@decipad/react-utils';
 import { Time } from '@decipad/remote-computer';
 import { dateFormatForGranularity } from 'libs/ui/src/utils/dateFormatForGranularity';
+import { offset } from '@floating-ui/dom';
 
 export interface DatePickerWrapperProps {
   granularity?: Time.Specificity;
@@ -78,6 +79,8 @@ export const DatePickerWrapper = ({
           portalId={portalId}
           todayButton="Today"
           timeClassName={() => 'deci-datepicker-selectable'}
+          showPopperArrow={false}
+          popperModifiers={[offset(-6) as any]}
         />
       </div>
 

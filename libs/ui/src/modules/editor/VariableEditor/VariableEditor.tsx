@@ -3,7 +3,15 @@ import type { SerializedType } from '@decipad/remote-computer';
 import { useThemeFromStore } from '@decipad/react-contexts';
 import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
-import { Children, FC, ReactNode, useCallback, useMemo, useState } from 'react';
+import {
+  Children,
+  FC,
+  ReactNode,
+  useCallback,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import { DatePickerWrapper, Toggle } from '../../../shared';
 import {
   cssVar,
@@ -17,6 +25,7 @@ import {
 import { AvailableSwatchColor, swatchesThemed } from '../../../utils';
 import { ElementVariants } from '@decipad/editor-types';
 import { Settings2 } from 'libs/ui/src/icons';
+import { useWindowListener } from '@decipad/react-utils';
 
 const leftBarSize = 2;
 
@@ -172,6 +181,31 @@ export const VariableEditor = ({
   const [darkTheme] = useThemeFromStore();
   const baseSwatches = useMemo(() => swatchesThemed(darkTheme), [darkTheme]);
   const [datePickerOpen, setDatePickerOpen] = useState<boolean>(false);
+  const datePickerRef = useRef<HTMLDivElement>(null);
+
+  const onWindowKeyDown = useCallback(
+    (event: KeyboardEvent) => {
+      if (!datePickerOpen) return;
+      switch (true) {
+        case event.key === 'Escape':
+          setDatePickerOpen(false);
+          break;
+      }
+    },
+    [datePickerOpen, setDatePickerOpen]
+  );
+
+  const onWindowClick = useCallback((event: Event) => {
+    if (
+      datePickerRef.current &&
+      !datePickerRef.current.contains(event.target as Node)
+    ) {
+      setDatePickerOpen(false);
+    }
+  }, []);
+
+  useWindowListener('keydown', onWindowKeyDown);
+  useWindowListener('click', onWindowClick);
 
   const editor = useCallback(() => {
     if (variant === 'display' || childrenArray.length === 0) {
@@ -196,7 +230,7 @@ export const VariableEditor = ({
           }}
           customInput={
             <>
-              <div onClick={() => setDatePickerOpen(true)}>
+              <div onClick={() => setDatePickerOpen(true)} ref={datePickerRef}>
                 {wrappedChildren}
               </div>
             </>

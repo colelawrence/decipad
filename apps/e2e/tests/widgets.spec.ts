@@ -60,7 +60,7 @@ test('date widget + date widget read mode', async ({
   const formattedDate = `${year}-${month}-${day}`;
 
   await test.step('publish notebook with date widget', async () => {
-    await testUser.notebook.addDatePickerWidget('Input3');
+    await testUser.notebook.addDatePickerWidget('Date');
 
     await testUser.page.getByTestId('widget-input').click();
     await testUser.page.getByText('Today').click();
