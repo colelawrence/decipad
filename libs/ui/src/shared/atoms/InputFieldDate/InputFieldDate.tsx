@@ -1,14 +1,13 @@
 /* eslint decipad/css-prop-named-variable: 0 */
 import { FC, ReactNode, useId, useState } from 'react';
 import { DatePickerWrapper } from '../DatePickerWrapper/DatePickerWrapper';
-import { InputField } from '../InputField/InputField';
-import { css } from '@emotion/react';
-import { cssVar } from 'libs/ui/src/primitives';
-import { CaretDown } from 'libs/ui/src/icons';
+import { DropdownFieldLabel, DropdownFieldTrigger } from 'libs/ui/src/modules';
+import { assert, noop } from '@decipad/utils';
 
 export type InputFieldDateProps = {
   readonly id?: string;
-  readonly size?: 'small' | 'regular' | 'full';
+  readonly disabled?: boolean;
+
   readonly label?: ReactNode;
   readonly value?: string;
   readonly onChange: (value: string) => void;
@@ -16,10 +15,10 @@ export type InputFieldDateProps = {
 
 export const InputFieldDate = ({
   id: idProp,
-  size,
   label,
   value,
   onChange,
+  disabled,
 }: InputFieldDateProps): ReturnType<FC> => {
   const [open, setOpen] = useState<boolean>(false);
 
@@ -31,46 +30,24 @@ export const InputFieldDate = ({
     setOpen(false);
   };
 
-  const hoverStyles = css({
-    '&:hover': {
-      backgroundColor: cssVar('backgroundSubdued'),
-      cursor: 'pointer',
-    },
-  });
-
-  const caretWrapper = css({
-    width: 12,
-    height: 12,
-    position: 'absolute',
-    top: '50%',
-    right: 12,
-    transform: 'translateY(50%)',
-  });
-
-  const inputWrapper = css({
-    position: 'relative',
-  });
+  assert(value !== undefined, 'Data must be defined');
 
   return (
     <div id={id}>
+      <DropdownFieldLabel id={id}>{label}</DropdownFieldLabel>
       <DatePickerWrapper
         granularity="day"
-        value={value || ''}
+        value={value}
         open={open}
         onChange={handleChange}
         customInput={
           <>
-            <div onClick={() => setOpen(true)} css={inputWrapper}>
-              <InputField
-                type="text"
-                size={size}
-                label={label}
-                value={value}
-                inputCss={hoverStyles}
+            <div onClick={() => (disabled ? noop : setOpen(true))}>
+              <DropdownFieldTrigger
+                id={id}
+                disabled={disabled}
+                children={value as string}
               />
-              <div css={caretWrapper}>
-                <CaretDown />
-              </div>
             </div>
           </>
         }

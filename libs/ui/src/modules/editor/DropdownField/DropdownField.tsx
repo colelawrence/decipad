@@ -19,27 +19,35 @@ const iconWrapperStyles = (squareIcon: boolean) =>
     flexShrink: 0,
   });
 
-const triggerStyles = (noValueSelected?: boolean) =>
-  css([
-    p13Medium,
-    noValueSelected ? { color: cssVar('textDisabled') } : {},
-    {
-      width: '100%',
-      height: '32px',
-      padding: '10px 12px',
-      display: 'flex',
-      alignItems: 'center',
-      gap: '6px',
-      border: `1px solid ${cssVar('borderSubdued')}`,
-      borderRadius: '6px',
-      backgroundColor: cssVar('backgroundMain'),
-      textOverflow: 'ellipsis',
+const triggerStyles = css([
+  p13Medium,
+  {
+    width: '100%',
+    height: '32px',
+    padding: '10px 12px',
+    display: 'flex',
+    alignItems: 'center',
+    gap: '6px',
+    border: `1px solid ${cssVar('borderSubdued')}`,
+    borderRadius: '6px',
+    backgroundColor: cssVar('backgroundMain'),
+    textOverflow: 'ellipsis',
 
-      ':hover, :focus-visible': {
-        backgroundColor: cssVar('backgroundSubdued'),
-      },
+    ':hover, :focus-visible': {
+      backgroundColor: cssVar('backgroundSubdued'),
     },
-  ]);
+
+    '&[data-no-value-selected="true"]': {
+      color: cssVar('textDisabled'),
+    },
+
+    '&[aria-disabled="true"]': {
+      backgroundColor: cssVar('backgroundSubdued'),
+      color: cssVar('textDisabled'),
+      cursor: 'not-allowed',
+    },
+  },
+]);
 
 const triggerTextStyles = css({
   overflow: 'hidden',
@@ -137,6 +145,7 @@ export interface DropdownFieldTriggerProps {
   readonly squareIcon?: boolean;
   readonly children: string;
   readonly noValueSelected?: boolean;
+  readonly disabled?: boolean;
 }
 
 export const DropdownFieldTrigger = ({
@@ -145,8 +154,15 @@ export const DropdownFieldTrigger = ({
   squareIcon = true,
   children,
   noValueSelected,
+  disabled = false,
 }: DropdownFieldTriggerProps) => (
-  <button id={id} type="button" css={triggerStyles(noValueSelected)}>
+  <button
+    id={id}
+    type="button"
+    css={triggerStyles}
+    aria-disabled={disabled}
+    data-no-value-selected={noValueSelected || undefined}
+  >
     {icon && <span css={iconWrapperStyles(squareIcon)}>{icon}</span>}
     <span css={triggerTextStyles} title={children}>
       {children}

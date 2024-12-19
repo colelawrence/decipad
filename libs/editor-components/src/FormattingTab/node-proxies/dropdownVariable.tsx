@@ -9,55 +9,19 @@ import {
   variableActions,
   setNodeProperty,
 } from './utils';
-import { FC } from 'react';
+import { FC, useId } from 'react';
 import { ProxyFactoryConfig, ProxyFormProps } from './types';
 import { VariableForm } from './VariableForm';
 import {
-  cssVar,
+  DropdownFieldLabel,
+  DropdownFieldTrigger,
   DropdownMenu,
   getNumberType,
   getStringType,
-  InputField,
 } from '@decipad/ui';
 import { ProxyDropdownField } from '../proxy-fields';
-import {
-  CaretDown,
-  Number as NumberIcon,
-  TableSmall,
-  Text,
-} from 'libs/ui/src/icons';
+import { Number as NumberIcon, TableSmall, Text } from 'libs/ui/src/icons';
 import { useDropdown } from '../../Widgets/hooks/useDropdown';
-import { css } from '@emotion/react';
-
-const caretWrapper = css({
-  width: 12,
-  height: 12,
-  position: 'absolute',
-  top: '50%',
-  right: 12,
-  transform: 'translateY(50%)',
-});
-
-const inputWrapper = css({
-  position: 'relative',
-});
-
-const input = css({
-  '&[data-is-multiple="true"]': {
-    color: cssVar('textDisabled'),
-    '&:hover': {
-      backgroundColor: cssVar('backgroundSubdued'),
-      cursor: 'not-allowed',
-    },
-  },
-  '&[data-is-multiple="false"]': {
-    color: cssVar('textDefault'),
-    '&:hover': {
-      backgroundColor: cssVar('backgroundSubdued'),
-      cursor: 'pointer',
-    },
-  },
-});
 
 type DropdownType = 'number' | 'text' | 'smart-selection';
 
@@ -124,37 +88,28 @@ const DynamicDropdownField = ({
   } = useDropdown(dropdownElem);
 
   const dropdownValue = ifVaries(properties.dropdownValue, 'Multiple');
+  const id = `dropdown-${useId()}`;
 
   return (
-    <DropdownMenu
-      open={dropdownOpen}
-      setOpen={(value) =>
-        dropdownValue !== 'Multiple' && setDropdownOpen(value)
-      }
-      items={dropdownIds}
-      addOption={addOption}
-      onRemoveOption={removeOption}
-      onEditOption={editOption}
-      onExecute={execute}
-      isEditingAllowed={true}
-    >
-      <div css={inputWrapper}>
-        <div>
-          <InputField
-            type="text"
-            size="small"
-            label="Value"
-            value={dropdownValue}
-            inputCss={input}
-            disabled={nodes.length > 1}
-            data-is-multiple={dropdownValue === 'Multiple'}
-          />
-        </div>
-        <div css={caretWrapper}>
-          <CaretDown />
-        </div>
-      </div>
-    </DropdownMenu>
+    <>
+      <DropdownFieldLabel id={id}>{'Value'}</DropdownFieldLabel>
+      <DropdownMenu
+        open={dropdownOpen}
+        setOpen={(value) =>
+          dropdownValue !== 'Multiple' && setDropdownOpen(value)
+        }
+        items={dropdownIds}
+        addOption={addOption}
+        onRemoveOption={removeOption}
+        onEditOption={editOption}
+        onExecute={execute}
+        isEditingAllowed={true}
+      >
+        <DropdownFieldTrigger disabled={properties.value === 'varies'} id={id}>
+          {dropdownValue}
+        </DropdownFieldTrigger>
+      </DropdownMenu>
+    </>
   );
 };
 
