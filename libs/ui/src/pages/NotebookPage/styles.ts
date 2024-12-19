@@ -118,7 +118,6 @@ export const ArticleWrapper = styled.article<ArticleWrapperProps>((props) => ({
   width: '100%',
   display: 'flex',
   flexDirection: 'column',
-  containerType: 'size',
 
   [tabletScreenQuery]: {
     width: '100%',
