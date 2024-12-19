@@ -89,6 +89,7 @@ export const Metric: PlateComponent = ({ attributes, element, children }) => {
           comparisonDescription={element.comparisonDescription}
           formatting={element.formatting}
           color={color as AvailableSwatchColor}
+          maxWidth={!insideLayout}
           fullHeight={insideLayout}
           onClickEdit={onEdit}
         >

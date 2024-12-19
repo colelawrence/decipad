@@ -20,7 +20,7 @@ import { NumberFormatting } from '@decipad/editor-types';
 const bottomBarSize = 2;
 
 const initialFontSize = 24;
-const initialFontSizeHeight = 110;
+const initialFontSizeHeight = 120;
 const initialLineHeight = 33;
 const finalFontSize = 48;
 const finalFontSizeHeight = 186;
@@ -135,6 +135,7 @@ export interface MetricProps {
   readonly comparisonDescription?: string;
   readonly formatting?: NumberFormatting;
   readonly color?: AvailableSwatchColor;
+  readonly maxWidth?: boolean;
   readonly fullHeight?: boolean;
   readonly onClickEdit?: () => void;
 }
@@ -148,7 +149,8 @@ export const Metric = ({
   comparisonDescription,
   formatting,
   color: colorProp = 'Catskill',
-  fullHeight,
+  maxWidth = true,
+  fullHeight = false,
   onClickEdit,
 }: MetricProps): ReturnType<FC> => {
   const selected = useSelected();
@@ -183,6 +185,7 @@ export const Metric = ({
       css={[
         wrapperStyles,
         selected && selectedStyles,
+        maxWidth && { maxWidth: '262px' },
         fullHeight && { height: '100%' },
       ]}
     >
