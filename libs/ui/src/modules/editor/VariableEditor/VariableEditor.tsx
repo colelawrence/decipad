@@ -143,6 +143,7 @@ const variableNameStyles = css({
 const toggleWrapperStyles = css({
   display: 'flex',
   gap: '8px',
+  width: 'fit-content',
   minHeight: '40px',
   alignItems: 'center',
   padding: '0px 8px 0px 8px',
