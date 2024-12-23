@@ -1194,13 +1194,12 @@ export class Notebook {
     // rename table
     if (option.varName != null) {
       // eslint-disable-next-line playwright/no-wait-for-timeout
-      await this.page.waitForTimeout(Timeouts.tableDelay);
+      await this.page.waitForTimeout(2_000);
       await this.page
         .getByTestId('live-code-name')
         .getByText(/Table/)
         .last()
-        .dblclick();
-      await this.page.keyboard.type(option.varName);
+        .fill(option.varName);
       await expect(
         this.page.getByTestId('live-code-name').getByText(option.varName)
       ).toBeVisible();

@@ -48,7 +48,7 @@ const selectedItemForName = (
   return {
     id: blockId ?? '',
     item: columnName ?? name.name,
-    blockId,
+    blockId: name.columnId ?? name.blockId,
     blockType: name.serializedType,
     group: {
       variable: 'Variables',

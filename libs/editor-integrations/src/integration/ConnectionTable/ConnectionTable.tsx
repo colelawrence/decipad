@@ -4,7 +4,7 @@ import { useActiveElement, useResolved } from '@decipad/react-utils';
 import { Result } from '@decipad/remote-computer';
 import {
   HideColumn,
-  PaginationControl,
+  PaginationSizeControl,
   VariableTypeMenu,
   getTypeIcon,
 } from '@decipad/ui';
@@ -216,17 +216,18 @@ const TableHeader: FC<ConnectionTableProps> = (props) => {
 const UnmemoedConnectionTable: FC<ConnectionTableProps> = (props) => {
   const { tableResult, hiddenColumns } = props;
   const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState(PAGE_SIZE);
 
   const htmlRows = useResolved(
     useMemo(async () => {
       const rows = await Promise.all(
         tableResult.value.map((column) =>
-          all(column((page - 1) * PAGE_SIZE, page * PAGE_SIZE))
+          all(column((page - 1) * pageSize, page * pageSize))
         )
       );
 
       return getHtmlRows(tableResult, rows);
-    }, [page, tableResult])
+    }, [page, pageSize, tableResult])
   );
 
   const rowCount = useResolved(
@@ -270,18 +271,13 @@ const UnmemoedConnectionTable: FC<ConnectionTableProps> = (props) => {
         <StyledFooter>
           <tr>
             <td colSpan={tableResult.value.length}>
-              <div>
-                <PaginationControl
-                  startAt={1}
-                  maxPages={Math.ceil(rowCount / PAGE_SIZE)}
-                  page={page}
-                  onPageChange={setPage}
-                />
-                <span>
-                  {rowCount} rows, previewing rows {(page - 1) * PAGE_SIZE + 1}{' '}
-                  to {Math.min(page * PAGE_SIZE, rowCount)}
-                </span>
-              </div>
+              <PaginationSizeControl
+                currentPage={page}
+                onPageChange={setPage}
+                pageSize={pageSize}
+                onChangePageSize={setPageSize}
+                rowCount={rowCount}
+              />
             </td>
           </tr>
         </StyledFooter>

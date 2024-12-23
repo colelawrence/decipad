@@ -1,7 +1,6 @@
 /* eslint decipad/css-prop-named-variable: 0 */
 import { FC, useMemo } from 'react';
 import { css } from '@emotion/react';
-import pluralize from 'pluralize';
 import { SimpleTableCellType } from '@decipad/editor-types';
 import { usePagination, useResolved } from '@decipad/react-utils';
 import {
@@ -10,13 +9,13 @@ import {
   isResultGenerator,
 } from '@decipad/remote-computer';
 import { all as allElements, count } from '@decipad/generator-utils';
-import { LoadingIndicator, PaginationControl } from '../../../shared';
+import { LoadingIndicator, PaginationSizeControl } from '../../../shared';
 import { Table } from '../Table/Table';
 import { TableHeader } from '../TableHeader/TableHeader';
 import { TableHeaderRow } from '../TableHeaderRow/TableHeaderRow';
 import { TableColumnHeader } from '../TableColumnHeader/TableColumnHeader';
 import { TableRow } from '../TableRow/TableRow';
-import { cssVar, p13Regular } from '../../../primitives';
+import { cssVar } from '../../../primitives';
 import { deciOverflowStyles } from '../../../styles/scrollbars';
 import { tableControlWidth } from '../../../styles/table';
 import { CodeResultProps } from '../../../types';
@@ -46,11 +45,6 @@ const liveTableEmptyCellStyles = css({
 const paginationControlWrapperTdStyles = css({
   border: 0,
   padding: '6px 8px 6px 12px',
-});
-
-const pageDescriptionStyles = css(p13Regular, {
-  color: cssVar('textDefault'),
-  padding: '0 8px',
 });
 
 const footerRowStyles = css({
@@ -113,17 +107,23 @@ export const TableResult: FC<TableResultProps> = ({
     ) ?? 0;
   const isNested = useMemo(() => isTabularType(parentType), [parentType]);
 
-  const { page, offset, presentRowCount, valuesForPage, setPage } =
-    usePagination(
-      useMemo(
-        () => ({
-          all,
-          totalRowCount: tableLength,
-          maxRowsPerPage: MAX_ROWS_PER_PAGE,
-        }),
-        [all, tableLength]
-      )
-    );
+  const {
+    page,
+    pageSize,
+    presentRowCount,
+    valuesForPage,
+    setPage,
+    setPageSize,
+  } = usePagination(
+    useMemo(
+      () => ({
+        all,
+        totalRowCount: tableLength,
+        startingPageSize: 10,
+      }),
+      [all, tableLength]
+    )
+  );
 
   const materializedValuesForPage = useResolved(
     useMemo(
@@ -252,19 +252,13 @@ export const TableResult: FC<TableResultProps> = ({
                 css={[paginationControlWrapperTdStyles, footerRowStyles]}
                 colSpan={type.columnNames.length}
               >
-                <PaginationControl
-                  page={page}
+                <PaginationSizeControl
+                  currentPage={page}
                   onPageChange={setPage}
-                  startAt={1}
-                  maxPages={Math.ceil(tableLength / MAX_ROWS_PER_PAGE)}
-                >
-                  <span css={pageDescriptionStyles}>
-                    {tableLength} {pluralize('row', tableLength)}
-                    {`, previewing rows ${offset + 1} to ${
-                      offset + presentRowCount
-                    }`}
-                  </span>
-                </PaginationControl>
+                  pageSize={pageSize}
+                  onChangePageSize={setPageSize}
+                  rowCount={tableLength}
+                />
               </td>
             </TableRow>
           )

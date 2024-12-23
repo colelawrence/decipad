@@ -50,3 +50,4 @@ export * from './containsExprRefs';
 export * from './email';
 export * from './prettify';
 export * from './getAnonUserMetadata';
+export * from './changePageSize';

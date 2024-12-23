@@ -29,3 +29,4 @@ export * from './SelectItem/SelectItem';
 export { TableToolbar } from './TableToolbar/TableToolbar';
 export { TabsContent, TabsList, TabsRoot, TabsTrigger } from './Tabs/Tabs';
 export { TextInputMenuItem } from './TextInputMenuItem/TextInputMenuItem';
+export { PaginationControl } from './PaginationControl/PaginationControl';

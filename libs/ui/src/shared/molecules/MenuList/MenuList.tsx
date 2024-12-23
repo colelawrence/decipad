@@ -10,6 +10,7 @@ import {
   useCallback,
   useContext,
   useRef,
+  useState,
 } from 'react';
 import { isElement } from 'react-is';
 
@@ -17,6 +18,8 @@ import { hideOnPrint } from 'libs/ui/src/styles/editor-layout';
 import { deciOverflowYStyles } from 'libs/ui/src/styles/scrollbars';
 import { cssVar, grey500, transparency } from '../../../primitives';
 import { TriggerMenuItem } from '../../atoms';
+import { CaretDown, CaretUp } from 'libs/ui/src/icons';
+import styled from '@emotion/styled';
 
 export const Depth = createContext(0);
 
@@ -82,6 +85,7 @@ export type MenuListProps = (
 ) & {
   readonly children: ReactNode;
   readonly open?: boolean;
+  readonly caret?: boolean;
   readonly disabled?: boolean;
   readonly portal?: boolean;
   readonly modal?: boolean;
@@ -134,6 +138,40 @@ const DropdownMenuPortalElement = ({
   return <>{children}</>;
 };
 
+const TriggerItemWrapper = styled.div({
+  display: 'flex',
+  gap: '4px',
+  alignItems: 'center',
+  svg: { width: '16px', height: '16px' },
+});
+
+const TriggerItem: FC<{
+  open: boolean;
+  disabled?: boolean;
+  TriggerElement: ReturnType<
+    typeof getSubElementType
+  >['DropdownMenuTriggerElement'];
+  onChangeOpen: (_open: boolean) => void;
+  caret?: boolean;
+  children: ReactNode;
+}> = ({ open, TriggerElement, disabled, onChangeOpen, caret, children }) => {
+  if (!caret) {
+    return (
+      <TriggerElement asChild disabled={disabled}>
+        {children}
+      </TriggerElement>
+    );
+  } else {
+    return (
+      <TriggerElement>
+        <TriggerItemWrapper onClick={() => onChangeOpen(!open)}>
+          {children} {open ? <CaretDown /> : <CaretUp />}
+        </TriggerItemWrapper>
+      </TriggerElement>
+    );
+  }
+};
+
 export const MenuList: FC<MenuListProps> = ({
   children,
 
@@ -142,7 +180,8 @@ export const MenuList: FC<MenuListProps> = ({
   trigger = <div css={{ display: 'none' }} />,
   itemTrigger,
 
-  open,
+  caret,
+  open: controlledOpen,
   onChangeOpen,
   modal,
   dropdown = !root,
@@ -165,6 +204,8 @@ export const MenuList: FC<MenuListProps> = ({
   if (!root && depth === 1) {
     throw new Error('Non-root MenuList must be nested in another MenuList');
   }
+
+  const [open, setOpen] = useState(controlledOpen ?? false);
 
   const hideOnAnotherMenuTrigger = useCallback((e: Event) => {
     const target = e.target as HTMLElement;
@@ -189,9 +230,15 @@ export const MenuList: FC<MenuListProps> = ({
 
   if (root) {
     triggerNode = (
-      <DropdownMenuTriggerElement asChild disabled={disabled}>
+      <TriggerItem
+        open={controlledOpen ?? open}
+        disabled={disabled}
+        TriggerElement={DropdownMenuTriggerElement}
+        onChangeOpen={onChangeOpen ?? setOpen}
+        caret={caret}
+      >
         {trigger}
-      </DropdownMenuTriggerElement>
+      </TriggerItem>
     );
   } else if (isElement(itemTrigger) && itemTrigger.type === TriggerMenuItem) {
     triggerNode = itemTrigger;
@@ -202,8 +249,8 @@ export const MenuList: FC<MenuListProps> = ({
   return (
     <Depth.Provider value={depth}>
       <DropdownMenuTopElement
-        open={open}
-        onOpenChange={onChangeOpen}
+        open={controlledOpen ?? open}
+        onOpenChange={onChangeOpen ?? setOpen}
         modal={modal ?? dropdown}
       >
         <div css={triggerStyles} ref={triggerRef} data-testid={dataTestid}>
@@ -211,14 +258,14 @@ export const MenuList: FC<MenuListProps> = ({
         </div>
         <DropdownMenuPortalElement portal={portal} container={container}>
           <div
-            css={[
+            css={css([
               dropdown || undropdownifyContentStyles,
               alwaysTopContentStyles,
               hideOnPrint,
-            ]}
+            ])}
           >
             <DropdownMenuContentElement
-              css={css([defaultStyles, styles, hideOnPrint])}
+              css={[defaultStyles, styles, hideOnPrint]}
               align={align}
               onFocusOutside={hideOnAnotherMenuTrigger}
               onClick={(e) => e.preventDefault()}

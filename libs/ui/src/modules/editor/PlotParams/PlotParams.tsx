@@ -94,6 +94,7 @@ export const PlotParams = ({
   setYAxisLabel,
   yColumnChartTypes,
 }: PlotParamsProps): ReturnType<FC> => {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [open, setOpen] = useState<SubMenuKey | null>(null);
   const [initValues, setInitValues] = useState(false);
   const [initValuesForFlipping, setInitValuesForFlipping] = useState(false);
@@ -453,7 +454,9 @@ export const PlotParams = ({
       <MenuList
         root
         dropdown
+        open={isMenuOpen}
         onChangeOpen={(isOpen) => {
+          setIsMenuOpen(isOpen);
           if (!isOpen) {
             setOpen(null);
           }

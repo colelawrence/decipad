@@ -32,7 +32,6 @@ export * from './Paragraph/Paragraph';
 export * from './ParagraphPlaceholder/ParagraphPlaceholder';
 export * from './TextPlaceholder/TextPlaceholder';
 export * from './MagicNumber/MagicNumber';
-export * from './VoidBlock/VoidBlock';
 export * from './Underline/Underline';
 export * from './CodeError/CodeError';
 export * from './CodeLineFloat/CodeLineFloat';

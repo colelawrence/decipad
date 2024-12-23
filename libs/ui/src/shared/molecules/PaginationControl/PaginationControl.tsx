@@ -1,9 +1,8 @@
 import { css } from '@emotion/react';
 import { FC, PropsWithChildren, useCallback } from 'react';
-import { Button, PositiveIntegerInput } from '../../../shared';
+import { Button, PositiveIntegerInput, VoidBlock } from '../..';
 import { ArrowBack, ArrowRight } from '../../../icons';
 import { cssVar } from '../../../primitives';
-import { VoidBlock } from '../VoidBlock/VoidBlock';
 
 const paginationControlOuterWrapperStyles = css({
   display: 'flex',
@@ -93,10 +92,7 @@ export const PaginationControl: FC<
               type="minimal"
               size="extraExtraSlim"
               testId={`Go to page ${targetPage(page, 1)}`}
-              onClick={useCallback(
-                () => onPageChange(targetPage(page, 1)),
-                [onPageChange, page, targetPage]
-              )}
+              onClick={() => onPageChange(targetPage(page, 1))}
             >
               <span css={iconWrapperStyles}>
                 <ArrowRight />

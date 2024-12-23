@@ -64,3 +64,4 @@ export { UpgradePlanWarning } from './UpgradePlanWarning/UpgradePlanWarning';
 export { UpgradePlanWarningTooltip } from './UpgradePlanWarning/UpgradePlanWarningTooltip';
 export { Loading } from './Loading/Loading';
 export { ExperimentalTooltip } from './ExperimentalTooltip/ExperimentalTooltip';
+export { VoidBlock } from './VoidBlock/VoidBlock';

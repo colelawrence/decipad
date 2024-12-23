@@ -32,7 +32,8 @@ test('Make sure auto-complete works', async ({ testUser }) => {
 
   await test.step('Checks if the revenue variable is linked properly', async () => {
     await testUser.notebook.addFormula('Another', '100');
-    await page.getByTestId('codeline-code').last().fill('Revenue');
+    await page.getByTestId('codeline-code').last().fill('');
+    await page.keyboard.type('Revenue', { delay: 50 });
     await page
       .getByTestId('autocomplete-group:Variables')
       .getByTestId('autocomplete-item:Revenue')
