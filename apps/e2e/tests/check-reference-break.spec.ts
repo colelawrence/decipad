@@ -14,6 +14,13 @@ test('Check references break', async ({ testUser }) => {
   await test.step('deletes calculation to break inline results', async () => {
     await page.locator('article').getByTestId('drag-handle').nth(3).click();
 
+    const hasCodelineErrors = page.getByTestId('code-line-warning');
+
+    const cEC = await hasCodelineErrors.count();
+
+    // there should be no errors
+    expect.soft(cEC, `calculation errors`).toBe(0);
+
     await page.getByText('Delete').waitFor();
     await page.getByText('Delete').click();
   });
@@ -23,9 +30,7 @@ test('Check references break', async ({ testUser }) => {
     await page.waitForTimeout(Timeouts.chartsDelay);
 
     // note: This will stop picking up errors if we change the icon of errors
-    const hasCodelineErrors = page.locator(
-      'output span >svg title:has-text("Warning")'
-    );
+    const hasCodelineErrors = page.getByTestId('code-line-warning');
 
     const cEC = await hasCodelineErrors.count();
 

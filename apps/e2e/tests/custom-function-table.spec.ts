@@ -32,7 +32,7 @@ test('Custom function Table', async ({ testUser }) => {
 
   await test.step('can change column type to a formula', async () => {
     await openColTypeMenu(page, 2);
-    await page.getByRole('menuitem', { name: 'Formula Formula' }).click();
+    await page.getByRole('menuitem', { name: 'Formula' }).click();
   });
 
   await test.step('uses custom formula on table', async () => {

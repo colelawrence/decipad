@@ -783,9 +783,7 @@ test.describe('staging operation performance checks', () => {
       );
       performance.sampleStart('Operations column > number unitless');
       await page.getByText('Show data').last().click();
-      await expect(
-        page.getByRole('row', { name: /CheckboxSelected/ }).first()
-      ).toBeVisible();
+      await expect(page.getByTestId('checkbox-selected').first()).toBeVisible();
 
       performance.sampleEnd('Operations column > number unitless');
       expect
@@ -831,9 +829,7 @@ test.describe('staging operation performance checks', () => {
       );
       performance.sampleStart('Operations column >= number unitless');
       await page.getByText('Show data').last().click();
-      await expect(
-        page.getByRole('row', { name: /CheckboxSelected/ }).first()
-      ).toBeVisible();
+      await expect(page.getByTestId('checkbox-selected').first()).toBeVisible();
 
       performance.sampleEnd('Operations column >= number unitless');
       expect
@@ -854,9 +850,7 @@ test.describe('staging operation performance checks', () => {
       );
       performance.sampleStart('Operations column  >= another column unitless');
       await page.getByText('Show data').last().click();
-      await expect(
-        page.getByRole('row', { name: /CheckboxSelected/ }).first()
-      ).toBeVisible();
+      await expect(page.getByTestId('checkbox-selected').first()).toBeVisible();
 
       performance.sampleEnd('Operations column  >= another column unitless');
       expect
@@ -950,9 +944,7 @@ test.describe('staging operation performance checks', () => {
       );
       performance.sampleStart('Operations column <= another column unitless');
       await page.getByText('Show data').last().click();
-      await expect(
-        page.getByRole('row', { name: /CheckboxSelected/ }).first()
-      ).toBeVisible();
+      await expect(page.getByTestId('checkbox-selected').first()).toBeVisible();
 
       performance.sampleEnd('Operations column <= another column unitless');
       expect
@@ -998,9 +990,7 @@ test.describe('staging operation performance checks', () => {
       );
       performance.sampleStart('Operations column == another column unitless');
       await page.getByText('Show data').last().click();
-      await expect(
-        page.getByRole('row', { name: /CheckboxSelected/ }).first()
-      ).toBeVisible();
+      await expect(page.getByTestId('checkbox-selected').first()).toBeVisible();
 
       performance.sampleEnd('Operations column == another column unitless');
       expect
@@ -1023,9 +1013,7 @@ test.describe('staging operation performance checks', () => {
       );
       performance.sampleStart('Operations column != number unitless');
       await page.getByText('Show data').last().click();
-      await expect(
-        page.getByRole('row', { name: /CheckboxSelected/ }).first()
-      ).toBeVisible();
+      await expect(page.getByTestId('checkbox-selected').first()).toBeVisible();
 
       performance.sampleEnd('Operations column != number unitless');
       expect
