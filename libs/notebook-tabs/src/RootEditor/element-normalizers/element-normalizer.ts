@@ -219,7 +219,7 @@ export const normalizeElement = <T extends AnyElement>(
       if (
         isElement(currentNodeChild) &&
         isElement(defaultNodeChild) &&
-        currentNodeChild.type === defaultNodeChild.type
+        currentNodeChild.type === (defaultNodeChild as any).type
       ) {
         continue;
       }
