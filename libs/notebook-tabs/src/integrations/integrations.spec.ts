@@ -36,7 +36,7 @@ describe('Inserting / Updating intergrations', () => {
     expect(blockIds).toMatchObject(['my-block-id']);
   });
 
-  it("doesn't perform an action if the timeOfLastRun is the same", () => {
+  it("doesn't perform an action if the timeOfLastRun is defined", () => {
     const blockIds: Array<string> = [];
 
     const { insertIntegration } = createIntegrationManager(
@@ -68,7 +68,7 @@ describe('Inserting / Updating intergrations', () => {
     expect(blockIds).toMatchObject(['my-block-id']);
   });
 
-  it('re-runs action if timeOfLastRun changes', () => {
+  it('re-runs action if timeOfLastRun becomes null again', () => {
     const blockIds: Array<string> = [];
 
     const { insertIntegration } = createIntegrationManager(
@@ -81,21 +81,16 @@ describe('Inserting / Updating intergrations', () => {
       () => {}
     );
 
-    // Run it once to get the Map inside `createIntegrationManager` up to date.
-    const date = Date.now();
-
     insertIntegration({
       id: 'my-block-id',
-      timeOfLastRun: date.toString(),
+      timeOfLastRun: null,
       children: [{ text: 'name' }],
     } as any);
     expect(blockIds).toMatchObject(['my-block-id']);
 
-    const newDate = date + 1000;
-
     insertIntegration({
       id: 'my-block-id',
-      timeOfLastRun: newDate.toString(),
+      timeOfLastRun: null,
       children: [{ text: 'name' }],
     } as any);
 

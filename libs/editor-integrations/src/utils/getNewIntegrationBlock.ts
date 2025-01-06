@@ -1,5 +1,5 @@
-import type { IntegrationTypes } from '@decipad/editor-types';
 import {
+  IntegrationTypes,
   ELEMENT_INTEGRATION,
   ELEMENT_STRUCTURED_VARNAME,
 } from '@decipad/editor-types';
@@ -21,7 +21,7 @@ export function getNewIntegration(
       },
     ],
     typeMappings: runner.types,
-    timeOfLastRun: null,
+    timeOfLastRun: IntegrationTypes.NEW_INTEGRATION_TIME_OF_LAST_RUN,
     isFirstRowHeader:
       'isFirstHeaderRow' in runner.options.importer &&
       typeof runner.options.importer.isFirstHeaderRow === 'boolean'

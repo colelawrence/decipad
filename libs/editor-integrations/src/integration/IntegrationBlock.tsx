@@ -16,7 +16,6 @@ import {
 } from '@decipad/editor-components';
 import { useComputer, useNodePath } from '@decipad/editor-hooks';
 import type {
-  IntegrationTypes,
   MarkType,
   MyElement,
   PlateComponent,
@@ -73,13 +72,12 @@ export const IntegrationBlock: PlateComponent = ({
   const onRefresh = () => {
     assert(path != null);
 
-    setNodes(
-      editor,
-      {
-        timeOfLastRun: Date.now().toString(),
-      } satisfies Partial<IntegrationTypes.IntegrationBlock>,
-      { at: path }
-    );
+    editor.apply({
+      type: 'set_node',
+      properties: { timeOfLastRun: element.timeOfLastRun },
+      newProperties: { timeOfLastRun: null },
+      path,
+    });
   };
 
   const result = computer.getBlockIdResult$.use(element.id)?.result;

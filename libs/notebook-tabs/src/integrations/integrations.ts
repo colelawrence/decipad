@@ -230,7 +230,11 @@ export const withComputerCacheIntegration = (
       return block.timeOfLastRun ?? Date.now().toString();
     }
 
-    if (block.timeOfLastRun == null && hasValidResult(computer, block.id)) {
+    if (
+      block.timeOfLastRun ===
+        IntegrationTypes.NEW_INTEGRATION_TIME_OF_LAST_RUN &&
+      hasValidResult(computer, block.id)
+    ) {
       // This is the first time the block has been inserted.
       // Let's check if we have a valid result. If so, we
       // shouldn't re-import.
@@ -272,7 +276,7 @@ export const createIntegrationManager = (
         (f) => `${f.varName!} - ${getCodeLineSource(f)}`
       );
 
-      if (lastRanTime !== block.timeOfLastRun || block.timeOfLastRun == null) {
+      if (lastRanTime == null || block.timeOfLastRun == null) {
         const timeOfLastRun = insertIntegration(block);
         integrationIdToLastRanTime.set(block.id, timeOfLastRun);
 

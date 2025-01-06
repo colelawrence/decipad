@@ -15,6 +15,7 @@ import { FC, memo, useEffect, useMemo, useRef, useState } from 'react';
 import { StyledFooter, StyledInput, StyledTable, TableWrapper } from './styles';
 import { Add, CaretDown, Formula, Trash } from 'libs/ui/src/icons';
 import { SimpleTableCellType } from '@decipad/editor-types';
+import { isFlagEnabled } from '@decipad/feature-flags';
 
 export type ChangableTableOptions = {
   formulaColumns: Array<[string, number]>;
@@ -337,21 +338,23 @@ const UnmemoedConnectionTable: FC<ConnectionTableProps> = (props) => {
             </tr>
           ))}
         </tbody>
-        <StyledFooter>
-          <tr>
-            <td colSpan={tableResult.value.length}>
-              <PaginationSizeControl
-                currentPage={page}
-                onPageChange={setPage}
-                pageSize={pageSize}
-                onChangePageSize={setPageSize}
-                rowCount={rowCount}
-              />
-            </td>
-          </tr>
-        </StyledFooter>
+        {rowCount > 10 && (
+          <StyledFooter>
+            <tr>
+              <td colSpan={tableResult.value.length}>
+                <PaginationSizeControl
+                  currentPage={page}
+                  onPageChange={setPage}
+                  pageSize={pageSize}
+                  onChangePageSize={setPageSize}
+                  rowCount={rowCount}
+                />
+              </td>
+            </tr>
+          </StyledFooter>
+        )}
       </StyledTable>
-      {props.type === 'static' && (
+      {isFlagEnabled('INTEGRATION_FORMULAS') && props.type === 'static' && (
         <div>
           <button onClick={props.onAddFormula}>
             <Add />

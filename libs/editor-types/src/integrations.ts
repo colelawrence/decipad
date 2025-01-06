@@ -8,6 +8,15 @@ import type {
   TableColumnFormulaElement,
 } from '.';
 
+//
+// Little hacky.
+// When we first insert an integration into the notebook, we don't want the integration
+// refreshing system to re-run our integration.
+//
+// So by having a special initial value, we can avoid this problem, and check for this.
+//
+export const NEW_INTEGRATION_TIME_OF_LAST_RUN = 'initial-value';
+
 export type SerializedFilter = {
   id: string;
   filterName: string;
