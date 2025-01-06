@@ -191,6 +191,7 @@ export interface TableData {
 export interface TableColumnFormulaElement extends BaseElement {
   type: typeof ELEMENT_TABLE_COLUMN_FORMULA;
   columnId: string;
+  varName?: string;
   children: (PlainText | SmartRefElement)[];
 }
 

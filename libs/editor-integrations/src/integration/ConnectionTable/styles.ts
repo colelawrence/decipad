@@ -1,4 +1,4 @@
-import { cssVar, fullWidthStyles, p13Medium, p14Medium } from '@decipad/ui';
+import { cssVar, p13Medium, p14Medium, table } from '@decipad/ui';
 import { css } from '@emotion/react';
 import styled from '@emotion/styled';
 import { noTrackScrollbarStyles } from 'libs/ui/src/styles/scrollbars';
@@ -98,13 +98,39 @@ export const StyledTable = styled.table(
   hiddenStyles
 );
 
+const buttonHoverStyles = css({
+  ':hover': {
+    '> div:last-child': {
+      visibility: 'unset',
+    },
+  },
+
+  '> div:last-child': {
+    button: {
+      minWidth: '32px',
+      height: '100%',
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+
+    visibility: 'hidden',
+    svg: { width: '16px' },
+    borderRadius: '8px',
+    backgroundColor: cssVar('backgroundDefault'),
+  },
+});
+
 export const TableWrapper = styled.div<{ fullWidth?: boolean }>(
   noTrackScrollbarStyles,
-  (props) => ({
-    width: '100%',
+  buttonHoverStyles,
+  (props) => (props.fullWidth ? table.fullWidthStyles : {}),
+  {
+    width: cssVar('editorWidth'),
     overflowX: 'auto',
-    ...(props.fullWidth ? fullWidthStyles : {}),
-  })
+    display: 'flex',
+    gap: '8px',
+  }
 );
 
 export const StyledFooter = styled.tfoot({

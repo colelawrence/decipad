@@ -22,8 +22,12 @@ import {
 import { useMergedRef } from '../../../hooks';
 import { DragHandle as DragHandleIcon, Text, Warning } from '../../../icons';
 import { p13Medium, useThemeColor } from '../../../primitives';
-import { table } from '../../../styles';
-import { tdMinWidth } from '../../../styles/table';
+import {
+  tdHorizontalPadding,
+  tdMinWidth,
+  tdVerticalPadding,
+  thMinHeight,
+} from '../../../styles/table';
 import { TableStyleContext, getStringType, getTypeIcon } from '../../../utils';
 import { ColumnDropLine } from '../DropLine/ColumnDropLine';
 import { Tooltip } from '../../../shared';
@@ -318,8 +322,8 @@ const showDragHandleStyles = css({
 });
 
 const columnStyles = css(p13Medium, showDragHandleStyles, {
-  minHeight: table.thMinHeight,
-  padding: `${table.tdVerticalPadding}px ${table.tdHorizontalPadding}px`,
+  minHeight: thMinHeight,
+  padding: `${tdVerticalPadding}px ${tdHorizontalPadding}px`,
 });
 
 const headerWrapperStyles = css({

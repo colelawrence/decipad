@@ -1,10 +1,12 @@
 import {
   getNodeString,
   getPreviousNode,
+  insertNodes,
+  removeNodes,
   setNodes,
 } from '@udecode/plate-common';
 import type { ComponentProps } from 'react';
-import { useCallback } from 'react';
+import { Children, useCallback } from 'react';
 import { useClientEvents } from '@decipad/client-events';
 import {
   DraggableBlock,
@@ -18,9 +20,11 @@ import type {
   MarkType,
   MyElement,
   PlateComponent,
+  TableColumnFormulaElement,
 } from '@decipad/editor-types';
 import {
   ELEMENT_INTEGRATION,
+  ELEMENT_TABLE_COLUMN_FORMULA,
   ImportElementSourcePretty,
   useMyEditorRef,
 } from '@decipad/editor-types';
@@ -38,8 +42,9 @@ import {
   icons,
 } from '@decipad/ui';
 import { assert } from '@decipad/utils';
-import { isRectangularTable } from '../utils';
+import { getBlockFormulas, isRectangularTable } from '../utils';
 import { ConnectionTable } from './ConnectionTable/ConnectionTable';
+import { nanoid } from 'nanoid';
 
 function canBePlotted(result: Result.Result | undefined): boolean {
   return (
@@ -147,6 +152,60 @@ export const IntegrationBlock: PlateComponent = ({
     });
   };
 
+  const addFormula = () => {
+    if (path == null) {
+      return;
+    }
+
+    const integrationVarName = getNodeString(element.children[0]);
+
+    const id = nanoid();
+
+    let index = 1;
+    let propasedName = 'Column1';
+
+    do {
+      propasedName = `Column${index}`;
+      index++;
+    } while (
+      computer.getVarBlockId(`${integrationVarName}.${propasedName}`) != null
+    );
+
+    insertNodes(
+      editor,
+      [
+        {
+          type: ELEMENT_TABLE_COLUMN_FORMULA,
+          children: [{ text: '' }],
+          id,
+          columnId: id,
+          varName: propasedName,
+        } satisfies TableColumnFormulaElement,
+      ],
+      { at: [...path, element.children.length] }
+    );
+  };
+
+  const renameFormula = (index: number, newName: string) => {
+    if (path == null) {
+      return;
+    }
+
+    setNodes(
+      editor,
+      { varName: newName } satisfies Partial<TableColumnFormulaElement>,
+      { at: [...path, index] }
+    );
+  };
+
+  const deleteFormula = (index: number) => {
+    if (path == null) {
+      return;
+    }
+
+    removeNodes(editor, { at: [...path, index] });
+  };
+
   const integrationTypeText =
     element.integrationType.type === 'mysql' && element.integrationType.provider
       ? element.integrationType.provider
@@ -158,6 +217,11 @@ export const IntegrationBlock: PlateComponent = ({
   const isRectangularResult = isRectangularTable(result);
   const displayResult = result != null && !element.hideResult;
 
+  const [, ...formulaChildren] = element.children;
+  const [varName, ...formulas] = Children.toArray(children);
+
+  const columnFormulas = getBlockFormulas(element);
+
   return (
     <DraggableBlock
       element={element}
@@ -166,6 +230,7 @@ export const IntegrationBlock: PlateComponent = ({
       slateAttributes={attributes}
     >
       <UIIntegrationBlock
+        formulas={formulaChildren.length > 0 ? formulas : null}
         meta={
           element.timeOfLastRun
             ? [
@@ -218,6 +283,10 @@ export const IntegrationBlock: PlateComponent = ({
               type="static"
               tableResult={result as Result.Result<'table'>}
               hiddenColumns={[]}
+              onAddFormula={addFormula}
+              formulaColumns={columnFormulas}
+              onChangeFormulaName={renameFormula}
+              onDeleteFormula={deleteFormula}
               fullWidth
             />
           ) : (
@@ -225,7 +294,7 @@ export const IntegrationBlock: PlateComponent = ({
           )
         }
       >
-        {children}
+        {varName}
       </UIIntegrationBlock>
     </DraggableBlock>
   );

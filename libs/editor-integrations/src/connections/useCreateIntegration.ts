@@ -21,8 +21,10 @@ import {
   CodeRunner,
   GSheetRunner,
   RunnerFactoryParams,
+  pushIntegrationFormulasWithName,
   useRunner,
 } from '@decipad/notebook-tabs';
+import { getBlockFormulas } from '../utils';
 
 export const useConcreteIntegration = (
   props: ConcreteIntegrationProps
@@ -135,7 +137,23 @@ export const useConcreteIntegration = (
 
         logSub.unsubscribe();
       });
-  }, [queries, runner, toast, externalData, computer]);
+
+    if (props.integrationBlock != null) {
+      await pushIntegrationFormulasWithName(
+        [notebookId, computer, props.integrationBlock],
+        varName
+      );
+    }
+  }, [
+    notebookId,
+    queries,
+    runner,
+    toast,
+    externalData,
+    computer,
+    props.integrationBlock,
+    varName,
+  ]);
 
   useEffect(() => {
     const name = varName.trim();
@@ -176,13 +194,25 @@ export const useConcreteIntegration = (
       (async () => {
         try {
           await runner.import(computer);
+          await pushIntegrationFormulasWithName(
+            [notebookId, computer, props.integrationBlock],
+            varName
+          );
         } catch (err) {
           console.error('error importing:', err);
           toast.error(`Error importing integration: ${(err as Error).message}`);
         }
       })();
     }
-  }, [type, runner, props.integrationBlock, computer, toast]);
+  }, [
+    type,
+    runner,
+    props.integrationBlock,
+    computer,
+    toast,
+    notebookId,
+    varName,
+  ]);
 
   //
   // If we are creating an integration and the user decides to
@@ -282,6 +312,8 @@ export const useConcreteIntegration = (
     info,
     onExecute,
     onChangeVarName: setVarName,
+
+    formulaColumns: getBlockFormulas(props.integrationBlock),
 
     onChangeColumnName(originalColumnName, desiredColumnName) {
       runner.renameColumn(computer, originalColumnName, desiredColumnName);

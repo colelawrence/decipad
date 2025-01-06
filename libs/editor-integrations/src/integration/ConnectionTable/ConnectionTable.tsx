@@ -4,16 +4,21 @@ import { useActiveElement, useResolved } from '@decipad/react-utils';
 import { Result } from '@decipad/remote-computer';
 import {
   HideColumn,
+  MenuItem,
+  MenuList,
   PaginationSizeControl,
   VariableTypeMenu,
   getTypeIcon,
+  table as tableStyles,
 } from '@decipad/ui';
 import { FC, memo, useEffect, useMemo, useRef, useState } from 'react';
 import { StyledFooter, StyledInput, StyledTable, TableWrapper } from './styles';
-import { CaretDown } from 'libs/ui/src/icons';
+import { Add, CaretDown, Formula, Trash } from 'libs/ui/src/icons';
 import { SimpleTableCellType } from '@decipad/editor-types';
 
 export type ChangableTableOptions = {
+  formulaColumns: Array<[string, number]>;
+
   onChangeColumnType: (
     columnName: string,
     type: SimpleTableCellType | undefined
@@ -29,6 +34,11 @@ export type ChangableVariableOptions = {
 type CommonTableProps = {
   tableResult: Result.Result<'table'>;
   hiddenColumns: Array<string>;
+
+  formulaColumns: Array<[string, number]>;
+  onAddFormula: () => void;
+  onChangeFormulaName: (formulaIndex: number, formulaName: string) => void;
+  onDeleteFormula: (formulaIndex: number) => void;
 
   fullWidth?: boolean;
 };
@@ -75,18 +85,57 @@ const getHtmlRows = (
 
 const StaticTableHeader: FC<
   Extract<ConnectionTableProps, { type: 'static' }>
-> = ({ tableResult, hiddenColumns }) => {
+> = ({
+  tableResult,
+  hiddenColumns,
+  formulaColumns,
+  onChangeFormulaName,
+  onDeleteFormula,
+}) => {
   return (
     <thead>
       <tr>
-        {tableResult.type.columnNames.map((columnName, i) => {
+        {tableResult.type.columnNames.map((colName, i) => {
           const Icon = getTypeIcon(tableResult.type.columnTypes[i]);
-          const isColumnHidden = hiddenColumns.some((c) => c === columnName);
+          // TODO: use a map instead of various arrays [ColumnName -> 'formula' | 'hidden' | 'any-future-state']
+
+          const isColumnHidden = hiddenColumns.some((c) => c === colName);
+          const columnFormula = formulaColumns.find(
+            ([name]) => name === colName
+          );
+
+          if (columnFormula != null) {
+            const [columnName, index] = columnFormula;
+            return (
+              <th key={columnName} scope="col">
+                <span>
+                  <Formula />
+                  <ToggleInput
+                    text={columnName}
+                    onChangeText={(formulaName) =>
+                      onChangeFormulaName(index, formulaName)
+                    }
+                  />
+                  <MenuList root dropdown caret trigger={null}>
+                    <MenuItem
+                      icon={<Trash />}
+                      css={{
+                        minWidth: '132px',
+                      }}
+                      onSelect={() => onDeleteFormula(index)}
+                    >
+                      Remove Column
+                    </MenuItem>
+                  </MenuList>
+                </span>
+              </th>
+            );
+          }
 
           return (
-            <th key={columnName} scope="col" data-hidden={isColumnHidden}>
+            <th key={colName} scope="col" data-hidden={isColumnHidden}>
               <span>
-                <Icon /> <span>{columnName}</span>
+                <Icon /> <span>{colName}</span>
               </span>
             </th>
           );
@@ -96,7 +145,7 @@ const StaticTableHeader: FC<
   );
 };
 
-const ToggleInput: FC<{
+export const ToggleInput: FC<{
   text: string;
   onChangeText: (_text: string) => void;
 }> = ({ text, onChangeText }) => {
@@ -155,6 +204,7 @@ const ChangableTableHeader: FC<
 > = ({
   tableResult,
   hiddenColumns,
+  formulaColumns,
   onChangeColumnType,
   onChangeColumnName,
   onToggleHideColumn,
@@ -164,7 +214,21 @@ const ChangableTableHeader: FC<
       <tr>
         {tableResult.type.columnNames.map((columnName, i) => {
           const Icon = getTypeIcon(tableResult.type.columnTypes[i]);
+
           const isColumnHidden = hiddenColumns.some((c) => c === columnName);
+          const columnFormula = formulaColumns.find(
+            ([name]) => name === columnName
+          );
+
+          if (columnFormula != null) {
+            return (
+              <th key={columnName} scope="col" data-hidden={isColumnHidden}>
+                <span>
+                  <Formula /> <span>{columnName}</span>
+                </span>
+              </th>
+            );
+          }
 
           return (
             <th key={columnName} scope="col" data-hidden={isColumnHidden}>
@@ -256,6 +320,7 @@ const UnmemoedConnectionTable: FC<ConnectionTableProps> = (props) => {
 
   return (
     <TableWrapper fullWidth={props.fullWidth}>
+      {props.fullWidth && <div css={tableStyles.tableOverflowStyles} />}
       <StyledTable contentEditable={false}>
         <TableHeader {...props} />
         <tbody>
@@ -286,6 +351,13 @@ const UnmemoedConnectionTable: FC<ConnectionTableProps> = (props) => {
           </tr>
         </StyledFooter>
       </StyledTable>
+      {props.type === 'static' && (
+        <div>
+          <button onClick={props.onAddFormula}>
+            <Add />
+          </button>
+        </div>
+      )}
     </TableWrapper>
   );
 };

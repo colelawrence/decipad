@@ -20,11 +20,8 @@ import { deciOverflowStyles } from '../../../styles/scrollbars';
 import { tableControlWidth } from '../../../styles/table';
 import { CodeResultProps } from '../../../types';
 import { isTabularType, toTableHeaderType } from '../../../utils';
-import {
-  tableOverflowStyles,
-  tableWrapperStyles,
-} from '../EditorTable/EditorTable';
 import { TableResultCell } from './TableResultCell';
+import { table } from 'libs/ui/src/styles';
 
 const MAX_ROWS_PER_PAGE = 10;
 
@@ -136,7 +133,7 @@ export const TableResult: FC<TableResultProps> = ({
     <div
       css={
         !isResultPreview && [
-          isLiveResult && tableWrapperStyles,
+          isLiveResult && table.tableWrapperStyles,
           isLiveResult && liveTableWrapperStyles,
           deciOverflowStyles, // cause of nested tables
         ]
@@ -145,7 +142,7 @@ export const TableResult: FC<TableResultProps> = ({
       {!isResultPreview && (
         <div
           css={[
-            isLiveResult && tableOverflowStyles,
+            isLiveResult && table.tableOverflowStyles,
             isLiveResult && liveTableOverflowStyles,
           ]}
           contentEditable={false}

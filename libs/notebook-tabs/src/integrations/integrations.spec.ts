@@ -8,7 +8,9 @@ import { FIRST_TAB_INDEX } from '../constants';
 import {
   ELEMENT_INTEGRATION,
   ELEMENT_STRUCTURED_VARNAME,
+  ELEMENT_TABLE_COLUMN_FORMULA,
   IntegrationTypes,
+  TableColumnFormulaElement,
 } from '@decipad/editor-types';
 
 describe('Inserting / Updating intergrations', () => {
@@ -20,6 +22,7 @@ describe('Inserting / Updating intergrations', () => {
         blockIds.push(block.id);
         return Date.now().toString();
       },
+      () => {},
       () => {},
       () => {}
     );
@@ -41,6 +44,7 @@ describe('Inserting / Updating intergrations', () => {
         blockIds.push(block.id);
         return Date.now().toString();
       },
+      () => {},
       () => {},
       () => {}
     );
@@ -72,6 +76,7 @@ describe('Inserting / Updating intergrations', () => {
         blockIds.push(block.id);
         return Date.now().toString();
       },
+      () => {},
       () => {},
       () => {}
     );
@@ -109,6 +114,7 @@ describe('Inserting / Updating intergrations', () => {
       (block) => {
         renamingBlockIds.push(block.id);
       },
+      () => {},
       () => {}
     );
 
@@ -132,6 +138,120 @@ describe('Inserting / Updating intergrations', () => {
 
     expect(blockIds).toMatchObject(['my-block-id']);
     expect(renamingBlockIds).toMatchObject(['my-block-id']);
+  });
+
+  it('can update formulas', () => {
+    const blockIds: Array<string> = [];
+    const updatedFormulasBlockIds: Array<string> = [];
+
+    const { insertIntegration } = createIntegrationManager(
+      (block) => {
+        blockIds.push(block.id);
+        return block.timeOfLastRun!;
+      },
+      () => {},
+      (block) => {
+        updatedFormulasBlockIds.push(block.id);
+      },
+      () => {}
+    );
+
+    // Run it once to get the Map inside `createIntegrationManager` up to date.
+    const date = Date.now() - 1000;
+
+    insertIntegration({
+      id: 'my-block-id',
+      timeOfLastRun: date.toString(),
+      children: [{ text: 'name' }],
+    } as any);
+
+    expect(updatedFormulasBlockIds).toMatchObject([]);
+    expect(blockIds).toMatchObject(['my-block-id']);
+
+    insertIntegration({
+      id: 'my-block-id',
+      timeOfLastRun: date.toString(),
+      children: [
+        { text: 'new-name' },
+        {
+          id: 'formula-1',
+          type: ELEMENT_TABLE_COLUMN_FORMULA,
+          columnId: 'formula-1',
+          children: [{ text: '1+1' }],
+        } satisfies TableColumnFormulaElement,
+      ],
+    } as any);
+
+    expect(blockIds).toMatchObject(['my-block-id']);
+    expect(updatedFormulasBlockIds).toMatchObject(['my-block-id']);
+  });
+
+  it('re-runs formulas if varName changes', () => {
+    const blockIds: Array<string> = [];
+    const updatedFormulasBlockIds: Array<string> = [];
+
+    const { insertIntegration } = createIntegrationManager(
+      (block) => {
+        blockIds.push(block.id);
+        return block.timeOfLastRun!;
+      },
+      () => {},
+      (block) => {
+        updatedFormulasBlockIds.push(block.id);
+      },
+      () => {}
+    );
+
+    // Run it once to get the Map inside `createIntegrationManager` up to date.
+    const date = Date.now() - 1000;
+
+    insertIntegration({
+      id: 'my-block-id',
+      timeOfLastRun: date.toString(),
+      children: [{ text: 'name' }],
+    } as any);
+
+    expect(updatedFormulasBlockIds).toMatchObject([]);
+    expect(blockIds).toMatchObject(['my-block-id']);
+
+    insertIntegration({
+      id: 'my-block-id',
+      timeOfLastRun: date.toString(),
+      children: [
+        { text: 'new-name' },
+        {
+          id: 'formula-1',
+          type: ELEMENT_TABLE_COLUMN_FORMULA,
+          columnId: 'formula-1',
+          varName: 'name',
+          children: [{ text: '1+1' }],
+        } satisfies TableColumnFormulaElement,
+      ],
+    } as any);
+
+    expect(blockIds).toMatchObject(['my-block-id']);
+    expect(updatedFormulasBlockIds).toMatchObject(['my-block-id']);
+
+    insertIntegration({
+      id: 'my-block-id',
+      timeOfLastRun: date.toString(),
+      children: [
+        { text: 'new-name' },
+        {
+          id: 'formula-1',
+          type: ELEMENT_TABLE_COLUMN_FORMULA,
+          columnId: 'formula-1',
+          varName: 'name-changed',
+          children: [{ text: '1+1' }],
+        } satisfies TableColumnFormulaElement,
+      ],
+    } as any);
+
+    expect(blockIds).toMatchObject(['my-block-id']);
+    expect(updatedFormulasBlockIds).toMatchObject([
+      'my-block-id',
+      'my-block-id',
+    ]);
   });
 });
 

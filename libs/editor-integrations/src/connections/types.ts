@@ -30,6 +30,8 @@ export interface ConnectionProps {
 
   onChangeColumnName: (originalColumnName: string, columnName: string) => void;
 
+  formulaColumns: Array<[string, number]>;
+
   hiddenColumns: Array<string>;
   onToggleHideColumn: (columnName: string) => void;
 }

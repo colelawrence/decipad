@@ -1,8 +1,12 @@
 import { Computer } from '@decipad/computer-interfaces';
-import { Filter, IntegrationTypes } from '@decipad/editor-types';
+import {
+  Filter,
+  IntegrationTypes,
+  TableColumnFormulaElement,
+} from '@decipad/editor-types';
 import { getRunner } from './runners';
 import { getNodeString } from '@udecode/plate-common';
-import { assert, timeout } from '@decipad/utils';
+import { assert, dequal, timeout } from '@decipad/utils';
 import {
   pushResultNameChange,
   pushResultToComputer,
@@ -10,6 +14,13 @@ import {
 import { omit } from 'lodash';
 import { EditorController } from '../EditorController';
 import DeciNumber from '@decipad/number';
+import { getCodeLineSource } from '@decipad/editor-utils';
+import {
+  astNode,
+  parseExpression,
+  statementToIdentifiedBlock,
+} from '@decipad/remote-computer';
+import { nanoid } from 'nanoid';
 
 const WAIT_BEFORE_CHECKING_RESULT = 3000;
 
@@ -19,11 +30,25 @@ const hasValidResult = (computer: Computer, resultId: string): boolean => {
   return result != null && result.type === 'computer-result';
 };
 
-const pushIntegration = async (
+type IntegrationProcessFunc = (
   notebookId: string,
   computer: Computer,
   block: IntegrationTypes.IntegrationBlock
-): Promise<void> => {
+) => Promise<void>;
+
+export const pushIntegrationsAndFormulas: IntegrationProcessFunc = (
+  ...props
+) => {
+  return pushIntegration(...props).then(() =>
+    pushIntegrationFormulas(...props)
+  );
+};
+
+export const pushIntegration: IntegrationProcessFunc = async (
+  notebookId,
+  computer,
+  block
+) => {
   const variableName = getNodeString(block.children[0]);
   const { id, typeMappings, filters } = block;
 
@@ -51,6 +76,55 @@ const pushIntegration = async (
     throw err;
   });
   runner.clean();
+};
+
+const pushFormulas = async (
+  computer: Computer,
+  name: string,
+  formulaElements: Array<TableColumnFormulaElement>,
+  randomIds = false
+): Promise<void> => {
+  const deciLangFormulas = formulaElements
+    .map(getCodeLineSource)
+    .map(parseExpression)
+    .filter((e) => e.solution != null)
+    .map((e) => e.solution!)
+    .map((expression, i) =>
+      astNode(
+        'table-column-assign',
+        astNode('tablepartialdef', name),
+        astNode('coldef', formulaElements[i].varName!),
+        expression
+      )
+    )
+    .map((node, i) =>
+      statementToIdentifiedBlock(
+        randomIds ? nanoid() : formulaElements[i].id,
+        node
+      )
+    );
+
+  return computer.pushComputeDelta({ program: { upsert: deciLangFormulas } });
+};
+
+export const pushIntegrationFormulasWithName = async (
+  [_id, computer, block]: Parameters<IntegrationProcessFunc>,
+  name: string
+): ReturnType<IntegrationProcessFunc> => {
+  const [, ...formulas] = block.children;
+
+  await pushFormulas(computer, name, formulas, true);
+};
+
+export const pushIntegrationFormulas: IntegrationProcessFunc = async (
+  _id,
+  computer,
+  block
+) => {
+  const [name, ...formulas] = block.children;
+  const varName = getNodeString(name);
+
+  await pushFormulas(computer, varName, formulas);
 };
 
 export const removeFromComputer =
@@ -125,7 +199,8 @@ export const withControllerSideEffects = (
 
 export const withComputerCacheIntegration = (
   notebookId: string,
-  computer: Computer
+  computer: Computer,
+  fn: IntegrationProcessFunc
 ): ((block: IntegrationTypes.IntegrationBlock) => string) => {
   let hasTriedCache = false;
 
@@ -142,7 +217,7 @@ export const withComputerCacheIntegration = (
           continue;
         }
 
-        pushIntegration(notebookId, computer, block);
+        fn(notebookId, computer, block);
       }
 
       blocksToProcess.clear();
@@ -163,7 +238,7 @@ export const withComputerCacheIntegration = (
       return Date.now().toString();
     }
 
-    pushIntegration(notebookId, computer, block);
+    fn(notebookId, computer, block);
 
     return Date.now().toString();
   };
@@ -177,24 +252,25 @@ type IntegrationManagerReturn = {
 export const createIntegrationManager = (
   insertIntegration: (block: IntegrationTypes.IntegrationBlock) => string,
   renameIntegration: (block: IntegrationTypes.IntegrationBlock) => void,
+  updateFormulas: (block: IntegrationTypes.IntegrationBlock) => void,
   deleteIntegration: (block: IntegrationTypes.IntegrationBlock) => void
 ): IntegrationManagerReturn => {
   const integrationIdToLastRanTime = new Map<string, string>();
   const integrationIdToName = new Map<string, string>();
+  const integrationIdToStringFormulas = new Map<string, Array<string>>();
 
   return {
     insertIntegration(block: IntegrationTypes.IntegrationBlock) {
       const lastRanTime = integrationIdToLastRanTime.get(block.id);
       const lastSeenName = integrationIdToName.get(block.id);
+      const lastFormulas = integrationIdToStringFormulas.get(block.id);
 
-      const blockName = getNodeString(block.children[0]);
+      const [varName, ...formulas] = block.children;
 
-      if (
-        lastRanTime === block.timeOfLastRun &&
-        lastSeenName === getNodeString(block.children[0])
-      ) {
-        return;
-      }
+      const blockName = getNodeString(varName);
+      const stringFormulas = formulas.map(
+        (f) => `${f.varName!} - ${getCodeLineSource(f)}`
+      );
 
       if (lastRanTime !== block.timeOfLastRun || block.timeOfLastRun == null) {
         const timeOfLastRun = insertIntegration(block);
@@ -204,12 +280,21 @@ export const createIntegrationManager = (
           integrationIdToName.set(block.id, blockName);
         }
 
+        if (!dequal(stringFormulas, lastFormulas)) {
+          integrationIdToStringFormulas.set(block.id, stringFormulas);
+        }
+
         return;
       }
 
       if (lastSeenName !== blockName) {
         renameIntegration(block);
         integrationIdToName.set(block.id, blockName);
+      }
+
+      if (!dequal(lastFormulas, stringFormulas)) {
+        updateFormulas(block);
+        integrationIdToStringFormulas.set(block.id, stringFormulas);
       }
     },
 

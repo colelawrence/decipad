@@ -4,7 +4,10 @@ import { css } from '@emotion/react';
 import { FC } from 'react';
 import { Add } from '../../../icons';
 import { cssVar, p13Medium } from '../../../primitives';
-import { table } from '../../../styles';
+import {
+  smartRowHorizontalPadding,
+  tdHorizontalPadding,
+} from 'libs/ui/src/styles/table';
 
 const buttonStyles = css(p13Medium, {
   cursor: 'pointer',
@@ -12,8 +15,8 @@ const buttonStyles = css(p13Medium, {
   alignItems: 'center',
   gap: '6px',
   width: 'auto',
-  padding: `6px ${table.tdHorizontalPadding}px`,
-  marginTop: `${table.smartRowHorizontalPadding}px`,
+  padding: `6px ${tdHorizontalPadding}px`,
+  marginTop: `${smartRowHorizontalPadding}px`,
   borderRadius: '6px',
 
   backgroundColor: cssVar('backgroundDefault'),

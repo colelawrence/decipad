@@ -78,6 +78,7 @@ describe('element type map', () => {
               "id": "mocked-id",
               "isHidden": "some-string-that-is-hard-to-guess",
               "type": "table-column-formula",
+              "varName": "some-string-that-is-hard-to-guess",
             },
           ],
           "endpointUrlSecretName": "some-string-that-is-hard-to-guess",

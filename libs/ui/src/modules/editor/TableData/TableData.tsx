@@ -3,8 +3,8 @@ import { PlateComponentAttributes } from '@decipad/editor-types';
 import { css } from '@emotion/react';
 import { FC, HTMLAttributes, forwardRef } from 'react';
 import { componentCssVars, cssVar, p12Medium } from '../../../primitives';
-import { table } from '../../../styles';
 import {
+  firstTdPaddingLeft,
   innerTablesNoBottomBorderStyles,
   innerTablesNoTopBorderStyles,
   tdBaseStyles,
@@ -30,8 +30,8 @@ const tdPlaceholderStyles = css({
   },
 
   '&:first-of-type': {
-    paddingLeft: table.firstTdPaddingLeft,
-    '--td-placeholder-width': `${table.firstTdPaddingLeft}px`,
+    paddingLeft: firstTdPaddingLeft,
+    '--td-placeholder-width': `${firstTdPaddingLeft}px`,
     '--td-no-padding-left': '0px',
   },
 

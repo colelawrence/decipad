@@ -11,9 +11,8 @@ import { Move, Transpose } from '../../../icons';
 import * as userIcons from '../../../icons/user-icons';
 import { p14Regular, smallScreenQuery } from '../../../primitives';
 import { IconPopover, TableToolbar } from '../../../shared/molecules';
-import { editorLayout, scrollbars } from '../../../styles';
+import { editorLayout, scrollbars, table } from '../../../styles';
 import { AvailableSwatchColor, TableStyleContext } from '../../../utils';
-import { tableCaptionWrapperStyles } from '../EditorTable/EditorTable';
 import { VariableNameSelector } from '../VariableNameSelector/VariableNameSelector';
 
 const dataViewWrapperStyles = css({
@@ -135,7 +134,7 @@ export const DataView: FC<DataViewProps> = ({
     >
       <div
         className={'block-table'}
-        css={[dataViewWrapperStyles, tableCaptionWrapperStyles]}
+        css={[dataViewWrapperStyles, table.tableCaptionWrapperStyles]}
         aria-roledescription="data view"
       >
         <TableToolbar

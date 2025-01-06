@@ -147,6 +147,7 @@ export const elementKindsToDefaultsGenerator: Partial<ElementKindToElementGenera
             endpointUrlSecretName: Hacky.Undefined,
             isHidden: Hacky.Undefined,
             columnId: '',
+            varName: Hacky.Undefined,
             [ANY_AMOUNT]: true,
           },
         ],
@@ -208,6 +209,8 @@ export const normalizeElement = <T extends AnyElement>(
       const currentNodeChild = node.children[i];
       const defaultNodeChild = defaultElement.children[i];
 
+      const defaultNodeChildType = (defaultNodeChild as any).type as string;
+
       if (isText(currentNodeChild) && isText(defaultNodeChild)) {
         // Do nothing if they're both text leafs
         continue;
@@ -227,7 +230,7 @@ export const normalizeElement = <T extends AnyElement>(
       //
 
       const correctNodeIndex = node.children.findIndex(
-        (c) => isElement(c) && c.type === (defaultNodeChild as any).type
+        (c) => isElement(c) && c.type === defaultNodeChildType
       );
 
       if (correctNodeIndex === -1) {

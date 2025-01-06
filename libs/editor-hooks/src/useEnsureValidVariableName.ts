@@ -42,7 +42,6 @@ export function useEnsureValidVariableName(
       if (!enabled) {
         return;
       }
-
       const path = findNodePath(editor, element);
       const currentVarName = getNodeString(element);
 

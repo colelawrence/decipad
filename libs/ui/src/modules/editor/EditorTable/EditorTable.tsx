@@ -23,109 +23,15 @@ import { Children, FC, ReactNode, useCallback, useMemo, useState } from 'react';
 import { ConnectDropTarget } from 'react-dnd';
 import { Point } from 'slate';
 import { Add } from '../../../icons';
-import { cssVar, smallScreenQuery } from '../../../primitives';
+import { cssVar } from '../../../primitives';
 import { AddTableRowButton } from '../../../shared';
-import { editorLayout, scrollbars } from '../../../styles';
-import { slimBlockWidth } from '../../../styles/editor-layout';
-import { tableControlWidth } from '../../../styles/table';
+import { table } from '../../../styles';
 import { AvailableSwatchColor, TableStyleContext } from '../../../utils';
 import { useEventNoEffect } from '../../../utils/useEventNoEffect';
 import { Table, TableWidth } from '../Table/Table';
 
-const halfSlimBlockWidth = `${Math.round(editorLayout.slimBlockWidth / 2)}px`;
-const totalWidth = cssVar('editorWidth');
-const halfTotalWidth = '50vw';
-const wideToSlimBlockWidthDifference = `${
-  editorLayout.wideBlockWidth - editorLayout.slimBlockWidth
-}px`;
-const gutterWidth = '60px';
-const leftMargin = `calc(${halfTotalWidth} - ${halfSlimBlockWidth} - ${wideToSlimBlockWidthDifference})`;
-const restWidthBlock = `calc(${totalWidth} - ${leftMargin} - ${gutterWidth} - ${gutterWidth})`;
-
-const scrollRightOffset = `(((${cssVar(
-  'editorWidth'
-)} - 610px) / 2) + ${tableControlWidth}px)`;
-
 const wrapperStyles = css({
   margin: '0',
-});
-
-export const tableCaptionWrapperStyles = css({
-  width: '100%',
-  minWidth: editorLayout.slimBlockWidth,
-  maxWidth: restWidthBlock,
-  display: 'inline-block',
-  [smallScreenQuery]: {
-    maxWidth: cssVar('editorWidth'),
-    minWidth: '0',
-  },
-});
-
-export const tableWrapperTransformStyles = css({
-  position: 'relative',
-  transform: `translateX(calc((((${cssVar(
-    'editorWidth'
-  )} - ${slimBlockWidth}px) / 2) + ${tableControlWidth}px) * -1 ))`,
-  left: tableControlWidth,
-});
-
-const tableWrapperDraggingStyles = css({
-  left: `-${tableControlWidth}px`,
-});
-
-const tableWrapperDefaultStyles = css(
-  scrollbars.deciInsideNotebookOverflowXStyles,
-  {
-    width: cssVar('editorWidth'),
-    minWidth: editorLayout.slimBlockWidth,
-    overflowY: 'hidden',
-    position: 'relative',
-    whiteSpace: 'nowrap',
-    display: 'flex',
-    [smallScreenQuery]: {
-      maxWidth: cssVar('editorWidth'),
-      transform: `translateX(-40px)`,
-      minWidth: '0',
-    },
-  }
-);
-
-export const tableWrapperStyles = css([
-  tableWrapperTransformStyles,
-  tableWrapperDefaultStyles,
-]);
-
-export const tableScroll = css({
-  paddingRight: `calc(${scrollRightOffset})`,
-  [smallScreenQuery]: {
-    paddingRight: '0px',
-  },
-});
-
-export const tableOverflowStyles = css({
-  display: 'inline-block',
-  height: '20px',
-  minWidth: `calc(((${cssVar(
-    'editorWidth'
-  )} - ${slimBlockWidth}px) / 2) - ${tableControlWidth}px)`,
-  '@media print': {
-    minWidth: 'auto',
-  },
-});
-
-const tableAddColumnButtonWrapperStyles = css({
-  // this is deliberately coded like this
-  // to prevent a unfixable rogue cursor from slate
-  // that otherwise would render
-  paddingRight: 400,
-  width: '32px',
-  minWidth: '32px',
-  paddingLeft: '8px',
-  position: 'relative',
-  marginLeft: `calc(${scrollRightOffset} *-1)`,
-  [smallScreenQuery]: {
-    marginLeft: '0px',
-  },
 });
 
 const tableAddColumnButtonStyles = css({
@@ -366,25 +272,27 @@ export const EditorTable: FC<EditorTableProps> = ({
     <TableStyleContext.Provider value={tableStyleContextValue}>
       <div id={id} className={'block-table'} css={wrapperStyles}>
         <div>
-          {!previewMode && <div css={tableCaptionWrapperStyles}>{caption}</div>}
+          {!previewMode && (
+            <div css={table.smartRowHorizontalPadding}>{caption}</div>
+          )}
 
           {!isCollapsed && (
             <div
               css={[
                 toggleTableStyles,
                 !isDragging
-                  ? tableWrapperTransformStyles
-                  : tableWrapperDraggingStyles,
-                tableWrapperDefaultStyles,
+                  ? table.tableWrapperTransformStyles
+                  : table.tableWrapperDraggingStyles,
+                table.tableWrapperDefaultStyles,
               ]}
               onMouseDown={onMouseDown}
               onMouseMove={onMouseMove}
               onClick={onClick}
             >
               {!isDragging && (
-                <div css={tableOverflowStyles} contentEditable={false} />
+                <div css={table.tableOverflowStyles} contentEditable={false} />
               )}
-              <div css={tableScroll} contentEditable={!readOnly}>
+              <div css={table.tableScroll} contentEditable={!readOnly}>
                 <Table
                   isReadOnly={false}
                   dropRef={dropRef}
@@ -405,7 +313,7 @@ export const EditorTable: FC<EditorTableProps> = ({
               </div>
 
               <div
-                css={tableAddColumnButtonWrapperStyles}
+                css={table.tableAddColumnButtonWrapperStyles}
                 contentEditable={false}
                 onMouseEnter={onMouseEnter}
                 onMouseLeave={onMouseLeave}

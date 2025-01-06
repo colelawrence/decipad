@@ -33,6 +33,10 @@ interface HeaderToColumnProps {
   dataRows: TableRowElement[];
 }
 
+// TODO:
+// on input tables. we are performing wayyy too much work.
+// We can do Table and Table Columns individually. So when you change a table column,
+// only that column is re-evaluated instead of everything?
 const tableFormulaColumnToColumn = ({
   table,
   th,

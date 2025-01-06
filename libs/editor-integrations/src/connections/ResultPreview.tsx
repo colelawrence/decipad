@@ -43,6 +43,7 @@ const ResultPreviewTable: FC<ConcreteResultPreview & ChangableTableOptions> = ({
   result,
   varNameInput,
 
+  formulaColumns,
   hiddenColumns,
 
   onChangeColumnType,
@@ -59,6 +60,10 @@ const ResultPreviewTable: FC<ConcreteResultPreview & ChangableTableOptions> = ({
         type="allow-changes"
         tableResult={result as Result.Result<'table'>}
         hiddenColumns={hiddenColumns}
+        formulaColumns={formulaColumns}
+        onAddFormula={() => {}}
+        onDeleteFormula={() => {}}
+        onChangeFormulaName={() => {}}
         onChangeColumnType={onChangeColumnType}
         onToggleHideColumn={onToggleHideColumn}
         onChangeColumnName={onChangeColumnName}
@@ -156,6 +161,7 @@ export const PortalledPreview: FC<
   onRun,
   onChangeColumnName,
   onToggleHideColumn,
+  formulaColumns,
   hiddenColumns,
   varNameInput,
 }) => {
@@ -171,6 +177,7 @@ export const PortalledPreview: FC<
         runner.setColumnType(colName, t);
         onRun();
       }}
+      formulaColumns={formulaColumns}
       hiddenColumns={hiddenColumns}
       onToggleHideColumn={onToggleHideColumn}
       onChangeColumnName={onChangeColumnName}

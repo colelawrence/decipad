@@ -14,7 +14,6 @@ import type {
   ExternalDataMap,
   Result,
   SerializedType,
-  SerializedTypes,
   Unit,
   AutocompleteNameWithSerializedType,
 } from '@decipad/language-interfaces';
@@ -67,7 +66,6 @@ import {
 } from '../utils';
 import { ComputationRealm } from './ComputationRealm';
 import { astToParseable } from './astToParseable';
-import { deduplicateColumnResults } from './deduplicateColumnResults';
 import { defaultComputerResults } from './defaultComputerResults';
 import { emptyBlockResultSubject } from './emptyBlockSubject';
 import { topologicalSort } from '../topological-sort';
@@ -82,7 +80,6 @@ import {
   getDeepLengths,
   serializeResult,
   isTableResult,
-  isTable,
   isColumn,
   pushExternalData,
 } from '@decipad/computer-utils';
@@ -745,95 +742,7 @@ export class Computer implements ComputerInterface {
           let readableTableName = this.getSymbolDefinedInBlock(b.id);
           const blockType = b.result?.type;
           if (b.type === 'computer-result') {
-            if (isTableResult(b.result)) {
-              if (filterForBlockId && b.id !== filterForBlockId) {
-                return [];
-              }
-              // external data results in a single table
-              if (this.latestExternalData.has(b.id)) {
-                const extData = getDefined(this.latestExternalData.get(b.id));
-                if (!isTable(extData.type)) {
-                  return [];
-                }
-                return b.result.type.columnNames.map(
-                  (columnName, columnIndex) => {
-                    const cellType = (extData.type as SerializedTypes.Table)
-                      .columnTypes[columnIndex];
-                    const result = buildResult(
-                      {
-                        kind: 'column',
-                        cellType,
-                        atParentIndex:
-                          cellType.kind === 'column' ||
-                          cellType.kind === 'materialized-column'
-                            ? cellType.atParentIndex
-                            : null,
-                        indexedBy:
-                          cellType.kind === 'column' ||
-                          cellType.kind === 'materialized-column'
-                            ? cellType.indexedBy
-                            : '',
-                      },
-                      (extData.value as Result.Result<'table'>['value'])[
-                        columnIndex
-                      ]
-                    );
-                    const tableName = this.getSymbolDefinedInBlock(b.id);
-                    return {
-                      tableName: tableName ?? 'unnamed',
-                      readableTableName,
-                      columnName,
-                      result,
-                      blockType,
-                    };
-                  }
-                );
-              } else {
-                const statement = this.latestProgram?.asBlockIdMap.get(b.id)
-                  ?.block?.args[0];
-                if (
-                  (statement?.type !== 'table' &&
-                    statement?.type !== 'assign') ||
-                  !b.result?.value ||
-                  !b.result?.type
-                ) {
-                  return [];
-                }
-                const tableName = getIdentifierString(statement.args[0]);
-                return b.result.type.columnNames.map(
-                  (columnName, columnIndex) => {
-                    const cellType = (b.result.type as SerializedTypes.Table)
-                      .columnTypes[columnIndex];
-                    const result = buildResult(
-                      {
-                        kind: 'column',
-                        cellType,
-                        atParentIndex:
-                          cellType.kind === 'column' ||
-                          cellType.kind === 'materialized-column'
-                            ? cellType.atParentIndex
-                            : null,
-                        indexedBy:
-                          cellType.kind === 'column' ||
-                          cellType.kind === 'materialized-column'
-                            ? cellType.indexedBy
-                            : '',
-                      },
-                      (b.result.value as Result.Result<'table'>['value'])[
-                        columnIndex
-                      ]
-                    );
-                    return {
-                      tableName,
-                      readableTableName,
-                      columnName,
-                      result,
-                      blockType,
-                    };
-                  }
-                );
-              }
-            } else if (isColumn(b.result?.type)) {
+            if (isColumn(b.result?.type)) {
               const statement = this.latestProgram?.asBlockIdMap.get(b.id)
                 ?.block?.args[0];
               if (statement?.type !== 'table-column-assign') {
@@ -865,7 +774,6 @@ export class Computer implements ComputerInterface {
 
           return [];
         })
-        .reduce(deduplicateColumnResults, [])
     );
   }
 

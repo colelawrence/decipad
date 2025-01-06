@@ -22,6 +22,8 @@ import { allBlockIds } from './allBlockIds';
 import type { RootEditorController } from './types';
 import {
   createIntegrationManager,
+  pushIntegrationFormulas,
+  pushIntegrationsAndFormulas,
   removeFromComputer,
   renameResultInComputer,
   withComputerCacheIntegration,
@@ -59,9 +61,18 @@ export class BlockProcessor {
     const { insertIntegration, removeIntegration } = createIntegrationManager(
       withControllerSideEffects(
         rootEditor as EditorController,
-        withComputerCacheIntegration(notebookId, computer)
+        withComputerCacheIntegration(
+          notebookId,
+          computer,
+          pushIntegrationsAndFormulas
+        )
       ),
       renameResultInComputer(notebookId, computer),
+      withComputerCacheIntegration(
+        notebookId,
+        computer,
+        pushIntegrationFormulas
+      ),
       removeFromComputer(computer)
     );
 

@@ -13,4 +13,3 @@ export * as results from './results';
 export * as scrollbars from './scrollbars';
 export * as table from './table';
 export * from './spacings';
-export * from './full-width';

@@ -14,6 +14,7 @@ import { Height } from '../../../styles/spacings';
 import { CreateChartMenu } from '../CreateChartMenu/CreateChartMenu';
 import { LiveCode } from '../LiveCode/LiveCode';
 import styled from '@emotion/styled';
+import { FormulasDrawer } from '../FormulasDrawer/FormulasDrawer';
 
 type IntegrationButton =
   | {
@@ -33,6 +34,7 @@ type IntegrationBlockProps = {
   readonly error?: string;
   readonly result?: Result.Result;
   readonly resultPreview: ReactNode;
+  readonly formulas?: ReactNode;
 } & LiveCodePartialProps &
   SegmentButtonsProps;
 
@@ -55,6 +57,7 @@ export const IntegrationBlock: FC<IntegrationBlockProps> = ({
   actionButtons = [],
   result,
   resultPreview,
+  formulas,
 }) => {
   const readOnly = useIsEditorReadOnly();
 
@@ -105,6 +108,7 @@ export const IntegrationBlock: FC<IntegrationBlockProps> = ({
           />
         </ControlButtonsDiv>
       </div>
+      {formulas && <FormulasDrawer>{formulas}</FormulasDrawer>}
 
       <div contentEditable={false}>{resultPreview}</div>
     </div>
