@@ -90,12 +90,14 @@ export const useOnAttachment = ({
 
     const res = await axios.post(attachForm.url, formData, {
       onUploadProgress: (uploadProgress) => {
-        setProgress((uploadProgress.loaded / uploadProgress.total!) * 100);
+        if (!uploadProgress.total) return;
+        setProgress((uploadProgress.loaded / uploadProgress.total) * 100);
       },
     });
 
     if (res.status >= 400) {
       toast('Sorry, an error occured :(. Try again later please!', 'error');
+      setProgress(undefined);
       return;
     }
 
@@ -105,6 +107,7 @@ export const useOnAttachment = ({
 
     if (attachRes.data?.attachFileToWorkspace == null) {
       toast('Sorry, an error occured :(. Try again later please!', 'error');
+      setProgress(undefined);
       return;
     }
 

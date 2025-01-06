@@ -1179,11 +1179,14 @@ export class Notebook {
     await expect(this.page.getByTestId('result-preview')).toBeVisible();
 
     if (option.firstRowHeader != null && !option.firstRowHeader) {
-      await this.page.getByTestId('toggle-cell-editor').click();
-
+      await this.page.getByText('Use first row as header').click();
+      await expect(
+        this.page.getByText('Integration loaded successfully!').first()
+      ).toBeVisible();
       // importing
       // eslint-disable-next-line playwright/no-wait-for-timeout
       await this.page.waitForTimeout(5_000);
+      await expect(this.page.getByText('A', { exact: true })).toBeVisible();
     }
 
     // A request is made before creating the integration. Which has to be waited for

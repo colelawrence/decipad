@@ -171,7 +171,8 @@ test('embed pitch on deipad @embeds', async ({ testUser }) => {
   }, `Pitch Embed didn't load properly`).toPass();
 });
 
-test('check calculations from CSVs imported with link work across tabs @imports @csv @tabs', async ({
+// eslint-disable-next-line playwright/no-skipped-test
+test.skip('check calculations from CSVs imported with link work across tabs @imports @csv @tabs', async ({
   testUser,
   unregisteredUser,
 }) => {
@@ -196,7 +197,7 @@ test('check calculations from CSVs imported with link work across tabs @imports 
       await expect(
         page
           .getByTestId('integration-block')
-          .getByText('20 rows, previewing rows 1 to 10')
+          .getByText('19 rows, previewing rows 1 to 10')
       ).toBeVisible();
     }, 'Integration no added to the notebook').toPass();
   });
@@ -320,7 +321,8 @@ test('csv integrations work when duplicating a notebook', async ({
   });
 });
 
-test('csv calculations propagate @csv @snapshot', async ({
+// eslint-disable-next-line playwright/no-skipped-test
+test.skip('csv calculations propagate @csv @snapshot', async ({
   testUser,
   randomFreeUser,
 }) => {

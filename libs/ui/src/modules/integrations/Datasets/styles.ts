@@ -72,3 +72,9 @@ export const Usage = styled.span(p12Medium, {
   borderRadius: '4px',
   backgroundColor: cssVar('backgroundDefault'),
 });
+
+export const UploadProgressWrapper = styled.div({
+  width: '96px',
+  height: '8px',
+  padding: '12px',
+});

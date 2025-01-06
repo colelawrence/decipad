@@ -5,9 +5,9 @@ export const Wrapper = styled.div({
 });
 
 export const UploadProgressWrapper = styled.div({
-  width: 96,
-  height: 8,
-  margin: 12,
+  width: '100%',
+  height: '8px',
+  padding: '12px',
 });
 
 export const FileUpload = styled.input({

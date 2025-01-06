@@ -8,7 +8,10 @@ import { ThumbnailChat } from '../../../icons/thumbnail-icons';
 import { Dataset } from '@decipad/interfaces';
 import { DatasetItem } from '../DatasetItem/DatasetItem';
 import * as Styled from './styles';
-import { UploadCSV } from '../UploadCSV/UploadCSV';
+import { UploadCSV, UploadFromUrl } from '../UploadCSV/UploadCSV';
+import { useOnAttachment, useOnImportUrl } from '../UploadCSV/hooks';
+import { useState } from 'react';
+import { Progress } from '../../../shared/molecules/Progress/Progress';
 
 type DatasetsProps = {
   workspaceId: string;
@@ -37,7 +40,7 @@ export const Datasets: React.FC<DatasetsProps> = ({
           </Styled.Usage>
         </Styled.Title>
 
-        <UploadCSV workspaceId={workspaceId} />
+        <UploadUI workspaceId={workspaceId} />
       </Styled.Header>
 
       {datasets.map((dataset) => (
@@ -61,7 +64,45 @@ export const Datasets: React.FC<DatasetsProps> = ({
       <Styled.HelperText>
         When you add a new dataset it will show up here
       </Styled.HelperText>
-      <UploadCSV workspaceId={workspaceId} />
+
+      <UploadUI workspaceId={workspaceId} />
     </Styled.Placeholder>
+  );
+};
+const UploadUI: React.FC<{
+  workspaceId: string;
+}> = ({ workspaceId }) => {
+  const { onAttachment, progress } = useOnAttachment({
+    workspaceId,
+    afterUpload: () => {},
+  });
+
+  const { onImportUrl } = useOnImportUrl({
+    workspaceId,
+    afterUpload: () => {},
+  });
+  const [isFromUrlOpen, setFromUrlOpen] = useState(false);
+  if (progress) {
+    return (
+      <Styled.UploadProgressWrapper>
+        <Progress progress={progress} />
+      </Styled.UploadProgressWrapper>
+    );
+  }
+
+  if (isFromUrlOpen) {
+    return (
+      <UploadFromUrl
+        onBlur={() => setFromUrlOpen(false)}
+        onImportUrl={onImportUrl}
+      />
+    );
+  }
+
+  return (
+    <UploadCSV
+      onAttachment={onAttachment}
+      onOpenUrlImport={() => setFromUrlOpen(true)}
+    />
   );
 };
