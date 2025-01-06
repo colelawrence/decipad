@@ -29,6 +29,8 @@ export type ChangableVariableOptions = {
 type CommonTableProps = {
   tableResult: Result.Result<'table'>;
   hiddenColumns: Array<string>;
+
+  fullWidth?: boolean;
 };
 
 export type ConnectionTableProps =
@@ -73,14 +75,16 @@ const getHtmlRows = (
 
 const StaticTableHeader: FC<
   Extract<ConnectionTableProps, { type: 'static' }>
-> = ({ tableResult }) => {
+> = ({ tableResult, hiddenColumns }) => {
   return (
     <thead>
       <tr>
         {tableResult.type.columnNames.map((columnName, i) => {
           const Icon = getTypeIcon(tableResult.type.columnTypes[i]);
+          const isColumnHidden = hiddenColumns.some((c) => c === columnName);
+
           return (
-            <th key={columnName} scope="col" data-hidden={i === 3}>
+            <th key={columnName} scope="col" data-hidden={isColumnHidden}>
               <span>
                 <Icon /> <span>{columnName}</span>
               </span>
@@ -251,7 +255,7 @@ const UnmemoedConnectionTable: FC<ConnectionTableProps> = (props) => {
   }
 
   return (
-    <TableWrapper>
+    <TableWrapper fullWidth={props.fullWidth}>
       <StyledTable contentEditable={false}>
         <TableHeader {...props} />
         <tbody>

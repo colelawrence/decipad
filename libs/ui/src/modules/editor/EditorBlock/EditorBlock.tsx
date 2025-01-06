@@ -1,10 +1,10 @@
 /* eslint decipad/css-prop-named-variable: 0 */
 import { useIsEditorReadOnly } from '@decipad/react-contexts';
 import { css } from '@emotion/react';
-import { hideOnPrint, slimBlockWidth } from 'libs/ui/src/styles/editor-layout';
+import { hideOnPrint } from 'libs/ui/src/styles/editor-layout';
 import { FC, ReactNode, Ref } from 'react';
-import { cssVar, p16Regular } from '../../../primitives';
-import { blockAlignment } from '../../../styles';
+import { p16Regular } from '../../../primitives';
+import { blockAlignment, fullWidthStyles } from '../../../styles';
 import { ElementAttributes } from '@decipad/editor-types';
 
 // Server as the base vertical space between elements. It's the same height as a 1-liner paragraph.
@@ -92,26 +92,6 @@ export type EditorBlockProps = {
 };
 
 const editorBlockOffset = 30;
-const fullWidthPadding = 60;
-
-// editorBlockOffset contributes additional padding on the right
-const fullWidthPaddingLeft = fullWidthPadding;
-const fullWidthPaddingRight = fullWidthPadding - editorBlockOffset;
-
-const fullWidthStyles = css({
-  transform: `translateX(min(
-    ${fullWidthPaddingLeft}px -
-    (
-      ${cssVar('editorWidth')} -
-      ${slimBlockWidth}px
-    ) / 2,
-    0px
-  ))`,
-  minWidth: `calc(
-    ${cssVar('editorWidth')} -
-    ${fullWidthPaddingLeft + fullWidthPaddingRight}px
-  )`,
-});
 
 export const EditorBlock: FC<EditorBlockProps> = ({
   blockKind,

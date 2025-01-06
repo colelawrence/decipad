@@ -38,6 +38,8 @@ import {
   icons,
 } from '@decipad/ui';
 import { assert } from '@decipad/utils';
+import { isRectangularTable } from '../utils';
+import { ConnectionTable } from './ConnectionTable/ConnectionTable';
 
 function canBePlotted(result: Result.Result | undefined): boolean {
   return (
@@ -153,6 +155,9 @@ export const IntegrationBlock: PlateComponent = ({
   const lastRun = element.timeOfLastRun && parseInt(element.timeOfLastRun, 10);
   const lastRunFmt =
     !lastRun || isNaN(lastRun) ? null : new Date(lastRun).toLocaleString();
+  const isRectangularResult = isRectangularTable(result);
+  const displayResult = result != null && !element.hideResult;
+
   return (
     <DraggableBlock
       element={element}
@@ -208,9 +213,16 @@ export const IntegrationBlock: PlateComponent = ({
         ]}
         result={result}
         resultPreview={
-          result != null && !element.hideResult ? (
-            <CodeResult {...result} isLiveResult />
-          ) : null
+          !displayResult ? null : isRectangularResult ? (
+            <ConnectionTable
+              type="static"
+              tableResult={result as Result.Result<'table'>}
+              hiddenColumns={[]}
+              fullWidth
+            />
+          ) : (
+            <CodeResult {...result!} isLiveResult />
+          )
         }
       >
         {children}

@@ -1,4 +1,4 @@
-import { cssVar, p13Medium, p14Medium } from '@decipad/ui';
+import { cssVar, fullWidthStyles, p13Medium, p14Medium } from '@decipad/ui';
 import { css } from '@emotion/react';
 import styled from '@emotion/styled';
 import { noTrackScrollbarStyles } from 'libs/ui/src/styles/scrollbars';
@@ -98,10 +98,14 @@ export const StyledTable = styled.table(
   hiddenStyles
 );
 
-export const TableWrapper = styled.div(noTrackScrollbarStyles, {
-  width: '100%',
-  overflowX: 'auto',
-});
+export const TableWrapper = styled.div<{ fullWidth?: boolean }>(
+  noTrackScrollbarStyles,
+  (props) => ({
+    width: '100%',
+    overflowX: 'auto',
+    ...(props.fullWidth ? fullWidthStyles : {}),
+  })
+);
 
 export const StyledFooter = styled.tfoot({
   backgroundColor: cssVar('backgroundSubdued'),
