@@ -182,7 +182,7 @@ const visualisationGroup = {
           {
             command: 'time-series',
             title: 'Time Series',
-            description: 'Visualise date over time in a table',
+            description: 'Visualise values over time in a table',
             icon: <CommandDataView />,
             extraSearchTerms: [
               'time',
