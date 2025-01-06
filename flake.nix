@@ -20,8 +20,8 @@
       # latest stable rust, with wasm target + rust-src extension
       rustToolchain = eachSystem (pkgs: pkgs.rust-bin.fromRustupToolchainFile ./rust-toolchain.toml);
       playwright-browsers = eachSystem(pkgs: ((pkgs.callPackage ./driver.nix {inherit pkgs;}) {
-              version = "1.48.0";
-              sha256 = "sha256-uay2XLmX9+/6OI0i7OP/Y1exWtUt37FVuOAl5/7jClo=";
+              version = "1.49.0";
+              sha256 = "sha256-o7k6HcZghQs9OLz1ZiR3jrqzMIrh1aaD+rv19EY/A9k=";
              }));
     in
     {
@@ -50,7 +50,6 @@
           nativeBuildInputs = with pkgs; [
             clang
             browsers
-            chromium
             chromedriver
             prettierd
 
