@@ -106,14 +106,14 @@ test('Make sure auto-complete works', async ({ testUser }) => {
     // eslint-disable-next-line playwright/no-wait-for-timeout
     await page.waitForTimeout(Timeouts.computerDelay);
 
-    await page.getByRole('menuitem', { name: 'Number RevenueNew' }).click();
+    await page.getByRole('menuitem', { name: 'RevenueNew' }).click();
     await page.keyboard.type('/ previous(0, RevenueNew');
 
     // eslint-disable-next-line playwright/no-wait-for-timeout
     await page.waitForTimeout(Timeouts.computerDelay);
 
     await page
-      .getByRole('menuitem', { name: 'TableSmall Table2.Table2.' })
+      .getByRole('menuitem', { name: 'Table2.Table2.' })
       .click({ timeout: Timeouts.maxSelectorWaitTime });
     await page.keyboard.type(')) - 1 in %');
     // eslint-disable-next-line playwright/no-wait-for-timeout

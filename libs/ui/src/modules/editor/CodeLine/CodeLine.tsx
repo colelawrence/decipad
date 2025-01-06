@@ -111,7 +111,6 @@ const inlineStyles = (insideLayout: boolean) =>
     display: 'flex',
     justifySelf: 'end',
     alignSelf: 'flex-start',
-    padding: '5px 0',
 
     userSelect: 'all',
 

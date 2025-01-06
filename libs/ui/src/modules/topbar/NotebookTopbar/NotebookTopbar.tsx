@@ -442,6 +442,7 @@ const WriterTopbar: FC<TopbarGenericProps> = ({
                 <Styled.CollapseExpandIconContainer
                   isNavBarVisible={isNavBarVisible}
                   role="button"
+                  aria-label="Collapse navigation sidebar"
                   onClick={toggleNavBarVisibility}
                 >
                   {isNavBarVisible ? <ChevronLeft /> : <ChevronRight />}
@@ -452,6 +453,7 @@ const WriterTopbar: FC<TopbarGenericProps> = ({
               <Styled.CollapseExpandIconContainer
                 isNavBarVisible={isNavBarVisible}
                 role="button"
+                aria-label="Expand navigation sidebar"
                 onClick={toggleNavBarVisibility}
               >
                 {isNavBarVisible ? <ChevronLeft /> : <ChevronRight />}
