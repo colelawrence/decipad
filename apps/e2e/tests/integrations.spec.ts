@@ -250,7 +250,9 @@ test('checks the ability to change the unit of a response', async ({
   await page.waitForTimeout(Timeouts.tableDelay);
   await page.getByTestId('live-code-name').getByText(/Table/).last().dblclick();
   await page.keyboard.type('F');
-  await expect(page.getByTestId('live-code-name').getByText('F')).toBeVisible();
+  await expect(
+    page.getByTestId('live-code-name').getByText('F').last()
+  ).toBeVisible();
 });
 
 // eslint-disable-next-line playwright/no-skipped-test

@@ -2,8 +2,10 @@ import {
   AnyElement,
   ELEMENT_CODE_LINE_V2_CODE,
   ELEMENT_DATA_TAB_CHILDREN,
+  ELEMENT_INTEGRATION,
   ELEMENT_PLOT,
   ELEMENT_STRUCTURED_VARNAME,
+  ELEMENT_TABLE_COLUMN_FORMULA,
 } from '@decipad/editor-types';
 import { assert } from '@decipad/utils';
 import {
@@ -32,6 +34,14 @@ enum Hacky {
   Undefined = 'some-string-that-is-hard-to-guess',
 }
 
+//
+// Used to describe that we want any amount of a specific element.
+// Think of tables for example, they can have any amount of rows.
+//
+// The normalizers must be prepared for that.
+//
+const ANY_AMOUNT = 'any-amount-value';
+
 type OptionalToNull<T> = T extends object
   ? {
       [K in keyof T]-?: undefined extends T[K]
@@ -45,9 +55,7 @@ type ElementKindToElementGenerator<T extends AnyElement = AnyElement> = {
 };
 
 type ElementKindToElement<T extends AnyElement = AnyElement> = {
-  [K in T['type']]: T extends { type: K }
-    ? OptionalToNull<ElementKindToElement<T>>
-    : never;
+  [K in T['type']]: T extends { type: K } ? OptionalToNull<T> : never;
 };
 
 export const elementKindsToDefaultsGenerator: Partial<ElementKindToElementGenerator> =
@@ -111,6 +119,39 @@ export const elementKindsToDefaultsGenerator: Partial<ElementKindToElementGenera
         title: Hacky.Undefined,
       };
     },
+    [ELEMENT_INTEGRATION]: () => {
+      return {
+        id: nanoid(),
+        type: ELEMENT_INTEGRATION,
+        filters: [],
+        endpointUrlSecretName: Hacky.Undefined,
+        isHidden: Hacky.Undefined,
+        hideResult: Hacky.Undefined,
+        typeMappings: {},
+        timeOfLastRun: Hacky.Undefined,
+        integrationType: {} as any, // Nested properties like this are hard to generally normalize.
+        isFirstRowHeader: false,
+
+        children: [
+          {
+            id: nanoid(),
+            type: ELEMENT_STRUCTURED_VARNAME,
+            children: [{ text: '' }],
+            isHidden: Hacky.Undefined,
+            endpointUrlSecretName: Hacky.Undefined,
+          },
+          {
+            id: nanoid(),
+            type: ELEMENT_TABLE_COLUMN_FORMULA,
+            children: [],
+            endpointUrlSecretName: Hacky.Undefined,
+            isHidden: Hacky.Undefined,
+            columnId: '',
+            [ANY_AMOUNT]: true,
+          },
+        ],
+      };
+    },
   };
 
 export const elementKindsToDefaults: Partial<ElementKindToElement> =
@@ -139,7 +180,7 @@ const removeHackyUndefined = (obj: object) => {
 
 export const normalizeElement = <T extends AnyElement>(
   type: T['type']
-): ((entry: TNodeEntry) => TOperation | undefined) => {
+): Normalizer => {
   const defaultElement = elementKindsToDefaults[type];
   if (defaultElement == null || !isElement(defaultElement)) {
     return () => {
@@ -147,17 +188,23 @@ export const normalizeElement = <T extends AnyElement>(
     };
   }
 
+  const lastElementChild = defaultElement.children.at(-1)!;
+  assert(typeof lastElementChild === 'object');
+
+  const lastElementAnyAmount = ANY_AMOUNT in lastElementChild;
+
+  const defaultElementChildren = lastElementAnyAmount
+    ? defaultElement.children.slice(0, -1)
+    : defaultElement.children;
+
+  // eslint-disable-next-line complexity
   return ([node, path]) => {
     if (!isElement(node)) {
       return undefined;
     }
 
     let i = 0;
-    for (
-      i = 0;
-      i < node.children.length && i < defaultElement.children.length;
-      i++
-    ) {
+    for (; i < node.children.length && i < defaultElementChildren.length; i++) {
       const currentNodeChild = node.children[i];
       const defaultNodeChild = defaultElement.children[i];
 
@@ -166,9 +213,11 @@ export const normalizeElement = <T extends AnyElement>(
         continue;
       }
 
-      assert(isElement(currentNodeChild) && isElement(defaultNodeChild));
-
-      if (currentNodeChild.type === defaultNodeChild.type) {
+      if (
+        isElement(currentNodeChild) &&
+        isElement(defaultNodeChild) &&
+        currentNodeChild.type === defaultNodeChild.type
+      ) {
         continue;
       }
 
@@ -178,7 +227,7 @@ export const normalizeElement = <T extends AnyElement>(
       //
 
       const correctNodeIndex = node.children.findIndex(
-        (c) => isElement(c) && c.type === defaultNodeChild.type
+        (c) => isElement(c) && c.type === (defaultNodeChild as any).type
       );
 
       if (correctNodeIndex === -1) {
@@ -203,7 +252,7 @@ export const normalizeElement = <T extends AnyElement>(
       };
     }
 
-    if (i < defaultElement.children.length) {
+    if (i < defaultElementChildren.length) {
       const childToInsert = removeHackyUndefined(
         elementKindsToDefaultsGenerator[type]!().children![i] as any
       );
@@ -215,12 +264,34 @@ export const normalizeElement = <T extends AnyElement>(
       };
     }
 
-    if (i < node.children.length) {
-      return {
+    const removeOperations: Array<TOperation> = [];
+
+    while (i < node.children.length) {
+      const nodeToRemove = node.children[i];
+
+      if (
+        lastElementAnyAmount &&
+        isElement(nodeToRemove) &&
+        nodeToRemove.type === (lastElementChild as any).type
+      ) {
+        i++;
+        continue;
+      }
+
+      removeOperations.push({
         type: 'remove_node',
         path: [...path, i],
-        node: node.children[i],
-      };
+        node: nodeToRemove,
+      });
+
+      i++;
+    }
+
+    if (removeOperations.length > 0) {
+      // We reverse the array because we want to delete from the highest paths first.
+      // [0, 2] -> [0, 1] etc...
+      // Because deleting from the smallest ones first, would cascade.
+      return removeOperations.reverse();
     }
 
     const newNodeProperties: Record<string, any> = omit(node, 'children');
@@ -278,14 +349,17 @@ const isTesting = !!(
   process.env.JEST_WORKER_ID ?? process.env.VITEST_WORKER_ID
 );
 
+export type Normalizer = (
+  entry: TNodeEntry
+) => Array<TOperation> | TOperation | undefined;
+
 export const createNormalizer = <
   T extends AnyElement = AnyElement,
   K extends TEditor = TEditor
 >(
-  type: T['type']
+  type: T['type'],
+  normalizer: Normalizer
 ) => {
-  const normalizer = normalizeElement(type);
-
   return (editor: K) => (entry: TNodeEntry) => {
     const [node] = entry;
 
@@ -299,7 +373,7 @@ export const createNormalizer = <
       return false;
     }
 
-    if (isTesting) {
+    if (!isTesting) {
       // eslint-disable-next-line no-console
       console.debug(
         `General Normalizer for ${type}: ${JSON.stringify(
@@ -310,7 +384,11 @@ export const createNormalizer = <
       );
     }
 
-    editor.apply(operation);
+    if (Array.isArray(operation)) {
+      operation.forEach(editor.apply);
+    } else {
+      editor.apply(operation);
+    }
 
     return true;
   };

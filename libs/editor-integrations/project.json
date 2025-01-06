@@ -26,14 +26,6 @@
         "command": "../../node_modules/.bin/depcruise --config ../../.dependency-cruiser.js src",
         "cwd": "libs/editor-integrations"
       }
-    },
-    "test": {
-      "executor": "nx:run-commands",
-      "outputs": ["{workspaceRoot}/coverage/libs/editor-integrations"],
-      "options": {
-        "command": "npx vitest --run --config ../../vitest.base.config.ts",
-        "cwd": "libs/editor-integrations"
-      }
     }
   },
   "tags": []

@@ -1,4 +1,4 @@
 export * from './connections';
 export * from './hooks';
-export * from './pplugins';
+export * from './plugins';
 export * from './utils';

@@ -6,6 +6,7 @@ import type {
   CodeLineV2Element,
   IntegrationTypes,
   StructuredInputElement,
+  StructuredVarnameElement,
   TableElement,
   VariableDefinitionElement,
 } from '@decipad/editor-types';
@@ -87,9 +88,12 @@ function deduplicateIntegrationVarName(
   computer: Computer,
   e: IntegrationTypes.IntegrationBlock
 ): void {
-  const varName = getNodeString(e.children[0]);
+  const structuredVarName: StructuredVarnameElement = e.children[0];
+  const varName = getNodeString(structuredVarName);
 
-  e.children[0].text = computer.getAvailableIdentifier(`${varName}Copy`);
+  structuredVarName.children[0].text = computer.getAvailableIdentifier(
+    `${varName}Copy`
+  );
 }
 
 export const deduplicateVarNameInBlock = <T extends AnyElement>(

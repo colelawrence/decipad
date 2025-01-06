@@ -26,7 +26,8 @@ import { useComputer } from './useComputer';
 export function useEnsureValidVariableName(
   element: MyElement & { children: [PlainText] },
   blockIds: Array<string | undefined> = [],
-  defaultVarName = generateVarName()
+  defaultVarName = generateVarName(),
+  enabled = true
 ): string | undefined {
   const editor = useMyEditorRef();
   const computer = useComputer();
@@ -38,6 +39,10 @@ export function useEnsureValidVariableName(
   useSlateOnBlur(
     computer,
     useCallback(() => {
+      if (!enabled) {
+        return;
+      }
+
       const path = findNodePath(editor, element);
       const currentVarName = getNodeString(element);
 
@@ -72,6 +77,7 @@ export function useEnsureValidVariableName(
       computer,
       validationMessage$,
       defaultVarName,
+      enabled,
     ])
   );
 

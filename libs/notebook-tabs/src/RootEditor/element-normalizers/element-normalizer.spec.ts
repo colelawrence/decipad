@@ -2,8 +2,10 @@ import { vi, describe, it, expect, beforeEach } from 'vitest';
 import {
   ELEMENT_CODE_LINE_V2_CODE,
   ELEMENT_DATA_TAB_CHILDREN,
+  ELEMENT_INTEGRATION,
   ELEMENT_PLOT,
   ELEMENT_STRUCTURED_VARNAME,
+  ELEMENT_TABLE_COLUMN_FORMULA,
   PlotElement,
 } from '@decipad/editor-types';
 import { TEditor } from '@udecode/plate-common';
@@ -54,6 +56,40 @@ describe('element type map', () => {
           "id": "mocked-id",
           "isHidden": "some-string-that-is-hard-to-guess",
           "type": "data-tab-children",
+        },
+        "integration-block": {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "",
+                },
+              ],
+              "endpointUrlSecretName": "some-string-that-is-hard-to-guess",
+              "id": "mocked-id",
+              "isHidden": "some-string-that-is-hard-to-guess",
+              "type": "structured_varname",
+            },
+            {
+              "any-amount-value": true,
+              "children": [],
+              "columnId": "",
+              "endpointUrlSecretName": "some-string-that-is-hard-to-guess",
+              "id": "mocked-id",
+              "isHidden": "some-string-that-is-hard-to-guess",
+              "type": "table-column-formula",
+            },
+          ],
+          "endpointUrlSecretName": "some-string-that-is-hard-to-guess",
+          "filters": [],
+          "hideResult": "some-string-that-is-hard-to-guess",
+          "id": "mocked-id",
+          "integrationType": {},
+          "isFirstRowHeader": false,
+          "isHidden": "some-string-that-is-hard-to-guess",
+          "timeOfLastRun": "some-string-that-is-hard-to-guess",
+          "type": "integration-block",
+          "typeMappings": {},
         },
         "plot": {
           "arcVariant": "simple",
@@ -201,21 +237,23 @@ describe('Default normalizer for every element', () => {
         [0],
       ])
     ).toMatchInlineSnapshot(`
-      {
-        "node": {
-          "children": [
-            {
-              "text": "extra-code",
-            },
+      [
+        {
+          "node": {
+            "children": [
+              {
+                "text": "extra-code",
+              },
+            ],
+            "type": "code_line_v2_code",
+          },
+          "path": [
+            0,
+            2,
           ],
-          "type": "code_line_v2_code",
+          "type": "remove_node",
         },
-        "path": [
-          0,
-          2,
-        ],
-        "type": "remove_node",
-      }
+      ]
     `);
   });
 });
@@ -229,7 +267,10 @@ describe('Normalizes on an actual editor', () => {
 
   it('normalizes workspace numbers', () => {
     editor.normalize = normalizeCurried(editor, [
-      createNormalizer(ELEMENT_DATA_TAB_CHILDREN)(editor),
+      createNormalizer(
+        ELEMENT_DATA_TAB_CHILDREN,
+        normalizeElement(ELEMENT_DATA_TAB_CHILDREN)
+      )(editor),
     ]);
 
     editor.children = [
@@ -273,7 +314,10 @@ describe('Normalizes on an actual editor', () => {
 
   it('normalizes workspace numbers if elements are out of order', () => {
     editor.normalize = normalizeCurried(editor, [
-      createNormalizer(ELEMENT_DATA_TAB_CHILDREN)(editor),
+      createNormalizer(
+        ELEMENT_DATA_TAB_CHILDREN,
+        normalizeElement(ELEMENT_DATA_TAB_CHILDREN)
+      )(editor),
     ]);
 
     editor.children = [
@@ -324,7 +368,7 @@ describe('Normalizes on an actual editor', () => {
 
   it('adds required element properties', () => {
     editor.normalize = normalizeCurried(editor, [
-      createNormalizer(ELEMENT_PLOT)(editor),
+      createNormalizer(ELEMENT_PLOT, normalizeElement(ELEMENT_PLOT))(editor),
     ]);
 
     editor.children = [
@@ -367,7 +411,7 @@ describe('Normalizes on an actual editor', () => {
 
   it('removes extra properties', () => {
     editor.normalize = normalizeCurried(editor, [
-      createNormalizer(ELEMENT_PLOT)(editor),
+      createNormalizer(ELEMENT_PLOT, normalizeElement(ELEMENT_PLOT))(editor),
     ]);
 
     editor.children = [
@@ -413,7 +457,7 @@ describe('Normalizes on an actual editor', () => {
 
   it('doesnt change a normal element', () => {
     editor.normalize = normalizeCurried(editor, [
-      createNormalizer(ELEMENT_PLOT)(editor),
+      createNormalizer(ELEMENT_PLOT, normalizeElement(ELEMENT_PLOT))(editor),
     ]);
 
     const goodPlot: PlotElement = {
@@ -449,7 +493,7 @@ describe('Normalizes on an actual editor', () => {
 
   it('distinguishes between array and object', () => {
     editor.normalize = normalizeCurried(editor, [
-      createNormalizer(ELEMENT_PLOT)(editor),
+      createNormalizer(ELEMENT_PLOT, normalizeElement(ELEMENT_PLOT))(editor),
     ]);
 
     editor.children = [
@@ -467,7 +511,7 @@ describe('Normalizes on an actual editor', () => {
 
   it('allows optional types to remain', () => {
     editor.normalize = normalizeCurried(editor, [
-      createNormalizer(ELEMENT_PLOT)(editor),
+      createNormalizer(ELEMENT_PLOT, normalizeElement(ELEMENT_PLOT))(editor),
     ]);
 
     editor.children = [
@@ -485,7 +529,7 @@ describe('Normalizes on an actual editor', () => {
 
   it('doesnt break old charts', () => {
     editor.normalize = normalizeCurried(editor, [
-      createNormalizer(ELEMENT_PLOT)(editor),
+      createNormalizer(ELEMENT_PLOT, normalizeElement(ELEMENT_PLOT))(editor),
     ]);
 
     editor.children = [
@@ -540,6 +584,150 @@ describe('Normalizes on an actual editor', () => {
         "xColumnName": "Column1",
         "yColumnChartTypes": [],
         "yColumnNames": [],
+      }
+    `);
+  });
+});
+
+describe('Normalizers various elements correctly', () => {
+  let editor = createEditor() as TEditor;
+
+  beforeEach(() => {
+    editor = createEditor() as TEditor;
+
+    editor.normalize = normalizeCurried(editor, [
+      createNormalizer(
+        ELEMENT_INTEGRATION,
+        normalizeElement(ELEMENT_INTEGRATION)
+      )(editor),
+    ]);
+  });
+
+  it('normalizes integration block', () => {
+    editor.children = [
+      {
+        type: ELEMENT_INTEGRATION,
+        id: 'integration',
+        children: [{ text: 'not the element ' }],
+      },
+    ];
+
+    editor.normalize();
+
+    expect(editor.children[0]).toMatchObject({
+      children: [
+        {
+          children: [
+            {
+              text: '',
+            },
+          ],
+          id: 'mocked-id',
+          type: 'structured_varname',
+        },
+      ],
+      filters: [],
+      id: 'integration',
+      integrationType: {},
+      isFirstRowHeader: false,
+      type: 'integration-block',
+      typeMappings: {},
+    });
+  });
+
+  it('allows multiple formulas in children', () => {
+    editor.children = [
+      {
+        type: ELEMENT_INTEGRATION,
+        id: 'integration',
+        children: [
+          { type: ELEMENT_STRUCTURED_VARNAME, children: [{ text: 'name' }] },
+          { type: ELEMENT_TABLE_COLUMN_FORMULA, children: [{ text: '1' }] },
+          { type: ELEMENT_TABLE_COLUMN_FORMULA, children: [{ text: '2' }] },
+        ],
+      },
+    ];
+
+    editor.normalize();
+
+    expect(editor.children[0]).toMatchObject({
+      children: [
+        {
+          children: [
+            {
+              text: 'name',
+            },
+          ],
+          type: 'structured_varname',
+        },
+        {
+          children: [
+            {
+              text: '1',
+            },
+          ],
+          type: 'table-column-formula',
+        },
+        {
+          children: [
+            {
+              text: '2',
+            },
+          ],
+          type: 'table-column-formula',
+        },
+      ],
+      filters: [],
+      id: 'integration',
+      integrationType: {},
+      isFirstRowHeader: false,
+      type: 'integration-block',
+      typeMappings: {},
+    });
+  });
+
+  it('normalizers from random element in children', () => {
+    editor.children = [
+      {
+        type: ELEMENT_INTEGRATION,
+        id: 'integration',
+        children: [
+          { type: ELEMENT_STRUCTURED_VARNAME, children: [{ text: 'name' }] },
+          { type: 'not meant to be here', children: [] },
+          { type: 'not meant to be here 2', children: [] },
+          { type: ELEMENT_TABLE_COLUMN_FORMULA, children: [{ text: '1' }] },
+        ],
+      },
+    ];
+
+    editor.normalize();
+
+    expect(editor.children[0]).toMatchInlineSnapshot(`
+      {
+        "children": [
+          {
+            "children": [
+              {
+                "text": "name",
+              },
+            ],
+            "type": "structured_varname",
+          },
+          {
+            "children": [
+              {
+                "text": "1",
+              },
+            ],
+            "type": "table-column-formula",
+          },
+        ],
+        "filters": [],
+        "id": "integration",
+        "integrationType": {},
+        "isFirstRowHeader": false,
+        "type": "integration-block",
+        "typeMappings": {},
       }
     `);
   });

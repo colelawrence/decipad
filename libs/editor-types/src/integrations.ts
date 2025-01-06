@@ -1,10 +1,11 @@
 import { Time } from '@decipad/language-interfaces';
 import type {
   BaseElement,
-  PlainText,
   SimpleTableCellType,
   ELEMENT_INTEGRATION,
   ImportElementSource,
+  StructuredVarnameElement,
+  TableColumnFormulaElement,
 } from '.';
 
 export type SerializedFilter = {
@@ -81,7 +82,7 @@ export interface IntegrationBlock<
   T extends IntegrationTypes['type'] = IntegrationTypes['type']
 > extends BaseElement {
   type: typeof ELEMENT_INTEGRATION;
-  children: [PlainText];
+  children: [StructuredVarnameElement, ...Array<TableColumnFormulaElement>];
 
   // Keeps the users desired result mappings.
   // THIS NEEDS TO BE MIGRATED.

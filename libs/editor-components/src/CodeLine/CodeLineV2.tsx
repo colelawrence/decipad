@@ -5,6 +5,7 @@ import {
   useIsBeingComputed,
   useNodePath,
   useNodeText,
+  useParentNode,
   usePathMutatorCallback,
 } from '@decipad/editor-hooks';
 import type {
@@ -16,6 +17,7 @@ import type {
 import {
   ELEMENT_CODE_LINE_V2,
   ELEMENT_CODE_LINE_V2_CODE,
+  ELEMENT_INTEGRATION,
   ELEMENT_STRUCTURED_VARNAME,
   useMyEditorRef,
 } from '@decipad/editor-types';
@@ -211,6 +213,7 @@ export const CodeLineV2Varname: PlateComponent = (props) => {
   const isReadOnly = useIsEditorReadOnly();
   const path = useNodePath(props.element);
   const insideLayout = useInsideLayoutContext();
+  const parentElement = useParentNode(element);
 
   const setLabel = useCallback(
     (newOption: string) => {
@@ -229,9 +232,18 @@ export const CodeLineV2Varname: PlateComponent = (props) => {
   const { id: lineId } = element;
   const lineResult = computer.getBlockIdResult$.use(lineId);
 
-  const errorMessage = useEnsureValidVariableName(props.element, [
-    varResult?.id,
-  ]);
+  const isIntegration =
+    parentElement &&
+    isElement(parentElement) &&
+    parentElement.type === ELEMENT_INTEGRATION;
+
+  const errorMessage = useEnsureValidVariableName(
+    props.element,
+    [varResult?.id],
+    undefined,
+    !isIntegration
+  );
+
   const variableName = getNodeString(props.element);
   const empty = variableName.trim() === '';
 
@@ -270,6 +282,10 @@ export const CodeLineV2Varname: PlateComponent = (props) => {
     },
     [editor, element]
   );
+
+  if (isIntegration) {
+    return <div {...props.attributes}>{props.children}</div>;
+  }
 
   return (
     <Tooltip

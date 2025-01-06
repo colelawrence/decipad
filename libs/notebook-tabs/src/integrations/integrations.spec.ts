@@ -5,7 +5,11 @@ import {
 } from './integrations';
 import { EditorController } from '../EditorController';
 import { FIRST_TAB_INDEX } from '../constants';
-import { ELEMENT_INTEGRATION, IntegrationTypes } from '@decipad/editor-types';
+import {
+  ELEMENT_INTEGRATION,
+  ELEMENT_STRUCTURED_VARNAME,
+  IntegrationTypes,
+} from '@decipad/editor-types';
 
 describe('Inserting / Updating intergrations', () => {
   it("performs an action if integration hasn't been ran before", () => {
@@ -136,7 +140,13 @@ describe('Interaction with EditorController', () => {
   const integrationBlock: IntegrationTypes.IntegrationBlock = {
     id: '1',
     type: ELEMENT_INTEGRATION,
-    children: [{ text: 'name ' }],
+    children: [
+      {
+        type: ELEMENT_STRUCTURED_VARNAME,
+        id: '1-1',
+        children: [{ text: 'name ' }],
+      },
+    ],
     timeOfLastRun: 'oldTimeOfLastRun',
     typeMappings: {},
     integrationType: { type: 'csv', csvUrl: 'some-url' },

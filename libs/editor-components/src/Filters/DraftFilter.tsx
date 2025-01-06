@@ -29,6 +29,7 @@ import { nanoid } from 'nanoid';
 import { css } from '@emotion/react';
 import DeciNumber from '@decipad/number';
 import { SerializedFilter } from 'libs/editor-types/src/integrations';
+import { getNodeString } from '@udecode/plate-common';
 
 export type DraftFilter = Partial<{
   id: string;
@@ -111,7 +112,7 @@ export const DraftFilterForm = ({
           if (!entry || entry[0].type !== ELEMENT_INTEGRATION) {
             return;
           }
-          const integrationName = entry[0].children[0].text;
+          const integrationName = getNodeString(entry[0].children[0]);
           if (
             integrationName &&
             (resultKind === 'table' || resultKind === 'materialized-table')
