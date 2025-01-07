@@ -248,6 +248,13 @@ export const withComputerCacheIntegration = (
   };
 };
 
+type SavedIntegration = {
+  lastRanTime: string;
+  name: string;
+  stringifiedFormulas: string;
+  stringifiedType: string;
+};
+
 type IntegrationManagerReturn = {
   insertIntegration: (block: IntegrationTypes.IntegrationBlock) => void;
   removeIntegration: (block: IntegrationTypes.IntegrationBlock) => void;
@@ -257,54 +264,64 @@ export const createIntegrationManager = (
   insertIntegration: (block: IntegrationTypes.IntegrationBlock) => string,
   renameIntegration: (block: IntegrationTypes.IntegrationBlock) => void,
   updateFormulas: (block: IntegrationTypes.IntegrationBlock) => void,
+  updateColumns: (block: IntegrationTypes.IntegrationBlock) => void,
   deleteIntegration: (block: IntegrationTypes.IntegrationBlock) => void
 ): IntegrationManagerReturn => {
-  const integrationIdToLastRanTime = new Map<string, string>();
-  const integrationIdToName = new Map<string, string>();
-  const integrationIdToStringFormulas = new Map<string, Array<string>>();
+  const integrationIdToSavedIntegration = new Map<string, SavedIntegration>();
 
   return {
     insertIntegration(block: IntegrationTypes.IntegrationBlock) {
-      const lastRanTime = integrationIdToLastRanTime.get(block.id);
-      const lastSeenName = integrationIdToName.get(block.id);
-      const lastFormulas = integrationIdToStringFormulas.get(block.id);
+      const savedIntegration = integrationIdToSavedIntegration.get(block.id);
 
       const [varName, ...formulas] = block.children;
 
       const blockName = getNodeString(varName);
-      const stringFormulas = formulas.map(
-        (f) => `${f.varName!} - ${getCodeLineSource(f)}`
-      );
+      const stringFormulas = formulas
+        .map((f) => `${f.varName!} - ${getCodeLineSource(f)}`)
+        .join(',');
 
-      if (lastRanTime == null || block.timeOfLastRun == null) {
+      const stringType = JSON.stringify(block.typeMappings);
+
+      if (savedIntegration == null || block.timeOfLastRun == null) {
         const timeOfLastRun = insertIntegration(block);
-        integrationIdToLastRanTime.set(block.id, timeOfLastRun);
 
-        if (lastSeenName !== blockName) {
-          integrationIdToName.set(block.id, blockName);
-        }
-
-        if (!dequal(stringFormulas, lastFormulas)) {
-          integrationIdToStringFormulas.set(block.id, stringFormulas);
-        }
+        integrationIdToSavedIntegration.set(block.id, {
+          lastRanTime: timeOfLastRun,
+          name: blockName,
+          stringifiedFormulas: stringFormulas,
+          stringifiedType: stringType,
+        });
 
         return;
       }
 
-      if (lastSeenName !== blockName) {
+      if (savedIntegration.name !== blockName) {
         renameIntegration(block);
-        integrationIdToName.set(block.id, blockName);
+        integrationIdToSavedIntegration.set(block.id, {
+          ...savedIntegration,
+          name: blockName,
+        });
       }
 
-      if (!dequal(lastFormulas, stringFormulas)) {
+      if (!dequal(savedIntegration.stringifiedFormulas, stringFormulas)) {
         updateFormulas(block);
-        integrationIdToStringFormulas.set(block.id, stringFormulas);
+        integrationIdToSavedIntegration.set(block.id, {
+          ...savedIntegration,
+          stringifiedFormulas: stringFormulas,
+        });
+      }
+
+      if (savedIntegration.stringifiedType !== stringType) {
+        updateColumns(block);
+        integrationIdToSavedIntegration.set(block.id, {
+          ...savedIntegration,
+          stringifiedType: stringType,
+        });
       }
     },
 
     removeIntegration(block) {
-      integrationIdToLastRanTime.delete(block.id);
-      integrationIdToName.delete(block.id);
+      integrationIdToSavedIntegration.delete(block.id);
 
       deleteIntegration(block);
     },

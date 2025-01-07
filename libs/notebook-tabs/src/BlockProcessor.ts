@@ -73,6 +73,7 @@ export class BlockProcessor {
         computer,
         pushIntegrationFormulas
       ),
+      (block) => pushIntegrationFormulas(notebookId, computer, block),
       removeFromComputer(computer)
     );
 

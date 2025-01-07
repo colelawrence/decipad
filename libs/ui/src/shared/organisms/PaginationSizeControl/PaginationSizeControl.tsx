@@ -38,10 +38,10 @@ export const PaginationSizeControl = ({
         page={currentPage}
         onPageChange={onPageChange}
       />
-      <span>
+      <NoWrapSpan>
         {rowCount} rows, previewing rows {(currentPage - 1) * pageSize + 1} to{' '}
         {Math.min(currentPage * pageSize, rowCount)}
-      </span>
+      </NoWrapSpan>
       <MenuList
         root
         dropdown
@@ -66,4 +66,9 @@ const PaginationControlWrapper = styled.div({
 const Trigger = styled.div(p13Medium, {
   display: 'flex',
   alignItems: 'center',
+  paddingLeft: '8px',
+});
+
+const NoWrapSpan = styled.span({
+  whiteSpace: 'nowrap',
 });

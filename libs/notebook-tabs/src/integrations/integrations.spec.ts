@@ -12,6 +12,7 @@ import {
   IntegrationTypes,
   TableColumnFormulaElement,
 } from '@decipad/editor-types';
+import { noop } from '@decipad/utils';
 
 describe('Inserting / Updating intergrations', () => {
   it("performs an action if integration hasn't been ran before", () => {
@@ -22,9 +23,10 @@ describe('Inserting / Updating intergrations', () => {
         blockIds.push(block.id);
         return Date.now().toString();
       },
-      () => {},
-      () => {},
-      () => {}
+      noop,
+      noop,
+      noop,
+      noop
     );
 
     insertIntegration({
@@ -44,9 +46,10 @@ describe('Inserting / Updating intergrations', () => {
         blockIds.push(block.id);
         return Date.now().toString();
       },
-      () => {},
-      () => {},
-      () => {}
+      noop,
+      noop,
+      noop,
+      noop
     );
 
     // Run it once to get the Map inside `createIntegrationManager` up to date.
@@ -76,9 +79,10 @@ describe('Inserting / Updating intergrations', () => {
         blockIds.push(block.id);
         return Date.now().toString();
       },
-      () => {},
-      () => {},
-      () => {}
+      noop,
+      noop,
+      noop,
+      noop
     );
 
     insertIntegration({
@@ -109,8 +113,9 @@ describe('Inserting / Updating intergrations', () => {
       (block) => {
         renamingBlockIds.push(block.id);
       },
-      () => {},
-      () => {}
+      noop,
+      noop,
+      noop
     );
 
     // Run it once to get the Map inside `createIntegrationManager` up to date.
@@ -144,11 +149,12 @@ describe('Inserting / Updating intergrations', () => {
         blockIds.push(block.id);
         return block.timeOfLastRun!;
       },
-      () => {},
+      noop,
       (block) => {
         updatedFormulasBlockIds.push(block.id);
       },
-      () => {}
+      noop,
+      noop
     );
 
     // Run it once to get the Map inside `createIntegrationManager` up to date.
@@ -190,11 +196,12 @@ describe('Inserting / Updating intergrations', () => {
         blockIds.push(block.id);
         return block.timeOfLastRun!;
       },
-      () => {},
+      noop,
       (block) => {
         updatedFormulasBlockIds.push(block.id);
       },
-      () => {}
+      noop,
+      noop
     );
 
     // Run it once to get the Map inside `createIntegrationManager` up to date.
@@ -247,6 +254,47 @@ describe('Inserting / Updating intergrations', () => {
       'my-block-id',
       'my-block-id',
     ]);
+  });
+
+  it('updates when column types change', () => {
+    const blockIds: Array<string> = [];
+    const updatedColumnBlockIds: Array<string> = [];
+
+    const { insertIntegration } = createIntegrationManager(
+      (block) => {
+        blockIds.push(block.id);
+        return block.timeOfLastRun!;
+      },
+      noop,
+      noop,
+      (block) => {
+        updatedColumnBlockIds.push(block.id);
+      },
+      noop
+    );
+
+    // Run it once to get the Map inside `createIntegrationManager` up to date.
+    const date = Date.now() - 1000;
+
+    insertIntegration({
+      id: 'my-block-id',
+      timeOfLastRun: date.toString(),
+      children: [{ text: 'name' }],
+      typeMappings: { col1: { type: { kind: 'number' } } },
+    } as any);
+
+    expect(updatedColumnBlockIds).toMatchObject([]);
+    expect(blockIds).toMatchObject(['my-block-id']);
+
+    insertIntegration({
+      id: 'my-block-id',
+      timeOfLastRun: date.toString(),
+      children: [{ text: 'name' }],
+      typeMappings: { col1: { type: { kind: 'string' } } },
+    } as any);
+
+    expect(blockIds).toMatchObject(['my-block-id']);
+    expect(updatedColumnBlockIds).toMatchObject(['my-block-id']);
   });
 });
 

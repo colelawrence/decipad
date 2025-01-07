@@ -127,7 +127,6 @@ export const TableWrapper = styled.div<{ fullWidth?: boolean }>(
   (props) => (props.fullWidth ? table.fullWidthStyles : {}),
   {
     width: cssVar('editorWidth'),
-    overflowX: 'auto',
     display: 'flex',
     gap: '8px',
   }
