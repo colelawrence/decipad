@@ -14,7 +14,7 @@ it('renders message when hovering the icon', async () => {
   const { container } = render(<CodeError message="Message" url="" />);
   await act(() => timeout(1000));
 
-  expect(container.querySelector('[data-title="Warning"]')).toBeNull();
+  expect(container.querySelector('[data-title="Message"]')).toBeNull();
 
   await userEvent.hover(container.querySelector('[data-title="Warning"]')!);
 
