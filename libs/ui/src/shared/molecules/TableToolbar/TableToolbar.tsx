@@ -48,6 +48,9 @@ const tableCaptionInnerStyles = css({
 });
 
 const tableIconSizeStyles = css({
+  position: 'relative',
+  top: -1,
+  left: -1,
   flexShrink: 0,
   display: 'grid',
   width: 16,
@@ -56,7 +59,7 @@ const tableIconSizeStyles = css({
 
 const tableVarStyles = css(codeBlock.structuredVariableStyles, {
   height: '100%',
-  padding: '0px 8px',
+  padding: '0px 6px',
   borderRadius: '6px',
   display: 'flex',
   alignItems: 'center',
@@ -71,7 +74,7 @@ const tableVarStyles = css(codeBlock.structuredVariableStyles, {
 const tableTitleWrapperStyles = css({
   display: 'flex',
   alignItems: 'center',
-  gap: '8px',
+  gap: '2px',
 });
 
 const placeholderStyles = css({

@@ -29,7 +29,7 @@ import { hideOnPrint } from '../../../styles/editor-layout';
 import { getTypeIcon } from '../../../utils';
 
 const varStyles = css(codeBlock.structuredVariableStyles, {
-  padding: '2px 8px',
+  padding: '2px 6px',
   borderRadius: '6px',
   display: 'flex',
   alignItems: 'center',
@@ -43,12 +43,15 @@ const varStyles = css(codeBlock.structuredVariableStyles, {
 });
 
 const codeVarIconStyles = css({
+  position: 'relative',
+  top: -1,
+  left: -1,
   display: 'inline-flex',
   verticalAlign: 'text-top',
   height: '16px',
   width: '16px',
   '> svg': { height: '16px', width: '16px' }, // safari
-  marginRight: '4px',
+  marginRight: '2px',
 });
 
 const emptyStyles = css({

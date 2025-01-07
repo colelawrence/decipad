@@ -8,6 +8,9 @@ const booleanResultStyles = css({
   overflow: 'hidden',
 
   '> svg': {
+    position: 'relative',
+    top: -1,
+    display: 'inline-block',
     width: '16px',
     height: '16px',
   },

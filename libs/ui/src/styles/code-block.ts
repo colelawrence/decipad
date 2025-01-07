@@ -30,7 +30,7 @@ export const structuredVariableStyles: CSSObject = {
 };
 
 export const pAdvCalcStyles = css(structuredVariableStyles, {
-  padding: '4px 8px',
+  padding: '4px 6px',
   borderRadius: '6px',
   display: 'flex',
   alignItems: 'center',
@@ -38,11 +38,14 @@ export const pAdvCalcStyles = css(structuredVariableStyles, {
 });
 
 export const pIconStyles = css({
+  position: 'relative',
+  top: -1,
+  left: -1,
   display: 'inline-flex',
   verticalAlign: 'text-top',
   height: '16px',
   width: '16px',
-  marginRight: '4px',
+  marginRight: '2px',
   pointerEvents: 'none',
   userSelect: 'none',
 });
