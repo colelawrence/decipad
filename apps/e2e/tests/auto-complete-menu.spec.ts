@@ -4,7 +4,9 @@ test('auto complete menu basic checks', async ({ testUser }) => {
   await test.step('searching', async () => {
     await testUser.notebook.focusOnBody();
     await testUser.page.keyboard.type('/input');
-    await expect(testUser.page.getByText('Model')).toBeVisible();
+    await expect(
+      testUser.page.getByText('Model', { exact: true })
+    ).toBeVisible();
     await expect(
       testUser.page.getByTestId('menu-item-structured-input')
     ).toBeVisible();

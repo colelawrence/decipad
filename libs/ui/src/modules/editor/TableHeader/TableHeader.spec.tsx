@@ -25,7 +25,7 @@ it('renders the children', () => {
 
 describe('Can render typed icons', () => {
   it('renders default type as string', () => {
-    render(
+    const { container } = render(
       <table>
         <thead>
           <tr>
@@ -35,11 +35,11 @@ describe('Can render typed icons', () => {
       </table>
     );
 
-    expect(screen.getByText('Text')).toBeDefined();
+    expect(container.querySelector('[data-title="Text"]')).toBeInTheDocument();
   });
 
   it('renders type icon', () => {
-    render(
+    const { container } = render(
       <table>
         <thead>
           <tr>
@@ -49,7 +49,9 @@ describe('Can render typed icons', () => {
       </table>
     );
 
-    expect(screen.getByText('Number')).toBeDefined();
+    expect(
+      container.querySelector('[data-title="Number"]')
+    ).toBeInTheDocument();
   });
 });
 
@@ -62,7 +64,7 @@ describe('type prop', () => {
     ['number', getNumberType(), getTypeIcon(getNumberType())],
     ['string', getStringType(), getTypeIcon(getStringType())],
   ])('renders icon for type %s', (_, type, Icon) => {
-    render(
+    const { container } = render(
       <table>
         <thead>
           <tr>
@@ -73,7 +75,9 @@ describe('type prop', () => {
     );
 
     expect(
-      screen.getByTitle(new RegExp((Icon as FunctionComponent).name))
+      container.querySelector(
+        `[data-title="${(Icon as FunctionComponent).name}"]`
+      )
     ).toBeInTheDocument();
   });
 });

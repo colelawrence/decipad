@@ -7,6 +7,7 @@ export const CheckboxSelected = (props: SVGProps<SVGSVGElement>) => {
       fill="none"
       viewBox="0 0 16 16"
       role="presentation"
+      data-title="CheckboxSelected"
       data-testid="checkbox-selected"
       {...props}
     >

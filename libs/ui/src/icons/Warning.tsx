@@ -7,6 +7,7 @@ export const Warning = (props: SVGProps<SVGSVGElement>) => {
       fill="none"
       viewBox="0 0 16 16"
       role="presentation"
+      data-title="Warning"
       {...props}
     >
       <path

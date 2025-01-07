@@ -112,10 +112,10 @@ describe('AutoCompleteMenu', () => {
 
       expect(getAllByRole('menuitem').map((x) => x.textContent))
         .toMatchInlineSnapshot(`
-        [
-          "NumberRevenue",
-        ]
-      `);
+          [
+            "Revenue",
+          ]
+        `);
 
       expect(getByText(/Rev/)).toBeInTheDocument();
     });
@@ -132,12 +132,12 @@ describe('AutoCompleteMenu', () => {
       expect(getAllByRole('menuitem')).toHaveLength(3);
       expect(getAllByRole('menuitem').map((x) => x.textContent))
         .toMatchInlineSnapshot(`
-        [
-          "NumberLosses",
-          "NumberProfit",
-          "NumberProfit",
-        ]
-      `);
+          [
+            "Losses",
+            "Profit",
+            "Profit",
+          ]
+        `);
     });
 
     it('affects arrow key selection', async () => {

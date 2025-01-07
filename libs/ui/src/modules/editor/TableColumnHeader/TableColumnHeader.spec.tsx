@@ -24,7 +24,7 @@ it('renders the children', () => {
 });
 
 it('renders the trigger for the dropdown menu', () => {
-  const { getByTitle } = render(
+  const { container } = render(
     <table>
       <thead>
         <tr>
@@ -34,7 +34,7 @@ it('renders the trigger for the dropdown menu', () => {
     </table>
   );
 
-  expect(getByTitle(/text/i)).toBeInTheDocument();
+  expect(container.querySelector('[data-title="Text"]')).toBeInTheDocument();
 });
 
 describe('readOnly prop', () => {

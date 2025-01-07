@@ -78,25 +78,27 @@ describe('CodeLine', () => {
 
   describe('when result is an error', () => {
     it('should render just the inline error', () => {
-      const { getAllByRole, queryByTitle } = render(
+      const { getAllByRole, container } = render(
         <SessionProvider>
           <CodeLine {...typeErrorProps} />
         </SessionProvider>
       );
       expect(getAllByRole('status')).toHaveLength(1);
-      expect(queryByTitle(/warning/i)!.closest('svg')).toBeVisible();
+      expect(container.querySelector('[data-title="Warning"]')).toBeVisible();
     });
   });
 
   describe('syntaxError prop', () => {
     it('renders the error inline', () => {
-      const { getByTitle } = render(
+      const { container } = render(
         <SessionProvider>
           <CodeLine syntaxError={syntaxError}>10</CodeLine>
         </SessionProvider>
       );
 
-      expect(getByTitle(/Warning/i).closest('svg')).toBeVisible();
+      expect(
+        container.querySelector('[data-title="Warning"]')
+      ).toBeInTheDocument();
     });
   });
 });

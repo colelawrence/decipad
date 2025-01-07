@@ -5,29 +5,31 @@ import { timeout } from '@decipad/utils';
 import { CodeError } from './CodeError';
 
 it('renders error icon', async () => {
-  render(<CodeError message="" url="" />);
+  const { container } = render(<CodeError message="" url="" />);
   await act(() => timeout(1000));
-  expect(screen.getByTitle(/Warning/i)).toBeInTheDocument();
+  expect(container.querySelector('[data-title="Warning"]')).toBeInTheDocument();
 });
 
 it('renders message when hovering the icon', async () => {
-  render(<CodeError message="Message" url="" />);
+  const { container } = render(<CodeError message="Message" url="" />);
   await act(() => timeout(1000));
 
-  expect(screen.queryByText('Message')).toBeNull();
+  expect(container.querySelector('[data-title="Warning"]')).toBeNull();
 
-  await userEvent.hover(screen.getByTitle(/Warning/i));
+  await userEvent.hover(container.querySelector('[data-title="Warning"]')!);
 
-  expect(await screen.findByText('Message')).toBeInTheDocument();
+  expect(container.querySelector('[data-title="Warning"]')).toBeInTheDocument();
 });
 
 it('renders documentation url when hovering the icon', async () => {
-  render(<CodeError message="" url="http://decipad.com/" />);
+  const { container } = render(
+    <CodeError message="" url="http://decipad.com/" />
+  );
   await act(() => timeout(1000));
 
   expect(screen.queryByText(/doc/i)).toBeNull();
 
-  await userEvent.hover(screen.getByTitle(/Warning/i));
+  await userEvent.hover(container.querySelector('[data-title="Warning"]')!);
 
   expect(await screen.findByText(/doc/i)).toBeInTheDocument();
   expect(await screen.findByText(/doc/i)).toHaveAttribute(

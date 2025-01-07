@@ -7,9 +7,9 @@ export const All = (props: SVGProps<SVGSVGElement>) => {
       fill="none"
       viewBox="0 0 16 16"
       role="img"
+      data-title="All"
       {...props}
     >
-      <title>All</title>
       <g
         stroke="currentColor"
         strokeLinecap="round"
