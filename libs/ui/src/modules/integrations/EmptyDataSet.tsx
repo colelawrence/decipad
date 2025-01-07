@@ -24,6 +24,10 @@ const EmptyDataSetStyled = styled.div({
 
   justifyContent: 'center',
   alignItems: 'center',
+  textAlign: 'center',
+
+  borderRadius: '16px',
+  border: `1px solid ${cssVar('borderDefault')}`,
 
   'div:first-child': {
     width: '40px',

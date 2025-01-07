@@ -37,7 +37,7 @@ export const SplitPreview: FC<SplitPreviewProps> = ({ conn, children }) => {
       </Panel>
       <PanelResizeHandle css={PanelResizeHandleStyle} />
       <Panel
-        css={PanelStyle}
+        css={PanelStyleNoBorder}
         collapsible
         minSize={20}
         ref={previewPanel}
@@ -88,22 +88,26 @@ const PanelResizeHandleStyle = css({
     maxHeight: '5em',
     height: '100%',
     width: '4px',
+    borderRadius: '4px',
     margin: '0 4px',
-    background: cssVar('borderDefault'),
+    background: cssVar('iconBackground'),
+    transition: 'transform 0.2s',
+  },
+  '&:hover::after': {
+    transform: 'scale(1.2)',
   },
 });
 const PanelContainer = styled.div(deciOverflowStyles, {
   display: 'flex',
   width: '100%',
   height: '100%',
-  '& > *, & > * > *': {
-    margin: 'auto',
-  },
 });
-const PanelStyle = css({
+const PanelStyleNoBorder = css({
   display: 'flex',
   flexDirection: 'column',
   position: 'relative',
+});
+const PanelStyle = css(PanelStyleNoBorder, {
   borderRadius: '16px',
   border: `1px solid ${cssVar('borderDefault')}`,
   '&[data-panel-size="0.0"]': {

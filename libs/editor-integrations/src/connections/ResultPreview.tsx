@@ -157,6 +157,7 @@ export const PortalledPreview: FC<
 > = ({
   varName,
   id,
+  info,
   runner,
   onRun,
   onChangeColumnName,
@@ -165,7 +166,7 @@ export const PortalledPreview: FC<
   hiddenColumns,
   varNameInput,
 }) => {
-  if (id == null) {
+  if (id == null || info.length === 0) {
     return <EmptyDataSet />;
   }
 

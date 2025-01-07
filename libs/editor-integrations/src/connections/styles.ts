@@ -33,7 +33,12 @@ export const ResultPreviewTableWrapper = styled.div(
 export const ResultPreviewVariableWrapper = styled.div(
   deciOverflowStyles,
   commonWrapper,
-  { flexDirection: 'row' }
+  {
+    flexDirection: 'row',
+    height: 'min-content',
+    borderRadius: '16px',
+    border: `1px solid ${cssVar('borderDefault')}`,
+  }
 );
 
 export const ChangeVariableTypeButton = styled.button(p12Medium, hideOnPrint, {
