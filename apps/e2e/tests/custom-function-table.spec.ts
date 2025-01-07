@@ -36,13 +36,10 @@ test('Custom function Table', async ({ testUser }) => {
   });
 
   await test.step('uses custom formula on table', async () => {
-    await page
-      .getByRole('code')
-      .filter({ hasText: 'FormulaColumn3 =' })
-      .click();
+    await page.getByRole('code').filter({ hasText: 'Column3 =' }).click();
     await page.keyboard.type('add5(');
     await page.keyboard.type('Column1');
-    // to add a smart referance
+    // to add a smart reference
     await page.keyboard.press('Enter');
     await page.keyboard.type(')');
   });

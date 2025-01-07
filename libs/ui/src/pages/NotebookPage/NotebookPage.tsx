@@ -1,6 +1,6 @@
 /* eslint decipad/css-prop-named-variable: 0 */
 import { SidebarComponent, useNotebookMetaData } from '@decipad/react-contexts';
-import React, { FC, ReactNode, useEffect } from 'react';
+import React, { FC, ReactNode } from 'react';
 import { IN_EDITOR_SIDEBAR_ID, OVERFLOWING_EDITOR_ID } from '../../constants';
 import { useDraggingScroll, useScrollToHash } from '../../hooks';
 import { PermissionType } from '../../types';
