@@ -4,7 +4,7 @@ import { css } from '@emotion/react';
 import { hideOnPrint } from 'libs/ui/src/styles/editor-layout';
 import { FC, ReactNode, Ref } from 'react';
 import { p16Regular } from '../../../primitives';
-import { blockAlignment, table } from '../../../styles';
+import { blockAlignment, editorLayout } from '../../../styles';
 import { ElementAttributes } from '@decipad/editor-types';
 
 // Server as the base vertical space between elements. It's the same height as a 1-liner paragraph.
@@ -129,7 +129,7 @@ export const EditorBlock: FC<EditorBlockProps> = ({
           transition: 'all 0.2s ease-out',
         },
         spacingStyles,
-        fullWidth && table.fullWidthStyles,
+        fullWidth && editorLayout.fullWidthLayout,
         fullHeight && { height: '100%' },
       ]}
       data-type={blockKind}

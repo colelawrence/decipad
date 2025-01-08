@@ -1,7 +1,7 @@
 import { once } from '@decipad/utils';
 import { css } from '@emotion/react';
 import { DragHandle } from '../icons';
-import { p14Regular } from '../primitives';
+import { cssVar, p14Regular } from '../primitives';
 import { getSvgAspectRatio } from '../utils';
 
 export const slimBlockWidth = 620;
@@ -30,4 +30,24 @@ export const integrationBlockStyles = css({
   display: 'flex',
   flexDirection: 'column',
   gap: '8px',
+});
+
+export const fullWidthLayout = css({
+  position: 'relative',
+  marginLeft: '-30px',
+  paddingLeft: '30px',
+  transition: '0.2s ease-out',
+  paddingTop: 'calc(1.5rem)',
+  transform: `translateX(min(
+    60px -
+    (
+      var(--deci-editorWidth, 100vw) -
+      620px
+    ) / 2,
+    0px
+  ))`,
+  minWidth: `calc(
+    ${cssVar('editorWidth')} -
+    90px
+  )`,
 });
