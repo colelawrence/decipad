@@ -106,7 +106,6 @@ test('Make sure auto-complete works', async ({ testUser }) => {
     // eslint-disable-next-line playwright/no-wait-for-timeout
     await page.waitForTimeout(Timeouts.computerDelay);
 
-    // await page.getByRole('menuitem', { name: 'RevenueNew' })
     await page
       .getByTestId('autocomplete-group:Variables')
       .getByRole('menuitem', { name: 'RevenueNew' })

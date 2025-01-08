@@ -84,7 +84,7 @@ export const CodeVariable = ({
       {isColumn || isCell ? (
         <span>
           <span css={isColumn} contentEditable={false}>
-            <span css={iconStyles} style={{ opacity: 0.5 }}>
+            <span css={[iconStyles, mutedStyles]}>
               {injectErrorChildren || (isColumn ? <TableSmall /> : <List />)}
             </span>
 
@@ -153,4 +153,8 @@ const typeStyles = css({
 const selectedStyles = css({
   backgroundColor: cssVar('textDefault'),
   color: cssVar('backgroundDefault'),
+});
+
+const mutedStyles = css({
+  opacity: 0.5,
 });
