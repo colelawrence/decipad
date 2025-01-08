@@ -1,6 +1,6 @@
 import invariant from 'tiny-invariant';
 import type { TOperation } from '@udecode/plate-common';
-import { captureException } from '@sentry/browser';
+import { captureException } from '@sentry/react';
 import stringify from 'json-stringify-safe';
 import type { SharedType } from '../model';
 import node from './node';

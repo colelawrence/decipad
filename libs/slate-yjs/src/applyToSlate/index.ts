@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type { TOperation } from '@udecode/plate-common';
 import * as Y from 'yjs';
-import { captureException } from '@sentry/browser';
+import { captureException } from '@sentry/react';
 import type { MinimalRootEditor } from '@decipad/editor-types';
 import translateArrayEvent from './arrayEvent';
 import translateMapEvent from './mapEvent';

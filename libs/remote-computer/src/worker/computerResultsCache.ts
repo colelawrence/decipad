@@ -3,7 +3,7 @@ import { Computer, NotebookResults } from '@decipad/computer-interfaces';
 import { createCache } from '@decipad/client-cache';
 import { ComputerResultsCache } from './types';
 import { debounceTime, mergeMap, shareReplay } from 'rxjs';
-import { captureException } from '@sentry/browser';
+import { captureException } from '@sentry/react';
 import { putRemoteResult } from '@decipad/remote-computer-cache/worker';
 import { SerializedNotebookResults } from '../types/serializedTypes';
 import { encodeFullNotebookResults } from '../encode/encodeFullNotebookResults';

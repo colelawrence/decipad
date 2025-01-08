@@ -18,7 +18,7 @@ import {
 } from '@decipad/notebook-tabs';
 import { createRemoteComputerClient } from '@decipad/remote-computer';
 import { isServerSideRendering } from '@decipad/support';
-import { captureException } from '@sentry/browser';
+import { captureException } from '@sentry/react';
 import * as idb from 'lib0/indexeddb';
 import { DATA_TAB_INDEX } from 'libs/notebook-tabs/src/constants';
 import debounce from 'lodash/debounce';

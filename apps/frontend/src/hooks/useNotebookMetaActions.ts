@@ -25,7 +25,7 @@ import {
 import type { NotebookMetaActionsReturn } from '@decipad/interfaces';
 import { PublishedVersionName } from '@decipad/interfaces';
 import { getLocalNotebookUpdates } from '@decipad/docsync';
-import { captureException } from '@sentry/browser';
+import { captureException } from '@sentry/react';
 import md5 from 'md5';
 import { canonicalize } from 'json-canonicalize';
 import { Doc, applyUpdate } from 'yjs';

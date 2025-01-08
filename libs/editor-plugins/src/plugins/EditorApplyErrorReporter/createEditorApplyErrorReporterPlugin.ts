@@ -1,4 +1,4 @@
-import { captureException } from '@sentry/browser';
+import { captureException } from '@sentry/react';
 import type { TOperation } from '@udecode/plate-common';
 import { createOverrideApplyPluginFactory } from '@decipad/editor-plugin-factories';
 

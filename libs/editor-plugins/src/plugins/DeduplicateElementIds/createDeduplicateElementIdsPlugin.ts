@@ -2,7 +2,7 @@ import type { AnyElement, MyValue } from '@decipad/editor-types';
 import { createMyPluginFactory } from '@decipad/editor-types';
 import { pluginStore } from '@decipad/editor-utils';
 import { getDefined } from '@decipad/utils';
-import { captureException } from '@sentry/browser';
+import { captureException } from '@sentry/react';
 import type {
   PlateEditor,
   TEditor,

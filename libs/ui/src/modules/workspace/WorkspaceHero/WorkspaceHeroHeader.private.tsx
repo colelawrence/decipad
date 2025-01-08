@@ -9,7 +9,7 @@ import { ClientEventsContext } from '@decipad/client-events';
 import { cssVar } from '../../../primitives';
 import { PermissionType } from 'libs/ui/src/types';
 import { useToast } from '@decipad/toast';
-import { captureException } from '@sentry/browser';
+import { captureException } from '@sentry/react';
 
 type WorkspaceHeroHeaderProps = {
   membersHref?: string;

@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 import md5 from 'md5';
 import { canonicalize } from 'json-canonicalize';
-import { captureException } from '@sentry/browser';
+import { captureException } from '@sentry/react';
 import { type PromiseOrType } from '@decipad/utils';
 // eslint-disable-next-line no-restricted-imports
 // eslint-disable-next-line no-restricted-imports

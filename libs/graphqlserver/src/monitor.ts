@@ -8,7 +8,7 @@ import {
   addBreadcrumb,
   setExtras,
   setUser,
-} from '@sentry/serverless';
+} from '@sentry/aws-serverless';
 import type { GraphqlContext } from '@decipad/backendtypes';
 import type { GraphQLError } from 'graphql';
 import { ForbiddenError, UserInputError } from 'apollo-server-lambda';

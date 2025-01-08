@@ -21,7 +21,7 @@ import type {
   MyWithOverride,
 } from '@decipad/editor-types';
 import { createMyPluginFactory, getMyEditor } from '@decipad/editor-types';
-import { captureException } from '@sentry/browser';
+import { captureException } from '@sentry/react';
 
 export type NormalizerNormaliser = () => void;
 

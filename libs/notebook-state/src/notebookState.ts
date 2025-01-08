@@ -1,4 +1,4 @@
-import { captureException } from '@sentry/browser';
+import { captureException } from '@sentry/react';
 import { setErrorReporter } from '@decipad/remote-computer';
 import { createNotebookStore } from './oneNotebookState';
 

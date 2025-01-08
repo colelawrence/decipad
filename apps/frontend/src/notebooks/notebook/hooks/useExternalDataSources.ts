@@ -1,5 +1,5 @@
 import { useCallback, useEffect } from 'react';
-import { captureException } from '@sentry/browser';
+import { captureException } from '@sentry/react';
 import type { ExternalDataSourcesContextValue } from '@decipad/interfaces';
 import type { ExternalDataSourceCreateInput } from '@decipad/graphql-client';
 import {

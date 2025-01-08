@@ -1,16 +1,23 @@
-import { AWSLambda as SentryAWSLambda, Integrations } from '@sentry/serverless';
-import '@sentry/tracing';
+import {
+  init,
+  requestDataIntegration,
+  consoleIntegration,
+  httpIntegration,
+  nodeContextIntegration,
+  graphqlIntegration,
+  flush,
+} from '@sentry/aws-serverless';
 import type { Boom } from '@hapi/boom';
 import { boomify } from '@hapi/boom';
 import { monitor as monitorConfig } from '@decipad/backend-config';
 import meta from '@decipad/meta';
-import { extraErrorDataIntegration } from '@sentry/integrations';
+import { extraErrorDataIntegration } from '@sentry/node';
 
 export type TraceOptions = Partial<{
   tracesSampleRate: number;
 }>;
 
-type SentryOptions = Parameters<typeof SentryAWSLambda.init>[0];
+type SentryOptions = Parameters<typeof init>[0];
 
 const {
   sentry: { dsn: sentryDSN },
@@ -23,12 +30,12 @@ const sentryInitOptions: SentryOptions = {
   release: meta().version,
   enableTracing: true,
   integrations: [
-    new Integrations.Apollo(),
     extraErrorDataIntegration(),
-    new Integrations.Console(),
-    new Integrations.Http(),
-    new Integrations.Context(),
-    new Integrations.RequestData({
+    graphqlIntegration(),
+    consoleIntegration(),
+    httpIntegration(),
+    nodeContextIntegration(),
+    requestDataIntegration({
       include: {
         cookies: true,
         data: true,
@@ -49,7 +56,7 @@ export const initTrace = (options: TraceOptions = {}): boolean => {
     return false;
   }
   if (!sentryInitialized) {
-    SentryAWSLambda.init({ ...sentryInitOptions, ...options });
+    init({ ...sentryInitOptions, ...options });
     sentryInitialized = true;
   }
   return true;
@@ -59,10 +66,10 @@ export const captureException = async (err: Error): Promise<Boom> => {
   const error = boomify(err as Error);
   if (initTrace()) {
     if (error.isServer) {
-      SentryAWSLambda.captureException(error);
+      captureException(error);
     }
     // eslint-disable-next-line no-await-in-loop
-    if (!(await SentryAWSLambda.flush())) {
+    if (!(await flush())) {
       // eslint-disable-next-line no-console
       console.warn('Failed to flush sentry event', error);
     }

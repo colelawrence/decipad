@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import type { PromiseOrType } from '@decipad/utils';
-import { captureException } from '@sentry/browser';
+import { captureException } from '@sentry/react';
 
 export const useResolved = <T>(p?: PromiseOrType<T>): T | undefined => {
   const [resolved, setResolved] = useState<T | undefined>();

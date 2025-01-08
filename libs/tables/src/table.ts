@@ -59,4 +59,3 @@ export const tablesProp = <T extends keyof DataTables>(
   }
   return target;
 };
-

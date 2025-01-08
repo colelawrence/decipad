@@ -1,4 +1,4 @@
-import { captureException } from '@sentry/browser';
+import { captureException } from '@sentry/react';
 import { useEffect, useState } from 'react';
 import type { ChatCompletionMessageParam } from 'openai/resources/chat';
 
