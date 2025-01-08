@@ -126,7 +126,11 @@ export const TableWrapper = styled.div<{ fullWidth?: boolean }>(
   buttonHoverStyles,
   (props) => (props.fullWidth ? table.fullWidthStyles : {}),
   {
-    width: cssVar('editorWidth'),
+    // Very cursed. When you have the sidebar open you couldn't see the scrollbar.
+    // But like this you do (but the incorrect one).
+    //
+    // It's a bit borked, but this glue will hold it together for the time being.
+    width: `calc(${cssVar('editorWidth')} - 5px)`,
     display: 'flex',
     gap: '8px',
     left: '32px',

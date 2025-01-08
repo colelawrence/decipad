@@ -67,6 +67,7 @@ const ResultPreviewTable: FC<ConcreteResultPreview & ChangableTableOptions> = ({
         onChangeColumnType={onChangeColumnType}
         onToggleHideColumn={onToggleHideColumn}
         onChangeColumnName={onChangeColumnName}
+        isReadOnly={false}
       />
     </ResultPreviewTableWrapper>
   );

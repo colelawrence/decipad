@@ -286,6 +286,7 @@ export const IntegrationBlock: PlateComponent = ({
               onChangeFormulaName={renameFormula}
               onDeleteFormula={deleteFormula}
               fullWidth
+              isReadOnly={readOnly}
             />
           ) : (
             <CodeResult {...result!} isLiveResult />

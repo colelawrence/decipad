@@ -177,33 +177,34 @@ export const useConcreteIntegration = (
   }, [run, existingDataset, runner]);
 
   useEffect(() => {
-    if (type === 'edit') {
-      //
-      // Delete the hidden type from the types.
-      // Because on edit we want to show the user the columns that they hid.
-      //
-
-      const types: TypeMap = {};
-      for (const [k, v] of Object.entries(
-        props.integrationBlock.typeMappings
-      )) {
-        types[k] = { ...v, isHidden: false };
-      }
-
-      runner.setTypes(types);
-      (async () => {
-        try {
-          await runner.import(computer);
-          await pushIntegrationFormulasWithName(
-            [notebookId, computer, props.integrationBlock],
-            varName
-          );
-        } catch (err) {
-          console.error('error importing:', err);
-          toast.error(`Error importing integration: ${(err as Error).message}`);
-        }
-      })();
+    if (type !== 'edit') {
+      return;
     }
+
+    //
+    // Delete the hidden type from the types.
+    // Because on edit we want to show the user the columns that they hid.
+    //
+
+    const types: TypeMap = {};
+    for (const [k, v] of Object.entries(props.integrationBlock.typeMappings)) {
+      types[k] = { ...v, isHidden: false };
+    }
+
+    runner.setTypes(types);
+    (async () => {
+      try {
+        await runner.import(computer);
+        await pushIntegrationFormulasWithName(
+          [notebookId, computer, props.integrationBlock],
+          varName
+        );
+        onExecute((logs) => [...logs, { status: 'success', ok: true }]);
+      } catch (err) {
+        console.error('error importing:', err);
+        toast.error(`Error importing integration: ${(err as Error).message}`);
+      }
+    })();
   }, [
     type,
     runner,

@@ -86,6 +86,7 @@ const pushFormulas = async (
 ): Promise<void> => {
   const deciLangFormulas = formulaElements
     .map(getCodeLineSource)
+    .map((i) => (i.length === 0 ? '""' : i)) // To allow for an empty placeholder
     .map(parseExpression)
     .filter((e) => e.solution != null)
     .map((e) => e.solution!)

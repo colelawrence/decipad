@@ -28,7 +28,7 @@ export function useSetCssVarWidth<T extends HTMLElement>(
     return () => {
       resizeObserver.disconnect();
     };
-  });
+  }, [varName]);
 
   return ref;
 }

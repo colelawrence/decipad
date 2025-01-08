@@ -7,6 +7,7 @@ import {
   MenuItem,
   MenuList,
   PaginationSizeControl,
+  Tooltip,
   VariableTypeMenu,
   getTypeIcon,
   table as tableStyles,
@@ -40,6 +41,8 @@ type CommonTableProps = {
   onAddFormula: () => void;
   onChangeFormulaName: (formulaIndex: number, formulaName: string) => void;
   onDeleteFormula: (formulaIndex: number) => void;
+
+  isReadOnly: boolean;
 
   fullWidth?: boolean;
 };
@@ -354,13 +357,22 @@ const UnmemoedConnectionTable: FC<ConnectionTableProps> = (props) => {
           </StyledFooter>
         )}
       </StyledTable>
-      {isFlagEnabled('INTEGRATION_FORMULAS') && props.type === 'static' && (
-        <div>
-          <button onClick={props.onAddFormula}>
-            <Add />
-          </button>
-        </div>
-      )}
+      {isFlagEnabled('INTEGRATION_FORMULAS') &&
+        props.type === 'static' &&
+        !props.isReadOnly && (
+          <Tooltip
+            side="left"
+            trigger={
+              <div>
+                <button onClick={props.onAddFormula}>
+                  <Add />
+                </button>
+              </div>
+            }
+          >
+            Add Column Formula
+          </Tooltip>
+        )}
     </TableWrapper>
   );
 };
