@@ -108,7 +108,7 @@ const ImporterOptions: {
   boolean: ({ onChange, value, label }) => {
     return (
       <Toggle
-        variant="small-toggle"
+        variant="small-switch"
         active={value}
         label={label}
         onChange={onChange}

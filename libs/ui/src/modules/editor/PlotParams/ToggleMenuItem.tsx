@@ -26,7 +26,7 @@ export const ToggleMenuItem = ({
     <div css={menuItemWithIconOnEnd}>
       <div css={constMenuMinWidth}>{label}</div>
       <div>
-        <Toggle variant="small-toggle" active={active} onChange={onChange} />
+        <Toggle variant="small-switch" active={active} onChange={onChange} />
       </div>
     </div>
   </MenuItem>

@@ -18,7 +18,7 @@ const CheckSVGString = encodeURIComponent(
 
 const CheckSVGStringDataURI = `url("data:image/svg+xml,${CheckSVGString}")`;
 
-const makeCheckbox = css({
+const checkboxStyle = css({
   '> span': {
     backgroundColor: cssVar('backgroundSubdued'),
     border: `1px solid ${cssVar('borderDefault')}`,
@@ -51,7 +51,7 @@ const makeCheckbox = css({
   },
 });
 
-const makeToggle = css({
+const baseSwitchStyle = css({
   display: 'flex',
   flexDirection: 'row',
   width: '100%',
@@ -66,6 +66,7 @@ const makeToggle = css({
     backgroundColor: componentCssVars('ToggleOffBackgroundColor'),
     borderRadius: '100vmax',
     display: 'flex',
+    flexShrink: 0,
     alignItems: 'center',
     padding: '2px',
     transition: `background-color ${shortAnimationDuration} ease-in-out`,
@@ -90,7 +91,7 @@ const makeToggle = css({
   },
 });
 
-const makeNormalToggle = css(makeToggle, {
+const switchStyle = css(baseSwitchStyle, {
   '> span': {
     width: '46px',
     height: '24px',
@@ -104,7 +105,7 @@ const makeNormalToggle = css(makeToggle, {
   },
 });
 
-const makeSmallToggle = css(makeToggle, {
+const smallSwitchStyle = css(baseSwitchStyle, {
   '> span': {
     width: '34px',
     height: '18px',
@@ -118,17 +119,27 @@ const makeSmallToggle = css(makeToggle, {
   },
 });
 
+type ToggleVariant = 'checkbox' | 'switch' | 'small-switch';
+
+const toggleStyle = (variant: ToggleVariant) =>
+  ({
+    checkbox: checkboxStyle,
+    switch: switchStyle,
+    'small-switch': smallSwitchStyle,
+  }[variant]);
+
 export interface ToggleProps {
-  active?: boolean;
+  active?: boolean | 'mixed';
   onChange?: (newActive: boolean) => void;
   ariaRoleDescription?: string;
   disabled?: boolean;
   label?: string;
-  variant?: 'checkbox' | 'toggle' | 'small-toggle';
+  variant?: ToggleVariant;
   testId?: string;
 }
 
-const CheckboxToggle: FC<Omit<ToggleProps, 'variant'>> = ({
+export const Toggle: FC<ToggleProps> = ({
+  variant = 'switch',
   ariaRoleDescription,
   active,
   onChange = noop,
@@ -138,9 +149,15 @@ const CheckboxToggle: FC<Omit<ToggleProps, 'variant'>> = ({
   return (
     <button
       aria-roledescription={ariaRoleDescription}
-      css={makeCheckbox}
+      css={toggleStyle(variant)}
       onClick={() => {
-        onChange(!active);
+        /**
+         * Clicking when the toggle is 'mixed' sets it to true, as per standard
+         * browser behaviour for indeterminate checkboxes. Otherwise, toggle
+         * between true and false. A toggle can't be set to 'mixed' by
+         * clicking, so onChange only accepts true or false.
+         */
+        onChange(active !== true);
       }}
       disabled={disabled}
       aria-checked={active}
@@ -152,82 +169,4 @@ const CheckboxToggle: FC<Omit<ToggleProps, 'variant'>> = ({
       </span>
     </button>
   );
-};
-
-const NormalToggle: FC<ToggleProps> = ({
-  ariaRoleDescription,
-  active,
-  onChange = noop,
-  disabled = false,
-  label,
-}) => {
-  return (
-    <button
-      aria-roledescription={ariaRoleDescription}
-      css={makeNormalToggle}
-      onClick={() => {
-        onChange(!active);
-      }}
-      disabled={disabled}
-      aria-checked={active}
-      data-testid="toggle-cell-editor"
-    >
-      {label && <p>{label}</p>}
-      <span aria-checked={active}>
-        <span role="checkbox" aria-checked={active} />
-      </span>
-    </button>
-  );
-};
-
-const SmallToggle: FC<ToggleProps> = ({
-  ariaRoleDescription,
-  active,
-  onChange = noop,
-  disabled = false,
-  label,
-}) => {
-  return (
-    <button
-      aria-roledescription={ariaRoleDescription}
-      css={makeSmallToggle}
-      onClick={() => {
-        onChange(!active);
-      }}
-      disabled={disabled}
-      aria-checked={active}
-      data-testid="toggle-cell-editor"
-    >
-      {label && <p>{label}</p>}
-      <span aria-checked={active}>
-        <span role="checkbox" aria-checked={active} />
-      </span>
-    </button>
-  );
-};
-
-/**
- * Multipurpose component.
- *
- * props `variant` can be used to return different styles
- * of checkbox with differing styles.
- *
- */
-export const Toggle = (props: ToggleProps): ReturnType<FC> => {
-  const variant: NonNullable<ToggleProps['variant']> =
-    props.variant ?? 'toggle';
-
-  if (variant === 'toggle') {
-    return <NormalToggle {...props} />;
-  }
-
-  if (variant === 'small-toggle') {
-    return <SmallToggle {...props} />;
-  }
-
-  if (variant === 'checkbox') {
-    return <CheckboxToggle {...props} />;
-  }
-
-  throw new Error('Impossible branch');
 };

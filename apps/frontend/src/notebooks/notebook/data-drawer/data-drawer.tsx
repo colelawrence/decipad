@@ -212,7 +212,7 @@ const DataDrawerVariableButtons: FC<
               popSidebar();
             }
           }}
-          variant="small-toggle"
+          variant="small-switch"
         />
       </DataDrawerFormulaHelperWrapper>
       <SegmentButtons

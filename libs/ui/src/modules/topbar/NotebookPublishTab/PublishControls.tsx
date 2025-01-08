@@ -30,7 +30,7 @@ export const PublishControls: FC<PublishControlsProps> = ({
         <Toggle
           label="Allow readers to duplicate"
           active={allowDuplicate}
-          variant="small-toggle"
+          variant="small-switch"
           onChange={(newActive) =>
             onChangeAllowDuplicate(notebookId, newActive)
           }
