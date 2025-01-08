@@ -6,8 +6,7 @@ const snapshotsTaken = new Set<string>();
 export const snapshot = async (
   page: Page,
   name: string,
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  _options?: { mobile?: boolean; midSize?: boolean }
+  options?: { mobile?: boolean; midSize?: boolean }
 ): Promise<void> => {
   if (!process.env.PERCY_TOKEN || snapshotsTaken.has(name)) {
     return;
@@ -20,7 +19,11 @@ export const snapshot = async (
 
   try {
     await percySnapshot(page, name, {
-      widths: [1380, 768, 375],
+      widths: [
+        1380,
+        options?.mobile != null ? 768 : undefined,
+        options?.midSize != null ? 375 : undefined,
+      ].filter((i): i is number => i != null),
     });
   } catch (err) {
     // eslint-disable-next-line no-console
