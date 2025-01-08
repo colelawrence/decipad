@@ -129,6 +129,7 @@ export const TableWrapper = styled.div<{ fullWidth?: boolean }>(
     width: cssVar('editorWidth'),
     display: 'flex',
     gap: '8px',
+    left: '32px',
   }
 );
 
