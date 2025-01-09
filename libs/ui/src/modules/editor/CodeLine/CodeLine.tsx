@@ -274,6 +274,12 @@ export const CodeLine: FC<CodeLineProps> = ({
   return (
     <div
       className={'block-code'}
+      style={
+        {
+          // Cascade the block theme color to the code variable
+          '--deci-themeBackgroundSubdued': backgroundColor.hex,
+        } as React.CSSProperties
+      }
       css={[
         codeLineStyles(variant, hasNextSibling, hasPreviousSibling),
         variant === 'table' && highlight && formulaDrawerHighlightLineStyles,

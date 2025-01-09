@@ -3,5 +3,5 @@ export const Height = {
   Bubble: '22px',
 
   // Action buttons on tables.
-  ActionButtons: '26px',
+  ActionButtons: '22px',
 };

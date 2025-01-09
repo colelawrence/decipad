@@ -34,9 +34,6 @@ const tableControlStyles = css(p12Medium, hideOnPrint, {
   gap: '6px',
   color: cssVar('textDefault'),
   height: Height.Bubble,
-  figure: {
-    height: Height.ActionButtons,
-  },
 });
 
 const tableCaptionInnerStyles = css({

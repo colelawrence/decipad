@@ -110,14 +110,14 @@ export const LiveCode = ({
 };
 
 const liveCodeWrapperStyles = css(codeBlock.structuredVariableStyles, {
-  height: '32px',
+  height: '24px',
 
   display: 'flex',
   gap: '4px',
   backgroundColor: cssVar('backgroundDefault'),
-  padding: '2px 2px 2px 6px',
+  padding: '2px 2px 2px 4px',
   width: 'fit-content',
-  borderRadius: '8px',
+  borderRadius: '6px',
   overflowWrap: 'anywhere',
   maxWidth: '375px',
   wordBreak: 'break-word',

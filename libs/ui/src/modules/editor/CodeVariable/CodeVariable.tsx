@@ -146,7 +146,9 @@ const typeStyles = css({
   backgroundColor: `color-mix(in srgb, ${cssVar(
     'themeBackgroundSubdued'
   )} 30%, transparent)`,
-  outline: `solid 1px ${cssVar('themeBackgroundSubdued')}`,
+  outline: `solid 1px color-mix(in srgb, ${cssVar(
+    'themeBackgroundSubdued'
+  )} 50%, transparent)`,
   outlineOffset: -1,
 });
 

@@ -42,11 +42,7 @@ const defaultStyles = css(
   deciOverflowYStyles
 );
 
-const triggerStyles = css({
-  display: 'contents',
-  height: '100%',
-  width: '100%',
-});
+const triggerStyles = css({});
 
 const undropdownifyContentStyles = css({
   '>[data-radix-popper-content-wrapper]': { display: 'contents' },

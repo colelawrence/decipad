@@ -5,8 +5,8 @@ import { cssVar } from '../../../primitives';
 
 const formulasDrawerStyles = css({
   border: `1px solid ${cssVar('borderDefault')}`,
-  borderRadius: '10px',
-  margin: '8px 0 16px',
+  borderRadius: '8px',
+  margin: '8px 0',
   pre: {
     'div:first-of-type': {
       borderRadius: '9px 9px 0 0',
