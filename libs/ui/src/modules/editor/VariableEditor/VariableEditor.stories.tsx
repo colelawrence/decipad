@@ -12,7 +12,10 @@ export default {
 
 export const Normal: StoryFn<ComponentProps<typeof VariableEditor>> = () => {
   return (
-    <VariableEditor>
+    <VariableEditor
+      variant="expression"
+      onClickEdit={() => console.info('clicked')}
+    >
       <Caption>Variable</Caption>
       <Expression>10</Expression>
     </VariableEditor>

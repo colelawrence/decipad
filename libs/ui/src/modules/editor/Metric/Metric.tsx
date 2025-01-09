@@ -1,11 +1,10 @@
 /* eslint decipad/css-prop-named-variable: 0 */
 import { css } from '@emotion/react';
-import { FC, ReactNode, useCallback, useState } from 'react';
+import { FC, ReactNode } from 'react';
 import { useSelected } from 'slate-react';
 import {
   componentCssVars,
   cssVar,
-  hoverTransitionStyles,
   p13Medium,
   p14Medium,
   shortAnimationDuration,
@@ -17,80 +16,13 @@ import { CodeResult } from '../CodeResult/CodeResult';
 import { Result } from '@decipad/language-interfaces';
 import { N, ZERO } from '@decipad/number';
 import { NumberFormatting } from '@decipad/editor-types';
-
-const bottomBarSize = 2;
-
-const initialFontSize = 24;
-const initialFontSizeHeight = 120;
-const initialLineHeight = 33;
-const finalFontSize = 48;
-const finalFontSizeHeight = 186;
-const finalLineHeight = 65;
-
-const fontSizeGradient =
-  (finalFontSize - initialFontSize) /
-  (finalFontSizeHeight - initialFontSizeHeight);
-const fontSizeForHeight = (height: number) =>
-  Math.max(
-    initialFontSize,
-    Math.min(
-      finalFontSize,
-      initialFontSize + (height - initialFontSizeHeight) * fontSizeGradient
-    )
-  );
-
-const lineHeightGradient =
-  (finalLineHeight - initialLineHeight) /
-  (finalFontSizeHeight - initialFontSizeHeight);
-const lineHeightForHeight = (height: number) =>
-  Math.max(
-    initialLineHeight,
-    Math.min(
-      finalLineHeight,
-      initialLineHeight + (height - initialFontSizeHeight) * lineHeightGradient
-    )
-  );
-
-const wrapperStyles = css(
-  {
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'space-between',
-    padding: '10px 10px 16px 16px',
-
-    border: `1px solid ${cssVar('borderDefault')}`,
-    borderRadius: '16px',
-    gap: '4px',
-
-    // Bottom side color bar.
-    boxShadow: `inset 0 -${bottomBarSize}px 0 ${cssVar('borderDefault')}`,
-    marginBottom: `${bottomBarSize}px`,
-
-    '--metric-hover': 0,
-
-    '&:hover': {
-      '--metric-hover': 1,
-    },
-  },
-  hoverTransitionStyles('all')
-);
-
-const selectedStyles = css({
-  backgroundColor: componentCssVars('SelectedBlockColor'),
-  border: `1px solid ${cssVar('borderDefault')}`,
-  boxShadow: `inset 0 -${bottomBarSize}px 0 ${cssVar('borderDefault')}`,
-});
-
-const hoveredStyles = css({
-  '&:hover': {
-    backgroundColor: componentCssVars('SelectedBlockColor'),
-  },
-});
+import { WidgetWrapper } from '../WidgetWrapper/WidgetWrapper';
 
 const headerStyles = css({
   display: 'flex',
   alignItems: 'center',
   gap: '4px',
+  paddingLeft: '6px',
 });
 
 const captionStyles = css([
@@ -113,31 +45,37 @@ const formatButtonStyles = css({
   },
   // Always visible on devices that cannot hover
   '@media (hover: hover)': {
-    opacity: 'var(--metric-hover)',
+    opacity: 'var(--widget-hover)',
     transition: `opacity ${shortAnimationDuration}`,
   },
 });
 
-const valueStyles = (height: number) =>
-  css({
-    color: cssVar('textHeavy'),
-    fontWeight: 500, // Medium
-    fontSize: `${fontSizeForHeight(height)}px`,
-    lineHeight: `${lineHeightForHeight(height)}px`,
-    transitionProperty: 'font-size, line-height',
-    transitionDuration: shortAnimationDuration,
-  });
+const valueStyles = css({
+  color: cssVar('textHeavy'),
+  fontWeight: 500, // Medium
+  padding: '0 6px',
+  transitionProperty: 'font-size, line-height',
+  transitionDuration: shortAnimationDuration,
+
+  fontSize: 'var(--widget-calculated-font-size)',
+  lineHeight: 'var(--widget-calculated-line-height)',
+});
 
 const comparisonStyles = css([
   p14Medium,
   {
     color: cssVar('textDefault'),
     display: 'flex',
+    padding: '0 6px',
   },
 ]);
 
 const hiddenChildrenStyles = css({
   display: 'none',
+});
+
+const valueAndComparisonWrapperStyles = css({
+  paddingBottom: '6px',
 });
 
 export interface MetricProps {
@@ -167,42 +105,15 @@ export const Metric = ({
   fullHeight = false,
   onClickEdit,
 }: MetricProps): ReturnType<FC> => {
-  const selected = useSelected();
   const color = useSwatchColor(colorProp, 'vivid', 'base');
-
-  // In full height mode, scale font size and line height with widget height
-  const [height, setHeight] = useState(initialFontSizeHeight);
-  const [resizeObserver] = useState(
-    () =>
-      new ResizeObserver(([entry]) => {
-        if (entry) {
-          setHeight(entry.borderBoxSize[0].blockSize);
-        }
-      })
-  );
-
-  const connectResizeObserver = useCallback(
-    (el: HTMLElement | null) => {
-      if (el) {
-        resizeObserver.observe(el);
-      } else {
-        resizeObserver.disconnect();
-      }
-    },
-    [resizeObserver]
-  );
+  const selected = useSelected();
 
   return (
-    <div
-      ref={fullHeight ? connectResizeObserver : undefined}
-      aria-roledescription="column-content"
-      css={[
-        wrapperStyles,
-        selected && selectedStyles,
-        !readOnly && hoveredStyles,
-        maxWidth && { maxWidth: '262px' },
-        fullHeight && { height: '100%' },
-      ]}
+    <WidgetWrapper
+      fullHeight={fullHeight}
+      maxWidth={maxWidth}
+      selected={selected}
+      readOnly={readOnly}
     >
       <div css={headerStyles}>
         <div css={captionStyles}>{caption || '\u00a0'}</div>
@@ -212,8 +123,8 @@ export const Metric = ({
           </button>
         )}
       </div>
-      <div>
-        <div css={[valueStyles(fullHeight ? height : 0), { color: color.hex }]}>
+      <div css={valueAndComparisonWrapperStyles}>
+        <div css={[valueStyles, { color: color.hex }]}>
           {mainResult?.type.kind !== 'type-error' && mainResult ? (
             <CodeResult {...mainResult} formatting={formatting} />
           ) : (
@@ -230,7 +141,7 @@ export const Metric = ({
       </div>
 
       <div css={hiddenChildrenStyles}>{children}</div>
-    </div>
+    </WidgetWrapper>
   );
 };
 

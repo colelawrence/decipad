@@ -32,7 +32,8 @@ import {
   TextAndIconButton,
   Tooltip,
 } from '../../../shared';
-import { wrapperStyles } from '../VariableEditor/VariableEditor';
+import { WidgetWrapper } from '../WidgetWrapper/WidgetWrapper';
+import { useSelected } from 'slate-react';
 
 const configContainerStyles = css({
   display: 'grid',
@@ -179,11 +180,13 @@ const Form = ({
   resetForm: () => void;
   toast: ToastContextType;
 }) => {
-  const formContainerStyles = [
-    wrapperStyles,
+  const formContainerStyles = css([
     baseFormContainerStyles,
     formStatus.status === 'error' && formContainerErrorStyles,
-  ];
+  ]);
+
+  const readOnly = useIsEditorReadOnly();
+  const selected = useSelected();
 
   useEffect(() => {
     if (formStatus.status === 'error') {
@@ -212,41 +215,50 @@ const Form = ({
 
   return (
     <>
-      <form
-        css={formContainerStyles}
-        onSubmit={(e) => {
-          e.preventDefault();
-          onSubmit();
-        }}
+      <WidgetWrapper
+        customCss={formContainerStyles}
+        readOnly={readOnly}
+        selected={selected}
+        maxWidth={false}
+        fullHeight={false}
       >
-        <div css={innerFormContainerStyles}>
-          <div css={iconWrapperStyles}>
-            <Email />
-          </div>
-          <InputField
-            type="email"
-            size="small"
-            value={email}
-            placeholder="Email"
-            onChange={setEmail}
-            disabled={formStatus.status === 'loading'}
-            inputCss={{
-              ':hover': {
-                background: cssVar('backgroundAccent'),
-              },
-            }}
-          />
+        <form
+          css={formContainerStyles}
+          onSubmit={(e) => {
+            e.preventDefault();
+            onSubmit();
+          }}
+        >
+          <div css={innerFormContainerStyles}>
+            <div css={iconWrapperStyles}>
+              <Email />
+            </div>
+            <InputField
+              type="email"
+              size="small"
+              value={email}
+              placeholder="Email"
+              onChange={setEmail}
+              disabled={formStatus.status === 'loading'}
+              inputCss={{
+                backgroundColor: 'transparent',
+                ':hover': {
+                  backgroundColor: cssVar('backgroundHeavy'),
+                },
+              }}
+            />
 
-          <TextAndIconButton
-            onClick={onSubmit}
-            text="Submit"
-            iconPosition="left"
-            color={formStatus.status === 'loading' ? 'grey' : 'black'}
-          >
-            {formStatus.status === 'loading' ? <Spinner /> : <Send />}
-          </TextAndIconButton>
-        </div>
-      </form>
+            <TextAndIconButton
+              onClick={onSubmit}
+              text="Submit"
+              iconPosition="left"
+              color={formStatus.status === 'loading' ? 'grey' : 'black'}
+            >
+              {formStatus.status === 'loading' ? <Spinner /> : <Send />}
+            </TextAndIconButton>
+          </div>
+        </form>
+      </WidgetWrapper>
     </>
   );
 };

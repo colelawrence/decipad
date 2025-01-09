@@ -4,80 +4,13 @@ import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
 import { Children, FC, ReactNode, useCallback, useRef, useState } from 'react';
 import { DatePickerWrapper, Toggle } from '../../../shared';
-import {
-  cssVar,
-  p24Medium,
-  smallScreenQuery,
-  shortAnimationDuration,
-  hoverTransitionStyles,
-} from '../../../primitives';
+import { cssVar, p24Medium, hoverTransitionStyles } from '../../../primitives';
 import { AvailableSwatchColor, useSwatchColor } from '../../../utils';
 import { ElementVariants } from '@decipad/editor-types';
 import { Settings2 } from 'libs/ui/src/icons';
 import { useWindowListener } from '@decipad/react-utils';
 import { useSelected } from 'slate-react';
-
-const bottomBarSize = 2;
-
-export const wrapperStyles = css(
-  {
-    minWidth: '175px',
-    width: '100%',
-    maxWidth: '262px',
-    height: 'unset',
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'space-between',
-    padding: 10,
-
-    border: `1px solid ${cssVar('borderDefault')}`,
-    borderRadius: '16px',
-
-    // Bottom side color bar. Inner shadow to avoid clipping selection.
-    boxShadow: `inset 0 -${bottomBarSize}px 0 ${cssVar('borderDefault')}`,
-
-    // Cursor
-    cursor: 'default',
-
-    '--metric-hover': 0,
-    '.settingsButtonWrapper': {
-      opacity: '0',
-    },
-
-    '&:hover': {
-      '--metric-hover': 1,
-      '.settingsButtonWrapper': {
-        opacity: '1',
-      },
-    },
-    '&[data-inside-layout="true"]': {
-      maxWidth: 'none',
-      height: '100%',
-    },
-    '&[aria-selected="true"]': {
-      '&[aria-readonly="false"]': {
-        backgroundColor: cssVar('backgroundDefault'),
-        border: `1px solid ${cssVar('borderDefault')}`,
-        boxShadow: `inset 0 -${bottomBarSize}px 0 ${cssVar('borderDefault')}`,
-      },
-    },
-    '&[aria-readonly="false"]': {
-      '&:hover': {
-        backgroundColor: cssVar('backgroundDefault'),
-      },
-    },
-  },
-  hoverTransitionStyles('all')
-);
-
-const widgetWrapperStyles = css({
-  alignItems: 'center',
-  display: 'flex',
-  gap: '4px',
-  flexDirection: 'column',
-  justifyContent: 'space-between',
-  height: '100%',
-});
+import { WidgetWrapper } from '../WidgetWrapper/WidgetWrapper';
 
 const headerWrapperStyles = css({
   position: 'relative',
@@ -101,10 +34,7 @@ const iconWrapperStyles = css({
     right: 0,
   },
 
-  [smallScreenQuery]: {
-    height: '16px',
-    width: '16px',
-  },
+  opacity: 'var(--widget-hover)',
 });
 
 const buttonWrapperStyles = css(
@@ -112,10 +42,13 @@ const buttonWrapperStyles = css(
     padding: '4px',
     flex: 0,
     backgroundColor: 'transparent',
+    borderRadius: '4px',
+    opacity: 'var(--widget-hover)',
+
     ':hover': {
       backgroundColor: cssVar('backgroundHeavy'),
-      borderRadius: '4px',
     },
+
     '&[data-variant="display"]': {
       position: 'absolute',
       top: 0,
@@ -292,54 +225,41 @@ export const VariableEditor = ({
   ])();
 
   return (
-    <div
-      aria-roledescription="column-content"
+    <WidgetWrapper
+      fullHeight={insideLayout}
+      maxWidth={!insideLayout}
+      selected={selected}
+      readOnly={readOnly}
       className={'block-table'}
-      css={wrapperStyles}
-      data-testid="widget-editor"
-      data-inside-layout={insideLayout}
-      aria-selected={selected}
-      aria-readonly={readOnly}
     >
-      <div css={widgetWrapperStyles}>
-        <div
-          css={[
-            headerWrapperStyles,
-            variant === 'display' && {
-              gap: 0,
-            },
-          ]}
-        >
-          <div css={variableNameStyles}>{childrenArray[0]}</div>
-          {variant && !readOnly && onClickEdit && (
-            <div
-              contentEditable={false}
-              css={[
-                iconWrapperStyles,
-                {
-                  // Always visible on devices that cannot hover
-                  '@media (hover: hover)': {
-                    opacity: 'var(--variable-editor-hover)',
-                    transition: `opacity ${shortAnimationDuration}`,
-                  },
-                },
-              ]}
+      <div
+        css={[
+          headerWrapperStyles,
+          variant === 'display' && {
+            gap: 0,
+          },
+        ]}
+      >
+        <div css={variableNameStyles}>{childrenArray[0]}</div>
+        {variant && !readOnly && onClickEdit && (
+          <div
+            contentEditable={false}
+            css={iconWrapperStyles}
+            data-variant={variant}
+          >
+            <button
+              type="button"
+              className="settingsButtonWrapper"
+              css={buttonWrapperStyles}
               data-variant={variant}
+              onClick={onClickEdit}
             >
-              <button
-                type="button"
-                className="settingsButtonWrapper"
-                css={buttonWrapperStyles}
-                data-variant={variant}
-                onClick={onClickEdit}
-              >
-                <Settings2 />
-              </button>
-            </div>
-          )}
-        </div>
-        <div css={editorWrapperStyles}>{editor}</div>
+              <Settings2 />
+            </button>
+          </div>
+        )}
       </div>
-    </div>
+      <div css={editorWrapperStyles}>{editor}</div>
+    </WidgetWrapper>
   );
 };
