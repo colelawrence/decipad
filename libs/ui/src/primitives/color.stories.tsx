@@ -26,10 +26,12 @@ const colorNames: Record<ColorId, string> = {
   grey50: 'Grey 50',
   grey100: 'Grey 100',
   grey200: 'Grey 200',
+  grey200Transparent: 'Grey 200 Transparent',
   grey300: 'Grey 300',
   grey400: 'Grey 400',
   grey500: 'Grey 500',
   grey600: 'Grey 600',
+  grey600Transparent: 'Grey 600 Transparent',
   grey700: 'Grey 700',
 
   brand50: 'Brand 50',

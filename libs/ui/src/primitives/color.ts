@@ -133,6 +133,9 @@ export const grey500 = color(119, 126, 137);
 export const grey600 = color(77, 86, 100);
 export const grey700 = color(50, 59, 73);
 
+export const grey200Transparent = transparency(color(2, 53, 129), 0.04); // should match grey200 but with 0.04 opacity on background
+export const grey600Transparent = transparency(color(50, 49, 70), 0.65); // should match grey600 but with 0.65 opacity on background
+
 export const offBlack = color(22, 31, 44);
 export const black = color(0, 0, 0);
 export const blackWhiteBlack = color(22, 31, 44);

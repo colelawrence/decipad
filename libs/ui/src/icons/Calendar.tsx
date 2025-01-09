@@ -12,6 +12,8 @@ export const Calendar = (props: SVGProps<SVGSVGElement>) => {
     >
       <path
         stroke="currentColor"
+        fill="currentColor"
+        fillOpacity={0.1}
         strokeLinecap="round"
         strokeLinejoin="round"
         strokeWidth={1.3}

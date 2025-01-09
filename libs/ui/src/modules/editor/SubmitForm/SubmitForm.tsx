@@ -5,7 +5,6 @@ import {
 } from '@decipad/editor-hooks';
 import {
   type AnyElement,
-  type AvailableSwatchColor,
   type MyNode,
   type PlateComponent,
   useMyEditorRef,
@@ -14,16 +13,14 @@ import { useWorkspaceSecrets } from '@decipad/graphql-client';
 import { exportProgramByVarname } from '@decipad/import';
 import {
   useCurrentWorkspaceStore,
-  useEditorStylesContext,
   useIsEditorReadOnly,
   useNotebookId,
-  useThemeFromStore,
 } from '@decipad/react-contexts';
 import { workspaces } from '@decipad/routing';
 import { type ToastContextType, useToast } from '@decipad/toast';
 import { BackendUrl } from '@decipad/utils';
 import { css } from '@emotion/react';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Close, Add, Email, Send } from '../../../icons';
 import { brand200, cssVar, p13Medium } from '../../../primitives';
@@ -35,7 +32,6 @@ import {
   TextAndIconButton,
   Tooltip,
 } from '../../../shared';
-import { swatchesThemed } from '../../../utils';
 import { wrapperStyles } from '../VariableEditor/VariableEditor';
 
 const configContainerStyles = css({
@@ -122,7 +118,7 @@ const baseFormContainerStyles = css({
 });
 
 const innerFormContainerStyles = {
-  margin: 8,
+  marginLeft: 6,
   display: 'grid',
   gridTemplateColumns: '13px 1fr auto',
   alignItems: 'center',
@@ -183,11 +179,8 @@ const Form = ({
   resetForm: () => void;
   toast: ToastContextType;
 }) => {
-  const { color } = useEditorStylesContext();
-  const [darkTheme] = useThemeFromStore();
-  const baseSwatches = useMemo(() => swatchesThemed(darkTheme), [darkTheme]);
   const formContainerStyles = [
-    wrapperStyles({ color: baseSwatches[color as AvailableSwatchColor].rgb }),
+    wrapperStyles,
     baseFormContainerStyles,
     formStatus.status === 'error' && formContainerErrorStyles,
   ];
@@ -227,7 +220,9 @@ const Form = ({
         }}
       >
         <div css={innerFormContainerStyles}>
-          <Email />
+          <div css={iconWrapperStyles}>
+            <Email />
+          </div>
           <InputField
             type="email"
             size="small"
@@ -235,6 +230,11 @@ const Form = ({
             placeholder="Email"
             onChange={setEmail}
             disabled={formStatus.status === 'loading'}
+            inputCss={{
+              ':hover': {
+                background: cssVar('backgroundAccent'),
+              },
+            }}
           />
 
           <TextAndIconButton

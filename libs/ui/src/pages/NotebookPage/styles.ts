@@ -197,10 +197,13 @@ export const PaddingEditor = styled.div({
   backgroundColor: cssVar('backgroundMain'),
   paddingTop: '64px',
   paddingBottom: '200px',
-  paddingRight: '16px',
-  paddingLeft: '16px',
 
   position: 'relative',
+
+  '@media (max-width: 475px)': {
+    paddingRight: '16px',
+    paddingLeft: '16px',
+  },
 });
 
 export const InEditorSidebar = styled.div({

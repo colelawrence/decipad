@@ -32,9 +32,11 @@ import {
   fullTransparent,
   grey100,
   grey200,
+  grey200Transparent,
   grey300,
   grey400,
   grey600,
+  grey600Transparent,
   grey700,
   offBlack,
   offWhite,
@@ -545,6 +547,11 @@ export interface ComponentCssVariables {
   TrendUpGreenColor: string;
   TrendDownRedColor: string;
   // --------------- End Trends ---------------
+
+  // ----------------- Selection -----------------
+  SelectionAreaColor: string;
+  SelectedBlockColor: string;
+  // --------------- End Selection ---------------
 }
 
 /**
@@ -673,6 +680,9 @@ export const ComponentColors: Record<'Light' | 'Dark', ComponentCssVariables> =
 
       TrendUpGreenColor: brand700.hex,
       TrendDownRedColor: red600.hex,
+
+      SelectionAreaColor: grey200Transparent.rgba,
+      SelectedBlockColor: grey200Transparent.rgba,
     },
     Dark: {
       ButtonPrimaryDefaultBackground: purple300.hex,
@@ -794,6 +804,9 @@ export const ComponentColors: Record<'Light' | 'Dark', ComponentCssVariables> =
 
       TrendUpGreenColor: brand600.hex,
       TrendDownRedColor: red500.hex,
+
+      SelectionAreaColor: grey600Transparent.rgba,
+      SelectedBlockColor: grey600Transparent.rgba,
     },
   } as const;
 

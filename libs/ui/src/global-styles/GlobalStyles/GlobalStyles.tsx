@@ -6,6 +6,8 @@ import emotionNormalize from 'emotion-normalize';
 import emotionReset from 'emotion-reset';
 import { FC } from 'react';
 import {
+  boldOpacity,
+  componentCssVars,
   cssVar,
   darkTheme,
   GlobalComponentStyles,
@@ -13,7 +15,6 @@ import {
   lightTheme,
   mediumShadow,
   p13Medium,
-  strongOpacity,
 } from '../../primitives';
 
 const DarkThemeStyles = (): ReturnType<React.FC> => {
@@ -278,9 +279,14 @@ export const GlobalStyles: React.FC<React.PropsWithChildren<unknown>> = ({
         },
 
         '.slate-selection-area': {
-          background: cssVar('backgroundHeavy'),
+          background: componentCssVars('SelectionAreaColor'),
           borderRadius: 8,
-          opacity: strongOpacity,
+          opacity: boldOpacity,
+          position: 'relative',
+        },
+
+        '.slate-selected': {
+          boxShadow: `0 0 0 1px ${componentCssVars('SelectedBlockColor')}`,
         },
 
         // further resets

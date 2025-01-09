@@ -25,7 +25,7 @@ test('toggle Widget', async ({ testUser }) => {
       page.getByTestId('widget-editor').getByRole('checkbox')
     ).not.toBeChecked();
     await expect(
-      page.getByText('false', { exact: true }).first()
+      page.getByText('False', { exact: true }).first()
     ).toBeVisible();
   });
 
@@ -33,7 +33,7 @@ test('toggle Widget', async ({ testUser }) => {
     const widgetEditor = page.getByTestId('widget-editor');
     await page.getByTestId('toggle-cell-editor').click();
     await expect(widgetEditor.getByRole('checkbox')).toBeChecked();
-    await expect(page.getByText('true', { exact: true }).first()).toBeVisible();
+    await expect(page.getByText('True', { exact: true }).first()).toBeVisible();
   });
 
   await test.step('can turn off toggle', async () => {
@@ -41,7 +41,7 @@ test('toggle Widget', async ({ testUser }) => {
     await page.getByTestId('toggle-cell-editor').click();
     await expect(widgetEditor.getByRole('checkbox')).not.toBeChecked();
     await expect(
-      page.getByText('false', { exact: true }).first()
+      page.getByText('False', { exact: true }).first()
     ).toBeVisible();
   });
 });

@@ -14,6 +14,7 @@ import { formatError } from '@decipad/format';
 import { docs } from '@decipad/routing';
 import { useDelayedTrue } from '@decipad/react-utils';
 import { ClientEventsContext } from '@decipad/client-events';
+import { useVariableEditorContext } from './VariableEditorContext';
 
 const getPlaceHolder = (type: SerializedType | undefined) => {
   if (!type) return '100$';
@@ -84,6 +85,8 @@ export const Expression: PlateComponent = ({
   const nodeText = getNodeString(element);
   const oldStr = useRef(nodeText);
 
+  const { color } = useVariableEditorContext();
+
   // Not focused because we don't want to update every time the user types,
   // just when they are done typing, which we assume is when they click away.
   // Sliders can be spammy, so they are handled separately.
@@ -123,6 +126,7 @@ export const Expression: PlateComponent = ({
             ? getPlaceHolder(result?.type)
             : ''
         }
+        color={color}
       >
         {children}
       </UIExpression>

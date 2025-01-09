@@ -1,4 +1,4 @@
-import { cssVar } from '@decipad/ui';
+import { componentCssVars } from '@decipad/ui';
 import type { TElement } from '@udecode/plate-common';
 import { BlockSelectable as _BlockSelectable } from '@udecode/plate-selection';
 import type { ReactNode } from 'react';
@@ -13,7 +13,7 @@ export const BlockSelectable = ({
   _BlockSelectable({
     options: {
       element,
-      selectedColor: cssVar('backgroundHeavy'),
+      selectedColor: componentCssVars('SelectedBlockColor'),
     },
     children,
   });

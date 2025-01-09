@@ -1,21 +1,18 @@
 /* eslint decipad/css-prop-named-variable: 0 */
-import { useThemeFromStore } from '@decipad/react-contexts';
 import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
 import * as SliderUI from '@radix-ui/react-slider';
 import { FC, InputHTMLAttributes } from 'react';
 import { brand400, cssVar } from '../../../primitives';
-import { AvailableSwatchColor, swatchesThemed } from '../../../utils';
+import { AvailableSwatchColor, useSwatchColor } from '../../../utils';
 
-const thumbBorderWidth = 1.28;
+const thumbBorderWidth = 1;
 const thumbSize = 16;
-const trackHeight = 3;
+const trackHeight = 4;
 
 const sliderWrapperStyles = css({
-  padding: `calc(${thumbSize}px / 2 / 2) 7px`,
+  padding: `calc(${thumbSize}px / 2) 7px`,
   width: '100%', // Specific width is required for Firefox.
-  marginTop: '-5px',
-  height: '0px',
   gap: '0px',
 });
 
@@ -29,7 +26,7 @@ const sliderStyles = css({
 });
 
 const trackStyles = css({
-  backgroundColor: cssVar('backgroundDefault'),
+  backgroundColor: cssVar('borderDefault'),
   position: 'relative',
   flexGrow: 1,
   borderRadius: '9999px',
@@ -57,7 +54,7 @@ const thumbStyles = css({
 
   backgroundColor: cssVar('backgroundMain'),
 
-  cursor: 'pointer',
+  cursor: 'grab',
   display: 'block',
 });
 
@@ -83,9 +80,7 @@ export const Slider = ({
   value = 0,
   color: colorName,
 }: SliderProps): ReturnType<FC> => {
-  const [darkTheme] = useThemeFromStore();
-  const baseSwatches = swatchesThemed(darkTheme);
-  const color = baseSwatches[colorName || 'Catskill'];
+  const color = useSwatchColor(colorName || 'Catskill', 'vivid', 'base');
   return (
     <div css={sliderWrapperStyles}>
       <SliderUI.Root
@@ -103,7 +98,9 @@ export const Slider = ({
             css={[rangeStyles, color && { backgroundColor: color.rgb }]}
           />
         </SliderUI.Track>
-        <SliderUI.Thumb css={thumbStyles} />
+        <SliderUI.Thumb
+          css={[thumbStyles, color && { borderColor: color.rgb }]}
+        />
       </SliderUI.Root>
     </div>
   );

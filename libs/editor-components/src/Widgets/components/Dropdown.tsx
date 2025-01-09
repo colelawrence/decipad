@@ -4,11 +4,13 @@ import { assertElementType } from '@decipad/editor-utils';
 import { useIsEditorReadOnly } from '@decipad/react-contexts';
 import { DropdownMenu, WidgetDisplay } from '@decipad/ui';
 import { useDropdown } from '../hooks/useDropdown';
+import { useVariableEditorContext } from './VariableEditorContext';
 
 export const Dropdown: PlateComponent = ({ attributes, element, children }) => {
   assertElementType(element, ELEMENT_DROPDOWN);
 
   const readOnly = useIsEditorReadOnly();
+  const { color } = useVariableEditorContext();
 
   const {
     dropdownOpen,
@@ -47,6 +49,7 @@ export const Dropdown: PlateComponent = ({ attributes, element, children }) => {
           setOpenMenu={setDropdownOpen}
           readOnly={readOnly}
           allowOpen
+          color={color}
         >
           {children}
         </WidgetDisplay>

@@ -5,13 +5,15 @@ import { FC, ReactNode } from 'react';
 import { CaretDown, CaretUp } from '../../../icons';
 import { CodeResult } from '../CodeResult/CodeResult';
 import { cssVar, p24Medium } from '../../../primitives';
+import { AvailableSwatchColor } from '@decipad/editor-types';
+import { useSwatchColor } from 'libs/ui/src/utils';
 
 const mainStyles = (readOnly: boolean, selected: boolean) =>
   css(p24Medium, {
     width: '100%',
-    maxWidth: '244px',
+    flex: 0,
     borderRadius: 8,
-    padding: '0px 6px 0px 8px',
+    padding: '0px 6px',
     fontSize: 24,
     minHeight: 40,
     height: '100%',
@@ -19,21 +21,24 @@ const mainStyles = (readOnly: boolean, selected: boolean) =>
     justifyContent: 'space-between',
     alignItems: 'center',
     transition: 'all 0.2s ease-in-out',
-    ...(selected && { backgroundColor: cssVar('backgroundDefault') }),
+    ...(selected && { backgroundColor: cssVar('backgroundHeavy') }),
     ...(!readOnly && {
       border: `1px solid ${cssVar('borderSubdued')}`,
       ':hover': {
-        backgroundColor: cssVar('backgroundDefault'),
+        backgroundColor: cssVar('backgroundHeavy'),
       },
       cursor: 'pointer',
     }),
+    overflow: 'hidden',
   });
 
 const lineStyles = css({
   overflow: 'hidden',
   whiteSpace: 'nowrap',
+  textOverflow: 'ellipsis',
+  flexGrow: 1,
   scrollSnapAlign: 'start',
-  fontVariantNumeric: 'tabular-nums',
+  textAlign: 'start',
 });
 
 export interface WidgetDisplayProps {
@@ -43,6 +48,7 @@ export interface WidgetDisplayProps {
   readonly allowOpen: boolean;
   readonly children: ReactNode;
   readonly result?: Result.Result;
+  readonly color?: AvailableSwatchColor;
 }
 
 export const WidgetDisplay: FC<WidgetDisplayProps> = ({
@@ -52,8 +58,10 @@ export const WidgetDisplay: FC<WidgetDisplayProps> = ({
   allowOpen,
   children,
   result,
+  color: colorProp = 'Catskill',
 }) => {
   const showMenu = !readOnly || allowOpen;
+  const swatchColor = useSwatchColor(colorProp, 'vivid', 'base');
   return (
     <div
       css={mainStyles(!allowOpen && readOnly, openMenu)}
@@ -69,7 +77,16 @@ export const WidgetDisplay: FC<WidgetDisplayProps> = ({
           />
         </span>
       ) : (
-        <span css={lineStyles}>{children}</span>
+        <span
+          css={[
+            lineStyles,
+            {
+              color: swatchColor.hex,
+            },
+          ]}
+        >
+          {children}
+        </span>
       )}
       {showMenu && (
         <div css={{ width: '20px' }}>

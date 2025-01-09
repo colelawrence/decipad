@@ -5,6 +5,7 @@ import { useSelected } from 'slate-react';
 import {
   componentCssVars,
   cssVar,
+  hoverTransitionStyles,
   p13Medium,
   p14Medium,
   shortAnimationDuration,
@@ -50,33 +51,46 @@ const lineHeightForHeight = (height: number) =>
     )
   );
 
-const wrapperStyles = css({
-  display: 'flex',
-  flexDirection: 'column',
-  justifyContent: 'space-between',
-  padding: 16,
+const wrapperStyles = css(
+  {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'space-between',
+    padding: '10px 10px 16px 16px',
 
-  border: `1px solid ${cssVar('borderSubdued')}`,
-  borderRadius: '16px',
+    border: `1px solid ${cssVar('borderDefault')}`,
+    borderRadius: '16px',
+    gap: '4px',
 
-  // Bottom side color bar.
-  boxShadow: `0px ${bottomBarSize}px ${cssVar('borderSubdued')}`,
-  marginBottom: `${bottomBarSize}px`,
+    // Bottom side color bar.
+    boxShadow: `inset 0 -${bottomBarSize}px 0 ${cssVar('borderDefault')}`,
+    marginBottom: `${bottomBarSize}px`,
 
-  '--metric-hover': 0,
+    '--metric-hover': 0,
 
-  '&:hover': {
-    '--metric-hover': 1,
+    '&:hover': {
+      '--metric-hover': 1,
+    },
   },
+  hoverTransitionStyles('all')
+);
+
+const selectedStyles = css({
+  backgroundColor: componentCssVars('SelectedBlockColor'),
+  border: `1px solid ${cssVar('borderDefault')}`,
+  boxShadow: `inset 0 -${bottomBarSize}px 0 ${cssVar('borderDefault')}`,
 });
 
-const selectedStyles = css({ backgroundColor: cssVar('backgroundAccent') });
+const hoveredStyles = css({
+  '&:hover': {
+    backgroundColor: componentCssVars('SelectedBlockColor'),
+  },
+});
 
 const headerStyles = css({
   display: 'flex',
   alignItems: 'center',
   gap: '4px',
-  marginBottom: '8px',
 });
 
 const captionStyles = css([
@@ -89,13 +103,13 @@ const captionStyles = css([
 const formatButtonStyles = css({
   display: 'grid',
   alignItems: 'start',
-  height: '20px',
-  width: '20px',
+  height: '24px',
+  width: '24px',
   flexShrink: 0,
-  padding: '2px',
+  padding: '4px',
   ':hover': {
     backgroundColor: cssVar('backgroundHeavy'),
-    borderRadius: '50%',
+    borderRadius: '4px',
   },
   // Always visible on devices that cannot hover
   '@media (hover: hover)': {
@@ -117,7 +131,7 @@ const valueStyles = (height: number) =>
 const comparisonStyles = css([
   p14Medium,
   {
-    color: cssVar('textHeavy'),
+    color: cssVar('textDefault'),
     display: 'flex',
   },
 ]);
@@ -185,6 +199,7 @@ export const Metric = ({
       css={[
         wrapperStyles,
         selected && selectedStyles,
+        !readOnly && hoveredStyles,
         maxWidth && { maxWidth: '262px' },
         fullHeight && { height: '100%' },
       ]}

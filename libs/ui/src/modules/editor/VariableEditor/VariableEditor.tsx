@@ -1,80 +1,82 @@
 /* eslint decipad/css-prop-named-variable: 0 */
 import type { SerializedType } from '@decipad/remote-computer';
-import { useThemeFromStore } from '@decipad/react-contexts';
 import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
-import {
-  Children,
-  FC,
-  ReactNode,
-  useCallback,
-  useMemo,
-  useRef,
-  useState,
-} from 'react';
+import { Children, FC, ReactNode, useCallback, useRef, useState } from 'react';
 import { DatePickerWrapper, Toggle } from '../../../shared';
 import {
   cssVar,
-  grey700,
   p24Medium,
-  offBlack,
-  transparency,
   smallScreenQuery,
   shortAnimationDuration,
+  hoverTransitionStyles,
 } from '../../../primitives';
-import { AvailableSwatchColor, swatchesThemed } from '../../../utils';
+import { AvailableSwatchColor, useSwatchColor } from '../../../utils';
 import { ElementVariants } from '@decipad/editor-types';
 import { Settings2 } from 'libs/ui/src/icons';
 import { useWindowListener } from '@decipad/react-utils';
+import { useSelected } from 'slate-react';
 
-const leftBarSize = 2;
+const bottomBarSize = 2;
 
-export const wrapperStyles = ({
-  color,
-  insideLayout = false,
-}: {
-  color: string;
-  insideLayout?: boolean;
-}) => {
-  const bgColor = cssVar('backgroundMain');
-
-  const finalColor = cssVar('borderSubdued');
-  const gradient = `linear-gradient(${bgColor}, ${bgColor}), linear-gradient(to right, ${color} 0%, ${finalColor} 18.71%)`;
-
-  return css({
-    maxWidth: insideLayout ? 'none' : '262px',
+export const wrapperStyles = css(
+  {
     minWidth: '175px',
     width: '100%',
+    maxWidth: '262px',
+    height: 'unset',
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'space-between',
+    padding: 10,
 
-    // Because `borderImage` with a linear gradient and `borderRadius` cannot
-    // work together, we mimic a border by setting a linear gradient in the
-    // background and clipping the content box.
-    border: '1px solid transparent',
-    borderRadius: '8px',
-    backgroundImage: gradient,
-    backgroundOrigin: 'border-box',
-    backgroundClip: 'content-box, border-box',
+    border: `1px solid ${cssVar('borderDefault')}`,
+    borderRadius: '16px',
 
-    // Last shadow is the left side color bar.
-    boxShadow: `0px 2px 20px ${transparency(grey700, 0.02).rgba},
-     0px 2px 8px ${transparency(offBlack, 0.02).rgba},
-     -${leftBarSize}px 0px ${color}`,
-    marginLeft: `${leftBarSize}px`,
+    // Bottom side color bar. Inner shadow to avoid clipping selection.
+    boxShadow: `inset 0 -${bottomBarSize}px 0 ${cssVar('borderDefault')}`,
 
-    '--variable-editor-hover': 0,
+    // Cursor
+    cursor: 'default',
+
+    '--metric-hover': 0,
+    '.settingsButtonWrapper': {
+      opacity: '0',
+    },
 
     '&:hover': {
-      '--variable-editor-hover': 1,
+      '--metric-hover': 1,
+      '.settingsButtonWrapper': {
+        opacity: '1',
+      },
     },
-  });
-};
+    '&[data-inside-layout="true"]': {
+      maxWidth: 'none',
+      height: '100%',
+    },
+    '&[aria-selected="true"]': {
+      '&[aria-readonly="false"]': {
+        backgroundColor: cssVar('backgroundDefault'),
+        border: `1px solid ${cssVar('borderDefault')}`,
+        boxShadow: `inset 0 -${bottomBarSize}px 0 ${cssVar('borderDefault')}`,
+      },
+    },
+    '&[aria-readonly="false"]': {
+      '&:hover': {
+        backgroundColor: cssVar('backgroundDefault'),
+      },
+    },
+  },
+  hoverTransitionStyles('all')
+);
 
 const widgetWrapperStyles = css({
   alignItems: 'center',
-  display: 'grid',
-  gap: '5px',
-  padding: '6px 6px 10px',
-  minHeight: '84px',
+  display: 'flex',
+  gap: '4px',
+  flexDirection: 'column',
+  justifyContent: 'space-between',
+  height: '100%',
 });
 
 const headerWrapperStyles = css({
@@ -82,45 +84,48 @@ const headerWrapperStyles = css({
   display: 'inline-flex',
   gridAutoColumns: 'auto',
   minWidth: 0,
+  width: '100%',
   gap: '4px',
-  padding: '0 2px',
 });
 
-const iconWrapperStyles = (variant: ElementVariants) =>
-  css({
-    display: 'grid',
-    alignItems: 'center',
-    height: '20px',
-    width: '20px',
-    flexShrink: 0,
-    ...(variant === 'display' && {
-      position: 'absolute',
-      top: 0,
-      right: 0,
-    }),
+const iconWrapperStyles = css({
+  display: 'grid',
+  alignItems: 'center',
+  height: '24px',
+  width: '24px',
+  flexShrink: 0,
 
-    [smallScreenQuery]: {
-      height: '16px',
-      width: '16px',
-    },
-  });
+  '&[data-variant="display"]': {
+    position: 'absolute',
+    top: 0,
+    right: 0,
+  },
 
-const buttonWrapperStyles = (variant: ElementVariants) =>
-  css({
-    padding: '2px',
-    flexShrink: 0,
+  [smallScreenQuery]: {
+    height: '16px',
+    width: '16px',
+  },
+});
+
+const buttonWrapperStyles = css(
+  {
+    padding: '4px',
+    flex: 0,
+    backgroundColor: 'transparent',
     ':hover': {
-      backgroundColor: cssVar('backgroundDefault'),
-      borderRadius: '50%',
+      backgroundColor: cssVar('backgroundHeavy'),
+      borderRadius: '4px',
     },
-    ...(variant === 'display' && {
+    '&[data-variant="display"]': {
       position: 'absolute',
       top: 0,
       right: 0,
-      width: '20px',
-      height: '20px',
-    }),
-  });
+      width: '24px',
+      height: '24px',
+    },
+  },
+  hoverTransitionStyles('all')
+);
 
 const variableNameStyles = css({
   alignSelf: 'start',
@@ -153,6 +158,16 @@ const hiddenChildrenStyles = css({
   display: 'none',
 });
 
+const wrappedChildrenStyles = css({
+  display: 'flex',
+  flexDirection: 'column',
+  gap: '0px',
+});
+
+const editorWrapperStyles = css({
+  width: '100%',
+});
+
 interface VariableEditorProps {
   children?: ReactNode;
   color?: AvailableSwatchColor;
@@ -179,8 +194,6 @@ export const VariableEditor = ({
   insideLayout = false,
 }: VariableEditorProps): ReturnType<FC> => {
   const childrenArray = Children.toArray(children);
-  const [darkTheme] = useThemeFromStore();
-  const baseSwatches = useMemo(() => swatchesThemed(darkTheme), [darkTheme]);
   const [datePickerOpen, setDatePickerOpen] = useState<boolean>(false);
   const datePickerRef = useRef<HTMLDivElement>(null);
 
@@ -207,6 +220,8 @@ export const VariableEditor = ({
 
   useWindowListener('keydown', onWindowKeyDown);
   useWindowListener('click', onWindowClick);
+  const swatchColor = useSwatchColor(color, 'vivid', 'base');
+  const selected = useSelected();
 
   const editor = useCallback(() => {
     if (variant === 'display' || childrenArray.length === 0) {
@@ -214,9 +229,7 @@ export const VariableEditor = ({
     }
 
     const wrappedChildren = (
-      <div css={{ display: 'flex', flexDirection: 'column', gap: '0px' }}>
-        {childrenArray.slice(1)}
-      </div>
+      <div css={wrappedChildrenStyles}>{childrenArray.slice(1)}</div>
     );
 
     if (variant === 'date') {
@@ -232,7 +245,7 @@ export const VariableEditor = ({
           customInput={
             <>
               <div onClick={() => setDatePickerOpen(true)} ref={datePickerRef}>
-                {wrappedChildren}
+                {childrenArray.slice(1)}
               </div>
             </>
           }
@@ -244,11 +257,22 @@ export const VariableEditor = ({
       return (
         <div contentEditable={false} css={toggleWrapperStyles}>
           <Toggle
+            variant="small-switch"
             active={value === 'true'}
             onChange={(newValue) => onChangeValue(newValue ? 'true' : 'false')}
+            color={color}
           />
 
-          <span css={p24Medium}>{value === 'true' ? 'true' : 'false'}</span>
+          <span
+            css={[
+              p24Medium,
+              {
+                color: swatchColor.hex,
+              },
+            ]}
+          >
+            {value === 'true' ? 'True' : 'False'}
+          </span>
 
           <div css={hiddenChildrenStyles}>{wrappedChildren}</div>
         </div>
@@ -256,14 +280,26 @@ export const VariableEditor = ({
     }
 
     return wrappedChildren;
-  }, [childrenArray, onChangeValue, type, value, variant, datePickerOpen])();
+  }, [
+    childrenArray,
+    onChangeValue,
+    type,
+    value,
+    variant,
+    datePickerOpen,
+    color,
+    swatchColor.hex,
+  ])();
 
   return (
     <div
       aria-roledescription="column-content"
       className={'block-table'}
-      css={wrapperStyles({ color: baseSwatches[color].rgb, insideLayout })}
+      css={wrapperStyles}
       data-testid="widget-editor"
+      data-inside-layout={insideLayout}
+      aria-selected={selected}
+      aria-readonly={readOnly}
     >
       <div css={widgetWrapperStyles}>
         <div
@@ -275,12 +311,11 @@ export const VariableEditor = ({
           ]}
         >
           <div css={variableNameStyles}>{childrenArray[0]}</div>
-
           {variant && !readOnly && onClickEdit && (
             <div
               contentEditable={false}
               css={[
-                iconWrapperStyles(variant),
+                iconWrapperStyles,
                 {
                   // Always visible on devices that cannot hover
                   '@media (hover: hover)': {
@@ -289,10 +324,13 @@ export const VariableEditor = ({
                   },
                 },
               ]}
+              data-variant={variant}
             >
               <button
                 type="button"
-                css={buttonWrapperStyles(variant)}
+                className="settingsButtonWrapper"
+                css={buttonWrapperStyles}
+                data-variant={variant}
                 onClick={onClickEdit}
               >
                 <Settings2 />
@@ -300,8 +338,7 @@ export const VariableEditor = ({
             </div>
           )}
         </div>
-
-        {editor}
+        <div css={editorWrapperStyles}>{editor}</div>
       </div>
     </div>
   );

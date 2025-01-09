@@ -34,7 +34,6 @@ export const Caption: PlateComponent = ({ attributes, element, children }) => {
 
   const path = useNodePath(element);
   const setIcon = usePathMutatorCallback(editor, path, 'icon', 'Caption');
-  const setColor = usePathMutatorCallback(editor, path, 'color', 'Caption');
   const setLabel = useCallback(
     (newOption: string) => {
       insertText(editor, newOption, {
@@ -92,8 +91,6 @@ export const Caption: PlateComponent = ({ attributes, element, children }) => {
       <UICaption
         color={color}
         readOnly={readOnly}
-        onChangeIcon={setIcon}
-        onChangeColor={setColor}
         icon={element.icon as UserIconKey}
         empty={getNodeString(element).length === 0}
         onGenerateName={generate}

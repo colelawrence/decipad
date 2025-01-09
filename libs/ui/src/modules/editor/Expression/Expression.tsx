@@ -3,7 +3,16 @@ import { type SerializedType } from '@decipad/language-interfaces';
 import { css } from '@emotion/react';
 import { ComponentProps, FC, ReactNode, useEffect, useRef } from 'react';
 import { CodeError } from '../CodeError/CodeError';
-import { Opacity, cssVar, display, p24Medium } from '../../../primitives';
+import {
+  Opacity,
+  cssVar,
+  display,
+  hoverTransitionStyles,
+  p24Medium,
+} from '../../../primitives';
+import { useSwatchColor } from 'libs/ui/src/utils';
+import { AvailableSwatchColor } from '@decipad/editor-types';
+import { Calendar } from 'libs/ui/src/icons';
 
 const baseWrapperStyles = css({
   width: '100%',
@@ -13,17 +22,33 @@ const baseWrapperStyles = css({
   minHeight: '40px',
 });
 
-const expressionInputStyles = css({
-  borderRadius: '8px',
-  minWidth: 0,
-  padding: '0 8px',
-  fontSize: '14px',
-  minHeight: '40px',
-  alignItems: 'center',
-  ':hover': {
-    backgroundColor: cssVar('backgroundDefault'),
+const expressionInputStyles = css(
+  {
+    borderRadius: '8px',
+    minWidth: 0,
+    padding: '0 6px',
+    fontSize: '14px',
+    minHeight: '40px',
+    alignItems: 'center',
+    backgroundColor: 'transparent',
+    ':hover': {
+      backgroundColor: cssVar('backgroundHeavy'),
+    },
+    '&[data-kind="date"]': {
+      border: `1px solid ${cssVar('borderSubdued')}`,
+      fontWeight: 500,
+      fontSize: 24,
+      position: 'relative',
+    },
+    '&[data-kind="string"]': {
+      border: `1px solid ${cssVar('borderSubdued')}`,
+      fontWeight: 500,
+      fontSize: 24,
+      position: 'relative',
+    },
   },
-});
+  hoverTransitionStyles('background-color')
+);
 
 const focusedExpressionInputStyles = css({
   backgroundColor: cssVar('backgroundDefault'),
@@ -53,12 +78,26 @@ const lineStyles = css({
   whiteSpace: 'pre',
   overflow: 'hidden',
   scrollSnapAlign: 'start',
-  fontVariantNumeric: 'tabular-nums',
+
+  '[data-kind="date"] &': {
+    marginRight: 24,
+    whiteSpace: 'nowrap',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+  },
 });
 
 const errorContainerStyles = css({
   alignSelf: 'center',
   justifySelf: 'center',
+});
+
+const calendarIconWrapperStyles = css({
+  width: '16px',
+  height: '16px',
+  position: 'absolute',
+  right: 8,
+  color: cssVar('textDefault'),
 });
 
 export interface VariableEditorProps {
@@ -67,6 +106,7 @@ export interface VariableEditorProps {
   focused?: boolean;
   placeholder?: string;
   children?: ReactNode;
+  color?: AvailableSwatchColor;
 }
 
 export const Expression = ({
@@ -75,8 +115,11 @@ export const Expression = ({
   focused = false,
   placeholder = '',
   children,
+  color: colorProp = 'Catskill',
 }: VariableEditorProps): ReturnType<FC> => {
   const inputRef = useRef<HTMLSpanElement | null>(null);
+  const swatchColor = useSwatchColor(colorProp, 'vivid', 'base');
+
   useEffect(() => {
     if (inputRef.current && !focused) {
       inputRef.current.scrollLeft = 0;
@@ -94,20 +137,25 @@ export const Expression = ({
         role="textbox"
         css={[
           expressionInputStyles,
-          (type?.kind === 'date' || type?.kind === 'string') && {
-            fontWeight: 500,
-            fontSize: 24,
-            color: cssVar('textHeavy'),
-          },
           placeholderStyles,
           focused && focusedExpressionInputStyles,
+          (type?.kind === 'date' || type?.kind === 'string') && {
+            color: swatchColor.hex,
+          },
         ]}
+        data-kind={type?.kind ?? 'string'}
         aria-placeholder={placeholder}
       >
         <span data-testid="widget-input" css={lineStyles} ref={inputRef}>
           {children}
         </span>
+        {type?.kind === 'date' && (
+          <div css={calendarIconWrapperStyles}>
+            <Calendar />
+          </div>
+        )}
       </div>
+
       {error && (
         <div contentEditable={false} css={errorContainerStyles}>
           <CodeError {...error} />

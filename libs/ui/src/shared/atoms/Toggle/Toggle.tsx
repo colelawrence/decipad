@@ -11,6 +11,8 @@ import {
   p14Regular,
   shortAnimationDuration,
 } from '../../../primitives';
+import { AvailableSwatchColor } from '@decipad/editor-types';
+import { useSwatchColor } from 'libs/ui/src/utils';
 
 const CheckSVGString = encodeURIComponent(
   renderToStaticMarkup(<Check color={cssVar('iconColorMain')} />)
@@ -128,6 +130,15 @@ const toggleStyle = (variant: ToggleVariant) =>
     'small-switch': smallSwitchStyle,
   }[variant]);
 
+const getSwatchColorStyles = (color: string) =>
+  css({
+    '> span': {
+      '&[aria-checked="true"]': {
+        backgroundColor: color,
+      },
+    },
+  });
+
 export interface ToggleProps {
   active?: boolean | 'mixed';
   onChange?: (newActive: boolean) => void;
@@ -136,6 +147,7 @@ export interface ToggleProps {
   label?: string;
   variant?: ToggleVariant;
   testId?: string;
+  color?: AvailableSwatchColor;
 }
 
 export const Toggle: FC<ToggleProps> = ({
@@ -145,11 +157,14 @@ export const Toggle: FC<ToggleProps> = ({
   onChange = noop,
   disabled = false,
   label,
+  color = 'Catskill',
 }) => {
+  const swatchColor = useSwatchColor(color, 'vivid', 'base');
+
   return (
     <button
       aria-roledescription={ariaRoleDescription}
-      css={toggleStyle(variant)}
+      css={[toggleStyle(variant), getSwatchColorStyles(swatchColor.hex)]}
       onClick={() => {
         /**
          * Clicking when the toggle is 'mixed' sets it to true, as per standard
