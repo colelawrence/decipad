@@ -228,7 +228,7 @@ export const DraggableBlock: FC<DraggableBlockProps> = ({
         hasPadding={hasPadding}
         fullWidth={fullWidth}
         fullHeight={fullHeight}
-        DragHandle={<DragHandle element={element} />}
+        DragHandle={<DragHandle element={element} fullHeight={fullHeight} />}
         slateAttributes={slateAttributes}
         layoutDirection={layoutDirection}
         blockRef={ref}

@@ -144,6 +144,7 @@ const withMultipleSelectionAction = (
 
 type DragHandleProps = {
   element: MyElement;
+  fullHeight?: boolean;
 };
 
 const ShowHideButton = ({ element }: DragHandleProps) => {
@@ -325,6 +326,7 @@ const PlusButton = ({ element }: DragHandleProps) => {
       }
       side="bottom"
       hoverOnly
+      offset={1}
     >
       <span css={plusButtonTextStyle}>
         <strong>Click</strong> to add block below
@@ -563,13 +565,17 @@ const DragHandleButton = ({ element, isMenuOpen }: DragHandleButtonProps) => {
   }
 };
 
-export const DragHandle = ({ element }: DragHandleProps) => {
+export const DragHandle = ({
+  element,
+  fullHeight = false,
+}: DragHandleProps) => {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
     <BlockDragHandle
       MainButton={<DragHandleButton element={element} isMenuOpen={isOpen} />}
       LeftButton={<PlusButton element={element} />}
+      insideLayout={fullHeight}
       menuOpen={isOpen}
       onChangeMenuOpen={setIsOpen}
     >

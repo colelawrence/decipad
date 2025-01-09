@@ -2,7 +2,7 @@ import { Meta, StoryFn } from '@storybook/react';
 import { ImageDisplay, ImageDisplayProps } from './ImageDisplay';
 
 const meta: Meta<typeof ImageDisplay> = {
-  title: 'Atom / UI / ImageDisplay',
+  title: 'Atoms / UI / ImageDisplay',
   component: ImageDisplay,
   argTypes: {
     insertFromPreview: { action: 'inserted' },

@@ -87,6 +87,8 @@ export const DraggableBlock = ({
       )`
     : 0;
 
+  const handleTransformX = 6;
+
   const menuOpen = false;
 
   const showEyeLabel = isHidden && !menuOpen;
@@ -156,7 +158,7 @@ export const DraggableBlock = ({
             draggableCss,
             insideLayout && {
               // TODO: Figure out where 36px comes from and deduplicate
-              transform: `translateX(36px) translateX(${handleInset})`,
+              transform: `translateX(calc(36px + ${handleTransformX}px)) translateY(${handleInset})`,
             },
           ]}
         >

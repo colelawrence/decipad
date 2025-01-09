@@ -16,10 +16,6 @@ const gridStyles = css(hideOnPrint, {
       ${editorLayout.gutterHandleHeight()}
       auto
     `,
-  gridTemplateColumns: `
-      minmax(max-content, 144px)
-      ${editorLayout.gutterHandleWidth()}
-    `,
   justifyContent: 'end',
 });
 
@@ -38,7 +34,6 @@ export const handleStyle = css(handleButtonStyle, {
   width: '20px',
   padding: '1px',
   color: cssVar('iconColorHeavy'),
-  marginLeft: '2px',
 
   '> svg': {
     height: '100%',
@@ -61,6 +56,8 @@ const eyeLabelStyles = css(handleButtonStyle, {
 
 const handleSpanWrapper = css({
   gridArea: 'handle',
+  height: '20px',
+  width: '20px',
 });
 
 const tooltipTextStyles = css(p12Medium, {
@@ -77,6 +74,7 @@ export interface BlockDragHandleProps {
   readonly children?: ReactNode;
 
   readonly menuOpen: boolean;
+  readonly insideLayout?: boolean;
   readonly onChangeMenuOpen: (newMenuOpen: boolean) => void;
 
   /**
@@ -97,6 +95,7 @@ export const BlockDragHandle = ({
 
   MainButton,
   LeftButton,
+  insideLayout = false,
 
   onChangeMenuOpen = noop,
 }: BlockDragHandleProps): ReturnType<FC> => {
@@ -120,7 +119,7 @@ export const BlockDragHandle = ({
   if (menuOpen) {
     return (
       <div css={gridStyles}>
-        <div css={eyeLabelStyles}>{LeftButton}</div>
+        {!insideLayout && <div css={eyeLabelStyles}>{LeftButton}</div>}
 
         <MenuList
           root
@@ -150,7 +149,7 @@ export const BlockDragHandle = ({
   } else {
     return (
       <div css={gridStyles}>
-        <div css={eyeLabelStyles}>{LeftButton}</div>
+        {!insideLayout && <div css={eyeLabelStyles}>{LeftButton}</div>}
 
         <Tooltip
           trigger={
@@ -167,6 +166,7 @@ export const BlockDragHandle = ({
           }
           side="bottom"
           hoverOnly
+          offset={1}
         >
           <span css={tooltipTextStyles}>
             <strong>Drag</strong> to move

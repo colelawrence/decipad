@@ -14,6 +14,7 @@ import {
 import * as Styled from './styles';
 import { CaretDown, CaretRight } from '../../../icons';
 import { useNotebookWithIdState } from '@decipad/notebook-state';
+import { useNotebookMetaData } from '@decipad/react-contexts';
 
 export type NumberCatalogItemType = {
   name: string;
@@ -44,6 +45,7 @@ export const NumberCatalog = ({
   const [selectedIds, setSelectedIds] = useState<Set<string>>(
     new Set(selectedIdsStore)
   );
+  const setSidebar = useNotebookMetaData((s) => s.setSidebar);
 
   useEffect(() => {
     setSelectedIds(new Set(selectedIdsStore));
@@ -68,14 +70,24 @@ export const NumberCatalog = ({
       if (newSelectedIds.size !== 1) {
         closeDataDrawer();
       } else {
-        // otherwise we want to have the data drawer editing the only selected value
-        editVariable(newSelectedIds.values().next().value);
+        const id = newSelectedIds.values().next().value;
+        if (items.Widgets.some((i) => i.blockId === id)) {
+          // when we select a widget, we want to close the data drawer as well
+          closeDataDrawer();
+          setSidebar({
+            type: 'default-sidebar',
+            selectedTab: 'format',
+          });
+        } else {
+          // otherwise we want to have the data drawer editing the only selected value
+          editVariable(newSelectedIds.values().next().value);
+        }
       }
 
       blockSelectionStore.set.selectedIds(newSelectedIds);
       setSelectedIds(newSelectedIds);
     },
-    [selectedIds, closeDataDrawer, editVariable]
+    [selectedIds, closeDataDrawer, editVariable, items.Widgets, setSidebar]
   );
 
   // Sync selection state with external changes to data-drawer

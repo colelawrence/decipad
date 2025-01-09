@@ -24,6 +24,7 @@ import { useWriteLock } from './utils/useWriteLock';
 import { useComputer } from '@decipad/editor-hooks';
 import { useNotebookWithIdState } from '@decipad/notebook-state';
 import { Filters } from './Filters.component';
+import { blockSelectionStore } from '@udecode/plate-selection';
 
 export interface EditorProps {
   notebookId: string;
@@ -143,7 +144,19 @@ export const Editor: FC<PropsWithChildren<EditorProps>> = (props) => {
             <div>
               <Filters />
             </div>
-            <div ref={containerRef} className="relative">
+            <div
+              ref={containerRef}
+              className="relative"
+              onClick={(e) => {
+                if (
+                  e.target instanceof HTMLElement &&
+                  e.target.classList.contains('slate-start-area')
+                ) {
+                  editor.deselect();
+                  blockSelectionStore.set.selectedIds(new Set());
+                }
+              }}
+            >
               <BlockLengthSynchronizationProvider editor={editor}>
                 <Plate<MyValue>
                   key={key}
