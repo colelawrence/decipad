@@ -13,7 +13,7 @@ export interface DatePickerWrapperProps {
   value: string;
   open?: boolean | null;
   onChange: (value: string) => void;
-  customInput?: React.ReactNode;
+  customInput?: DatePicker['props']['customInput'];
   children?: React.ReactNode;
 }
 
@@ -30,7 +30,8 @@ export const DatePickerWrapper = ({
 
   const dateValue = useMemo(() => {
     if (dateFormat) {
-      const d = parse(value, dateFormat, new Date());
+      const d =
+        value.length === 0 ? new Date() : parse(value, dateFormat, new Date());
       return d != null && !Number.isNaN(d.valueOf()) ? d : undefined;
     }
     return undefined;

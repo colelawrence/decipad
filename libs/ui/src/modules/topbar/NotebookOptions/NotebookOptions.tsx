@@ -7,7 +7,7 @@ import { NotebookMetaActionsReturn } from '@decipad/interfaces';
 import { useToast } from '@decipad/toast';
 import { css } from '@emotion/react';
 import styled from '@emotion/styled';
-import format from 'date-fns/format';
+import { format } from 'date-fns';
 import { Section } from 'libs/ui/src/types';
 import { FC, ReactNode, useContext, useState } from 'react';
 import {
