@@ -1,3 +1,4 @@
+import { NoInfer } from '@udecode/plate-common';
 import {
   blue100,
   blue200,
@@ -174,12 +175,24 @@ export const bubblesThemed = (
     return store;
   }, {} as ThemedSwatch);
 
-export function useSwatchColor(
-  swatchColor: AvailableSwatchColor,
+function isSwatchColor(value: unknown): value is AvailableSwatchColor {
+  return (value as any) in colorSwatches;
+}
+
+/**
+ * Automatically select one of two color swatch variants depending on whether
+ * the app is in light mode or dark mode. Optionally, pass a type argument T to
+ * allow passing through non-color swatch values of type T such as null or
+ * 'trend'.
+ */
+export function useSwatchColor<T = never>(
+  swatchColor: AvailableSwatchColor | NoInfer<T>,
   lightVariant: keyof SwatchColor,
   darkVariant: keyof SwatchColor
-): OpaqueColor {
+): OpaqueColor | T {
   const isDarkMode = themeStore((s) => s.theme);
   const variant = isDarkMode ? darkVariant : lightVariant;
-  return colorSwatches[swatchColor][variant];
+  return isSwatchColor(swatchColor)
+    ? colorSwatches[swatchColor][variant]
+    : swatchColor;
 }

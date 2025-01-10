@@ -123,6 +123,7 @@ export { Question } from './Question';
 export { QuestionMark } from './QuestionMark';
 export { RainbowPalette } from './RainbowPalette';
 export { RadarChart } from './RadarChart';
+export { RedGreenPalette } from './RedGreenPalette';
 export { Redo } from './Redo';
 export { Refresh } from './Refresh';
 export { Replicate } from './Replicate';

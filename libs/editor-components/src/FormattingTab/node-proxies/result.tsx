@@ -12,7 +12,7 @@ import { FormWrapper } from '../FormWrapper';
 import {
   ProxyDropdownField,
   ProxyColorDropdownField,
-  ColorSwatchOrAuto,
+  ColorOption,
 } from '../proxy-fields';
 import { capitalize } from 'lodash';
 
@@ -22,16 +22,12 @@ export const resultConfig = {
   factory: createMultipleNodeProxyFactory({
     mapProperties: (node: DisplayElement) => ({
       formatting: node.formatting,
-      color: (node.color ?? 'auto') as ColorSwatchOrAuto,
+      color: (node.color ?? 'auto') as ColorOption,
     }),
     actions: {
       setFormatting: (node, editor: MyEditor, formatting: NumberFormatting) =>
         setNodeProperty(editor, node, 'formatting', formatting),
-      setColor: (
-        node: DisplayElement,
-        editor: MyEditor,
-        color: ColorSwatchOrAuto
-      ) =>
+      setColor: (node: DisplayElement, editor: MyEditor, color: ColorOption) =>
         setNodeProperty(
           editor,
           node,

@@ -103,7 +103,7 @@ import {
 } from './plot-kinds';
 import { UserIconKey } from './icons';
 import { IntegrationBlock } from './integrations';
-import { ElementKind, markKinds } from '.';
+import { AvailableSwatchColor, ElementKind, markKinds } from '.';
 import DeciNumber from '@decipad/number';
 
 export type Filter = {
@@ -409,7 +409,8 @@ export interface MetricElement extends BaseElement {
   comparisonAggregation?: string;
   comparisonDescription: string;
   formatting?: NumberFormatting;
-  color?: string;
+  color?: AvailableSwatchColor | 'auto';
+  trendColor?: AvailableSwatchColor | 'auto' | 'trend';
   migratedFromDisplayElement?: DisplayElement;
 }
 

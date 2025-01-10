@@ -16,10 +16,12 @@ import { ProxyFactoryConfig, ProxyFormProps } from './types';
 import { FC } from 'react';
 import { FormWrapper } from '../FormWrapper';
 import {
+  ColorOption,
+  ColorOptionWithTrend,
   ProxyColorDropdownField,
-  ColorSwatchOrAuto,
   ProxyDropdownField,
   ProxyStringField,
+  ProxyTrendColorDropdownField,
 } from '../proxy-fields';
 import { ProxyVariableDropdownField } from '../proxy-fields/ProxyVariableDropdownField';
 import { SerializedType } from '@decipad/language-interfaces';
@@ -46,7 +48,8 @@ export const metricConfig = {
       comparisonAggregation: node.comparisonAggregation,
       comparisonDescription: node.comparisonDescription,
       formatting: node.formatting,
-      color: (node.color ?? 'auto') as ColorSwatchOrAuto,
+      color: node.color ?? 'auto',
+      trendColor: node.trendColor ?? 'trend',
     }),
     actions: {
       setCaption: (node: MetricElement, editor: MyEditor, caption: string) =>
@@ -81,17 +84,13 @@ export const metricConfig = {
         ),
       setFormatting: (node, editor: MyEditor, formatting: NumberFormatting) =>
         setNodeProperty(editor, node, 'formatting', formatting),
-      setColor: (
+      setColor: (node: MetricElement, editor: MyEditor, color: ColorOption) =>
+        setNodeProperty(editor, node, 'color', color),
+      setTrendColor: (
         node: MetricElement,
         editor: MyEditor,
-        color: ColorSwatchOrAuto
-      ) =>
-        setNodeProperty(
-          editor,
-          node,
-          'color',
-          color === 'auto' ? undefined : color
-        ),
+        color: ColorOptionWithTrend
+      ) => setNodeProperty(editor, node, 'trendColor', color),
     },
   }),
 } satisfies ProxyFactoryConfig<any, any>;
@@ -210,6 +209,8 @@ export const MetricForm: FC<ProxyFormProps<typeof metricConfig>> = ({
   );
 
   const comparable = resultType?.kind === 'number';
+  const hasComparison =
+    comparable && !!ifVaries(properties.comparisonBlockId, 'true');
 
   const {
     safeAggregationId: safeComparisonAggregationId,
@@ -257,8 +258,7 @@ export const MetricForm: FC<ProxyFormProps<typeof metricConfig>> = ({
             onSetAggregationId={actions.setComparisonAggregation}
           />
 
-          {(properties.comparisonBlockId === 'varies' ||
-            properties.comparisonBlockId.value !== '') && (
+          {hasComparison && (
             <ProxyStringField
               editor={editor}
               label="Comparison description"
@@ -281,10 +281,19 @@ export const MetricForm: FC<ProxyFormProps<typeof metricConfig>> = ({
 
       <ProxyColorDropdownField
         editor={editor}
-        label="Metric color"
+        label="Value color"
         property={properties.color}
         onChange={actions.setColor}
       />
+
+      {hasComparison && (
+        <ProxyTrendColorDropdownField
+          editor={editor}
+          label="Trend color"
+          property={properties.trendColor}
+          onChange={actions.setTrendColor}
+        />
+      )}
     </FormWrapper>
   );
 };

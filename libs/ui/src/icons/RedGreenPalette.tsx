@@ -3,15 +3,15 @@ import type { SVGProps } from 'react';
 import { colorSwatches } from '../utils';
 import { FourColorPalette } from './FourColorPalette';
 
-export const RainbowPalette = (props: SVGProps<SVGSVGElement>) => {
+export const RedGreenPalette = (props: SVGProps<SVGSVGElement>) => {
   return (
     <FourColorPalette
-      title="RainbowPalette"
+      title="RedGreenPalette"
       colors={[
         colorSwatches.Rose.vivid.hex,
-        colorSwatches.Sun.vivid.hex,
+        colorSwatches.Rose.vivid.hex,
         colorSwatches.Sulu.vivid.hex,
-        colorSwatches.Malibu.vivid.hex,
+        colorSwatches.Sulu.vivid.hex,
       ]}
       {...props}
     />

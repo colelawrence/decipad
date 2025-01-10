@@ -17,6 +17,7 @@ import { Result } from '@decipad/language-interfaces';
 import { N, ZERO } from '@decipad/number';
 import { NumberFormatting } from '@decipad/editor-types';
 import { WidgetWrapper } from '../WidgetWrapper/WidgetWrapper';
+import { OpaqueColor } from '@decipad/utils';
 
 const headerStyles = css({
   display: 'flex',
@@ -51,7 +52,6 @@ const formatButtonStyles = css({
 });
 
 const valueStyles = css({
-  color: cssVar('textHeavy'),
   fontWeight: 500, // Medium
   overflow: 'hidden',
   textOverflow: 'ellipsis',
@@ -64,7 +64,6 @@ const valueStyles = css({
 const comparisonStyles = css([
   p14Medium,
   {
-    color: cssVar('textDefault'),
     display: 'flex',
   },
 ]);
@@ -86,6 +85,7 @@ export interface MetricProps {
   readonly comparisonDescription?: string;
   readonly formatting?: NumberFormatting;
   readonly color?: AvailableSwatchColor;
+  readonly trendColor?: AvailableSwatchColor | 'trend';
   readonly maxWidth?: boolean;
   readonly fullHeight?: boolean;
   readonly onClickEdit?: () => void;
@@ -100,11 +100,13 @@ export const Metric = ({
   comparisonDescription,
   formatting,
   color: colorProp = 'Catskill',
+  trendColor: trendColorProp = 'trend',
   maxWidth = true,
   fullHeight = false,
   onClickEdit,
 }: MetricProps): ReturnType<FC> => {
   const color = useSwatchColor(colorProp, 'vivid', 'base');
+  const trendColor = useSwatchColor<'trend'>(trendColorProp, 'vivid', 'base');
   const selected = useSelected();
 
   return (
@@ -136,6 +138,7 @@ export const Metric = ({
         <MetricComparison
           trendResult={trendResult as any}
           comparisonDescription={comparisonDescription}
+          color={trendColor}
         />
       )}
 
@@ -147,11 +150,13 @@ export const Metric = ({
 interface MetricComparisonProps {
   readonly trendResult: Result.Result<'trend'>;
   readonly comparisonDescription?: string;
+  readonly color: OpaqueColor | 'trend';
 }
 
 const MetricComparison = ({
   trendResult,
   comparisonDescription,
+  color: colorProp,
 }: MetricComparisonProps) => {
   const { first, diff } = trendResult.value;
   if (!first || !diff) return null;
@@ -160,20 +165,24 @@ const MetricComparison = ({
   const zero = diff.isZero();
   const positive = diff.compare(ZERO) > 0;
 
-  const trendColor = zero
-    ? cssVar('textSubdued')
-    : componentCssVars(positive ? 'TrendUpGreenColor' : 'TrendDownRedColor');
+  const color = (() => {
+    if (colorProp !== 'trend') return colorProp.hex;
+    if (zero) return cssVar('textSubdued');
+    return componentCssVars(
+      positive ? 'TrendUpGreenColor' : 'TrendDownRedColor'
+    );
+  })();
 
   const Icon = positive ? ArrowUp2 : ArrowDown2;
 
   return (
     <div css={comparisonStyles}>
       {!zero && (
-        <span css={{ color: trendColor, width: 16, height: 16 }}>
+        <span css={{ color, width: 16, height: 16 }}>
           <Icon />
         </span>
       )}
-      <span css={{ color: trendColor }}>{percentageChange}%</span>
+      <span css={{ color }}>{percentageChange}%</span>
       {comparisonDescription && ` ${comparisonDescription.trim()}`}
     </div>
   );

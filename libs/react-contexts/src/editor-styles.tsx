@@ -1,8 +1,8 @@
-import { NumberFormatting } from '@decipad/editor-types';
+import { AvailableSwatchColor, NumberFormatting } from '@decipad/editor-types';
 import { createContext, useContext } from 'react';
 
 export type EditorStylesContextValue = Readonly<{
-  color: string;
+  color: AvailableSwatchColor;
   numberFormatting: NumberFormatting;
 }>;
 

@@ -10,7 +10,7 @@ import {
   replaceNodeChildren,
   setNodes,
 } from '@udecode/plate-common';
-import { ColorSwatchOrAuto } from '../proxy-fields';
+import { ColorOption } from '../proxy-fields';
 
 export const setNodeProperty = <N extends MyNode, K extends keyof N>(
   editor: MyEditor,
@@ -41,7 +41,7 @@ export const mapVariableProperties = (node: VariableDefinitionElement) => {
   return {
     name: caption.children[0].text,
     variant: node.variant,
-    color: (caption.color ?? 'auto') as ColorSwatchOrAuto,
+    color: (caption.color ?? 'auto') as ColorOption,
     value: expression.children[0].text,
   };
 };
@@ -57,7 +57,7 @@ export const variableActions = {
   setColor: (
     node: VariableDefinitionElement,
     editor: MyEditor,
-    color: ColorSwatchOrAuto
+    color: ColorOption
   ) =>
     setNodeProperty(
       editor,

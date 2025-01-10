@@ -1,4 +1,5 @@
 import type {
+  AvailableSwatchColor,
   MetricElement,
   MyEditor,
   MyNodeEntry,
@@ -27,7 +28,7 @@ export const createMigrateDisplayPlugin = createNormalizerPluginFactory({
               id: node.id as any,
               blockId: node.blockId,
               caption: node.varName || 'Metric',
-              color: node.color,
+              color: node.color as AvailableSwatchColor | undefined,
               formatting: node.formatting,
               comparisonBlockId: '',
               comparisonDescription: '',

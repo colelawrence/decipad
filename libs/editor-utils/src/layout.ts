@@ -103,7 +103,7 @@ export const insertLayoutBelow = (editor: MyEditor, path: Path) => {
         type: ELEMENT_PARAGRAPH,
         children: [{ text: '' }],
       } satisfies ColumnableElement)
-  ) as LayoutElement['children'];
+  ) as unknown as LayoutElement['children'];
 
   const layout: LayoutElement = {
     id: nanoid(),

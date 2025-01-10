@@ -1,8 +1,4 @@
-import {
-  AvailableSwatchColor,
-  ELEMENT_METRIC,
-  PlateComponent,
-} from '@decipad/editor-types';
+import { ELEMENT_METRIC, PlateComponent } from '@decipad/editor-types';
 import { assertElementType } from '@decipad/editor-utils';
 import { Metric as UIMetric } from '@decipad/ui';
 import { DraggableBlock } from '../block-management';
@@ -67,7 +63,16 @@ export const Metric: PlateComponent = ({ attributes, element, children }) => {
   );
 
   const { color: defaultColor } = useEditorStylesContext();
-  const { color = defaultColor } = element;
+
+  const {
+    color: elementColor = 'auto',
+    trendColor: elementTrendColor = 'trend',
+  } = element;
+
+  const color = elementColor === 'auto' ? defaultColor : elementColor;
+
+  const trendColor =
+    elementTrendColor === 'auto' ? defaultColor : elementTrendColor;
 
   return (
     <div
@@ -88,7 +93,8 @@ export const Metric: PlateComponent = ({ attributes, element, children }) => {
           trendResult={trendResult ?? undefined}
           comparisonDescription={element.comparisonDescription}
           formatting={element.formatting}
-          color={color as AvailableSwatchColor}
+          color={color}
+          trendColor={trendColor}
           maxWidth={!insideLayout}
           fullHeight={insideLayout}
           onClickEdit={onEdit}
