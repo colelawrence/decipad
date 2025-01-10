@@ -429,7 +429,7 @@
     "@types/architect__functions": "3.13.7",
     "@types/boom": "7.3.2",
     "@types/chunk-text": "^1.0.2",
-    "@types/dompurify": "^3.0.5",
+    "@types/dompurify": "^3.2.0",
     "@types/gapi": "^0.0.47",
     "@types/graphql-iso-date": "3.4.3",
     "@types/is-hotkey": "^0.1.10",
