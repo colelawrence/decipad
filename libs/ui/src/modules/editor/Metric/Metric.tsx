@@ -22,7 +22,7 @@ const headerStyles = css({
   display: 'flex',
   alignItems: 'center',
   gap: '4px',
-  paddingLeft: '6px',
+  minHeight: '24px',
 });
 
 const captionStyles = css([
@@ -53,7 +53,6 @@ const formatButtonStyles = css({
 const valueStyles = css({
   color: cssVar('textHeavy'),
   fontWeight: 500, // Medium
-  padding: '0 6px',
   overflow: 'hidden',
   textOverflow: 'ellipsis',
   transitionProperty: 'font-size, line-height',
@@ -67,7 +66,6 @@ const comparisonStyles = css([
   {
     color: cssVar('textDefault'),
     display: 'flex',
-    padding: '0 6px',
   },
 ]);
 
@@ -75,8 +73,8 @@ const hiddenChildrenStyles = css({
   display: 'none',
 });
 
-const valueAndComparisonWrapperStyles = css({
-  paddingBottom: '6px',
+const widgetWrapperOverrideStyles = css({
+  padding: '10px 10px 16px 16px',
 });
 
 export interface MetricProps {
@@ -115,6 +113,7 @@ export const Metric = ({
       maxWidth={maxWidth}
       selected={selected}
       readOnly={readOnly}
+      css={widgetWrapperOverrideStyles}
     >
       <div css={headerStyles}>
         <div css={captionStyles}>{caption || '\u00a0'}</div>
@@ -124,22 +123,21 @@ export const Metric = ({
           </button>
         )}
       </div>
-      <div css={valueAndComparisonWrapperStyles}>
-        <div css={[valueStyles, { color: color.hex }]}>
-          {mainResult?.type.kind !== 'type-error' && mainResult ? (
-            <CodeResult {...mainResult} formatting={formatting} />
-          ) : (
-            '0'
-          )}
-        </div>
-        {/* TODO: Handle case error case */}
-        {trendResult?.type.kind === 'trend' && (
-          <MetricComparison
-            trendResult={trendResult as any}
-            comparisonDescription={comparisonDescription}
-          />
+
+      <div css={[valueStyles, { color: color.hex }]}>
+        {mainResult?.type.kind !== 'type-error' && mainResult ? (
+          <CodeResult {...mainResult} formatting={formatting} />
+        ) : (
+          '0'
         )}
       </div>
+      {/* TODO: Handle case error case */}
+      {trendResult?.type.kind === 'trend' && (
+        <MetricComparison
+          trendResult={trendResult as any}
+          comparisonDescription={comparisonDescription}
+        />
+      )}
 
       <div css={hiddenChildrenStyles}>{children}</div>
     </WidgetWrapper>

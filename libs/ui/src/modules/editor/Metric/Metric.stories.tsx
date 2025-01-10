@@ -13,7 +13,7 @@ export const Normal: StoryFn<MetricProps> = () => (
     mainResult={demoResult as unknown as ResultType}
     readOnly={false}
     onClickEdit={() => console.info('clicked')}
-  ></Metric>
+  />
 );
 
 export const ReadOnly: StoryFn<MetricProps> = () => (
@@ -21,7 +21,7 @@ export const ReadOnly: StoryFn<MetricProps> = () => (
     caption="Metric"
     mainResult={demoResult as unknown as ResultType}
     readOnly={true}
-  ></Metric>
+  />
 );
 
 const demoResult = {

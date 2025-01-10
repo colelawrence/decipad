@@ -91,7 +91,8 @@ const DynamicDropdownField = ({
   const id = `dropdown-${useId()}`;
 
   return (
-    <>
+    // Can't use a fragment. Otherwise there will be some gap between the label and the dropdown. The nesting swallows the hierarchy.
+    <div>
       <DropdownFieldLabel id={id}>{'Value'}</DropdownFieldLabel>
       <DropdownMenu
         open={dropdownOpen}
@@ -109,7 +110,7 @@ const DynamicDropdownField = ({
           {dropdownValue}
         </DropdownFieldTrigger>
       </DropdownMenu>
-    </>
+    </div>
   );
 };
 

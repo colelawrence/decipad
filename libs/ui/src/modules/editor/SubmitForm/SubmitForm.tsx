@@ -216,7 +216,7 @@ const Form = ({
   return (
     <>
       <WidgetWrapper
-        customCss={formContainerStyles}
+        css={formContainerStyles}
         readOnly={readOnly}
         selected={selected}
         maxWidth={false}

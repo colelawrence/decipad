@@ -63,27 +63,19 @@ const wrapperStyles = css(
     '&[data-max-width="false"]': {
       maxWidth: 'none',
     },
-    '&[aria-selected="true"]': {
-      '&[aria-readonly="false"]': {
-        backgroundColor: cssVar('backgroundDefault'),
-        border: `1px solid ${cssVar('borderDefault')}`,
-        boxShadow: `inset 0 -${bottomBarSize}px 0 ${cssVar('borderDefault')}`,
-      },
+    '&[aria-selected="true"][aria-readonly="false"]': {
+      backgroundColor: cssVar('backgroundDefault'),
+      border: `1px solid ${cssVar('borderDefault')}`,
+      boxShadow: `inset 0 -${bottomBarSize}px 0 ${cssVar('borderDefault')}`,
     },
-    '&[aria-readonly="false"]': {
-      '&:hover': {
-        backgroundColor: cssVar('backgroundDefault'),
-      },
+    '&[aria-readonly="false"]:hover': {
+      backgroundColor: cssVar('backgroundDefault'),
     },
 
     // Variables that can be consumed by children
     '--widget-hover': 0,
-    '--widget-calculated-font-size': `${fontSizeForHeight(
-      initialFontSizeHeight
-    )}px`,
-    '--widget-calculated-line-height': `${lineHeightForHeight(
-      initialFontSizeHeight
-    )}px`,
+    '--widget-calculated-font-size': `${initialFontSize}px`,
+    '--widget-calculated-line-height': `${initialLineHeight}px`,
 
     '&:hover': {
       '--widget-hover': 1,
@@ -101,7 +93,7 @@ interface WidgetWrapperProps {
   readonly selected?: boolean;
   readonly fullHeight?: boolean;
   readonly maxWidth?: boolean;
-  readonly customCss?: SerializedStyles;
+  readonly css?: SerializedStyles;
   readonly className?: string;
 }
 
@@ -111,9 +103,9 @@ export const WidgetWrapper = ({
   selected = false,
   fullHeight = false,
   maxWidth = true,
-  customCss,
+  css: customCss,
   className,
-}: WidgetWrapperProps) => {
+}: WidgetWrapperProps & { css?: SerializedStyles }) => {
   // Resize observer
   const [height, setHeight] = useState(initialFontSizeHeight);
   const [resizeObserver] = useState(
@@ -135,20 +127,17 @@ export const WidgetWrapper = ({
     [resizeObserver]
   );
 
-  // styles
-  const styles = css([wrapperStyles, customCss]);
-
-  const getWidgetFontSize = (value: number) => {
-    return css({
-      '--widget-calculated-font-size': `${fontSizeForHeight(value)}px`,
-      '--widget-calculated-line-height': `${lineHeightForHeight(value)}px`,
-    });
-  };
-
   return (
     <div
       ref={fullHeight ? connectResizeObserver : undefined}
-      css={[styles, getWidgetFontSize(height)]}
+      css={[
+        customCss,
+        wrapperStyles,
+        {
+          '--widget-calculated-font-size': `${fontSizeForHeight(height)}px`,
+          '--widget-calculated-line-height': `${lineHeightForHeight(height)}px`,
+        },
+      ]}
       data-full-height={fullHeight}
       data-max-width={maxWidth}
       aria-selected={selected}
