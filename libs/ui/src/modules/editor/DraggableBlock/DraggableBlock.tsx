@@ -173,6 +173,8 @@ export const DraggableBlock = ({
             !insideLayout &&
               !fullWidth && { maxWidth: slimBlockWidth, width: '100%' },
             hasPadding && { padding: '0.75rem' },
+            // Prevent overflow when inside layout
+            { minWidth: 0 },
           ]}
           // See LayoutColumn in @decipad/editor-components
           data-draggable-inside

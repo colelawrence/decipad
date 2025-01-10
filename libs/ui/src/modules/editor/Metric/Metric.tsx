@@ -54,9 +54,10 @@ const valueStyles = css({
   color: cssVar('textHeavy'),
   fontWeight: 500, // Medium
   padding: '0 6px',
+  overflow: 'hidden',
+  textOverflow: 'ellipsis',
   transitionProperty: 'font-size, line-height',
   transitionDuration: shortAnimationDuration,
-
   fontSize: 'var(--widget-calculated-font-size)',
   lineHeight: 'var(--widget-calculated-line-height)',
 });

@@ -38,7 +38,6 @@ const lineHeightForHeight = (height: number) =>
 
 const wrapperStyles = css(
   {
-    minWidth: '175px',
     width: '100%',
     maxWidth: '262px',
     height: 'unset',

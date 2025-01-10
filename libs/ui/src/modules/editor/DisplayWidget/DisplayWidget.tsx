@@ -52,6 +52,15 @@ const triggerStyles = (readOnly: boolean, selected: boolean) =>
     }),
   });
 
+const resultStyles = css([
+  p24Medium,
+  {
+    color: cssVar('textHeavy'),
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+  },
+]);
+
 const textWrapperStyles = css({
   display: 'flex',
   flexWrap: 'wrap',
@@ -156,7 +165,7 @@ export const DisplayWidget: FC<DisplayWidgetDropdownProps> = ({
           onClick={() => !readOnly && onChangeOpen(!openMenu)}
           data-testid="result-widget"
         >
-          <span css={[p24Medium, { color: cssVar('textHeavy') }]}>
+          <span css={resultStyles}>
             {lineResult?.result?.type.kind !== 'type-error' &&
             lineResult?.result ? (
               <CodeResult {...lineResult.result} formatting={formatting} />
