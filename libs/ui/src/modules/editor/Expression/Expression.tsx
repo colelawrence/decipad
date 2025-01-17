@@ -12,7 +12,7 @@ import {
 } from '../../../primitives';
 import { useSwatchColor } from 'libs/ui/src/utils';
 import { AvailableSwatchColor } from '@decipad/editor-types';
-import { Calendar } from 'libs/ui/src/icons';
+import { Calendar, Edit } from 'libs/ui/src/icons';
 
 const baseWrapperStyles = css({
   width: '100%',
@@ -31,20 +31,14 @@ const expressionInputStyles = css(
     minHeight: '40px',
     alignItems: 'center',
     backgroundColor: 'transparent',
+    border: `1px solid ${cssVar('borderSubdued')}`,
+    position: 'relative',
+    '&[data-kind="date"], &[data-kind="string"]': {
+      fontWeight: 500,
+      fontSize: 24,
+    },
     ':hover': {
       backgroundColor: cssVar('backgroundHeavy'),
-    },
-    '&[data-kind="date"]': {
-      border: `1px solid ${cssVar('borderSubdued')}`,
-      fontWeight: 500,
-      fontSize: 24,
-      position: 'relative',
-    },
-    '&[data-kind="string"]': {
-      border: `1px solid ${cssVar('borderSubdued')}`,
-      fontWeight: 500,
-      fontSize: 24,
-      position: 'relative',
     },
   },
   hoverTransitionStyles('background-color')
@@ -92,7 +86,7 @@ const errorContainerStyles = css({
   justifySelf: 'center',
 });
 
-const calendarIconWrapperStyles = css({
+const iconWrapperStyles = css({
   width: '16px',
   height: '16px',
   position: 'absolute',
@@ -149,11 +143,9 @@ export const Expression = ({
         <span data-testid="widget-input" css={lineStyles} ref={inputRef}>
           {children}
         </span>
-        {type?.kind === 'date' && (
-          <div css={calendarIconWrapperStyles}>
-            <Calendar />
-          </div>
-        )}
+        <div css={iconWrapperStyles}>
+          {type?.kind === 'date' ? <Calendar /> : <Edit />}
+        </div>
       </div>
 
       {error && (

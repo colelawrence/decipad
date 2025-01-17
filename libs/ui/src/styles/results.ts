@@ -18,7 +18,6 @@ export const characterLimitStyles = css({
   textOverflow: 'ellipsis',
   overflow: 'hidden',
   whiteSpace: 'nowrap',
-  fontFeatureSettings: '"tnum"',
   verticalAlign: 'middle',
   lineHeight: 1.2,
 });
