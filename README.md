@@ -229,6 +229,16 @@ You will see a message like this:
 
 2. Then re-run the deployment github action.
 
+## Persisting the database
+
+To persist the database, you need to set the `ARC_DB_PATH` environment variable to a path where the database can be persisted.
+
+```bash
+export ARC_DB_PATH=/tmp/decipad-db
+```
+
+If you run the sandbox like this, the database will be persisted in the `/tmp/decipad-db` directory. You can remove the database data between server runs by running `rm -rf /tmp/decipad-db`.
+
 ## Private deploys and fast client updates
 
 You can deploy your own private instance by following these instructions:
