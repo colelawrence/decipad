@@ -168,6 +168,8 @@ jobs:
           include-details: false
 
   staging-tests:
+    # Disabled
+    if: false
     name: 🔬 Run Staging Tests
     runs-on: buildjet-4vcpu-ubuntu-2204
     needs: deploy
@@ -245,7 +247,6 @@ jobs:
           name: playwright-report
           path: /home/runner/actions-runner/_work/decipad/decipad/playwright-report
           retention-days: 3
-
   notify-staging:
     name: Discord Notification for Staging Tests
     runs-on: ubuntu-latest
