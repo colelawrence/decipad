@@ -17,14 +17,10 @@ import {
   TableToolbar,
   TextAndIconButton,
 } from '../../../shared';
-import { slimBlockWidth, wideBlockWidth } from '../../../styles/editor-layout';
+import { slimBlockWidth } from '../../../styles/editor-layout';
 import { AvailableSwatchColor, TableStyleContext } from '../../../utils';
 import { CreateChartMenu } from '../CreateChartMenu/CreateChartMenu';
 import { FormulasDrawer } from '../FormulasDrawer/FormulasDrawer';
-
-const tableCaptionWideStyles = css({
-  maxWidth: `${wideBlockWidth}px`,
-});
 
 const tableCaptionSlimStyles = css({
   maxWidth: `${slimBlockWidth}px`,
@@ -44,7 +40,6 @@ const toggleFormulaStyles = (
 export type EditableTableCaptionProps = PropsWithChildren<{
   onAddDataViewButtonPress: () => void;
   onAddChartViewButtonPress?: (_type: typeof markTypes[number]) => void;
-  isForWideTable?: boolean;
   empty?: boolean;
   readOnly?: boolean;
   formulaEditor?: boolean;
@@ -58,7 +53,6 @@ export const shouldShowFormulaDrawer = (
 
 export const EditableTableCaption: FC<EditableTableCaptionProps> = ({
   empty,
-  isForWideTable = false,
   readOnly = false,
   onAddDataViewButtonPress,
   onAddChartViewButtonPress,
@@ -155,7 +149,6 @@ export const EditableTableCaption: FC<EditableTableCaptionProps> = ({
     <>
       <TableToolbar
         actions={actions}
-        isForWideTable={isForWideTable}
         readOnly={readOnly}
         icon={icon}
         color={color}
@@ -176,9 +169,7 @@ export const EditableTableCaption: FC<EditableTableCaptionProps> = ({
         }
       />
 
-      <div
-        css={isForWideTable ? tableCaptionWideStyles : tableCaptionSlimStyles}
-      >
+      <div css={tableCaptionSlimStyles}>
         <div
           css={toggleFormulaStyles(
             !!hideFormulas,

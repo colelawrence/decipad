@@ -1,4 +1,8 @@
-import { ELEMENT_METRIC, PlateComponent } from '@decipad/editor-types';
+import {
+  AvailableSwatchColor,
+  ELEMENT_METRIC,
+  PlateComponent,
+} from '@decipad/editor-types';
 import { assertElementType } from '@decipad/editor-utils';
 import { Metric as UIMetric } from '@decipad/ui';
 import { DraggableBlock } from '../block-management';
@@ -18,7 +22,6 @@ import { getExprRef } from '@decipad/computer';
 export const Metric: PlateComponent = ({ attributes, element, children }) => {
   assertElementType(element, ELEMENT_METRIC);
   const {
-    id,
     blockId,
     aggregation: aggregationId,
     comparisonBlockId,
@@ -64,44 +67,30 @@ export const Metric: PlateComponent = ({ attributes, element, children }) => {
 
   const { color: defaultColor } = useEditorStylesContext();
 
-  const {
-    color: elementColor = 'auto',
-    trendColor: elementTrendColor = 'trend',
-  } = element;
+  const { color: elementColor = 'auto' } = element;
 
   const color = elementColor === 'auto' ? defaultColor : elementColor;
 
-  const trendColor =
-    elementTrendColor === 'auto' ? defaultColor : elementTrendColor;
-
   return (
-    <div
-      {...attributes}
-      contentEditable={false}
-      id={id}
-      css={{ height: '100%' }}
+    <DraggableBlock
+      blockKind="interactive"
+      element={element}
+      slateAttributes={attributes}
     >
-      <DraggableBlock
-        blockKind="interactive"
-        element={element}
+      <UIMetric
+        readOnly={readOnly}
+        caption={element.caption}
+        mainResult={mainResult ?? undefined}
+        trendResult={trendResult ?? undefined}
+        comparisonDescription={element.comparisonDescription}
+        formatting={element.formatting}
+        color={color as AvailableSwatchColor}
+        maxWidth={!insideLayout}
         fullHeight={insideLayout}
+        onClickEdit={onEdit}
       >
-        <UIMetric
-          readOnly={readOnly}
-          caption={element.caption}
-          mainResult={mainResult ?? undefined}
-          trendResult={trendResult ?? undefined}
-          comparisonDescription={element.comparisonDescription}
-          formatting={element.formatting}
-          color={color}
-          trendColor={trendColor}
-          maxWidth={!insideLayout}
-          fullHeight={insideLayout}
-          onClickEdit={onEdit}
-        >
-          {children}
-        </UIMetric>
-      </DraggableBlock>
-    </div>
+        {children}
+      </UIMetric>
+    </DraggableBlock>
   );
 };

@@ -1,7 +1,6 @@
 /* eslint decipad/css-prop-named-variable: 0 */
-import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
-import { FC, ReactNode, useCallback } from 'react';
+import { FC, ReactNode } from 'react';
 import { ConnectDropTarget } from 'react-dnd';
 import { useAutoAnimate } from '../../../hooks';
 import { cssVar } from '../../../primitives';
@@ -23,6 +22,9 @@ const tableBaseStyles = css({
   '@-moz-document url-prefix()': {
     height: 'auto',
   },
+
+  position: 'relative',
+  left: '-18px',
 
   borderCollapse: 'inherit',
   borderSpacing: '0',
@@ -178,7 +180,6 @@ interface TableProps {
   readonly isCollapsed?: boolean;
   readonly isReadOnly?: boolean;
   readonly isLiveResult?: boolean;
-  readonly onMouseOver?: (over: boolean) => void;
 }
 
 export const Table = ({
@@ -193,11 +194,8 @@ export const Table = ({
   tableWidth,
   isSelectingCell,
   isReadOnly = false,
-  onMouseOver = noop,
 }: TableProps): ReturnType<FC> => {
   const [animateBody] = useAutoAnimate<HTMLTableSectionElement>();
-  const onMouseEnter = useCallback(() => onMouseOver(true), [onMouseOver]);
-  const onMouseLeave = useCallback(() => onMouseOver(false), [onMouseOver]);
 
   return (
     <table
@@ -220,11 +218,11 @@ export const Table = ({
         footer && footerStyles,
         b === 'inner' && nestedStyles,
       ]}
-      onMouseEnter={onMouseEnter}
-      onMouseLeave={onMouseLeave}
     >
       {head && <thead css={{ position: 'relative' }}>{head}</thead>}
-      <tbody ref={animateBody}>{body}</tbody>
+      <tbody contentEditable={false} ref={animateBody}>
+        {body}
+      </tbody>
 
       <tfoot>
         {previewMode && (

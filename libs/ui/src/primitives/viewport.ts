@@ -30,3 +30,5 @@ export const tabletScreenQuery = `@media (max-width: ${smallestDesktop.landscape
 export const smallScreenQuery = `@media (max-width: ${smallestDesktop.portrait.width}px)`;
 export const mobileQuery = `@media (max-width: ${smallestMobile.landscape.width}px)`;
 export const tinyPhone = `@media (max-width: ${smallestMobile.portrait.width}px)`;
+
+export const gridShiftScreenQuery = '@media (max-width: 868px)';

@@ -124,33 +124,36 @@ export const Display: PlateComponent = ({ attributes, element, children }) => {
   const { color: defaultColor } = useEditorStylesContext();
   const { color = defaultColor } = element;
   return (
-    <div {...attributes} contentEditable={false} id={element.id}>
-      <DraggableBlock blockKind="interactive" element={element}>
-        <VariableEditor
-          variant="display"
-          color={color as AvailableSwatchColor}
+    <DraggableBlock
+      blockKind="interactive"
+      element={element}
+      slateAttributes={attributes}
+      contentEditable={false}
+    >
+      <VariableEditor
+        variant="display"
+        color={color as AvailableSwatchColor}
+        readOnly={readOnly}
+        insideLayout={insideLayout}
+        onClickEdit={onEdit}
+      >
+        <DisplayWidget
+          openMenu={openMenu}
+          onChangeOpen={setOpenMenu}
+          onExecute={onExecute}
+          allResults={allResults}
+          formatting={element.formatting}
+          lineResult={res}
+          result={element.varName}
           readOnly={readOnly}
-          insideLayout={insideLayout}
-          onClickEdit={onEdit}
+          color={color as AvailableSwatchColor}
+          icon={element.icon as UserIconKey | undefined}
+          saveIcon={saveIcon}
+          saveColor={saveColor}
         >
-          <DisplayWidget
-            openMenu={openMenu}
-            onChangeOpen={setOpenMenu}
-            onExecute={onExecute}
-            allResults={allResults}
-            formatting={element.formatting}
-            lineResult={res}
-            result={element.varName}
-            readOnly={readOnly}
-            color={color as AvailableSwatchColor}
-            icon={element.icon as UserIconKey | undefined}
-            saveIcon={saveIcon}
-            saveColor={saveColor}
-          >
-            {children}
-          </DisplayWidget>
-        </VariableEditor>
-      </DraggableBlock>
-    </div>
+          {children}
+        </DisplayWidget>
+      </VariableEditor>
+    </DraggableBlock>
   );
 };

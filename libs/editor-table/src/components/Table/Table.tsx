@@ -46,7 +46,7 @@ export const Table: PlateComponent = ({ attributes, children, element }) => {
 
   const contextValue: EditorTableContextValue = useMemo(
     () => ({
-      blockId: blockId ?? '',
+      blockId,
       cellTypes: columns.map((col) => col.cellType),
       columnBlockIds: columns.map((col) => col.blockId),
       tableFrozen,

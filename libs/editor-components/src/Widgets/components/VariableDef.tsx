@@ -53,7 +53,6 @@ export const VariableDef: PlateComponent = ({
     <DraggableBlock
       blockKind="interactive"
       element={element}
-      fullHeight={insideLayout}
       slateAttributes={attributes}
     >
       <VariableEditorContextProvider

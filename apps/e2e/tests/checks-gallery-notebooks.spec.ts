@@ -32,7 +32,6 @@ for (const file of jsonFiles) {
       for (const tab of authorNotebookTabs) {
         await randomFreeUser.notebook.selectTab(tab);
         await randomFreeUser.notebook.waitForEditorToLoad();
-        await randomFreeUser.notebook.focusOnBody();
         await timeout(Timeouts.computerDelay);
         await randomFreeUser.notebook.checkCalculationErrors();
       }

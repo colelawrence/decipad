@@ -75,7 +75,6 @@ export const DraggableBlockOverlay = ({
     <UIDraggableBlockOverlay
       position={position}
       previewHtmlRef={previewHtmlRef}
-      showDragHandle={item?.id === element.id}
     />
   );
 };

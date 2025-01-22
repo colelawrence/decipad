@@ -1,5 +1,4 @@
 /* eslint decipad/css-prop-named-variable: 0 */
-import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
 import { FC } from 'react';
 import { Add } from '../../../icons';
@@ -22,8 +21,8 @@ const buttonStyles = css(p13Medium, {
   backgroundColor: cssVar('backgroundDefault'),
 });
 
-const hiddenStyles = css({
-  visibility: 'hidden',
+const heightStyles = css({
+  height: '36px',
 });
 
 const iconWrapperStyles = css({
@@ -31,21 +30,19 @@ const iconWrapperStyles = css({
   width: '16px',
 });
 
-export interface AddTableRowButtonProps {
-  readonly onAddRow?: () => void;
-  readonly mouseOver?: boolean;
-}
+export type AddTableRowButtonProps = {
+  onAddRow: () => void;
+};
 
 export const AddTableRowButton = ({
-  onAddRow = noop,
-  mouseOver = false,
+  onAddRow,
 }: AddTableRowButtonProps): ReturnType<FC> => {
   return (
     <>
       <th></th>
-      <th key="firstcol" css={css({ height: '36px' })}>
+      <th key="firstcol" css={heightStyles}>
         <button
-          css={[buttonStyles, !mouseOver && hiddenStyles]}
+          css={buttonStyles}
           onClick={onAddRow}
           data-testid="editor-table-add-row"
         >

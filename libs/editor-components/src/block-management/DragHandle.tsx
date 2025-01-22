@@ -74,6 +74,7 @@ import { useToast } from '@decipad/toast';
 import { materializeResult, Result } from '@decipad/remote-computer';
 import { exportCsv } from '@decipad/export';
 import { handleExportSVGUsingHtml2Canvas } from './download-chart';
+import { ConnectDragSource } from 'react-dnd';
 
 const handleButtonStyle = css({
   borderRadius: '6px',
@@ -144,7 +145,8 @@ const withMultipleSelectionAction = (
 
 type DragHandleProps = {
   element: MyElement;
-  fullHeight?: boolean;
+
+  dragSource?: ConnectDragSource;
 };
 
 const ShowHideButton = ({ element }: DragHandleProps) => {
@@ -565,19 +567,19 @@ const DragHandleButton = ({ element, isMenuOpen }: DragHandleButtonProps) => {
   }
 };
 
-export const DragHandle = ({
-  element,
-  fullHeight = false,
-}: DragHandleProps) => {
+export const DragHandle = ({ element, dragSource }: DragHandleProps) => {
   const [isOpen, setIsOpen] = useState(false);
+
+  const isInsideLayout = useInsideLayoutContext();
 
   return (
     <BlockDragHandle
       MainButton={<DragHandleButton element={element} isMenuOpen={isOpen} />}
       LeftButton={<PlusButton element={element} />}
-      insideLayout={fullHeight}
+      insideLayout={isInsideLayout}
       menuOpen={isOpen}
       onChangeMenuOpen={setIsOpen}
+      dragSource={dragSource}
     >
       <ShowHideButton element={element} />
       <DuplicateButton element={element} />

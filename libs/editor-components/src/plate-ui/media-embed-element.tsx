@@ -1,10 +1,10 @@
 import type {
+  ElementAttributes,
   MediaEmbedElement as MediaEmbedElementType,
-  MyElement,
   PlateComponent,
 } from '@decipad/editor-types';
 import { cn, componentCssVars, p14Regular } from '@decipad/ui';
-import { SerializedStyles, css } from '@emotion/react';
+import { css } from '@emotion/react';
 import { PlateElement, withHOC } from '@udecode/plate-common';
 import {
   ELEMENT_MEDIA_EMBED,
@@ -13,12 +13,10 @@ import {
   useMediaState,
 } from '@udecode/plate-media';
 import { ResizableProvider, useResizableStore } from '@udecode/plate-resizable';
-import type { ComponentProps, FC, ReactNode } from 'react';
 import LiteYouTubeEmbed from 'react-lite-youtube-embed';
 import { Tweet } from 'react-tweet';
 import { DraggableBlock } from '../block-management/index';
 import { Caption, CaptionTextarea } from './caption';
-import { draggableStyles } from './image-element';
 import { useInsideLayoutContext } from '@decipad/react-contexts';
 import { MediaPopover } from './media-popover';
 import {
@@ -32,19 +30,12 @@ const resizableSelectedStyles = css({
 });
 
 type Component = PlateComponent<{
-  draggableBlock: FC<
-    ComponentProps<typeof DraggableBlock> & {
-      readonly element: MyElement;
-      readonly children: ReactNode;
-      draggableCss?: SerializedStyles;
-    }
-  >;
   readOnly?: boolean;
 }>;
 
 export const MediaEmbedElement: Component = withHOC(
   ResizableProvider,
-  ({ draggableBlock: Draggable, readOnly, className, ...props }) => {
+  ({ readOnly, className, ...props }) => {
     const { children, element } = props;
 
     const insideLayout = useInsideLayoutContext();
@@ -70,10 +61,10 @@ export const MediaEmbedElement: Component = withHOC(
     return (
       <MediaPopover pluginKey={ELEMENT_MEDIA_EMBED}>
         <PlateElement className={cn('relative', className)} {...(props as any)}>
-          <Draggable
+          <DraggableBlock
             blockKind="media"
             element={element as MediaEmbedElementType}
-            draggableCss={draggableStyles}
+            slateAttributes={props.attributes as ElementAttributes}
           >
             <figure
               className="group relative m-0 w-full"
@@ -167,7 +158,7 @@ export const MediaEmbedElement: Component = withHOC(
             </figure>
 
             {children}
-          </Draggable>
+          </DraggableBlock>
         </PlateElement>
       </MediaPopover>
     );

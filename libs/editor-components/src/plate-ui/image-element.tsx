@@ -1,12 +1,9 @@
 import type {
   ImageElement as ImageElementType,
-  MyElement,
   PlateComponent,
 } from '@decipad/editor-types';
 import { css } from '@emotion/react';
 import { PlateElement, withHOC } from '@udecode/plate-common';
-import type { ComponentProps, FC, ReactNode } from 'react';
-import type { DraggableBlock } from '@decipad/ui';
 import { cn, componentCssVars, cssVar, p14Regular } from '@decipad/ui';
 import { MediaPopover } from './media-popover';
 import {
@@ -23,7 +20,7 @@ import {
 import { Caption, CaptionTextarea } from './caption';
 import { assertElementType } from '@decipad/editor-utils';
 import { useInsideLayoutContext } from '@decipad/react-contexts';
-import { DragHandle } from '../block-management/DragHandle';
+import { DraggableBlock } from '../block-management';
 
 export const draggableStyles = css({
   paddingTop: 8,
@@ -51,12 +48,6 @@ const resizableImagePlaceholderStyles = css({
 });
 
 type ImageComponent = PlateComponent<{
-  draggableBlock: FC<
-    ComponentProps<typeof DraggableBlock> & {
-      readonly element: MyElement;
-      readonly children: ReactNode;
-    }
-  >;
   readOnly?: boolean;
   accept?: any;
   getAxis?: any;
@@ -65,15 +56,7 @@ type ImageComponent = PlateComponent<{
 
 export const ImageElement: ImageComponent = withHOC(
   ResizableProvider,
-  ({
-    draggableBlock: Draggable,
-    readOnly,
-    accept,
-    getAxis,
-    onDrop,
-    className,
-    ...props
-  }) => {
+  ({ readOnly, accept, getAxis, onDrop, className, ...props }) => {
     const { children, element } = props;
     assertElementType(element, ELEMENT_IMAGE);
 
@@ -88,11 +71,10 @@ export const ImageElement: ImageComponent = withHOC(
     return (
       <MediaPopover pluginKey={ELEMENT_IMAGE}>
         <PlateElement className={className} {...(props as any)}>
-          <Draggable
+          <DraggableBlock
             blockKind="media"
             element={element as ImageElementType}
-            draggableCss={draggableStyles}
-            DragHandle={<DragHandle element={element as ImageElementType} />}
+            slateAttributes={props.attributes}
           >
             <figure
               className="block-figure group relative m-0"
@@ -154,7 +136,7 @@ export const ImageElement: ImageComponent = withHOC(
             </figure>
 
             {children}
-          </Draggable>
+          </DraggableBlock>
         </PlateElement>
       </MediaPopover>
     );

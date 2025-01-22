@@ -1,8 +1,7 @@
-import { ReactNode, useState } from 'react';
+import { ReactNode } from 'react';
 import * as Styled from './styles';
 
 export type BlockContextualActionsProps = {
-  readonly children: ReactNode;
   readonly contextualActions: {
     id: string;
     icon: ReactNode;
@@ -11,48 +10,26 @@ export type BlockContextualActionsProps = {
   readonly fullHeight?: boolean;
 };
 
-const variants = {
-  show: {
-    opacity: 1,
-    scale: 1,
-  },
-  hide: {
-    opacity: 0,
-    scale: 0.8,
-  },
-};
+export const BLOCK_CONTEXTUAL_ACTIONS = 'block-contextual-actions';
 
 export const BlockContextualActions: React.FC<BlockContextualActionsProps> = ({
-  children,
   contextualActions,
   fullHeight,
 }) => {
-  const [hovering, setHovering] = useState(false);
-
-  if (contextualActions.length === 0) {
-    return <>{children}</>;
-  }
   return (
-    <Styled.BlockWrapper
-      onMouseEnter={() => setHovering(true)}
-      onMouseLeave={() => setHovering(false)}
+    <Styled.ContextualActionWrapper
       fullHeight={fullHeight}
+      className={BLOCK_CONTEXTUAL_ACTIONS}
     >
-      <Styled.ButtonsWrapper>
-        {contextualActions.map(({ id, icon, onClick }) => (
-          <Styled.Button
-            key={id}
-            onClick={onClick}
-            variants={variants}
-            transition={{ duration: 0.15 }}
-            animate={hovering ? 'show' : 'hide'}
-            data-testid={`block-action-${id}`}
-          >
-            {icon}
-          </Styled.Button>
-        ))}
-      </Styled.ButtonsWrapper>
-      {children}
-    </Styled.BlockWrapper>
+      {contextualActions.map(({ id, icon, onClick }) => (
+        <Styled.Button
+          key={id}
+          onClick={onClick}
+          data-testid={`block-action-${id}`}
+        >
+          {icon}
+        </Styled.Button>
+      ))}
+    </Styled.ContextualActionWrapper>
   );
 };

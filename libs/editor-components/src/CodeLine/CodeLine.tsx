@@ -112,7 +112,6 @@ export const CodeLine: PlateComponent = ({ attributes, children, element }) => {
     <DraggableBlock
       blockKind="codeLine"
       element={element}
-      hasPreviousSibling={siblingCodeLines?.hasPrevious}
       slateAttributes={attributes}
     >
       <UICodeLine

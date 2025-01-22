@@ -450,7 +450,8 @@ export class Notebook {
     if (await this.page.getByTestId('editor-sidebar').isHidden()) {
       await this.page
         .getByTestId('segment-button-trigger-top-bar-sidebar')
-        .click();
+        // eslint-disable-next-line playwright/no-force-option
+        .click({ force: true });
       await this.checkSidebarIsOpen();
     }
   }
@@ -1498,7 +1499,7 @@ export class Notebook {
     const p = await this.page.waitForSelector(
       `[data-testid="paragraph-wrapper"] >> nth=${paragraphNumber}`
     );
-    await p.click();
+    await p.click({ position: { y: 10, x: 10 } });
     return this.page.getByTestId('paragraph-wrapper').count();
   }
 
@@ -1512,30 +1513,18 @@ export class Notebook {
    * ```
    */
   async selectBlocks(startBlock: number, endBlock: number) {
-    const [startBoxLocation, endBoxLocation] = await Promise.all([
-      this.page
-        .locator(`[data-testid="drag-handle"] >> nth=${startBlock}`)
-        .boundingBox(),
-      this.page
-        .locator(`[data-testid="drag-handle"] >> nth=${endBlock}`)
-        .boundingBox(),
-    ]);
+    // First draggable-block-div is the EditorTitle.
+    const firstBlock = this.page.locator(
+      `[data-testid="draggable-block-div"] >> nth=${startBlock + 1}`
+    );
+    const lastBlock = this.page.locator(
+      `[data-testid="draggable-block-div"] >> nth=${endBlock + 1}`
+    );
 
-    const width = this.page.viewportSize()?.width;
-    const startMousePosition = {
-      x: startBoxLocation!.x / 2,
-      y: startBoxLocation!.y,
-    };
-
-    const endMouseLocation = {
-      x: endBoxLocation!.x + width! / 2,
-      y: endBoxLocation!.y,
-    };
-
-    await this.page.mouse.move(startMousePosition.x, startMousePosition.y);
-    await this.page.mouse.down();
-    await this.page.mouse.move(endMouseLocation.x, endMouseLocation.y);
-    await this.page.mouse.up();
+    return firstBlock.dragTo(lastBlock, {
+      sourcePosition: { x: 10, y: 10 },
+      targetPosition: { x: 10, y: 10 },
+    });
   }
 
   async selectLastParagraph() {

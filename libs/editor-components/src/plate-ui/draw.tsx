@@ -1,10 +1,9 @@
-import type {
-  DrawElement,
-  DrawElementDescendant,
-  DrawElements,
-  MyEditor,
-  MyElement,
-  PlateComponent,
+import {
+  ELEMENT_DRAW,
+  type DrawElementDescendant,
+  type DrawElements,
+  type MyEditor,
+  type PlateComponent,
 } from '@decipad/editor-types';
 import { useThemeFromStore } from '@decipad/react-contexts';
 import { noop } from '@decipad/utils';
@@ -12,34 +11,19 @@ import { css } from '@emotion/react';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { THEME } from '@excalidraw/excalidraw';
 import type { ExcalidrawDataState } from '@udecode/plate-excalidraw';
-import type { ComponentProps, FC, MouseEvent, ReactNode } from 'react';
+import type { FC, MouseEvent } from 'react';
 import { useCallback, useRef } from 'react';
-import type { DraggableBlock } from '@decipad/ui';
 import { blue200, blue300, cssVar } from '@decipad/ui';
 import type { ExcalidrawProps, ExcalidrawRef } from './excalidraw-element';
 import { ExcalidrawElement } from './excalidraw-element';
-import { DragHandle } from '../block-management/DragHandle';
-
-const drawStyles = css({
-  display: 'block',
-  width: '100%',
-  maxWidth: '100%',
-  cursor: 'pointer',
-  borderRadius: 8,
-  border: 0,
-});
+import { DraggableBlock } from '../block-management';
+import { assertElementType } from '@decipad/editor-utils';
 
 type AppState = NonNullable<ExcalidrawDataState['appState']>;
 type ExcalidrawDrawElement = Omit<DrawElementDescendant, 'children'>;
 
 interface DrawComponentProps {
   excalidrawRef: ExcalidrawRef;
-  draggableBlock: FC<
-    ComponentProps<typeof DraggableBlock> & {
-      readonly element: MyElement;
-      readonly children: ReactNode;
-    }
-  >;
   readOnly?: boolean;
   elements: DrawElements;
   onChange?: (elements: Readonly<ExcalidrawDrawElement[]>) => void;
@@ -90,7 +74,6 @@ const ExcalidrawElementWithRef: FC<
 > = ExcalidrawElement;
 
 export const Draw: DrawComponent = ({
-  draggableBlock: Draggable,
   excalidrawRef,
   readOnly,
   elements,
@@ -100,6 +83,8 @@ export const Draw: DrawComponent = ({
 }) => {
   const { attributes, children, element } = props;
   const appState = useRef<unknown>({});
+
+  assertElementType(element, ELEMENT_DRAW);
 
   const onExcalidrawChange = useCallback(
     (newElements: Readonly<ExcalidrawDrawElement[]>, newAppState: AppState) => {
@@ -118,12 +103,10 @@ export const Draw: DrawComponent = ({
 
   // ExcalidrawProps for all the configuration options
   return (
-    <Draggable
+    <DraggableBlock
       blockKind="draw"
-      element={element as DrawElement}
-      draggableCss={drawStyles}
-      DragHandle={<DragHandle element={element as DrawElement} />}
-      {...attributes}
+      element={element}
+      slateAttributes={attributes}
     >
       <div
         className="block-figure [&_.App-toolbar-content>button:first-child]:!hidden"
@@ -158,6 +141,6 @@ export const Draw: DrawComponent = ({
         />
       </div>
       {children}
-    </Draggable>
+    </DraggableBlock>
   );
 };

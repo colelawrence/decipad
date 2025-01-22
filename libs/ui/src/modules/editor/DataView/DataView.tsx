@@ -9,18 +9,25 @@ import { slimBlockWidth } from 'libs/ui/src/styles/editor-layout';
 import { Children, FC, ReactNode } from 'react';
 import { Move, Transpose } from '../../../icons';
 import * as userIcons from '../../../icons/user-icons';
-import { p14Regular, smallScreenQuery } from '../../../primitives';
+import { cssVar, p14Regular } from '../../../primitives';
 import { IconPopover, TableToolbar } from '../../../shared/molecules';
-import { editorLayout, scrollbars, table } from '../../../styles';
 import { AvailableSwatchColor, TableStyleContext } from '../../../utils';
 import { VariableNameSelector } from '../VariableNameSelector/VariableNameSelector';
+import { noTrackScrollbarStyles } from 'libs/ui/src/styles/scrollbars';
 
-const dataViewWrapperStyles = css({
+const widthPadding = `calc((${slimBlockWidth}px - ${cssVar(
+  'editorWidth'
+)}) / -2)`;
+
+const tableWrapper = css(noTrackScrollbarStyles, {
+  gridRow: '4',
+  gridColumn: '1 / span 5',
+  overflowX: 'auto',
   display: 'flex',
-  flexDirection: 'column',
-});
+  gap: '4px',
 
-const gutterWidth = '60px';
+  paddingLeft: widthPadding,
+});
 
 const dataViewTableStyles = css(p14Regular, {
   tableLayout: 'auto',
@@ -39,44 +46,10 @@ const dataViewAlternateRotationTableStyles = css({
   },
 });
 
-const dataViewTableWrapperStyles = css(
-  {
-    transform: `translateX(calc((((100vw - ${slimBlockWidth}px) / 2)) * -1 ))`,
-    width: '100vw',
-    minWidth: editorLayout.slimBlockWidth,
-    paddingBottom: '12px',
-    position: 'relative',
-    whiteSpace: 'nowrap',
-    display: 'flex',
-    [smallScreenQuery]: {
-      maxWidth: `calc(100vw - ${gutterWidth})`,
-      minWidth: '0',
-      transform: `translateX(0)`,
-    },
-  },
-  scrollbars.deciInsideNotebookOverflowXStyles
-);
-
-const scrollRightOffset = `(((100vw - 1055px) / 2) + 200px)`;
-
-export const tableScroll = css({
-  display: 'flex',
-  flexDirection: 'row',
-  marginLeft: '60px',
-  paddingRight: `calc(${scrollRightOffset})`,
-  [smallScreenQuery]: {
-    paddingRight: '0px',
-    marginLeft: '0px',
-  },
-});
-
-const dataViewTableOverflowStyles = css({
-  display: 'inline-block',
-  height: '20px',
-  minWidth: `calc((100vw - 700px) / 2)`,
-});
-
 export const loadingIconStyles = css({
+  gridRow: '3',
+  gridColumn: '1 / span 5',
+
   minHeight: '19px',
   margin: 'auto',
   display: 'grid',
@@ -132,102 +105,91 @@ export const DataView: FC<DataViewProps> = ({
         setColor: onChangeColor,
       }}
     >
-      <div
-        className={'block-table'}
-        css={[dataViewWrapperStyles, table.tableCaptionWrapperStyles]}
-        aria-roledescription="data view"
-      >
-        <TableToolbar
-          isForWideTable={false}
-          readOnly={readOnly}
-          emptyLabel="Data view name..."
-          empty={empty}
-          actions={
-            <>
-              {!readOnly && (
-                <VariableNameSelector
-                  label=""
-                  variableNames={availableVariableNames}
-                  selectedVariableName={variableName}
-                  onChangeVariableName={onChangeVariableName}
-                  testId="data-view-source"
-                />
-              )}
-              {!readOnly && (
-                <SegmentButtons
-                  border
-                  variant="default"
-                  iconSize="integrations"
-                  padding="skinny"
-                  buttons={[
-                    {
-                      experimentalTooltip: true,
-                      tooltip: 'Flip',
-                      children: <Transpose />,
-                      onClick: () => onRotated(!rotate),
-                      testId: 'formula',
-                    },
-                    {
-                      experimentalTooltip: true,
-                      children: <Move />,
-                      tooltip: `Drilldown`,
-                      onClick: () =>
-                        onChangeAlternateRotation(!alternateRotation),
-                      testId: 'table',
-                    },
-                  ]}
-                />
-              )}
-            </>
-          }
-          iconPopover={
-            <IconPopover
-              color={color as AvailableSwatchColor}
-              trigger={
-                <button>
-                  <Icon />
-                </button>
-              }
-              onChangeIcon={onChangeIcon}
-              onChangeColor={onChangeColor}
-            />
-          }
-          icon={icon}
-          color={color}
-          caption={caption}
-        />
-
-        {computing ? (
-          <div css={loadingIconStyles}>
-            <Loading />
-          </div>
-        ) : null}
-
-        <div css={dataViewTableWrapperStyles} contentEditable={false}>
-          <div css={dataViewTableOverflowStyles} contentEditable={false} />
-
-          <div css={tableScroll}>
-            {data ? (
-              <table
-                css={[
-                  dataViewTableStyles,
-                  alternateRotation && dataViewAlternateRotationTableStyles,
+      <TableToolbar
+        readOnly={readOnly}
+        emptyLabel="Data view name..."
+        empty={empty}
+        actions={
+          <>
+            {!readOnly && (
+              <VariableNameSelector
+                label=""
+                variableNames={availableVariableNames}
+                selectedVariableName={variableName}
+                onChangeVariableName={onChangeVariableName}
+                testId="data-view-source"
+              />
+            )}
+            {!readOnly && (
+              <SegmentButtons
+                border
+                variant="default"
+                iconSize="integrations"
+                padding="skinny"
+                buttons={[
+                  {
+                    experimentalTooltip: true,
+                    tooltip: 'Flip',
+                    children: <Transpose />,
+                    onClick: () => onRotated(!rotate),
+                    testId: 'formula',
+                  },
+                  {
+                    experimentalTooltip: true,
+                    children: <Move />,
+                    tooltip: `Drilldown`,
+                    onClick: () =>
+                      onChangeAlternateRotation(!alternateRotation),
+                    testId: 'table',
+                  },
                 ]}
-                contentEditable={false}
-              >
-                <thead>
-                  {rotate && !alternateRotation ? (
-                    <Invisible>{thead}</Invisible>
-                  ) : (
-                    thead
-                  )}
-                </thead>
-                <tbody aria-roledescription="data view data">{data}</tbody>
-              </table>
-            ) : null}
-            {variableName && addNewColumnComponent}
-          </div>
+              />
+            )}
+          </>
+        }
+        iconPopover={
+          <IconPopover
+            color={color as AvailableSwatchColor}
+            trigger={
+              <button>
+                <Icon />
+              </button>
+            }
+            onChangeIcon={onChangeIcon}
+            onChangeColor={onChangeColor}
+          />
+        }
+        icon={icon}
+        color={color}
+        caption={caption}
+      />
+
+      {computing && (
+        <div css={loadingIconStyles}>
+          <Loading />
         </div>
+      )}
+
+      <div css={tableWrapper}>
+        {data && (
+          <table
+            css={[
+              dataViewTableStyles,
+              alternateRotation && dataViewAlternateRotationTableStyles,
+            ]}
+            contentEditable={false}
+          >
+            <thead>
+              {rotate && !alternateRotation ? (
+                <Invisible>{thead}</Invisible>
+              ) : (
+                thead
+              )}
+            </thead>
+            <tbody aria-roledescription="data view data">{data}</tbody>
+          </table>
+        )}
+        {variableName && addNewColumnComponent}
       </div>
     </TableStyleContext.Provider>
   );

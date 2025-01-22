@@ -4,6 +4,9 @@ import { Locator, Page, expect, test } from './manager/decipad-tests';
 const getParagraphByText = (page: Page, text: string) =>
   page.locator('[data-type="paragraph"]').filter({ hasText: text });
 
+const getParagraphWrapperByText = (page: Page, text: string) =>
+  page.locator('[data-testid="paragraph-wrapper"]').filter({ hasText: text });
+
 const dragTo = async (
   page: Page,
   block: Locator,
@@ -24,9 +27,9 @@ const dragTo = async (
   const position = {
     center: [centerX, centerY],
     top: [centerX, startY],
-    left: [startX, centerY],
+    left: [startX - 20, centerY],
     bottom: [centerX, endY],
-    right: [endX, centerY],
+    right: [endX + 20, centerY],
   }[side] as [number, number];
 
   await page.mouse.move(...position);
@@ -123,7 +126,7 @@ test('Drag and drop blocks', async ({ testUser }) => {
     await dragTo(
       page,
       getParagraphByText(page, 'one'),
-      getParagraphByText(page, 'three'),
+      getParagraphWrapperByText(page, 'three'),
       'left'
     );
 
@@ -175,7 +178,7 @@ test('Drag and drop blocks', async ({ testUser }) => {
     await dragTo(
       page,
       getParagraphByText(page, 'one'),
-      getParagraphByText(page, 'three'),
+      getParagraphWrapperByText(page, 'three'),
       'right'
     );
 
@@ -192,7 +195,7 @@ test('Drag and drop blocks', async ({ testUser }) => {
     await dragTo(
       page,
       getParagraphByText(page, 'three'),
-      getParagraphByText(page, 'two'),
+      getParagraphWrapperByText(page, 'two'),
       'left'
     );
 
@@ -370,7 +373,7 @@ test('Drag and drop blocks', async ({ testUser }) => {
     await dragTo(
       page,
       getParagraphByText(page, 'one'),
-      getParagraphByText(page, 'three'),
+      getParagraphWrapperByText(page, 'three'),
       'left'
     );
 

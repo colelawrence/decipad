@@ -2,7 +2,6 @@
 import { css } from '@emotion/react';
 import { FC, PropsWithChildren } from 'react';
 import { smallestDesktop } from '../../../primitives';
-import { slimBlockWidth } from '../../../styles/editor-layout';
 
 const remoteAvatarOverlayWrapperStyles = css({
   position: 'absolute',
@@ -15,7 +14,7 @@ const remoteAvatarOverlayWrapperStyles = css({
 
 const remoteAvatarOverlayStyles = css({
   position: 'relative',
-  maxWidth: slimBlockWidth,
+  width: '100%',
   margin: '0 auto',
   height: '100%',
   zIndex: 0,
@@ -23,7 +22,7 @@ const remoteAvatarOverlayStyles = css({
 
 const mobileQuery = `@media (max-width: ${smallestDesktop.portrait.width}px)`;
 
-const invisibleOnSmallScreens = css({
+const invisibleOnSmallScreens = css(remoteAvatarOverlayWrapperStyles, {
   [mobileQuery]: {
     display: 'none',
   },
@@ -31,8 +30,8 @@ const invisibleOnSmallScreens = css({
 
 export const RemoteAvatarOverlay: FC<PropsWithChildren> = ({ children }) => {
   return (
-    <div css={[invisibleOnSmallScreens, remoteAvatarOverlayWrapperStyles]}>
-      <div css={remoteAvatarOverlayStyles}>{children} </div>
+    <div css={invisibleOnSmallScreens}>
+      <div css={remoteAvatarOverlayStyles}>{children}</div>
     </div>
   );
 };

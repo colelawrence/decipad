@@ -162,7 +162,7 @@ export const LayoutColumn: FC<LayoutColumnProps> = ({
     <UILayoutColumn
       borderMode={borderMode}
       isDragging={canDrop && isDragging}
-      isDragOver={isOver}
+      isDragOver={canDrop && isOver}
       connectDropTarget={drop}
       minWidth={minWidth}
       {...props}

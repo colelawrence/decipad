@@ -142,7 +142,6 @@ export const TimeSeries: PlateComponent<{ variableName: string }> = ({
     >
       <DataViewContextProvider columns={availableColumns}>
         <TableToolbar
-          isForWideTable={false}
           readOnly={readOnly}
           emptyLabel="Time series name..."
           empty={isEmpty}

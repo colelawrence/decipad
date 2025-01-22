@@ -162,6 +162,7 @@ export const TableData = forwardRef(
         // Used in e2e tests
         data-selected={selected || anchor}
         {...props}
+        contentEditable={isUserContent}
       >
         {children}
       </Component>

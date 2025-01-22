@@ -1,11 +1,7 @@
 /* eslint decipad/css-prop-named-variable: 0 */
 import { UserIconKey } from '@decipad/editor-types';
 import { css } from '@emotion/react';
-import {
-  hideOnPrint,
-  slimBlockWidth,
-  wideBlockWidth,
-} from 'libs/ui/src/styles/editor-layout';
+import { hideOnPrint } from 'libs/ui/src/styles/editor-layout';
 import { AvailableSwatchColor } from 'libs/ui/src/utils';
 import { FC, ReactNode } from 'react';
 import * as userIcons from '../../../icons/user-icons';
@@ -16,14 +12,6 @@ import {
   placeholderOpacity,
 } from '../../../primitives';
 import { Height, codeBlock } from '../../../styles';
-
-const tableCaptionWideStyles = css({
-  maxWidth: `${wideBlockWidth}px`,
-});
-
-const tableCaptionSlimStyles = css({
-  maxWidth: `${slimBlockWidth}px`,
-});
 
 const tableControlStyles = css(p12Medium, hideOnPrint, {
   // Shifts whole div to the right.
@@ -42,6 +30,8 @@ const tableCaptionInnerStyles = css({
   justifyContent: 'space-between',
   gap: '9px',
   lineBreak: 'unset',
+
+  gridColumn: '3 / span 1',
 });
 
 const tableIconSizeStyles = css({
@@ -85,7 +75,6 @@ const placeholderStyles = css({
 
 type TableToolbarProps = {
   readonly color?: AvailableSwatchColor;
-  readonly isForWideTable: boolean;
   readonly icon: UserIconKey;
   readonly readOnly: boolean;
   readonly empty?: boolean;
@@ -93,6 +82,8 @@ type TableToolbarProps = {
   readonly caption: ReactNode;
   readonly iconPopover?: ReactNode;
   readonly actions: ReactNode;
+
+  readonly gridColumn?: string;
 };
 
 export const TableToolbar: FC<TableToolbarProps> = ({
@@ -104,67 +95,59 @@ export const TableToolbar: FC<TableToolbarProps> = ({
   caption = 'test',
   icon = 'TableSmall',
   color = 'Perfume',
-  isForWideTable = false,
 }) => {
   const IconComponent = userIcons[icon] ?? userIcons.TableSmall;
 
   return (
-    <div
-      css={[
-        isForWideTable ? tableCaptionWideStyles : tableCaptionSlimStyles,
-        { marginBottom: '8px' },
-      ]}
-    >
-      <div css={tableCaptionInnerStyles}>
+    <div css={tableCaptionInnerStyles}>
+      <div
+        css={[
+          tableTitleWrapperStyles,
+          tableVarStyles,
+          {
+            backgroundColor: color
+              ? getThemeColor(color).Background.Subdued
+              : cssVar('themeBackgroundSubdued'),
+            mixBlendMode: 'luminosity',
+          },
+        ]}
+      >
         <div
+          contentEditable={false}
           css={[
-            tableTitleWrapperStyles,
-            tableVarStyles,
+            tableIconSizeStyles,
             {
-              backgroundColor: color
-                ? getThemeColor(color).Background.Subdued
-                : cssVar('themeBackgroundSubdued'),
               mixBlendMode: 'luminosity',
             },
           ]}
         >
-          <div
-            contentEditable={false}
-            css={[
-              tableIconSizeStyles,
-              {
-                mixBlendMode: 'luminosity',
-              },
-            ]}
-          >
-            {readOnly || !iconPopover ? <IconComponent /> : iconPopover}
-          </div>
-          <div
-            role="textbox"
-            aria-roledescription="table name"
-            css={[
-              placeholderStyles,
-              empty && {
-                '::after': {
-                  content: `"${emptyLabel ?? 'Table name...'}"`,
-                },
-              },
-              {
-                color: color
-                  ? getThemeColor(color).Text.Default
-                  : cssVar('themeTextDefault'),
-              },
-            ]}
-            spellCheck={false}
-            contentEditable={!readOnly}
-            data-testid={'table-name-input'}
-          >
-            {caption}
-          </div>
+          {readOnly || !iconPopover ? <IconComponent /> : iconPopover}
         </div>
-        <div css={[tableControlStyles, hideOnPrint]} contentEditable={false}>
-          {actions}
+        <div
+          role="textbox"
+          aria-roledescription="table name"
+          css={[
+            placeholderStyles,
+            empty && {
+              '::after': {
+                content: `"${emptyLabel ?? 'Table name...'}"`,
+              },
+            },
+            {
+              color: color
+                ? getThemeColor(color).Text.Default
+                : cssVar('themeTextDefault'),
+            },
+          ]}
+          spellCheck={false}
+          contentEditable={!readOnly}
+          data-testid={'table-name-input'}
+        >
+          {caption}
         </div>
+      </div>
+      <div css={[tableControlStyles, hideOnPrint]} contentEditable={false}>
+        {actions}
       </div>
     </div>
   );

@@ -15,6 +15,9 @@ import {
 } from '@udecode/plate-common';
 import { Title } from './Title';
 import { createHeadingPlugin } from '@udecode/plate-heading';
+import { DndProvider } from 'react-dnd';
+import { HTML5Backend } from 'react-dnd-html5-backend';
+import { MemoryRouter } from 'react-router-dom';
 
 let plateProps: Omit<PlateProps, 'children'>;
 let editor: PlateEditor;
@@ -35,9 +38,13 @@ beforeEach(() => {
 });
 it('shows a placeholder only when empty', async () => {
   const { getByText } = render(
-    <Plate {...plateProps} editor={editor}>
-      <PlateContent scrollSelectionIntoView={noop} />
-    </Plate>
+    <MemoryRouter>
+      <DndProvider backend={HTML5Backend}>
+        <Plate {...plateProps} editor={editor}>
+          <PlateContent scrollSelectionIntoView={noop} />
+        </Plate>
+      </DndProvider>
+    </MemoryRouter>
   );
   const h1Element = getByText('text').closest('h1');
 

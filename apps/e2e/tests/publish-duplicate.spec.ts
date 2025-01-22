@@ -141,7 +141,7 @@ test('publish notebook, check logged out reader + logged in duplication', async 
 
   await test.step('add one more paragraph', async () => {
     await testUserNotebook.focusOnBody();
-    await testUserPage.keyboard.press('Enter');
+    await testUserPage.keyboard.press('Control+Enter');
     await testUserPage.keyboard.type(justOneMore);
     await expect(testUserNotebook.notebookParagraph.nth(1)).toHaveText(
       justOneMore

@@ -2,14 +2,10 @@
 import { MarkType } from '@decipad/editor-types';
 import { useIsEditorReadOnly } from '@decipad/react-contexts';
 import type { Result } from '@decipad/language-interfaces';
-import { css } from '@emotion/react';
 import { ComponentProps, FC, ReactNode } from 'react';
 import { cssVar, p12Medium } from '../../../primitives';
 import { SegmentButtons, TextAndIconButton } from '../../../shared';
-import {
-  hideOnPrint,
-  integrationBlockStyles,
-} from '../../../styles/editor-layout';
+import { hideOnPrint } from '../../../styles/editor-layout';
 import { Height } from '../../../styles/spacings';
 import { CreateChartMenu } from '../CreateChartMenu/CreateChartMenu';
 import { LiveCode } from '../LiveCode/LiveCode';
@@ -62,12 +58,8 @@ export const IntegrationBlock: FC<IntegrationBlockProps> = ({
   const readOnly = useIsEditorReadOnly();
 
   return (
-    <div
-      className={'block-table'}
-      css={integrationBlockStyles}
-      data-testid={'integration-block'}
-    >
-      <div css={css(hideOnPrint, { display: 'flex', alignItems: 'center' })}>
+    <>
+      <CaptionWrapper>
         <LiveCode
           meta={meta}
           error={typeof error === 'string' ? new Error(error) : undefined}
@@ -107,11 +99,14 @@ export const IntegrationBlock: FC<IntegrationBlockProps> = ({
             iconSize="integrations"
           />
         </ControlButtonsDiv>
-      </div>
+      </CaptionWrapper>
+
       {formulas && <FormulasDrawer>{formulas}</FormulasDrawer>}
 
-      <div contentEditable={false}>{resultPreview}</div>
-    </div>
+      <ResultPreviewWrapper contentEditable={false}>
+        {resultPreview}
+      </ResultPreviewWrapper>
+    </>
   );
 };
 
@@ -124,4 +119,14 @@ const ControlButtonsDiv = styled.div(p12Medium, hideOnPrint, {
   gap: '6px',
   color: cssVar('textDefault'),
   height: Height.Bubble,
+});
+
+const CaptionWrapper = styled.div({
+  gridColumn: '3 / span 1',
+  display: 'flex',
+  alignItems: 'center',
+});
+
+const ResultPreviewWrapper = styled.div({
+  gridColumn: '1 / span 5',
 });

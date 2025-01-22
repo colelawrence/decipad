@@ -1,19 +1,18 @@
 /* eslint decipad/css-prop-named-variable: 0 */
 import { RefObject, useEffect, useRef } from 'react';
-import { DragHandle } from '../../../icons';
-import { handleStyle } from '../BlockDragHandle/BlockDragHandle';
 import type { XYCoord } from 'react-dnd';
+import { css } from '@emotion/react';
+import { slimBlockWidth } from 'libs/ui/src/styles/editor-layout';
+import { cssVar } from 'libs/ui/src/primitives';
 
 export interface DraggableBlockOverlayProps {
   previewHtmlRef: RefObject<HTMLDivElement>;
   position: XYCoord;
-  showDragHandle: boolean;
 }
 
 export const DraggableBlockOverlay = ({
   previewHtmlRef,
   position,
-  showDragHandle,
 }: DraggableBlockOverlayProps) => {
   const ref = useRef<HTMLDivElement>(null);
 
@@ -42,53 +41,45 @@ export const DraggableBlockOverlay = ({
   }, [ref, previewHtmlRef]);
 
   return (
-    <div
-      css={{
-        position: 'fixed',
-        pointerEvents: 'none',
-        zIndex: 2000,
-        left: 0,
-        top: 0,
-        width: '100%',
-        height: '100%',
-      }}
-    >
+    <div css={wrapperStyles}>
       <div
         // https://emotion.sh/docs/best-practices#use-the-style-prop-for-dynamic-styles
         style={{
-          transform: `translate(${position.x}px, ${position.y}px)`,
+          transform: `translate(${position.x - 64}px, ${position.y}px)`,
         }}
       >
-        <div
-          css={{
-            display: 'flex',
-            alignItems: 'start',
-            gap: 16,
-            transform: 'rotate(1deg)',
-            transformOrigin: '0 0',
-          }}
-        >
+        <div css={innerStyles}>
           <div
-            css={[
-              handleStyle,
-              {
-                marginTop: 'calc((1.5rem - 1.125rem) / 2)',
-                visibility: showDragHandle ? 'visible' : 'hidden',
-              },
-            ]}
-          >
-            <DragHandle />
-          </div>
-
-          <div
+            className="drag-preview"
             ref={ref}
             dangerouslySetInnerHTML={{
-              __html: previewHtmlRef.current?.innerHTML ?? '',
+              __html: previewHtmlRef.current?.outerHTML!,
             }}
-            style={{ width: previewHtmlRef.current?.clientWidth ?? 0 }}
+            css={dragPreviewStyles}
           />
         </div>
       </div>
     </div>
   );
 };
+
+const wrapperStyles = css({
+  position: 'fixed',
+  pointerEvents: 'none',
+  zIndex: 2000,
+  left: 0,
+  top: 0,
+  width: '100%',
+  height: '100%',
+});
+
+const innerStyles = css({
+  transform: 'rotate(1deg)',
+  transformOrigin: '0 0',
+});
+
+const dragPreviewStyles = css({
+  display: 'grid',
+  gridTemplateColumns: `64px 1fr ${slimBlockWidth}px 1fr 64px`,
+  width: cssVar('editorWidth'),
+});

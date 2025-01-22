@@ -2,7 +2,6 @@ export * from './tableActions';
 export * from './useDropColumn';
 export * from './useColumnDropDirection';
 export * from './useTableColumnHeaderOfTableAbove';
-export * from './useTableColumnCount';
 export * from './useCellAnchor';
 export * from './useCellSelected';
 export * from './useCellType';

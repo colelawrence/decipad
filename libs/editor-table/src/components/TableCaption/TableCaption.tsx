@@ -24,8 +24,6 @@ import {
   isElement,
 } from '@udecode/plate-common';
 import { useCallback } from 'react';
-import { WIDE_MIN_COL_COUNT } from '../../constants';
-import { useTableColumnCount } from '../../hooks';
 
 export const TableCaption: PlateComponent = ({
   element,
@@ -36,7 +34,6 @@ export const TableCaption: PlateComponent = ({
   const computer = useComputer();
 
   assertElementType(element, ELEMENT_TABLE_CAPTION);
-  const columnCount = useTableColumnCount(element);
   const editor = useMyEditorRef();
   const path = findNodePath(editor, element);
   const parent = getAboveNodeSafe<TableElement>(editor, {
@@ -100,9 +97,6 @@ export const TableCaption: PlateComponent = ({
     <div {...attributes}>
       <EditableTableCaption
         readOnly={readOnly}
-        isForWideTable={
-          (columnCount && columnCount >= WIDE_MIN_COL_COUNT) || false
-        }
         empty={getNodeString(element.children[0]).length === 0}
         onAddDataViewButtonPress={onAddDataViewButtonPress}
         onAddChartViewButtonPress={onAddChartViewButtonPress}

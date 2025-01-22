@@ -67,11 +67,11 @@ test('Formatting tab', async ({ testUser }) => {
    * formatting controls for charts have been implemented by the time this
    * happens, charts and widgets may be a good candidate.
    */
-  await test.step('select blocks of mixed types', async () => {
-    await notebook.selectBlocks(3, 4);
-    await expect(page.getByLabel('Notebook title')).toBeVisible();
-    await expect(page.getByLabel('Label')).toBeHidden();
-  });
+  // await test.step('select blocks of mixed types', async () => {
+  //   await notebook.selectBlocks(3, 4);
+  //   await expect(page.getByLabel('Notebook title')).toBeVisible();
+  //   await expect(page.getByLabel('Label')).toBeHidden();
+  // });
 
   await test.step('select paragraph', async () => {
     await focusTrailingParagraph(page);

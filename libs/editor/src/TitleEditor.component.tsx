@@ -47,9 +47,13 @@ export const TitleEditor: FC<TitleEditorProps> = ({
           const leaf = getLeaf(props);
           return (
             <EditorBlock
-              {...props.attributes}
+              slateAttributes={props.attributes}
               blockKind="title"
               data-testId="notebook-title"
+              isReadOnly={readOnly}
+              AddNewLine={null}
+              ContextualActions={null}
+              DragHandle={null}
             >
               <EditorTitle
                 placeholder={

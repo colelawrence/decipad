@@ -3,20 +3,21 @@ import { css } from '@emotion/react';
 import { Children, FC, ReactNode } from 'react';
 import { componentCssVars, cssVar, p12Medium } from '../../../primitives';
 import { MenuItem, MenuList, Tooltip } from '../../../shared';
-import { editorLayout } from '../../../styles';
 import { hideOnPrint } from '../../../styles/editor-layout';
+import { ConnectDragSource } from 'react-dnd';
 
 const gridStyles = css(hideOnPrint, {
-  display: 'grid',
-  gridTemplateAreas: `
-      ". plus handle"
-      "menu . ."
-    `,
-  gridTemplateRows: `
-      ${editorLayout.gutterHandleHeight()}
-      auto
-    `,
+  paddingRight: '16px',
+
+  display: 'flex',
   justifyContent: 'end',
+  alignItems: 'center',
+
+  '&[data-layout=true]': {
+    position: 'absolute',
+    top: '4px',
+    left: '4px',
+  },
 });
 
 const handleButtonStyle = css({
@@ -77,6 +78,8 @@ export interface BlockDragHandleProps {
   readonly insideLayout?: boolean;
   readonly onChangeMenuOpen: (newMenuOpen: boolean) => void;
 
+  readonly dragSource?: ConnectDragSource;
+
   /**
    * The primary button.
    */
@@ -88,6 +91,8 @@ export interface BlockDragHandleProps {
   readonly LeftButton: ReactNode;
 }
 
+export const DRAG_HANDLE_CLASS = 'drag-handle';
+
 // eslint-disable-next-line complexity
 export const BlockDragHandle = ({
   children,
@@ -95,9 +100,11 @@ export const BlockDragHandle = ({
 
   MainButton,
   LeftButton,
-  insideLayout = false,
+  insideLayout = true,
 
   onChangeMenuOpen = noop,
+
+  dragSource,
 }: BlockDragHandleProps): ReturnType<FC> => {
   const childrenArray = Children.toArray(children);
   assert(childrenArray.length > 0, 'Must have at least one child.');
@@ -118,7 +125,13 @@ export const BlockDragHandle = ({
    */
   if (menuOpen) {
     return (
-      <div css={gridStyles}>
+      <div
+        ref={dragSource}
+        css={gridStyles}
+        className={DRAG_HANDLE_CLASS}
+        contentEditable={false}
+        data-layout={insideLayout}
+      >
         {!insideLayout && <div css={eyeLabelStyles}>{LeftButton}</div>}
 
         <MenuList
@@ -131,6 +144,7 @@ export const BlockDragHandle = ({
               onClick={() => onChangeMenuOpen(!menuOpen)}
               css={handleStyle}
               tabIndex={-1}
+              data-layout={insideLayout}
             >
               {MainButton}
             </button>
@@ -148,7 +162,13 @@ export const BlockDragHandle = ({
     );
   } else {
     return (
-      <div css={gridStyles}>
+      <div
+        ref={dragSource}
+        css={gridStyles}
+        className={DRAG_HANDLE_CLASS}
+        contentEditable={false}
+        data-layout={insideLayout}
+      >
         {!insideLayout && <div css={eyeLabelStyles}>{LeftButton}</div>}
 
         <Tooltip

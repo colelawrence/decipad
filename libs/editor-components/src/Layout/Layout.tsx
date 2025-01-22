@@ -1,19 +1,7 @@
-import { ClientEventsContext } from '@decipad/client-events';
-import {
-  Children,
-  useCallback,
-  useContext,
-  useMemo,
-  useRef,
-  useState,
-} from 'react';
+import { Children, useCallback, useMemo, useRef, useState } from 'react';
 import { DraggableBlock } from '../block-management';
-import type { LayoutElement, PlateComponent } from '@decipad/editor-types';
-import {
-  ELEMENT_LAYOUT,
-  ELEMENT_PARAGRAPH,
-  useMyEditorRef,
-} from '@decipad/editor-types';
+import type { PlateComponent } from '@decipad/editor-types';
+import { ELEMENT_LAYOUT, useMyEditorRef } from '@decipad/editor-types';
 import { Layout as UILayout, layoutColumnGap, useMergedRef } from '@decipad/ui';
 import { LayoutColumn } from './LayoutColumn';
 import { useSelected } from 'slate-react';
@@ -26,10 +14,8 @@ import {
   setNodes,
   withoutNormalizing,
 } from '@udecode/plate-common';
-import { insertNodes, minColumnWidth } from '@decipad/editor-utils';
+import { minColumnWidth } from '@decipad/editor-utils';
 import { useElementWidth } from '@decipad/react-utils';
-import { nanoid } from 'nanoid';
-import { Add, FullWidthLayout, DefaultWidthLayout } from 'libs/ui/src/icons';
 
 const useStableGetter = <T,>(value: T) => {
   const ref = useRef(value);
@@ -127,60 +113,6 @@ export const Layout: PlateComponent = ({ attributes, children, element }) => {
     setWidthOverrides([]);
   };
 
-  const addColumn = () => {
-    const path = findNodePath(editor, element);
-    if (!path) return;
-
-    const newColumnPath = [...path, element.children.length];
-
-    insertNodes(
-      editor,
-      [
-        {
-          type: ELEMENT_PARAGRAPH,
-          id: nanoid(),
-          children: [{ text: '' }],
-        },
-      ],
-      {
-        at: newColumnPath,
-      }
-    );
-  };
-
-  const event = useContext(ClientEventsContext);
-
-  const toggleWidth = () => {
-    const path = findNodePath(editor, element);
-    if (!path) return;
-
-    setNodes(
-      editor,
-      {
-        width: (
-          {
-            full: 'default',
-            default: 'full',
-          } as const
-        )[element.width ?? 'default'],
-      } satisfies Partial<LayoutElement>,
-      {
-        at: path,
-      }
-    );
-
-    event({
-      segmentEvent: {
-        type: 'action',
-        action: 'Toggle Width Button Clicked',
-        props: {
-          analytics_source: 'frontend',
-          button_location: 'shortcut button',
-        },
-      },
-    });
-  };
-
   const ref = useMergedRef(layoutRef, availableWidthRef);
 
   return (
@@ -189,28 +121,6 @@ export const Layout: PlateComponent = ({ attributes, children, element }) => {
       element={element}
       fullWidth={element.width === 'full'}
       layoutDirection={hasSufficientWidth ? 'columns' : 'rows'}
-      contextualActions={
-        readOnly
-          ? []
-          : [
-              {
-                id: 'add-column',
-                icon: <Add />,
-                onClick: addColumn,
-              },
-              {
-                id: 'toggle-width',
-                icon:
-                  element.width === 'full' ? (
-                    <DefaultWidthLayout />
-                  ) : (
-                    <FullWidthLayout />
-                  ),
-                onClick: toggleWidth,
-              },
-            ]
-      }
-      isCommentable={false}
       slateAttributes={attributes}
     >
       <InsideLayoutContext.Provider value={true}>

@@ -1,5 +1,5 @@
 /* eslint decipad/css-prop-named-variable: 0 */
-import { FC, ReactNode, useRef, useState } from 'react';
+import { FC, ReactNode, useState } from 'react';
 import { css } from '@emotion/react';
 import {
   componentCssVars,
@@ -20,6 +20,12 @@ export type LayoutColumnBorderMode = 'always' | 'hover' | 'never';
 
 const itemStyles = css({
   position: 'relative',
+
+  '> div:nth-of-type(1)': {
+    display: 'grid',
+    gridTemplateColumns: 'auto',
+  },
+
   border: 'solid 1px transparent',
   borderRadius: '0.5rem',
 });
@@ -46,14 +52,6 @@ const dragOverStyles = css({
    * with box-sizing: border-box.
    */
   boxShadow: `0 0 0 2px ${componentCssVars('DropLineColor')}`,
-});
-
-const dropTargetStyles = css({
-  position: 'absolute',
-  top: 0,
-  left: 0,
-  bottom: 0,
-  right: 0,
 });
 
 const resizeHandleWrapperStyles = css({
@@ -121,7 +119,6 @@ export const LayoutColumn: FC<LayoutColumnProps> = ({
 }) => {
   const [darkTheme] = useThemeFromStore();
   const { Catskill, Malibu } = swatchesThemed(darkTheme);
-  const ref = useRef<HTMLLIElement>(null);
   const [isResizing, setIsResizing] = useState(false);
 
   const draggingStyles = isDragOver
@@ -166,9 +163,14 @@ export const LayoutColumn: FC<LayoutColumnProps> = ({
     );
   };
 
+  /**
+   * We have to only apply the `connectDropTarget` when we are `isDragging`,
+   * this is because LI will block drag events when certain nested parts
+   * are hovered over.
+   */
   return (
     <li
-      ref={ref}
+      ref={isDragging ? connectDropTarget : null}
       css={[
         itemStyles,
         borderStyles(borderMode),
@@ -182,21 +184,6 @@ export const LayoutColumn: FC<LayoutColumnProps> = ({
       }}
     >
       {children}
-
-      {isDragging && (
-        /**
-         * Attaching the drop target to the LI doesn't work, since the negative
-         * margin used by the DraggableBlock inside the LI causes the LI to
-         * receive pointer events when the cursor is in the gap to the left
-         * of a column. Attach it to an absolutely positioned child of the LI
-         * instead.
-         */
-        <div
-          ref={connectDropTarget}
-          css={dropTargetStyles}
-          contentEditable={false}
-        />
-      )}
 
       {resizable && (
         <div

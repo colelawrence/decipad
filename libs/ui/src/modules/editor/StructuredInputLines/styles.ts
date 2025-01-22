@@ -24,6 +24,7 @@ export const borderStyles = (pos: 'top' | 'bot') =>
     left: 0,
     right: 0,
     borderTop: `1px solid ${cssVar('borderSubdued')}`,
+    zIndex: 2,
   });
 
 export const borderTopStyles = borderStyles('top');

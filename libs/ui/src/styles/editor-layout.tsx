@@ -25,13 +25,6 @@ export const hideOnPrint = css({
   },
 });
 
-export const integrationBlockStyles = css({
-  width: '100%',
-  display: 'flex',
-  flexDirection: 'column',
-  gap: '8px',
-});
-
 export const fullWidthLayout = css({
   position: 'relative',
   marginLeft: '-30px',

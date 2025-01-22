@@ -4,6 +4,7 @@ import { FC, ReactNode } from 'react';
 import { cssVar } from '../../../primitives';
 
 const formulasDrawerStyles = css({
+  gridColumn: '3 / span 1',
   border: `1px solid ${cssVar('borderDefault')}`,
   borderRadius: '8px',
   margin: '8px 0',
@@ -28,10 +29,8 @@ export const FormulasDrawer = ({
   readOnly = false,
 }: FormulasDrawerProps): ReturnType<FC> => {
   return (
-    <div>
-      <section css={formulasDrawerStyles} spellCheck={false}>
-        <pre contentEditable={!readOnly}>{children}</pre>
-      </section>
-    </div>
+    <section css={formulasDrawerStyles} spellCheck={false}>
+      <pre contentEditable={!readOnly}>{children}</pre>
+    </section>
   );
 };

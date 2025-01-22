@@ -3,10 +3,8 @@ import { UserIconKey } from '@decipad/editor-types';
 import {
   useDndPreviewSelectors,
   useEditorStylesContext,
-  useIsEditorReadOnly,
 } from '@decipad/react-contexts';
 import { noop } from '@decipad/utils';
-import { css } from '@emotion/react';
 import {
   PlateEditor,
   TElement,
@@ -23,33 +21,70 @@ import { Children, FC, ReactNode, useCallback, useMemo, useState } from 'react';
 import { ConnectDropTarget } from 'react-dnd';
 import { Point } from 'slate';
 import { Add } from '../../../icons';
-import { cssVar } from '../../../primitives';
+import { cssVar, gridShiftScreenQuery } from '../../../primitives';
 import { AddTableRowButton } from '../../../shared';
-import { table } from '../../../styles';
 import { AvailableSwatchColor, TableStyleContext } from '../../../utils';
 import { useEventNoEffect } from '../../../utils/useEventNoEffect';
 import { Table, TableWidth } from '../Table/Table';
+import { slimBlockWidth } from 'libs/ui/src/styles/editor-layout';
+import { noTrackScrollbarStyles } from 'libs/ui/src/styles/scrollbars';
+import { css } from '@emotion/react';
 
-const wrapperStyles = css({
-  margin: '0',
+const widthPadding = `calc((${slimBlockWidth}px - ${cssVar(
+  'editorWidth'
+)}) / -2)`;
+
+const tableWrapperStyles = css(noTrackScrollbarStyles, {
+  display: 'flex',
+  overflowX: 'auto',
+  paddingLeft: widthPadding,
+  paddingRight: '16px',
+
+  order: 3,
+
+  gridColumn: 'span 5',
+  [gridShiftScreenQuery]: {
+    gridColumn: '1 / span 3',
+  },
+
+  // Sibling selector.
+  // Set the visibility of the "Add Column" to hidden until we hover.
+  //
+  // This way, we don't need any extra JS or prop drilling to hide them,
+  // and show them on hover.
+  'table + button': {
+    visibility: 'hidden',
+  },
+
+  // Selector for the "Add Row" button, which also gets hidden,
+  // and shows on hover.
+  'table > tfoot > tr > th:nth-of-type(2)': {
+    visibility: 'hidden',
+  },
+
+  ':hover': {
+    'table + button': {
+      visibility: 'visible',
+    },
+    'table > tfoot > tr > th:nth-of-type(2)': {
+      visibility: 'visible',
+    },
+  },
 });
 
-const tableAddColumnButtonStyles = css({
-  width: '32px',
+const captionWrapperStyles = css({
+  gridColumn: '3 / span 1',
+  [gridShiftScreenQuery]: {
+    gridColumn: '2 / span 1',
+  },
+});
+
+const buttonWrapperStyles = css({
   backgroundColor: cssVar('backgroundDefault'),
   borderRadius: '8px',
-  padding: '8px',
-  position: 'absolute',
-  top: 0,
-  bottom: 0,
-  visibility: 'hidden',
+  padding: '4px',
+  flex: '0 0 32px',
 });
-
-const mouseOverAddColumnButtonStyles = css({
-  visibility: 'unset',
-});
-
-const toggleTableStyles = css({ height: 'initial', overflow: 'auto' });
 
 export interface EditorTableProps {
   readonly id?: string;
@@ -63,7 +98,7 @@ export interface EditorTableProps {
 
   readonly children?: ReactNode;
   readonly dropRef?: ConnectDropTarget;
-  readonly onAddRow?: () => void;
+  readonly onAddRow: () => void;
   readonly onAddColumn?: () => void;
   readonly previewMode?: boolean;
   readonly tableWidth?: TableWidth;
@@ -161,7 +196,6 @@ export const EditorTable: FC<EditorTableProps> = ({
   const editor = useEditorRef();
   const element = useElement();
   const { color: defaultColor } = useEditorStylesContext();
-  const readOnly = useIsEditorReadOnly();
 
   const tableStyleContextValue = useMemo(
     () => ({
@@ -191,11 +225,7 @@ export const EditorTable: FC<EditorTableProps> = ({
     ]
   );
 
-  const [mouseOver, setMouseOver] = useState(false);
   const [mouseDown, setMouseDown] = useState(false);
-
-  const onMouseEnter = useCallback(() => setMouseOver(true), []);
-  const onMouseLeave = useCallback(() => setMouseOver(false), []);
 
   const onMouseDown = useCallback(
     (event: React.MouseEvent) => {
@@ -264,79 +294,42 @@ export const EditorTable: FC<EditorTableProps> = ({
 
   const onAddColumnClick = useEventNoEffect(onAddColumn);
 
-  const draggingId = useDndPreviewSelectors().draggingId();
-
-  const isDragging = draggingId === id;
-
   return (
     <TableStyleContext.Provider value={tableStyleContextValue}>
-      <div id={id} className={'block-table'} css={wrapperStyles}>
-        <div>
-          {!previewMode && (
-            <div css={table.smartRowHorizontalPadding}>{caption}</div>
-          )}
-
-          {!isCollapsed && (
-            <div
-              css={[
-                toggleTableStyles,
-                !isDragging
-                  ? table.tableWrapperTransformStyles
-                  : table.tableWrapperDraggingStyles,
-                table.tableWrapperDefaultStyles,
-              ]}
-              onMouseDown={onMouseDown}
-              onMouseMove={onMouseMove}
-              onClick={onClick}
-            >
-              {!isDragging && (
-                <div css={table.tableOverflowStyles} contentEditable={false} />
-              )}
-              <div css={table.tableScroll} contentEditable={!readOnly}>
-                <Table
-                  isReadOnly={false}
-                  dropRef={dropRef}
-                  tableWidth={tableWidth}
-                  isSelectingCell={isSelectingCell}
-                  head={thead}
-                  body={tbody}
-                  previewMode={previewMode}
-                  addTable={
-                    <AddTableRowButton
-                      mouseOver={mouseOver}
-                      onAddRow={onAddRow}
-                    />
-                  }
-                  smartRow={smartRow}
-                  onMouseOver={setMouseOver}
-                ></Table>
-              </div>
-
-              <div
-                css={table.tableAddColumnButtonWrapperStyles}
-                contentEditable={false}
-                onMouseEnter={onMouseEnter}
-                onMouseLeave={onMouseLeave}
-              >
-                <button
-                  onClick={onAddColumnClick}
-                  css={[
-                    tableAddColumnButtonStyles,
-                    mouseOver && mouseOverAddColumnButtonStyles,
-                    // this is deliberately coded like this
-                    // to prevent a unfixable rogue cursor from slate
-                    // that otherwise would render
-                    (previewMode || readOnly) && { visibility: 'hidden' },
-                  ]}
-                  title="Add Column"
-                >
-                  <Add />
-                </button>
-              </div>
-            </div>
-          )}
+      {!previewMode && (
+        <div css={captionWrapperStyles} id={id}>
+          {caption}
         </div>
-      </div>
+      )}
+
+      {!isCollapsed && (
+        <div
+          id={id}
+          css={tableWrapperStyles}
+          onMouseDown={onMouseDown}
+          onMouseMove={onMouseMove}
+          onClick={onClick}
+        >
+          <Table
+            isReadOnly={false}
+            dropRef={dropRef}
+            tableWidth={tableWidth}
+            isSelectingCell={isSelectingCell}
+            head={thead}
+            body={tbody}
+            previewMode={previewMode}
+            addTable={<AddTableRowButton onAddRow={onAddRow} />}
+            smartRow={smartRow}
+          />
+          <button
+            onClick={onAddColumnClick}
+            css={buttonWrapperStyles}
+            title="Add Column"
+          >
+            <Add />
+          </button>
+        </div>
+      )}
     </TableStyleContext.Provider>
   );
 };

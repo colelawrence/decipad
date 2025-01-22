@@ -1,19 +1,8 @@
 /* eslint decipad/css-prop-named-variable: 0 */
-import {
-  IframeEmbedElement,
-  MyElement,
-  PlateComponent,
-} from '@decipad/editor-types';
 import { css } from '@emotion/react';
 import styled from '@emotion/styled';
 import { sanitizeInput } from 'libs/ui/src/utils';
-import { ComponentProps, FC, ReactNode } from 'react';
-import { DraggableBlock } from '../DraggableBlock/DraggableBlock';
-import { DragHandle } from 'libs/ui/src/icons';
-
-const draggableStyles = css({
-  paddingTop: 8,
-});
+import { FC, ReactNode } from 'react';
 
 export const iframeStyles = css({
   display: 'block',
@@ -27,44 +16,26 @@ export const iframeStyles = css({
   border: 0,
 });
 
-type IframeEmbedComponent = PlateComponent<{
-  draggableBlock: FC<
-    ComponentProps<typeof DraggableBlock> & {
-      readonly element: MyElement;
-      readonly children: ReactNode;
-    }
-  >;
-  onDrop?: any;
-}>;
+type IframeEmbedComponent = {
+  children: ReactNode;
+  url: string;
+};
 
-export const IframeEmbed: IframeEmbedComponent = ({
-  draggableBlock: Draggable,
-  ...props
-}) => {
-  const { children, element } = props;
-  const { url } = element as IframeEmbedElement;
-
+export const IframeEmbed: FC<IframeEmbedComponent> = ({ children, url }) => {
   const safeUrl = sanitizeInput({ input: url, isURL: true });
 
   return (
-    <Draggable
-      blockKind="media"
-      element={element as IframeEmbedElement}
-      draggableCss={draggableStyles}
-      DragHandle={<DragHandle />}
-    >
-      <IFrameContainerDiv>
-        <ResponsiveIFrame
-          title="decipad-embed"
-          src={safeUrl}
-          allow="fullscreen"
-          allowFullScreen
-          width="100%"
-          height="100%"
-        />
-        {children}
-      </IFrameContainerDiv>
-    </Draggable>
+    <IFrameContainerDiv>
+      <ResponsiveIFrame
+        title="decipad-embed"
+        src={safeUrl}
+        allow="fullscreen"
+        allowFullScreen
+        width="100%"
+        height="100%"
+      />
+      {children}
+    </IFrameContainerDiv>
   );
 };
 

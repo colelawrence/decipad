@@ -13,4 +13,5 @@ export * from './table';
 export * from './toVar';
 export * from './useDnd';
 export * from './validateItemAndGetFile';
+export * from './insertSameNodeType';
 export const catalogDebounceTimeMs = 1_000;

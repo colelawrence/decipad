@@ -1,6 +1,7 @@
-import { cssVar, p13Medium, p14Medium, table } from '@decipad/ui';
+import { cssVar, p13Medium, p14Medium } from '@decipad/ui';
 import { css } from '@emotion/react';
 import styled from '@emotion/styled';
+import { slimBlockWidth } from 'libs/ui/src/styles/editor-layout';
 import { noTrackScrollbarStyles } from 'libs/ui/src/styles/scrollbars';
 
 const borderStyles = css({
@@ -121,19 +122,20 @@ const buttonHoverStyles = css({
   },
 });
 
-export const TableWrapper = styled.div<{ fullWidth?: boolean }>(
+// TODO: add this to a common place.
+const widthPadding = `calc((${slimBlockWidth}px - ${cssVar(
+  'editorWidth'
+)}) / -2)`;
+
+export const TableWrapper = styled.div(
   noTrackScrollbarStyles,
   buttonHoverStyles,
-  (props) => (props.fullWidth ? table.fullWidthStyles : {}),
   {
-    // Very cursed. When you have the sidebar open you couldn't see the scrollbar.
-    // But like this you do (but the incorrect one).
-    //
-    // It's a bit borked, but this glue will hold it together for the time being.
-    width: `calc(${cssVar('editorWidth')} - 5px)`,
     display: 'flex',
     gap: '8px',
-    left: '32px',
+    overflowX: 'auto',
+    paddingLeft: widthPadding,
+    paddingRight: '16px',
   }
 );
 

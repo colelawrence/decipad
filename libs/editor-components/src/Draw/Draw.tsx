@@ -11,7 +11,6 @@ import cloneDeep from 'lodash/cloneDeep';
 import type { MutableRefObject } from 'react';
 import { useCallback, useRef, useState } from 'react';
 import type { ExcalidrawRef as TExcalidrawRef } from '@decipad/editor-components';
-import { DraggableBlock } from '../block-management';
 import { dequal } from '@decipad/utils';
 import { unfixElements } from './fixElement';
 import type { ExcalidrawImperativeAPI, ExcalidrawRef } from './types';
@@ -61,7 +60,6 @@ export const Draw: PlateComponent = ({ element, attributes, className }) => {
     <UIDraw
       className={className}
       excalidrawRef={excalidrawRef as TExcalidrawRef}
-      draggableBlock={DraggableBlock}
       readOnly={readOnly}
       elements={cloneDeep(previousElements.current)}
       onChange={onUserChange}

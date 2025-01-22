@@ -13,6 +13,6 @@ export default {
 export const Normal: StoryFn<Args> = () => (
   <>
     <p>Hover under me</p>
-    <NewElementLine onAdd={noop} show={true} />
+    <NewElementLine onAdd={noop} />
   </>
 );

@@ -10,7 +10,6 @@ import {
   Tooltip,
   VariableTypeMenu,
   getTypeIcon,
-  table as tableStyles,
 } from '@decipad/ui';
 import { FC, memo, useEffect, useMemo, useRef, useState } from 'react';
 import { StyledFooter, StyledInput, StyledTable, TableWrapper } from './styles';
@@ -43,8 +42,6 @@ type CommonTableProps = {
   onDeleteFormula: (formulaIndex: number) => void;
 
   isReadOnly: boolean;
-
-  fullWidth?: boolean;
 };
 
 export type ConnectionTableProps =
@@ -323,8 +320,7 @@ const UnmemoedConnectionTable: FC<ConnectionTableProps> = (props) => {
   }
 
   return (
-    <TableWrapper fullWidth={props.fullWidth}>
-      {props.fullWidth && <div css={tableStyles.tableOverflowStyles} />}
+    <TableWrapper>
       <StyledTable contentEditable={false}>
         <TableHeader {...props} />
         <tbody>

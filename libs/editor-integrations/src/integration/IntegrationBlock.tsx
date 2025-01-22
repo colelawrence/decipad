@@ -1,6 +1,5 @@
 import {
   getNodeString,
-  getPreviousNode,
   insertNodes,
   removeNodes,
   setNodes,
@@ -17,7 +16,6 @@ import {
 import { useComputer, useNodePath } from '@decipad/editor-hooks';
 import type {
   MarkType,
-  MyElement,
   PlateComponent,
   TableColumnFormulaElement,
 } from '@decipad/editor-types';
@@ -27,7 +25,7 @@ import {
   ImportElementSourcePretty,
   useMyEditorRef,
 } from '@decipad/editor-types';
-import { assertElementType, isStructuredElement } from '@decipad/editor-utils';
+import { assertElementType } from '@decipad/editor-utils';
 import {
   useIsEditorReadOnly,
   useNotebookMetaData,
@@ -65,7 +63,6 @@ export const IntegrationBlock: PlateComponent = ({
 
   const editor = useMyEditorRef();
   const path = useNodePath(element);
-  const prevElement = getPreviousNode<MyElement>(editor, { at: path });
   const computer = useComputer();
   const readOnly = useIsEditorReadOnly();
 
@@ -223,8 +220,7 @@ export const IntegrationBlock: PlateComponent = ({
   return (
     <DraggableBlock
       element={element}
-      blockKind="live"
-      hasPreviousSibling={isStructuredElement(prevElement?.[0])}
+      blockKind="editorTable"
       slateAttributes={attributes}
     >
       <UIIntegrationBlock
@@ -285,7 +281,6 @@ export const IntegrationBlock: PlateComponent = ({
               formulaColumns={columnFormulas}
               onChangeFormulaName={renameFormula}
               onDeleteFormula={deleteFormula}
-              fullWidth
               isReadOnly={readOnly}
             />
           ) : (

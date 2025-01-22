@@ -10,7 +10,6 @@ import {
 } from '@decipad/editor-hooks';
 import type {
   CodeLineV2Element,
-  MyElement,
   PlateComponent,
   StructuredVarnameElement,
 } from '@decipad/editor-types';
@@ -21,11 +20,7 @@ import {
   ELEMENT_STRUCTURED_VARNAME,
   useMyEditorRef,
 } from '@decipad/editor-types';
-import {
-  assertElementType,
-  getCodeLineSource,
-  isStructuredElement,
-} from '@decipad/editor-utils';
+import { assertElementType, getCodeLineSource } from '@decipad/editor-utils';
 import {
   useInsideLayoutContext,
   useIsEditorReadOnly,
@@ -47,7 +42,6 @@ import { css } from '@emotion/react';
 import {
   findNodePath,
   getNodeString,
-  getPreviousNode,
   insertText,
   isElement,
   useElement,
@@ -140,8 +134,6 @@ export const CodeLineV2: PlateComponent = ({
   }
 
   const path = findNodePath(editor, element);
-  const prevElement = getPreviousNode<MyElement>(editor, { at: path });
-
   const setShowResult = usePathMutatorCallback<CodeLineV2Element, 'showResult'>(
     editor,
     path,
@@ -171,8 +163,6 @@ export const CodeLineV2: PlateComponent = ({
       blockKind="structured"
       element={element}
       slateAttributes={attributes}
-      isCentered={true}
-      hasPreviousSibling={isStructuredElement(prevElement?.[0])}
     >
       <CodeLineStructured
         highlight={selected}
