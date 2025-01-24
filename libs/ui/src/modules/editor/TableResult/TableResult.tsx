@@ -21,7 +21,6 @@ import { tableControlWidth } from '../../../styles/table';
 import { CodeResultProps } from '../../../types';
 import { isTabularType, toTableHeaderType } from '../../../utils';
 import { TableResultCell } from './TableResultCell';
-import { table } from 'libs/ui/src/styles';
 
 const MAX_ROWS_PER_PAGE = 10;
 
@@ -133,7 +132,6 @@ export const TableResult: FC<TableResultProps> = ({
     <div
       css={
         !isResultPreview && [
-          isLiveResult && table.tableWrapperStyles,
           isLiveResult && liveTableWrapperStyles,
           deciOverflowStyles, // cause of nested tables
         ]
@@ -141,10 +139,7 @@ export const TableResult: FC<TableResultProps> = ({
     >
       {!isResultPreview && (
         <div
-          css={[
-            isLiveResult && table.tableOverflowStyles,
-            isLiveResult && liveTableOverflowStyles,
-          ]}
+          css={[isLiveResult && liveTableOverflowStyles]}
           contentEditable={false}
         />
       )}

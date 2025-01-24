@@ -26,51 +26,43 @@ import { AddTableRowButton } from '../../../shared';
 import { AvailableSwatchColor, TableStyleContext } from '../../../utils';
 import { useEventNoEffect } from '../../../utils/useEventNoEffect';
 import { Table, TableWidth } from '../Table/Table';
-import { slimBlockWidth } from 'libs/ui/src/styles/editor-layout';
 import { noTrackScrollbarStyles } from 'libs/ui/src/styles/scrollbars';
 import { css } from '@emotion/react';
+import { fullWidthHorizontalScrollable } from 'libs/ui/src/styles/table';
 
-const widthPadding = `calc((${slimBlockWidth}px - ${cssVar(
-  'editorWidth'
-)}) / -2)`;
+const tableWrapperStyles = css(
+  noTrackScrollbarStyles,
+  fullWidthHorizontalScrollable,
+  {
+    display: 'flex',
+    overflowX: 'auto',
+    paddingRight: '16px',
 
-const tableWrapperStyles = css(noTrackScrollbarStyles, {
-  display: 'flex',
-  overflowX: 'auto',
-  paddingLeft: widthPadding,
-  paddingRight: '16px',
-
-  order: 3,
-
-  gridColumn: 'span 5',
-  [gridShiftScreenQuery]: {
-    gridColumn: '1 / span 3',
-  },
-
-  // Sibling selector.
-  // Set the visibility of the "Add Column" to hidden until we hover.
-  //
-  // This way, we don't need any extra JS or prop drilling to hide them,
-  // and show them on hover.
-  'table + button': {
-    visibility: 'hidden',
-  },
-
-  // Selector for the "Add Row" button, which also gets hidden,
-  // and shows on hover.
-  'table > tfoot > tr > th:nth-of-type(2)': {
-    visibility: 'hidden',
-  },
-
-  ':hover': {
+    // Sibling selector.
+    // Set the visibility of the "Add Column" to hidden until we hover.
+    //
+    // This way, we don't need any extra JS or prop drilling to hide them,
+    // and show them on hover.
     'table + button': {
-      visibility: 'visible',
+      visibility: 'hidden',
     },
+
+    // Selector for the "Add Row" button, which also gets hidden,
+    // and shows on hover.
     'table > tfoot > tr > th:nth-of-type(2)': {
-      visibility: 'visible',
+      visibility: 'hidden',
     },
-  },
-});
+
+    ':hover': {
+      'table + button': {
+        visibility: 'visible',
+      },
+      'table > tfoot > tr > th:nth-of-type(2)': {
+        visibility: 'visible',
+      },
+    },
+  }
+);
 
 const captionWrapperStyles = css({
   gridColumn: '3 / span 1',

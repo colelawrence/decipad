@@ -19,7 +19,6 @@ type TableCellProps = {
  */
 
 export const TableSimple = styled.table`
-  width: 100%;
   border-collapse: separate; // Required for border-radius to work.
 `;
 

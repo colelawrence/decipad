@@ -31,13 +31,9 @@ import {
   useDataView,
   useDataViewLayoutData,
 } from 'libs/editor-components/src/DataView/hooks';
-
 import {
-  dataViewTableWrapperStyles,
-  dataViewTableOverflowStyles,
   rightAddColumnWrapper,
   rightAddColumnWhenEmpty,
-  tableScroll,
   addNumericRowButtonStyles,
   stickyWrapper,
 } from './time-series-styles';
@@ -45,6 +41,7 @@ import { TimeSeriesHead } from './TimeSeriesHead';
 import { TimeSeriesBody } from './TimeSeriesBody';
 import { formatError } from '@decipad/format';
 import { useTimeSeriesData } from './useTimeSeriesData';
+import { fullWidthHorizontalScrollable } from 'libs/ui/src/styles/table';
 
 export const TimeSeries: PlateComponent<{ variableName: string }> = ({
   attributes,
@@ -174,7 +171,7 @@ export const TimeSeries: PlateComponent<{ variableName: string }> = ({
           color={color}
           caption={caption}
         />
-        <div contentEditable={false}>
+        <div css={fullWidthHorizontalScrollable} contentEditable={false}>
           <div style={{ display: 'none' }}>{thead}</div>
 
           {error && (
@@ -199,47 +196,41 @@ export const TimeSeries: PlateComponent<{ variableName: string }> = ({
           {
             <>
               <div css={stickyWrapper}>
-                <div css={dataViewTableWrapperStyles}>
-                  <div css={dataViewTableOverflowStyles} />
-
-                  <div css={tableScroll}>
-                    {showTable && (
-                      <TableSimple style={{ opacity: computing ? 0.5 : 1 }}>
-                        <TimeSeriesHead
-                          categoricalColumns={categoricalColumns}
-                          numericalColumns={numericalColumns}
-                          path={path}
-                          groups={groups}
-                          element={element}
-                        />
-
-                        <TimeSeriesBody
-                          uniqueFirstCategorical={uniqueFirstCategorical}
-                          numericalColumns={numericalColumns}
-                          categoricalColumns={categoricalColumns}
-                          path={path}
-                          groups={groups}
-                          element={element}
-                        />
-                      </TableSimple>
-                    )}
-                  </div>
-                </div>
-
-                {showAddColumn && (
-                  <div
-                    css={[
-                      rightAddColumnWrapper,
-                      showTable ? undefined : rightAddColumnWhenEmpty,
-                    ]}
-                  >
-                    <DataViewMenu
-                      availableColumns={availableCategoricalColumns}
-                      onInsertColumn={onInsertColumn}
+                {showTable && (
+                  <TableSimple style={{ opacity: computing ? 0.5 : 1 }}>
+                    <TimeSeriesHead
+                      categoricalColumns={categoricalColumns}
+                      numericalColumns={numericalColumns}
+                      path={path}
+                      groups={groups}
+                      element={element}
                     />
-                  </div>
+
+                    <TimeSeriesBody
+                      uniqueFirstCategorical={uniqueFirstCategorical}
+                      numericalColumns={numericalColumns}
+                      categoricalColumns={categoricalColumns}
+                      path={path}
+                      groups={groups}
+                      element={element}
+                    />
+                  </TableSimple>
                 )}
               </div>
+
+              {showAddColumn && (
+                <div
+                  css={[
+                    rightAddColumnWrapper,
+                    showTable ? undefined : rightAddColumnWhenEmpty,
+                  ]}
+                >
+                  <DataViewMenu
+                    availableColumns={availableCategoricalColumns}
+                    onInsertColumn={onInsertColumn}
+                  />
+                </div>
+              )}
 
               {!readOnly && !computing && hasSourceTable && (
                 <div style={{ paddingTop: 16 }}>

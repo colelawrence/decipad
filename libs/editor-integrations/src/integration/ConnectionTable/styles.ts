@@ -1,8 +1,8 @@
 import { cssVar, p13Medium, p14Medium } from '@decipad/ui';
 import { css } from '@emotion/react';
 import styled from '@emotion/styled';
-import { slimBlockWidth } from 'libs/ui/src/styles/editor-layout';
 import { noTrackScrollbarStyles } from 'libs/ui/src/styles/scrollbars';
+import { leftPadding } from 'libs/ui/src/styles/table';
 
 const borderStyles = css({
   borderRadius: 8,
@@ -122,11 +122,6 @@ const buttonHoverStyles = css({
   },
 });
 
-// TODO: add this to a common place.
-const widthPadding = `calc((${slimBlockWidth}px - ${cssVar(
-  'editorWidth'
-)}) / -2)`;
-
 export const TableWrapper = styled.div(
   noTrackScrollbarStyles,
   buttonHoverStyles,
@@ -134,7 +129,7 @@ export const TableWrapper = styled.div(
     display: 'flex',
     gap: '8px',
     overflowX: 'auto',
-    paddingLeft: widthPadding,
+    paddingLeft: leftPadding,
     paddingRight: '16px',
   }
 );

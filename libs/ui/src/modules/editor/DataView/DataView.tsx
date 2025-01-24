@@ -5,29 +5,26 @@ import type { AutocompleteName } from '@decipad/language-interfaces';
 import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
 import { Invisible, Loading, SegmentButtons } from '../../../shared';
-import { slimBlockWidth } from 'libs/ui/src/styles/editor-layout';
 import { Children, FC, ReactNode } from 'react';
 import { Move, Transpose } from '../../../icons';
 import * as userIcons from '../../../icons/user-icons';
-import { cssVar, p14Regular } from '../../../primitives';
+import { p14Regular } from '../../../primitives';
 import { IconPopover, TableToolbar } from '../../../shared/molecules';
 import { AvailableSwatchColor, TableStyleContext } from '../../../utils';
 import { VariableNameSelector } from '../VariableNameSelector/VariableNameSelector';
 import { noTrackScrollbarStyles } from 'libs/ui/src/styles/scrollbars';
+import { fullWidthHorizontalScrollable } from 'libs/ui/src/styles/table';
 
-const widthPadding = `calc((${slimBlockWidth}px - ${cssVar(
-  'editorWidth'
-)}) / -2)`;
-
-const tableWrapper = css(noTrackScrollbarStyles, {
-  gridRow: '4',
-  gridColumn: '1 / span 5',
-  overflowX: 'auto',
-  display: 'flex',
-  gap: '4px',
-
-  paddingLeft: widthPadding,
-});
+const tableWrapper = css(
+  noTrackScrollbarStyles,
+  fullWidthHorizontalScrollable,
+  {
+    gridRow: '4',
+    overflowX: 'auto',
+    display: 'flex',
+    gap: '4px',
+  }
+);
 
 const dataViewTableStyles = css(p14Regular, {
   tableLayout: 'auto',
