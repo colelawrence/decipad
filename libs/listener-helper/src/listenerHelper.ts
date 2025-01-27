@@ -28,7 +28,8 @@ export function listenerHelper<
     SubjectContents,
     MoreArgs,
     Ret
-  > = identity as unknown as Select<SubjectContents, MoreArgs, Ret>
+  > = identity as unknown as Select<SubjectContents, MoreArgs, Ret>,
+  equality: (prev: Ret, cur: Ret) => boolean = dequal
 ): ListenerHelper<MoreArgs, Ret> {
   const rootSubscribe = (args: MoreArgs) => (callback: () => void) => {
     const sub = getSubject(subject, args).subscribe(callback);
@@ -52,7 +53,7 @@ export function listenerHelper<
   const observe = (...a: MoreArgs) =>
     getSubject(subject, a).pipe(
       map((item) => select(item, ...a)),
-      distinctUntilChanged((cur, next) => dequal(cur, next))
+      distinctUntilChanged((cur, next) => equality(cur, next))
     );
 
   const observeWithSelector = <T>(

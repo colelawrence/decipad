@@ -12,8 +12,8 @@ import type { Computer } from '..';
 import { defaultComputerResults } from '../computer/defaultComputerResults';
 import type { BlockResultObservableStream, BlockResultStream } from './types';
 import { defaultBlockResults } from './defaultBlockResults';
-import { areBlockResultsEqual } from '../utils/areBlockResultsEqual';
 import { dequal } from '@decipad/utils';
+import { areBlockResultsEqual } from '@decipad/computer-utils';
 
 export class ResultStreams {
   global: NotebookResultStream = new BehaviorSubject(defaultComputerResults);

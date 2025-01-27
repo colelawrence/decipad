@@ -82,6 +82,7 @@ import {
   isTableResult,
   isColumn,
   pushExternalData,
+  areBlockResultsEqual,
 } from '@decipad/computer-utils';
 import zip from 'lodash.zip';
 import {
@@ -469,7 +470,8 @@ export class Computer implements ComputerInterface {
       _blockId?: string | null
     ): Readonly<IdentifiedError> | Readonly<IdentifiedResult> | undefined => {
       return result;
-    }
+    },
+    areBlockResultsEqual
   );
 
   getVarBlockId$ = listenerHelper(this.results, (_, varName: string) =>
@@ -490,7 +492,8 @@ export class Computer implements ComputerInterface {
     },
     (result): IdentifiedError | IdentifiedResult | undefined => {
       return result;
-    }
+    },
+    areBlockResultsEqual
   );
 
   getAllColumnsIndexedBy$ = listenerHelper(

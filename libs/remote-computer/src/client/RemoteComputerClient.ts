@@ -64,7 +64,11 @@ import { PROTOCOL_VERSION } from '../constants';
 import { deserializeType } from '@decipad/language';
 import { linearizeType } from 'libs/language-types/src/Dimension';
 import zip from 'lodash.zip';
-import { getDeepLengths, isColumn } from '@decipad/computer-utils';
+import {
+  areBlockResultsEqual,
+  getDeepLengths,
+  isColumn,
+} from '@decipad/computer-utils';
 import { resultsWithCachedIndicator } from '../utils/resultsWithCachedIndicator';
 
 const testing = !!(process.env.VITEST_WORKER_ID ?? process.env.VITEST);
@@ -445,7 +449,8 @@ export const createRemoteComputerClientFromWorker = (
 
     getBlockIdResult$ = listenerHelper(
       this.results,
-      (results, blockId: string) => results.blockResults[blockId]
+      (results, blockId: string) => results.blockResults[blockId],
+      areBlockResultsEqual
     );
 
     getVarResult(varName: string) {
@@ -453,10 +458,14 @@ export const createRemoteComputerClientFromWorker = (
       return blockId ? this.getBlockIdResult(blockId) : undefined;
     }
 
-    getVarResult$ = listenerHelper(this.results, (results, varName: string) => {
-      const blockId = this.getVarBlockId(varName);
-      return blockId ? results.blockResults[blockId] : undefined;
-    });
+    getVarResult$ = listenerHelper(
+      this.results,
+      (results, varName: string) => {
+        const blockId = this.getVarBlockId(varName);
+        return blockId ? results.blockResults[blockId] : undefined;
+      },
+      areBlockResultsEqual
+    );
 
     getVarBlockId$ = listenerHelper(this.results, (_, varName: string) =>
       this.getVarBlockId(varName)

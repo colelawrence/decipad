@@ -7,3 +7,4 @@ export * from './pushResultToComputer';
 export * from './pushResultNameChange';
 export * from './pushExternalData';
 export * from './jsifyComputerVariables';
+export * from './areBlockResultsEqual';

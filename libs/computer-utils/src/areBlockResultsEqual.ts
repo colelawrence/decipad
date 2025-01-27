@@ -6,10 +6,14 @@ import type {
 
 type BlockResult = IdentifiedResult | IdentifiedError;
 
-export const areBlockResultsEqual = (
-  a: BlockResult,
-  b: BlockResult
+export const areBlockResultsEqual = <T extends BlockResult | undefined>(
+  a: T,
+  b: T
 ): boolean => {
+  if (a == null || b == null) {
+    return false;
+  }
+
   if (a.type === 'identified-error') {
     return dequal(a, b);
   }
