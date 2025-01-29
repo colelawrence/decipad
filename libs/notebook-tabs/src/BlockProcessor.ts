@@ -22,12 +22,15 @@ import { allBlockIds } from './allBlockIds';
 import type { RootEditorController } from './types';
 import {
   createIntegrationManager,
+  getUsedVariables,
+  getVariableChangeObservable,
   pushIntegrationFormulas,
   pushIntegrationsAndFormulas,
   removeFromComputer,
   renameResultInComputer,
   withComputerCacheIntegration,
   withControllerSideEffects,
+  withVariableDependencies,
 } from './integrations';
 import { EditorController } from './EditorController';
 
@@ -43,7 +46,7 @@ export class BlockProcessor {
 
   private sendQueue = fnQueue();
 
-  private insertIntegration: (block: IntegrationTypes.IntegrationBlock) => void;
+  private upsertIntegration: (block: IntegrationTypes.IntegrationBlock) => void;
   private removeIntegration: (block: IntegrationTypes.IntegrationBlock) => void;
 
   constructor(
@@ -58,26 +61,49 @@ export class BlockProcessor {
 
     this.DirtyBlocksSet = new Map();
 
-    const { insertIntegration, removeIntegration } = createIntegrationManager(
-      withControllerSideEffects(
-        rootEditor as EditorController,
-        withComputerCacheIntegration(
-          notebookId,
-          computer,
-          pushIntegrationsAndFormulas
-        )
-      ),
-      renameResultInComputer(notebookId, computer),
+    const usedVariablesGetter = getUsedVariables(computer, notebookId);
+    const dependencyObservableGetter = getVariableChangeObservable(
+      usedVariablesGetter,
+      computer
+    );
+
+    const sideEffectsUpsertFunc = withControllerSideEffects(
+      rootEditor as EditorController,
       withComputerCacheIntegration(
+        notebookId,
+        computer,
+        pushIntegrationsAndFormulas
+      )
+    );
+
+    const { updateIntegration: variableChangeUpdateIntegration } =
+      withVariableDependencies({
+        getDependencyObservable: dependencyObservableGetter,
+        getVariablesUsed: (block) => new Set(usedVariablesGetter(block)),
+        upsertIntegration: (block) =>
+          pushIntegrationsAndFormulas(notebookId, computer, block),
+      });
+
+    const { upsertIntegration, removeIntegration } = createIntegrationManager({
+      insertIntegration: (block) => {
+        if (variableChangeUpdateIntegration(block)) {
+          return block.timeOfLastRun!;
+        }
+
+        return sideEffectsUpsertFunc(block);
+      },
+      renameIntegration: renameResultInComputer(notebookId, computer),
+      updateFormulas: withComputerCacheIntegration(
         notebookId,
         computer,
         pushIntegrationFormulas
       ),
-      (block) => pushIntegrationsAndFormulas(notebookId, computer, block),
-      removeFromComputer(computer)
-    );
+      updateColumns: (block) =>
+        pushIntegrationsAndFormulas(notebookId, computer, block),
+      deleteIntegration: removeFromComputer(computer),
+    });
 
-    this.insertIntegration = insertIntegration;
+    this.upsertIntegration = upsertIntegration;
     this.removeIntegration = removeIntegration;
 
     this.DebouncedComputeCompute = debounce(
@@ -168,7 +194,7 @@ export class BlockProcessor {
         (block): block is IntegrationTypes.IntegrationBlock =>
           block.type === ELEMENT_INTEGRATION
       )
-      .forEach(this.insertIntegration);
+      .forEach(this.upsertIntegration);
 
     const blocksToRemove = blocksToRemoveIds
       .map((id) => this.rootEditor.findNodeById(id))

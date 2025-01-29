@@ -39,6 +39,11 @@ export class CodeRunner extends Runner<T, O> {
     };
   }
 
+  public getUsedVariableIds(): Array<string> {
+    // TODO: JS integrations can actually use deci variables.
+    return [];
+  }
+
   constructor(id: string, opts: PartialOptions<T, O>) {
     super(id, opts);
     this.options.runner.code ??= codePlaceholder();

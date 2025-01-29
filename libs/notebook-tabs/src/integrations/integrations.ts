@@ -1,4 +1,4 @@
-import { Computer } from '@decipad/computer-interfaces';
+import { Computer, IdentifiedResult } from '@decipad/computer-interfaces';
 import {
   Filter,
   IntegrationTypes,
@@ -21,6 +21,7 @@ import {
   statementToIdentifiedBlock,
 } from '@decipad/remote-computer';
 import { nanoid } from 'nanoid';
+import { filter, merge, Observable, skip, Subscription } from 'rxjs';
 
 const WAIT_BEFORE_CHECKING_RESULT = 3000;
 
@@ -52,11 +53,11 @@ export const pushIntegration: IntegrationProcessFunc = async (
   const variableName = getNodeString(block.children[0]);
   const { id, typeMappings, filters } = block;
 
-  const hydratedFilters = (filters ?? []).map((filter): Filter => {
-    if (filter.type === 'number') {
-      return { ...filter, value: new DeciNumber(filter.value) };
+  const hydratedFilters = (filters ?? []).map((f): Filter => {
+    if (f.type === 'number') {
+      return { ...f, value: new DeciNumber(f.value) };
     }
-    return filter;
+    return f;
   });
 
   const runner = getRunner({
@@ -257,21 +258,29 @@ type SavedIntegration = {
 };
 
 type IntegrationManagerReturn = {
-  insertIntegration: (block: IntegrationTypes.IntegrationBlock) => void;
+  upsertIntegration: (block: IntegrationTypes.IntegrationBlock) => void;
   removeIntegration: (block: IntegrationTypes.IntegrationBlock) => void;
 };
 
-export const createIntegrationManager = (
-  insertIntegration: (block: IntegrationTypes.IntegrationBlock) => string,
-  renameIntegration: (block: IntegrationTypes.IntegrationBlock) => void,
-  updateFormulas: (block: IntegrationTypes.IntegrationBlock) => void,
-  updateColumns: (block: IntegrationTypes.IntegrationBlock) => void,
-  deleteIntegration: (block: IntegrationTypes.IntegrationBlock) => void
-): IntegrationManagerReturn => {
+type IntegrationManagerParameters = {
+  insertIntegration: (block: IntegrationTypes.IntegrationBlock) => string;
+  renameIntegration: (block: IntegrationTypes.IntegrationBlock) => void;
+  updateFormulas: (block: IntegrationTypes.IntegrationBlock) => void;
+  updateColumns: (block: IntegrationTypes.IntegrationBlock) => void;
+  deleteIntegration: (block: IntegrationTypes.IntegrationBlock) => void;
+};
+
+export const createIntegrationManager = ({
+  insertIntegration,
+  renameIntegration,
+  updateFormulas,
+  updateColumns,
+  deleteIntegration,
+}: IntegrationManagerParameters): IntegrationManagerReturn => {
   const integrationIdToSavedIntegration = new Map<string, SavedIntegration>();
 
   return {
-    insertIntegration(block: IntegrationTypes.IntegrationBlock) {
+    upsertIntegration(block: IntegrationTypes.IntegrationBlock) {
       const savedIntegration = integrationIdToSavedIntegration.get(block.id);
 
       const [varName, ...formulas] = block.children;
@@ -325,6 +334,117 @@ export const createIntegrationManager = (
       integrationIdToSavedIntegration.delete(block.id);
 
       deleteIntegration(block);
+    },
+  };
+};
+
+const setIntersection = <T>(a: Set<T>, b: Set<T>): Set<T> => {
+  const intersection = new Set<T>();
+
+  for (const value of a.values()) {
+    if (b.has(value)) {
+      intersection.add(value);
+    }
+  }
+
+  return intersection;
+};
+
+const areSetsEqual = <T>(a: Set<T>, b: Set<T>): boolean =>
+  a.size === b.size && setIntersection(a, b).size === a.size;
+
+export const getUsedVariables =
+  (computer: Computer, notebookId: string) =>
+  (block: IntegrationTypes.IntegrationBlock) => {
+    const runner = getRunner({
+      id: block.id,
+      computer,
+      notebookId,
+      integration: block,
+      integrationType: undefined,
+      name: getNodeString(block.children[0]),
+      types: block.typeMappings,
+      filters: [],
+    });
+
+    return runner.getUsedVariableIds(computer);
+  };
+
+export const getVariableChangeObservable =
+  (
+    getUsedVariablesCallback: (
+      block: IntegrationTypes.IntegrationBlock
+    ) => Array<string>,
+    computer: Computer
+  ) =>
+  (block: IntegrationTypes.IntegrationBlock): Observable<IdentifiedResult> => {
+    const usedVariables = getUsedVariablesCallback(block);
+
+    const observable = merge(
+      ...usedVariables.map(computer.getVarResult$.observe)
+    );
+
+    // Skip 1 because the computer emits the result instantly of the last variable block.
+    return observable.pipe(
+      skip(1),
+      filter((i) => i != null && i.type === 'computer-result')
+    ) as Observable<IdentifiedResult>; // TODO: remove when typescript is updated
+  };
+
+type VariableDependencyParams<T> = {
+  upsertIntegration: (block: IntegrationTypes.IntegrationBlock) => void;
+  getDependencyObservable: (
+    block: IntegrationTypes.IntegrationBlock
+  ) => Observable<T>;
+  getVariablesUsed: (block: IntegrationTypes.IntegrationBlock) => Set<string>;
+};
+
+export const withVariableDependencies = <T>({
+  upsertIntegration,
+  getDependencyObservable,
+  getVariablesUsed,
+}: VariableDependencyParams<T>) => {
+  const integrationIdToSubscriptions = new Map<
+    string,
+    { variablesUsed: Set<string>; subscription: Subscription }
+  >();
+
+  return {
+    // Used only for testing.
+    _integrationToSubscriptions: integrationIdToSubscriptions,
+    updateIntegration(
+      updatedBlock: IntegrationTypes.IntegrationBlock
+    ): boolean {
+      const existingSubscription = integrationIdToSubscriptions.get(
+        updatedBlock.id
+      );
+
+      const variablesUsed = getVariablesUsed(updatedBlock);
+
+      if (variablesUsed.size === 0) {
+        integrationIdToSubscriptions.delete(updatedBlock.id);
+        return false;
+      }
+
+      if (
+        existingSubscription != null &&
+        areSetsEqual(existingSubscription.variablesUsed, variablesUsed)
+      ) {
+        return false;
+      }
+
+      const varChangeSubscription = getDependencyObservable(
+        updatedBlock
+      ).subscribe(() => {
+        upsertIntegration(updatedBlock);
+      });
+
+      integrationIdToSubscriptions.set(updatedBlock.id, {
+        variablesUsed: new Set(variablesUsed),
+        subscription: varChangeSubscription,
+      });
+
+      return true;
     },
   };
 };

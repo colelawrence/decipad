@@ -1,7 +1,10 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import {
   createIntegrationManager,
+  getUsedVariables,
+  getVariableChangeObservable,
   withControllerSideEffects,
+  withVariableDependencies,
 } from './integrations';
 import { EditorController } from '../EditorController';
 import { FIRST_TAB_INDEX } from '../constants';
@@ -12,24 +15,26 @@ import {
   IntegrationTypes,
   TableColumnFormulaElement,
 } from '@decipad/editor-types';
-import { noop } from '@decipad/utils';
+import { assert, noop } from '@decipad/utils';
+import { Computer, parseBlockOrThrow } from '@decipad/computer';
+import { Observable, Subject } from 'rxjs';
 
 describe('Inserting / Updating intergrations', () => {
   it("performs an action if integration hasn't been ran before", () => {
     const blockIds: Array<string> = [];
 
-    const { insertIntegration } = createIntegrationManager(
-      (block) => {
+    const { upsertIntegration } = createIntegrationManager({
+      insertIntegration: (block) => {
         blockIds.push(block.id);
         return Date.now().toString();
       },
-      noop,
-      noop,
-      noop,
-      noop
-    );
+      renameIntegration: noop,
+      updateFormulas: noop,
+      updateColumns: noop,
+      deleteIntegration: noop,
+    });
 
-    insertIntegration({
+    upsertIntegration({
       id: 'my-block-id',
       timeOfLastRun: Date.now().toString(),
       children: [{ text: 'name' }],
@@ -41,29 +46,29 @@ describe('Inserting / Updating intergrations', () => {
   it("doesn't perform an action if the timeOfLastRun is defined", () => {
     const blockIds: Array<string> = [];
 
-    const { insertIntegration } = createIntegrationManager(
-      (block) => {
+    const { upsertIntegration } = createIntegrationManager({
+      insertIntegration: (block) => {
         blockIds.push(block.id);
         return Date.now().toString();
       },
-      noop,
-      noop,
-      noop,
-      noop
-    );
+      renameIntegration: noop,
+      updateFormulas: noop,
+      updateColumns: noop,
+      deleteIntegration: noop,
+    });
 
     // Run it once to get the Map inside `createIntegrationManager` up to date.
 
     const date = Date.now().toString();
 
-    insertIntegration({
+    upsertIntegration({
       id: 'my-block-id',
       timeOfLastRun: date,
       children: [{ text: 'name' }],
     } as any);
     expect(blockIds).toMatchObject(['my-block-id']);
 
-    insertIntegration({
+    upsertIntegration({
       id: 'my-block-id',
       timeOfLastRun: date,
       children: [{ text: 'name' }],
@@ -74,25 +79,25 @@ describe('Inserting / Updating intergrations', () => {
   it('re-runs action if timeOfLastRun becomes null again', () => {
     const blockIds: Array<string> = [];
 
-    const { insertIntegration } = createIntegrationManager(
-      (block) => {
+    const { upsertIntegration } = createIntegrationManager({
+      insertIntegration: (block) => {
         blockIds.push(block.id);
         return Date.now().toString();
       },
-      noop,
-      noop,
-      noop,
-      noop
-    );
+      renameIntegration: noop,
+      updateFormulas: noop,
+      updateColumns: noop,
+      deleteIntegration: noop,
+    });
 
-    insertIntegration({
+    upsertIntegration({
       id: 'my-block-id',
       timeOfLastRun: null,
       children: [{ text: 'name' }],
     } as any);
     expect(blockIds).toMatchObject(['my-block-id']);
 
-    insertIntegration({
+    upsertIntegration({
       id: 'my-block-id',
       timeOfLastRun: null,
       children: [{ text: 'name' }],
@@ -105,23 +110,23 @@ describe('Inserting / Updating intergrations', () => {
     const blockIds: Array<string> = [];
     const renamingBlockIds: Array<string> = [];
 
-    const { insertIntegration } = createIntegrationManager(
-      (block) => {
+    const { upsertIntegration } = createIntegrationManager({
+      insertIntegration: (block) => {
         blockIds.push(block.id);
         return block.timeOfLastRun!;
       },
-      (block) => {
+      renameIntegration: (block) => {
         renamingBlockIds.push(block.id);
       },
-      noop,
-      noop,
-      noop
-    );
+      updateFormulas: noop,
+      updateColumns: noop,
+      deleteIntegration: noop,
+    });
 
     // Run it once to get the Map inside `createIntegrationManager` up to date.
     const date = Date.now() - 1000;
 
-    insertIntegration({
+    upsertIntegration({
       id: 'my-block-id',
       timeOfLastRun: date.toString(),
       children: [{ text: 'name' }],
@@ -130,7 +135,7 @@ describe('Inserting / Updating intergrations', () => {
     expect(renamingBlockIds).toMatchObject([]);
     expect(blockIds).toMatchObject(['my-block-id']);
 
-    insertIntegration({
+    upsertIntegration({
       id: 'my-block-id',
       timeOfLastRun: date.toString(),
       children: [{ text: 'new-name' }],
@@ -144,23 +149,23 @@ describe('Inserting / Updating intergrations', () => {
     const blockIds: Array<string> = [];
     const updatedFormulasBlockIds: Array<string> = [];
 
-    const { insertIntegration } = createIntegrationManager(
-      (block) => {
+    const { upsertIntegration } = createIntegrationManager({
+      insertIntegration: (block) => {
         blockIds.push(block.id);
         return block.timeOfLastRun!;
       },
-      noop,
-      (block) => {
+      renameIntegration: noop,
+      updateFormulas: (block) => {
         updatedFormulasBlockIds.push(block.id);
       },
-      noop,
-      noop
-    );
+      updateColumns: noop,
+      deleteIntegration: noop,
+    });
 
     // Run it once to get the Map inside `createIntegrationManager` up to date.
     const date = Date.now() - 1000;
 
-    insertIntegration({
+    upsertIntegration({
       id: 'my-block-id',
       timeOfLastRun: date.toString(),
       children: [{ text: 'name' }],
@@ -169,7 +174,7 @@ describe('Inserting / Updating intergrations', () => {
     expect(updatedFormulasBlockIds).toMatchObject([]);
     expect(blockIds).toMatchObject(['my-block-id']);
 
-    insertIntegration({
+    upsertIntegration({
       id: 'my-block-id',
       timeOfLastRun: date.toString(),
       children: [
@@ -191,23 +196,23 @@ describe('Inserting / Updating intergrations', () => {
     const blockIds: Array<string> = [];
     const updatedFormulasBlockIds: Array<string> = [];
 
-    const { insertIntegration } = createIntegrationManager(
-      (block) => {
+    const { upsertIntegration } = createIntegrationManager({
+      insertIntegration: (block) => {
         blockIds.push(block.id);
         return block.timeOfLastRun!;
       },
-      noop,
-      (block) => {
+      renameIntegration: noop,
+      updateFormulas: (block) => {
         updatedFormulasBlockIds.push(block.id);
       },
-      noop,
-      noop
-    );
+      updateColumns: noop,
+      deleteIntegration: noop,
+    });
 
     // Run it once to get the Map inside `createIntegrationManager` up to date.
     const date = Date.now() - 1000;
 
-    insertIntegration({
+    upsertIntegration({
       id: 'my-block-id',
       timeOfLastRun: date.toString(),
       children: [{ text: 'name' }],
@@ -216,7 +221,7 @@ describe('Inserting / Updating intergrations', () => {
     expect(updatedFormulasBlockIds).toMatchObject([]);
     expect(blockIds).toMatchObject(['my-block-id']);
 
-    insertIntegration({
+    upsertIntegration({
       id: 'my-block-id',
       timeOfLastRun: date.toString(),
       children: [
@@ -234,7 +239,7 @@ describe('Inserting / Updating intergrations', () => {
     expect(blockIds).toMatchObject(['my-block-id']);
     expect(updatedFormulasBlockIds).toMatchObject(['my-block-id']);
 
-    insertIntegration({
+    upsertIntegration({
       id: 'my-block-id',
       timeOfLastRun: date.toString(),
       children: [
@@ -260,23 +265,23 @@ describe('Inserting / Updating intergrations', () => {
     const blockIds: Array<string> = [];
     const updatedColumnBlockIds: Array<string> = [];
 
-    const { insertIntegration } = createIntegrationManager(
-      (block) => {
+    const { upsertIntegration } = createIntegrationManager({
+      insertIntegration: (block) => {
         blockIds.push(block.id);
         return block.timeOfLastRun!;
       },
-      noop,
-      noop,
-      (block) => {
+      renameIntegration: noop,
+      updateFormulas: noop,
+      updateColumns: (block) => {
         updatedColumnBlockIds.push(block.id);
       },
-      noop
-    );
+      deleteIntegration: noop,
+    });
 
     // Run it once to get the Map inside `createIntegrationManager` up to date.
     const date = Date.now() - 1000;
 
-    insertIntegration({
+    upsertIntegration({
       id: 'my-block-id',
       timeOfLastRun: date.toString(),
       children: [{ text: 'name' }],
@@ -286,7 +291,7 @@ describe('Inserting / Updating intergrations', () => {
     expect(updatedColumnBlockIds).toMatchObject([]);
     expect(blockIds).toMatchObject(['my-block-id']);
 
-    insertIntegration({
+    upsertIntegration({
       id: 'my-block-id',
       timeOfLastRun: date.toString(),
       children: [{ text: 'name' }],
@@ -341,5 +346,214 @@ describe('Interaction with EditorController', () => {
     expect(controller.children[FIRST_TAB_INDEX].children[0].timeOfLastRun).toBe(
       'newTimeOfLastRun'
     );
+  });
+});
+
+describe('Variable change management', () => {
+  const integrationBlock: IntegrationTypes.IntegrationBlock = {
+    id: 'id',
+    type: ELEMENT_INTEGRATION,
+    typeMappings: {},
+    children: [
+      {
+        id: 'id',
+        type: ELEMENT_STRUCTURED_VARNAME,
+        children: [{ text: 'varname' }],
+      },
+    ],
+    filters: [],
+    timeOfLastRun: undefined,
+    integrationType: {
+      type: 'mysql',
+      url: 'url',
+      query: '',
+    },
+    isFirstRowHeader: false,
+  };
+
+  it('doesnt update the integration if no variable exists', () => {
+    const blockIds: Array<string> = [];
+
+    const { updateIntegration } = withVariableDependencies({
+      upsertIntegration(block) {
+        blockIds.push(block.id);
+      },
+      getVariablesUsed() {
+        return new Set();
+      },
+      getDependencyObservable() {
+        return new Observable();
+      },
+    });
+
+    assert(integrationBlock.integrationType.type === 'mysql');
+    integrationBlock.integrationType.query = '';
+
+    updateIntegration(integrationBlock);
+
+    expect(blockIds).toHaveLength(0);
+  });
+
+  it('doesnt run instantly even if variables are present', async () => {
+    const blockIds: Array<string> = [];
+
+    const { updateIntegration } = withVariableDependencies({
+      upsertIntegration(block) {
+        blockIds.push(block.id);
+      },
+      getVariablesUsed() {
+        return new Set(['Variable']);
+      },
+      getDependencyObservable() {
+        return new Observable();
+      },
+    });
+
+    updateIntegration(integrationBlock);
+
+    expect(blockIds).toHaveLength(0);
+  });
+
+  it('re-runs integration if variable changes', async () => {
+    const blockIds: Array<string> = [];
+
+    const subject = new Subject<undefined>();
+
+    const { updateIntegration } = withVariableDependencies({
+      upsertIntegration(block) {
+        blockIds.push(block.id);
+      },
+      getVariablesUsed() {
+        return new Set(['Variable']);
+      },
+      getDependencyObservable() {
+        return subject.asObservable();
+      },
+    });
+
+    updateIntegration(integrationBlock);
+    expect(blockIds).toHaveLength(0);
+
+    subject.next(undefined);
+
+    expect(blockIds).toHaveLength(1);
+  });
+
+  it('doesnt create a new subscription if the variables dont change', async () => {
+    const blockIds: Array<string> = [];
+
+    const subject = new Subject<undefined>();
+
+    const { updateIntegration, _integrationToSubscriptions } =
+      withVariableDependencies({
+        upsertIntegration(block) {
+          blockIds.push(block.id);
+        },
+        getVariablesUsed() {
+          return new Set(['Variable']);
+        },
+        getDependencyObservable() {
+          return subject.asObservable();
+        },
+      });
+
+    updateIntegration(integrationBlock);
+    expect(blockIds).toHaveLength(0);
+
+    const originalSubscription = _integrationToSubscriptions.get(
+      integrationBlock.id
+    )!;
+
+    updateIntegration(integrationBlock);
+    expect(blockIds).toHaveLength(0);
+
+    expect(_integrationToSubscriptions.get(integrationBlock.id)).toBe(
+      originalSubscription
+    );
+    expect(
+      _integrationToSubscriptions.get(integrationBlock.id)?.variablesUsed
+    ).toBe(originalSubscription.variablesUsed);
+    expect(
+      _integrationToSubscriptions.get(integrationBlock.id)?.subscription
+    ).toBe(originalSubscription.subscription);
+  });
+
+  it('removes subscription if variables are no longer used', async () => {
+    const blockIds: Array<string> = [];
+
+    let called = false;
+    const subject = new Subject<undefined>();
+
+    const { updateIntegration, _integrationToSubscriptions } =
+      withVariableDependencies({
+        upsertIntegration(block) {
+          blockIds.push(block.id);
+        },
+        getVariablesUsed() {
+          if (!called) {
+            return new Set(['Variable']);
+          }
+
+          return new Set();
+        },
+        getDependencyObservable() {
+          return subject.asObservable();
+        },
+      });
+
+    updateIntegration(integrationBlock);
+    expect(blockIds).toHaveLength(0);
+
+    called = true;
+
+    updateIntegration(integrationBlock);
+    expect(_integrationToSubscriptions.size).toBe(0);
+  });
+
+  it('integrates with the computer', async () => {
+    const blockIds: Array<string> = [];
+
+    const computer = new Computer();
+    const usedVariablesGetter = getUsedVariables(computer, 'notebook-id');
+
+    const { updateIntegration, _integrationToSubscriptions } =
+      withVariableDependencies({
+        upsertIntegration(block) {
+          blockIds.push(block.id);
+        },
+        getVariablesUsed(block) {
+          return new Set(usedVariablesGetter(block));
+        },
+        getDependencyObservable(block) {
+          return getVariableChangeObservable(
+            usedVariablesGetter,
+            computer
+          )(block);
+        },
+      });
+
+    assert(integrationBlock.integrationType.type === 'mysql');
+    integrationBlock.integrationType.query = '{{Variable}}';
+
+    await computer.pushComputeDelta({
+      program: {
+        upsert: [
+          {
+            id: 'id',
+            type: 'identified-block',
+            block: parseBlockOrThrow('Variable = 5', 'id'),
+          },
+        ],
+      },
+    });
+
+    updateIntegration(integrationBlock);
+    expect(blockIds).toHaveLength(0);
+
+    assert(integrationBlock.integrationType.type === 'mysql');
+    integrationBlock.integrationType.query = 'no variables used';
+
+    updateIntegration(integrationBlock);
+    expect(_integrationToSubscriptions.size).toBe(0);
   });
 });

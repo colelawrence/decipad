@@ -202,6 +202,8 @@ export abstract class Runner<
   public abstract assertedOptions(): Pick<Options<T, O>, 'runner' | 'importer'>;
   public abstract intoIntegrationType(): IntegrationTypes;
 
+  public abstract getUsedVariableIds(computer: Computer): Array<string>;
+
   public async import(computer: Computer): Promise<string> {
     assert(!!this.name);
     const options = this.assertedOptions();

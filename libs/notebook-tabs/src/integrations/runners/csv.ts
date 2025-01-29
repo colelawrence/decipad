@@ -26,6 +26,10 @@ export class CSVRunner extends Runner<T, O> {
     };
   }
 
+  public getUsedVariableIds(): Array<string> {
+    return [];
+  }
+
   protected fetchData(): Promise<Uint8Array> {
     const options = this.assertedOptions();
     return fetch(options.runner.csvUrl)

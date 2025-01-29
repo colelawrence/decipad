@@ -57,3 +57,10 @@ export const applyToTemplate = (
   }
   return Mustache.render(template, valuesToFunctions(values));
 };
+
+export const getTemplateVariables = (template: string): Array<string> => {
+  const mustacheTemplate = Mustache.parse(template);
+  return mustacheTemplate
+    .filter(([type]) => type === 'name')
+    .map(([, name]) => name);
+};

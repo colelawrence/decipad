@@ -77,6 +77,10 @@ export class GSheetRunner extends Runner<T, O> {
     return getExternalDataUrl(externalDataId, { url: dataUrl });
   }
 
+  public getUsedVariableIds(): Array<string> {
+    return [];
+  }
+
   private async fetchSheetMetaData(): Promise<SheetMeta> {
     const options = this.assertedOptions();
 

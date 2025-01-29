@@ -2,7 +2,7 @@ import { assert } from '@decipad/utils';
 import { Options, Runner } from './runner';
 import { IntegrationTypes } from '@decipad/editor-types';
 import { getVariablesFromComputer } from '@decipad/computer-utils';
-import { applyToTemplate } from './utils';
+import { applyToTemplate, getTemplateVariables } from './utils';
 import { Computer } from '@decipad/computer';
 
 /** Matches on `{{var_name}}` etc. */
@@ -29,6 +29,27 @@ export class SQLRunner extends Runner<T, O> {
       type: 'mysql',
       ...options.runner,
     };
+  }
+
+  public getUsedVariableIds(computer: Computer): Array<string> {
+    const { query } = this.options.runner;
+    assert(query != null);
+
+    const variables = getTemplateVariables(query);
+
+    const undefinedVariables = variables.filter(
+      (v) => computer.getVarResult(v) == null
+    );
+
+    if (undefinedVariables.length > 0) {
+      throw new Error(
+        `Not all variables are defined. Undefined variables: \n${undefinedVariables.join(
+          '\n'
+        )}`
+      );
+    }
+
+    return getTemplateVariables(query);
   }
 
   protected async fetchData(computer: Computer): Promise<Uint8Array> {

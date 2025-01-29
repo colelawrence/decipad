@@ -28,6 +28,10 @@ export class NotionRunner extends Runner<T, O> {
     };
   }
 
+  public getUsedVariableIds(): Array<string> {
+    return [];
+  }
+
   protected async fetchData(): Promise<Uint8Array> {
     const options = this.assertedOptions();
     const res = await fetch(options.runner.notionUrl);
