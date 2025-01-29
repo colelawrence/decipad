@@ -18,7 +18,7 @@ import { assertInstanceOf } from '@decipad/utils';
 import { useWorkspaceConnections } from '../../hooks/useWorkspaceConnections';
 import styled from '@emotion/styled';
 import { SplitPreview } from '../SplitPreview';
-import { SQLRunner, varIdentifierRegex } from '@decipad/notebook-tabs';
+import { SQLRunner } from '@decipad/notebook-tabs';
 
 const SQL: Array<ExternalProvider> = [
   'mysql',
@@ -79,8 +79,6 @@ export const SQLConnection: FC<ConnectionProps> = (props) => {
   const { queries } = useResourceUsage();
   const [query, setQuery] = useState(runner.options.runner.query ?? '');
 
-  const [_, setVarIdentifiers] = useState<RegExpMatchArray[]>([]);
-
   return (
     <SQLConnectionWrapper>
       <SplitPreview conn={props}>
@@ -107,8 +105,6 @@ export const SQLConnection: FC<ConnectionProps> = (props) => {
         <CodeEditor
           code={query}
           setCode={(q) => {
-            const identifiers = q.matchAll(varIdentifierRegex);
-            setVarIdentifiers([...identifiers]);
             runner.setOptions({ runner: { query: q } });
             setQuery(q);
           }}

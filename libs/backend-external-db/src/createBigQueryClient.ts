@@ -60,7 +60,8 @@ export const createBigQueryClient = (
         if (!result) {
           throw new Error('BigQuery error: no result');
         }
-        return prepareForJSON(rowsToColumns(result));
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        return prepareForJSON(rowsToColumns(result as any));
       } catch (err) {
         // eslint-disable-next-line no-console
         console.error('Error caught in BigQuery client', err);
@@ -70,5 +71,6 @@ export const createBigQueryClient = (
     destroy: noop, // nothing to do here
   };
 
-  return [wrappedClient, { connection: clientConfig }];
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  return [wrappedClient as any, { connection: clientConfig }];
 };

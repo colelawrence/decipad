@@ -35,9 +35,10 @@ export class SQLRunner extends Runner<T, O> {
     const options = this.assertedOptions();
 
     const variables = getVariablesFromComputer(computer);
+    const queryWithVariables = applyToTemplate(options.runner.query, variables);
 
     const res = await fetch(options.runner.url, {
-      body: applyToTemplate(options.runner.query, variables),
+      body: queryWithVariables,
       method: 'POST',
     });
 

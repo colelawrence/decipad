@@ -30,6 +30,8 @@ export async function createWithSlashCommand(
     );
   } else {
     await page.keyboard.press('Enter');
+    // eslint-disable-next-line playwright/no-wait-for-timeout
+    await page.waitForTimeout(Timeouts.computerDelay);
   }
 }
 

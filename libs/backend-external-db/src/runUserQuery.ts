@@ -2,20 +2,16 @@ import Boom from '@hapi/boom';
 import type { Knex } from 'knex';
 import { createDatabaseClient } from './createDatabaseClient';
 import { rowsToColumns } from './rowsToColumns';
+import { knexRawResponseParser } from './types';
 
 const parseResponse = (resp: unknown, clientConfig: Knex.Config): unknown => {
   switch (clientConfig.client) {
     case 'pg':
-      if (resp && typeof resp === 'object' && 'rows' in resp) {
-        const { rows } = resp;
-        if (Array.isArray(rows) && rows.length) {
-          return rowsToColumns(rows);
-        }
-        return resp;
-      }
-      break;
+      const parsedResponse = knexRawResponseParser.parse(resp);
+
+      return rowsToColumns(parsedResponse);
     case 'mysql':
-      if (Array.isArray(resp) && resp.length) {
+      if (Array.isArray(resp)) {
         return rowsToColumns(resp[0]);
       }
       return resp;
