@@ -18,6 +18,7 @@ export const highlightedLineStyles = {
 export const codeLineStyles = css({
   ':hover': highlightedLineStyles,
   display: 'flex',
+  flexWrap: 'wrap',
   [mobileQuery]: {
     flexDirection: 'column',
   },
@@ -41,19 +42,22 @@ export const variableNameContainerStyles = css({
   gridArea: 'varname',
   display: 'flex',
   alignItems: 'center',
-  padding: '4px 6px 4px 0',
+  padding: '4px 4px 4px 0',
   flexShrink: '0',
 });
 
 export const codeContainerStyles = css(code, {
   gridArea: 'code',
 
-  lineHeight,
-  display: 'block',
+  display: 'flex',
+  justifyContent: 'space-between',
+  flexDirection: 'row-reverse',
   flexGrow: 1,
-  gap: '16px',
-  overflowWrap: 'anywhere',
 
+  gap: '16px',
+
+  lineHeight,
+  overflowWrap: 'anywhere',
   [smallScreenQuery]: {
     borderLeft: 'none',
   },

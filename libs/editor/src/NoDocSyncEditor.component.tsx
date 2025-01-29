@@ -1,5 +1,4 @@
 import { ClientEventsContext } from '@decipad/client-events';
-import { BlockLengthSynchronizationProvider } from '@decipad/editor-components';
 import { plugins } from '@decipad/editor-config';
 import type { MyValue } from '@decipad/editor-types';
 import { createMyPlateEditor } from '@decipad/editor-types';
@@ -104,19 +103,17 @@ export const NoDocSyncEditorInternal: FC = () => {
               onRedo={() => {}}
             />
             <div ref={containerRef}>
-              <BlockLengthSynchronizationProvider editor={editor}>
-                <Plate<MyValue>
-                  editor={editor}
-                  onChange={onChange}
-                  initialValue={
-                    populateNotebook ? introNotebook() : emptyNotebook()
-                  }
-                  readOnly={isWritingLocked}
-                >
-                  <PlateContent />
-                  <Tooltip />
-                </Plate>
-              </BlockLengthSynchronizationProvider>
+              <Plate<MyValue>
+                editor={editor}
+                onChange={onChange}
+                initialValue={
+                  populateNotebook ? introNotebook() : emptyNotebook()
+                }
+                readOnly={isWritingLocked}
+              >
+                <PlateContent />
+                <Tooltip />
+              </Plate>
             </div>
           </EditorLayout>
         </LoadingFilter>

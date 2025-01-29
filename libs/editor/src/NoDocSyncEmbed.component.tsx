@@ -10,7 +10,6 @@ import {
 } from '@decipad/react-contexts';
 import type { MyValue } from '@decipad/editor-types';
 import { createMyPlateEditor } from '@decipad/editor-types';
-import { BlockLengthSynchronizationProvider } from '@decipad/editor-components';
 import { ClientEventsContext } from '@decipad/client-events';
 import { plugins } from '@decipad/editor-config';
 import { Tooltip } from './components';
@@ -54,17 +53,15 @@ export const NoDocSyncEmbedInternal: FC = () => {
     <EditorReadOnlyContext.Provider value={{ readOnly: true, lockWriting }}>
       <LoadingFilter loading={isWritingLocked}>
         <EditorLayout ref={containerRef}>
-          <BlockLengthSynchronizationProvider editor={editor}>
-            <Plate<MyValue>
-              editor={editor}
-              onChange={onChange}
-              initialValue={embedNotebook()}
-              readOnly={true}
-            >
-              <PlateContent />
-              <Tooltip />
-            </Plate>
-          </BlockLengthSynchronizationProvider>
+          <Plate<MyValue>
+            editor={editor}
+            onChange={onChange}
+            initialValue={embedNotebook()}
+            readOnly={true}
+          >
+            <PlateContent />
+            <Tooltip />
+          </Plate>
         </EditorLayout>
       </LoadingFilter>
     </EditorReadOnlyContext.Provider>

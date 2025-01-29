@@ -23,7 +23,7 @@ import {
 } from 'react';
 import { Location } from 'slate';
 import { Formula, Sparkles, Number } from '../../../icons';
-import { cssVar } from '../../../primitives';
+import { cssVar, smallScreenQuery } from '../../../primitives';
 import { codeBlock } from '../../../styles';
 import { hideOnPrint } from '../../../styles/editor-layout';
 import { getTypeIcon } from '../../../utils';
@@ -31,10 +31,9 @@ import { getTypeIcon } from '../../../utils';
 const varStyles = css(codeBlock.structuredVariableStyles, {
   padding: '2px 6px',
   borderRadius: '6px',
-  display: 'flex',
+  display: 'inline',
   alignItems: 'center',
   overflowWrap: 'anywhere',
-  maxWidth: '174px',
   wordBreak: 'break-word',
   whiteSpace: 'normal',
   '@media print': {
@@ -44,7 +43,7 @@ const varStyles = css(codeBlock.structuredVariableStyles, {
 
 const codeVarIconStyles = css({
   position: 'relative',
-  top: -1,
+  top: 0,
   left: -1,
   display: 'inline-flex',
   verticalAlign: 'text-top',
@@ -67,11 +66,15 @@ const formulaIconStyles = css([
   hideOnPrint,
   {
     position: 'absolute',
+    top: 0,
     left: '-18px',
     width: '16px',
     height: '100%',
-    display: 'grid',
-    alignItems: 'center',
+
+    paddingTop: 10,
+    [smallScreenQuery]: {
+      paddingTop: 16,
+    },
   },
 ]);
 
@@ -236,6 +239,7 @@ export const CodeVariableDefinition = ({
               mixBlendMode: 'luminosity',
             },
           ]}
+          contentEditable={false}
         >
           <Formula />
         </span>

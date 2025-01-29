@@ -16,7 +16,6 @@ export const varStyles = css(variableStyles, {
   borderRadius: '6px',
   fontSize: '13px',
   whiteSpace: 'nowrap',
-  maxWidth: 'min(30vw, 174px)',
   '@media print': {
     background: 'unset',
     color: cssVar('textDefault'),

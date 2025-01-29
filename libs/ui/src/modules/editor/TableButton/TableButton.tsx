@@ -12,7 +12,7 @@ const showMoreButtonWrapperStyles = css({
   'div > button > span > svg': {
     height: '12px',
   },
-  padding: '5px',
+  padding: '2px 0 0 5px',
 });
 
 interface TableButtonProps {

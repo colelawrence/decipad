@@ -29,6 +29,13 @@ export const loadingIconStyles = css({
   '> svg': { height: '16px', display: 'block', margin: '0 auto' },
 });
 
+const codeLineExpressionStyles = css({
+  display: 'inline-flex',
+  alignItems: 'center',
+  overflowWrap: 'anywhere',
+  wordBreak: 'break-word',
+});
+
 export interface CodeLineStructuredProps {
   readonly highlight?: boolean;
   readonly result?: Result.Result;
@@ -165,7 +172,7 @@ export const CodeLineStructured = ({
             {inline}
           </div>
           <div
-            css={{ padding: '7px 8px 5px 0px' }}
+            css={codeLineExpressionStyles}
             data-testid="code-line-expression"
           >
             {codeChild}

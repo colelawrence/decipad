@@ -58,7 +58,6 @@ import {
   useState,
 } from 'react';
 import { useSelected } from 'slate-react';
-import { BlockLengthSynchronizationReceiver } from '../BlockLengthSynchronization/BlockLengthSynchronizationReceiver';
 import { DraggableBlock } from '../block-management';
 import { CodeVariableDefinitionEffects } from './CodeVariableDefinitionEffects';
 import { getSyntaxError } from './getSyntaxError';
@@ -285,29 +284,24 @@ export const CodeLineV2Varname: PlateComponent = (props) => {
           data-testid="codeline-varname"
           spellCheck={false}
         >
-          <BlockLengthSynchronizationReceiver
-            syncGroupName="variableNameColumn"
-            topLevelBlockId={varResult?.id}
+          <CodeVariableDefinition
+            empty={empty}
+            type={
+              varResult?.type === 'identified-error'
+                ? { kind: 'number', unit: null }
+                : varResult?.result.type
+            }
+            formulaIcon={simpleValue == null && !insideLayout}
+            contentEditable={contentEditable}
+            readOnly={isReadOnly}
+            onClick={handleCodeVariableDefinitionClick}
+            onDragStartInlineResult={handleDragStartInlineResult}
+            onGenerateName={generate}
+            onCancelGenerateName={cancel}
           >
-            <CodeVariableDefinition
-              empty={empty}
-              type={
-                varResult?.type === 'identified-error'
-                  ? { kind: 'number', unit: null }
-                  : varResult?.result.type
-              }
-              formulaIcon={simpleValue == null && !insideLayout}
-              contentEditable={contentEditable}
-              readOnly={isReadOnly}
-              onClick={handleCodeVariableDefinitionClick}
-              onDragStartInlineResult={handleDragStartInlineResult}
-              onGenerateName={generate}
-              onCancelGenerateName={cancel}
-            >
-              <CodeVariableDefinitionEffects onEditorChange={onEditorChange} />
-              {props.children}
-            </CodeVariableDefinition>
-          </BlockLengthSynchronizationReceiver>
+            <CodeVariableDefinitionEffects onEditorChange={onEditorChange} />
+            {props.children}
+          </CodeVariableDefinition>
         </span>
       }
       open={errorMessage != null}

@@ -223,7 +223,7 @@ test.describe('structured input and calculations @calculation-blocks @snapshot',
         .getByRole('textbox')
         .getByTestId('number-result:560');
 
-      await original.dragTo(page.getByTestId('codeline-code').nth(-1));
+      await original.dragTo(page.getByTestId('code-line-expression').nth(-1));
       // eslint-disable-next-line playwright/no-wait-for-timeout
       await page.waitForTimeout(Timeouts.computerDelay);
 
@@ -233,8 +233,14 @@ test.describe('structured input and calculations @calculation-blocks @snapshot',
           .length
       ).toBe(1);
 
+      // click on getByTestId('paragraph-content')
+      await page.getByTestId('paragraph-content').click();
+
+      // Add text
+      await page.keyboard.type('Inline ref: ');
+
       // Drag into a paragraph -> creates a magic number
-      await original.dragTo(page.getByTestId('paragraph-wrapper').last());
+      await original.dragTo(page.getByText('Inline ref:'));
 
       await expect(
         page.getByTestId('paragraph-wrapper').getByTestId('number-result:560')
@@ -244,7 +250,7 @@ test.describe('structured input and calculations @calculation-blocks @snapshot',
     await test.step('Renames smart-ref and name is reflected', async () => {
       await page.getByTestId('smart-ref').getByText('DragMe').waitFor();
 
-      await page.getByText('DragMe').first().dblclick();
+      await page.locator('code').getByText('DragMe').nth(0).dblclick();
 
       await page.keyboard.type('DragMeRenamed');
 
@@ -252,8 +258,12 @@ test.describe('structured input and calculations @calculation-blocks @snapshot',
       // eslint-disable-next-line playwright/no-wait-for-timeout
       await page.waitForTimeout(Timeouts.computerDelay);
 
-      await expect(page.getByText('DragMe', { exact: true })).toHaveCount(0);
-      await expect(page.getByText('DragMeRenamed')).toHaveCount(2);
+      await expect(
+        page.locator('code').getByText('DragMe', { exact: true })
+      ).toHaveCount(0);
+      await expect(page.locator('code').getByText('DragMeRenamed')).toHaveCount(
+        2
+      );
     });
 
     await test.step('check custom unit conversion', async () => {

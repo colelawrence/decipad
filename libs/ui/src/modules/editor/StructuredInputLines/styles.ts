@@ -14,6 +14,7 @@ export const structuredInputContainerStyles = css({
 
 export const siChildrenStyles = css({
   gridArea: 'children',
+  padding: '2px 0',
 });
 
 export const borderStyles = (pos: 'top' | 'bot') =>
