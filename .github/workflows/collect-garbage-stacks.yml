@@ -48,5 +48,8 @@ jobs:
           DECI_IMAGE_LAMBDA_LAYER: 'arn:aws:lambda:eu-west-2:861969788890:layer:sharp:2'
         run: yarn install --ignore-engines
 
-      - name: Collect
+      - name: Collect stacks
         run: ./scripts/aws-garbage-collect-stacks.sh
+
+      - name: Collect log groups
+        run: ./scripts/aws-garbage-collect-dev-log-groups.sh
