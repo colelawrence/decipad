@@ -136,7 +136,7 @@ export const useCreateIntegration = (
               ? runner.options.importer.isFirstHeaderRow
               : false,
           typeMappings: runner.types,
-          timeOfLastRun: Date.now().toString(),
+          timeOfLastRun: null,
         } satisfies Omit<IntegrationTypes.IntegrationBlock, 'children'>,
       });
     },
