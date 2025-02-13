@@ -7,6 +7,7 @@ import {
   getStatement,
   getSymbolsDefinedInBlocks,
 } from '../utils';
+import { getExprRef } from '../exprRefs';
 
 export const getDependents = (
   program: AST.Block[],
@@ -18,6 +19,7 @@ export const getDependents = (
   const dependencySymbols = new Set([
     ...getSymbolsDefinedInBlocks(program, dependentsOf),
     ...initialSymbols,
+    ...dependentsOf.map(getExprRef),
   ]);
 
   iterProgram(program, (stmt, blockId) => {
