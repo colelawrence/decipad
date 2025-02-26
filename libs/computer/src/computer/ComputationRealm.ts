@@ -16,7 +16,7 @@ import type {
 } from '@decipad/computer-interfaces';
 import type { GetStatementsToEvictArgs } from '../caching/getStatementsToEvict';
 import { getStatementsToEvict } from '../caching/getStatementsToEvict';
-import { getDefinedSymbol, getStatementFromProgram } from '../utils';
+import { getFineGrainedDefinedSymbol, getStatementFromProgram } from '../utils';
 
 export type CacheContents = {
   result: IdentifiedResult;
@@ -65,10 +65,15 @@ export class ComputationRealm {
 
     const statement = getStatementFromProgram(program, blockId);
     if (statement) {
-      const sym = getDefinedSymbol(statement);
+      const sym = getFineGrainedDefinedSymbol(statement);
       if (sym) {
-        this.interpreterRealm.stack.delete(sym);
-        this.inferContext.stack.delete(sym);
+        if (Array.isArray(sym)) {
+          this.interpreterRealm.stack.deleteNamespaced(sym);
+          this.inferContext.stack.deleteNamespaced(sym);
+        } else {
+          this.interpreterRealm.stack.delete(sym);
+          this.inferContext.stack.delete(sym);
+        }
       }
     }
   }

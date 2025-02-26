@@ -189,7 +189,6 @@ export class StackFrame<T> implements TStackFrame<T> {
     [ns, name]: readonly [namespace: string, name: string],
     depth = 0
   ): T | null {
-    // console.log('[ns, name]', [ns, name]);
     const foundWithId = ns === '' && this.idMap.get(name);
     if (foundWithId && depth < 3) {
       return this.getNamespaced(foundWithId, depth + 1);

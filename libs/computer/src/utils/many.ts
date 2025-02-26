@@ -86,6 +86,22 @@ export const getDefinedSymbol = (
   }
 };
 
+export const getFineGrainedDefinedSymbol = (
+  stmt: AST.Statement,
+  findIncrementalDefinitions = true,
+  excludeTypes: Set<AST.Node['type']> = new Set()
+): string | [string, string] | null => {
+  if (excludeTypes.has(stmt.type)) return null;
+  switch (stmt.type) {
+    case 'table-column-assign':
+      return findIncrementalDefinitions
+        ? [getIdentifierString(stmt.args[0]), getIdentifierString(stmt.args[1])]
+        : null;
+    default:
+      return getDefinedSymbol(stmt, findIncrementalDefinitions, excludeTypes);
+  }
+};
+
 export const getGoodBlocks = (parsed: Program) =>
   parsed.flatMap((b) => {
     if (b.type === 'identified-block') return [b];
