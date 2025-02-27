@@ -175,6 +175,13 @@ export class EditorController implements RootEditorController {
 
     titleEditor.apply = (_op) => {
       const op = _op as TOperation;
+
+      // Don't allow these operations on the title editor,
+      // as it is meant to be strictly one element.
+      if (op.type === 'split_node' || op.type === 'move_node') {
+        return;
+      }
+
       if (op.FROM_ROOT) {
         this.events.next({ type: 'title-change' });
         this.events.next({ type: 'any-change' });
