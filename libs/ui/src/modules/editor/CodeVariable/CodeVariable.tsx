@@ -47,6 +47,7 @@ export const CodeVariable = ({
   columnName,
   decoration,
   injectErrorChildren,
+  onGoToDefinition = noop,
 }: CodeVariableProps): ReturnType<React.FC> => {
   const isColumn = !!(tableName && columnName);
   const isCell = decoration === 'cell';
@@ -119,6 +120,7 @@ export const CodeVariable = ({
       variableMissing={variableMissing}
       defBlockId={defBlockId}
       provideDefinitionLink={provideVariableDefLink}
+      onGoToDefinition={onGoToDefinition}
     >
       {decorated}
     </CodeVariableTooltip>

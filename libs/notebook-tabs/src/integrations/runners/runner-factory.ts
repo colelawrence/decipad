@@ -9,6 +9,7 @@ import { NotionRunner } from './notion';
 import { GSheetRunner } from './gsheet';
 import { omit } from 'lodash';
 import { dequal } from '@decipad/utils';
+import { DataLakeRunner } from './datalake';
 
 export type RunnerFactoryParams = {
   notebookId: string;
@@ -27,7 +28,9 @@ export type RunnerFactoryParams = {
     }
   | {
       integration: undefined;
-      integrationType: IntegrationTypes.IntegrationBlock['integrationType']['type'];
+      integrationType:
+        | IntegrationTypes.IntegrationBlock['integrationType']['type']
+        | 'datalake';
     }
 );
 
@@ -97,6 +100,18 @@ export function getRunner(options: RunnerFactoryParams): Runner {
         runner: { code: integrationType.code },
         types: options.types,
         filters: options.filters,
+      });
+    case 'datalake':
+      return new DataLakeRunner(options.id, {
+        name: options.name,
+        importer: {
+          query: integrationType.query,
+          time: integrationType.time,
+        },
+        types: options.types,
+        padId: options.notebookId,
+        filters: options.filters,
+        runner: { query: integrationType.query, time: integrationType.time },
       });
     default:
       throw new Error('NOT IMPLEMENTED');

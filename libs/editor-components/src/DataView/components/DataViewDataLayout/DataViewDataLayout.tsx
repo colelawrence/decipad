@@ -86,6 +86,7 @@ export const DataViewDataLayout: FC<DataViewLayoutProps> = ({
           children: pageGroups,
           aggregationResult: undefined,
           aggregationExpression: undefined,
+          aggregationVariableName: undefined,
         },
         {
           rotate,

@@ -1,7 +1,7 @@
 /* eslint decipad/css-prop-named-variable: 0 */
-import { ClientEventsContext } from '@decipad/client-events';
+import { analytics } from '@decipad/client-events';
 import { css, keyframes } from '@emotion/react';
-import { ComponentProps, useCallback, useContext, useState } from 'react';
+import { ComponentProps, useCallback, useState } from 'react';
 import { useIntercom } from '@decipad/react-utils';
 import { Link, MenuItem, MenuSeparator, SegmentButtons } from '../../atoms';
 import {
@@ -205,7 +205,6 @@ export const HelpMenu = ({
   docsUrl,
   releaseUrl,
 }: HelpMenuProps) => {
-  const clientEvent = useContext(ClientEventsContext);
   const [open, setOpen] = useState(false);
 
   const { show, showNewMessage } = useIntercom();
@@ -221,11 +220,9 @@ export const HelpMenu = ({
       open={open}
       onChangeOpen={() => {
         if (!open) {
-          clientEvent({
-            segmentEvent: {
-              type: 'action',
-              action: 'help button clicked',
-            },
+          analytics.track({
+            type: 'action',
+            action: 'help button clicked',
           });
         }
         setOpen(!open);
@@ -259,11 +256,9 @@ export const HelpMenu = ({
         description="Chat with our team"
         icon={statusIcon}
         onClick={() => {
-          clientEvent({
-            segmentEvent: {
-              type: 'action',
-              action: 'contact live support',
-            },
+          analytics.track({
+            type: 'action',
+            action: 'contact live support',
           });
         }}
         dataTestid="contact-live-support"
@@ -275,11 +270,9 @@ export const HelpMenu = ({
         title="What's New"
         icon={<Bulb />}
         onClick={() =>
-          clientEvent({
-            segmentEvent: {
-              type: 'action',
-              action: 'visit releases',
-            },
+          analytics.track({
+            type: 'action',
+            action: 'visit releases',
           })
         }
         dataTestid="releases-link"
@@ -290,13 +283,11 @@ export const HelpMenu = ({
         title="Docs & Examples"
         icon={<Docs />}
         onClick={() =>
-          clientEvent({
-            segmentEvent: {
-              type: 'action',
-              action: 'Documentation Button Clicked',
-              props: {
-                analytics_source: 'frontend',
-              },
+          analytics.track({
+            type: 'action',
+            action: 'Documentation Button Clicked',
+            props: {
+              analytics_source: 'frontend',
             },
           })
         }
@@ -307,13 +298,11 @@ export const HelpMenu = ({
         title="Share Feedback"
         icon={<Chat />}
         onClick={() => {
-          clientEvent({
-            segmentEvent: {
-              type: 'action',
-              action: 'Feedback Button Clicked',
-              props: {
-                analytics_source: 'frontend',
-              },
+          analytics.track({
+            type: 'action',
+            action: 'Feedback Button Clicked',
+            props: {
+              analytics_source: 'frontend',
             },
           });
         }}
@@ -325,11 +314,9 @@ export const HelpMenu = ({
         title="Join Discord"
         icon={<Discord />}
         onClick={() =>
-          clientEvent({
-            segmentEvent: {
-              type: 'action',
-              action: 'join discord',
-            },
+          analytics.track({
+            type: 'action',
+            action: 'join discord',
           })
         }
         dataTestid="discord-link"

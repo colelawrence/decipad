@@ -244,19 +244,15 @@ export const duplicatePad: MutationResolvers['duplicatePad'] = async (
     replaceList,
   });
 
-  await track(
-    context.event,
-    {
-      userId: user.id,
-      event: 'Notebook Duplicated',
-      properties: {
-        notebook_id: importedNotebook.id,
-        original_notebookId: previousPad.id,
-        analytics_source: 'backend',
-      },
+  await track(context.event, {
+    userId: user.id,
+    event: 'Notebook Duplicated',
+    properties: {
+      notebook_id: importedNotebook.id,
+      original_notebookId: previousPad.id,
+      analytics_source: 'backend',
     },
-    context
-  );
+  });
 
   // Graphql types mismatch the DB types here.
   // But the mismatch happens because of nested properties

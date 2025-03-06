@@ -7,6 +7,7 @@ import {
 import { type DataViewFilter } from '@decipad/editor-types';
 import { type DataGroup } from '../../types';
 import { aggregationExpression as createAggregationExpression } from '../../utils/aggregationExpression';
+import { aggregationVariableName as createAggregationVariableName } from '../../utils/aggregationVariableName';
 
 export interface GenerateSmartRowProps {
   aggregation: Result.Result | undefined;
@@ -79,6 +80,12 @@ export const generateSmartRow: GenerateSmartRow = ({
     filters[0]
   );
 
+  const aggregationVariableName = createAggregationVariableName(
+    newPreviousColumns,
+    newPreviousColumnTypes,
+    valuePath
+  );
+
   return {
     elementType: 'smartrow',
     children,
@@ -86,5 +93,6 @@ export const generateSmartRow: GenerateSmartRow = ({
     type: aggregation?.type,
     value: aggregation?.value ?? Unknown,
     aggregationExpression,
+    aggregationVariableName,
   };
 };

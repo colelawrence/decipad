@@ -21,6 +21,8 @@ import {
 } from '../helpers';
 import { activeDotStyle, tooltipCursorStyle } from './styles';
 import { AreaChartProps } from './types';
+import { calculateChartHeight } from '../helpers/calculateChartHeight';
+import { customTick } from '../Components/CustomTick';
 
 export const AreaChart = ({
   table,
@@ -37,6 +39,7 @@ export const AreaChart = ({
   setXAxisLabel,
   setYAxisLabel,
   isExporting,
+  size = 'medium',
 }: AreaChartProps) => {
   const [isDarkTheme] = useThemeFromStore();
   const [chartDimensions, setChartDimensions] = useState({
@@ -90,6 +93,7 @@ export const AreaChart = ({
         yAxisLabel,
         setYAxisLabel,
         tickFormatter,
+        customTick,
         isExporting,
       }),
     [
@@ -115,7 +119,7 @@ export const AreaChart = ({
   return (
     <ResponsiveContainer
       width={'100%'}
-      height={chartHeight}
+      height={calculateChartHeight(size, chartHeight)}
       onResize={(width, height) => {
         if (width && height) {
           setChartDimensions({

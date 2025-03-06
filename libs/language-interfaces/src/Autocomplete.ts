@@ -30,7 +30,8 @@ export type ImportElementSource =
   | 'mssql'
   | 'mariadb'
   | 'notion'
-  | 'bigquery';
+  | 'bigquery'
+  | 'datalake';
 
 export interface AutocompleteName<
   Kind extends SerializedType['kind'] = SerializedType['kind']

@@ -6,7 +6,6 @@ import {
 } from '@udecode/plate-common';
 import type { ComponentProps } from 'react';
 import { Children, useCallback } from 'react';
-import { useClientEvents } from '@decipad/client-events';
 import {
   DraggableBlock,
   UpgradeWarningBlock,
@@ -35,6 +34,7 @@ import { Result, getExprRef } from '@decipad/remote-computer';
 import {
   AnimatedIcon,
   CodeResult,
+  ConditionalResult,
   IntegrationBlock as UIIntegrationBlock,
   icons,
 } from '@decipad/ui';
@@ -42,6 +42,8 @@ import { assert } from '@decipad/utils';
 import { getBlockFormulas, isRectangularTable } from '../utils';
 import { ConnectionTable } from './ConnectionTable/ConnectionTable';
 import { nanoid } from 'nanoid';
+import { FormulasDrawer } from 'libs/ui/src/modules/editor/FormulasDrawer/FormulasDrawer';
+import { analytics } from '@decipad/client-events';
 
 function canBePlotted(result: Result.Result | undefined): boolean {
   return (
@@ -127,7 +129,6 @@ export const IntegrationBlock: PlateComponent = ({
         ]),
   ];
 
-  const track = useClientEvents();
   const { queries } = useResourceUsage();
 
   const handleClick = async () => {
@@ -135,14 +136,12 @@ export const IntegrationBlock: PlateComponent = ({
 
     onRefresh();
 
-    track({
-      segmentEvent: {
-        type: 'action',
-        action: 'Notebook Integration Query Submitted',
-        props: {
-          integration_type: element.integrationType.type,
-          analytics_source: 'frontend',
-        },
+    analytics.track({
+      type: 'action',
+      action: 'Notebook Integration Query Submitted',
+      props: {
+        integration_type: element.integrationType.type,
+        analytics_source: 'frontend',
       },
     });
   };
@@ -224,7 +223,13 @@ export const IntegrationBlock: PlateComponent = ({
       slateAttributes={attributes}
     >
       <UIIntegrationBlock
-        formulas={formulaChildren.length > 0 ? formulas : null}
+        formulas={
+          formulaChildren.length > 0 ? (
+            <FormulasDrawer>{formulas}</FormulasDrawer>
+          ) : (
+            formulas
+          )
+        }
         meta={
           element.timeOfLastRun
             ? [
@@ -272,20 +277,22 @@ export const IntegrationBlock: PlateComponent = ({
         ]}
         result={result}
         resultPreview={
-          !displayResult ? null : isRectangularResult ? (
-            <ConnectionTable
-              type="static"
-              tableResult={result as Result.Result<'table'>}
-              hiddenColumns={[]}
-              onAddFormula={addFormula}
-              formulaColumns={columnFormulas}
-              onChangeFormulaName={renameFormula}
-              onDeleteFormula={deleteFormula}
-              isReadOnly={readOnly}
-            />
-          ) : (
-            <CodeResult {...result!} isLiveResult />
-          )
+          <ConditionalResult kind={result?.type.kind ?? 'pending'}>
+            {!displayResult ? null : isRectangularResult ? (
+              <ConnectionTable
+                type="static"
+                tableResult={result as Result.Result<'table'>}
+                hiddenColumns={[]}
+                onAddFormula={addFormula}
+                formulaColumns={columnFormulas}
+                onChangeFormulaName={renameFormula}
+                onDeleteFormula={deleteFormula}
+                isReadOnly={readOnly}
+              />
+            ) : (
+              <CodeResult {...result!} isLiveResult />
+            )}
+          </ConditionalResult>
         }
       >
         {varName}

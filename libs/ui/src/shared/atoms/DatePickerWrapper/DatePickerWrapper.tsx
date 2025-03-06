@@ -13,6 +13,7 @@ export interface DatePickerWrapperProps {
   value: string;
   open?: boolean | null;
   onChange: (value: string) => void;
+  onDateChange?: (value: Date) => void;
   customInput?: DatePicker['props']['customInput'];
   children?: React.ReactNode;
 }
@@ -22,6 +23,7 @@ export const DatePickerWrapper = ({
   value,
   open = true,
   onChange,
+  onDateChange,
   customInput,
   children,
 }: DatePickerWrapperProps) => {
@@ -39,11 +41,14 @@ export const DatePickerWrapper = ({
 
   const setDateValue = useCallback(
     (newDateValue: Date | null) => {
-      if (newDateValue != null && dateFormat) {
-        onChange(format(newDateValue, dateFormat));
+      if (newDateValue != null) {
+        if (dateFormat) {
+          onChange?.(format(newDateValue, dateFormat));
+        }
+        onDateChange?.(newDateValue);
       }
     },
-    [dateFormat, onChange]
+    [dateFormat, onChange, onDateChange]
   );
 
   const showTimeSelect = ['hour', 'minute', 'second', 'millisecond'].includes(

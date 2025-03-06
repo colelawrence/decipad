@@ -696,6 +696,14 @@ it('tests every action', () => {
                 "showDataLabel": {
                   "type": "boolean",
                 },
+                "size": {
+                  "enum": [
+                    "small",
+                    "medium",
+                    "large",
+                  ],
+                  "type": "string",
+                },
                 "sizeColumnName": {
                   "type": "string",
                 },
@@ -791,6 +799,14 @@ it('tests every action', () => {
                 },
                 "showDataLabel": {
                   "type": "boolean",
+                },
+                "size": {
+                  "enum": [
+                    "small",
+                    "medium",
+                    "large",
+                  ],
+                  "type": "string",
                 },
                 "sizeColumnName": {
                   "type": "string",

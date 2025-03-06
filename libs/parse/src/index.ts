@@ -10,3 +10,4 @@ export * from './inferBoolean';
 export * from './inferDate';
 export * from './parseDate';
 export * from './textify';
+export * from './labelize';

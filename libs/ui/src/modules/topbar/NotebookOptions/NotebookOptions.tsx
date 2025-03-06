@@ -1,4 +1,4 @@
-import { ClientEventsContext } from '@decipad/client-events';
+import { analytics } from '@decipad/client-events';
 import {
   NotebookMetaDataFragment,
   WorkspaceSwitcherWorkspaceFragment,
@@ -9,7 +9,7 @@ import { css } from '@emotion/react';
 import styled from '@emotion/styled';
 import { format } from 'date-fns';
 import { Section } from 'libs/ui/src/types';
-import { FC, ReactNode, useContext, useState } from 'react';
+import { FC, ReactNode, useState } from 'react';
 import {
   Archive,
   Download,
@@ -68,7 +68,6 @@ export const NotebookOptions: FC<NotebookOptionsProps> = ({
   popupAlign = 'end',
 }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const clientEvent = useContext(ClientEventsContext);
   const toast = useToast();
 
   const downloadPDF = (_: string) => {
@@ -188,14 +187,12 @@ export const NotebookOptions: FC<NotebookOptionsProps> = ({
                 onSelect={() => {
                   try {
                     downloadPDF(`${workspaceId}-${id}`);
-                    clientEvent({
-                      segmentEvent: {
-                        type: 'action',
-                        action: 'Notebook Downloaded',
-                        props: {
-                          analytics_source: 'frontend',
-                          format: 'pdf',
-                        },
+                    analytics.track({
+                      type: 'action',
+                      action: 'Notebook Downloaded',
+                      props: {
+                        analytics_source: 'frontend',
+                        format: 'pdf',
                       },
                     });
                   } catch (error) {
@@ -212,14 +209,12 @@ export const NotebookOptions: FC<NotebookOptionsProps> = ({
                 onSelect={() => {
                   actions.onDownloadNotebook(id);
                   setIsOpen(false);
-                  clientEvent({
-                    segmentEvent: {
-                      type: 'action',
-                      action: 'Notebook Downloaded',
-                      props: {
-                        analytics_source: 'frontend',
-                        format: 'json',
-                      },
+                  analytics.track({
+                    type: 'action',
+                    action: 'Notebook Downloaded',
+                    props: {
+                      analytics_source: 'frontend',
+                      format: 'json',
                     },
                   });
                 }}
@@ -233,13 +228,11 @@ export const NotebookOptions: FC<NotebookOptionsProps> = ({
               onSelect={() => {
                 actions.onDownloadNotebookHistory(id);
                 setIsOpen(false);
-                clientEvent({
-                  segmentEvent: {
-                    type: 'action',
-                    action: 'Exported Notebook History',
-                    props: {
-                      analytics_source: 'frontend',
-                    },
+                analytics.track({
+                  type: 'action',
+                  action: 'Exported Notebook History',
+                  props: {
+                    analytics_source: 'frontend',
                   },
                 });
               }}

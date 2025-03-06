@@ -1,6 +1,6 @@
 import type { Result } from '@decipad/language-interfaces';
 import type { AnyElement } from '@decipad/editor-types';
-import { useMyEditorRef } from '@decipad/editor-types';
+import { useMyEditorRef, DRAG_EXPRESSION } from '@decipad/editor-types';
 import { Select, SmartColumnCell as UISmartColumnCell } from '@decipad/ui';
 import type { DragEvent, FC } from 'react';
 import { useCallback, useEffect, useMemo, useState } from 'react';
@@ -8,10 +8,10 @@ import { EMPTY } from 'rxjs';
 import type { Path } from 'slate';
 import { type AggregationType } from '@decipad/language-aggregations';
 import { useColumnAggregationTypes } from '../../hooks';
-import { onDragSmartCellResultStarted } from './onDragSmartCellResultStarted';
 import { useOnDragEnd } from '../../../../editor-components/src/utils/useDnd';
 import type { TableColumn } from '../../types';
 import { useComputer } from '@decipad/editor-hooks';
+import { onDragStartSmartRef } from '@decipad/editor-utils';
 
 interface SmartColumnCellProps {
   tableName: string;
@@ -91,7 +91,8 @@ export const SmartColumnCell: FC<SmartColumnCellProps> = ({
     (ev: DragEvent) => {
       expression &&
         result &&
-        onDragSmartCellResultStarted(editor)({
+        onDragStartSmartRef(editor)({
+          dragType: DRAG_EXPRESSION,
           result,
           expression,
         })(ev);

@@ -33,6 +33,8 @@ export const availableFlags = [
 
   'WORKSPACE_NUMBERS',
   'INTEGRATION_FILTERS',
+
+  'DATA_LAKE',
   'INTEGRATION_FORMULAS',
 
   'TIME_SERIES_BLOCK',

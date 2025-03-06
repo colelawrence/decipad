@@ -15,12 +15,12 @@ import {
   p14Regular,
 } from '../../../primitives';
 
-import { ClientEventsContext } from '@decipad/client-events';
+import { analytics } from '@decipad/client-events';
 import { AssistantMessage } from '@decipad/react-contexts';
 import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
 import copyToClipboard from 'copy-to-clipboard';
-import { useCallback, useContext, useState } from 'react';
+import { useCallback, useState } from 'react';
 import { JellyBeans, Tooltip } from '../../../shared';
 import { AssistantFeedbackPopUp } from '../AssistantFeedbackPopUp/AssistantFeedbackPopUp';
 import { ChatMarkdownRenderer } from '../ChatMarkdownRenderer/ChatMarkdownRenderer';
@@ -121,8 +121,6 @@ export const ChatAssistantMessage: React.FC<Props> = ({
   const [hasRated, setHasRated] = useState(false);
   const [hasSubmittedFeedback, setHasSubmittedFeedback] = useState(false);
 
-  const clientEvent = useContext(ClientEventsContext);
-
   const handleSendRating = useCallback(
     (r: 'like' | 'dislike') => {
       submitRating(r);
@@ -142,18 +140,16 @@ export const ChatAssistantMessage: React.FC<Props> = ({
   const handleUseSuggestions = useCallback(
     (s: string) => {
       sendMessage(s);
-      clientEvent({
-        segmentEvent: {
-          type: 'action',
-          action: 'AI Chat Suggestion Clicked',
-          props: {
-            picked_suggestion: s,
-            analytics_source: 'frontend',
-          },
+      analytics.track({
+        type: 'action',
+        action: 'AI Chat Suggestion Clicked',
+        props: {
+          picked_suggestion: s,
+          analytics_source: 'frontend',
         },
       });
     },
-    [sendMessage, clientEvent]
+    [sendMessage]
   );
 
   const { content, suggestions } = message;

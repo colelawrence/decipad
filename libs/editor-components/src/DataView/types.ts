@@ -7,6 +7,7 @@ export interface SmartProps {
   aggregationType: AggregationKind | undefined;
   aggregationExpression: string | undefined;
   aggregationResult: Result.AnyResult | undefined;
+  aggregationVariableName: string | undefined;
   rowSpan?: number;
   colSpan?: number;
   alignRight?: boolean;
@@ -33,6 +34,7 @@ export interface HeaderProps {
   aggregationType?: string;
   aggregationResult: Result.Result | undefined;
   aggregationExpression: string | undefined;
+  aggregationVariableName: string | undefined;
 }
 
 export interface SmartRowColumn {
@@ -46,6 +48,7 @@ export interface SmartRowElement {
   type?: SerializedType;
   value?: Result.OneResult;
   aggregationExpression: string | undefined;
+  aggregationVariableName: string | undefined;
   children: DataGroup[];
   global?: boolean;
 }
@@ -60,6 +63,7 @@ export interface DataGroupElement {
   global?: boolean;
   aggregationResult: Result.Result | undefined;
   aggregationExpression: string | undefined;
+  aggregationVariableName: string | undefined;
 }
 
 export type DataGroup = DataGroupElement | SmartRowElement;

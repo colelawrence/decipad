@@ -26,6 +26,7 @@ const viteConfig: UserConfig = {
   worker: {
     plugins: () => [tsconfigPaths()],
   },
+  assetsInclude: ['**/*.sql'],
 };
 
 // https://vitejs.dev/config/

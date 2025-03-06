@@ -1,5 +1,5 @@
 /* eslint-disable camelcase */
-import { ClientEventsContext } from '@decipad/client-events';
+import { analytics } from '@decipad/client-events';
 import type { DocSyncEditor } from '@decipad/docsync';
 import {
   useClaimNotebookMutation,
@@ -23,7 +23,7 @@ import styled from '@emotion/styled';
 import { Ellipsis } from 'libs/ui/src/icons';
 import { useSession } from 'next-auth/react';
 import type { FC } from 'react';
-import { memo, useContext, useMemo } from 'react';
+import { memo, useMemo } from 'react';
 import { useNotebookMetaActions } from '../../hooks';
 import {
   useBackActions,
@@ -100,8 +100,6 @@ const Topbar: FC<TopbarProps> = memo(
     const { isEmbed } = useNotebookRoute();
 
     const [, claimNotebook] = useClaimNotebookMutation();
-
-    const clientEvent = useContext(ClientEventsContext);
 
     const data = meta.data?.getPadById;
 
@@ -210,13 +208,11 @@ const Topbar: FC<TopbarProps> = memo(
         actions={{
           onBack,
           onGalleryClick: () => {
-            clientEvent({
-              segmentEvent: {
-                type: 'action',
-                action: 'Templates Button Clicked',
-                props: {
-                  analytics_source: 'frontend',
-                },
+            analytics.track({
+              type: 'action',
+              action: 'Templates Button Clicked',
+              props: {
+                analytics_source: 'frontend',
               },
             });
           },
@@ -227,11 +223,9 @@ const Topbar: FC<TopbarProps> = memo(
           onToggleSidebar: () =>
             sidebarData.toggleSidebar({ type: 'default-sidebar' }),
           onTryDecipadClick: () => {
-            clientEvent({
-              segmentEvent: {
-                type: 'action',
-                action: 'try decipad',
-              },
+            analytics.track({
+              type: 'action',
+              action: 'try decipad',
             });
           },
           onClaimNotebook: () => {

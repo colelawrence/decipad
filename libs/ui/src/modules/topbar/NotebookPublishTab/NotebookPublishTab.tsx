@@ -13,8 +13,7 @@ import {
   Tooltip,
 } from '../../../shared';
 import CopyToClipboard from 'react-copy-to-clipboard';
-import { FC, ReactNode, useContext, useState } from 'react';
-import { ClientEventsContext } from '@decipad/client-events';
+import { FC, ReactNode, useState } from 'react';
 
 import { useCurrentWorkspaceStore } from '@decipad/react-contexts';
 
@@ -24,6 +23,7 @@ import { aliasInputStyles } from './styles';
 import { isFlagEnabled } from '@decipad/feature-flags';
 import { Publish_State } from '@decipad/graphql-client';
 import * as Popover from '@radix-ui/react-popover';
+import { analytics } from '@decipad/client-events';
 
 const PublishingTextMap: Record<Publish_State, string> = {
   PUBLICLY_HIGHLIGHTED: 'Public on the web',
@@ -63,8 +63,6 @@ export const NotebookPublishTab: FC<S.NotebookPublishTabProps> = ({
   const [linkTypeTab, setLinkTypeTab] = useState<'public' | 'private'>(
     isPremium ? 'private' : 'public'
   );
-
-  const clientEvent = useContext(ClientEventsContext);
 
   const [aliasName, setAliasName] = useState('');
 
@@ -171,13 +169,11 @@ export const NotebookPublishTab: FC<S.NotebookPublishTabProps> = ({
                               options={{ format: 'text/plain' }}
                               onCopy={() => {
                                 // Analytics
-                                clientEvent({
-                                  segmentEvent: {
-                                    type: 'action',
-                                    action: 'Notebook Share Link Copied',
-                                    props: {
-                                      analytics_source: 'frontend',
-                                    },
+                                analytics.track({
+                                  type: 'action',
+                                  action: 'Notebook Share Link Copied',
+                                  props: {
+                                    analytics_source: 'frontend',
                                   },
                                 });
                               }}
@@ -252,13 +248,11 @@ export const NotebookPublishTab: FC<S.NotebookPublishTabProps> = ({
                               options={{ format: 'text/plain' }}
                               onCopy={() => {
                                 // Analytics
-                                clientEvent({
-                                  segmentEvent: {
-                                    type: 'action',
-                                    action: 'Notebook Share Link Copied',
-                                    props: {
-                                      analytics_source: 'frontend',
-                                    },
+                                analytics.track({
+                                  type: 'action',
+                                  action: 'Notebook Share Link Copied',
+                                  props: {
+                                    analytics_source: 'frontend',
                                   },
                                 });
                               }}
@@ -449,13 +443,11 @@ export const NotebookPublishTab: FC<S.NotebookPublishTabProps> = ({
                                       setCopiedPublicStatusVisible(false);
                                     }, 1000);
                                     // Analytics
-                                    clientEvent({
-                                      segmentEvent: {
-                                        type: 'action',
-                                        action: 'Notebook Share Link Copied',
-                                        props: {
-                                          analytics_source: 'frontend',
-                                        },
+                                    analytics.track({
+                                      type: 'action',
+                                      action: 'Notebook Share Link Copied',
+                                      props: {
+                                        analytics_source: 'frontend',
                                       },
                                     });
                                   }}

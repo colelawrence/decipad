@@ -54,6 +54,7 @@ export const PlotResult = ({
   grid,
   startFromZero,
   mirrorYAxis,
+  size,
   groupByX,
   yColumnNames,
   yColumnChartTypes,
@@ -92,6 +93,7 @@ export const PlotResult = ({
           colorScheme={colorScheme}
           grid={grid}
           isExporting={isExporting}
+          size={size}
         />
       );
       break;
@@ -106,6 +108,7 @@ export const PlotResult = ({
           showDataLabel={showDataLabel}
           mirrorYAxis={mirrorYAxis}
           isExporting={isExporting}
+          size={size}
         />
       );
       break;
@@ -121,6 +124,7 @@ export const PlotResult = ({
           isExporting={isExporting}
           xAxisLabel={xAxisLabel}
           setXAxisLabel={setXAxisLabel}
+          size={size}
         />
       );
       break;
@@ -143,6 +147,7 @@ export const PlotResult = ({
             setXAxisLabel={setXAxisLabel}
             setYAxisLabel={setYAxisLabel}
             isExporting={isExporting}
+            size={size}
           />
         );
       } else if (lineVariant === 'area100') {
@@ -163,6 +168,7 @@ export const PlotResult = ({
             setXAxisLabel={setXAxisLabel}
             setYAxisLabel={setYAxisLabel}
             isExporting={isExporting}
+            size={size}
           />
         );
       } else {
@@ -181,6 +187,7 @@ export const PlotResult = ({
             setXAxisLabel={setXAxisLabel}
             setYAxisLabel={setYAxisLabel}
             isExporting={isExporting}
+            size={size}
           />
         );
       }
@@ -203,6 +210,7 @@ export const PlotResult = ({
           setXAxisLabel={setXAxisLabel}
           setYAxisLabel={setYAxisLabel}
           isExporting={isExporting}
+          size={size}
         />
       );
       break;
@@ -224,6 +232,7 @@ export const PlotResult = ({
           setXAxisLabel={setXAxisLabel}
           setYAxisLabel={setYAxisLabel}
           isExporting={isExporting}
+          size={size}
         />
       );
       break;
@@ -244,6 +253,7 @@ export const PlotResult = ({
           setXAxisLabel={setXAxisLabel}
           setYAxisLabel={setYAxisLabel}
           isExporting={isExporting}
+          size={size}
         />
       );
       break;
@@ -264,6 +274,7 @@ export const PlotResult = ({
           setXAxisLabel={setXAxisLabel}
           setYAxisLabel={setYAxisLabel}
           isExporting={isExporting}
+          size={size}
         />
       );
       break;

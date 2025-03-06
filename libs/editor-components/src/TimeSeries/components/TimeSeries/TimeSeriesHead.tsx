@@ -4,6 +4,7 @@ import { DataGroup } from 'libs/editor-components/src/DataView/types';
 import { Path } from 'slate';
 import { TimeSeriesColumnHeader } from '../TimeSeriesColumnHeader';
 import { stickyLeftColumn, stickySecondLeftColumn } from './time-series-styles';
+import { css } from '@emotion/react';
 
 type TimeSeriesHeadProps = {
   categoricalColumns: TimeSeriesHeader[];
@@ -70,7 +71,7 @@ export const TimeSeriesHead = ({
                 dateIndex === length - 1 && !numericalColumns.length // When there's only header and no data.
               }
               key={String(date.value)}
-              style={{ position: 'relative', zIndex: 1 }}
+              css={datesCellStyles}
             >
               {date?.type && (
                 <CodeResult
@@ -87,3 +88,9 @@ export const TimeSeriesHead = ({
     </thead>
   );
 };
+
+const datesCellStyles = css({
+  position: 'relative',
+  zIndex: 1,
+  whiteSpace: 'nowrap',
+});

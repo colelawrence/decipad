@@ -1,6 +1,7 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import {
   createIntegrationManager,
+  debounceWithLeading,
   getUsedVariables,
   getVariableChangeObservable,
   withControllerSideEffects,
@@ -16,8 +17,9 @@ import {
   TableColumnFormulaElement,
 } from '@decipad/editor-types';
 import { assert, noop } from '@decipad/utils';
-import { Computer, parseBlockOrThrow } from '@decipad/computer';
-import { Observable, Subject } from 'rxjs';
+import { Computer, getComputer, parseBlockOrThrow } from '@decipad/computer';
+import { concatMap, delay, merge, Observable, of, Subject } from 'rxjs';
+import { TestScheduler } from 'rxjs/testing';
 
 describe('Inserting / Updating intergrations', () => {
   it("performs an action if integration hasn't been ran before", () => {
@@ -555,5 +557,326 @@ describe('Variable change management', () => {
 
     updateIntegration(integrationBlock);
     expect(_integrationToSubscriptions.size).toBe(0);
+  });
+});
+
+describe('Variable change computer observable', () => {
+  const integrationBlock: IntegrationTypes.IntegrationBlock = {
+    id: 'id',
+    type: ELEMENT_INTEGRATION,
+    typeMappings: {},
+    children: [
+      {
+        id: 'id',
+        type: ELEMENT_STRUCTURED_VARNAME,
+        children: [{ text: 'varname' }],
+      },
+    ],
+    filters: [],
+    timeOfLastRun: undefined,
+    integrationType: {
+      type: 'mysql',
+      url: 'url',
+      query: '',
+    },
+    isFirstRowHeader: false,
+  };
+
+  let computer = getComputer();
+
+  beforeEach(() => {
+    computer = getComputer();
+  });
+
+  it('emits event when variable changes', async () => {
+    assert(integrationBlock.integrationType.type === 'mysql');
+    integrationBlock.integrationType.query = '{{Variable}}';
+
+    await computer.pushComputeDelta({
+      program: {
+        upsert: [
+          {
+            id: 'id',
+            type: 'identified-block',
+            block: parseBlockOrThrow('Variable = 5', 'id'),
+          },
+        ],
+      },
+    });
+
+    const usedVariablesGetter = getUsedVariables(computer, 'notebook-id');
+    const observable = getVariableChangeObservable(
+      usedVariablesGetter,
+      computer
+    );
+
+    let counter = 0;
+    const sub = observable(integrationBlock).subscribe(() => {
+      counter++;
+    });
+
+    expect(counter).toBe(0);
+
+    await computer.pushComputeDelta({
+      program: {
+        upsert: [
+          {
+            id: 'id',
+            type: 'identified-block',
+            block: parseBlockOrThrow('Variable = 6', 'id'),
+          },
+        ],
+      },
+    });
+
+    expect(counter).toBe(1);
+
+    sub.unsubscribe();
+  });
+
+  it('doesnt re-emit if that variable has stayed the same', async () => {
+    assert(integrationBlock.integrationType.type === 'mysql');
+    integrationBlock.integrationType.query = '{{Variable}}';
+
+    await computer.pushComputeDelta({
+      program: {
+        upsert: [
+          {
+            id: 'id',
+            type: 'identified-block',
+            block: parseBlockOrThrow('Variable = 5', 'id'),
+          },
+        ],
+      },
+    });
+
+    const usedVariablesGetter = getUsedVariables(computer, 'notebook-id');
+    const observable = getVariableChangeObservable(
+      usedVariablesGetter,
+      computer
+    );
+
+    let counter = 0;
+    const sub = observable(integrationBlock).subscribe(() => {
+      counter++;
+    });
+
+    expect(counter).toBe(0);
+
+    await computer.pushComputeDelta({
+      program: {
+        upsert: [
+          {
+            id: 'id',
+            type: 'identified-block',
+            block: parseBlockOrThrow('Variable = 5', 'id'),
+          },
+        ],
+      },
+    });
+
+    expect(counter).toBe(1);
+
+    await computer.pushComputeDelta({
+      program: {
+        upsert: [
+          {
+            id: 'id',
+            type: 'identified-block',
+            block: parseBlockOrThrow('Variable = 5', 'id'),
+          },
+        ],
+      },
+    });
+
+    expect(counter).toBe(1);
+
+    sub.unsubscribe();
+  });
+
+  it('does re-emit if the variable has changed', async () => {
+    assert(integrationBlock.integrationType.type === 'mysql');
+    integrationBlock.integrationType.query = '{{Variable}}';
+
+    await computer.pushComputeDelta({
+      program: {
+        upsert: [
+          {
+            id: 'id',
+            type: 'identified-block',
+            block: parseBlockOrThrow('Variable = 5', 'id'),
+          },
+        ],
+      },
+    });
+
+    const usedVariablesGetter = getUsedVariables(computer, 'notebook-id');
+    const observable = getVariableChangeObservable(
+      usedVariablesGetter,
+      computer
+    );
+
+    let counter = 0;
+    const sub = observable(integrationBlock).subscribe(() => {
+      counter++;
+    });
+
+    expect(counter).toBe(0);
+
+    await computer.pushComputeDelta({
+      program: {
+        upsert: [
+          {
+            id: 'id',
+            type: 'identified-block',
+            block: parseBlockOrThrow('Variable = 5', 'id'),
+          },
+        ],
+      },
+    });
+
+    expect(counter).toBe(1);
+
+    await computer.pushComputeDelta({
+      program: {
+        upsert: [
+          {
+            id: 'id',
+            type: 'identified-block',
+            block: parseBlockOrThrow('Variable = 6', 'id'),
+          },
+        ],
+      },
+    });
+
+    expect(counter).toBe(2);
+
+    sub.unsubscribe();
+  });
+
+  it('only emits one event if multiple variables are emitted at once', async () => {
+    assert(integrationBlock.integrationType.type === 'mysql');
+    integrationBlock.integrationType.query = '{{Variable}} {{Variable2}}';
+
+    await computer.pushComputeDelta({
+      program: {
+        upsert: [
+          {
+            id: 'id',
+            type: 'identified-block',
+            block: parseBlockOrThrow('Variable = 5', 'id'),
+          },
+          {
+            id: 'id-2',
+            type: 'identified-block',
+            block: parseBlockOrThrow('Variable2 = 5', 'id'),
+          },
+        ],
+      },
+    });
+
+    const usedVariablesGetter = getUsedVariables(computer, 'notebook-id');
+    const observable = getVariableChangeObservable(
+      usedVariablesGetter,
+      computer
+    );
+
+    let counter = 0;
+    const sub = observable(integrationBlock).subscribe(() => {
+      counter++;
+    });
+
+    expect(counter).toBe(0);
+
+    await computer.pushComputeDelta({
+      program: {
+        upsert: [
+          {
+            id: 'id',
+            type: 'identified-block',
+            block: parseBlockOrThrow('Variable = 5', 'id'),
+          },
+          {
+            id: 'id-2',
+            type: 'identified-block',
+            block: parseBlockOrThrow('Variable2 = 5', 'id'),
+          },
+        ],
+      },
+    });
+
+    expect(counter).toBe(1);
+
+    sub.unsubscribe();
+  });
+
+  // I want
+  // - First event to be instant.
+  // - Any subsequent event to have to wait 1 or so second.
+  it('observable that throttles first and debounces', async () => {
+    const scheduler = new TestScheduler((actual, expected) => {
+      expect(actual).deep.equal(expected);
+    });
+
+    const other = of('d').pipe(delay(15));
+    const otherother = of('e').pipe(delay(40));
+    const observable = merge(of('a', 'b', 'c'), other, otherother).pipe(
+      debounceWithLeading(10)
+    );
+
+    scheduler.run((helpers) => {
+      const { expectObservable } = helpers;
+
+      //
+      // There is a bit to understand about this testing syntax.
+      // @see https://rxjs.dev/guide/testing/marble-testing
+      //
+      // Basically, you write the value of the events emitted, delay between them,
+      // and a group (brackets), and a pipe (|) to indicate the end of the observable.
+      //
+
+      //
+      // Here we can see that we wait the debounce time necessary,
+      // but revert back to throttling (emitting instantly), when
+      // the delay is over.
+      //
+
+      const expected = 'a 9ms c 4ms d 24ms e';
+
+      expectObservable(observable).toBe(expected);
+    });
+  });
+
+  it('waits until very last event to emit', async () => {
+    const scheduler = new TestScheduler((actual, expected) => {
+      expect(actual).deep.equal(expected);
+    });
+
+    const delayed = of('a', 'b', 'c', 'd', 'e', 'f').pipe(
+      concatMap((v) => of(v).pipe(delay(5)))
+    );
+    const observable = delayed.pipe(debounceWithLeading(10));
+
+    scheduler.run((helpers) => {
+      const { expectObservable } = helpers;
+
+      //
+      // There is a bit to understand about this testing syntax.
+      // @see https://rxjs.dev/guide/testing/marble-testing
+      //
+      // Basically, you write the value of the events emitted, delay between them,
+      // and a group (brackets), and a pipe (|) to indicate the end of the observable.
+      //
+
+      //
+      // Here we can see that we wait the debounce time necessary,
+      // but revert back to throttling (emitting instantly), when
+      // the delay is over.
+      //
+
+      const expected = '5ms a 34ms f';
+
+      expectObservable(observable).toBe(expected);
+    });
   });
 });

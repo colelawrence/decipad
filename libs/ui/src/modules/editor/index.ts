@@ -85,3 +85,4 @@ export * from './VariableTypeMenu';
 export * from './PendingResult/PendingResult';
 export * from './ResultIcon/ResultIcon';
 export * from './NewElementLine/NewElementLine';
+export * from './ConditionalResult/ConditionalResult';

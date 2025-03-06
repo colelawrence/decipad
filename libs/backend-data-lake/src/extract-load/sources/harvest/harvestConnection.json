@@ -1,0 +1,3103 @@
+{
+  "scheduleType": "basic",
+  "scheduleData": { "basicSchedule": { "units": 24, "timeUnit": "hours" } },
+  "namespaceDefinition": "destination",
+  "prefix": "timetracking_harvest_",
+  "nonBreakingChangesPreference": "propagate_fully",
+  "geography": "auto",
+  "syncCatalog": {
+    "streams": [
+      {
+        "stream": {
+          "name": "clients",
+          "jsonSchema": {
+            "$schema": "http://json-schema.org/draft-07/schema#",
+            "additionalProperties": true,
+            "type": "object",
+            "properties": {
+              "address": {
+                "description": "The client's postal address.",
+                "type": ["null", "string"]
+              },
+              "is_active": {
+                "description": "Indicates whether the client is currently active or not.",
+                "type": ["null", "boolean"]
+              },
+              "updated_at": {
+                "format": "date-time",
+                "description": "The date and time when the client record was last updated.",
+                "type": ["null", "string"]
+              },
+              "name": {
+                "description": "The client's name.",
+                "type": ["null", "string"]
+              },
+              "created_at": {
+                "format": "date-time",
+                "description": "The date and time when the client record was created.",
+                "type": ["null", "string"]
+              },
+              "currency": {
+                "description": "The currency used by the client.",
+                "type": ["null", "string"]
+              },
+              "id": {
+                "description": "Unique identifier for the client.",
+                "type": ["null", "integer"]
+              },
+              "statement_key": {
+                "description": "Key used for client's statements or invoices.",
+                "type": ["null", "string"]
+              }
+            }
+          },
+          "supportedSyncModes": ["full_refresh", "incremental"],
+          "sourceDefinedCursor": true,
+          "defaultCursorField": ["updated_at"],
+          "sourceDefinedPrimaryKey": [["id"]],
+          "isResumable": true
+        },
+        "config": {
+          "syncMode": "incremental",
+          "cursorField": ["updated_at"],
+          "destinationSyncMode": "append",
+          "primaryKey": [["id"]],
+          "aliasName": "clients",
+          "selected": true,
+          "suggested": false,
+          "selectedFields": [],
+          "hashedFields": [],
+          "mappers": []
+        }
+      },
+      {
+        "stream": {
+          "name": "company",
+          "jsonSchema": {
+            "$schema": "http://json-schema.org/draft-07/schema#",
+            "additionalProperties": true,
+            "type": "object",
+            "properties": {
+              "thousands_separator": {
+                "description": "The symbol used to separate thousands in a number.",
+                "type": ["null", "string"]
+              },
+              "estimate_feature": {
+                "description": "Indicates if the estimate feature is enabled for this company.",
+                "type": ["null", "boolean"]
+              },
+              "plan_type": {
+                "description": "The type of plan subscribed by the company.",
+                "type": ["null", "string"]
+              },
+              "is_active": {
+                "description": "Indicates if the company is currently active.",
+                "type": ["null", "boolean"]
+              },
+              "time_format": {
+                "description": "The format used to display time.",
+                "type": ["null", "string"]
+              },
+              "weekly_capacity": {
+                "description": "The weekly capacity setting for this company.",
+                "type": ["null", "integer"]
+              },
+              "full_domain": {
+                "description": "The full domain name associated with this company.",
+                "type": ["null", "string"]
+              },
+              "week_start_day": {
+                "description": "The day considered the start of the week for this company.",
+                "type": ["null", "string"]
+              },
+              "approval_required": {
+                "description": "Indicates if approval is required for certain actions.",
+                "type": ["null", "boolean"]
+              },
+              "expense_feature": {
+                "description": "Indicates if the expense feature is enabled for this company.",
+                "type": ["null", "boolean"]
+              },
+              "clock": {
+                "description": "The clock configuration for time tracking.",
+                "type": ["null", "string"]
+              },
+              "decimal_symbol": {
+                "description": "The symbol used to separate the integer part from the fractional part of a number.",
+                "type": ["null", "string"]
+              },
+              "base_uri": {
+                "description": "The base URI used in constructing URLs for this company.",
+                "type": ["null", "string"]
+              },
+              "name": {
+                "description": "The name of the company.",
+                "type": ["null", "string"]
+              },
+              "invoice_feature": {
+                "description": "Indicates if the invoice feature is enabled for this company.",
+                "type": ["null", "boolean"]
+              },
+              "color_scheme": {
+                "description": "The color scheme used in the user interface.",
+                "type": ["null", "string"]
+              },
+              "wants_timestamp_timers": {
+                "description": "Indicates if the company wants timestamp timers displayed.",
+                "type": ["null", "boolean"]
+              }
+            }
+          },
+          "supportedSyncModes": ["full_refresh"],
+          "sourceDefinedCursor": false,
+          "defaultCursorField": [],
+          "sourceDefinedPrimaryKey": [],
+          "isResumable": false
+        },
+        "config": {
+          "syncMode": "full_refresh",
+          "cursorField": [],
+          "destinationSyncMode": "append",
+          "primaryKey": [],
+          "aliasName": "company",
+          "selected": false,
+          "suggested": false,
+          "selectedFields": [],
+          "mappers": [],
+          "fieldSelectionEnabled": false
+        }
+      },
+      {
+        "stream": {
+          "name": "contacts",
+          "jsonSchema": {
+            "$schema": "http://json-schema.org/draft-07/schema#",
+            "additionalProperties": true,
+            "type": "object",
+            "properties": {
+              "phone_mobile": {
+                "description": "Mobile phone number of the contact",
+                "type": ["null", "string"]
+              },
+              "phone_office": {
+                "description": "Office phone number of the contact",
+                "type": ["null", "string"]
+              },
+              "updated_at": {
+                "format": "date-time",
+                "description": "Timestamp of when the contact was last updated",
+                "type": ["null", "string"]
+              },
+              "client": {
+                "description": "Details of the client associated with the contact",
+                "type": ["null", "object"],
+                "properties": {
+                  "name": {
+                    "description": "Name of the client",
+                    "type": ["null", "string"]
+                  },
+                  "id": {
+                    "description": "Unique identifier for the client",
+                    "type": ["null", "integer"]
+                  }
+                }
+              },
+              "last_name": {
+                "description": "Last name of the contact",
+                "type": ["null", "string"]
+              },
+              "created_at": {
+                "format": "date-time",
+                "description": "Timestamp of when the contact was created",
+                "type": ["null", "string"]
+              },
+              "id": {
+                "description": "Unique identifier for the contact",
+                "type": ["null", "integer"]
+              },
+              "fax": {
+                "description": "Fax number of the contact",
+                "type": ["null", "string"]
+              },
+              "title": {
+                "description": "Job title of the contact",
+                "type": ["null", "string"]
+              },
+              "first_name": {
+                "description": "First name of the contact",
+                "type": ["null", "string"]
+              },
+              "email": {
+                "description": "Email address of the contact",
+                "type": ["null", "string"]
+              }
+            }
+          },
+          "supportedSyncModes": ["full_refresh", "incremental"],
+          "sourceDefinedCursor": true,
+          "defaultCursorField": ["updated_at"],
+          "sourceDefinedPrimaryKey": [["id"]],
+          "isResumable": true
+        },
+        "config": {
+          "syncMode": "incremental",
+          "cursorField": ["updated_at"],
+          "destinationSyncMode": "append",
+          "primaryKey": [["id"]],
+          "aliasName": "contacts",
+          "selected": true,
+          "suggested": false,
+          "selectedFields": [],
+          "hashedFields": [],
+          "mappers": []
+        }
+      },
+      {
+        "stream": {
+          "name": "estimate_item_categories",
+          "jsonSchema": {
+            "$schema": "http://json-schema.org/draft-07/schema#",
+            "additionalProperties": true,
+            "type": "object",
+            "properties": {
+              "updated_at": {
+                "format": "date-time",
+                "description": "The date and time when the estimate item category was last updated.",
+                "type": ["null", "string"]
+              },
+              "name": {
+                "description": "The name of the estimate item category.",
+                "type": ["null", "string"]
+              },
+              "created_at": {
+                "format": "date-time",
+                "description": "The date and time when the estimate item category was created.",
+                "type": ["null", "string"]
+              },
+              "id": {
+                "description": "The unique identifier for the estimate item category.",
+                "type": ["null", "integer"]
+              }
+            }
+          },
+          "supportedSyncModes": ["full_refresh", "incremental"],
+          "sourceDefinedCursor": true,
+          "defaultCursorField": ["updated_at"],
+          "sourceDefinedPrimaryKey": [["id"]],
+          "isResumable": true
+        },
+        "config": {
+          "syncMode": "incremental",
+          "cursorField": ["updated_at"],
+          "destinationSyncMode": "append",
+          "primaryKey": [["id"]],
+          "aliasName": "estimate_item_categories",
+          "selected": true,
+          "suggested": false,
+          "selectedFields": [],
+          "hashedFields": [],
+          "mappers": []
+        }
+      },
+      {
+        "stream": {
+          "name": "estimates",
+          "jsonSchema": {
+            "$schema": "http://json-schema.org/draft-07/schema#",
+            "additionalProperties": true,
+            "type": "object",
+            "properties": {
+              "tax_amount": {
+                "description": "The total amount of tax applied to the estimate.",
+                "type": ["null", "number"]
+              },
+              "amount": {
+                "description": "The total amount of the estimate.",
+                "type": ["null", "number"]
+              },
+              "creator": {
+                "description": "Information about the creator of the estimates",
+                "type": ["null", "object"],
+                "properties": {
+                  "name": {
+                    "description": "The name of the user who created the estimate.",
+                    "type": ["null", "string"]
+                  },
+                  "id": {
+                    "description": "The unique identifier of the user who created the estimate.",
+                    "type": ["null", "integer"]
+                  }
+                }
+              },
+              "declined_at": {
+                "description": "The date and time when the estimates was declined.",
+                "type": ["null", "string"]
+              },
+              "notes": {
+                "description": "Any additional notes or comments related to the estimate.",
+                "type": ["null", "string"]
+              },
+              "subject": {
+                "description": "The subject or description of the estimate.",
+                "type": ["null", "string"]
+              },
+              "discount_amount": {
+                "description": "The total discount amount applied to the estimate.",
+                "type": ["null", "number"]
+              },
+              "discount": {
+                "description": "The discount percentage applied to the estimate.",
+                "type": ["null", "number"]
+              },
+              "created_at": {
+                "format": "date-time",
+                "description": "The date and time when the estimates was created.",
+                "type": ["null", "string"]
+              },
+              "tax": {
+                "description": "The tax rate applied to the estimate.",
+                "type": ["null", "number"]
+              },
+              "line_items": {
+                "description": "The list of line items included in the estimate.",
+                "type": ["null", "array"]
+              },
+              "accepted_at": {
+                "description": "The date and time when the estimates was accepted.",
+                "type": ["null", "string"]
+              },
+              "sent_at": {
+                "format": "date-time",
+                "description": "The date and time when the estimate was sent.",
+                "type": ["null", "string"]
+              },
+              "tax2": {
+                "description": "An additional tax rate applied to the estimate.",
+                "type": ["null", "number"]
+              },
+              "number": {
+                "description": "The unique number assigned to the estimate.",
+                "type": ["null", "string"]
+              },
+              "client_key": {
+                "description": "The key associated with the client.",
+                "type": ["null", "string"]
+              },
+              "issue_date": {
+                "format": "date",
+                "description": "The date when the estimate was issued.",
+                "type": ["null", "string"]
+              },
+              "updated_at": {
+                "format": "date-time",
+                "description": "The date and time when the estimate was last updated.",
+                "type": ["null", "string"]
+              },
+              "purchase_order": {
+                "description": "The purchase order associated with the estimate.",
+                "type": ["null", "string"]
+              },
+              "client": {
+                "description": "Details about the client associated with the estimates",
+                "type": ["null", "object"],
+                "properties": {
+                  "name": {
+                    "description": "The name of the client.",
+                    "type": ["null", "string"]
+                  },
+                  "id": {
+                    "description": "The unique identifier of the client.",
+                    "type": ["null", "integer"]
+                  }
+                }
+              },
+              "currency": {
+                "description": "The currency used for the estimate.",
+                "type": ["null", "string"]
+              },
+              "id": {
+                "description": "The unique identifier of the estimate.",
+                "type": ["null", "integer"]
+              },
+              "state": {
+                "description": "The current state of the estimate (e.g., pending, accepted, declined).",
+                "type": ["null", "string"]
+              },
+              "tax2_amount": {
+                "description": "The total amount of the additional tax applied to the estimate.",
+                "type": ["null", "number"]
+              }
+            }
+          },
+          "supportedSyncModes": ["full_refresh", "incremental"],
+          "sourceDefinedCursor": true,
+          "defaultCursorField": ["updated_at"],
+          "sourceDefinedPrimaryKey": [["id"]],
+          "isResumable": true
+        },
+        "config": {
+          "syncMode": "incremental",
+          "cursorField": ["updated_at"],
+          "destinationSyncMode": "append",
+          "primaryKey": [["id"]],
+          "aliasName": "estimates",
+          "selected": true,
+          "suggested": false,
+          "selectedFields": [],
+          "hashedFields": [],
+          "mappers": []
+        }
+      },
+      {
+        "stream": {
+          "name": "expense_categories",
+          "jsonSchema": {
+            "$schema": "http://json-schema.org/draft-07/schema#",
+            "additionalProperties": true,
+            "type": "object",
+            "properties": {
+              "unit_name": {
+                "description": "The unit of measurement for the expense category.",
+                "type": ["null", "string"]
+              },
+              "is_active": {
+                "description": "Indicates whether the expense category is currently active or not.",
+                "type": ["null", "boolean"]
+              },
+              "updated_at": {
+                "format": "date-time",
+                "description": "The date and time when the expense category was last updated.",
+                "type": ["null", "string"]
+              },
+              "name": {
+                "description": "The name of the expense category.",
+                "type": ["null", "string"]
+              },
+              "created_at": {
+                "format": "date-time",
+                "description": "The date and time when the expense category was created.",
+                "type": ["null", "string"]
+              },
+              "id": {
+                "description": "The unique identifier for the expense category.",
+                "type": ["null", "integer"]
+              },
+              "unit_price": {
+                "description": "The price per unit of the expense category.",
+                "type": ["null", "number"]
+              }
+            }
+          },
+          "supportedSyncModes": ["full_refresh", "incremental"],
+          "sourceDefinedCursor": true,
+          "defaultCursorField": ["updated_at"],
+          "sourceDefinedPrimaryKey": [["id"]],
+          "isResumable": true
+        },
+        "config": {
+          "syncMode": "incremental",
+          "cursorField": ["updated_at"],
+          "destinationSyncMode": "append",
+          "primaryKey": [["id"]],
+          "aliasName": "expense_categories",
+          "selected": true,
+          "suggested": false,
+          "selectedFields": [],
+          "hashedFields": [],
+          "mappers": []
+        }
+      },
+      {
+        "stream": {
+          "name": "expenses",
+          "jsonSchema": {
+            "$schema": "http://json-schema.org/draft-07/schema#",
+            "additionalProperties": true,
+            "type": "object",
+            "properties": {
+              "is_locked": {
+                "description": "Indicates if the expense entry is locked",
+                "type": ["null", "boolean"]
+              },
+              "user_assignment": {
+                "description": "Details of the assignment or task associated with the expense",
+                "type": ["null", "object"],
+                "properties": {
+                  "is_project_manager": {
+                    "description": "Indicates if the user is a project manager",
+                    "type": ["null", "boolean"]
+                  },
+                  "is_active": {
+                    "description": "Indicates if the user assignment is active",
+                    "type": ["null", "boolean"]
+                  },
+                  "updated_at": {
+                    "format": "date-time",
+                    "description": "Date and time of the last update to the user assignment",
+                    "type": ["null", "string"]
+                  },
+                  "use_default_rates": {
+                    "description": "Indicates if default rates are used for the user assignment",
+                    "type": ["null", "boolean"]
+                  },
+                  "hourly_rate": {
+                    "description": "Hourly rate set for the user assignment",
+                    "type": ["null", "number"]
+                  },
+                  "created_at": {
+                    "format": "date-time",
+                    "description": "Date and time when the user assignment was created",
+                    "type": ["null", "string"]
+                  },
+                  "id": {
+                    "description": "Unique identifier for the user assignment",
+                    "type": ["null", "integer"]
+                  },
+                  "budget": {
+                    "description": "Budget allocated for the user assignment",
+                    "type": ["null", "number"]
+                  }
+                }
+              },
+              "locked_reason": {
+                "description": "Reason for locking the expense entry",
+                "type": ["null", "string"]
+              },
+              "notes": {
+                "description": "Additional notes or comments for the expense entry",
+                "type": ["null", "string"]
+              },
+              "total_cost": {
+                "description": "Total cost of the expense entry",
+                "type": ["null", "number"]
+              },
+              "is_billed": {
+                "description": "Indicates if the expense has been billed to the client",
+                "type": ["null", "boolean"]
+              },
+              "project": {
+                "description": "Information about the project for which the expense was made",
+                "type": ["null", "object"],
+                "properties": {
+                  "code": {
+                    "description": "Code associated with the project",
+                    "type": ["null", "string"]
+                  },
+                  "name": {
+                    "description": "Name of the project associated with the expense",
+                    "type": ["null", "string"]
+                  },
+                  "id": {
+                    "description": "Unique identifier for the project",
+                    "type": ["null", "integer"]
+                  }
+                }
+              },
+              "created_at": {
+                "format": "date-time",
+                "description": "Date and time when the expense was created",
+                "type": ["null", "string"]
+              },
+              "units": {
+                "description": "Number of units (if applicable)",
+                "type": ["null", "number"]
+              },
+              "billable": {
+                "description": "Indicates if the expense is billable to the client",
+                "type": ["null", "boolean"]
+              },
+              "spent_date": {
+                "format": "date",
+                "description": "Date when the expense was incurred",
+                "type": ["null", "string"]
+              },
+              "updated_at": {
+                "format": "date-time",
+                "description": "Date and time of the last update to the expense entry",
+                "type": ["null", "string"]
+              },
+              "expense_category": {
+                "description": "Information about the category of the expense",
+                "type": ["null", "object"],
+                "properties": {
+                  "unit_name": {
+                    "description": "Name of the unit (if applicable)",
+                    "type": ["null", "string"]
+                  },
+                  "name": {
+                    "description": "Name of the expense category",
+                    "type": ["null", "string"]
+                  },
+                  "id": {
+                    "description": "Unique identifier for the expense category",
+                    "type": ["null", "integer"]
+                  },
+                  "unit_price": {
+                    "description": "Price per unit (if applicable)",
+                    "type": ["null", "number"]
+                  }
+                }
+              },
+              "client": {
+                "description": "Details of the client associated with the expense",
+                "type": ["null", "object"],
+                "properties": {
+                  "name": {
+                    "description": "Name of the client associated with the expense",
+                    "type": ["null", "string"]
+                  },
+                  "currency": {
+                    "description": "Currency used for the client's transactions",
+                    "type": ["null", "string"]
+                  },
+                  "id": {
+                    "description": "Unique identifier for the client",
+                    "type": ["null", "integer"]
+                  }
+                }
+              },
+              "receipt": {
+                "description": "Details of the receipt attached to the expense",
+                "type": ["null", "object"],
+                "properties": {
+                  "content_type": {
+                    "description": "MIME type of the receipt content",
+                    "type": ["null", "string"]
+                  },
+                  "file_name": {
+                    "description": "Name of the receipt file",
+                    "type": ["null", "string"]
+                  },
+                  "url": {
+                    "description": "URL path to access the receipt file",
+                    "type": ["null", "string"]
+                  },
+                  "file_size": {
+                    "description": "Size of the receipt file",
+                    "type": ["null", "integer"]
+                  }
+                }
+              },
+              "id": {
+                "description": "Unique identifier for the expense entry",
+                "type": ["null", "integer"]
+              },
+              "invoice": {
+                "description": "Details of the invoice related to the expense",
+                "type": ["null", "object"],
+                "properties": {
+                  "number": {
+                    "description": "Invoice number related to the expense",
+                    "type": ["null", "string"]
+                  },
+                  "id": {
+                    "description": "Unique identifier for the invoice associated with the expense",
+                    "type": ["null", "integer"]
+                  }
+                }
+              },
+              "user": {
+                "description": "Information about the user who incurred the expense",
+                "type": ["null", "object"],
+                "properties": {
+                  "name": {
+                    "description": "Name of the user who incurred the expense",
+                    "type": ["null", "string"]
+                  },
+                  "id": {
+                    "description": "Unique identifier for the user",
+                    "type": ["null", "integer"]
+                  }
+                }
+              },
+              "is_closed": {
+                "description": "Indicates if the expense entry is closed",
+                "type": ["null", "boolean"]
+              }
+            }
+          },
+          "supportedSyncModes": ["full_refresh", "incremental"],
+          "sourceDefinedCursor": true,
+          "defaultCursorField": ["updated_at"],
+          "sourceDefinedPrimaryKey": [["id"]],
+          "isResumable": true
+        },
+        "config": {
+          "syncMode": "incremental",
+          "cursorField": ["updated_at"],
+          "destinationSyncMode": "append",
+          "primaryKey": [["id"]],
+          "aliasName": "expenses",
+          "selected": true,
+          "suggested": false,
+          "selectedFields": [],
+          "hashedFields": [],
+          "mappers": []
+        }
+      },
+      {
+        "stream": {
+          "name": "invoice_item_categories",
+          "jsonSchema": {
+            "$schema": "http://json-schema.org/draft-07/schema#",
+            "additionalProperties": true,
+            "type": "object",
+            "properties": {
+              "use_as_expense": {
+                "description": "Indicates whether the category is used as an expense type.",
+                "type": ["null", "boolean"]
+              },
+              "use_as_service": {
+                "description": "Indicates whether the category is used as a service type.",
+                "type": ["null", "boolean"]
+              },
+              "updated_at": {
+                "format": "date-time",
+                "description": "The date and time when the invoice item category was last updated.",
+                "type": ["null", "string"]
+              },
+              "name": {
+                "description": "The name of the invoice item category.",
+                "type": ["null", "string"]
+              },
+              "created_at": {
+                "format": "date-time",
+                "description": "The date and time when the invoice item category was created.",
+                "type": ["null", "string"]
+              },
+              "id": {
+                "description": "The unique identifier for the invoice item category.",
+                "type": ["null", "integer"]
+              }
+            }
+          },
+          "supportedSyncModes": ["full_refresh", "incremental"],
+          "sourceDefinedCursor": true,
+          "defaultCursorField": ["updated_at"],
+          "sourceDefinedPrimaryKey": [["id"]],
+          "isResumable": true
+        },
+        "config": {
+          "syncMode": "incremental",
+          "cursorField": ["updated_at"],
+          "destinationSyncMode": "append",
+          "primaryKey": [["id"]],
+          "aliasName": "invoice_item_categories",
+          "selected": true,
+          "suggested": false,
+          "selectedFields": [],
+          "hashedFields": [],
+          "mappers": []
+        }
+      },
+      {
+        "stream": {
+          "name": "invoices",
+          "jsonSchema": {
+            "$schema": "http://json-schema.org/draft-07/schema#",
+            "additionalProperties": true,
+            "type": "object",
+            "properties": {
+              "tax_amount": {
+                "description": "Total amount of tax applied",
+                "type": ["null", "number"]
+              },
+              "notes": {
+                "description": "Additional notes related to the invoice",
+                "type": ["null", "string"]
+              },
+              "subject": {
+                "description": "Subject of the invoice",
+                "type": ["null", "string"]
+              },
+              "discount_amount": {
+                "description": "The total discount amount applied",
+                "type": ["null", "number"]
+              },
+              "discount": {
+                "description": "Discount percentage applied to the invoice",
+                "type": ["null", "number"]
+              },
+              "created_at": {
+                "format": "date-time",
+                "description": "Timestamp when the invoice was created",
+                "type": ["null", "string"]
+              },
+              "line_items": {
+                "description": "List of line items containing the services/products included in the invoice",
+                "type": ["null", "array"],
+                "items": {
+                  "type": ["null", "object"],
+                  "properties": {
+                    "amount": {
+                      "description": "The amount per line item",
+                      "type": ["null", "number"]
+                    },
+                    "quantity": {
+                      "description": "Quantity of the line item",
+                      "type": ["null", "number"]
+                    },
+                    "kind": {
+                      "description": "Type of line item",
+                      "type": ["null", "string"]
+                    },
+                    "taxed2": {
+                      "description": "Whether the line item is taxed at a different rate",
+                      "type": ["null", "boolean"]
+                    },
+                    "project": {
+                      "description": "Details of the project related to the line item",
+                      "type": ["null", "object"],
+                      "properties": {
+                        "code": {
+                          "description": "Project code of the line item",
+                          "type": ["null", "string"]
+                        },
+                        "name": {
+                          "description": "Name of the project",
+                          "type": ["null", "string"]
+                        },
+                        "id": {
+                          "description": "The unique identifier of the project",
+                          "type": ["integer", "null"]
+                        }
+                      }
+                    },
+                    "description": {
+                      "description": "Description of the line item",
+                      "type": ["null", "string"]
+                    },
+                    "taxed": {
+                      "description": "Whether the line item is taxed",
+                      "type": ["null", "boolean"]
+                    },
+                    "id": {
+                      "description": "The unique identifier of the line item",
+                      "type": ["null", "integer"]
+                    },
+                    "unit_price": {
+                      "description": "Unit price of the line item",
+                      "type": ["null", "number"]
+                    }
+                  }
+                }
+              },
+              "tax2": {
+                "description": "Additional tax amount applied at a different rate",
+                "type": ["null", "number"]
+              },
+              "number": {
+                "description": "Invoice number",
+                "type": ["null", "string"]
+              },
+              "client_key": {
+                "description": "Key associated with the client",
+                "type": ["null", "string"]
+              },
+              "issue_date": {
+                "description": "Date when the invoice was issued",
+                "type": ["null", "string"]
+              },
+              "updated_at": {
+                "format": "date-time",
+                "description": "Timestamp when the invoice was last updated",
+                "type": ["null", "string"]
+              },
+              "period_start": {
+                "description": "Start date of the period covered by the invoice",
+                "type": ["null", "string"]
+              },
+              "estimate": {
+                "description": "Whether the invoice is an estimate",
+                "type": ["null", "string"]
+              },
+              "client": {
+                "description": "Details of the client associated with the invoice",
+                "type": ["null", "object"],
+                "properties": {
+                  "name": {
+                    "description": "The name of the client",
+                    "type": ["null", "string"]
+                  },
+                  "id": {
+                    "description": "The unique identifier of the client",
+                    "type": ["null", "integer"]
+                  }
+                }
+              },
+              "currency": {
+                "description": "The currency used for the invoice",
+                "type": ["null", "string"]
+              },
+              "id": {
+                "description": "The unique identifier of the invoice",
+                "type": ["null", "integer"]
+              },
+              "state": {
+                "description": "Current state of the invoice",
+                "type": ["null", "string"]
+              },
+              "tax2_amount": {
+                "description": "Total amount of tax2 applied",
+                "type": ["null", "number"]
+              },
+              "recurring_invoice_id": {
+                "description": "Unique identifier of the recurring invoice",
+                "type": ["null", "string"]
+              },
+              "payment_options": {
+                "description": "Payment options available for the invoice",
+                "type": ["null", "array"]
+              },
+              "amount": {
+                "description": "The total amount of the invoice",
+                "type": ["null", "number"]
+              },
+              "creator": {
+                "description": "Information about the creator of the invoice",
+                "type": ["null", "object"],
+                "properties": {
+                  "name": {
+                    "description": "The name of the creator",
+                    "type": ["null", "string"]
+                  },
+                  "id": {
+                    "description": "The unique identifier of the creator",
+                    "type": ["null", "integer"]
+                  }
+                }
+              },
+              "closed_at": {
+                "description": "Timestamp when the invoice was closed",
+                "type": ["null", "string"]
+              },
+              "payment_term": {
+                "description": "Payment terms associated with the invoice",
+                "type": ["null", "string"]
+              },
+              "retainer": {
+                "description": "Whether the invoice is for a retainer",
+                "type": ["null", "string"]
+              },
+              "due_date": {
+                "description": "Due date for the invoice payment",
+                "type": ["null", "string"]
+              },
+              "tax": {
+                "description": "Tax amount applied",
+                "type": ["null", "number"]
+              },
+              "paid_at": {
+                "description": "Timestamp when the invoice was paid",
+                "type": ["null", "string"]
+              },
+              "sent_at": {
+                "format": "date-time",
+                "description": "Timestamp when the invoice was sent",
+                "type": ["null", "string"]
+              },
+              "period_end": {
+                "description": "End date of the period covered by the invoice",
+                "type": ["null", "string"]
+              },
+              "due_amount": {
+                "description": "The remaining amount that is due",
+                "type": ["null", "number"]
+              },
+              "purchase_order": {
+                "description": "Purchase order related to the invoice",
+                "type": ["null", "string"]
+              },
+              "paid_date": {
+                "description": "Date when the invoice was paid",
+                "type": ["null", "string"]
+              }
+            }
+          },
+          "supportedSyncModes": ["full_refresh", "incremental"],
+          "sourceDefinedCursor": true,
+          "defaultCursorField": ["updated_at"],
+          "sourceDefinedPrimaryKey": [["id"]],
+          "isResumable": true
+        },
+        "config": {
+          "syncMode": "incremental",
+          "cursorField": ["updated_at"],
+          "destinationSyncMode": "append",
+          "primaryKey": [["id"]],
+          "aliasName": "invoices",
+          "selected": true,
+          "suggested": false,
+          "selectedFields": [],
+          "hashedFields": [],
+          "mappers": []
+        }
+      },
+      {
+        "stream": {
+          "name": "projects",
+          "jsonSchema": {
+            "$schema": "http://json-schema.org/draft-07/schema#",
+            "additionalProperties": true,
+            "type": "object",
+            "properties": {
+              "budget_by": {
+                "description": "Specifies how the budget is managed, e.g., total, task, person, etc.",
+                "type": ["null", "string"]
+              },
+              "cost_budget_include_expenses": {
+                "description": "Indicates whether expenses are included in the cost budget.",
+                "type": ["null", "boolean"]
+              },
+              "code": {
+                "description": "A unique identifier or code for the project.",
+                "type": ["null", "string"]
+              },
+              "notes": {
+                "description": "Any additional notes or comments related to the project.",
+                "type": ["null", "string"]
+              },
+              "is_active": {
+                "description": "Indicates whether the project is currently active.",
+                "type": ["null", "boolean"]
+              },
+              "budget_is_monthly": {
+                "description": "Indicates whether the budget is monthly.",
+                "type": ["null", "boolean"]
+              },
+              "fee": {
+                "description": "The fee associated with the project.",
+                "type": ["null", "number"]
+              },
+              "ends_on": {
+                "description": "The end date of the project.",
+                "type": ["null", "string"]
+              },
+              "created_at": {
+                "format": "date-time",
+                "description": "The date and time when the project was created.",
+                "type": ["null", "string"]
+              },
+              "is_billable": {
+                "description": "Indicates whether the project is billable.",
+                "type": ["null", "boolean"]
+              },
+              "is_fixed_fee": {
+                "description": "Indicates whether the project has a fixed fee.",
+                "type": ["null", "boolean"]
+              },
+              "cost_budget": {
+                "description": "The total cost budget for the project.",
+                "type": ["null", "number"]
+              },
+              "starts_on": {
+                "format": "date",
+                "description": "The start date of the project.",
+                "type": ["null", "string"]
+              },
+              "over_budget_notification_percentage": {
+                "description": "The percentage threshold for over-budget notifications.",
+                "type": ["null", "number"]
+              },
+              "show_budget_to_all": {
+                "description": "Indicates whether the budget is visible to all project members.",
+                "type": ["null", "boolean"]
+              },
+              "updated_at": {
+                "format": "date-time",
+                "description": "The date and time when the project was last updated.",
+                "type": ["null", "string"]
+              },
+              "hourly_rate": {
+                "description": "The hourly rate for the project.",
+                "type": ["null", "number"]
+              },
+              "name": {
+                "description": "The name or title of the project.",
+                "type": ["null", "string"]
+              },
+              "client": {
+                "description": "Details of the client associated with the project.",
+                "type": ["null", "object"],
+                "properties": {
+                  "name": {
+                    "description": "The name of the client associated with the project.",
+                    "type": ["null", "string"]
+                  },
+                  "currency": {
+                    "description": "The currency used for the project.",
+                    "type": ["null", "string"]
+                  },
+                  "id": {
+                    "description": "The unique identifier of the client.",
+                    "type": ["null", "integer"]
+                  }
+                }
+              },
+              "notify_when_over_budget": {
+                "description": "Indicates whether notifications are sent when the project goes over budget.",
+                "type": ["null", "boolean"]
+              },
+              "id": {
+                "description": "The unique identifier of the project.",
+                "type": ["null", "integer"]
+              },
+              "bill_by": {
+                "description": "Indicates how the project is billed, e.g., hourly, fixed fee, etc.",
+                "type": ["null", "string"]
+              },
+              "over_budget_notification_date": {
+                "format": "date",
+                "description": "The date for sending notifications when the project goes over budget.",
+                "type": ["null", "string"]
+              },
+              "budget": {
+                "description": "The allocated budget for the project.",
+                "type": ["null", "number"]
+              }
+            }
+          },
+          "supportedSyncModes": ["full_refresh", "incremental"],
+          "sourceDefinedCursor": true,
+          "defaultCursorField": ["updated_at"],
+          "sourceDefinedPrimaryKey": [["id"]],
+          "isResumable": true
+        },
+        "config": {
+          "syncMode": "incremental",
+          "cursorField": ["updated_at"],
+          "destinationSyncMode": "append",
+          "primaryKey": [["id"]],
+          "aliasName": "projects",
+          "selected": true,
+          "suggested": false,
+          "selectedFields": [],
+          "hashedFields": [],
+          "mappers": []
+        }
+      },
+      {
+        "stream": {
+          "name": "roles",
+          "jsonSchema": {
+            "$schema": "http://json-schema.org/draft-07/schema#",
+            "additionalProperties": true,
+            "type": "object",
+            "properties": {
+              "updated_at": {
+                "format": "date-time",
+                "description": "The date and time when the role was last updated",
+                "type": ["null", "string"]
+              },
+              "user_ids": {
+                "description": "An array of user IDs associated with the role",
+                "type": ["null", "array"],
+                "items": {
+                  "description": "The unique identifier for a user assigned to this role",
+                  "type": "integer"
+                }
+              },
+              "name": {
+                "description": "The name of the role",
+                "type": ["null", "string"]
+              },
+              "created_at": {
+                "format": "date-time",
+                "description": "The date and time when the role was created",
+                "type": ["null", "string"]
+              },
+              "id": {
+                "description": "The unique identifier for the role",
+                "type": ["null", "integer"]
+              }
+            }
+          },
+          "supportedSyncModes": ["full_refresh", "incremental"],
+          "sourceDefinedCursor": true,
+          "defaultCursorField": ["updated_at"],
+          "sourceDefinedPrimaryKey": [["id"]],
+          "isResumable": true
+        },
+        "config": {
+          "syncMode": "incremental",
+          "cursorField": ["updated_at"],
+          "destinationSyncMode": "append",
+          "primaryKey": [["id"]],
+          "aliasName": "roles",
+          "selected": true,
+          "suggested": false,
+          "selectedFields": [],
+          "hashedFields": [],
+          "mappers": []
+        }
+      },
+      {
+        "stream": {
+          "name": "task_assignments",
+          "jsonSchema": {
+            "$schema": "http://json-schema.org/draft-07/schema#",
+            "additionalProperties": true,
+            "type": "object",
+            "properties": {
+              "task": {
+                "description": "Information related to the task assigned.",
+                "type": ["null", "object"],
+                "properties": {
+                  "name": {
+                    "description": "The name of the task",
+                    "type": ["null", "string"]
+                  },
+                  "id": {
+                    "description": "Unique identifier for the task",
+                    "type": ["null", "integer"]
+                  }
+                }
+              },
+              "is_active": {
+                "description": "Indicates if the task assignment is currently active",
+                "type": ["null", "boolean"]
+              },
+              "updated_at": {
+                "format": "date-time",
+                "description": "The date and time when the task assignment was last updated",
+                "type": ["null", "string"]
+              },
+              "hourly_rate": {
+                "description": "The hourly rate for this task assignment",
+                "type": ["null", "number"]
+              },
+              "project": {
+                "description": "Details about the project the task assignment is associated with.",
+                "type": ["null", "object"],
+                "properties": {
+                  "code": {
+                    "description": "The code assigned to the project",
+                    "type": ["null", "string"]
+                  },
+                  "name": {
+                    "description": "The name of the project",
+                    "type": ["null", "string"]
+                  },
+                  "id": {
+                    "description": "Unique identifier for the project",
+                    "type": ["null", "integer"]
+                  }
+                }
+              },
+              "created_at": {
+                "format": "date-time",
+                "description": "The date and time when the task assignment was created",
+                "type": ["null", "string"]
+              },
+              "id": {
+                "description": "Unique identifier for the task assignment",
+                "type": ["null", "integer"]
+              },
+              "billable": {
+                "description": "Indicates if the task assignment is billable or not",
+                "type": ["null", "boolean"]
+              },
+              "budget": {
+                "description": "The budget allocated for this task assignment",
+                "type": ["null", "string"]
+              }
+            }
+          },
+          "supportedSyncModes": ["full_refresh", "incremental"],
+          "sourceDefinedCursor": true,
+          "defaultCursorField": ["updated_at"],
+          "sourceDefinedPrimaryKey": [["id"]],
+          "isResumable": true
+        },
+        "config": {
+          "syncMode": "incremental",
+          "cursorField": ["updated_at"],
+          "destinationSyncMode": "append",
+          "primaryKey": [["id"]],
+          "aliasName": "task_assignments",
+          "selected": true,
+          "suggested": false,
+          "selectedFields": [],
+          "hashedFields": [],
+          "mappers": []
+        }
+      },
+      {
+        "stream": {
+          "name": "tasks",
+          "jsonSchema": {
+            "$schema": "http://json-schema.org/draft-07/schema#",
+            "additionalProperties": true,
+            "type": "object",
+            "properties": {
+              "is_active": {
+                "description": "Indicates if the task is active or not.",
+                "type": ["null", "boolean"]
+              },
+              "updated_at": {
+                "format": "date-time",
+                "description": "Timestamp for when the task was last updated.",
+                "type": ["null", "string"]
+              },
+              "billable_by_default": {
+                "description": "Indicates if the task is billable by default for the project.",
+                "type": ["null", "boolean"]
+              },
+              "name": {
+                "description": "Name of the task.",
+                "type": ["null", "string"]
+              },
+              "created_at": {
+                "format": "date-time",
+                "description": "Timestamp for when the task was created.",
+                "type": ["null", "string"]
+              },
+              "id": {
+                "description": "Unique identifier for the task.",
+                "type": ["null", "integer"]
+              },
+              "is_default": {
+                "description": "Indicates if the task is the default task for the project.",
+                "type": ["null", "boolean"]
+              },
+              "default_hourly_rate": {
+                "description": "Default hourly rate set for the task.",
+                "type": ["null", "number"]
+              }
+            }
+          },
+          "supportedSyncModes": ["full_refresh", "incremental"],
+          "sourceDefinedCursor": true,
+          "defaultCursorField": ["updated_at"],
+          "sourceDefinedPrimaryKey": [["id"]],
+          "isResumable": true
+        },
+        "config": {
+          "syncMode": "incremental",
+          "cursorField": ["updated_at"],
+          "destinationSyncMode": "append",
+          "primaryKey": [["id"]],
+          "aliasName": "tasks",
+          "selected": true,
+          "suggested": false,
+          "selectedFields": [],
+          "hashedFields": [],
+          "mappers": []
+        }
+      },
+      {
+        "stream": {
+          "name": "time_entries",
+          "jsonSchema": {
+            "$schema": "http://json-schema.org/draft-07/schema#",
+            "additionalProperties": true,
+            "type": "object",
+            "properties": {
+              "is_locked": {
+                "description": "Indicates if the time entry is locked.",
+                "type": ["null", "boolean"]
+              },
+              "user_assignment": {
+                "description": "The user assignment details for the time entry",
+                "type": ["null", "object"],
+                "properties": {
+                  "is_project_manager": {
+                    "description": "Indicates if the user is a project manager.",
+                    "type": ["null", "boolean"]
+                  },
+                  "is_active": {
+                    "description": "Indicates if the user assignment is active.",
+                    "type": ["null", "boolean"]
+                  },
+                  "updated_at": {
+                    "format": "date-time",
+                    "description": "The date and time when the user assignment was last updated.",
+                    "type": ["null", "string"]
+                  },
+                  "hourly_rate": {
+                    "description": "The hourly rate associated with the user assignment.",
+                    "type": ["null", "number"]
+                  },
+                  "created_at": {
+                    "format": "date-time",
+                    "description": "The date and time when the user assignment was created.",
+                    "type": ["null", "string"]
+                  },
+                  "id": {
+                    "description": "The unique identifier of the user assignment.",
+                    "type": ["null", "integer"]
+                  },
+                  "budget": {
+                    "description": "The budget associated with the user assignment.",
+                    "type": ["null", "number"]
+                  }
+                }
+              },
+              "locked_reason": {
+                "description": "The reason why the time entry is locked.",
+                "type": ["null", "string"]
+              },
+              "rounded_hours": {
+                "description": "The total hours rounded to a specific precision.",
+                "type": ["null", "number"]
+              },
+              "notes": {
+                "description": "Any additional notes associated with the time entry.",
+                "type": ["null", "string"]
+              },
+              "is_billed": {
+                "description": "Indicates if the time entry has been billed.",
+                "type": ["null", "boolean"]
+              },
+              "project": {
+                "description": "The project where the time entry was tracked",
+                "type": ["null", "object"],
+                "properties": {
+                  "code": {
+                    "description": "The project code associated with the time entry.",
+                    "type": ["null", "string"]
+                  },
+                  "name": {
+                    "description": "The name of the project.",
+                    "type": ["null", "string"]
+                  },
+                  "id": {
+                    "description": "The unique identifier of the project.",
+                    "type": ["null", "integer"]
+                  }
+                }
+              },
+              "created_at": {
+                "format": "date-time",
+                "description": "The date and time when the time entry was created.",
+                "type": ["null", "string"]
+              },
+              "budgeted": {
+                "description": "Indicates if the time entry is within the budget.",
+                "type": ["null", "boolean"]
+              },
+              "spent_date": {
+                "format": "date",
+                "description": "The date when the time was spent.",
+                "type": ["null", "string"]
+              },
+              "timer_started_at": {
+                "description": "The time when the timer for the time entry was started.",
+                "type": ["null", "string"]
+              },
+              "updated_at": {
+                "format": "date-time",
+                "description": "The date and time when the time entry was last updated.",
+                "type": ["null", "string"]
+              },
+              "external_reference": {
+                "description": "An external reference linked to the time entry.",
+                "type": ["null", "string"]
+              },
+              "client": {
+                "description": "The client associated with the time entry",
+                "type": ["null", "object"],
+                "properties": {
+                  "name": {
+                    "description": "The name of the client.",
+                    "type": ["null", "string"]
+                  },
+                  "currency": {
+                    "description": "The currency used by the client.",
+                    "type": ["null", "string"]
+                  },
+                  "id": {
+                    "description": "The unique identifier of the client.",
+                    "type": ["null", "integer"]
+                  }
+                }
+              },
+              "id": {
+                "description": "The unique identifier of the time entry.",
+                "type": ["null", "integer"]
+              },
+              "task_assignment": {
+                "description": "The task assignment details for the time entry",
+                "type": ["null", "object"],
+                "properties": {
+                  "is_active": {
+                    "description": "Indicates if the task assignment is active.",
+                    "type": ["null", "boolean"]
+                  },
+                  "updated_at": {
+                    "format": "date-time",
+                    "description": "The date and time when the task assignment was last updated.",
+                    "type": ["null", "string"]
+                  },
+                  "hourly_rate": {
+                    "description": "The hourly rate associated with the task assignment.",
+                    "type": ["null", "number"]
+                  },
+                  "created_at": {
+                    "format": "date-time",
+                    "description": "The date and time when the task assignment was created.",
+                    "type": ["null", "string"]
+                  },
+                  "id": {
+                    "description": "The unique identifier of the task assignment.",
+                    "type": ["null", "integer"]
+                  },
+                  "billable": {
+                    "description": "Indicates if the task assignment is billable.",
+                    "type": ["null", "boolean"]
+                  },
+                  "budget": {
+                    "description": "The budget associated with the task assignment.",
+                    "type": ["null", "number"]
+                  }
+                }
+              },
+              "hours_without_timer": {
+                "description": "Hours logged without using a timer.",
+                "type": ["null", "number"]
+              },
+              "is_closed": {
+                "description": "Indicates if the time entry is closed.",
+                "type": ["null", "boolean"]
+              },
+              "hours": {
+                "description": "The total hours logged in the time entry.",
+                "type": ["null", "number"]
+              },
+              "started_time": {
+                "description": "The time when the time entry started.",
+                "type": ["null", "string"]
+              },
+              "billable": {
+                "description": "Indicates if the time entry is billable or not.",
+                "type": ["null", "boolean"]
+              },
+              "is_running": {
+                "description": "Indicates if the time entry is currently running.",
+                "type": ["null", "boolean"]
+              },
+              "task": {
+                "description": "The task performed during the time entry",
+                "type": ["null", "object"],
+                "properties": {
+                  "name": {
+                    "description": "The name of the task.",
+                    "type": ["null", "string"]
+                  },
+                  "id": {
+                    "description": "The unique identifier of the task.",
+                    "type": ["null", "integer"]
+                  }
+                }
+              },
+              "ended_time": {
+                "description": "The time when the time entry ended.",
+                "type": ["null", "string"]
+              },
+              "billable_rate": {
+                "description": "The rate at which the time entry is billable.",
+                "type": ["null", "number"]
+              },
+              "cost_rate": {
+                "description": "The cost rate associated with the time entry.",
+                "type": ["null", "number"]
+              },
+              "invoice": {
+                "description": "The invoice related to the time entry",
+                "type": ["null", "object"],
+                "properties": {
+                  "number": {
+                    "description": "The invoice number associated with the time entry.",
+                    "type": "string"
+                  },
+                  "id": {
+                    "description": "The unique identifier of the associated invoice.",
+                    "type": "integer"
+                  }
+                }
+              },
+              "user": {
+                "description": "The user who created the time entry",
+                "type": ["null", "object"],
+                "properties": {
+                  "name": {
+                    "description": "The name of the user.",
+                    "type": ["null", "string"]
+                  },
+                  "id": {
+                    "description": "The unique identifier of the user.",
+                    "type": ["null", "integer"]
+                  }
+                }
+              }
+            }
+          },
+          "supportedSyncModes": ["full_refresh", "incremental"],
+          "sourceDefinedCursor": true,
+          "defaultCursorField": ["updated_at"],
+          "sourceDefinedPrimaryKey": [["id"]],
+          "isResumable": true
+        },
+        "config": {
+          "syncMode": "incremental",
+          "cursorField": ["updated_at"],
+          "destinationSyncMode": "append",
+          "primaryKey": [["id"]],
+          "aliasName": "time_entries",
+          "selected": true,
+          "suggested": false,
+          "selectedFields": [],
+          "hashedFields": [],
+          "mappers": []
+        }
+      },
+      {
+        "stream": {
+          "name": "user_assignments",
+          "jsonSchema": {
+            "$schema": "http://json-schema.org/draft-07/schema#",
+            "additionalProperties": true,
+            "type": "object",
+            "properties": {
+              "is_project_manager": {
+                "description": "Flag indicating if the user is a project manager for the assignment",
+                "type": ["null", "boolean"]
+              },
+              "is_active": {
+                "description": "Flag indicating if the assignment is currently active",
+                "type": ["null", "boolean"]
+              },
+              "updated_at": {
+                "format": "date-time",
+                "description": "The date and time when the assignment was last updated",
+                "type": ["null", "string"]
+              },
+              "use_default_rates": {
+                "description": "Flag indicating if default rates are used for the assignment",
+                "type": ["null", "boolean"]
+              },
+              "hourly_rate": {
+                "description": "The hourly rate for the assignment",
+                "type": ["null", "number"]
+              },
+              "project": {
+                "description": "Details of the project the user is assigned to.",
+                "type": ["null", "object"],
+                "properties": {
+                  "code": {
+                    "description": "The project code associated with the assignment",
+                    "type": ["null", "string"]
+                  },
+                  "name": {
+                    "description": "The name of the project associated with the assignment",
+                    "type": ["null", "string"]
+                  },
+                  "id": {
+                    "description": "The unique identifier of the project",
+                    "type": ["null", "integer"]
+                  }
+                }
+              },
+              "created_at": {
+                "format": "date-time",
+                "description": "The date and time when the assignment was created",
+                "type": ["null", "string"]
+              },
+              "id": {
+                "description": "The unique identifier for the assignment",
+                "type": ["null", "integer"]
+              },
+              "user": {
+                "description": "Details of the user assignment.",
+                "type": ["null", "object"],
+                "properties": {
+                  "name": {
+                    "description": "The name of the user assigned to the project",
+                    "type": ["null", "string"]
+                  },
+                  "id": {
+                    "description": "The unique identifier of the user assigned to the project",
+                    "type": ["null", "integer"]
+                  }
+                }
+              },
+              "budget": {
+                "description": "The budget allocated for the assignment",
+                "type": ["null", "number"]
+              }
+            }
+          },
+          "supportedSyncModes": ["full_refresh", "incremental"],
+          "sourceDefinedCursor": true,
+          "defaultCursorField": ["updated_at"],
+          "sourceDefinedPrimaryKey": [["id"]],
+          "isResumable": true
+        },
+        "config": {
+          "syncMode": "incremental",
+          "cursorField": ["updated_at"],
+          "destinationSyncMode": "append",
+          "primaryKey": [["id"]],
+          "aliasName": "user_assignments",
+          "selected": true,
+          "suggested": false,
+          "selectedFields": [],
+          "hashedFields": [],
+          "mappers": []
+        }
+      },
+      {
+        "stream": {
+          "name": "users",
+          "jsonSchema": {
+            "$schema": "http://json-schema.org/draft-07/schema#",
+            "additionalProperties": true,
+            "type": "object",
+            "properties": {
+              "can_create_invoices": {
+                "description": "Shows if the user can create invoices.",
+                "type": ["null", "boolean"]
+              },
+              "is_active": {
+                "description": "Shows if the user is currently active.",
+                "type": ["null", "boolean"]
+              },
+              "can_see_rates": {
+                "description": "Indicates if the user can see rates.",
+                "type": ["null", "boolean"]
+              },
+              "weekly_capacity": {
+                "description": "User's weekly capacity for work.",
+                "type": ["null", "integer"]
+              },
+              "timezone": {
+                "description": "User's timezone.",
+                "type": ["null", "string"]
+              },
+              "roles": {
+                "description": "List of roles associated with the user.",
+                "type": ["null", "array"],
+                "items": { "type": "string" }
+              },
+              "last_name": {
+                "description": "User's last name.",
+                "type": ["null", "string"]
+              },
+              "created_at": {
+                "format": "date-time",
+                "description": "Date and time when the user was created.",
+                "type": ["null", "string"]
+              },
+              "telephone": {
+                "description": "User's telephone number.",
+                "type": ["null", "string"]
+              },
+              "calendar_integration_source": {
+                "description": "Source of calendar integration for the user.",
+                "type": ["null", "string"]
+              },
+              "can_create_projects": {
+                "description": "Shows if the user can create projects.",
+                "type": ["null", "boolean"]
+              },
+              "is_admin": {
+                "description": "Indicates if the user is an admin.",
+                "type": ["null", "boolean"]
+              },
+              "is_project_manager": {
+                "description": "Indicates if the user is a project manager.",
+                "type": ["null", "boolean"]
+              },
+              "has_access_to_all_future_projects": {
+                "description": "Indicates if the user has access to all future projects.",
+                "type": ["null", "boolean"]
+              },
+              "avatar_url": {
+                "description": "URL of the user's avatar image.",
+                "type": ["null", "string"]
+              },
+              "updated_at": {
+                "format": "date-time",
+                "description": "Date and time when the user record was last updated.",
+                "type": ["null", "string"]
+              },
+              "is_contractor": {
+                "description": "Shows if the user is a contractor.",
+                "type": ["null", "boolean"]
+              },
+              "calendar_integration_enabled": {
+                "description": "Indicates if calendar integration is enabled for the user.",
+                "type": ["null", "boolean"]
+              },
+              "cost_rate": {
+                "description": "The cost rate associated with the user.",
+                "type": ["null", "number"]
+              },
+              "id": {
+                "description": "Unique identifier for the user.",
+                "type": ["null", "integer"]
+              },
+              "default_hourly_rate": {
+                "description": "User's default hourly rate for billing.",
+                "type": ["null", "number"]
+              },
+              "first_name": {
+                "description": "User's first name.",
+                "type": ["null", "string"]
+              },
+              "email": {
+                "description": "User's email address.",
+                "type": ["null", "string"]
+              }
+            }
+          },
+          "supportedSyncModes": ["full_refresh", "incremental"],
+          "sourceDefinedCursor": true,
+          "defaultCursorField": ["updated_at"],
+          "sourceDefinedPrimaryKey": [["id"]],
+          "isResumable": true
+        },
+        "config": {
+          "syncMode": "incremental",
+          "cursorField": ["updated_at"],
+          "destinationSyncMode": "append",
+          "primaryKey": [["id"]],
+          "aliasName": "users",
+          "selected": true,
+          "suggested": false,
+          "selectedFields": [],
+          "hashedFields": [],
+          "mappers": []
+        }
+      },
+      {
+        "stream": {
+          "name": "expenses_categories",
+          "jsonSchema": {
+            "$schema": "http://json-schema.org/draft-07/schema#",
+            "additionalProperties": true,
+            "type": "object",
+            "properties": {
+              "expense_category_name": {
+                "description": "Name of the expense category",
+                "type": ["null", "string"]
+              },
+              "total_amount": {
+                "description": "Total amount spent on this expense category",
+                "type": ["null", "number"]
+              },
+              "billable_amount": {
+                "description": "The amount that can be billed to a client for this expense category",
+                "type": ["null", "number"]
+              },
+              "from": {
+                "description": "Start date for the expenses",
+                "type": ["null", "string"]
+              },
+              "currency": {
+                "description": "The currency in which the expenses are incurred",
+                "type": ["null", "string"]
+              },
+              "to": {
+                "description": "End date for the expenses",
+                "type": ["null", "string"]
+              },
+              "expense_category_id": {
+                "description": "Unique identifier for the expense category",
+                "type": ["null", "integer"]
+              }
+            }
+          },
+          "supportedSyncModes": ["full_refresh", "incremental"],
+          "sourceDefinedCursor": true,
+          "defaultCursorField": ["to"],
+          "sourceDefinedPrimaryKey": [],
+          "isResumable": true
+        },
+        "config": {
+          "syncMode": "incremental",
+          "cursorField": ["to"],
+          "destinationSyncMode": "append",
+          "primaryKey": [],
+          "aliasName": "expenses_categories",
+          "selected": false,
+          "suggested": false,
+          "selectedFields": [],
+          "mappers": [],
+          "fieldSelectionEnabled": false
+        }
+      },
+      {
+        "stream": {
+          "name": "expenses_clients",
+          "jsonSchema": {
+            "$schema": "http://json-schema.org/draft-07/schema#",
+            "additionalProperties": true,
+            "type": "object",
+            "properties": {
+              "total_amount": {
+                "description": "The total amount of expenses including billable and non-billable expenses.",
+                "type": ["null", "number"]
+              },
+              "billable_amount": {
+                "description": "The amount billed to the client for the expenses.",
+                "type": ["null", "number"]
+              },
+              "from": {
+                "description": "The start date of the expense period.",
+                "type": ["null", "string"]
+              },
+              "currency": {
+                "description": "The currency in which the expenses are recorded.",
+                "type": ["null", "string"]
+              },
+              "to": {
+                "description": "The end date of the expense period.",
+                "type": ["null", "string"]
+              },
+              "client_name": {
+                "description": "The name of the client associated with the expenses.",
+                "type": ["null", "string"]
+              },
+              "client_id": {
+                "description": "The unique identifier of the client.",
+                "type": ["null", "integer"]
+              }
+            }
+          },
+          "supportedSyncModes": ["full_refresh", "incremental"],
+          "sourceDefinedCursor": true,
+          "defaultCursorField": ["to"],
+          "sourceDefinedPrimaryKey": [],
+          "isResumable": true
+        },
+        "config": {
+          "syncMode": "incremental",
+          "cursorField": ["to"],
+          "destinationSyncMode": "append",
+          "primaryKey": [],
+          "aliasName": "expenses_clients",
+          "selected": false,
+          "suggested": false,
+          "selectedFields": [],
+          "mappers": [],
+          "fieldSelectionEnabled": false
+        }
+      },
+      {
+        "stream": {
+          "name": "expenses_projects",
+          "jsonSchema": {
+            "$schema": "http://json-schema.org/draft-07/schema#",
+            "additionalProperties": true,
+            "type": "object",
+            "properties": {
+              "project_id": {
+                "description": "The unique identifier of the project",
+                "type": ["null", "integer"]
+              },
+              "total_amount": {
+                "description": "The total amount of expenses incurred for the project",
+                "type": ["null", "number"]
+              },
+              "billable_amount": {
+                "description": "The amount of expenses that are billable to the client",
+                "type": ["null", "number"]
+              },
+              "from": {
+                "description": "The starting date of the expense record period",
+                "type": ["null", "string"]
+              },
+              "currency": {
+                "description": "The currency in which the expenses are recorded",
+                "type": ["null", "string"]
+              },
+              "to": {
+                "description": "The ending date of the expense record period",
+                "type": ["null", "string"]
+              },
+              "project_name": {
+                "description": "The name of the project",
+                "type": ["null", "string"]
+              },
+              "client_name": {
+                "description": "The name of the client associated with the project",
+                "type": ["null", "string"]
+              },
+              "client_id": {
+                "description": "The unique identifier of the client associated with the project",
+                "type": ["null", "integer"]
+              }
+            }
+          },
+          "supportedSyncModes": ["full_refresh", "incremental"],
+          "sourceDefinedCursor": true,
+          "defaultCursorField": ["to"],
+          "sourceDefinedPrimaryKey": [],
+          "isResumable": true
+        },
+        "config": {
+          "syncMode": "incremental",
+          "cursorField": ["to"],
+          "destinationSyncMode": "append",
+          "primaryKey": [],
+          "aliasName": "expenses_projects",
+          "selected": false,
+          "suggested": false,
+          "selectedFields": [],
+          "mappers": [],
+          "fieldSelectionEnabled": false
+        }
+      },
+      {
+        "stream": {
+          "name": "expenses_team",
+          "jsonSchema": {
+            "$schema": "http://json-schema.org/draft-07/schema#",
+            "additionalProperties": true,
+            "type": "object",
+            "properties": {
+              "is_contractor": {
+                "description": "Indicates if the user is a contractor",
+                "type": ["null", "boolean"]
+              },
+              "user_id": {
+                "description": "The ID of the user associated with the expense",
+                "type": ["null", "integer"]
+              },
+              "total_amount": {
+                "description": "The total amount of the expense",
+                "type": ["null", "number"]
+              },
+              "billable_amount": {
+                "description": "The amount that can be billed for the expense",
+                "type": ["null", "number"]
+              },
+              "user_name": {
+                "description": "The name of the user associated with the expense",
+                "type": ["null", "string"]
+              },
+              "from": {
+                "description": "The start date of the expense",
+                "type": ["null", "string"]
+              },
+              "currency": {
+                "description": "The currency in which the expense is incurred",
+                "type": ["null", "string"]
+              },
+              "to": {
+                "description": "The end date of the expense",
+                "type": ["null", "string"]
+              }
+            }
+          },
+          "supportedSyncModes": ["full_refresh", "incremental"],
+          "sourceDefinedCursor": true,
+          "defaultCursorField": ["to"],
+          "sourceDefinedPrimaryKey": [],
+          "isResumable": true
+        },
+        "config": {
+          "syncMode": "incremental",
+          "cursorField": ["to"],
+          "destinationSyncMode": "append",
+          "primaryKey": [],
+          "aliasName": "expenses_team",
+          "selected": false,
+          "suggested": false,
+          "selectedFields": [],
+          "mappers": [],
+          "fieldSelectionEnabled": false
+        }
+      },
+      {
+        "stream": {
+          "name": "project_budget",
+          "jsonSchema": {
+            "$schema": "http://json-schema.org/draft-07/schema#",
+            "additionalProperties": true,
+            "type": "object",
+            "properties": {
+              "budget_by": {
+                "description": "Person or entity responsible for the budget",
+                "type": ["null", "string"]
+              },
+              "is_active": {
+                "description": "Indicates if the project is currently active",
+                "type": ["null", "boolean"]
+              },
+              "project_id": {
+                "description": "Unique identifier for the project",
+                "type": ["null", "integer"]
+              },
+              "budget_remaining": {
+                "description": "Remaining budget amount available for the project",
+                "type": ["null", "number"]
+              },
+              "budget_is_monthly": {
+                "description": "Indicates if the budget is calculated on a monthly basis",
+                "type": ["null", "boolean"]
+              },
+              "from": {
+                "description": "Start date of the budget period",
+                "type": ["null", "string"]
+              },
+              "budget_spent": {
+                "description": "Total amount spent from the budget",
+                "type": ["null", "number"]
+              },
+              "to": {
+                "description": "End date of the budget period",
+                "type": ["null", "string"]
+              },
+              "project_name": {
+                "description": "Name of the project",
+                "type": ["null", "string"]
+              },
+              "client_name": {
+                "description": "Name of the client associated with the project",
+                "type": ["null", "string"]
+              },
+              "client_id": {
+                "description": "Unique identifier for the client associated with the project",
+                "type": ["null", "integer"]
+              },
+              "budget": {
+                "description": "Total budget allocated for the project",
+                "type": ["null", "number"]
+              }
+            }
+          },
+          "supportedSyncModes": ["full_refresh"],
+          "sourceDefinedCursor": false,
+          "defaultCursorField": [],
+          "sourceDefinedPrimaryKey": [],
+          "isResumable": true
+        },
+        "config": {
+          "syncMode": "full_refresh",
+          "cursorField": [],
+          "destinationSyncMode": "append",
+          "primaryKey": [],
+          "aliasName": "project_budget",
+          "selected": false,
+          "suggested": false,
+          "selectedFields": [],
+          "mappers": [],
+          "fieldSelectionEnabled": false
+        }
+      },
+      {
+        "stream": {
+          "name": "time_clients",
+          "jsonSchema": {
+            "$schema": "http://json-schema.org/draft-07/schema#",
+            "additionalProperties": true,
+            "type": "object",
+            "properties": {
+              "billable_amount": {
+                "description": "The amount that can be billed for the client's hours worked within the specified timeframe.",
+                "type": ["null", "number"]
+              },
+              "billable_hours": {
+                "description": "The total number of billable hours worked for the client within the specified timeframe.",
+                "type": ["null", "number"]
+              },
+              "from": {
+                "description": "The start date and time of the timeframe for which the time entries are being fetched.",
+                "type": ["null", "string"]
+              },
+              "currency": {
+                "description": "The currency used for billing the client's time entries.",
+                "type": ["null", "string"]
+              },
+              "to": {
+                "description": "The end date and time of the timeframe for which the time entries are being fetched.",
+                "type": ["null", "string"]
+              },
+              "total_hours": {
+                "description": "The total number of hours worked for the client within the specified timeframe, including both billable and non-billable hours.",
+                "type": ["null", "number"]
+              },
+              "client_name": {
+                "description": "The name of the client for whom the time entries were recorded.",
+                "type": ["null", "string"]
+              },
+              "client_id": {
+                "description": "The unique identifier of the client associated with the time entries.",
+                "type": ["null", "integer"]
+              }
+            }
+          },
+          "supportedSyncModes": ["full_refresh", "incremental"],
+          "sourceDefinedCursor": true,
+          "defaultCursorField": ["to"],
+          "sourceDefinedPrimaryKey": [],
+          "isResumable": true
+        },
+        "config": {
+          "syncMode": "incremental",
+          "cursorField": ["to"],
+          "destinationSyncMode": "append",
+          "primaryKey": [],
+          "aliasName": "time_clients",
+          "selected": false,
+          "suggested": false,
+          "selectedFields": [],
+          "mappers": [],
+          "fieldSelectionEnabled": false
+        }
+      },
+      {
+        "stream": {
+          "name": "time_projects",
+          "jsonSchema": {
+            "$schema": "http://json-schema.org/draft-07/schema#",
+            "additionalProperties": true,
+            "type": "object",
+            "properties": {
+              "project_id": {
+                "description": "The unique identifier for the project.",
+                "type": ["null", "integer"]
+              },
+              "billable_amount": {
+                "description": "The total amount that can be billed for this project in the given currency.",
+                "type": ["null", "number"]
+              },
+              "billable_hours": {
+                "description": "The number of billable hours spent on this project.",
+                "type": ["null", "number"]
+              },
+              "from": {
+                "description": "The start date for the project time frame.",
+                "type": ["null", "string"]
+              },
+              "currency": {
+                "description": "The currency in which the billable amount is specified.",
+                "type": ["null", "string"]
+              },
+              "to": {
+                "description": "The end date for the project time frame.",
+                "type": ["null", "string"]
+              },
+              "total_hours": {
+                "description": "The total number of hours spent on this project.",
+                "type": ["null", "number"]
+              },
+              "project_name": {
+                "description": "The name of the project.",
+                "type": ["null", "string"]
+              },
+              "client_name": {
+                "description": "The name of the client associated with this project.",
+                "type": ["null", "string"]
+              },
+              "client_id": {
+                "description": "The unique identifier for the client associated with this project.",
+                "type": ["null", "integer"]
+              }
+            }
+          },
+          "supportedSyncModes": ["full_refresh", "incremental"],
+          "sourceDefinedCursor": true,
+          "defaultCursorField": ["to"],
+          "sourceDefinedPrimaryKey": [],
+          "isResumable": true
+        },
+        "config": {
+          "syncMode": "incremental",
+          "cursorField": ["to"],
+          "destinationSyncMode": "append",
+          "primaryKey": [],
+          "aliasName": "time_projects",
+          "selected": false,
+          "suggested": false,
+          "selectedFields": [],
+          "mappers": [],
+          "fieldSelectionEnabled": false
+        }
+      },
+      {
+        "stream": {
+          "name": "time_tasks",
+          "jsonSchema": {
+            "$schema": "http://json-schema.org/draft-07/schema#",
+            "additionalProperties": true,
+            "type": "object",
+            "properties": {
+              "task_name": {
+                "description": "The name of the task associated with this time entry",
+                "type": ["null", "string"]
+              },
+              "billable_amount": {
+                "description": "The amount that can be billed for this time task",
+                "type": ["null", "number"]
+              },
+              "billable_hours": {
+                "description": "The number of hours that can be billed for this time task",
+                "type": ["null", "number"]
+              },
+              "from": {
+                "description": "The starting time of the time task",
+                "type": ["null", "string"]
+              },
+              "task_id": {
+                "description": "The unique identifier for the task associated with this time entry",
+                "type": ["null", "integer"]
+              },
+              "currency": {
+                "description": "The currency in which the billable amount is calculated",
+                "type": ["null", "string"]
+              },
+              "to": {
+                "description": "The ending time of the time task",
+                "type": ["null", "string"]
+              },
+              "total_hours": {
+                "description": "The total number of hours spent on this time task",
+                "type": ["null", "number"]
+              }
+            }
+          },
+          "supportedSyncModes": ["full_refresh", "incremental"],
+          "sourceDefinedCursor": true,
+          "defaultCursorField": ["to"],
+          "sourceDefinedPrimaryKey": [],
+          "isResumable": true
+        },
+        "config": {
+          "syncMode": "incremental",
+          "cursorField": ["to"],
+          "destinationSyncMode": "append",
+          "primaryKey": [],
+          "aliasName": "time_tasks",
+          "selected": false,
+          "suggested": false,
+          "selectedFields": [],
+          "mappers": [],
+          "fieldSelectionEnabled": false
+        }
+      },
+      {
+        "stream": {
+          "name": "time_team",
+          "jsonSchema": {
+            "$schema": "http://json-schema.org/draft-07/schema#",
+            "additionalProperties": true,
+            "type": "object",
+            "properties": {
+              "is_contractor": {
+                "description": "Flag indicating if the user is a contractor",
+                "type": ["null", "boolean"]
+              },
+              "user_id": {
+                "description": "The unique identifier of the user",
+                "type": ["null", "integer"]
+              },
+              "billable_amount": {
+                "description": "The amount that can be billed for the time period",
+                "type": ["null", "number"]
+              },
+              "user_name": {
+                "description": "The name of the user",
+                "type": ["null", "string"]
+              },
+              "billable_hours": {
+                "description": "The number of hours that can be billed for the time period",
+                "type": ["null", "number"]
+              },
+              "from": {
+                "description": "The start date and time of the time period",
+                "type": ["null", "string"]
+              },
+              "currency": {
+                "description": "The currency used for billing",
+                "type": ["null", "string"]
+              },
+              "to": {
+                "description": "The end date and time of the time period",
+                "type": ["null", "string"]
+              },
+              "total_hours": {
+                "description": "The total number of hours worked for the time period",
+                "type": ["null", "number"]
+              }
+            }
+          },
+          "supportedSyncModes": ["full_refresh", "incremental"],
+          "sourceDefinedCursor": true,
+          "defaultCursorField": ["to"],
+          "sourceDefinedPrimaryKey": [],
+          "isResumable": true
+        },
+        "config": {
+          "syncMode": "incremental",
+          "cursorField": ["to"],
+          "destinationSyncMode": "append",
+          "primaryKey": [],
+          "aliasName": "time_team",
+          "selected": false,
+          "suggested": false,
+          "selectedFields": [],
+          "mappers": [],
+          "fieldSelectionEnabled": false
+        }
+      },
+      {
+        "stream": {
+          "name": "uninvoiced",
+          "jsonSchema": {
+            "$schema": "http://json-schema.org/draft-07/schema#",
+            "additionalProperties": true,
+            "type": "object",
+            "properties": {
+              "uninvoiced_expenses": {
+                "description": "Total expenses yet to be invoiced for the project within the data range",
+                "type": ["null", "number"]
+              },
+              "project_id": {
+                "description": "Unique identifier for the project",
+                "type": ["null", "integer"]
+              },
+              "uninvoiced_hours": {
+                "description": "Total hours yet to be invoiced for the project within the data range",
+                "type": ["null", "number"]
+              },
+              "from": {
+                "description": "Start date for the data range",
+                "type": ["null", "string"]
+              },
+              "currency": {
+                "description": "Currency used for the transaction",
+                "type": ["null", "string"]
+              },
+              "to": {
+                "description": "End date for the data range",
+                "type": ["null", "string"]
+              },
+              "total_hours": {
+                "description": "Total hours tracked for the project within the data range",
+                "type": ["null", "number"]
+              },
+              "project_name": {
+                "description": "Name of the project",
+                "type": ["null", "string"]
+              },
+              "client_name": {
+                "description": "Name of the client",
+                "type": ["null", "string"]
+              },
+              "uninvoiced_amount": {
+                "description": "Total amount yet to be invoiced for the project within the data range",
+                "type": ["null", "number"]
+              },
+              "client_id": {
+                "description": "Unique identifier for the client",
+                "type": ["null", "integer"]
+              }
+            }
+          },
+          "supportedSyncModes": ["full_refresh", "incremental"],
+          "sourceDefinedCursor": true,
+          "defaultCursorField": ["to"],
+          "sourceDefinedPrimaryKey": [],
+          "isResumable": true
+        },
+        "config": {
+          "syncMode": "incremental",
+          "cursorField": ["to"],
+          "destinationSyncMode": "append",
+          "primaryKey": [],
+          "aliasName": "uninvoiced",
+          "selected": false,
+          "suggested": false,
+          "selectedFields": [],
+          "mappers": [],
+          "fieldSelectionEnabled": false
+        }
+      },
+      {
+        "stream": {
+          "name": "estimate_messages",
+          "jsonSchema": {
+            "$schema": "http://json-schema.org/draft-07/schema#",
+            "additionalProperties": true,
+            "type": "object",
+            "properties": {
+              "subject": {
+                "description": "The subject or title of the message.",
+                "type": ["null", "string"]
+              },
+              "created_at": {
+                "format": "date-time",
+                "description": "The date and time when the message was created.",
+                "type": ["null", "string"]
+              },
+              "body": {
+                "description": "The main content of the message.",
+                "type": ["null", "string"]
+              },
+              "sent_from_email": {
+                "description": "The email address displayed as the sender.",
+                "type": ["null", "string"]
+              },
+              "sent_from": {
+                "description": "The name displayed as the sender.",
+                "type": ["null", "string"]
+              },
+              "event_type": {
+                "description": "The type of event associated with the message.",
+                "type": ["null", "string"]
+              },
+              "sent_by": {
+                "description": "The name of the user who sent the message.",
+                "type": ["null", "string"]
+              },
+              "updated_at": {
+                "format": "date-time",
+                "description": "The date and time when the message was last updated.",
+                "type": ["null", "string"]
+              },
+              "parent_id": {
+                "description": "The identifier of the parent message, if this is a reply.",
+                "type": "integer"
+              },
+              "recipients": {
+                "description": "Details of the recipients of the message.",
+                "type": ["null", "array"],
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "description": "The name of a recipient.",
+                      "type": ["string", "null"]
+                    },
+                    "email": {
+                      "description": "The email address of a recipient.",
+                      "type": ["string", "null"]
+                    }
+                  }
+                }
+              },
+              "id": {
+                "description": "The unique identifier for the message.",
+                "type": ["null", "integer"]
+              },
+              "send_me_a_copy": {
+                "description": "Indicates if the sender requested a copy of the message.",
+                "type": ["null", "boolean"]
+              },
+              "sent_by_email": {
+                "description": "The email address of the user who sent the message.",
+                "type": ["null", "string"]
+              }
+            }
+          },
+          "supportedSyncModes": ["full_refresh", "incremental"],
+          "sourceDefinedCursor": true,
+          "defaultCursorField": ["updated_at"],
+          "sourceDefinedPrimaryKey": [["id"]],
+          "isResumable": true
+        },
+        "config": {
+          "syncMode": "incremental",
+          "cursorField": ["updated_at"],
+          "destinationSyncMode": "append",
+          "primaryKey": [["id"]],
+          "aliasName": "estimate_messages",
+          "selected": true,
+          "suggested": false,
+          "selectedFields": [],
+          "hashedFields": [],
+          "mappers": []
+        }
+      },
+      {
+        "stream": {
+          "name": "invoice_messages",
+          "jsonSchema": {
+            "$schema": "http://json-schema.org/draft-07/schema#",
+            "additionalProperties": true,
+            "type": "object",
+            "properties": {
+              "include_link_to_client_invoice": {
+                "description": "Indicates if a link to the client invoice is included.",
+                "type": ["null", "boolean"]
+              },
+              "reminder": {
+                "description": "Indicates if the message is a reminder.",
+                "type": ["null", "boolean"]
+              },
+              "subject": {
+                "description": "The subject of the invoice message.",
+                "type": ["null", "string"]
+              },
+              "attach_pdf": {
+                "description": "Indicates if a PDF file is attached to the message.",
+                "type": ["null", "boolean"]
+              },
+              "created_at": {
+                "format": "date-time",
+                "description": "The date and time when the message was created.",
+                "type": ["null", "string"]
+              },
+              "body": {
+                "description": "The content of the invoice message.",
+                "type": ["null", "string"]
+              },
+              "sent_from_email": {
+                "description": "Email address used to send the message.",
+                "type": ["null", "string"]
+              },
+              "sent_from": {
+                "description": "The display name of the sender.",
+                "type": ["null", "string"]
+              },
+              "send_reminder_on": {
+                "description": "The date to send a reminder for the message.",
+                "type": ["null", "string"]
+              },
+              "event_type": {
+                "description": "The type of event associated with the message.",
+                "type": ["null", "string"]
+              },
+              "sent_by": {
+                "description": "The sender of the message.",
+                "type": ["null", "string"]
+              },
+              "thank_you": {
+                "description": "Indicates if the message is a thank you message.",
+                "type": ["null", "boolean"]
+              },
+              "updated_at": {
+                "format": "date-time",
+                "description": "The date and time when the message was last updated.",
+                "type": ["null", "string"]
+              },
+              "parent_id": {
+                "description": "The ID of the parent message if it's a reply or related message.",
+                "type": "integer"
+              },
+              "recipients": {
+                "description": "List of recipients for the message.",
+                "type": ["null", "array"],
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "description": "Name of the recipient.",
+                      "type": "string"
+                    },
+                    "email": {
+                      "description": "Email address of the recipient.",
+                      "type": "string"
+                    }
+                  }
+                }
+              },
+              "id": {
+                "description": "The unique identifier of the invoice message.",
+                "type": ["null", "integer"]
+              },
+              "send_me_a_copy": {
+                "description": "Option to send a copy of the message to the sender.",
+                "type": ["null", "boolean"]
+              },
+              "sent_by_email": {
+                "description": "Email address of the sender.",
+                "type": ["null", "string"]
+              }
+            }
+          },
+          "supportedSyncModes": ["full_refresh", "incremental"],
+          "sourceDefinedCursor": true,
+          "defaultCursorField": ["updated_at"],
+          "sourceDefinedPrimaryKey": [["id"]],
+          "isResumable": true
+        },
+        "config": {
+          "syncMode": "incremental",
+          "cursorField": ["updated_at"],
+          "destinationSyncMode": "append",
+          "primaryKey": [["id"]],
+          "aliasName": "invoice_messages",
+          "selected": true,
+          "suggested": false,
+          "selectedFields": [],
+          "hashedFields": [],
+          "mappers": []
+        }
+      },
+      {
+        "stream": {
+          "name": "invoice_payments",
+          "jsonSchema": {
+            "$schema": "http://json-schema.org/draft-07/schema#",
+            "additionalProperties": true,
+            "type": "object",
+            "properties": {
+              "paid_at": {
+                "format": "date-time",
+                "description": "The timestamp when the invoice payment was paid.",
+                "type": ["null", "string"]
+              },
+              "transaction_id": {
+                "description": "The transaction ID associated with the invoice payment.",
+                "type": ["null", "string"]
+              },
+              "amount": {
+                "description": "The amount of the invoice payment.",
+                "type": ["null", "number"]
+              },
+              "notes": {
+                "description": "Any additional notes or comments related to the invoice payment.",
+                "type": ["null", "string"]
+              },
+              "updated_at": {
+                "format": "date-time",
+                "description": "The timestamp when the invoice payment was last updated.",
+                "type": ["null", "string"]
+              },
+              "recorded_by_email": {
+                "description": "The email address of the user who recorded this invoice payment.",
+                "type": ["null", "string"]
+              },
+              "recorded_by": {
+                "description": "The user who recorded this invoice payment.",
+                "type": ["null", "string"]
+              },
+              "payment_gateway": {
+                "description": "Information about the payment gateway used for the transaction.",
+                "type": ["null", "object"],
+                "properties": {
+                  "name": {
+                    "description": "The name of the payment gateway.",
+                    "type": ["null", "string"]
+                  },
+                  "id": {
+                    "description": "The unique identifier of the payment gateway.",
+                    "type": ["null", "integer"]
+                  }
+                }
+              },
+              "parent_id": {
+                "description": "The ID of the parent invoice associated with this payment.",
+                "type": "integer"
+              },
+              "created_at": {
+                "format": "date-time",
+                "description": "The timestamp when the invoice payment was created.",
+                "type": ["null", "string"]
+              },
+              "id": {
+                "description": "The unique identifier of the invoice payment.",
+                "type": ["null", "integer"]
+              },
+              "paid_date": {
+                "format": "date",
+                "description": "The date when the invoice payment was paid.",
+                "type": ["null", "string"]
+              }
+            }
+          },
+          "supportedSyncModes": ["full_refresh", "incremental"],
+          "sourceDefinedCursor": true,
+          "defaultCursorField": ["updated_at"],
+          "sourceDefinedPrimaryKey": [["id"]],
+          "isResumable": true
+        },
+        "config": {
+          "syncMode": "incremental",
+          "cursorField": ["updated_at"],
+          "destinationSyncMode": "append",
+          "primaryKey": [["id"]],
+          "aliasName": "invoice_payments",
+          "selected": true,
+          "suggested": false,
+          "selectedFields": [],
+          "hashedFields": [],
+          "mappers": []
+        }
+      },
+      {
+        "stream": {
+          "name": "project_assignments",
+          "jsonSchema": {
+            "$schema": "http://json-schema.org/draft-07/schema#",
+            "additionalProperties": true,
+            "type": "object",
+            "properties": {
+              "is_project_manager": {
+                "description": "Indicates whether the user is assigned as a project manager",
+                "type": ["null", "boolean"]
+              },
+              "is_active": {
+                "description": "Indicates whether the project assignment is currently active",
+                "type": ["null", "boolean"]
+              },
+              "updated_at": {
+                "format": "date-time",
+                "description": "The date and time when the project assignment was last updated",
+                "type": ["null", "string"]
+              },
+              "use_default_rates": {
+                "description": "Indicates whether default rates are used for this project assignment",
+                "type": ["null", "boolean"]
+              },
+              "parent_id": {
+                "description": "The parent project assignment ID if this assignment is a sub-assignment",
+                "type": "integer"
+              },
+              "hourly_rate": {
+                "description": "The hourly rate for this project assignment",
+                "type": ["null", "number"]
+              },
+              "client": {
+                "description": "Client information for the project assignment",
+                "type": ["null", "object"],
+                "properties": {
+                  "name": {
+                    "description": "The name of the client",
+                    "type": ["null", "string"]
+                  },
+                  "currency": {
+                    "description": "The currency used by the client",
+                    "type": ["null", "string"]
+                  },
+                  "id": {
+                    "description": "The unique identifier of the client",
+                    "type": ["null", "integer"]
+                  }
+                }
+              },
+              "project": {
+                "description": "Project information for the assignment",
+                "type": ["null", "object"],
+                "properties": {
+                  "code": {
+                    "description": "The code associated with the project",
+                    "type": ["null", "string"]
+                  },
+                  "name": {
+                    "description": "The name of the project",
+                    "type": ["null", "string"]
+                  },
+                  "id": {
+                    "description": "The unique identifier of the project",
+                    "type": ["null", "integer"]
+                  }
+                }
+              },
+              "created_at": {
+                "format": "date-time",
+                "description": "The date and time when the project assignment was created",
+                "type": ["null", "string"]
+              },
+              "id": {
+                "description": "The unique identifier of the project assignment",
+                "type": ["null", "integer"]
+              },
+              "task_assignments": {
+                "description": "List of task assignments for the project",
+                "type": ["null", "array"],
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "task": {
+                      "description": "Information about a specific task assigned",
+                      "type": ["object", "null"],
+                      "properties": {
+                        "name": {
+                          "description": "The name of the task",
+                          "type": ["null", "string"]
+                        },
+                        "id": {
+                          "description": "The unique identifier of the task",
+                          "type": ["null", "integer"]
+                        }
+                      }
+                    },
+                    "is_active": {
+                      "description": "Indicates whether the task assignment is currently active",
+                      "type": ["null", "boolean"]
+                    },
+                    "updated_at": {
+                      "description": "The date and time when the task assignment was last updated",
+                      "type": ["null", "string"]
+                    },
+                    "hourly_rate": {
+                      "description": "The hourly rate for this task assignment",
+                      "type": ["null", "number"]
+                    },
+                    "created_at": {
+                      "description": "The date and time when the task assignment was created",
+                      "type": ["string", "null"]
+                    },
+                    "id": {
+                      "description": "The unique identifier of the task assignment",
+                      "type": ["null", "integer"]
+                    },
+                    "billable": {
+                      "description": "Indicates whether the task is billable",
+                      "type": ["null", "boolean"]
+                    },
+                    "budget": {
+                      "description": "The budget allocated for this task assignment",
+                      "type": ["null", "number"]
+                    }
+                  }
+                }
+              },
+              "budget": {
+                "description": "The budget allocated for this project assignment",
+                "type": ["null", "number"]
+              }
+            }
+          },
+          "supportedSyncModes": ["full_refresh", "incremental"],
+          "sourceDefinedCursor": true,
+          "defaultCursorField": ["updated_at"],
+          "sourceDefinedPrimaryKey": [["id"]],
+          "isResumable": true
+        },
+        "config": {
+          "syncMode": "incremental",
+          "cursorField": ["updated_at"],
+          "destinationSyncMode": "append",
+          "primaryKey": [["id"]],
+          "aliasName": "project_assignments",
+          "selected": true,
+          "suggested": false,
+          "selectedFields": [],
+          "hashedFields": [],
+          "mappers": []
+        }
+      },
+      {
+        "stream": {
+          "name": "billable_rates",
+          "jsonSchema": {
+            "$schema": "http://json-schema.org/draft-07/schema#",
+            "additionalProperties": true,
+            "type": "object",
+            "properties": {
+              "end_date": {
+                "format": "date",
+                "description": "The end date for this billable rate period.",
+                "type": ["null", "string"]
+              },
+              "amount": {
+                "description": "The billable amount associated with this rate.",
+                "type": ["null", "number"]
+              },
+              "updated_at": {
+                "format": "date-time",
+                "description": "The date and time when this rate was last updated.",
+                "type": ["null", "string"]
+              },
+              "parent_id": {
+                "description": "The identifier of the parent resource associated with this rate.",
+                "type": "integer"
+              },
+              "created_at": {
+                "format": "date-time",
+                "description": "The date and time when this rate was created.",
+                "type": ["null", "string"]
+              },
+              "id": {
+                "description": "The unique identifier for this billable rate.",
+                "type": ["null", "integer"]
+              },
+              "start_date": {
+                "format": "date",
+                "description": "The start date for this billable rate period.",
+                "type": ["null", "string"]
+              }
+            }
+          },
+          "supportedSyncModes": ["full_refresh"],
+          "sourceDefinedCursor": false,
+          "defaultCursorField": [],
+          "sourceDefinedPrimaryKey": [["id"]],
+          "isResumable": true
+        },
+        "config": {
+          "syncMode": "full_refresh",
+          "cursorField": [],
+          "destinationSyncMode": "append",
+          "primaryKey": [["id"]],
+          "aliasName": "billable_rates",
+          "selected": true,
+          "suggested": false,
+          "selectedFields": [],
+          "hashedFields": [],
+          "mappers": []
+        }
+      },
+      {
+        "stream": {
+          "name": "cost_rates",
+          "jsonSchema": {
+            "$schema": "http://json-schema.org/draft-07/schema#",
+            "additionalProperties": true,
+            "type": "object",
+            "properties": {
+              "end_date": {
+                "format": "date",
+                "description": "The end date for which the cost rate is valid. Only applicable for intervals.",
+                "type": ["null", "string"]
+              },
+              "amount": {
+                "description": "The cost rate amount associated with this data entry.",
+                "type": ["null", "number"]
+              },
+              "updated_at": {
+                "format": "date-time",
+                "description": "The timestamp for the last update made to this cost rate entry.",
+                "type": ["null", "string"]
+              },
+              "parent_id": {
+                "description": "The parent identifier if this cost rate is a child entry.",
+                "type": "integer"
+              },
+              "created_at": {
+                "format": "date-time",
+                "description": "The timestamp indicating when this cost rate entry was created.",
+                "type": ["null", "string"]
+              },
+              "id": {
+                "description": "The unique identifier for this cost rate entry.",
+                "type": ["null", "integer"]
+              },
+              "start_date": {
+                "format": "date",
+                "description": "The start date from which the cost rate is valid. Only applicable for intervals.",
+                "type": ["null", "string"]
+              }
+            }
+          },
+          "supportedSyncModes": ["full_refresh"],
+          "sourceDefinedCursor": false,
+          "defaultCursorField": [],
+          "sourceDefinedPrimaryKey": [["id"]],
+          "isResumable": true
+        },
+        "config": {
+          "syncMode": "full_refresh",
+          "cursorField": [],
+          "destinationSyncMode": "append",
+          "primaryKey": [["id"]],
+          "aliasName": "cost_rates",
+          "selected": true,
+          "suggested": false,
+          "selectedFields": [],
+          "hashedFields": [],
+          "mappers": []
+        }
+      }
+    ]
+  },
+  "notifySchemaChanges": false,
+  "backfillPreference": "disabled",
+  "status": "active"
+}

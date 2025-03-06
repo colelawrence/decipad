@@ -160,6 +160,12 @@ export const usePlot = (element: PlotElement): UsePlotReturn => {
     'startFromZero',
     'usePlot'
   );
+  const setSize = usePathMutatorCallback<PlotElement>(
+    editor,
+    path,
+    'size',
+    'usePlot'
+  );
   const setMirrorYAxis = usePathMutatorCallback<PlotElement>(
     editor,
     path,
@@ -259,6 +265,7 @@ export const usePlot = (element: PlotElement): UsePlotReturn => {
       setXAxisLabel,
       setYAxisLabel,
       setStartFromZero,
+      setSize,
       setGroupByX,
       setMirrorYAxis,
       setFlipTable,
@@ -286,6 +293,7 @@ export const usePlot = (element: PlotElement): UsePlotReturn => {
       setXAxisLabel,
       setYAxisLabel,
       setStartFromZero,
+      setSize,
       setGroupByX,
       setMirrorYAxis,
       setFlipTable,

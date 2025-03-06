@@ -5,6 +5,7 @@ export type TrackedIntegrations =
   | 'notion'
   | 'codeconnection'
   | 'mysql'
+  | 'datalake'
   | 'gsheets'
   | 'csv';
 

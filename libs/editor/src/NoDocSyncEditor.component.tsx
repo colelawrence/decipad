@@ -1,4 +1,3 @@
-import { ClientEventsContext } from '@decipad/client-events';
 import { plugins } from '@decipad/editor-config';
 import type { MyValue } from '@decipad/editor-types';
 import { createMyPlateEditor } from '@decipad/editor-types';
@@ -10,7 +9,7 @@ import {
 import { EditorLayout, LoadingFilter } from '@decipad/ui';
 import { Plate, PlateContent } from '@udecode/plate-common';
 import type { FC } from 'react';
-import { useCallback, useContext, useMemo, useRef, useState } from 'react';
+import { useCallback, useMemo, useRef, useState } from 'react';
 import { Subject } from 'rxjs';
 import type { ReactEditor } from 'slate-react';
 import { withReact } from 'slate-react';
@@ -29,7 +28,6 @@ import { useComputer } from '@decipad/editor-hooks';
 
 export const NoDocSyncEditorInternal: FC = () => {
   const computer = useComputer();
-  const events = useContext(ClientEventsContext);
 
   const interactions = useEditorUserInteractionsContext();
 
@@ -39,12 +37,11 @@ export const NoDocSyncEditorInternal: FC = () => {
     () => [
       ...plugins({
         computer,
-        events,
         interactions,
       }),
       createUpdateComputerPlugin(computer),
     ],
-    [computer, events, interactions]
+    [computer, interactions]
   );
 
   const [editor] = useState(() =>

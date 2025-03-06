@@ -6,6 +6,7 @@ import { type DataGroup } from '../../types';
 import { sliceToGroup } from './sliceToGroup';
 import { generateSmartRow } from './generateSmartRow';
 import { aggregationExpression as createAggregationExpression } from '../../utils/aggregationExpression';
+import { aggregationVariableName as createAggregationVariableName } from '../../utils/aggregationVariableName';
 import type { GenerateGroupsProps } from './types';
 
 export const generateGroups = async ({
@@ -72,6 +73,12 @@ export const generateGroups = async ({
         filters[0]
       );
 
+      const aggregationVariableName = createAggregationVariableName(
+        nextPreviousColumns,
+        nextPreviousColumnTypes,
+        valuePath
+      );
+
       return sliceToGroup({
         tableName,
         tree: subTree,
@@ -91,6 +98,7 @@ export const generateGroups = async ({
         indent,
         expandedGroups,
         aggregationExpression,
+        aggregationVariableName,
         generateGroups,
         generateSmartRow,
       });

@@ -1,4 +1,4 @@
-import { ClientEventsContext } from '@decipad/client-events';
+import { analytics } from '@decipad/client-events';
 import { DraggableBlock } from '../block-management/DraggableBlock';
 import {
   useNodePath,
@@ -20,7 +20,7 @@ import {
 } from '@decipad/react-contexts';
 import type { SelectItems, AvailableSwatchColor } from '@decipad/ui';
 import { DisplayWidget, VariableEditor } from '@decipad/ui';
-import { useCallback, useContext, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useResults } from '../hooks';
 import { SerializedType } from '@decipad/language-interfaces';
 
@@ -44,7 +44,6 @@ export const Display: PlateComponent = ({ attributes, element, children }) => {
   // the name of the variable/result.
   const [loaded, setLoaded] = useState(false);
 
-  const userEvents = useContext(ClientEventsContext);
   const readOnly = useIsEditorReadOnly();
   const insideLayout = useInsideLayoutContext();
   const onEdit = useEditElement(element);
@@ -86,23 +85,16 @@ export const Display: PlateComponent = ({ attributes, element, children }) => {
       setOpenMenu(false);
 
       // Analytics
-      userEvents({
-        segmentEvent: {
-          type: 'action',
-          action: 'widget value updated',
-          props: {
-            variant: 'display',
-            isReadOnly: readOnly,
-          },
-        },
-        gaEvent: {
-          category: 'widget',
-          action: 'widget value updated',
-          label: 'display',
+      analytics.track({
+        type: 'action',
+        action: 'widget value updated',
+        props: {
+          variant: 'display',
+          isReadOnly: readOnly,
         },
       });
     },
-    [changeBlockId, changeVarName, allResults, readOnly, userEvents]
+    [changeBlockId, changeVarName, allResults, readOnly]
   );
 
   const onExecute = useCallback(

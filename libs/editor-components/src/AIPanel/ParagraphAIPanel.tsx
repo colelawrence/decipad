@@ -1,4 +1,3 @@
-import { getAnalytics } from '@decipad/client-events';
 import type { MyEditor } from '@decipad/editor-types';
 import { useMyEditorRef } from '@decipad/editor-types';
 import {
@@ -60,9 +59,6 @@ export const ParagraphAIPanel: FC<ParagraphAIPanelProps> = ({
   const editor = useMyEditorRef();
 
   const handleSubmit = async () => {
-    getAnalytics().then((analytics) =>
-      analytics?.track('submit AI paragraph rewrite', { prompt })
-    );
     fetch({
       prompt: prompt.prompt,
       paragraph: getTextFromSelectParagraphs(editor, paragraph),

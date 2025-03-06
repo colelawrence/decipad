@@ -1,15 +1,8 @@
-import { ClientEventsContext } from '@decipad/client-events';
+import { analytics } from '@decipad/client-events';
 import { useCreateAnnotationMutation } from '@decipad/graphql-client';
 import { useToast } from '@decipad/toast';
 import { Send } from 'libs/ui/src/icons';
-import {
-  useCallback,
-  useContext,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import * as Styled from './styles';
 import { useAnnotations } from '@decipad/notebook-state';
 
@@ -33,8 +26,6 @@ export const NewAnnotation: React.FC<NewAnnotationProps> = ({
   const [annotation, setAnnotation] = useState<string>('');
   const [, createAnnotation] = useCreateAnnotationMutation();
   const [status, setStatus] = useState<'idle' | 'loading' | 'error'>('idle');
-
-  const userEvents = useContext(ClientEventsContext);
 
   const { permission } = useAnnotations();
 
@@ -77,15 +68,13 @@ export const NewAnnotation: React.FC<NewAnnotationProps> = ({
       return;
     }
 
-    userEvents({
-      segmentEvent: {
-        type: 'action',
-        action: 'Comment Submitted',
-        props: {
-          notebook_id: notebookId,
-          permissions_type: permission,
-          analytics_source: 'frontend',
-        },
+    analytics.track({
+      type: 'action',
+      action: 'Comment Submitted',
+      props: {
+        notebook_id: notebookId,
+        permissions_type: permission,
+        analytics_source: 'frontend',
       },
     });
   }, [
@@ -94,7 +83,6 @@ export const NewAnnotation: React.FC<NewAnnotationProps> = ({
     annotation,
     blockId,
     notebookId,
-    userEvents,
     permission,
     toast,
     aliasId,

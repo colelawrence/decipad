@@ -21,14 +21,28 @@ import {
   statementToIdentifiedBlock,
 } from '@decipad/remote-computer';
 import { nanoid } from 'nanoid';
-import { filter, merge, Observable, skip, Subscription } from 'rxjs';
+import {
+  distinctUntilChanged,
+  filter,
+  merge,
+  Observable,
+  skip,
+  Subscription,
+  switchMap,
+  tap,
+  timer,
+} from 'rxjs';
 
 const WAIT_BEFORE_CHECKING_RESULT = 3000;
 
 const hasValidResult = (computer: Computer, resultId: string): boolean => {
   const result = computer.getBlockIdResult(resultId);
 
-  return result != null && result.type === 'computer-result';
+  return (
+    result != null &&
+    result.type === 'computer-result' &&
+    result.result.type.kind !== 'pending'
+  );
 };
 
 type IntegrationProcessFunc = (
@@ -37,47 +51,45 @@ type IntegrationProcessFunc = (
   block: IntegrationTypes.IntegrationBlock
 ) => Promise<void>;
 
-export const pushIntegrationsAndFormulas: IntegrationProcessFunc = (
-  ...props
-) => {
-  return pushIntegration(...props).then(() =>
-    pushIntegrationFormulas(...props)
-  );
-};
+export const pushIntegrationsAndFormulas =
+  (abortController?: AbortController): IntegrationProcessFunc =>
+  (...props) => {
+    return pushIntegration(abortController)(...props).then(() =>
+      pushIntegrationFormulas(...props)
+    );
+  };
 
-export const pushIntegration: IntegrationProcessFunc = async (
-  notebookId,
-  computer,
-  block
-) => {
-  const variableName = getNodeString(block.children[0]);
-  const { id, typeMappings, filters } = block;
+export const pushIntegration =
+  (abortController?: AbortController): IntegrationProcessFunc =>
+  async (notebookId, computer, block) => {
+    const variableName = getNodeString(block.children[0]);
+    const { id, typeMappings, filters } = block;
 
-  const hydratedFilters = (filters ?? []).map((f): Filter => {
-    if (f.type === 'number') {
-      return { ...f, value: new DeciNumber(f.value) };
-    }
-    return f;
-  });
+    const hydratedFilters = (filters ?? []).map((f): Filter => {
+      if (f.type === 'number') {
+        return { ...f, value: new DeciNumber(f.value) };
+      }
+      return f;
+    });
 
-  const runner = getRunner({
-    id,
-    computer,
-    notebookId,
-    integration: block,
-    integrationType: undefined,
-    name: variableName,
-    types: typeMappings,
-    filters: hydratedFilters,
-  });
+    const runner = getRunner({
+      id,
+      computer,
+      notebookId,
+      integration: block,
+      integrationType: undefined,
+      name: variableName,
+      types: typeMappings,
+      filters: hydratedFilters,
+    });
 
-  await runner.import(computer).catch((err) => {
-    console.error('error importing:', err);
-    // TODO: error handling in the runner
-    throw err;
-  });
-  runner.clean();
-};
+    await runner.import(computer, abortController).catch((err) => {
+      console.error('error importing:', err);
+      // TODO: error handling in the runner
+      throw err;
+    });
+    runner.clean();
+  };
 
 const pushFormulas = async (
   computer: Computer,
@@ -151,7 +163,7 @@ export const renameResultInComputer =
     ) {
       // Try to push the result again if we have an error.
       // Or if we have a simple result (like a single value, or column).
-      await pushIntegration(notebookId, computer, block);
+      await pushIntegration()(notebookId, computer, block);
       return;
     }
 
@@ -190,8 +202,8 @@ export const withControllerSideEffects = (
 
     controller.apply({
       type: 'set_node',
-      properties: omit(block, 'children'),
-      newProperties: { ...omit(block, 'children'), timeOfLastRun },
+      properties: { timeOfLastRun: block.timeOfLastRun },
+      newProperties: { timeOfLastRun },
       path,
     });
 
@@ -380,16 +392,61 @@ export const getVariableChangeObservable =
   (block: IntegrationTypes.IntegrationBlock): Observable<IdentifiedResult> => {
     const usedVariables = getUsedVariablesCallback(block);
 
-    const observable = merge(
-      ...usedVariables.map(computer.getVarResult$.observe)
+    const usedVariableObservables = usedVariables.map(
+      computer.getVarResult$.observe
     );
 
-    // Skip 1 because the computer emits the result instantly of the last variable block.
+    const pipedVariableObservables = usedVariableObservables.map((usedVar) =>
+      usedVar.pipe(
+        skip(1),
+        filter((i) => i != null && i.type === 'computer-result'),
+        distinctUntilChanged((prev, next) => {
+          const prevValue = (prev as IdentifiedResult).result!;
+          const nextValue = (next as IdentifiedResult).result!;
+
+          return dequal(omit(prevValue, 'meta'), omit(nextValue, 'meta'));
+        })
+      )
+    );
+
+    const observable = merge(
+      ...pipedVariableObservables
+    ) as Observable<IdentifiedResult>;
+
     return observable.pipe(
-      skip(1),
-      filter((i) => i != null && i.type === 'computer-result')
-    ) as Observable<IdentifiedResult>; // TODO: remove when typescript is updated
+      distinctUntilChanged((prev, next) => prev.epoch === next.epoch)
+    );
   };
+
+export const debounceWithLeading = <T>(time: number) => {
+  return (source: Observable<T>) =>
+    new Observable<T>((observer) => {
+      let allowLeading = true;
+
+      return source
+        .pipe(
+          switchMap((value) => {
+            if (allowLeading) {
+              // Emit immediately and start debounce timer
+              allowLeading = false;
+              observer.next(value);
+              return timer(time).pipe(
+                tap(() => {
+                  allowLeading = true;
+                }) // Reset after debounce time
+              );
+            }
+            return timer(time).pipe(
+              tap(() => {
+                observer.next(value);
+                allowLeading = true;
+              })
+            );
+          })
+        )
+        .subscribe();
+    });
+};
 
 type VariableDependencyParams<T> = {
   upsertIntegration: (block: IntegrationTypes.IntegrationBlock) => void;

@@ -35,6 +35,7 @@
     { "path": "../routing" },
     { "path": "../backend-search" },
     { "path": "../computer" },
-    { "path": "../remote-computer-cache" }
+    { "path": "../remote-computer-cache" },
+    { "path": "../backend-data-lake" }
   ]
 }

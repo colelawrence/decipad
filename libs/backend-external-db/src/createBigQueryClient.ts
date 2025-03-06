@@ -1,40 +1,10 @@
 /* eslint-disable no-console */
-import {
-  BigQuery,
-  BigQueryDate,
-  BigQueryDatetime,
-  BigQueryTimestamp,
-  BigQueryTime,
-  BigQueryInt,
-  type BigQueryOptions,
-} from '@google-cloud/bigquery';
+import { BigQuery, type BigQueryOptions } from '@google-cloud/bigquery';
 import { notAcceptable } from '@hapi/boom';
 import { noop } from '@decipad/utils';
 import { DatabaseClient, DatabaseClientConfig } from './types';
 import { rowsToColumns } from './rowsToColumns';
-
-const prepareCellForJSON = (cell: unknown): unknown => {
-  if (
-    cell instanceof BigQueryDate ||
-    cell instanceof BigQueryDatetime ||
-    cell instanceof BigQueryTimestamp ||
-    cell instanceof BigQueryTime ||
-    cell instanceof BigQueryInt
-  ) {
-    return cell.value;
-  }
-  return cell;
-};
-
-const prepareForJSON = (
-  data: Record<string, Array<unknown>>
-): Record<string, Array<unknown>> =>
-  Object.fromEntries(
-    Object.entries(data).map(([key, value]) => [
-      key,
-      (Array.isArray(value) ? value : [value]).map(prepareCellForJSON),
-    ])
-  );
+import { prepareForJSON } from './prepareForJson';
 
 const urlToCredentials = (url: URL): BigQueryOptions['credentials'] => {
   try {
@@ -56,12 +26,24 @@ export const createBigQueryClient = (
   const wrappedClient = {
     raw: async (query: string) => {
       try {
-        const [result] = await client.query(query, { autoPaginate: false });
+        const [result, , metadata] = await client.query(query, {
+          autoPaginate: false,
+        });
         if (!result) {
           throw new Error('BigQuery error: no result');
         }
+        const fields: Array<{ name?: string; type?: string }> =
+          metadata?.schema?.fields ?? [];
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        return prepareForJSON(rowsToColumns(result as any));
+        return prepareForJSON(
+          rowsToColumns({
+            rows: result,
+            fields,
+          }),
+          Object.fromEntries(
+            fields.map((field) => [field.name ?? '', field.type ?? ''])
+          )
+        );
       } catch (err) {
         // eslint-disable-next-line no-console
         console.error('Error caught in BigQuery client', err);

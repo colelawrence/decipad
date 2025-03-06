@@ -14,15 +14,6 @@ export const identify = (
 ): Promise<void> | void => {
   const client = analyticsClient(request);
   if (client) {
-    return new Promise((resolve) => {
-      client.identify({ userId, traits: event }, (err: Error) => {
-        if (err) {
-          console.error('Analytics: error identifying:', err);
-        } else {
-          console.log('Analytics identified successfully');
-        }
-        resolve();
-      });
-    });
+    client.identify(userId, event as Record<string | number, unknown>);
   }
 };

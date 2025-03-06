@@ -1,7 +1,11 @@
 import type { Session } from 'next-auth';
 import type { Computer } from '@decipad/computer-interfaces';
 import type { DocSyncEditor, DocSyncOptions } from '@decipad/docsync';
-import type { BlockProcessor, EditorController } from '@decipad/notebook-tabs';
+import type {
+  BlockProcessor,
+  EditorController,
+  Reporter,
+} from '@decipad/notebook-tabs';
 import type { MyPlatePlugin } from '@decipad/editor-types';
 import { Subject, Subscription } from 'rxjs';
 import {
@@ -9,6 +13,7 @@ import {
   PermissionType,
 } from '@decipad/graphql-client';
 import { UserInteraction } from '@decipad/react-contexts';
+import { TOperation } from '@udecode/plate-common';
 
 interface InitNotebookStateOptions {
   docsync: Omit<DocSyncOptions, 'editor' | 'controller'>;
@@ -104,6 +109,7 @@ export type EditorState = {
   isNewNotebook: boolean;
 
   editorChanges: Subject<undefined>;
+  reporter: Reporter<TOperation> | undefined;
 
   interactionsSubscription: Subscription | undefined;
 };

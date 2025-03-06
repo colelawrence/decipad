@@ -51,11 +51,14 @@ impl DeciResult {
 impl DeciResult {
     pub fn mean(&self) -> DeciResult {
         match self {
-            DeciResult::Column(items) => match items[0] {
-                DeciResult::Column(_) => {
-                    return DeciResult::Column(items.iter().map(|x| x.mean()).collect());
-                }
-                _ => self.sum_frac() * DeciResult::Fraction(1, self.len() as i64),
+            DeciResult::Column(items) => match items.first() {
+                Some(result) => match result {
+                    DeciResult::Column(_) => {
+                        return DeciResult::Column(items.iter().map(|x| x.mean()).collect());
+                    }
+                    _ => self.sum_frac() * DeciResult::Fraction(1, self.len() as i64),
+                },
+                None => DeciResult::Fraction(0, 1),
             },
             _ => panic!("Can't take mean of a non-column"),
         }
@@ -63,19 +66,22 @@ impl DeciResult {
 
     pub fn min_val(&self) -> DeciResult {
         match self {
-            DeciResult::Column(items) => match items[0] {
-                DeciResult::Column(_) => {
-                    return DeciResult::Column(items.iter().map(|x| x.min_val()).collect());
-                }
-                _ => {
-                    let mut minval = &items[0];
-                    for item in items.iter().skip(1) {
-                        if *item < *minval {
-                            minval = item;
-                        }
+            DeciResult::Column(items) => match items.first() {
+                Some(result) => match result {
+                    DeciResult::Column(_) => {
+                        return DeciResult::Column(items.iter().map(|x| x.min_val()).collect());
                     }
-                    minval.clone()
-                }
+                    _ => {
+                        let mut minval = &items[0];
+                        for item in items.iter().skip(1) {
+                            if *item < *minval {
+                                minval = item;
+                            }
+                        }
+                        minval.clone()
+                    }
+                },
+                None => DeciResult::Fraction(0, 1),
             },
             _ => panic!("Can't take min of a non-column"),
         }
@@ -83,19 +89,22 @@ impl DeciResult {
 
     pub fn max_val(&self) -> DeciResult {
         match self {
-            DeciResult::Column(items) => match items[0] {
-                DeciResult::Column(_) => {
-                    return DeciResult::Column(items.iter().map(|x| x.max_val()).collect());
-                }
-                _ => {
-                    let mut maxval = &items[0];
-                    for item in items.iter().skip(1) {
-                        if *item > *maxval {
-                            maxval = item;
-                        }
+            DeciResult::Column(items) => match items.first() {
+                Some(result) => match result {
+                    DeciResult::Column(_) => {
+                        return DeciResult::Column(items.iter().map(|x| x.max_val()).collect());
                     }
-                    maxval.clone()
-                }
+                    _ => {
+                        let mut maxval = &items[0];
+                        for item in items.iter().skip(1) {
+                            if *item > *maxval {
+                                maxval = item;
+                            }
+                        }
+                        maxval.clone()
+                    }
+                },
+                None => DeciResult::Fraction(0, 1),
             },
             _ => panic!("Can't take max of a non-column"),
         }

@@ -129,9 +129,10 @@ export const prettyPrintProgramBlock = (block: ProgramBlock) => {
 
 export function getIdentifiedBlock(
   source: string,
-  i = 0
+  i = 0,
+  prefix = 'block-'
 ): IdentifiedBlock | IdentifiedError {
-  const id = `block-${i}`;
+  const id = `${prefix}${i}`;
   const { solution: block, error } = parseBlock(source);
 
   if (error) {

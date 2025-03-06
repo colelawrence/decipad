@@ -11,7 +11,6 @@ import type { Doc as YDoc } from 'yjs';
 import { mergeUpdates } from 'yjs';
 import { isValidMessage } from './isValidMessage';
 import { messageHandlers } from './messageHandlers';
-import { printReceivedMessage } from './printReceivedMessage';
 import { receiver } from './receive';
 import type { MessageHandler, MessageType, TWebSocketProvider } from './types';
 import { messageAwareness, messageSync } from './types';
@@ -166,7 +165,6 @@ const setupWS = async (provider: TWebSocketProvider) => {
           return;
         }
         provider.wsLastMessageReceived = time.getUnixTime();
-        printReceivedMessage(event.data);
         if (isValidMessage(event.data)) {
           receive(decodeMessage(event.data));
         }

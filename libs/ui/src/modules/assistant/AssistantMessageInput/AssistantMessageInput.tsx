@@ -1,4 +1,4 @@
-import { useContext, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import { Send, Stop } from '../../../icons';
 import { css } from '@emotion/react';
@@ -8,7 +8,7 @@ import {
   p13Bold,
   p14Medium,
 } from '../../../primitives';
-import { ClientEventsContext } from '@decipad/client-events';
+import { analytics } from '@decipad/client-events';
 
 const wrapperStyles = css({
   position: 'relative',
@@ -149,8 +149,6 @@ export const AssistantMessageInput: React.FC<AssistantMessageInputProps> = ({
 
   const isDisabled = !isGenerating && value.trim() === '';
 
-  const clientEvent = useContext(ClientEventsContext);
-
   const resetInput = () => {
     setValue('');
   };
@@ -161,14 +159,12 @@ export const AssistantMessageInput: React.FC<AssistantMessageInputProps> = ({
 
   const handleSubmit = () => {
     onSubmit(value);
-    clientEvent({
-      segmentEvent: {
-        type: 'action',
-        action: 'AI Chat Message Submitted',
-        props: {
-          ai_message: value,
-          analytics_source: 'frontend',
-        },
+    analytics.track({
+      type: 'action',
+      action: 'AI Chat Message Submitted',
+      props: {
+        ai_message: value,
+        analytics_source: 'frontend',
       },
     });
     resetInput();

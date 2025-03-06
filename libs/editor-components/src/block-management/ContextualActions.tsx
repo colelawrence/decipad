@@ -1,4 +1,4 @@
-import { useClientEvents } from '@decipad/client-events';
+import { analytics } from '@decipad/client-events';
 import {
   ELEMENT_LAYOUT,
   ELEMENT_PARAGRAPH,
@@ -36,8 +36,6 @@ export const ContextualActions: FC<ContextualActionsProps> = ({ element }) => {
 
   const isInsideLayout = useInsideLayoutContext();
   const editor = useMyEditorRef();
-
-  const event = useClientEvents();
 
   const contextualActions = useMemo<
     ComponentProps<typeof BlockContextualActions>['contextualActions']
@@ -95,14 +93,12 @@ export const ContextualActions: FC<ContextualActionsProps> = ({ element }) => {
               }
             );
 
-            event({
-              segmentEvent: {
-                type: 'action',
-                action: 'Toggle Width Button Clicked',
-                props: {
-                  analytics_source: 'frontend',
-                  button_location: 'shortcut button',
-                },
+            analytics.track({
+              type: 'action',
+              action: 'Toggle Width Button Clicked',
+              props: {
+                analytics_source: 'frontend',
+                button_location: 'shortcut button',
               },
             });
           },
@@ -126,14 +122,7 @@ export const ContextualActions: FC<ContextualActionsProps> = ({ element }) => {
     } else {
       return [];
     }
-  }, [
-    editor,
-    element,
-    event,
-    setSidebar,
-    handleExpandedBlockId,
-    isInsideLayout,
-  ]);
+  }, [editor, element, setSidebar, handleExpandedBlockId, isInsideLayout]);
 
   if (isInsideLayout) {
     return null;

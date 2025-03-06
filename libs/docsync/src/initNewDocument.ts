@@ -7,9 +7,12 @@ import { slateYjsSymbol } from './docsync';
 import { isFlagEnabled } from '@decipad/feature-flags';
 import { starterNotebook } from './initialNotebook';
 import {
+  DATA_TAB_INDEX,
   ELEMENT_DATA_TAB,
   ELEMENT_TAB,
   ELEMENT_TITLE,
+  TITLE_INDEX,
+  FIRST_TAB_INDEX,
   type MyValue,
 } from '@decipad/editor-types';
 
@@ -36,7 +39,7 @@ export async function initNewDocument(
     [
       {
         type: 'insert_node',
-        path: [0],
+        path: [TITLE_INDEX],
         node: {
           type: ELEMENT_TITLE,
           id: nanoid(),
@@ -45,21 +48,21 @@ export async function initNewDocument(
       },
       {
         type: 'insert_node',
-        path: [1],
+        path: [DATA_TAB_INDEX],
         node: {
           type: ELEMENT_DATA_TAB,
           id: nanoid(),
+          name: 'Data Tab',
           children: [],
-          name: 'New Tab',
         },
       },
       {
         type: 'insert_node',
-        path: [2],
+        path: [FIRST_TAB_INDEX],
         node: {
           type: ELEMENT_TAB,
           id: firstTabId,
-          children: getTabContent(),
+          children: [...getTabContent()],
           name: 'New Tab',
         },
       },

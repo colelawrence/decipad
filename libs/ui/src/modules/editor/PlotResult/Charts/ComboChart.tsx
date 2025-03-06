@@ -23,6 +23,8 @@ import {
 import { roundedEndsHorizontal, roundedEndsVertical } from './BarChart';
 import { activeDotStyle, tooltipCursorStyle } from './styles';
 import { ComboChartProps } from './types';
+import { calculateChartHeight } from '../helpers/calculateChartHeight';
+import { customTick } from '../Components/CustomTick';
 
 export const ComboChart = ({
   table,
@@ -39,6 +41,7 @@ export const ComboChart = ({
   setXAxisLabel,
   setYAxisLabel,
   isExporting,
+  size = 'medium',
 }: ComboChartProps) => {
   const [isDarkTheme] = useThemeFromStore();
   const [chartDimensions, setChartDimensions] = useState({
@@ -87,6 +90,7 @@ export const ComboChart = ({
         setXAxisLabel,
         yAxisLabel,
         setYAxisLabel,
+        customTick,
         isExporting,
       }),
     [
@@ -142,7 +146,7 @@ export const ComboChart = ({
   return (
     <ResponsiveContainer
       width={'100%'}
-      height={chartHeight}
+      height={calculateChartHeight(size, chartHeight)}
       onResize={(width, height) => {
         if (width && height) {
           setChartDimensions({

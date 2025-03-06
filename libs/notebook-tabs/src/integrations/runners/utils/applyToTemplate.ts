@@ -2,6 +2,7 @@ import Mustache from 'mustache';
 import { SerializedType } from '@decipad/language-interfaces';
 import { Time } from '@decipad/language-types';
 import { getVariablesFromComputer } from '@decipad/computer-utils';
+import { identity } from '@decipad/utils';
 
 const valueToString = (
   varName: string,
@@ -55,7 +56,9 @@ export const applyToTemplate = (
       }
     }
   }
-  return Mustache.render(template, valuesToFunctions(values));
+  return Mustache.render(template, valuesToFunctions(values), undefined, {
+    escape: identity, // disables HTML-escaping of variable values
+  });
 };
 
 export const getTemplateVariables = (template: string): Array<string> => {

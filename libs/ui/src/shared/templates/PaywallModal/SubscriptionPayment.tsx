@@ -1,12 +1,4 @@
-import {
-  FC,
-  useCallback,
-  useContext,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from 'react';
+import { FC, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import * as Styled from './styles';
 import {
   EmbeddedCheckout,
@@ -14,7 +6,7 @@ import {
 } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
 import { env } from '@decipad/client-env';
-import { ClientEventsContext, getAnalytics } from '@decipad/client-events';
+import { analytics } from '@decipad/client-events';
 import {
   useCurrentWorkspaceStore,
   useResourceUsage,
@@ -33,12 +25,11 @@ import {
 } from '@decipad/graphql-client';
 
 export const SubscriptionPayment: FC = () => {
-  const { cs, workspaceId, plan, newWorkspace } = useParams();
+  const { cs, workspaceId, newWorkspace } = useParams();
   const navigate = useNavigate();
   const { setIsUpgradeWorkspaceModalOpen, workspaceInfo } =
     useCurrentWorkspaceStore();
   const { ai } = useResourceUsage();
-  const clientEvent = useContext(ClientEventsContext);
   const [shouldNavigate, setShouldNavigate] = useState(false);
   const [isPollingData, setIsPollingData] = useState(false);
   const isFetching = useRef(false);
@@ -49,16 +40,14 @@ export const SubscriptionPayment: FC = () => {
 
   useEffect(() => {
     setIsUpgradeWorkspaceModalOpen(false);
-    clientEvent({
-      segmentEvent: {
-        type: 'action',
-        action: 'Checkout Modal Viewed',
-        props: {
-          analytics_source: 'frontend',
-        },
+    analytics.track({
+      type: 'action',
+      action: 'Checkout Modal Viewed',
+      props: {
+        analytics_source: 'frontend',
       },
     });
-  }, [setIsUpgradeWorkspaceModalOpen, clientEvent]);
+  }, [setIsUpgradeWorkspaceModalOpen]);
 
   const onExecuteGetWSNoNotebooksQuery = useCallback(() => {
     if (isFetching.current) {
@@ -151,21 +140,10 @@ export const SubscriptionPayment: FC = () => {
     () => ({
       clientSecret: cs,
       onComplete: () => {
-        getAnalytics().then((analytics) =>
-          analytics?.track('Purchase', {
-            category: 'Subscription',
-            subCategory: 'Plan',
-            resource: {
-              type: 'workspace',
-              id: workspaceId,
-            },
-            plan,
-          })
-        );
         setShouldNavigate(true);
       },
     }),
-    [cs, workspaceId, plan]
+    [cs]
   );
 
   useEffect(() => {

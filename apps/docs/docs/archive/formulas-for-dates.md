@@ -43,7 +43,7 @@ This operator allows you to check whether a certain range contains a specific da
 
 Use the `pick()` formula to extract the year, month, or day from a given date.
 
-**Syntax:** `pick(Date, [year/month/day])`
+**Syntax:** `pick(Date, [year | month | day | week | weekday | hour | minute | second | millisecond])`
 
 **Example:** `pick(date(2050-Jan-01), year)`
 
@@ -51,6 +51,6 @@ Use the `pick()` formula to extract the year, month, or day from a given date.
 
 Use the `round()` formula to control the precision of a given date. This formula is useful when you have a date for a specific day and you want to perform a calculation referring to its month or year instead.
 
-**Syntax:** `round(Date, [year/month/day])`
+**Syntax:** `round(Date, [year | month | day])`
 
 **Example:** `round(date(2050-Jan-01), month)`

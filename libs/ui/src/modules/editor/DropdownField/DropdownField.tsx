@@ -46,6 +46,11 @@ const triggerStyles = css([
       color: cssVar('textDisabled'),
       cursor: 'not-allowed',
     },
+
+    '&[data-size="small"]': {
+      height: '24px',
+      padding: '6px 8px',
+    },
   },
 ]);
 
@@ -146,6 +151,7 @@ export interface DropdownFieldTriggerProps {
   readonly children: string;
   readonly noValueSelected?: boolean;
   readonly disabled?: boolean;
+  readonly size?: 'small' | 'medium';
 }
 
 export const DropdownFieldTrigger = ({
@@ -155,12 +161,14 @@ export const DropdownFieldTrigger = ({
   children,
   noValueSelected,
   disabled = false,
+  size = 'medium',
 }: DropdownFieldTriggerProps) => (
   <button
     id={id}
     type="button"
     css={triggerStyles}
     aria-disabled={disabled}
+    data-size={size}
     data-no-value-selected={noValueSelected || undefined}
   >
     {icon && <span css={iconWrapperStyles(squareIcon)}>{icon}</span>}

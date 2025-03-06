@@ -8,6 +8,7 @@ export default mergeConfig(
   defineConfig({
     test: {
       testTimeout: 20_000,
+      globalSetup: '../../vitest.global.setup.mjs',
       setupFiles: [
         '@vitest/web-worker',
         '../../vitest.base.setup.mjs',

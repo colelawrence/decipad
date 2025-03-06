@@ -25,6 +25,13 @@ export const IntegrationList: ComponentProps<
     enabled: true,
   },
   {
+    icon: <ThumbnailSql />,
+    title: 'Data Lake',
+    description: 'Access your workspace data lake',
+    type: 'datalake',
+    enabled: true,
+  },
+  {
     icon: <ThumbnailNotion />,
     title: 'Notion',
     description: 'Connect your Notion databases to Decipad',

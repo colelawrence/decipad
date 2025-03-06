@@ -7,10 +7,7 @@ import { FC, ReactNode, useMemo } from 'react';
 
 import { CodeResult } from '../CodeResult/CodeResult';
 import { cssVar } from '../../../primitives';
-import {
-  resultBubbleStyles,
-  resultLoadingIconStyles,
-} from '../../../styles/results';
+import { resultLoadingIconStyles } from '../../../styles/results';
 import { useEventNoEffect } from '../../../utils/useEventNoEffect';
 import { Loading, Tooltip } from '../../../shared';
 
@@ -20,6 +17,7 @@ export type MagicNumberProps = {
   readonly loadingState?: boolean;
   readOnly?: boolean;
   readonly onClick?: () => void;
+  readonly onGoToDefinition?: () => void;
   readonly setPointyStyles?: boolean;
   readonly expression?: string;
   readonly element?: AnyElement;
@@ -29,16 +27,21 @@ export type MagicNumberProps = {
 
 const wrapperStyles = css({
   display: 'inline-flex',
+});
+
+const clickableStyles = css({
   cursor: 'pointer',
 });
 
 const highlightStyles = (isReference: boolean, readOnly: boolean) =>
   css([
-    resultBubbleStyles,
     {
       display: 'inline-block',
-      padding: '1px 6px 0px 6px',
-      lineHeight: '1.3',
+      textDecoration: 'underline',
+      textDecorationStyle: 'dotted',
+      textDecorationThickness: '1.3px',
+      textDecorationColor: 'color-mix(in srgb, currentColor 33%, transparent)',
+      textUnderlineOffset: '5px',
       '@media print': {
         color: 'unset',
       },
@@ -60,19 +63,23 @@ interface ResultResultProps {
   readOnly: boolean;
   isReference: boolean;
   expression?: string;
+  onGoToDefinition?: () => void;
 }
 
 const IntrospectMagicNumber: FC<ResultResultProps> = ({
   isReference,
   readOnly,
   children,
+  onGoToDefinition = noop,
 }) => {
   if (!isReference && readOnly) {
     return <span>{children}</span>;
   }
   return (
     <Tooltip trigger={<span>{children}</span>}>
-      {readOnly ? 'Live result' : <p>Click to edit</p>}
+      <p onClick={onGoToDefinition} css={clickableStyles}>
+        Definition &rarr;
+      </p>
     </Tooltip>
   );
 };
@@ -93,6 +100,7 @@ export const MagicNumber = ({
   readOnly = false,
   isReference = true,
   onClick = noop,
+  onGoToDefinition = noop,
   expression,
   element,
 }: MagicNumberProps): ReturnType<React.FC> => {
@@ -106,7 +114,7 @@ export const MagicNumber = ({
   return (
     <span
       onClick={readOnly ? noop : noEffectOnClick}
-      css={[wrapperStyles]}
+      css={[wrapperStyles, clickableStyles]}
       data-number-id={tempId}
       id={tempId}
       data-testid="magic-number"
@@ -116,6 +124,7 @@ export const MagicNumber = ({
           isReference={isReference}
           expression={expression}
           readOnly={readOnly}
+          onGoToDefinition={onGoToDefinition}
         >
           {hasResult ? (
             <span

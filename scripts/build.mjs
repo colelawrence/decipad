@@ -15,11 +15,10 @@ const pExec = promisify(exec);
 const envVarNames = [
   'NEXTAUTH_URL',
   'VITE_ANALYTICS_WRITE_KEY',
+  'VITE_POSTHOG_API_KEY',
   'VITE_GOOGLE_ANALYTICS_ID',
   'VITE_HOTJAR_SITE_ID',
   'GIT_COMMIT_HASH',
-  'GITHUB_CLIENT_ID',
-  'GITHUB_CLIENT_SECRET',
   'JWT_SECRET',
   'SENTRY_DSN',
   'SENTRY_ENVIRONMENT',
@@ -72,6 +71,11 @@ const envVarNames = [
 
   'NOTION_CLIENT_ID',
   'NOTION_CLIENT_SECRET',
+  'DATALAKE_GOOGLE_ROOT_SERVICE_CREDENTIALS',
+  'DATALAKE_AIRBYTE_CLIENT_ID',
+  'DATALAKE_AIRBYTE_CLIENT_SECRET',
+  'DATALAKE_AIRBYTE_URL',
+  'DATALAKE_AIRBYTE_WORKSPACE_ID',
 ];
 
 function getEnvVar(name) {
@@ -150,6 +154,7 @@ async function esBuildOptions(env) {
       '.svg': 'file',
       '.png': 'file',
       '.wasm': 'file',
+      '.sql': 'text',
     },
     treeShaking: true,
     plugins: [

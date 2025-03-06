@@ -10,7 +10,7 @@ pagination_prev: null
 
 **Syntax**:
 
-`pick(Date, [year/month/day])`
+`pick(Date, [year | month | day | week | weekday | hour | minute | second | millisecond])`
 
 Extracts the year, month, or day from a given date.
 

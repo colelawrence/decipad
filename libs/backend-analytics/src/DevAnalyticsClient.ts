@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
-import type { CoreAnalytics } from '@segment/analytics-core';
-import EventEmitter from 'events';
 import { noop } from '@decipad/utils';
+import { TMyAnalyticsClient } from './client';
+import EventEmitter from 'node:events';
 
 const isTesting = !!(
   process.env.JEST_WORKER_ID ??
@@ -11,62 +11,32 @@ const isTesting = !!(
 const log = isTesting ? noop : console.debug.bind(console);
 
 // Analytics client for development environment
-export class DevAnalyticsClient extends EventEmitter implements CoreAnalytics {
-  track(event: object, callback?: () => unknown) {
-    log('DevAnalyticsClient: tracking', event);
-    if (callback) {
-      setTimeout(callback, 0);
-    }
-    return Promise.resolve();
+export class DevAnalyticsClient
+  extends EventEmitter
+  implements TMyAnalyticsClient
+{
+  page(url: string) {
+    // do nothing
+    log('Backend Analytics [dev]: page', url);
   }
-  page(event: object, callback?: () => unknown) {
-    log('DevAnalyticsClient: page', event);
-    if (callback) {
-      setTimeout(callback, 0);
-    }
-    return Promise.resolve();
+  identify(userId: string, params: Record<string, unknown>) {
+    // do nothing
+    log('Backend Analytics [dev]: identify', userId, params);
   }
-  identify(arg: object, callback?: () => unknown) {
-    log('DevAnalyticsClient: identify', arg);
-    if (callback) {
-      setTimeout(callback, 0);
-    }
-    return Promise.resolve();
+  track(event: string, properties: Record<string, unknown>) {
+    // do nothing
+    log('Backend Analytics [dev]: track', event, properties);
   }
-  group(arg: object, callback?: () => unknown) {
-    log('DevAnalyticsClient: group', arg);
-    if (callback) {
-      setTimeout(callback, 0);
-    }
-    return Promise.resolve();
-  }
-  alias(arg: object, callback?: () => unknown) {
-    log('DevAnalyticsClient: alias', arg);
-    if (callback) {
-      setTimeout(callback, 0);
-    }
-    return Promise.resolve();
-  }
-  screen(arg: object, callback?: () => unknown) {
-    log('DevAnalyticsClient: screen', arg);
-    if (callback) {
-      setTimeout(callback, 0);
-    }
-    return Promise.resolve();
-  }
-  register(...plugins: unknown[]) {
-    log('DevAnalyticsClient: register', plugins);
-    return Promise.resolve();
-  }
-  deregister(...plugins: unknown[]) {
-    log('DevAnalyticsClient: deregister', plugins);
-    return Promise.resolve();
+  recordProperty(key: string, value: string) {
+    // do nothing
+    log('Backend Analytics [dev]: recordProperty', key, value);
   }
   closeAndFlush() {
+    this.emit('deregister');
     return Promise.resolve();
   }
   flush() {
-    return Promise.resolve();
+    return Promise.resolve([]);
   }
   VERSION = '1.0.0';
 }

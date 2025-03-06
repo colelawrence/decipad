@@ -18,10 +18,10 @@ import {
   useGeneratedName,
 } from '@decipad/editor-hooks';
 import { useIsEditorReadOnly } from '@decipad/react-contexts';
-import { useCallback, useContext, useRef } from 'react';
+import { useCallback, useRef } from 'react';
 import { useFocused } from 'slate-react';
-import { ClientEventsContext } from '@decipad/client-events';
 import { useVariableEditorContext } from './VariableEditorContext';
+import { analytics } from '@decipad/client-events';
 
 export const Caption: PlateComponent = ({ attributes, element, children }) => {
   if (element?.type !== ELEMENT_CAPTION) {
@@ -30,7 +30,6 @@ export const Caption: PlateComponent = ({ attributes, element, children }) => {
 
   const editor = useMyEditorRef();
   const focused = useFocused();
-  const userEvents = useContext(ClientEventsContext);
 
   const path = useNodePath(element);
   const setIcon = usePathMutatorCallback(editor, path, 'icon', 'Caption');
@@ -71,13 +70,11 @@ export const Caption: PlateComponent = ({ attributes, element, children }) => {
   // just when they are done typing, which we assume is when they click away.
   if (nodeText !== oldStr.current && !focused) {
     oldStr.current = getNodeString(element);
-    userEvents({
-      segmentEvent: {
-        type: 'action',
-        action: 'widget renamed',
-        props: {
-          variant: parent?.[0].variant || 'expression',
-        },
+    analytics.track({
+      type: 'action',
+      action: 'widget renamed',
+      props: {
+        variant: parent?.[0].variant ?? 'expression',
       },
     });
   }

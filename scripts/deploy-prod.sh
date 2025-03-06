@@ -15,6 +15,7 @@ echo "VITE_SENTRY_PROJECT=${SENTRY_PROJECT:-}" >> apps/frontend/.env.production
 echo "VITE_SENTRY_AUTH_TOKEN=${SENTRY_AUTH_TOKEN:-}" >> apps/frontend/.env.production
 echo "VITE_SENTRY_ENVIRONMENT=${SENTRY_ENVIRONMENT}" >> apps/frontend/.env.production
 echo "VITE_ANALYTICS_WRITE_KEY=${VITE_ANALYTICS_WRITE_KEY:-}" >> apps/frontend/.env.production
+echo "VITE_POSTHOG_API_KEY=${VITE_POSTHOG_API_KEY:-}" >> apps/frontend/.env.production
 echo "VITE_GOOGLE_ANALYTICS_ID=${VITE_GOOGLE_ANALYTICS_ID:-}" >> apps/frontend/.env.production
 echo "VITE_GOOGLESHEETS_API_KEY=${VITE_GOOGLESHEETS_API_KEY:-}" >> apps/frontend/.env.production
 echo "INTERCOM_SECRET_ID=${INTERCOM_SECRET_ID:-}" >> apps/frontend/.env.production

@@ -4,7 +4,7 @@ import { devtoolsExchange } from '@urql/devtools';
 import { cacheExchange } from '@urql/exchange-graphcache';
 import type { FC, ReactNode } from 'react';
 import { useEffect, useMemo, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 import type { ClientOptions } from 'urql';
 import {
   Provider as UrqlProvider,
@@ -67,22 +67,26 @@ const useMySession = () => {
 };
 
 export const GraphqlProvider: FC<GraphqlProviderProps> = ({ children }) => {
-  const { search } = useLocation();
+  const [searchParams] = useSearchParams();
   const session = useMySession();
 
+  const secret = searchParams.get('secret');
+
   const clientOpts = useMemo(() => {
-    const params = new URLSearchParams(search);
-    const secret = params.get('secret');
-    return produce(defaultClientOpts(session ?? undefined), (opts) => {
-      if (secret) {
-        // eslint-disable-next-line no-param-reassign
-        opts.fetchOptions.headers = {
-          ...(opts.fetchOptions.headers || {}),
-          authorization: `Bearer ${secret}`,
-        };
-      }
-    });
-  }, [search, session]);
+    if (secret) {
+      return produce(defaultClientOpts(session ?? undefined), (opts) => {
+        if (secret) {
+          // eslint-disable-next-line no-param-reassign
+          opts.fetchOptions.headers = {
+            ...(opts.fetchOptions.headers || {}),
+            authorization: `Bearer ${secret}`,
+          };
+        }
+      });
+    }
+
+    return defaultClientOpts(session ?? undefined);
+  }, [secret, session]);
 
   const client = useMemo(
     () => createClient(clientOpts as ClientOptions),

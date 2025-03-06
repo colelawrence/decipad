@@ -155,7 +155,10 @@ const inlineResultStyles = (bubble: boolean) =>
     ':empty': { display: 'none' },
 
     textOverflow: 'ellipsis',
+    overflow: 'hidden',
+    whiteSpace: 'nowrap',
     padding: '2px 8px',
+    maxWidth: 220,
 
     ...(!bubble && {
       paddingTop: '4px',

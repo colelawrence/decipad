@@ -1,4 +1,8 @@
-import { useComputer, useEditorChange } from '@decipad/editor-hooks';
+import {
+  useComputer,
+  useEditorChange,
+  useNavigateToDefinition,
+} from '@decipad/editor-hooks';
 import type {
   AnyElement,
   PlateComponent,
@@ -31,6 +35,7 @@ const UnprotectedMagicNumber: PlateComponent = ({
   const setEditingVariable = useNotebookWithIdState(
     (s) => s.setEditingVariable
   );
+  const navigateToDefinition = useNavigateToDefinition();
 
   const result = computer.getBlockIdResult$.use(blockId)?.result;
 
@@ -55,10 +60,17 @@ const UnprotectedMagicNumber: PlateComponent = ({
     setEditingVariable(sourceId);
   }, [sourceId, isTableReference, setEditingVariable]);
 
+  const onGoToDefinition = useCallback(() => {
+    if (typeof sourceId === 'string') {
+      navigateToDefinition(sourceId);
+    }
+  }, [navigateToDefinition, sourceId]);
+
   return (
     <span {...attributes}>
       <UIMagicNumber
         tempId={blockId}
+        onGoToDefinition={onGoToDefinition}
         loadingState={loadingState}
         result={result}
         expression={exp}

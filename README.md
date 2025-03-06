@@ -351,6 +351,10 @@ Once added, to build the icons into React components, run `nx run ui:build-icons
 
 ![Software Architecture](docs/software_architecture.png)
 
+## Data Lake
+
+Check out the [Data Lake](docs/DATALAKE.md) documentation for more information on how the data lake works and how to set up a Decipad development environment with it.
+
 ## Further resources
 
 - [Development cycle](docs/DEVELOPMENT.md)
@@ -367,6 +371,7 @@ There is also documentation available for larger areas of the codebase that span
 - [Backend](docs/BACKEND.md)
 - [Auth](docs/AUTH.md)
 - [Sync](docs/SYNC.md)
+- [Data Lake](docs/DATALAKE.md)
 
 # Feature flags
 

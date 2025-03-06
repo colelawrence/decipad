@@ -3,8 +3,8 @@ import { cssVar, p13Regular, p14Medium, p14Regular } from '../../../primitives';
 import { Link as LinkIcon } from '../../../icons';
 import { Tooltip, Link, Badge } from '../../../shared';
 import CopyToClipboard from 'react-copy-to-clipboard';
-import { useContext, useState } from 'react';
-import { ClientEventsContext } from '@decipad/client-events';
+import { useState } from 'react';
+import { analytics } from '@decipad/client-events';
 
 const innerPopUpStyles = css({
   display: 'flex',
@@ -86,9 +86,9 @@ export const NotebookEmbedTab = ({
   isPublished,
   embedLink,
 }: NotebookEmbedTabProps) => {
-  const clientEvent = useContext(ClientEventsContext);
   const [copiedPublicStatusVisible, setCopiedPublicStatusVisible] =
     useState(false);
+
   return (
     <div css={innerPopUpStyles}>
       {isAdmin && (
@@ -149,14 +149,11 @@ export const NotebookEmbedTab = ({
                         setTimeout(() => {
                           setCopiedPublicStatusVisible(false);
                         }, 1000);
-                        // Analytics
-                        clientEvent({
-                          segmentEvent: {
-                            type: 'action',
-                            action: 'Notebook Embed Link Copied',
-                            props: {
-                              analytics_source: 'frontend',
-                            },
+                        analytics.track({
+                          type: 'action',
+                          action: 'Notebook Embed Link Copied',
+                          props: {
+                            analytics_source: 'frontend',
                           },
                         });
                       }}

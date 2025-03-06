@@ -132,6 +132,10 @@ const DatePickerStyles: FC = () => {
             ...p13Medium,
             color: cssVar('textSubdued'),
           },
+          '& &__month-wrapper, & &__quarter-wrapper': {
+            display: 'flex',
+            gap: '2px',
+          },
 
           '& &__day-name': {
             ...p13Medium,
@@ -139,7 +143,16 @@ const DatePickerStyles: FC = () => {
             margin: '2px',
           },
 
-          '& &__day, & &__month-text, & &__year-text': {
+          '& &__week-container, & &__month-container, & &__year-container': {
+            minWidth: '200px',
+          },
+
+          '& &__quarter-text': {
+            width: '50%',
+            margin: '0',
+          },
+
+          '& &__day, & &__quarter-text, & &__month-text, & &__year-text': {
             ...p13Medium,
             color: cssVar('textDefault'),
             lineHeight: '28px',

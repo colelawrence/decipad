@@ -1,4 +1,3 @@
-import { getAnalytics } from '@decipad/client-events';
 import type { Computer } from '@decipad/computer-interfaces';
 import type { BlockElement, MyGenericEditor } from '@decipad/editor-types';
 import { ELEMENT_PARAGRAPH } from '@decipad/editor-types';
@@ -65,10 +64,6 @@ export const createAutoFormatCodeLinePlugin = <
         });
         return;
       }
-
-      getAnalytics().then((analytics) =>
-        analytics?.track('convert paragraph to code line because =')
-      );
 
       const autoVarName = computer.getAvailableIdentifier(generateVarName());
       const newCodeLine = createStructuredCodeLine({

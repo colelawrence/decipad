@@ -4,7 +4,6 @@ import { Button, LoadingIndicator } from '../../../shared';
 import { useUpdateResourceQuotaLimitMutation } from '@decipad/graphql-client';
 import { FormEventHandler, useCallback, useState } from 'react';
 import { useResourceUsage } from '@decipad/react-contexts';
-import { getAnalytics } from '@decipad/client-events';
 import { cssVarHex } from 'libs/ui/src/primitives';
 
 type AddCreditsPaymentComponentProps = {
@@ -15,7 +14,7 @@ type AddCreditsPaymentComponentProps = {
 
 export const AddCreditsPaymentComponent: React.FC<
   AddCreditsPaymentComponentProps
-> = ({ resourceId, closeAction, credits }) => {
+> = ({ resourceId, closeAction }) => {
   const stripe = useStripe();
   const elements = useElements();
   const [, UpdateResourceQuotaLimit] = useUpdateResourceQuotaLimitMutation();
@@ -57,21 +56,6 @@ export const AddCreditsPaymentComponent: React.FC<
       });
 
       if (result.error) {
-        getAnalytics().then((analytics) =>
-          analytics?.track('Purchase', {
-            category: 'Credits',
-            subCategory: 'AI',
-            resource: {
-              type: 'workspace',
-              id: resourceId,
-            },
-            amount: credits,
-            error: {
-              code: result.error.code,
-              message: result.error.message,
-            },
-          })
-        );
         console.error(result.error.message);
       } else {
         setLoadingState(true);
@@ -79,18 +63,6 @@ export const AddCreditsPaymentComponent: React.FC<
           result.paymentMethod.id
         );
         if (newCreditsLimitResult.data) {
-          getAnalytics().then((analytics) =>
-            analytics?.track('Purchase', {
-              category: 'Credits',
-              subCategory: 'AI',
-              resource: {
-                type: 'workspace',
-                id: resourceId,
-              },
-              amount: credits,
-            })
-          );
-
           const newLimit =
             newCreditsLimitResult.data.updateExtraAiAllowance?.newQuotaLimit ??
             0;

@@ -1,5 +1,5 @@
-import { useCallback, useContext, useMemo, useState } from 'react';
-import { ClientEventsContext } from '@decipad/client-events';
+import { useCallback, useMemo, useState } from 'react';
+import { analytics } from '@decipad/client-events';
 import { useComputer } from '@decipad/editor-hooks';
 import {
   EditorSidebarTab,
@@ -68,8 +68,6 @@ export const EditorSidebar: FC<EditorSidebarProps> = ({
 
   const computer = useComputer();
 
-  const clientEvent = useContext(ClientEventsContext);
-
   const [setAddVariable, setEditingVariable] = useNotebookState(
     notebookId,
     (s) => [s.setAddVariable, s.setEditingVariable] as const
@@ -114,15 +112,13 @@ export const EditorSidebar: FC<EditorSidebarProps> = ({
             computer.getAvailableIdentifier.bind(computer),
         });
       }
-      clientEvent({
-        segmentEvent: {
-          type: 'action',
-          action: 'sidebar block add',
-          props: { command },
-        },
+      analytics.track({
+        type: 'action',
+        action: 'sidebar block add',
+        props: { command },
       });
     },
-    [clientEvent, computer, editor]
+    [computer, editor]
   );
 
   const [search, setSearch] = useState('');
@@ -148,14 +144,12 @@ export const EditorSidebar: FC<EditorSidebarProps> = ({
     <NewVariableButton
       onClick={() => {
         setAddVariable();
-        clientEvent({
-          segmentEvent: {
-            type: 'action',
-            action: 'Data Drawer Opened',
-            props: {
-              analytics_source: 'frontend',
-              drawer_trigger: 'sidebar',
-            },
+        analytics.track({
+          type: 'action',
+          action: 'Data Drawer Opened',
+          props: {
+            analytics_source: 'frontend',
+            drawer_trigger: 'sidebar',
           },
         });
       }}

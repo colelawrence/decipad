@@ -14,8 +14,8 @@ import { useNotebookRoute } from '@decipad/routing';
 import { ConnectionProps, IntegrationProps } from '../connections';
 import { useNotebookWithIdState } from '@decipad/notebook-state';
 import omit from 'lodash/omit';
-import { useClientEvents } from '@decipad/client-events';
 import { Runner } from '@decipad/notebook-tabs';
+import { analytics } from '@decipad/client-events';
 
 /**
  * Returns the attachment ID from a file handle
@@ -87,7 +87,6 @@ export const useCreateIntegration = (
   props: IntegrationProps
 ): ((state: ConnectionProps) => void) => {
   const setSidebar = useNotebookMetaData((s) => s.setSidebar);
-  const track = useClientEvents();
 
   const editor = useActiveEditor();
   assert(editor != null, 'editor cannot be null when creating an integration');
@@ -168,18 +167,17 @@ export const useCreateIntegration = (
       }
 
       onCreateIntegration();
-      track({
-        segmentEvent: {
-          type: 'action',
-          action: 'Notebook Integration Created',
-          props: {
-            integration_type: state.connectionType as any,
-            analytics_source: 'frontend',
-          },
+
+      analytics.track({
+        type: 'action',
+        action: 'Notebook Integration Created',
+        props: {
+          integration_type: state.connectionType as any,
+          analytics_source: 'frontend',
         },
       });
     },
-    [editor, onBeforeCreateIntegration, runner, setSidebar, track]
+    [editor, onBeforeCreateIntegration, runner, setSidebar]
   );
 
   return props.type === 'create'

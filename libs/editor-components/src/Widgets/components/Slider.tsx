@@ -1,10 +1,9 @@
 import type { PlateComponent } from '@decipad/editor-types';
-import { ClientEventsContext } from '@decipad/client-events';
 import { ELEMENT_SLIDER, ELEMENT_VARIABLE_DEF } from '@decipad/editor-types';
 import { assertElementType } from '@decipad/editor-utils';
 import { useIsEditorReadOnly, useNotebookId } from '@decipad/react-contexts';
 import { Slider as UISlider } from '@decipad/ui';
-import { useCallback, useContext } from 'react';
+import { useCallback } from 'react';
 import { useVariableEditorContext } from './VariableEditorContext';
 import { useOnSliderChange } from '../hooks';
 import {
@@ -15,6 +14,7 @@ import { useParentNodeEntry } from '@decipad/editor-hooks';
 import { getAnonUserMetadata } from '@decipad/utils';
 import { isFlagEnabled } from '@decipad/feature-flags';
 import { useNotebookRoute } from '@decipad/routing';
+import { analytics } from '@decipad/client-events';
 
 export const Slider: PlateComponent = ({ attributes, element, children }) => {
   assertElementType(element, ELEMENT_SLIDER);
@@ -31,7 +31,6 @@ export const Slider: PlateComponent = ({ attributes, element, children }) => {
   const { aliasId } = useNotebookRoute();
 
   // Analytics
-  const userEvents = useContext(ClientEventsContext);
   const isReadOnly = useIsEditorReadOnly();
   const onCommit = useCallback(async () => {
     if (isFlagEnabled('PRIVATE_LINK_ANALYTICS')) {
@@ -56,24 +55,16 @@ export const Slider: PlateComponent = ({ attributes, element, children }) => {
       }
     }
     setSyncValues(true);
-    userEvents({
-      segmentEvent: {
-        type: 'action',
-        action: 'widget value updated',
-        props: {
-          variant: 'slider',
-          isReadOnly,
-        },
-      },
-      gaEvent: {
-        category: 'widget',
-        action: 'widget value updated',
-        label: 'slider',
+    analytics.track({
+      type: 'action',
+      action: 'widget value updated',
+      props: {
+        variant: 'slider',
+        isReadOnly,
       },
     });
   }, [
     isReadOnly,
-    userEvents,
     setSyncValues,
     value,
     createAnnotation,

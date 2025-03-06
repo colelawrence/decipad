@@ -9,7 +9,7 @@ const borderStyles = css({
   border: `1px solid ${cssVar('borderDefault')}`,
   borderCollapse: 'separate',
   borderSpacing: 0,
-
+  overflow: 'hidden',
   thead: {
     borderCollapse: 'separate',
     th: {
@@ -122,16 +122,16 @@ const buttonHoverStyles = css({
   },
 });
 
-export const TableWrapper = styled.div(
+export const TableWrapper = styled.div<{ padLeft?: boolean }>(
   noTrackScrollbarStyles,
   buttonHoverStyles,
-  {
+  (props) => ({
     display: 'flex',
     gap: '8px',
     overflowX: 'auto',
-    paddingLeft: leftPadding,
+    paddingLeft: props.padLeft ? leftPadding : undefined,
     paddingRight: '16px',
-  }
+  })
 );
 
 export const StyledFooter = styled.tfoot({

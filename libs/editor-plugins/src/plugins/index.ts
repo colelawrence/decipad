@@ -46,7 +46,6 @@ export * from './SyntaxErrorHighlight';
 export * from './TrailingParagraph';
 export * from './Metric';
 export * from './TypeErrorHighlight';
-export * from './UserEvent';
 export * from './CreateCrossBlockSelection';
 export * from './TabSelectionPlugin';
 export * from './SubmitForm';

@@ -1,38 +1,40 @@
-import { TEditor, hasNode } from '@udecode/plate-common';
 import { createNormalizer, normalizeElement } from './element-normalizer';
 import {
   ELEMENT_INTEGRATION,
+  ELEMENT_METRIC,
   ELEMENT_PLOT,
-  MyPlatePlugin,
 } from '@decipad/editor-types';
 import { migrateIntegration } from './migrations/migrate-integrations';
+import { integrationColumnNameNormalizer, metricNormalizer } from './special';
+import {
+  PlatePlugin,
+  TEditor,
+  TNodeEntry,
+  hasNode,
+} from '@udecode/plate-common';
 
-const editorMigrations = <T extends TEditor = TEditor>(editor: T) =>
-  [createNormalizer(ELEMENT_INTEGRATION, migrateIntegration)].map((plugin) =>
-    plugin(editor)
-  );
+const editorMigrations = [
+  createNormalizer(ELEMENT_INTEGRATION, migrateIntegration),
+];
 
-const editorNormalizers = <T extends TEditor = TEditor>(editor: T) =>
-  [
-    createNormalizer(ELEMENT_PLOT, normalizeElement(ELEMENT_PLOT)),
-    createNormalizer(
-      ELEMENT_INTEGRATION,
-      normalizeElement(ELEMENT_INTEGRATION)
-    ),
-  ].map((plugin) => plugin(editor));
+const editorNormalizers = [
+  createNormalizer(ELEMENT_PLOT, normalizeElement(ELEMENT_PLOT)),
+  createNormalizer(ELEMENT_INTEGRATION, normalizeElement(ELEMENT_INTEGRATION)),
+  createNormalizer(ELEMENT_INTEGRATION, integrationColumnNameNormalizer),
+  createNormalizer(ELEMENT_METRIC, metricNormalizer),
+];
 
-export const generalEditorNormalizers: MyPlatePlugin = {
-  key: 'GENERAL_EDITOR_NORMALIZERS',
+export const genericEditorNormalizer = <T extends TEditor = TEditor>(
+  name: string,
+  normalizers: Array<(_editor: T) => (_entry: TNodeEntry<any>) => boolean>
+): PlatePlugin => ({
+  key: name,
   withOverrides: (editor) => {
     const { normalizeNode } = editor;
 
-    // It is important that migrations come first.
-    // Because normalisers will default to the current element type,
-    // and therefore lose data if migration to new elements dont happen before.
-    const withEditorMigrationsAndNormalizers = [
-      ...editorMigrations(editor),
-      ...editorNormalizers(editor),
-    ];
+    const normalizersWithEditor = normalizers.map((normalizer) =>
+      normalizer(editor as T)
+    );
 
     // eslint-disable-next-line no-param-reassign
     editor.normalizeNode = (entry) => {
@@ -44,8 +46,8 @@ export const generalEditorNormalizers: MyPlatePlugin = {
         return;
       }
 
-      for (const normalizer of withEditorMigrationsAndNormalizers) {
-        const op = normalizer(entry);
+      for (const normalizer of normalizersWithEditor) {
+        const op = normalizer(entry as any);
 
         if (op) {
           // Do not continue trying to normalize, since we have not normalized something.
@@ -58,4 +60,9 @@ export const generalEditorNormalizers: MyPlatePlugin = {
 
     return editor;
   },
-};
+});
+
+export const generalEditorNormalizers = genericEditorNormalizer(
+  'GENERAL_EDITOR_NORMALIZERS',
+  [...editorMigrations, ...editorNormalizers]
+);

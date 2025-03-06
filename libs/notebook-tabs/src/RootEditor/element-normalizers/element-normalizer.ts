@@ -10,6 +10,7 @@ import {
 import { assert } from '@decipad/utils';
 import {
   TEditor,
+  TNode,
   TNodeEntry,
   TOperation,
   isElement,
@@ -103,6 +104,7 @@ export const elementKindsToDefaultsGenerator: Partial<ElementKindToElementGenera
         flipTable: false,
         groupByX: false,
         showDataLabel: false,
+        size: 'medium',
         barVariant: 'grouped',
         lineVariant: 'area',
         arcVariant: 'simple',
@@ -352,18 +354,18 @@ const isTesting = !!(
   process.env.JEST_WORKER_ID ?? process.env.VITEST_WORKER_ID
 );
 
-export type Normalizer = (
-  entry: TNodeEntry
+export type Normalizer<T extends TNode = TNode> = (
+  entry: TNodeEntry<T>
 ) => Array<TOperation> | TOperation | undefined;
 
 export const createNormalizer = <
-  T extends AnyElement = AnyElement,
+  T extends TNode = TNode,
   K extends TEditor = TEditor
 >(
   type: T['type'],
-  normalizer: Normalizer
+  normalizer: Normalizer<T>
 ) => {
-  return (editor: K) => (entry: TNodeEntry) => {
+  return (editor: K) => (entry: TNodeEntry<T>) => {
     const [node] = entry;
 
     if (!isElement(node) || node.type !== type) {

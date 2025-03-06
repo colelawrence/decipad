@@ -1,7 +1,6 @@
 export * from './useEditElement';
 export * from './useElementAbove';
 export * from './useEnsureValidVariableName';
-export * from './useExpressionResult';
 export * from './useGlobalParentNode';
 export * from './useMaterializedColumnResult';
 export * from './useMaterializedColumnResultValue';
@@ -28,3 +27,5 @@ export * from './useIsBeingComputed';
 export * from './useFilters';
 export * from './useDragColumn';
 export * from './useDelayedResult';
+export * from './useFindBlock';
+export * from './useNavigateToDefinition';

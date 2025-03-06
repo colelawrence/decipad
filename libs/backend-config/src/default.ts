@@ -31,8 +31,6 @@ const defaultEnvValues = {
 
   // Third-party auth:
   DECI_DEFAULT_TOKEN_EXPIRATION_SECONDS: (365 * 60 * 60 * 24).toString(), // one year,
-  GITHUB_CLIENT_ID: '724d4d510a5e7301d70d',
-  GITHUB_CLIENT_SECRET: '288ea1dc0c15a556524042cf2691f54faf393c69',
   DECI_GOOGLESHEETS_API_KEY: 'AIzaSyAUUz2i17q5GS-RucohCV0H2rhn63QciIY',
   DECI_GOOGLESHEETS_CLIENT_ID:
     '549815184000-f5fot2gqf2v0215i5jai3p4arcmujlj1.apps.googleusercontent.com',
@@ -54,6 +52,7 @@ const defaultEnvValues = {
   DISCORD_APP_ID: 'discord app id',
 
   VITE_ANALYTICS_WRITE_KEY: '',
+  VITE_POSTHOG_API_KEY: '',
   VITE_GOOGLE_ANALYTICS_ID: '',
 
   // Tests-related
@@ -88,6 +87,12 @@ const defaultEnvValues = {
   WORKSPACE_FREE_PLAN_NAME: 'Free',
   OPENAI_DECIPAD_GPT_BEARER_KEY: '',
   MAILERSEND_API_KEY: '',
+  DATALAKE_GOOGLE_ROOT_SERVICE_CREDENTIALS: '',
+  DATALAKE_WEBHOOK_SECRET: 'psd5tjs6da8a8j6d8s29dksdqwpgvv2uf02bc',
+  DATALAKE_AIRBYTE_CLIENT_ID: '',
+  DATALAKE_AIRBYTE_CLIENT_SECRET: '',
+  DATALAKE_AIRBYTE_URL: 'http://localhost:8000',
+  DATALAKE_AIRBYTE_WORKSPACE_ID: '',
 };
 
 export type SupportedEnvKey = keyof typeof defaultEnvValues;

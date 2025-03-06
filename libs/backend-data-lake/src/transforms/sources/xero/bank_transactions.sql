@@ -1,0 +1,20 @@
+SELECT
+  BankTransactionID as Id,
+  {{{temporal_fields}}},
+  (Type = 'RECEIVE' OR Type = 'RECEIVE-OVERPAYMENT' OR Type = 'RECEIVE-PREPAYMENT' OR Type = 'RECEIVE-TRANSFER') as IsReceive,
+  (Type = 'SPEND' OR Type = 'SPEND-OVERPAYMENT' OR Type = 'SPEND-PREPAYMENT' OR Type = 'SPEND-TRANSFER') as IsSpend,
+  (Type = 'RECEIVE-PREPAYMENT' OR Type = 'SPEND-PREPAYMENT') as IsPrePayment,
+  CAST(JSON_VALUE(Contact.ContactID) as STRING) as ContactID,
+  Date as TransactionDate,
+  IsReconciled,
+  Reference,
+  SubTotal,
+  TotalTax,
+  Total,
+  CurrencyCode,
+  CurrencyRate,
+  (Status = 'AUTHORISED') as IsAuthorized,
+  (Status = 'DELETED') as IsDeleted,
+  null as CreatedAt,
+  UpdatedDateUTC as UpdatedAt
+  FROM {{bank_transactions}}

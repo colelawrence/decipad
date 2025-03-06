@@ -1,0 +1,18 @@
+SELECT
+  CAST(id AS STRING) as Id,
+  {{{temporal_fields}}},
+  number as Number,
+  subject as Subject,
+  issue_date as IssueDate,
+  state as State,
+  CAST(JSON_VALUE(client.id) as STRING) as ClientId,
+  CAST(JSON_VALUE(creator.id) as STRING) as CreatedByUserId,
+  amount as Amount,
+  tax_amount as TaxAmount,
+  currency as Currency,
+  sent_at as SentAt,
+  accepted_at as AcceptedAt,
+  declined_at as DeclinedAt,
+  created_at as CreatedAt,
+  updated_at as UpdatedAt,
+FROM {{estimates}}

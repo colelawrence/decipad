@@ -9,7 +9,7 @@ import React, {
 } from 'react';
 import { Tooltip } from 'recharts';
 import { Props as DefaultLegendContentProps } from 'recharts/types/component/DefaultLegendContent';
-import { ChartProps } from '../Charts/types';
+import { ChartProps, CustomTickProps } from '../Charts/types';
 
 export type RechartTooltipProps = ComponentProps<typeof Tooltip>;
 export type RechartPayloadProps = RechartTooltipProps['payload'];
@@ -61,6 +61,7 @@ export type RadiusProps = [number, number, number, number];
 export type AxisProps = {
   xColumnType?: SerializedType;
   tickFormatter?: (value: number) => string;
+  customTick?: (props: CustomTickProps) => any;
   xAxisOffset?: number;
   yAxisOffset?: number;
   xAxisLabel?: string;

@@ -16,6 +16,7 @@ export const timeUnits = new Set([
   'day',
   'days',
   'week',
+  'weekday',
   'weeks',
   'hour',
   'hours',

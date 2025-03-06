@@ -10,9 +10,21 @@ export default {
   },
 } as Meta;
 
+const defBlockId = 'ID123';
+const clickHandler = () => {
+  console.info('goto definition', defBlockId);
+};
+
 export const Normal: StoryFn<ComponentProps<typeof CodeVariable>> = (
   args: CodeVariableProps
-) => <CodeVariable {...args} />;
+) => (
+  <CodeVariable
+    {...args}
+    provideVariableDefLink
+    onGoToDefinition={clickHandler}
+    defBlockId={defBlockId}
+  />
+);
 
 export const VariableMissing: StoryFn<ComponentProps<typeof CodeVariable>> = (
   args: CodeVariableProps

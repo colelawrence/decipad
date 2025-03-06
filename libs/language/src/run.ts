@@ -26,7 +26,7 @@ export const parseBlockOrThrow = (
   const parsed = parseBlock(source, id, addCacheKeys, suppressErrorLog);
 
   if (parsed.error) {
-    throw new TypeError(parsed.error.message);
+    throw new TypeError(`${parsed.error.message}:\n\n${source}\n`);
   }
 
   if (id != null) {

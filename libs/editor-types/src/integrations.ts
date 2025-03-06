@@ -52,6 +52,12 @@ export interface SQLBlockIntegration {
   query: string;
 }
 
+export interface DataLakeBlockIntegration {
+  type: 'datalake';
+  query: string;
+  time?: number;
+}
+
 export interface NotionBlockIntegration extends WithExternalData {
   type: 'notion';
 
@@ -66,13 +72,13 @@ export interface GoogleSheetIntegration extends WithExternalData {
 
 export interface CSVIntegration {
   type: 'csv';
-
   csvUrl: string;
 }
 
 export type IntegrationTypes =
   | CodeBlockIntegration
   | SQLBlockIntegration
+  | DataLakeBlockIntegration
   | NotionBlockIntegration
   | GoogleSheetIntegration
   | CSVIntegration;

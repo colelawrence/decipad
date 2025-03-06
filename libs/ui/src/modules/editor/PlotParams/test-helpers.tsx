@@ -45,6 +45,8 @@ export const plotParams: ComponentProps<typeof PlotParams> = {
   setGrid: noop,
   showDataLabel: false,
   setShowDataLabel: noop,
+  setSize: noop,
+  size: 'medium',
   startFromZero: true,
   mirrorYAxis: false,
   flipTable: false,

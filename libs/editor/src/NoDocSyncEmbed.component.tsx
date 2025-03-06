@@ -1,5 +1,5 @@
 import type { FC } from 'react';
-import { useCallback, useContext, useMemo, useRef, useState } from 'react';
+import { useCallback, useMemo, useRef, useState } from 'react';
 import type { ReactEditor } from 'slate-react';
 import { Subject } from 'rxjs';
 import { Plate, PlateContent } from '@udecode/plate-common';
@@ -10,7 +10,6 @@ import {
 } from '@decipad/react-contexts';
 import type { MyValue } from '@decipad/editor-types';
 import { createMyPlateEditor } from '@decipad/editor-types';
-import { ClientEventsContext } from '@decipad/client-events';
 import { plugins } from '@decipad/editor-config';
 import { Tooltip } from './components';
 import { embedNotebook } from './exampleNotebooks';
@@ -19,7 +18,6 @@ import { useComputer } from '@decipad/editor-hooks';
 
 export const NoDocSyncEmbedInternal: FC = () => {
   const computer = useComputer();
-  const events = useContext(ClientEventsContext);
 
   const interactions = useEditorUserInteractionsContext();
 
@@ -29,10 +27,9 @@ export const NoDocSyncEmbedInternal: FC = () => {
     () =>
       plugins({
         computer,
-        events,
         interactions,
       }),
-    [computer, events, interactions]
+    [computer, interactions]
   );
 
   const [editor] = useState(() =>

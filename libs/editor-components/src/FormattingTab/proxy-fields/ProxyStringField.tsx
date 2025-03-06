@@ -1,6 +1,10 @@
 import { useCallback, useLayoutEffect, useRef, useState } from 'react';
 import { identity } from '@decipad/utils';
-import { InputField, InputFieldHorizontal } from '@decipad/ui';
+import {
+  InputField,
+  InputFieldHorizontal,
+  InputFieldTextArea,
+} from '@decipad/ui';
 import { useStableCallback } from '@decipad/react-utils';
 import { ProxyFieldProps } from './types';
 import { ifVaries } from '../proxy/utils';
@@ -70,7 +74,10 @@ export const useWriteOnBlur = <T,>(
 };
 
 export interface ProxyStringFieldProps extends ProxyFieldProps<string> {
-  as?: typeof InputField | typeof InputFieldHorizontal;
+  as?:
+    | typeof InputField
+    | typeof InputFieldHorizontal
+    | typeof InputFieldTextArea;
   error?: string;
   disabled?: boolean;
   placeholder?: string;

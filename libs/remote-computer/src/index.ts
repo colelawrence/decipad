@@ -109,3 +109,5 @@ export type {
 } from '@decipad/computer';
 
 export * from './client';
+
+export { getIdentifiedBlock } from './testUtils';

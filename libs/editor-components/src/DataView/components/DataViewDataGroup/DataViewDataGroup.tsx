@@ -38,6 +38,7 @@ export const DataViewDataGroupElement: FC<DataViewDataGroupElementProps> = ({
   isFirstLevel,
   alignRight,
 }) => {
+  const aggregationVariableName = `${aggregationType}${element.aggregationVariableName}`;
   return element.elementType === 'group' ? (
     <Header
       type={element.type}
@@ -58,6 +59,7 @@ export const DataViewDataGroupElement: FC<DataViewDataGroupElementProps> = ({
       aggregationType={aggregationType}
       aggregationResult={element.aggregationResult}
       aggregationExpression={element.aggregationExpression}
+      aggregationVariableName={aggregationVariableName}
     />
   ) : (
     <SmartCell
@@ -73,6 +75,7 @@ export const DataViewDataGroupElement: FC<DataViewDataGroupElementProps> = ({
           : undefined
       }
       aggregationExpression={element.aggregationExpression}
+      aggregationVariableName={aggregationVariableName}
     />
   );
 };

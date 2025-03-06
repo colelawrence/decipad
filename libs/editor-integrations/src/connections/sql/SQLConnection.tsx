@@ -6,7 +6,6 @@ import { useState } from 'react';
 import {
   CodeEditor,
   OptionsList,
-  SegmentButtons,
   StatusLine,
   TextAndIconButton,
 } from '@decipad/ui';
@@ -82,26 +81,18 @@ export const SQLConnection: FC<ConnectionProps> = (props) => {
   return (
     <SQLConnectionWrapper>
       <SplitPreview conn={props}>
-        <header>
-          <SegmentButtons
-            buttons={[
-              {
-                children: (
-                  <TextAndIconButton
-                    text="Run"
-                    size="fit"
-                    color="default"
-                    iconPosition="left"
-                    disabled={queries.hasReachedLimit}
-                  >
-                    <Play />
-                  </TextAndIconButton>
-                ),
-                onClick: onRun,
-              },
-            ]}
-          />
-        </header>
+        <StyledHeader>
+          <TextAndIconButton
+            text="Run"
+            size="fit"
+            color="default"
+            iconPosition="left"
+            disabled={queries.hasReachedLimit}
+            onClick={onRun}
+          >
+            <Play />
+          </TextAndIconButton>
+        </StyledHeader>
         <CodeEditor
           code={query}
           setCode={(q) => {
@@ -136,4 +127,8 @@ const SQLConnectionWrapper = styled.div({
     flexDirection: 'row',
     justifyContent: 'end',
   },
+});
+
+const StyledHeader = styled.header({
+  padding: '8px',
 });

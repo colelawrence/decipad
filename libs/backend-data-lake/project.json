@@ -1,0 +1,32 @@
+{
+  "name": "backend-data-lake",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/backend-data-lake/src",
+  "projectType": "library",
+  "targets": {
+    "lint": {
+      "executor": "@nx/linter:eslint",
+      "options": {
+        "lintFilePatterns": [
+          "libs/backend-data-lake/src/**/*.ts",
+          "libs/backend-data-lake/src/**/*.tsx"
+        ],
+        "maxWarnings": 0
+      }
+    },
+    "typecheck": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "yarn tsc -b libs/backend-data-lake"
+      }
+    },
+    "depcheck": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "../../node_modules/.bin/depcruise --config ../../.dependency-cruiser.js src",
+        "cwd": "libs/backend-data-lake"
+      }
+    }
+  },
+  "tags": []
+}

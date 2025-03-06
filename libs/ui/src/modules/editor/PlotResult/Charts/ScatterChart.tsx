@@ -27,6 +27,7 @@ import {
 } from '../helpers';
 import { tooltipCursorStyle } from './styles';
 import { ScatterChartProps } from './types';
+import { calculateChartHeight } from '../helpers/calculateChartHeight';
 
 export const ScatterChart = ({
   table,
@@ -44,6 +45,7 @@ export const ScatterChart = ({
   setXAxisLabel,
   setYAxisLabel,
   isExporting,
+  size = 'medium',
 }: ScatterChartProps) => {
   const [isDarkTheme] = useThemeFromStore();
   const [chartDimensions, setChartDimensions] = useState({
@@ -81,7 +83,7 @@ export const ScatterChart = ({
   return (
     <ResponsiveContainer
       width={'100%'}
-      height={chartHeight}
+      height={calculateChartHeight(size, chartHeight)}
       onResize={(width, height) => {
         if (width && height) {
           setChartDimensions({

@@ -1,4 +1,3 @@
-import { useGAPageTracking } from '@decipad/client-events';
 import { lazyLoad } from '@decipad/react-utils';
 import {
   notebooks,
@@ -43,8 +42,6 @@ const NavigateToWorkspaces: FC = () => {
 };
 
 export const App: FC = () => {
-  useGAPageTracking();
-
   return (
     <Routes>
       <Route path="/" element={<NavigateToWorkspaces />} />

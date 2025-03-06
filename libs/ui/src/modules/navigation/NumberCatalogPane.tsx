@@ -1,13 +1,13 @@
 /* eslint-disable decipad/css-prop-named-variable */
 import { CaretDown, CaretRight, Add } from '../../icons';
 import { Tooltip } from '../../shared';
-import { ClientEventsContext } from '@decipad/client-events';
 import * as Styled from './styles';
 import styled from '@emotion/styled';
 import { Panel } from 'react-resizable-panels';
 import { deciOverflowYStyles } from '../../styles/scrollbars';
-import { FC, useContext, useState } from 'react';
+import { FC, useState } from 'react';
 import { NumberCatalogPaneProps } from './types';
+import { analytics } from '@decipad/client-events';
 
 const SectionWrapper = styled(Panel)(deciOverflowYStyles, {
   width: '100%',
@@ -20,18 +20,15 @@ export const NumberCatalogPane: FC<NumberCatalogPaneProps> = ({
   toggleAddNewVariable,
 }) => {
   const [isNotebookDataExpanded, setIsNotebookDataExpanded] = useState(true);
-  const event = useContext(ClientEventsContext);
 
   const handleCreateVariable = () => {
     toggleAddNewVariable();
-    event({
-      segmentEvent: {
-        type: 'action',
-        action: 'Data Drawer Opened',
-        props: {
-          analytics_source: 'frontend',
-          drawer_trigger: 'sidebar',
-        },
+    analytics.track({
+      type: 'action',
+      action: 'Data Drawer Opened',
+      props: {
+        analytics_source: 'frontend',
+        drawer_trigger: 'sidebar',
       },
     });
   };

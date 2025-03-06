@@ -23,6 +23,7 @@ const enhancedTables: Set<keyof DataTables> = new Set([
   'resourceusages',
   'externaldatasnapshots',
   'workspacenumbers',
+  'datalakes',
 ]);
 
 const observedTables: Set<keyof DataTables> = new Set([
@@ -37,7 +38,10 @@ const observedTables: Set<keyof DataTables> = new Set([
   'pads',
 ]);
 
-const versionedTables: Set<keyof DataTables> = new Set(['docsync']);
+const versionedTables: Set<keyof DataTables> = new Set([
+  'docsync',
+  'datalakes',
+]);
 
 export const tablesProp = <T extends keyof DataTables>(
   tables: DataTables,

@@ -31,6 +31,18 @@ export const connections = route(
   }
 );
 
+const newConnection = route(
+  'connections/new/:connType',
+  { connType: stringParser },
+  {}
+);
+const editConnection = route(
+  'connections/edit/:connType',
+  { connType: stringParser },
+  {}
+);
+const dataLake = route('datalake', {}, { newConnection, editConnection });
+
 const section = route('/section/:sectionId', { sectionId: stringParser }, {});
 
 const workspace = route(
@@ -45,6 +57,7 @@ const workspace = route(
     shared,
     section,
     addcredits,
+    dataLake,
   }
 );
 

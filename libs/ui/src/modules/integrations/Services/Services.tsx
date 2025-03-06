@@ -16,13 +16,13 @@ import {
   IntegrationActionItem,
   IntegrationItem,
 } from '../IntegrationItem/IntegrationItem';
-import { useClientEvents } from '@decipad/client-events';
 import {
   ThumbnailGoogleSheet,
   ThumbnailNotion,
 } from '../../../icons/thumbnail-icons';
 import { TEMP_CONNECTION_NAME } from '@decipad/frontend-config';
 import * as Styled from './styles';
+import { analytics } from '@decipad/client-events';
 
 interface ServicesProps {
   readonly workspaceId: string;
@@ -65,7 +65,6 @@ export const Services: FC<ServicesProps> = ({ workspaceId }) => {
   );
 
   const toast = useToast();
-  const track = useClientEvents();
 
   useEffect(() => {
     if (connected != null) {
@@ -102,14 +101,12 @@ export const Services: FC<ServicesProps> = ({ workspaceId }) => {
         description="Work with Notion Databases at the speed of thought!"
         variant="modal"
         onClick={() => {
-          track({
-            segmentEvent: {
-              type: 'action',
-              action: 'Integration Set Up',
-              props: {
-                integration_type: 'notion',
-                analytics_source: 'frontend',
-              },
+          analytics.track({
+            type: 'action',
+            action: 'Integration Set Up',
+            props: {
+              integration_type: 'notion',
+              analytics_source: 'frontend',
             },
           });
           OnConnectIntegration('notion');

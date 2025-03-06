@@ -31,7 +31,7 @@ import {
   availableAggregations,
   getAggregationShortName,
 } from '@decipad/language-aggregations';
-import { Button } from '@decipad/ui';
+import { Button, InputFieldTextArea } from '@decipad/ui';
 import { Trash } from 'libs/ui/src/icons';
 import { capitalize } from 'lodash';
 import { useMetricAggregation } from '@decipad/editor-hooks';
@@ -50,16 +50,24 @@ export const metricConfig = {
       formatting: node.formatting,
       color: node.color ?? 'auto',
       trendColor: node.trendColor ?? 'trend',
+      description: node.description ?? '',
     }),
     actions: {
       setCaption: (node: MetricElement, editor: MyEditor, caption: string) =>
         setNodeProperty(editor, node, 'caption', caption),
-      setBlockId: (node: MetricElement, editor: MyEditor, blockId: string) =>
-        setNodeProperty(editor, node, 'blockId', blockId),
+      setBlockId: (
+        node: MetricElement,
+        editor: MyEditor,
+        blockId: string,
+        name?: string
+      ) => {
+        setNodeProperty(editor, node, 'blockId', blockId);
+        name && setNodeProperty(editor, node, 'caption', name);
+      },
       setAggregation: (
         node: MetricElement,
         editor: MyEditor,
-        aggregation: string
+        aggregation?: string
       ) => setNodeProperty(editor, node, 'aggregation', aggregation),
       setComparisonBlockId: (
         node: MetricElement,
@@ -69,7 +77,7 @@ export const metricConfig = {
       setComparisonAggregation: (
         node: MetricElement,
         editor: MyEditor,
-        aggregation: string
+        aggregation?: string
       ) => setNodeProperty(editor, node, 'comparisonAggregation', aggregation),
       setComparisonDescription: (
         node: MetricElement,
@@ -91,6 +99,11 @@ export const metricConfig = {
         editor: MyEditor,
         color: ColorOptionWithTrend
       ) => setNodeProperty(editor, node, 'trendColor', color),
+      setDescription: (
+        node: MetricElement,
+        editor: MyEditor,
+        description: string
+      ) => setNodeProperty(editor, node, 'description', description),
     },
   }),
 } satisfies ProxyFactoryConfig<any, any>;
@@ -131,8 +144,9 @@ interface MetricValueFieldProps {
   blockIdProperty: MultipleNodeProxyProperty<string>;
   aggregationIdProperty: MultipleNodeProxyProperty<string>;
   aggregationOptions: AggregationType[];
-  onSetBlockId: (editor: MyEditor, blockId: string) => void;
+  onSetBlockId: (editor: MyEditor, blockId: string, name?: string) => void;
   onSetAggregationId: (editor: MyEditor, aggregationId: string) => void;
+  onSetAggregation: (editor: MyEditor, aggregation?: string) => void;
 }
 
 const MetricValueField = ({
@@ -144,6 +158,7 @@ const MetricValueField = ({
   aggregationOptions,
   onSetBlockId,
   onSetAggregationId,
+  onSetAggregation,
 }: MetricValueFieldProps) => {
   return (
     <div
@@ -171,7 +186,7 @@ const MetricValueField = ({
             property={aggregationIdProperty}
             onChange={onSetAggregationId}
             options={aggregationOptions.map(({ id }) => id)}
-            labelForValue={(id) => getAggregationShortName(id) ?? ''}
+            labelForValue={(id) => getAggregationShortName(id) ?? 'Select'}
           />
         </div>
       )}
@@ -181,7 +196,10 @@ const MetricValueField = ({
           <Button
             size="square"
             type="ghost"
-            onClick={() => onSetBlockId(editor, '')}
+            onClick={() => {
+              onSetBlockId(editor, '');
+              onSetAggregation(editor, undefined);
+            }}
           >
             <div css={{ width: 16, height: 16, display: 'grid' }}>
               <Trash />
@@ -205,7 +223,7 @@ export const MetricForm: FC<ProxyFormProps<typeof metricConfig>> = ({
 
   const aggregationIdProperty = mapProperty(
     properties.aggregation,
-    () => safeAggregationId!
+    () => safeAggregationId ?? 'Select'
   );
 
   const comparable = resultType?.kind === 'number';
@@ -222,7 +240,7 @@ export const MetricForm: FC<ProxyFormProps<typeof metricConfig>> = ({
 
   const comparisonAggregationIdProperty = mapProperty(
     properties.comparisonAggregation,
-    () => safeComparisonAggregationId!
+    () => safeComparisonAggregationId ?? 'Select'
   );
 
   return (
@@ -243,6 +261,7 @@ export const MetricForm: FC<ProxyFormProps<typeof metricConfig>> = ({
         aggregationOptions={aggregationOptions}
         onSetBlockId={actions.setBlockId}
         onSetAggregationId={actions.setAggregation}
+        onSetAggregation={actions.setAggregation}
       />
 
       {comparable && (
@@ -256,6 +275,7 @@ export const MetricForm: FC<ProxyFormProps<typeof metricConfig>> = ({
             aggregationOptions={comparisonAggregationOptions}
             onSetBlockId={actions.setComparisonBlockId}
             onSetAggregationId={actions.setComparisonAggregation}
+            onSetAggregation={actions.setComparisonAggregation}
           />
 
           {hasComparison && (
@@ -294,6 +314,15 @@ export const MetricForm: FC<ProxyFormProps<typeof metricConfig>> = ({
           onChange={actions.setTrendColor}
         />
       )}
+
+      <ProxyStringField
+        editor={editor}
+        label="Description"
+        property={properties.description}
+        onChange={actions.setDescription}
+        placeholder="Add description..."
+        as={InputFieldTextArea}
+      />
     </FormWrapper>
   );
 };

@@ -1,7 +1,11 @@
 // eslint-disable-next-line no-restricted-imports
 import type { Type } from '@decipad/language-types';
 // eslint-disable-next-line no-restricted-imports
-import { serializeType, buildType as t } from '@decipad/language-types';
+import {
+  buildType as t,
+  Dimension,
+  serializeType,
+} from '@decipad/language-types';
 import { singular } from '@decipad/language-units';
 import { columnToTable } from './columnToTable';
 import { treeToTable } from './treeToTable';
@@ -31,6 +35,34 @@ export const coerceType = async (
     }
   }
   const sourceSerType = serializeType(source);
+  if (target === 'number') {
+    return Dimension.automapTypes(
+      realm.utils,
+      [source],
+      async ([expressionType]: Type[]): Promise<Type> => {
+        if (!(await expressionType.isScalar('string')).errorCause) {
+          return t.number();
+        }
+        return t.impossible(
+          `Don't know how to convert ${sourceSerType.kind} to ${target}`
+        );
+      }
+    );
+  }
+  if (target === 'string') {
+    return Dimension.automapTypes(
+      realm.utils,
+      [source],
+      async ([expressionType]: Type[]): Promise<Type> => {
+        if (!(await expressionType.isScalar('number')).errorCause) {
+          return t.string();
+        }
+        return t.impossible(
+          `Don't know how to convert ${sourceSerType.kind} to ${target}`
+        );
+      }
+    );
+  }
   return t.impossible(
     `Don't know how to convert ${sourceSerType.kind} to ${target}`
   );

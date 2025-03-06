@@ -7,7 +7,6 @@ import { TExecution } from '@decipad/interfaces';
 import { useNotebookMetaData, useResourceUsage } from '@decipad/react-contexts';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useNotebookRoute } from '@decipad/routing';
-import { useClientEvents } from '@decipad/client-events';
 import { useComputer } from '@decipad/editor-hooks';
 import { nanoid } from 'nanoid';
 import { getExprRef } from '@decipad/computer';
@@ -25,6 +24,7 @@ import {
   useRunner,
 } from '@decipad/notebook-tabs';
 import { getBlockFormulas } from '../utils';
+import { analytics } from '@decipad/client-events';
 
 export const useConcreteIntegration = (
   props: ConcreteIntegrationProps
@@ -36,20 +36,16 @@ export const useConcreteIntegration = (
 
   const { notebookId } = useNotebookRoute();
 
-  const track = useClientEvents();
-
   useEffect(() => {
-    track({
-      segmentEvent: {
-        type: 'action',
-        action: 'Notebook Integrations Modal Viewed',
-        props: {
-          integration_type: connectionType as any,
-          analytics_source: 'backend',
-        },
+    analytics.track({
+      type: 'action',
+      action: 'Notebook Integrations Modal Viewed',
+      props: {
+        integration_type: connectionType as any,
+        analytics_source: 'backend',
       },
     });
-  }, [connectionType, track]);
+  }, [connectionType]);
 
   const [externalData, setExternalData] =
     useState<ConnectionProps['externalData']>(undefined);
@@ -131,11 +127,7 @@ export const useConcreteIntegration = (
         toast.error('Error importing integration!');
       })
       .finally(() => {
-        if (logSub == null) {
-          return;
-        }
-
-        logSub.unsubscribe();
+        logSub?.unsubscribe();
       });
 
     if (props.integrationBlock != null) {
@@ -162,11 +154,7 @@ export const useConcreteIntegration = (
   }, [runner, computer, varName]);
 
   useEffect(() => {
-    if (existingDataset === undefined) {
-      return;
-    }
-
-    if (existingDataset.type !== 'attachment') {
+    if (existingDataset?.type !== 'attachment') {
       return;
     }
 

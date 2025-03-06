@@ -1,7 +1,9 @@
+import { z } from 'zod';
 import type { S3ClientConfig } from '@aws-sdk/client-s3';
 import { Buffer } from 'buffer';
 import type { SupportedEnvKey } from './default';
 import { defaultEnv } from './default';
+import { once } from 'ramda';
 
 export { defaultEnv };
 
@@ -85,10 +87,6 @@ function env(name: SupportedEnvKey): string {
       return valueOrDefault(name, process.env.DISCORD_APP_ID);
     case 'DISCORD_PUBLIC_KEY':
       return valueOrDefault(name, process.env.DISCORD_PUBLIC_KEY);
-    case 'GITHUB_CLIENT_ID':
-      return valueOrDefault(name, process.env.GITHUB_CLIENT_ID);
-    case 'GITHUB_CLIENT_SECRET':
-      return valueOrDefault(name, process.env.GITHUB_CLIENT_SECRET);
     case 'JWT_MAX_AGE':
       return valueOrDefault(name, process.env.JWT_MAX_AGE);
     case 'JWT_SECRET':
@@ -105,6 +103,8 @@ function env(name: SupportedEnvKey): string {
       return valueOrDefault(name, process.env.NEXTAUTH_URL);
     case 'VITE_ANALYTICS_WRITE_KEY':
       return valueOrDefault(name, process.env.VITE_ANALYTICS_WRITE_KEY);
+    case 'VITE_POSTHOG_API_KEY':
+      return valueOrDefault(name, process.env.VITE_POSTHOG_API_KEY);
     case 'VITE_GOOGLE_ANALYTICS_ID':
       return valueOrDefault(name, process.env.VITE_GOOGLE_ANALYTICS_ID);
     case 'SENTRY_DSN':
@@ -156,6 +156,23 @@ function env(name: SupportedEnvKey): string {
       return valueOrDefault(name, process.env.OPENAI_DECIPAD_GPT_BEARER_KEY);
     case 'MAILERSEND_API_KEY':
       return valueOrDefault(name, process.env.MAILERSEND_API_KEY);
+
+    case 'DATALAKE_GOOGLE_ROOT_SERVICE_CREDENTIALS':
+      return valueOrDefault(
+        name,
+        process.env.DATALAKE_GOOGLE_ROOT_SERVICE_CREDENTIALS
+      );
+
+    case 'DATALAKE_WEBHOOK_SECRET':
+      return valueOrDefault(name, process.env.DATALAKE_WEBHOOK_SECRET);
+    case 'DATALAKE_AIRBYTE_CLIENT_ID':
+      return valueOrDefault(name, process.env.DATALAKE_AIRBYTE_CLIENT_ID);
+    case 'DATALAKE_AIRBYTE_CLIENT_SECRET':
+      return valueOrDefault(name, process.env.DATALAKE_AIRBYTE_CLIENT_SECRET);
+    case 'DATALAKE_AIRBYTE_URL':
+      return valueOrDefault(name, process.env.DATALAKE_AIRBYTE_URL);
+    case 'DATALAKE_AIRBYTE_WORKSPACE_ID':
+      return valueOrDefault(name, process.env.DATALAKE_AIRBYTE_WORKSPACE_ID);
   }
 }
 
@@ -248,6 +265,7 @@ export function monitor() {
 export function analytics() {
   return {
     secretKey: env('VITE_ANALYTICS_WRITE_KEY'),
+    posthogApiKey: env('VITE_POSTHOG_API_KEY'),
   };
 }
 
@@ -401,3 +419,45 @@ export function discord() {
     appId: env('DISCORD_APP_ID'),
   };
 }
+
+const createGoogleServiceAccountCredentialsParser = once(() =>
+  z.object({
+    type: z.string(),
+    project_id: z.string(),
+    private_key_id: z.string(),
+    private_key: z.string(),
+    client_email: z.string(),
+    client_id: z.string(),
+    auth_uri: z.string(),
+    token_uri: z.string(),
+    auth_provider_x509_cert_url: z.string(),
+    client_x509_cert_url: z.string(),
+    universe_domain: z.string(),
+  })
+);
+
+export const datalake = once(() => {
+  const encodedCredentials = env('DATALAKE_GOOGLE_ROOT_SERVICE_CREDENTIALS');
+  if (!encodedCredentials) {
+    throw new Error(
+      'To use data lake you need to have the DATALAKE_GOOGLE_ROOT_SERVICE_CREDENTIALS env var configured'
+    );
+  }
+  try {
+    const rootCredentials = createGoogleServiceAccountCredentialsParser().parse(
+      JSON.parse(Buffer.from(encodedCredentials, 'base64').toString())
+    );
+    return {
+      rootCredentials,
+      webhookSecret: env('DATALAKE_WEBHOOK_SECRET'),
+      airbyteClientId: env('DATALAKE_AIRBYTE_CLIENT_ID'),
+      airbyteClientSecret: env('DATALAKE_AIRBYTE_CLIENT_SECRET'),
+      airbyteUrl: env('DATALAKE_AIRBYTE_URL'),
+      airbyteWorkspaceId: env('DATALAKE_AIRBYTE_WORKSPACE_ID'),
+    };
+  } catch (err) {
+    // eslint-disable-next-line no-console
+    console.error(err);
+    throw new Error('Invalid DATALAKE_GOOGLE_ROOT_SERVICE_CREDENTIALS');
+  }
+});

@@ -1,4 +1,3 @@
-import { useClientEvents } from '@decipad/client-events';
 import { useComputer, useFilteredTabs } from '@decipad/editor-hooks';
 import {
   ELEMENT_CODE_LINE,
@@ -75,6 +74,7 @@ import { materializeResult, Result } from '@decipad/remote-computer';
 import { exportCsv } from '@decipad/export';
 import { handleExportSVGUsingHtml2Canvas } from './download-chart';
 import { ConnectDragSource } from 'react-dnd';
+import { analytics } from '@decipad/client-events';
 
 const handleButtonStyle = css({
   borderRadius: '6px',
@@ -150,16 +150,13 @@ type DragHandleProps = {
 };
 
 const ShowHideButton = ({ element }: DragHandleProps) => {
-  const event = useClientEvents();
   const editor = useMyEditorRef();
 
   const onShowHide = withMultipleSelectionAction(editor, element, (path) => {
-    event({
-      segmentEvent: {
-        type: 'action',
-        action: `${element.isHidden ? 'show' : 'hide'} block`,
-        props: { blockType: element.type },
-      },
+    analytics.track({
+      type: 'action',
+      action: `${element.isHidden ? 'show' : 'hide'} block`,
+      props: { blockType: element.type },
     });
 
     setNodes(
@@ -215,16 +212,13 @@ const BasicDeleteButton = ({ onDelete }: BasicDeleteButtonProps) => {
 };
 
 const DeleteButton = ({ element }: DragHandleProps) => {
-  const event = useClientEvents();
   const editor = useMyEditorRef();
 
   const onDelete = withMultipleSelectionAction(editor, element, (path) => {
-    event({
-      segmentEvent: {
-        type: 'action',
-        action: 'block deleted',
-        props: { blockType: element.type },
-      },
+    analytics.track({
+      type: 'action',
+      action: 'block deleted',
+      props: { blockType: element.type },
     });
 
     removeNodes(editor, { at: path });
@@ -300,17 +294,14 @@ const DuplicateButton = ({ element }: DragHandleProps) => {
 };
 
 const PlusButton = ({ element }: DragHandleProps) => {
-  const event = useClientEvents();
   const editor = useMyEditorRef();
 
   const onClick = useEventNoEffect(() => {
     openSlashMenu(editor, element);
-    event({
-      segmentEvent: {
-        type: 'action',
-        action: 'click +',
-        props: { blockType: element.type },
-      },
+    analytics.track({
+      type: 'action',
+      action: 'click +',
+      props: { blockType: element.type },
     });
   });
 
@@ -381,7 +372,6 @@ const MoveToTabButton = ({ element }: DragHandleProps) => {
 
 const MakeFullScreenButton = ({ element }: DragHandleProps) => {
   const editor = useMyEditorRef();
-  const event = useClientEvents();
 
   const insideLayout = useInsideLayoutContext();
 
@@ -394,14 +384,12 @@ const MakeFullScreenButton = ({ element }: DragHandleProps) => {
 
     wrapIntoLayout(editor, path, 'full');
 
-    event({
-      segmentEvent: {
-        type: 'action',
-        action: 'Toggle Width Button Clicked',
-        props: {
-          analytics_source: 'frontend',
-          button_location: 'block menu',
-        },
+    analytics.track({
+      type: 'action',
+      action: 'Toggle Width Button Clicked',
+      props: {
+        analytics_source: 'frontend',
+        button_location: 'block menu',
       },
     });
   };
@@ -424,8 +412,6 @@ const isCalculationType = (element: MyElement) =>
   element.type === ELEMENT_VARIABLE_DEF;
 
 const CopyHrefButton = ({ element }: DragHandleProps) => {
-  const event = useClientEvents();
-
   const [isMultipleSelection] = getSelection();
 
   const onCopyHref = () => {
@@ -443,12 +429,10 @@ const CopyHrefButton = ({ element }: DragHandleProps) => {
     const newUrl = `${url.origin}${pathname}#${hash}`;
     copyToClipboard(newUrl);
 
-    event({
-      segmentEvent: {
-        type: 'action',
-        action: 'copy block href',
-        props: { blockType: element.type },
-      },
+    analytics.track({
+      type: 'action',
+      action: 'copy block href',
+      props: { blockType: element.type },
     });
   };
 
@@ -487,7 +471,6 @@ const isValidResult = (
 };
 
 const DownloadCsv = ({ element }: DragHandleProps) => {
-  const events = useClientEvents();
   const computer = useComputer();
   const toast = useToast();
 
@@ -515,13 +498,11 @@ const DownloadCsv = ({ element }: DragHandleProps) => {
 
     const csv = exportCsv(rResult as Result.Result<'materialized-table'>);
     forceDownload(`${tableName}.csv`, new Blob([csv]));
-    events({
-      segmentEvent: {
-        type: 'action',
-        action: 'Table CSV Downloaded',
-        props: {
-          analytics_source: 'frontend',
-        },
+    analytics.track({
+      type: 'action',
+      action: 'Table CSV Downloaded',
+      props: {
+        analytics_source: 'frontend',
       },
     });
   };

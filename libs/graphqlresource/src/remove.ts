@@ -33,14 +33,10 @@ export function remove<
       removeAllPermissionsFor(resources[0]),
     ]);
 
-    await track(
-      context.event,
-      {
-        userId: context.user?.id,
-        event: `${resourceType.humanName} removed`,
-      },
-      context
-    );
+    track(context.event, {
+      userId: context.user?.id,
+      event: `${resourceType.humanName} removed`,
+    });
 
     if (resourceType.afterDeletion != null) {
       await resourceType.afterDeletion(record);

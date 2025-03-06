@@ -42,7 +42,7 @@ describe('Returns the ID of variables used in the query', () => {
     expect(runner.getUsedVariableIds(computer)).toHaveLength(1);
   });
 
-  it('throws an error if you used variables that are not in the computer', async () => {
+  it('returns empty array if some variables are not defined', async () => {
     runner.setOptions({
       runner: { query: 'SELECT * FROM TABLE WHERE time = {{Date}};' },
     });
@@ -60,10 +60,6 @@ describe('Returns the ID of variables used in the query', () => {
     });
 
     expect(computer.getVarResult('AnotherDate')).not.toBeUndefined();
-    expect(() => runner.getUsedVariableIds(computer))
-      .toThrowErrorMatchingInlineSnapshot(`
-      [Error: Not all variables are defined. Undefined variables: 
-      Date]
-    `);
+    expect(runner.getUsedVariableIds(computer)).toMatchObject([]);
   });
 });

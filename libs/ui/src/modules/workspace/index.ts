@@ -13,3 +13,6 @@ export * from './DashboardTopbar/DashboardTopbar';
 export * from './WorkspaceSecrets/WorkspaceSecrets';
 export * from './EditDataConnectionsModal/EditDataConnectionsModal';
 export * from './NotebookListPlaceholder/NotebookListPlaceholder';
+export * from './DataLakeModal/DataLakeModal';
+export * from './DataLakeNewConnectionModal/DataLakeNewConnectionModal';
+export * from './DataLakeEditConnectionModal/DataLakeEditConnectionModal';

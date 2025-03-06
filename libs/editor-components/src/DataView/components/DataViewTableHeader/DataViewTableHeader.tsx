@@ -41,6 +41,7 @@ export const DataViewTableHeader: FC<DataViewTableHeaderProps> = ({
   aggregationType,
   aggregationResult,
   aggregationExpression,
+  aggregationVariableName,
 }) => {
   const editor = useMyEditorRef();
   const handleCollapseGroupButtonPress = useEventNoEffect(
@@ -123,6 +124,7 @@ export const DataViewTableHeader: FC<DataViewTableHeaderProps> = ({
             element={element}
             aggregationResult={aggregationResult}
             aggregationExpression={aggregationExpression}
+            aggregationVariableName={aggregationVariableName}
           />
         </div>
       ) : null}

@@ -63,6 +63,7 @@ describe('layoutPowerData', () => {
         {
           "aggregationExpression": undefined,
           "aggregationResult": undefined,
+          "aggregationVariableName": "columnName",
           "children": [],
           "collapsible": false,
           "elementType": "group",
@@ -115,6 +116,7 @@ describe('layoutPowerData', () => {
         {
           "aggregationExpression": undefined,
           "aggregationResult": undefined,
+          "aggregationVariableName": "columnName",
           "children": [],
           "collapsible": false,
           "elementType": "group",
@@ -133,6 +135,7 @@ describe('layoutPowerData', () => {
         {
           "aggregationExpression": undefined,
           "aggregationResult": undefined,
+          "aggregationVariableName": "columnName",
           "children": [],
           "collapsible": false,
           "elementType": "group",
@@ -151,6 +154,7 @@ describe('layoutPowerData', () => {
         {
           "aggregationExpression": undefined,
           "aggregationResult": undefined,
+          "aggregationVariableName": "columnName",
           "children": [],
           "collapsible": false,
           "elementType": "group",
@@ -210,6 +214,7 @@ describe('layoutPowerData', () => {
         {
           "aggregationExpression": undefined,
           "aggregationResult": undefined,
+          "aggregationVariableName": "columnName",
           "children": [],
           "collapsible": false,
           "elementType": "group",
@@ -228,6 +233,7 @@ describe('layoutPowerData', () => {
         {
           "aggregationExpression": undefined,
           "aggregationResult": undefined,
+          "aggregationVariableName": "columnName",
           "children": [],
           "collapsible": false,
           "elementType": "group",
@@ -258,7 +264,6 @@ describe('layoutPowerData', () => {
               { kind: 'number', unit: null },
               { kind: 'number', unit: null },
             ],
-
             columnNames: ['Column1', 'Column2'],
           },
           value: Value.Tree.from(
@@ -310,10 +315,12 @@ describe('layoutPowerData', () => {
         {
           "aggregationExpression": undefined,
           "aggregationResult": undefined,
+          "aggregationVariableName": "columnName",
           "children": [
             {
               "aggregationExpression": undefined,
               "aggregationResult": undefined,
+              "aggregationVariableName": undefined,
               "children": [],
               "collapsible": false,
               "elementType": "group",
@@ -347,10 +354,12 @@ describe('layoutPowerData', () => {
         {
           "aggregationExpression": undefined,
           "aggregationResult": undefined,
+          "aggregationVariableName": "columnName",
           "children": [
             {
               "aggregationExpression": undefined,
               "aggregationResult": undefined,
+              "aggregationVariableName": undefined,
               "children": [],
               "collapsible": false,
               "elementType": "group",
@@ -384,10 +393,12 @@ describe('layoutPowerData', () => {
         {
           "aggregationExpression": undefined,
           "aggregationResult": undefined,
+          "aggregationVariableName": "columnName",
           "children": [
             {
               "aggregationExpression": undefined,
               "aggregationResult": undefined,
+              "aggregationVariableName": undefined,
               "children": [],
               "collapsible": false,
               "elementType": "group",
@@ -482,6 +493,7 @@ describe('layoutPowerData', () => {
         {
           "aggregationExpression": undefined,
           "aggregationResult": undefined,
+          "aggregationVariableName": "columnName",
           "children": [],
           "collapsible": true,
           "elementType": "group",
@@ -500,10 +512,12 @@ describe('layoutPowerData', () => {
         {
           "aggregationExpression": undefined,
           "aggregationResult": undefined,
+          "aggregationVariableName": "columnName",
           "children": [
             {
               "aggregationExpression": undefined,
               "aggregationResult": undefined,
+              "aggregationVariableName": undefined,
               "children": [],
               "collapsible": false,
               "elementType": "group",

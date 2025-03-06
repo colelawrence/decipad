@@ -5,7 +5,8 @@ export const knexRawResponseParser = z.object({
   rows: z.array(z.record(z.string(), z.any())),
   fields: z.array(
     z.object({
-      name: z.string(),
+      name: z.string().optional(),
+      type: z.string().optional(),
     })
   ),
 });

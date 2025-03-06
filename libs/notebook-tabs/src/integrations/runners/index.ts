@@ -6,3 +6,4 @@ export * from './code';
 export * from './notion';
 export * from './gsheet';
 export * from './mysql';
+export * from './datalake';

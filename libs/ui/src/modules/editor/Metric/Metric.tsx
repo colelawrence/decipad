@@ -18,6 +18,7 @@ import { N, ZERO } from '@decipad/number';
 import { NumberFormatting } from '@decipad/editor-types';
 import { WidgetWrapper } from '../WidgetWrapper/WidgetWrapper';
 import { OpaqueColor } from '@decipad/utils';
+import ConditionalResult from '../ConditionalResult/ConditionalResult';
 
 const headerStyles = css({
   display: 'flex',
@@ -116,31 +117,47 @@ export const Metric = ({
       selected={selected}
       readOnly={readOnly}
       css={widgetWrapperOverrideStyles}
+      contentEditable={false}
     >
       <div css={headerStyles}>
         <div css={captionStyles}>{caption || '\u00a0'}</div>
         {!readOnly && onClickEdit && (
-          <button type="button" css={formatButtonStyles} onClick={onClickEdit}>
+          <button
+            type="button"
+            css={formatButtonStyles}
+            data-testid="metric-widget-settings-button"
+            onClick={onClickEdit}
+          >
             <Settings2 />
           </button>
         )}
       </div>
 
-      <div css={[valueStyles, { color: color.hex }]}>
-        {mainResult?.type.kind !== 'type-error' && mainResult ? (
+      <div
+        css={[valueStyles, { color: color.hex }]}
+        data-testid="metric-widget"
+      >
+        {mainResult?.type.kind !== 'type-error' &&
+        (mainResult?.type.kind === 'number' ||
+          mainResult?.type.kind === 'string' ||
+          mainResult?.type.kind === 'boolean' ||
+          mainResult?.type.kind === 'pending') &&
+        mainResult ? (
           <CodeResult {...mainResult} formatting={formatting} />
         ) : (
-          '0'
+          '-'
         )}
       </div>
       {/* TODO: Handle case error case */}
-      {trendResult?.type.kind === 'trend' && (
-        <MetricComparison
-          trendResult={trendResult as any}
-          comparisonDescription={comparisonDescription}
-          color={trendColor}
-        />
-      )}
+      {mainResult?.type.kind !== 'type-error' && trendResult ? (
+        <ConditionalResult kind={trendResult.type.kind}>
+          <MetricComparison
+            trendResult={trendResult as any}
+            comparisonDescription={comparisonDescription}
+            color={trendColor}
+          />
+        </ConditionalResult>
+      ) : null}
 
       <div css={hiddenChildrenStyles}>{children}</div>
     </WidgetWrapper>
@@ -182,7 +199,10 @@ const MetricComparison = ({
           <Icon />
         </span>
       )}
-      <span css={{ color }}>{percentageChange}%</span>
+      <span css={{ color }}>
+        {!positive && !zero && '-'}
+        {percentageChange}%
+      </span>
       {comparisonDescription && ` ${comparisonDescription.trim()}`}
     </div>
   );

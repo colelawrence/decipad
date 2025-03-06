@@ -53,6 +53,7 @@ get /api/ws
 get /api/import/url
 get /api/clear
 any /api/notebook/:action
+any /api/datalakes/*
 
 # AI endpoints
 any /api/ai/generate-sql
@@ -336,6 +337,12 @@ resourceusages
 
 resourceusagehistory
   id *String
+
+# Composite key: /workspaces/:workspace_id
+datalakes
+  id *String
+  createdAt Number
+  state String
 
 @tables-indexes
 workspacesubscriptions

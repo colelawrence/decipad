@@ -3,6 +3,7 @@ import { css } from '@emotion/react';
 import { Button } from '../../atoms';
 import {
   cssVar,
+  gridShiftScreenQuery,
   p13Medium,
   p14Medium,
   smallScreenQuery,
@@ -88,14 +89,18 @@ export const ErrorBlock: React.FC<ErrorBlockProps> = ({
 // When inside a layout, remove the explicit width to prevent overflow
 const errorBlock = (insideLayout: boolean) =>
   css({
+    zIndex: 20,
     padding: '16px 24px',
     gap: '16px',
     borderRadius: '8px',
     width: insideLayout ? undefined : slimBlockWidth,
     backgroundColor: cssVar('backgroundDefault'),
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'start',
+
+    gridTemplateColumns: 'subgrid',
+    gridColumn: '3 / span 1',
+    [gridShiftScreenQuery]: {
+      gridColumn: '2 / span 1',
+    },
 
     [smallScreenQuery]: insideLayout
       ? undefined

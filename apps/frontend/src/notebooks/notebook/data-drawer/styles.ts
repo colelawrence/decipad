@@ -31,7 +31,7 @@ export const DataDrawerEditor = styled.div({
   justifyContent: 'center',
   gap: '8px',
   width: '100%',
-  height: '32px',
+  minHeight: '32px',
 
   color: cssVar('stateOkBackground'),
 });
@@ -53,6 +53,8 @@ export const DataDrawerNameWrapper = styled.div(p14Regular, {
 
   display: 'flex',
   color: cssVar('textTitle'),
+
+  height: '32px',
 
   '> div:first-of-type': {
     borderRight: `1px solid ${cssVar('borderDefault')}`,
@@ -81,11 +83,15 @@ export const DataDrawerCodeWrapper = styled.div(p14Regular, {
   borderRadius: '8px',
   border: `1px solid ${cssVar('borderDefault')}`,
 
+  minHeight: '32px',
   height: '100%',
   width: '100%',
 
   display: 'flex',
   alignItems: 'center',
+
+  paddingTop: '2px',
+  paddingBottom: '2px',
 
   paddingLeft: '8px',
 

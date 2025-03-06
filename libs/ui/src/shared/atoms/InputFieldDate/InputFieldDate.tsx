@@ -2,7 +2,7 @@
 import { FC, ReactNode, useCallback, useId, useRef, useState } from 'react';
 import { DatePickerWrapper } from '../DatePickerWrapper/DatePickerWrapper';
 import { DropdownFieldLabel, DropdownFieldTrigger } from 'libs/ui/src/modules';
-import { assert, noop } from '@decipad/utils';
+import { noop } from '@decipad/utils';
 import { useWindowListener } from '@decipad/react-utils';
 
 export type InputFieldDateProps = {
@@ -11,6 +11,8 @@ export type InputFieldDateProps = {
 
   readonly label?: ReactNode;
   readonly value?: string;
+  readonly size?: 'small' | 'medium';
+  readonly placeholder?: string;
   readonly onChange: (value: string) => void;
 };
 
@@ -20,6 +22,8 @@ export const InputFieldDate = ({
   value,
   onChange,
   disabled,
+  size = 'medium',
+  placeholder = 'Select date...',
 }: InputFieldDateProps): ReturnType<FC> => {
   const [open, setOpen] = useState<boolean>(false);
   const datePickerRef = useRef<HTMLDivElement>(null);
@@ -31,8 +35,6 @@ export const InputFieldDate = ({
     onChange(newDate);
     setOpen(false);
   };
-
-  assert(value !== undefined, 'Data must be defined');
 
   const onWindowKeyDown = useCallback(
     (event: KeyboardEvent) => {
@@ -60,10 +62,10 @@ export const InputFieldDate = ({
 
   return (
     <div id={id}>
-      <DropdownFieldLabel id={id}>{label}</DropdownFieldLabel>
+      {label && <DropdownFieldLabel id={id}>{label}</DropdownFieldLabel>}
       <DatePickerWrapper
         granularity="day"
-        value={value}
+        value={value || ''}
         open={open}
         onChange={handleChange}
         customInput={
@@ -75,7 +77,8 @@ export const InputFieldDate = ({
               <DropdownFieldTrigger
                 id={id}
                 disabled={disabled}
-                children={value || 'Select date...'}
+                children={value || placeholder}
+                size={size}
               />
             </div>
           </>

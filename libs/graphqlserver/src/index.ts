@@ -8,6 +8,7 @@ import type {
 import { trace } from '@decipad/backend-trace';
 import createServer from './server';
 import { debug } from './debug';
+import { analyticsClient } from '@decipad/backend-analytics';
 
 type AdditionalContext = {
   additionalHeaders?: Map<string, string>;
@@ -26,7 +27,7 @@ export default function createHandler(): Handler {
   return trace(
     (event, context: Context, _callback: APIGatewayProxyCallback) => {
       let calledBack = false;
-      const callback = (
+      const callback = async (
         err: Error | null | undefined | string,
         reply?: APIGatewayProxyResult
       ) => {
@@ -34,6 +35,7 @@ export default function createHandler(): Handler {
           return;
         }
         calledBack = true;
+
         if (!context?.additionalHeaders) {
           throw new Error('missing additional headers');
         }
@@ -52,6 +54,10 @@ export default function createHandler(): Handler {
         if (err) {
           // eslint-disable-next-line no-console
           console.error('replying with error', err);
+        }
+        const client = analyticsClient(event);
+        if (client) {
+          await client.closeAndFlush(2000);
         }
         _callback(err, reply);
       };
@@ -78,7 +84,7 @@ export default function createHandler(): Handler {
       if (p) {
         p.then((result) => {
           debug('result: %j', result);
-          callback(null, result);
+          return callback(null, result);
         }).catch((err) => callback(err));
       }
     }

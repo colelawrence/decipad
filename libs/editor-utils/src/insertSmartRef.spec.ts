@@ -213,6 +213,7 @@ describe('when inserting into empty paragraph', () => {
   it('inserts functions as math blocks', () => {
     insertSmartRef(editor, {
       computer: {
+        getAvailableIdentifier: computer.getAvailableIdentifier,
         getBlockIdResult$: {
           get: () => ({
             result: { type: { kind: 'function' } },

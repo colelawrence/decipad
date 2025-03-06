@@ -1,8 +1,8 @@
-import { ClientEventsContext } from '@decipad/client-events';
+import { analytics } from '@decipad/client-events';
 import { InferError } from '@decipad/remote-computer';
 import { AnyElement } from '@decipad/editor-types';
 import { css } from '@emotion/react';
-import { FC, useContext, useEffect } from 'react';
+import { FC, useEffect } from 'react';
 import {
   componentCssVars,
   p16Regular,
@@ -19,22 +19,18 @@ type BlockCodeErrorProps = CodeResultProps<'type-error'> & {
 export const BlockCodeError: FC<BlockCodeErrorProps> = ({ type, element }) => {
   const { url } = new InferError(type.errorCause);
   const message = formatError('en-us', type.errorCause);
-  const clientEvent = useContext(ClientEventsContext);
-
   useEffect(() => {
-    clientEvent({
-      segmentEvent: {
-        type: 'action',
-        action: 'user code error',
-        props: {
-          errorType: type.errorCause.errType,
-          elementType: element?.type,
-          message,
-          url,
-        },
+    analytics.track({
+      type: 'action',
+      action: 'user code error',
+      props: {
+        errorType: type.errorCause.errType,
+        elementType: element?.type,
+        message,
+        url,
       },
     });
-  }, [clientEvent, element?.type, message, type.errorCause.errType, url]);
+  }, [element?.type, message, type.errorCause.errType, url]);
 
   return (
     <div css={errorBlockBgStyles} contentEditable={false}>

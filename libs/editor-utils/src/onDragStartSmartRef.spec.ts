@@ -39,7 +39,9 @@ describe('onDragStartSmartRef', () => {
   });
 
   it('should set editor.dragging to DRAG_BLOCK_ID', () => {
-    onDragStartSmartRef(editor)({ asText: '' } as any)(dragEvent);
+    onDragStartSmartRef(editor)({ dragType: DRAG_BLOCK_ID, asText: '' } as any)(
+      dragEvent
+    );
     expect(editor.dragging).toBe(DRAG_BLOCK_ID);
   });
 
@@ -48,6 +50,7 @@ describe('onDragStartSmartRef', () => {
 
     const dragStartSmartRef = onDragStartSmartRef(editor);
     dragStartSmartRef({
+      dragType: DRAG_BLOCK_ID,
       element: {
         id: 'mockId',
       } as any,

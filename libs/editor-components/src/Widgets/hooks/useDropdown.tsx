@@ -1,4 +1,3 @@
-import { ClientEventsContext } from '@decipad/client-events';
 import {
   type ColumnDesc,
   type MaterializedColumnDesc,
@@ -27,6 +26,7 @@ import uniqBy from 'lodash.uniqby';
 import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { combineLatestWith, concat, distinctUntilChanged, map, of } from 'rxjs';
 import { useNotebookWithIdState } from '@decipad/notebook-state';
+import { analytics } from '@decipad/client-events';
 
 interface UseDropdownResult {
   dropdownOpen: boolean;
@@ -44,7 +44,6 @@ export const useDropdown = (element: DropdownElement): UseDropdownResult => {
   const editorChanges = useNotebookWithIdState((s) => s.editorChanges);
   const path = useNodePath(element);
   const readOnly = useIsEditorReadOnly();
-  const userEvents = useContext(ClientEventsContext);
   const parent = useGlobalParentNode(element);
 
   const preSelectedOptionText = element.children[0].text;
@@ -163,19 +162,12 @@ export const useDropdown = (element: DropdownElement): UseDropdownResult => {
         setSelectedOption(option);
         changeOptions(option.item);
 
-        userEvents({
-          segmentEvent: {
-            type: 'action',
-            action: 'widget value updated',
-            props: {
-              variant: 'dropdown',
-              isReadOnly: readOnly,
-            },
-          },
-          gaEvent: {
-            category: 'widget',
-            action: 'value updated',
-            label: 'dropdown',
+        analytics.track({
+          type: 'action',
+          action: 'widget value updated',
+          props: {
+            variant: 'dropdown',
+            isReadOnly: readOnly,
           },
         });
         setDropdownOpen(false);
@@ -185,7 +177,6 @@ export const useDropdown = (element: DropdownElement): UseDropdownResult => {
       elementChangeColumn,
       element.selectedColumn,
       onChangeTypeMutator,
-      userEvents,
       readOnly,
       changeOptions,
     ]

@@ -38,8 +38,7 @@ export const useMetricAggregation = ({
       return aggregationId!;
     }
 
-    // Default to first option
-    return aggregationOptions[0].id;
+    return null;
   }, [aggregationOptions, aggregationId]);
 
   const aggregation = useMemo(() => {

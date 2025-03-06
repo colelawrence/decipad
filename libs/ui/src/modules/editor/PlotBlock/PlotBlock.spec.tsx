@@ -79,6 +79,7 @@ const plotParamSetters = {
   setLabelColumnName: setter('labelColumnName'),
   setOtherYColumnNames: setArray,
   setOrientation: setter('orientation'),
+  setSize: setter('size'),
   setYColumnNames: setArray,
   setYColumnChartTypes: setArray,
   setBarVariant: setter('barVariant'),
@@ -164,6 +165,7 @@ const founderEquityPlotBlockParams = {
     orientation: 'horizontal',
     grid: true,
     startFromZero: true,
+    size: 'medium',
     showDataLabel: false,
     flipTable: false,
     mirrorYAxis: false,
@@ -352,6 +354,7 @@ const revBarChartPlotBlockParams = {
     grid: true,
     startFromZero: true,
     showDataLabel: false,
+    size: 'medium',
     groupByX: true,
     colorScheme: 'monochrome_purple',
     children: [

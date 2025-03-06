@@ -17,7 +17,7 @@ describe('dates', () => {
     [
       '2023-02-01T00:00:00+02:00',
       { kind: 'date', date: 'second' },
-      '2023-01-31T14:00:00.000Z',
+      '2023-01-31T22:00:00.000Z',
     ],
   ])('%s is a good %s', (format, type, result) => {
     const d = parseDate(format, type.date as DateGranularity);

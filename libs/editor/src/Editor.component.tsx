@@ -22,8 +22,8 @@ import { editorOnPaste } from './utils/editorOnPaste';
 import { useWriteLock } from './utils/useWriteLock';
 import { useComputer } from '@decipad/editor-hooks';
 import { useNotebookWithIdState } from '@decipad/notebook-state';
-import { Filters } from './Filters.component';
 import { blockSelectionStore } from '@udecode/plate-selection';
+import { GlobalFilters } from './Filters/GlobalFilters';
 
 export interface EditorProps {
   notebookId: string;
@@ -139,10 +139,8 @@ export const Editor: FC<PropsWithChildren<EditorProps>> = (props) => {
       <LoadingFilter loading={isWritingLocked}>
         <EditorBlockParentRefProvider onRefChange={onRefChange}>
           <EditorLayout>
+            <GlobalFilters />
             {props.titleEditor}
-            <div>
-              <Filters />
-            </div>
             <div
               ref={containerRef}
               className="relative"

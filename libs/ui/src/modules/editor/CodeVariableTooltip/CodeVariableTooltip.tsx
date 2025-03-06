@@ -2,11 +2,13 @@ import { css } from '@emotion/react';
 import { FC, ReactNode } from 'react';
 import { Tooltip } from '../../../shared';
 import { CodeResult } from '../CodeResult/CodeResult';
-import { componentCssVars, p8Regular } from '../../../primitives';
+import { componentCssVars, p12Regular } from '../../../primitives';
 import { useComputer } from '@decipad/editor-hooks';
+import { noop } from '@decipad/utils';
 
-const goToDefStyles = css(p8Regular, {
+const goToDefStyles = css(p12Regular, {
   color: componentCssVars('TooltipText'),
+  cursor: 'pointer',
 });
 
 interface CodeVariableTooltipProps {
@@ -14,6 +16,7 @@ interface CodeVariableTooltipProps {
   children: ReactNode;
   defBlockId?: string | null;
   provideDefinitionLink: boolean;
+  onGoToDefinition?: () => void;
 }
 
 const tooltipDebounceMs = 500;
@@ -23,6 +26,7 @@ export const CodeVariableTooltip: FC<CodeVariableTooltipProps> = ({
   children,
   defBlockId,
   provideDefinitionLink,
+  onGoToDefinition: goToDefinition = noop,
 }) => {
   const hasValue = useComputer().getBlockIdResult$.useWithSelectorDebounced(
     tooltipDebounceMs,
@@ -33,22 +37,22 @@ export const CodeVariableTooltip: FC<CodeVariableTooltipProps> = ({
   const tooltipResult = hasValue && (
     <TooltipResult defBlockId={defBlockId ?? ''} />
   );
-  const goToDefinition = provideDefinitionLink && defBlockId && (
+  const goToDefinitionLink = provideDefinitionLink && defBlockId && (
     <a
       css={goToDefStyles}
       href={`#${defBlockId}`}
       onClick={(ev) => {
         ev.preventDefault();
-        window.history.pushState(null, '', `#${defBlockId}`);
-        window.dispatchEvent(new Event('hashchange'));
+        goToDefinition();
       }}
       data-testid="go-to-definition"
     >
-      Go to definition &rarr;
+      Definition &rarr;
     </a>
   );
 
-  const enableTooltip = !variableMissing && (tooltipResult || goToDefinition);
+  const enableTooltip =
+    !variableMissing && (tooltipResult || goToDefinitionLink);
 
   return (
     <Tooltip
@@ -56,7 +60,7 @@ export const CodeVariableTooltip: FC<CodeVariableTooltipProps> = ({
       open={enableTooltip ? undefined : false}
     >
       {tooltipResult}
-      {goToDefinition}
+      {goToDefinitionLink}
     </Tooltip>
   );
 };

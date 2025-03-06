@@ -194,7 +194,7 @@ export function openRowMenu(page: Page, line: number, tableName?: string) {
 export function focusOnTable(page: Page, tableName?: string) {
   return getTableOrPage(page, tableName)
     .locator('table > tbody > tr:nth-child(1) > td:nth-child(2)')
-    .click();
+    .hover({ force: true });
 }
 
 export async function addRow(page: Page, tableName?: string) {

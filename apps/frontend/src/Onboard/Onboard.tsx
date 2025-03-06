@@ -1,4 +1,4 @@
-import { ClientEventsContext } from '@decipad/client-events';
+import { analytics } from '@decipad/client-events';
 import {
   useSetUsernameMutation,
   useUpdateUserMutation,
@@ -12,7 +12,7 @@ import {
   ErrorPage,
 } from '@decipad/ui';
 import { useSession } from 'next-auth/react';
-import { useCallback, useContext, useState } from 'react';
+import { useCallback, useState } from 'react';
 import {
   Navigate,
   Route,
@@ -51,19 +51,18 @@ export const Onboard = () => {
 
   // Browser navigation between steps.
   const step = useParams()['*'];
-  const clientEvent = useContext(ClientEventsContext);
+
   const next = useCallback(() => {
     navigate(onboard({}).step({ step: Number(step) + 1 }).$);
-    clientEvent({
-      segmentEvent: {
-        type: 'action',
-        action: 'onboarding screen',
-        props: {
-          screen: `Screen ${Number(step)} finished`,
-        },
+    analytics.track({
+      type: 'action',
+      action: 'onboarding screen',
+      props: {
+        screen: `Screen ${Number(step)} finished`,
       },
     });
-  }, [navigate, step, clientEvent]);
+  }, [navigate, step]);
+
   const previous = useCallback(() => {
     navigate(onboard({}).step({ step: Number(step) - 1 }).$);
   }, [navigate, step]);
@@ -183,13 +182,11 @@ export const Onboard = () => {
                       );
                     } else {
                       navigate(redirectPath);
-                      clientEvent({
-                        segmentEvent: {
-                          type: 'action',
-                          action: 'onboarding screen',
-                          props: {
-                            screen: `Screen 3 finished`,
-                          },
+                      analytics.track({
+                        type: 'action',
+                        action: 'onboarding screen',
+                        props: {
+                          screen: `Screen 3 finished`,
                         },
                       });
                     }

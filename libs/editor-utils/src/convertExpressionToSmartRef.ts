@@ -17,14 +17,20 @@ import { nanoid } from 'nanoid';
 
 export interface ConvertExpressionToSmartRefOptions {
   expression: string;
+  variableName?: string;
   idGenerator?: () => string;
 }
 
 export const convertExpressionToSmartRef = (
   editor: RootEditor,
-  { expression, idGenerator = nanoid }: ConvertExpressionToSmartRefOptions
+  {
+    expression,
+    variableName,
+    idGenerator = nanoid,
+  }: ConvertExpressionToSmartRefOptions
 ): string => {
   const id = idGenerator();
+  const name = variableName ?? generatedNames();
 
   editor.apply({
     type: 'insert_node',
@@ -36,7 +42,7 @@ export const convertExpressionToSmartRef = (
         {
           id: idGenerator(),
           type: ELEMENT_STRUCTURED_VARNAME,
-          children: [{ text: generatedNames() }],
+          children: [{ text: name }],
         },
         {
           id: idGenerator(),

@@ -84,24 +84,20 @@ export const setPadPublic: MutationResolvers['setPadPublic'] = async (
 
   const event = isPublic ? 'Notebook Published' : 'Notebook Unpublished';
 
-  await track(
-    context.event,
-    {
-      userId: user?.id,
-      event,
-      properties: {
-        notebook_id: id,
-        analytics_source: 'backend',
-        publishing_type:
-          publishState === 'PUBLIC'
-            ? 'Private URL'
-            : publishState === 'PUBLICLY_HIGHLIGHTED'
-            ? 'Public URL'
-            : 'Unpublished',
-      },
+  await track(context.event, {
+    userId: user?.id,
+    event,
+    properties: {
+      notebook_id: id,
+      analytics_source: 'backend',
+      publishing_type:
+        publishState === 'PUBLIC'
+          ? 'Private URL'
+          : publishState === 'PUBLICLY_HIGHLIGHTED'
+          ? 'Public URL'
+          : 'Unpublished',
     },
-    context
-  );
+  });
 
   return true;
 };

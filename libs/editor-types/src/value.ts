@@ -100,6 +100,7 @@ import {
   PlotBarVariant,
   PlotLineVariant,
   PlotOrientation,
+  PlotSize,
 } from './plot-kinds';
 import { UserIconKey } from './icons';
 import { IntegrationBlock } from './integrations';
@@ -263,7 +264,8 @@ export type ImportElementSource =
   | 'mssql'
   | 'mariadb'
   | 'notion'
-  | 'bigquery';
+  | 'bigquery'
+  | 'datalake';
 
 export const ImportElementSourcePretty: Record<ImportElementSource, string> = {
   decipad: 'Decipad',
@@ -280,6 +282,7 @@ export const ImportElementSourcePretty: Record<ImportElementSource, string> = {
   mariadb: 'MariaDB',
   notion: 'Notion',
   bigquery: 'BigQuery',
+  datalake: 'Data Lake',
 };
 
 export interface ImportElement extends BaseElement {
@@ -344,6 +347,7 @@ export interface BasePlotProps {
   readonly grid: boolean;
   readonly startFromZero: boolean;
   readonly mirrorYAxis: boolean;
+  readonly size?: PlotSize;
   readonly flipTable: boolean;
   readonly groupByX: boolean;
   readonly showDataLabel: boolean;
@@ -412,6 +416,7 @@ export interface MetricElement extends BaseElement {
   color?: AvailableSwatchColor | 'auto';
   trendColor?: AvailableSwatchColor | 'auto' | 'trend';
   migratedFromDisplayElement?: DisplayElement;
+  description?: string;
 }
 
 /**

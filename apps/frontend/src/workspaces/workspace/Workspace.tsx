@@ -33,7 +33,7 @@ import {
 } from '@decipad/ui';
 import { useIntercom } from '@decipad/react-utils';
 import { signOut, useSession } from 'next-auth/react';
-import { FC, Suspense, useCallback, useMemo, useState } from 'react';
+import { FC, Suspense, useCallback, useEffect, useMemo, useState } from 'react';
 import {
   Outlet,
   Route,
@@ -55,6 +55,10 @@ import { initNewDocument } from '@decipad/docsync';
 import { isFlagEnabled } from '@decipad/feature-flags';
 import { NotebookList } from './NotebookList';
 import { useInitializeResourceUsage } from '../../hooks';
+import { DataLakeModal } from './datalake/DataLakeModal';
+import { NewDataLakeConnectionModal } from './datalake/NewDataLakeConnectionModal';
+import { EditDataLakeConnectionModal } from './datalake/EditDataLakeConnectionModal';
+import { analytics } from '@decipad/client-events';
 
 const Workspace: FC = () => {
   const { show, showNewMessage } = useIntercom();
@@ -81,6 +85,17 @@ const Workspace: FC = () => {
 
   const { data: session } = useSession();
   const toast = useToast();
+
+  useEffect(() => {
+    if (session == null || session.user == null) {
+      return;
+    }
+
+    analytics.identify(session.user.id, {
+      email: session.user.email!,
+      workspaceId,
+    });
+  }, [session, workspaceId]);
 
   const { setIsUpgradeWorkspaceModalOpen, isUpgradeWorkspaceModalOpen } =
     useCurrentWorkspaceStore();
@@ -428,7 +443,76 @@ const Workspace: FC = () => {
               </LazyRoute>
             }
           />
+
+          <Route
+            path={`${currentWorkspaceRoute.dataLake.template}/${
+              currentWorkspaceRoute.dataLake({}).newConnection.template
+            }`}
+            element={
+              <LazyRoute>
+                <NewDataLakeConnectionModal
+                  closeAction={() =>
+                    navigate(currentWorkspaceRoute.dataLake({}).$)
+                  }
+                  workspaceId={currentWorkspace.id}
+                  createdNewConnectionAction={async () => {
+                    // eslint-disable-next-line no-console
+                    console.log('createdNewConnectionAction');
+                    navigate(currentWorkspaceRoute.dataLake({}).$);
+                  }}
+                />
+              </LazyRoute>
+            }
+          />
+
+          <Route
+            path={`${currentWorkspaceRoute.dataLake.template}/${
+              currentWorkspaceRoute.dataLake({}).editConnection.template
+            }`}
+            element={
+              <LazyRoute>
+                <EditDataLakeConnectionModal
+                  closeAction={() =>
+                    navigate(currentWorkspaceRoute.dataLake({}).$)
+                  }
+                  workspaceId={currentWorkspace.id}
+                  editedConnectionAction={async () => {
+                    // eslint-disable-next-line no-console
+                    console.log('editedConnectionAction');
+                    navigate(currentWorkspaceRoute.dataLake({}).$);
+                  }}
+                />
+              </LazyRoute>
+            }
+          />
+
+          <Route
+            path={currentWorkspaceRoute.dataLake.template}
+            element={
+              <LazyRoute>
+                <DataLakeModal
+                  closeAction={() => navigate(currentWorkspaceRoute.$)}
+                  workspaceId={currentWorkspace.id}
+                  newConnectionAction={async (connType: string) =>
+                    navigate(
+                      currentWorkspaceRoute
+                        .dataLake({})
+                        .newConnection({ connType }).$
+                    )
+                  }
+                  editConnectionAction={async (connection: string) =>
+                    navigate(
+                      currentWorkspaceRoute
+                        .dataLake({})
+                        .editConnection({ connType: connection }).$
+                    )
+                  }
+                />
+              </LazyRoute>
+            }
+          ></Route>
         </Route>
+
         <Route path="*" element={<ErrorPage Heading="h1" wellKnown="404" />} />
       </Routes>
       <LazyRoute>

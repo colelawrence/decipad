@@ -4,6 +4,7 @@ import { assertElementType } from '@decipad/editor-utils';
 import { SmartRef as UISmartRef } from '@decipad/ui';
 import { useReinstateSmartRefBlockId } from '../hooks/useReinstateSmartRefBlockId';
 import { useSmartRef } from '../hooks/useSmartRef';
+import { useNavigateToDefinition } from '@decipad/editor-hooks';
 
 export const SmartRef: PlateComponent = ({ attributes, children, element }) => {
   assertElementType(element, ELEMENT_SMART_REF);
@@ -17,6 +18,8 @@ export const SmartRef: PlateComponent = ({ attributes, children, element }) => {
   } = useSmartRef(element);
   useReinstateSmartRefBlockId(element);
 
+  const navigateToDefinition = useNavigateToDefinition();
+
   return (
     <span {...attributes}>
       <UISmartRef
@@ -28,6 +31,7 @@ export const SmartRef: PlateComponent = ({ attributes, children, element }) => {
         decoration={element.decoration}
         hasPreviousContent={siblingContent?.hasPrevious}
         hasNextContent={siblingContent?.hasNext}
+        onGoToDefinition={() => navigateToDefinition(element.blockId)}
       />
       {children}
     </span>

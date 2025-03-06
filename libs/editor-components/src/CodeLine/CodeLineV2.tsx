@@ -69,8 +69,6 @@ import { useSimpleValueInfo } from './useSimpleValueInfo';
 
 export type Variant = 'error' | 'calculation' | 'value';
 
-const codeLineDebounceResultMs = 500;
-
 export const CodeLineV2: PlateComponent = ({
   attributes,
   children,
@@ -96,12 +94,9 @@ export const CodeLineV2: PlateComponent = ({
   useCodeLineClickReference(editor, selected, codeLineContent);
 
   const { id: lineId } = element;
-  const [syntaxError, lineResult] =
-    computer.getBlockIdResult$.useWithSelectorDebounced(
-      codeLineDebounceResultMs,
-      (line) => [getSyntaxError(line), line] as const,
-      lineId
-    );
+
+  const lineResult = computer.getBlockIdResult$.use(lineId);
+  const syntaxError = getSyntaxError(lineResult);
 
   const variableName = getNodeString(
     element.children[0] satisfies StructuredVarnameElement

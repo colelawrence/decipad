@@ -20,7 +20,6 @@ import {
   setNodes,
   withoutNormalizing,
 } from '@udecode/plate-common';
-import { getAnalytics } from '@decipad/client-events';
 import { getDraggingIds } from './getDraggingIds';
 import type { DropLine } from './types';
 
@@ -57,8 +56,6 @@ const onDropNodeHorizontal = (
   );
 
   smartMoveNodes(editor, draggingPaths, dropLine.path, dropLine.direction);
-
-  getAnalytics().then((analytics) => analytics?.track('move block'));
 };
 
 const onDropNodeVertical = (

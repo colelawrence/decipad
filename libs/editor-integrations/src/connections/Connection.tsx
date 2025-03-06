@@ -1,13 +1,14 @@
+import { createPortal } from 'react-dom';
 import type { FC } from 'react';
+import { Logs } from '@decipad/ui';
+import { useNotebookWithIdState } from '@decipad/notebook-state';
 import type { ConnectionProps } from './types';
-
 import { CodeConnection } from './code';
 import { CSVConnection } from './csv';
 import { SQLConnection, SQLConnectionPicker } from './sql';
 import { NotionConnection } from './notion';
 import { GoogleSheetConnection } from './gsheet';
-import { useNotebookWithIdState } from '@decipad/notebook-state';
-import { createPortal } from 'react-dom';
+import { DataLakeConnection } from './datalake';
 
 const ConnectionDataDrawer: FC<ConnectionProps> = (props) => {
   switch (props.connectionType) {
@@ -19,6 +20,8 @@ const ConnectionDataDrawer: FC<ConnectionProps> = (props) => {
       return <CodeConnection {...props} />;
     case 'mysql':
       return <SQLConnection {...props} />;
+    case 'datalake':
+      return <DataLakeConnection {...props} />;
     default:
       return null;
   }
@@ -49,6 +52,12 @@ const ConnectionSidebar: FC<ConnectionProps> = (props) => {
       return <GoogleSheetConnection {...props} />;
     case 'csv':
       return <CSVConnection {...props} />;
+    case 'datalake':
+      return (
+        <>
+          <Logs logs={props.info} type="sql" />
+        </>
+      );
     default:
       return null;
   }

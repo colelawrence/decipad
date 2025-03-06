@@ -20,6 +20,7 @@ import {
   renderPieTooltipWithData,
 } from '../helpers';
 import { PieChartProps } from './types';
+import { calculateChartHeight } from '../helpers/calculateChartHeight';
 
 export const PieChart = ({
   table,
@@ -30,6 +31,7 @@ export const PieChart = ({
   showDataLabel = false,
   xAxisLabel,
   setXAxisLabel,
+  size = 'medium',
 }: PieChartProps) => {
   const [isDarkTheme] = useThemeFromStore();
   const yColumnName = useMemo(() => yColumnNames[0], [yColumnNames]);
@@ -68,7 +70,7 @@ export const PieChart = ({
   return (
     <ResponsiveContainer
       width={'100%'}
-      height={chartHeight}
+      height={calculateChartHeight(size, chartHeight)}
       onResize={(width, height) => {
         if (width && height) {
           setChartDimensions({

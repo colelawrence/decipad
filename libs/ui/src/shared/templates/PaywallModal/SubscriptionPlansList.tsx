@@ -4,7 +4,7 @@ import * as Styled from './styles';
 import { Button, Link, Loading } from '../../atoms';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { workspaces } from '@decipad/routing';
-import { useClientEvents } from '@decipad/client-events';
+import { analytics } from '@decipad/client-events';
 
 interface SubscriptionPlansListProps {
   plans: (SubscriptionPlan | null)[];
@@ -50,7 +50,6 @@ export const SubscriptionPlansList: FC<SubscriptionPlansListProps> = ({
 }) => {
   const navigate = useNavigate();
   const location = useLocation();
-  const track = useClientEvents();
 
   const [isStripeInfoLoading, setStripeInfoLoading] = useState(false);
   const [billingButtonTitle, setBillingButtonTitle] = useState(
@@ -60,16 +59,14 @@ export const SubscriptionPlansList: FC<SubscriptionPlansListProps> = ({
 
   useEffect(() => {
     if (!hasFiredRef.current) {
-      track({
-        segmentEvent: {
-          type: 'action',
-          action: 'Pricing Modal Viewed',
-          props: { url: location.pathname, analytics_source: 'frontend' },
-        },
+      analytics.track({
+        type: 'action',
+        action: 'Pricing Modal Viewed',
+        props: { url: location.pathname, analytics_source: 'frontend' },
       });
       hasFiredRef.current = true;
     }
-  }, [location.pathname, track]);
+  }, [location.pathname]);
 
   return (
     <>

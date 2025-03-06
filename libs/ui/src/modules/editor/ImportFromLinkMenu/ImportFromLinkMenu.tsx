@@ -23,6 +23,7 @@ const sourceToName: Record<ImportElementSource, string> = {
   codeconnection: 'A code connection',
   notion: 'a Notion connection',
   bigquery: 'a BigQuery database',
+  datalake: 'your workspace Data Lake',
 };
 
 const databases = [

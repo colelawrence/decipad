@@ -2,11 +2,10 @@ import type { DragEvent, FC } from 'react';
 import { useCallback } from 'react';
 import { SmartCell as UISmartCell } from '@decipad/ui';
 import { css } from '@emotion/react';
-import { useMyEditorRef } from '@decipad/editor-types';
-import { onDragStartSmartCell } from './onDragStartSmartCell';
+import { useMyEditorRef, DRAG_EXPRESSION } from '@decipad/editor-types';
 import type { SmartProps } from '../../types';
 import { useOnDragEnd } from '../../../utils/useDnd';
-import { useComputer } from '@decipad/editor-hooks';
+import { onDragStartSmartRef } from '@decipad/editor-utils';
 
 const emptyCellStyles = css({
   borderBottom: 0,
@@ -17,6 +16,7 @@ const emptyCellStyles = css({
 export const SmartCell: FC<SmartProps> = ({
   aggregationResult: result,
   aggregationExpression: expression,
+  aggregationVariableName,
   aggregationType,
   rowSpan,
   colSpan,
@@ -25,16 +25,18 @@ export const SmartCell: FC<SmartProps> = ({
   rotate,
 }: SmartProps) => {
   const editor = useMyEditorRef();
-  const computer = useComputer();
 
   const onDragStart = useCallback(
     (ev: DragEvent) => {
-      expression &&
-        result &&
-        typeof expression === 'string' &&
-        onDragStartSmartCell(editor)({ computer, expression, result })(ev);
+      result &&
+        onDragStartSmartRef(editor)({
+          dragType: DRAG_EXPRESSION,
+          result,
+          expression,
+          variableName: aggregationVariableName,
+        })(ev);
     },
-    [computer, editor, expression, result]
+    [editor, expression, result, aggregationVariableName]
   );
 
   const onDragEnd = useOnDragEnd();

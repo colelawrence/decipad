@@ -1,22 +1,25 @@
 import {
   dateSpecificityToWasm,
   DeciType,
-  Importer,
+  Importer as ComputeBackendImporter,
 } from '@decipad/compute-backend-js';
-import { Computer } from '@decipad/computer-interfaces';
+import { Computer, IdentifiedBlock } from '@decipad/computer-interfaces';
 import { pushExtraData, pushResultNameChange } from '@decipad/computer-utils';
 import { filterExpression } from '@decipad/editor-language-elements';
 import { Filter, SimpleTableCellType } from '@decipad/editor-types';
 import { astNode, hydrateType } from '@decipad/remote-computer';
-import { Unknown } from '@decipad/language-interfaces';
+import { Result, Unknown } from '@decipad/language-interfaces';
 import { assert } from '@decipad/utils';
-import {
+import type { JSONSchema7 as JSONSchema } from 'json-schema';
+import type {
   IntegrationTypes,
   TypeMap,
   TypeObject,
 } from 'libs/editor-types/src/integrations';
 
-type ImporterTypes = Importer['type'];
+export type Importer = ComputeBackendImporter | { type: 'datalake' };
+
+export type ImporterTypes = Importer['type'];
 export type Options<T extends ImporterTypes, O extends Record<string, any>> = {
   name?: string;
   /** Options specific to the WASM-land importer */
@@ -197,17 +200,46 @@ export abstract class Runner<
     return this._types;
   }
 
-  protected abstract fetchData(computer: Computer): Promise<Uint8Array>;
+  protected abstract fetchData(
+    computer: Computer,
+    abortController?: AbortController
+  ): Promise<Uint8Array>;
 
   public abstract assertedOptions(): Pick<Options<T, O>, 'runner' | 'importer'>;
   public abstract intoIntegrationType(): IntegrationTypes;
 
   public abstract getUsedVariableIds(computer: Computer): Array<string>;
+  protected async fetchSchema(): Promise<JSONSchema | undefined> {
+    return undefined;
+  }
 
-  public async import(computer: Computer): Promise<string> {
+  protected get computerImportType(): ComputeBackendImporter['type'] {
+    return this.type as ComputeBackendImporter['type'];
+  }
+
+  public async import(
+    computer: Computer,
+    abortController?: AbortController
+  ): Promise<string> {
     assert(!!this.name);
     const options = this.assertedOptions();
 
+    const previousColumns = computer.getAllColumns$.get(this.id);
+
+    const emptyTable: Result.Result<'table'> = {
+      type: {
+        kind: 'table',
+        indexName: null,
+        columnNames: [],
+        columnTypes: [],
+      },
+      value: [],
+    };
+
+    // TODO: Add columns as pending.
+
+    //
+    //
     // TODO: Is this correct? I think we need more on program field.
     // Also clean up on errors.
     await computer.pushComputeDelta({
@@ -228,26 +260,56 @@ export abstract class Runner<
               ],
             },
           },
+          ...previousColumns.map(
+            (col) =>
+              ({
+                id: col.blockId!,
+                type: 'identified-block',
+                block: {
+                  id: col.blockId!,
+                  type: 'block',
+                  args: [
+                    astNode(
+                      'table-column-assign',
+                      astNode('tablepartialdef', this.name!),
+                      astNode('coldef', col.columnName),
+                      astNode('externalref', col.blockId!)
+                    ),
+                  ],
+                },
+                isArtificial: true,
+                artificiallyDerivedFrom: [this.id],
+              } satisfies IdentifiedBlock)
+          ),
         ],
       },
       external: {
         upsert: {
-          [this._id]: {
-            type: { kind: 'pending' },
-            value: Unknown,
-            meta: undefined,
-          },
+          [this._id]: emptyTable,
+          ...previousColumns.reduce((prev, next) => {
+            // eslint-disable-next-line no-param-reassign
+            prev[next.blockId!] = {
+              type: { kind: 'pending' },
+              value: Unknown,
+              meta: undefined,
+            };
+
+            return prev;
+          }, {} as Record<string, Result.Result>),
         },
       },
     });
 
-    const data = await this.fetchData(computer);
+    const data = await this.fetchData(computer, abortController);
 
     const importedResult = await computer.importExternalData({
       data,
       name: this.name,
       id: this._id,
-      importer: { type: this.type, ...options.importer } as Importer,
+      importer: {
+        type: this.computerImportType,
+        ...options.importer,
+      } as unknown as ComputeBackendImporter,
 
       importOptions: {
         column_types: Object.fromEntries(

@@ -53,7 +53,7 @@ export const dateOperators: Record<string, BuiltinSpec> = {
       return Value.NumberValue.fromValue(luxonDate.get(unitName));
     },
     explanation:
-      'Extracts a component from a date (year, month, day, hour, etc.)',
+      'Extracts a component from a date (year, month, week, weekday, day, hour, etc.)',
     syntax: 'pick(Date, Precision)',
     example: 'pick(date(2020-03-15), day)',
     formulaGroup: 'Dates',

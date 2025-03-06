@@ -20,3 +20,4 @@ export * from './useResolved';
 export * from './useStableCallback';
 export * from './lazyLoad';
 export * from './width-listener';
+export * from './TimeAgo';

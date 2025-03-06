@@ -1,0 +1,78 @@
+{
+  "sourceType": "harvest",
+  "realm": "timetracking",
+  "displayName": "Harvest",
+  "description": "Harvest is a time tracking and invoicing platform that allows you to track your time and generate invoices.",
+  "icon": "https://connectors.airbyte.com/files/metadata/airbyte/source-harvest/latest/icon.svg",
+  "configSchema": {
+    "type": "object",
+    "required": ["account_id", "credentials", "replication_start_date"],
+    "properties": {
+      "account_id": {
+        "type": "string",
+        "title": "Account ID",
+        "description": "The account ID of your Harvest app."
+      },
+      "credentials": {
+        "title": "Authentication Mechanism",
+        "description": "Choose the type of credentials you want to use to connect to Harvest.",
+        "anyOf": [
+          {
+            "type": "object",
+            "title": "Personal Access Token",
+            "required": ["auth_type", "api_token"],
+            "properties": {
+              "auth_type": {
+                "title": "Authentication Type",
+                "enum": ["Token"]
+              },
+              "api_token": {
+                "type": "string",
+                "title": "Personal Access Token",
+                "description": "Log into Harvest and then create a personal access token under Account Settings > User Settings > API."
+              }
+            }
+          },
+          {
+            "type": "object",
+            "title": "Oauth",
+            "required": [
+              "auth_type",
+              "client_id",
+              "client_secret",
+              "refresh_token"
+            ],
+            "properties": {
+              "auth_type": {
+                "title": "Authentication Type",
+                "enum": ["Client"]
+              },
+              "client_id": {
+                "type": "string",
+                "title": "Client ID",
+                "description": "The client ID of your Harvest app."
+              },
+              "client_secret": {
+                "type": "string",
+                "title": "Client Secret",
+                "description": "The client secret of your Harvest app."
+              },
+              "refresh_token": {
+                "type": "string",
+                "title": "Refresh Token",
+                "description": "The refresh token of your Harvest app."
+              }
+            }
+          }
+        ]
+      },
+      "replication_start_date": {
+        "type": "string",
+        "title": "Replication Start Date",
+        "description": "The date from which you'd like to replicate data for Harvest.",
+        "format": "date-time"
+      }
+    }
+  },
+  "configInstructionsMarkdown": "To connect to Harvest, you need to provide a personal access token. You can get this from the Harvest API settings page."
+}

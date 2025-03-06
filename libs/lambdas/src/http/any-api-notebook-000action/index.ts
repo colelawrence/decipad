@@ -1,40 +1,8 @@
-/* eslint-disable @typescript-eslint/no-unused-vars  */
-/* eslint-disable unused-imports/no-unused-vars */
-import { server } from '@decipad/backend-notebook';
-import type {
-  APIGatewayProxyHandlerV2,
-  APIGatewayProxyEventV2,
-} from 'aws-lambda';
+import type { APIGatewayProxyHandlerV2 } from 'aws-lambda';
 import { notAcceptable } from '@hapi/boom';
+import { server } from '@decipad/backend-notebook';
 import handle from '../handle';
-
-const parseBody = async (
-  event: APIGatewayProxyEventV2
-): Promise<Record<string, unknown>> => {
-  if (event.body) {
-    const body = (
-      event.isBase64Encoded
-        ? Buffer.from(event.body, 'base64')
-        : Buffer.from(event.body, 'utf-8')
-    ).toString('utf-8');
-
-    console.log('BODY', body);
-
-    let parsedBody;
-    try {
-      parsedBody = JSON.parse(body);
-    } catch (_e) {
-      throw notAcceptable('Error parsing JSON body');
-    }
-    if (parsedBody && typeof parsedBody !== 'object') {
-      console.log('parsed body %j', parsedBody);
-      throw notAcceptable('JSON body should be an object');
-    }
-
-    return parsedBody ?? {};
-  }
-  return {};
-};
+import { parseBody } from '@decipad/backend-utils';
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',

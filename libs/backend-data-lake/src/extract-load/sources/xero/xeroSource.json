@@ -1,0 +1,48 @@
+{
+  "sourceType": "xero",
+  "realm": "accounting",
+  "displayName": "Xero",
+  "description": "Xero is a cloud-based accounting software that allows you to manage your finances and invoices.",
+  "icon": "https://connectors.airbyte.com/files/metadata/airbyte/source-xero/latest/icon.svg",
+  "configSchema": {
+    "type": "object",
+    "required": ["tenant_id", "start_date", "credentials"],
+    "properties": {
+      "tenant_id": {
+        "type": "string",
+        "title": "Enter your Xero organization's Tenant ID",
+        "description": "Your Xero organization's Tenant ID."
+      },
+      "credentials": {
+        "type": "object",
+        "title": "Authentication Mechanism",
+        "description": "Choose the type of credentials you want to use to connect to Harvest.",
+        "required": ["auth_type", "client_id", "client_secret"],
+        "properties": {
+          "auth_type": {
+            "type": "string",
+            "title": "Authentication Type",
+            "enum": ["oauth2_confidential_application"]
+          },
+          "client_id": {
+            "type": "string",
+            "title": "Client ID",
+            "description": "The client ID of your Harvest app."
+          },
+          "client_secret": {
+            "type": "string",
+            "title": "Client Secret",
+            "description": "The client secret of your Harvest app."
+          }
+        }
+      },
+      "start_date": {
+        "type": "string",
+        "title": "Replication Start Date",
+        "description": "The date from which you'd like to replicate data for Xero.",
+        "format": "date-time"
+      }
+    }
+  },
+  "configInstructionsMarkdown": "To connect to Xero, you need to provide your Xero organization's Tenant ID and setup a custom connection. See [here](https://developer.xero.com/documentation/guides/oauth2/custom-connections/) for more information."
+}

@@ -17,6 +17,3 @@ export const DRAG_EXPRESSION = 'expression';
 export const DRAG_EXPRESSION_CONTENT_TYPE = 'text/x-expression';
 
 export const DRAG_VARIABLE_NAME_CONTENT_TYPE = 'text/x-variable-name';
-
-export const DEPRECATED_DRAG_EXPRESSION_IN_FRAGMENT =
-  'deprecated-expression-fragment';

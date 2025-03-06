@@ -22,6 +22,7 @@ type PlaygroundPageEvent = {
     title: string;
   };
 };
+
 export type PageEvent =
   | WorkspacePageEvent
   | NotebookPageEvent

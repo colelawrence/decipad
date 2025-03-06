@@ -3,14 +3,13 @@ import { MarkType } from '@decipad/editor-types';
 import { useIsEditorReadOnly } from '@decipad/react-contexts';
 import type { Result } from '@decipad/language-interfaces';
 import { ComponentProps, FC, ReactNode } from 'react';
-import { cssVar, p12Medium } from '../../../primitives';
+import { cssVar, gridShiftScreenQuery, p12Medium } from '../../../primitives';
 import { SegmentButtons, TextAndIconButton } from '../../../shared';
 import { hideOnPrint } from '../../../styles/editor-layout';
 import { Height } from '../../../styles/spacings';
 import { CreateChartMenu } from '../CreateChartMenu/CreateChartMenu';
 import { LiveCode } from '../LiveCode/LiveCode';
 import styled from '@emotion/styled';
-import { FormulasDrawer } from '../FormulasDrawer/FormulasDrawer';
 
 type IntegrationButton =
   | {
@@ -30,7 +29,7 @@ type IntegrationBlockProps = {
   readonly error?: string;
   readonly result?: Result.Result;
   readonly resultPreview: ReactNode;
-  readonly formulas?: ReactNode;
+  readonly formulas: ReactNode;
 } & LiveCodePartialProps &
   SegmentButtonsProps;
 
@@ -101,7 +100,7 @@ export const IntegrationBlock: FC<IntegrationBlockProps> = ({
         </ControlButtonsDiv>
       </CaptionWrapper>
 
-      {formulas && <FormulasDrawer>{formulas}</FormulasDrawer>}
+      {formulas}
 
       <ResultPreviewWrapper contentEditable={false}>
         {resultPreview}
@@ -125,6 +124,10 @@ const CaptionWrapper = styled.div({
   gridColumn: '3 / span 1',
   display: 'flex',
   alignItems: 'center',
+
+  [gridShiftScreenQuery]: {
+    gridColumn: '2 / span 1',
+  },
 });
 
 const ResultPreviewWrapper = styled.div({

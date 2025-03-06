@@ -87,6 +87,7 @@ export const EditorBlock: FC<EditorBlockProps> = ({
         data-selected={isSelected}
         css={editableEditorBlock}
         ref={mergedRef}
+        id={elementId}
       >
         {AddNewLine}
         {DragHandle}

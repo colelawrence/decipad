@@ -111,7 +111,7 @@ const getCodeLineText = (
   return text;
 };
 
-const useNamesDefined = ({
+export const useNamesDefined = ({
   enabled,
 }: UseResultsOptions): AutocompleteNameWithSerializedType[] => {
   const computer = useComputer();

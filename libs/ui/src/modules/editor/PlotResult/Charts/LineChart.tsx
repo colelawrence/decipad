@@ -22,6 +22,8 @@ import {
 } from '../helpers';
 import { activeDotStyle, tooltipCursorStyle } from './styles';
 import { LineChartProps } from './types';
+import { calculateChartHeight } from '../helpers/calculateChartHeight';
+import { customTick } from '../Components/CustomTick';
 
 export const LineChart = ({
   table,
@@ -37,6 +39,7 @@ export const LineChart = ({
   setXAxisLabel,
   setYAxisLabel,
   isExporting,
+  size = 'medium',
 }: LineChartProps) => {
   const [isDarkTheme] = useThemeFromStore();
   const [chartDimensions, setChartDimensions] = useState({
@@ -86,6 +89,7 @@ export const LineChart = ({
         setXAxisLabel,
         yAxisLabel,
         setYAxisLabel,
+        customTick,
         isExporting,
       }),
     [
@@ -111,7 +115,7 @@ export const LineChart = ({
   return (
     <ResponsiveContainer
       width={'100%'}
-      height={chartHeight}
+      height={calculateChartHeight(size, chartHeight)}
       onResize={(width, height) => {
         if (width && height) {
           setChartDimensions({

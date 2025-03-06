@@ -49,6 +49,7 @@ export * from './mutateText';
 export * from './noopPromise';
 export * from './normalizeIdentifierElement';
 export * from './onDragStartSmartRef';
+export * from './onDropSmartRef';
 export * from './path';
 export * from './placeholders';
 export * from './pluginStore';

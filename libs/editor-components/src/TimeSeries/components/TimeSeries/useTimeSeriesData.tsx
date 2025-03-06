@@ -18,12 +18,8 @@ export function useTimeSeriesData({
   tableName?: string;
 }) {
   return useMemo(() => {
-    const categoricalColumns = theadElement.children.filter((x) =>
-      ['string', 'boolean', 'date'].includes(x?.cellType?.kind)
-    );
-    const numericalColumns = theadElement.children.filter((x) =>
-      NUMERICAL_COLUMN_TYPES.includes(x?.cellType?.kind)
-    );
+    const categoricalColumns = theadElement.children.slice(0, 2);
+    const numericalColumns = theadElement.children.slice(2);
 
     const hasDateSelected =
       theadElement.children.findIndex((x) => x?.cellType?.kind === 'date') !==
@@ -50,7 +46,11 @@ export function useTimeSeriesData({
     const uniqueFirstCategorical = [...new Set(firstCategorical)];
 
     const availableNumericColumns = availableColumns
-      ?.filter((x) => NUMERICAL_COLUMN_TYPES.includes(x.type.kind))
+      ?.filter(
+        (x) =>
+          NUMERICAL_COLUMN_TYPES.includes(x.type.kind) ||
+          CATEGORICAL_COLUMN_TYPES.includes(x.type.kind)
+      )
       .filter((x) => !numericalColumnsLabels.includes(x.name) && !!x.blockId);
 
     const availableCategoricalColumns = availableColumns?.filter(

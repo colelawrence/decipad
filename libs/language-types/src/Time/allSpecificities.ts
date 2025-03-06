@@ -3,6 +3,7 @@ export const allSpecificities: ReadonlyArray<string> = [
   'quarter',
   'month',
   'week',
+  'weekday',
   'day',
   'hour',
   'minute',

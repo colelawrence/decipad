@@ -6,5 +6,5 @@ export interface ProxyFieldProps<T> {
   editor: MyEditor;
   label: ReactNode;
   property: MultipleNodeProxyProperty<T>;
-  onChange: (editor: MyEditor, value: T) => void;
+  onChange: (editor: MyEditor, value: T, name?: string) => void;
 }

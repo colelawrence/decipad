@@ -46,14 +46,14 @@ export const ProxyVariableDropdownField = ({
 
   const onExecute = useCallback(
     (item: SelectItems) => {
-      onChange(editor, item.blockId ?? '');
+      onChange(editor, item.blockId ?? '', item.item);
       setOpen(false);
     },
     [editor, onChange]
   );
 
   return (
-    <div>
+    <div data-testid="proxy-variable-dropdown-field">
       <DropdownFieldLabel id={id}>{label}</DropdownFieldLabel>
       <DropdownMenu
         open={open}

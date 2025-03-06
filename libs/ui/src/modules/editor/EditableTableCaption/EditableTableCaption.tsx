@@ -1,5 +1,5 @@
 /* eslint-disable decipad/css-prop-named-variable */
-import { ClientEventsContext } from '@decipad/client-events';
+import { analytics } from '@decipad/client-events';
 import { markTypes } from '@decipad/editor-types';
 import { css } from '@emotion/react';
 import { Formula, Hide, Show, Source, Table } from 'libs/ui/src/icons';
@@ -74,8 +74,6 @@ export const EditableTableCaption: FC<EditableTableCaptionProps> = ({
   const Icon = userIcons[icon] || userIcons.Deci;
   const [caption, ...tableFormulaEditors] = Children.toArray(children);
 
-  const clientEvent = useContext(ClientEventsContext);
-
   const onPivotViewButtonPress = useCallback(
     () => onAddDataViewButtonPress(),
     [onAddDataViewButtonPress]
@@ -117,15 +115,13 @@ export const EditableTableCaption: FC<EditableTableCaptionProps> = ({
                 onClick: () => {
                   if (tableFormulaEditors.length !== 0) {
                     setHideFormulas(!hideFormulas);
-                    clientEvent({
-                      segmentEvent: {
-                        type: 'action',
-                        action: hideFormulas
-                          ? 'Show Table Formulas Button Clicked'
-                          : 'Hide Table Formulas Button Clicked',
-                        props: {
-                          analytics_source: 'frontend',
-                        },
+                    analytics.track({
+                      type: 'action',
+                      action: hideFormulas
+                        ? 'Show Table Formulas Button Clicked'
+                        : 'Hide Table Formulas Button Clicked',
+                      props: {
+                        analytics_source: 'frontend',
                       },
                     });
                   }

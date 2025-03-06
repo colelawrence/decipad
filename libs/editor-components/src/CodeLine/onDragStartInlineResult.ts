@@ -1,7 +1,8 @@
-import type {
-  CodeLineElement,
-  CodeLineV2Element,
-  MyEditor,
+import {
+  DRAG_BLOCK_ID,
+  type CodeLineElement,
+  type CodeLineV2Element,
+  type MyEditor,
 } from '@decipad/editor-types';
 import { onDragStartSmartRef } from '@decipad/editor-utils';
 import { Result } from '@decipad/language-interfaces';
@@ -26,6 +27,7 @@ export const onDragStartInlineResult =
   ) =>
   (e: React.DragEvent) => {
     onDragStartSmartRef(editor)({
+      dragType: DRAG_BLOCK_ID,
       element,
       variableName,
       asText,

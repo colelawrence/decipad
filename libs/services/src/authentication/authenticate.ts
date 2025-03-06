@@ -7,12 +7,18 @@ import type {
 import tables from '@decipad/tables';
 import { getDefined } from '@decipad/utils';
 import Boom from '@hapi/boom';
-import type { APIGatewayProxyEventV2 as APIGatewayProxyEvent } from 'aws-lambda';
 import { decode as decodeJWT } from 'next-auth/jwt';
 import { parse as parseCookie } from 'simple-cookie';
 import { debug } from './debug';
 import { jwt as jwtConf } from './jwt';
 import type { AnonUser } from '@decipad/graphqlserver-types';
+
+export interface AuthRequest {
+  headers?: {
+    [name: string]: string | string[] | undefined;
+  };
+  cookies?: string[] | null;
+}
 
 export type AuthResult = {
   user?: User;
@@ -32,10 +38,6 @@ type SessionTokenResult = {
   gotFromSecProtocolHeader?: boolean;
 };
 
-export type Request = APIGatewayProxyEvent & {
-  cookies?: string[] | null;
-};
-
 type ParsedCookies = Record<string, string>;
 
 export const TOKEN_COOKIE_NAMES = [
@@ -47,13 +49,15 @@ export function isValidAuthResult(authResult: AuthResult): boolean {
   return !!authResult.secret || !!authResult.user || !!authResult.anonUser;
 }
 
-export async function authenticate(event: Request): Promise<AuthResult[]> {
+export async function authenticate(event: AuthRequest): Promise<AuthResult[]> {
   const tokens = getSessionTokens(event);
   debug('tokens', tokens);
   return (await Promise.all(tokens.map(authenticateOneToken))).filter(
     isValidAuthResult
   );
 }
+
+/** Hey */
 
 export async function authenticateOneToken({
   token,
@@ -133,7 +137,7 @@ function userAuthenticatedAuthResult(
 }
 
 export async function getAuthenticatedUser(
-  event: Request
+  event: AuthRequest
 ): Promise<User | undefined> {
   return (await authenticate(event))
     .map(authenticatedAuthResultFromAuthResult)
@@ -141,7 +145,7 @@ export async function getAuthenticatedUser(
 }
 
 export async function expectAuthenticated(
-  event: Request
+  event: AuthRequest
 ): Promise<AuthenticatedAuthResult[]> {
   const results = (await authenticate(event))
     .map(authenticatedAuthResultFromAuthResult)
@@ -215,9 +219,11 @@ function parseCookies(cookies: string[] | string): ParsedCookies {
   }, {} as ParsedCookies);
 }
 
-function getSessionTokens(event: Request): SessionTokenResult[] {
+function getSessionTokens(event: AuthRequest): SessionTokenResult[] {
   const tokens: SessionTokenResult[] = [];
-  const cookies = parseCookies(event.headers?.Cookie || event.cookies || []);
+  const cookies = parseCookies(
+    event.headers?.Cookie || event.headers?.cookie || event.cookies || []
+  );
   for (const cookieName of TOKEN_COOKIE_NAMES) {
     if (cookies[cookieName]) {
       tokens.push({ token: cookies[cookieName] });
@@ -225,6 +231,7 @@ function getSessionTokens(event: Request): SessionTokenResult[] {
   }
   for (const headerName of ['authorization', 'Authorizatiion']) {
     let value = event.headers?.[headerName];
+    value = Array.isArray(value) ? value[0] : value;
     if (!value) {
       continue;
     }
@@ -239,7 +246,8 @@ function getSessionTokens(event: Request): SessionTokenResult[] {
     'Sec-WebSocket-Protocol',
   ]) {
     if (event.headers?.[headerName]) {
-      const protocol = event.headers?.[headerName];
+      let protocol = event.headers?.[headerName];
+      protocol = Array.isArray(protocol) ? protocol[0] : protocol;
       if (!protocol) {
         continue;
       }

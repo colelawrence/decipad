@@ -1,9 +1,9 @@
 import type { ComponentProps } from 'react';
-import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import type { BehaviorSubject } from 'rxjs';
 import type { DocSyncEditor } from '@decipad/docsync';
 import { useToast } from '@decipad/toast';
-import { ClientEventsContext } from '@decipad/client-events';
+import { analytics } from '@decipad/client-events';
 import type { PermissionType as PermissionTypeStr } from 'libs/ui/src/types';
 import type {
   GetNotebookByIdQuery,
@@ -30,6 +30,7 @@ import {
 import { useExternalDataSources } from './useExternalDataSources';
 import type { ExternalDataSourcesContextValue } from '@decipad/interfaces';
 import { NumberFormatting } from '@decipad/editor-types';
+import { timeout } from '@decipad/utils';
 
 type Icon = ComponentProps<typeof EditorIcon>['icon'];
 type IconColor = ComponentProps<typeof EditorIcon>['color'];
@@ -207,20 +208,16 @@ export const useNotebookStateAndActions = ({
     [attachFileToNotebook]
   );
 
-  // ------- analytics -------
-  const event = useContext(ClientEventsContext);
-
   // ------- actions -------
   const removeLocalChanges = useCallback(async () => {
     await docsync?.removeLocalChanges();
-    await event({
-      segmentEvent: {
-        type: 'action',
-        action: 'notebook local changes removed',
-      },
+    analytics.track({
+      type: 'action',
+      action: 'notebook local changes removed',
     });
+    await timeout(1_000);
     window.location.reload();
-  }, [docsync, event]);
+  }, [docsync]);
 
   // ------- effects -------
   useEffect(() => {
@@ -245,19 +242,13 @@ export const useNotebookStateAndActions = ({
         }).catch((err) => {
           toast(`Error updating icon: ${(err as Error).message}`, 'error');
         });
-        event({
-          segmentEvent: { type: 'action', action: 'notebook icon changed' },
+        analytics.track({
+          type: 'action',
+          action: 'notebook icon changed',
         });
       }
     },
-    [
-      event,
-      iconColor,
-      notebook?.icon,
-      notebookId,
-      remoteUpdateNotebookIcon,
-      toast,
-    ]
+    [iconColor, notebook?.icon, notebookId, remoteUpdateNotebookIcon, toast]
   );
 
   const updateIconColor = useCallback(
@@ -274,15 +265,13 @@ export const useNotebookStateAndActions = ({
         }).catch((err) => {
           toast(`Error updating icon: ${(err as Error).message}`, 'error');
         });
-        event({
-          segmentEvent: {
-            type: 'action',
-            action: 'notebook icon color changed',
-          },
+        analytics.track({
+          type: 'action',
+          action: 'notebook icon color changed',
         });
       }
     },
-    [event, icon, notebook?.icon, notebookId, remoteUpdateNotebookIcon, toast]
+    [icon, notebook?.icon, notebookId, remoteUpdateNotebookIcon, toast]
   );
 
   const setNumberFormatting = useCallback(

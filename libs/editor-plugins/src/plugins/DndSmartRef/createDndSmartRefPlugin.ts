@@ -1,6 +1,6 @@
 import type { Computer } from '@decipad/computer-interfaces';
 import type { MyPlatePlugin } from '@decipad/editor-types';
-import { onDropSmartRef } from './onDrop/onDropSmartRef';
+import { onDropSmartRef } from '@decipad/editor-utils';
 
 /**
  * Plugin that enables dropping smart refs in the document.

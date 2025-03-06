@@ -1,8 +1,8 @@
 /* eslint decipad/css-prop-named-variable: 0 */
-import { ClientEventsContext } from '@decipad/client-events';
+import { analytics } from '@decipad/client-events';
 import type { Parser } from '@decipad/language-interfaces';
 import { css } from '@emotion/react';
-import { FC, useContext } from 'react';
+import { FC } from 'react';
 import { Tooltip } from '../../../shared';
 import { Warning } from '../../../icons';
 import { Anchor } from '../../../utils';
@@ -71,7 +71,6 @@ export const CodeError: FC<CodeErrorProps> = ({
   defaultDocsMessage = 'Check our docs',
   variant = 'default',
 }) => {
-  const clientEvent = useContext(ClientEventsContext);
   // Muting "expected expression" when the codeLine is empty
   if (message !== 'Expected expression') {
     return (
@@ -96,11 +95,9 @@ export const CodeError: FC<CodeErrorProps> = ({
           href={url}
           // Analytics
           onClick={() =>
-            clientEvent({
-              segmentEvent: {
-                type: 'action',
-                action: 'notebook code error docs link clicked',
-              },
+            analytics.track({
+              type: 'action',
+              action: 'notebook code error docs link clicked',
             })
           }
         >

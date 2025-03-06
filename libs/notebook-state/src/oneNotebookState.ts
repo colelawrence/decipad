@@ -9,9 +9,11 @@ import {
   ELEMENT_DATA_TAB_CHILDREN,
   ELEMENT_STRUCTURED_VARNAME,
   MARK_MAGICNUMBER,
+  MyPlatePlugin,
 } from '@decipad/editor-types';
 import {
   BlockProcessor,
+  createEditorReporter,
   EditorController,
   elementNormalizersDataTab,
   generalEditorNormalizers,
@@ -87,6 +89,7 @@ const initialState = (): Omit<
     resolveNotebookLoadedPromise: () => {
       return resolveNotebookLoadedPromise;
     },
+    reporter: undefined,
     editorChanges: new Subject(),
     interactionsSubscription: undefined,
     dataDrawerMode: {
@@ -164,7 +167,7 @@ export const createNotebookStore = (
 
         const controller = new EditorController(
           notebookId,
-          [generalEditorNormalizers, ...plugins],
+          [generalEditorNormalizers as MyPlatePlugin, ...plugins],
           elementNormalizersDataTab
         );
         const blockProcessor = new BlockProcessor(
@@ -173,6 +176,8 @@ export const createNotebookStore = (
           notebookId,
           COMPUTER_DEBOUNCE
         );
+
+        const reporter = createEditorReporter(controller);
 
         const interactionsSubscription = interactions.subscribe((i) => {
           if (i.type !== 'inline-equal') {
@@ -357,6 +362,7 @@ export const createNotebookStore = (
         set({
           editor: docSyncEditor,
           controller,
+          reporter,
           notebookHref: isServerSideRendering() ? '' : window.location.pathname,
           syncClientState: 'created',
           loadedFromLocal: false,
@@ -374,7 +380,11 @@ export const createNotebookStore = (
       },
 
       destroy: () => {
-        const { syncClientState, editor, interactionsSubscription } = get();
+        const { syncClientState, editor, interactionsSubscription, reporter } =
+          get();
+
+        reporter?.onClose();
+
         if (syncClientState === 'created') {
           editor?.disconnect();
           editor?.destroy();

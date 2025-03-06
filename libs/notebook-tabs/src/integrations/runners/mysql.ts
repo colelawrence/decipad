@@ -42,11 +42,12 @@ export class SQLRunner extends Runner<T, O> {
     );
 
     if (undefinedVariables.length > 0) {
-      throw new Error(
-        `Not all variables are defined. Undefined variables: \n${undefinedVariables.join(
-          '\n'
-        )}`
-      );
+      // To prevent unhandled errors, let's not give any dependencies if
+      // the variables are not _yet_ defined in the computer.
+      //
+      // TODO: this could lead to bad behavior. So after x seconds we
+      // should send some sort of error to the user.
+      return [];
     }
 
     return getTemplateVariables(query);
@@ -63,7 +64,7 @@ export class SQLRunner extends Runner<T, O> {
       method: 'POST',
     });
 
-    if (res.status !== 200) {
+    if (!res.ok) {
       const msg = (await res.json()) || {};
       throw new Error(
         `Failed to fetch SQL data - ${

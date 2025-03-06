@@ -104,17 +104,21 @@ const wrapHandler = (
             )
           );
         }
+        const body = sanitizeErrorPayload(err.output.payload);
+        if (err.data) {
+          body.data = err.data;
+        }
         const reply = {
           statusCode: err.output.statusCode,
           headers: getErrorHeaders(err.output.headers, options),
-          body: stringify(sanitizeErrorPayload(err.output.payload)),
+          body: stringify(body),
         };
         console.error('Replying with', reply);
         return reply;
       } finally {
         const client = analyticsClient(req);
         if (client) {
-          await client.closeAndFlush({ timeout: 2000 });
+          await client.closeAndFlush(2000);
         }
       }
     }
@@ -158,8 +162,10 @@ export const trackingUtmAndReferer = (handler: Handler): HttpHandler => {
       }
 
       if (user) {
-        client.myIdentify({ userId: user.id });
-        client.identify({ userId: user.id });
+        client.identify(user.id, {
+          email: user.email,
+          name: user.name,
+        });
       }
     }
     return handler(event, ctx, cb);

@@ -1,5 +1,5 @@
 /* eslint decipad/css-prop-named-variable: 0 */
-import { ClientEventsContext } from '@decipad/client-events';
+import { analytics } from '@decipad/client-events';
 import type { SmartRefDecoration } from '@decipad/editor-types';
 import { useWindowListener } from '@decipad/react-utils';
 import { docs } from '@decipad/routing';
@@ -12,7 +12,6 @@ import {
   type MouseEventHandler,
   type MutableRefObject,
   useCallback,
-  useContext,
   useEffect,
   useMemo,
   useState,
@@ -102,21 +101,17 @@ export const AutoCompleteMenu = ({
   result = '',
   openRef,
 }: AutoCompleteMenuProps): ReturnType<FC> => {
-  const clientEvent = useContext(ClientEventsContext);
-
   const handleMouseDown: MouseEventHandler<HTMLSpanElement> =
     useCancelingEvent(noop);
   const handleClientEvent = useCallback(() => {
-    clientEvent({
-      segmentEvent: {
-        type: 'action',
-        action: 'Documentation Button Clicked',
-        props: {
-          analytics_source: 'frontend',
-        },
+    analytics.track({
+      type: 'action',
+      action: 'Documentation Button Clicked',
+      props: {
+        analytics_source: 'frontend',
       },
     });
-  }, [clientEvent]);
+  }, []);
 
   const isResult = result !== '';
   const groups = useMemo(() => {

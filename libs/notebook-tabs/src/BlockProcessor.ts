@@ -4,7 +4,7 @@
 
 import debounce from 'lodash/debounce';
 import type { EElement, TOperation } from '@udecode/plate-common';
-import { isElement } from '@udecode/plate-common';
+import { getNodeString, isElement } from '@udecode/plate-common';
 import type { Computer } from '@decipad/computer-interfaces';
 import {
   type MyElement,
@@ -22,6 +22,7 @@ import { allBlockIds } from './allBlockIds';
 import type { RootEditorController } from './types';
 import {
   createIntegrationManager,
+  debounceWithLeading,
   getUsedVariables,
   getVariableChangeObservable,
   pushIntegrationFormulas,
@@ -33,6 +34,10 @@ import {
   withVariableDependencies,
 } from './integrations';
 import { EditorController } from './EditorController';
+import { handleQueryParamsChanges } from './params/handleQueryParamsChanges';
+import { astNode } from '@decipad/remote-computer';
+import { Result, Unknown } from '@decipad/language-interfaces';
+import { withAbortController } from '@decipad/utils';
 
 export class BlockProcessor {
   private rootEditor: RootEditorController;
@@ -67,28 +72,40 @@ export class BlockProcessor {
       computer
     );
 
+    const pushIntegrationsWithAbort = withAbortController(
+      pushIntegrationsAndFormulas
+    );
+
+    const pushIntegrationWithBlock = (
+      block: IntegrationTypes.IntegrationBlock
+    ) => {
+      pushIntegrationsWithAbort(notebookId, computer, block).catch(() => {
+        /* Do nothing. We aborted the request. */
+      });
+    };
+
     const sideEffectsUpsertFunc = withControllerSideEffects(
       rootEditor as EditorController,
       withComputerCacheIntegration(
         notebookId,
         computer,
-        pushIntegrationsAndFormulas
+        pushIntegrationsWithAbort
       )
     );
 
     const { updateIntegration: variableChangeUpdateIntegration } =
       withVariableDependencies({
-        getDependencyObservable: dependencyObservableGetter,
+        getDependencyObservable: (block) => {
+          const source = dependencyObservableGetter(block);
+          return source.pipe(debounceWithLeading(1_000));
+        },
         getVariablesUsed: (block) => new Set(usedVariablesGetter(block)),
-        upsertIntegration: (block) =>
-          pushIntegrationsAndFormulas(notebookId, computer, block),
+        upsertIntegration: pushIntegrationWithBlock,
       });
 
     const { upsertIntegration, removeIntegration } = createIntegrationManager({
       insertIntegration: (block) => {
-        if (variableChangeUpdateIntegration(block)) {
-          return block.timeOfLastRun!;
-        }
+        variableChangeUpdateIntegration(block);
 
         return sideEffectsUpsertFunc(block);
       },
@@ -98,8 +115,7 @@ export class BlockProcessor {
         computer,
         pushIntegrationFormulas
       ),
-      updateColumns: (block) =>
-        pushIntegrationsAndFormulas(notebookId, computer, block),
+      updateColumns: pushIntegrationWithBlock,
       deleteIntegration: removeFromComputer(computer),
     });
 
@@ -129,6 +145,12 @@ export class BlockProcessor {
       onChange.bind(rootEditor)();
       this.DebouncedComputeCompute();
     };
+
+    handleQueryParamsChanges((queryBlocks) => {
+      this.Computer.pushComputeDelta({
+        program: { upsert: queryBlocks },
+      });
+    });
   }
 
   /**
@@ -151,6 +173,12 @@ export class BlockProcessor {
     this.DirtyBlocksSet.clear();
     this.SetAllBlocksDirty();
 
+    // We process special first so that we don't get "unknown-reference" errors.
+    // This will set the blocks to "pending" and the computer does the rest.
+    await this.processSpecialWithPending(
+      Array.from(this.DirtyBlocksSet.values())
+    );
+
     let wholeProgram = await editorToProgram(
       this.rootEditor,
       this.DirtyBlocksSet.values() as Iterable<AnyElement>,
@@ -166,6 +194,7 @@ export class BlockProcessor {
     );
 
     await this.Computer.pushComputeDelta({ program: { upsert: wholeProgram } });
+
     this.processSpecial(Array.from(this.DirtyBlocksSet.values()), []);
 
     this.DirtyBlocksSet.clear();
@@ -184,17 +213,31 @@ export class BlockProcessor {
     }
   }
 
-  private processSpecial(
-    blocksToProcess: Array<EElement<NotebookValue>>,
-    blocksToRemoveIds: Array<string>
-  ): void {
-    blocksToProcess
+  private async processSpecialWithPending(
+    blocksToProcess: Array<EElement<NotebookValue>>
+  ): Promise<void> {
+    const blocks = blocksToProcess
       .filter(isElement)
       .filter(
         (block): block is IntegrationTypes.IntegrationBlock =>
           block.type === ELEMENT_INTEGRATION
-      )
-      .forEach(this.upsertIntegration);
+      );
+
+    await setIntegrationsPending(blocks, this.Computer);
+  }
+
+  private processSpecial(
+    blocksToProcess: Array<EElement<NotebookValue>>,
+    blocksToRemoveIds: Array<string>
+  ): void {
+    const blocks = blocksToProcess
+      .filter(isElement)
+      .filter(
+        (block): block is IntegrationTypes.IntegrationBlock =>
+          block.type === ELEMENT_INTEGRATION
+      );
+
+    blocks.forEach(this.upsertIntegration);
 
     const blocksToRemove = blocksToRemoveIds
       .map((id) => this.rootEditor.findNodeById(id))
@@ -228,14 +271,14 @@ export class BlockProcessor {
         this.Computer
       );
 
-      this.processSpecial(dirtyOnes, removedOnes);
-
       await this.Computer.pushComputeDelta({
         program: {
           upsert: changedProgram,
           remove: removedOnes,
         },
       });
+
+      this.processSpecial(dirtyOnes, removedOnes);
     });
   }
 
@@ -348,4 +391,40 @@ export class BlockProcessor {
       }
     }
   }
+}
+
+async function setIntegrationsPending(
+  blocks: IntegrationTypes.IntegrationBlock[],
+  computer: Computer
+): Promise<void> {
+  return computer.pushComputeDelta({
+    program: {
+      upsert: blocks.map((block) => ({
+        id: block.id,
+        type: 'identified-block',
+        block: {
+          id: block.id,
+          type: 'block',
+          args: [
+            astNode(
+              'assign',
+              astNode('def', getNodeString(block.children[0])),
+              astNode('externalref', block.id)
+            ),
+          ],
+        },
+      })),
+    },
+    external: {
+      upsert: blocks.reduce((prev, next) => {
+        // eslint-disable-next-line no-param-reassign
+        prev[next.id] = {
+          type: { kind: 'pending' },
+          value: Unknown,
+          meta: undefined,
+        };
+        return prev;
+      }, {} as Record<string, Result.AnyResult>),
+    },
+  });
 }

@@ -71,7 +71,7 @@ export const NumberCatalog = ({
         closeDataDrawer();
       } else {
         const id = newSelectedIds.values().next().value;
-        if (items.Widgets.some((i) => i.blockId === id)) {
+        if (items.Widgets?.some((i) => i.blockId === id)) {
           // when we select a widget, we want to close the data drawer as well
           closeDataDrawer();
           setSidebar({

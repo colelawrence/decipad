@@ -254,7 +254,9 @@ export type ButtonProps = {
   readonly href?: string;
   readonly tabIndex?: number;
   readonly autoFocus?: boolean;
-  readonly onClick?: () => void;
+  readonly onClick?: (
+    event: React.MouseEvent<HTMLButtonElement | HTMLAnchorElement>
+  ) => void;
   readonly submit?: boolean;
   readonly styles?: SerializedStyles | Parameters<typeof css>[0];
   readonly sameTab?: boolean;

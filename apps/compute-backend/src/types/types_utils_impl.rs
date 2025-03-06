@@ -97,16 +97,19 @@ impl DeciResult {
     pub fn eq_num(&self, val: impl Into<DeciResult>) -> DeciResult {
         let val = val.into();
         match self {
-            DeciResult::Column(items) => match &items[0] {
-                DeciResult::Column(_) => {
-                    DeciResult::Column(items.iter().map(|x| x.eq_num(val.clone())).collect())
-                }
-                _ => DeciResult::Column(
-                    items
-                        .iter()
-                        .map(|x| DeciResult::Boolean(*x == val))
-                        .collect(),
-                ),
+            DeciResult::Column(items) => match &items.first() {
+                Some(result) => match result {
+                    DeciResult::Column(_) => {
+                        DeciResult::Column(items.iter().map(|x| x.eq_num(val.clone())).collect())
+                    }
+                    _ => DeciResult::Column(
+                        items
+                            .iter()
+                            .map(|x| DeciResult::Boolean(*x == val))
+                            .collect(),
+                    ),
+                },
+                None => DeciResult::Column(vec![]),
             },
             _ => panic!("Mask functions should be called on a column with a value"),
         }
@@ -115,16 +118,19 @@ impl DeciResult {
     pub fn gt_num(&self, val: impl Into<DeciResult>) -> DeciResult {
         let val = val.into();
         match self {
-            DeciResult::Column(items) => match &items[0] {
-                DeciResult::Column(_) => {
-                    DeciResult::Column(items.iter().map(|x| x.gt_num(val.clone())).collect())
-                }
-                _ => DeciResult::Column(
-                    items
-                        .iter()
-                        .map(|x| DeciResult::Boolean(*x > val))
-                        .collect(),
-                ),
+            DeciResult::Column(items) => match &items.first() {
+                Some(result) => match result {
+                    DeciResult::Column(_) => {
+                        DeciResult::Column(items.iter().map(|x| x.gt_num(val.clone())).collect())
+                    }
+                    _ => DeciResult::Column(
+                        items
+                            .iter()
+                            .map(|x| DeciResult::Boolean(*x > val))
+                            .collect(),
+                    ),
+                },
+                None => DeciResult::Column(vec![]),
             },
             _ => panic!("Mask functions should be called on a column with a value"),
         }
@@ -133,16 +139,19 @@ impl DeciResult {
     pub fn ge_num(&self, val: impl Into<DeciResult>) -> DeciResult {
         let val = val.into();
         match self {
-            DeciResult::Column(items) => match &items[0] {
-                DeciResult::Column(_) => {
-                    DeciResult::Column(items.iter().map(|x| x.ge_num(val.clone())).collect())
-                }
-                _ => DeciResult::Column(
-                    items
-                        .iter()
-                        .map(|x| DeciResult::Boolean(*x >= val))
-                        .collect(),
-                ),
+            DeciResult::Column(items) => match &items.first() {
+                Some(result) => match result {
+                    DeciResult::Column(_) => {
+                        DeciResult::Column(items.iter().map(|x| x.ge_num(val.clone())).collect())
+                    }
+                    _ => DeciResult::Column(
+                        items
+                            .iter()
+                            .map(|x| DeciResult::Boolean(*x >= val))
+                            .collect(),
+                    ),
+                },
+                None => DeciResult::Column(vec![]),
             },
             _ => panic!("Mask functions should be called on a column with a value"),
         }
@@ -151,16 +160,19 @@ impl DeciResult {
     pub fn lt_num(&self, val: impl Into<DeciResult>) -> DeciResult {
         let val = val.into();
         match self {
-            DeciResult::Column(items) => match &items[0] {
-                DeciResult::Column(_) => {
-                    DeciResult::Column(items.iter().map(|x| x.lt_num(val.clone())).collect())
-                }
-                _ => DeciResult::Column(
-                    items
-                        .iter()
-                        .map(|x| DeciResult::Boolean(*x < val))
-                        .collect(),
-                ),
+            DeciResult::Column(items) => match &items.first() {
+                Some(result) => match result {
+                    DeciResult::Column(_) => {
+                        DeciResult::Column(items.iter().map(|x| x.lt_num(val.clone())).collect())
+                    }
+                    _ => DeciResult::Column(
+                        items
+                            .iter()
+                            .map(|x| DeciResult::Boolean(*x < val))
+                            .collect(),
+                    ),
+                },
+                None => DeciResult::Column(vec![]),
             },
             _ => panic!("Mask functions should be called on a column with a value"),
         }
@@ -168,16 +180,19 @@ impl DeciResult {
 
     pub fn le_num(&self, val: DeciResult) -> DeciResult {
         match self {
-            DeciResult::Column(items) => match &items[0] {
-                DeciResult::Column(_) => {
-                    DeciResult::Column(items.iter().map(|x| x.le_num(val.clone())).collect())
-                }
-                _ => DeciResult::Column(
-                    items
-                        .iter()
-                        .map(|x| DeciResult::Boolean(*x <= val))
-                        .collect(),
-                ),
+            DeciResult::Column(items) => match &items.first() {
+                Some(result) => match result {
+                    DeciResult::Column(_) => {
+                        DeciResult::Column(items.iter().map(|x| x.le_num(val.clone())).collect())
+                    }
+                    _ => DeciResult::Column(
+                        items
+                            .iter()
+                            .map(|x| DeciResult::Boolean(*x <= val))
+                            .collect(),
+                    ),
+                },
+                None => DeciResult::Column(vec![]),
             },
             _ => panic!("Mask functions should be called on a column with a value"),
         }

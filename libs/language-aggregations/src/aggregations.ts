@@ -24,7 +24,7 @@ const getResultTypeNumber = (): SerializedType => ({
   unit: null,
 });
 
-const aggregationTypes = {
+export const aggregationTypes = {
   boolean: [
     {
       id: 'boolean:count-true',
@@ -188,6 +188,17 @@ const aggregationTypes = {
 
 export type AggregationIds =
   typeof aggregationTypes[keyof typeof aggregationTypes][number]['id'];
+
+export const flattenedAggregationTypes = Object.values(aggregationTypes)
+  .flat()
+  .reduce((prev, next) => {
+    // eslint-disable-next-line no-param-reassign
+    prev[next.id] = next;
+
+    return prev;
+  }, {} as Record<AggregationIds, AggregationType>);
+
+export const allAggregationIds = Object.keys(flattenedAggregationTypes);
 
 const typeById = once(() => {
   const types: { [id: string]: AggregationType } = {};

@@ -15,6 +15,7 @@ import { isFlagEnabled } from '@decipad/feature-flags';
 import {
   ImportElementSource,
   ImportElementSourcePretty,
+  DRAG_BLOCK_ID,
 } from '@decipad/editor-types';
 import { FC, HTMLProps, ReactNode } from 'react';
 import { assert } from '@decipad/utils';
@@ -144,6 +145,7 @@ const NumberCatalogItemWithResult: FC<NumberCatalogItemWithResultProps> = ({
       onDragStart={
         onDragStart &&
         onDragStart({
+          dragType: DRAG_BLOCK_ID,
           blockId,
           asText,
           result,

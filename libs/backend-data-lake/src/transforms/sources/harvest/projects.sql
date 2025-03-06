@@ -1,0 +1,20 @@
+SELECT
+  CAST(id AS STRING) as Id,
+  {{{temporal_fields}}},
+  CAST(JSON_VALUE(client.id) as STRING) as ClientId,
+  name as Name,
+  code as Code,
+  is_active as IsActive,
+  is_billable as IsBillable,
+  is_fixed_fee as IsFixedFee,
+  bill_by as BillBy,
+  hourly_rate as HourlyRate,
+  budget as HoursBudget,
+  budget_by as BudgetBy,
+  cost_budget as CostBudget,
+  fee as Fee,
+  starts_on as StartsOn,
+  ends_on as EndsOn,
+  created_at as CreatedAt,
+  updated_at as UpdatedAt
+  FROM {{projects}}

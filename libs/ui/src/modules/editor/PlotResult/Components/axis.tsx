@@ -188,6 +188,7 @@ export const verticalAxis = ({
   startFromZero,
   xColumnName,
   tickFormatter,
+  customTick,
   xAxisOffset = 0,
   yAxisOffset = 0,
   xAxisLabel,
@@ -223,5 +224,6 @@ export const verticalAxis = ({
     })}
     {...propsForMirroredAxis({})}
     {...propsForAllAxis}
+    tick={customTick}
   />,
 ];

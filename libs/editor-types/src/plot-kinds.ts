@@ -27,6 +27,7 @@ export type PlotOrientation = 'vertical' | 'horizontal';
 export type PlotBarVariant = 'grouped' | 'stacked' | 'stacked100';
 export type PlotLineVariant = 'simple' | 'area' | 'area100';
 export type PlotArcVariant = 'simple' | 'donut';
+export type PlotSize = 'small' | 'medium' | 'large';
 
 export type PlotParams = BasePlotProps & {
   readonly sourceVarNameOptions: string[];
@@ -49,6 +50,7 @@ export type PlotParams = BasePlotProps & {
   readonly setGrid: (grid: boolean) => void;
   readonly setShowDataLabel: (show: boolean) => void;
   readonly setStartFromZero: (start: boolean) => void;
+  readonly setSize: (size: PlotSize) => void;
   readonly setFlipTable: (flip: boolean) => void;
   readonly setMirrorYAxis: (mirror: boolean) => void;
   readonly setGroupByX: (group: boolean) => void;
@@ -63,6 +65,7 @@ export const defaultPlotParams: Pick<
   | 'grid'
   | 'showDataLabel'
   | 'startFromZero'
+  | 'size'
   | 'groupByX'
   | 'orientation'
   | 'colorScheme'
@@ -73,6 +76,7 @@ export const defaultPlotParams: Pick<
   lineVariant: 'simple',
   arcVariant: 'simple',
   orientation: 'horizontal',
+  size: 'medium',
   grid: true,
   startFromZero: true,
   mirrorYAxis: false,

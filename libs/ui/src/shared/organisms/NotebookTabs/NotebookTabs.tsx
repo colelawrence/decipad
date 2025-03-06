@@ -5,7 +5,6 @@ import styled from '@emotion/styled';
 import * as TabsPrimitive from '@radix-ui/react-tabs';
 import {
   useCallback,
-  useContext,
   useEffect,
   useMemo,
   useRef,
@@ -35,7 +34,7 @@ import { MenuItem, TriggerMenuItem } from '../../atoms';
 import { deciTabsOverflowXStyles } from '../../../styles/scrollbars';
 import { IconPopover, MenuList } from '../../molecules';
 
-import { ClientEventsContext } from '@decipad/client-events';
+import { analytics } from '@decipad/client-events';
 import { noop } from '@decipad/utils';
 import { hideOnPrint } from 'libs/ui/src/styles/editor-layout';
 import { useCancelingEvent } from '../../../utils';
@@ -83,8 +82,6 @@ export const NotebookTabs: FC<TabsProps> = ({
   }, [tabs, isReadOnly]);
 
   const toast = useToast();
-
-  const clientEvent = useContext(ClientEventsContext);
 
   // Used to set the width of the input to the length of the tab name
   const resizeSpanRef = useRef<HTMLSpanElement>(null);
@@ -264,18 +261,16 @@ export const NotebookTabs: FC<TabsProps> = ({
 
   const handleAddTab = useCancelingEvent(
     useCallback(() => {
-      clientEvent({
-        segmentEvent: {
-          type: 'action',
-          action: 'Tab Created',
-          props: {
-            analytics_source: 'frontend',
-          },
+      analytics.track({
+        type: 'action',
+        action: 'Tab Created',
+        props: {
+          analytics_source: 'frontend',
         },
       });
       const id = onCreateTab();
       setEditableTabId(id);
-    }, [onCreateTab, clientEvent])
+    }, [onCreateTab])
   );
 
   const handleKeyPress = useCallback(
@@ -412,7 +407,6 @@ const Tab: FC<TabProps> = ({
   const iconRef = useRef<HTMLDivElement>(null);
 
   const Icon = userIcons[icon];
-  const clientEvent = useContext(ClientEventsContext);
 
   const handleClickRename: MouseEventHandler<HTMLButtonElement> =
     useCancelingEvent<MouseEvent<HTMLButtonElement>>(
@@ -543,13 +537,11 @@ const Tab: FC<TabProps> = ({
             disabled={!canHideDelete}
             onClick={() => {
               if (!isHidden) {
-                clientEvent({
-                  segmentEvent: {
-                    type: 'action',
-                    action: 'Tab Hidden',
-                    props: {
-                      analytics_source: 'frontend',
-                    },
+                analytics.track({
+                  type: 'action',
+                  action: 'Tab Hidden',
+                  props: {
+                    analytics_source: 'frontend',
                   },
                 });
               }
@@ -566,13 +558,11 @@ const Tab: FC<TabProps> = ({
             disabled={!canHideDelete}
             onClick={(event) => {
               event.stopPropagation();
-              clientEvent({
-                segmentEvent: {
-                  type: 'action',
-                  action: 'Tab Deleted',
-                  props: {
-                    analytics_source: 'frontend',
-                  },
+              analytics.track({
+                type: 'action',
+                action: 'Tab Deleted',
+                props: {
+                  analytics_source: 'frontend',
                 },
               });
             }}

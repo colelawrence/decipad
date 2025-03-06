@@ -1,5 +1,4 @@
 import type { Computer } from '@decipad/computer-interfaces';
-import { ClientEventContextType } from '@decipad/client-events';
 import { createIntegrationPlugin } from '@decipad/editor-integrations';
 import {
   createCrossBlockSelection,
@@ -32,7 +31,6 @@ import {
   createMigrateTableDropdownToId,
   createNavigationPlugin,
   createNormalizeLayoutPlugin,
-  createNormalizeEditorPlugin,
   createNormalizeLinkPlugin,
   createNormalizeListPlugin,
   createNormalizePlainTextBlockPlugin,
@@ -49,7 +47,6 @@ import {
   createSyntaxErrorHighlightPlugin,
   createTrailingParagraphPlugin,
   createTypeErrorHighlightPlugin,
-  createUserEventPlugin,
   createTabSelectionPlugin,
   createMathPlugin,
   createTransformH1,
@@ -62,6 +59,7 @@ import {
   createDataViewPlugin,
   createMigrateDisplayPlugin,
   createTimeSeriesPlugin,
+  createNormalizeEditorPlugin,
 } from '@decipad/editor-plugins';
 import {
   createCodeLineV2Plugin,
@@ -76,7 +74,6 @@ import {
   ELEMENT_IMAGE,
   ELEMENT_MEDIA_EMBED,
 } from '@decipad/editor-types';
-import { noopPromise } from '@decipad/editor-utils';
 import type { UserInteraction } from '@decipad/react-contexts';
 
 import { createDndPlugin } from '@udecode/plate-dnd';
@@ -99,15 +96,10 @@ import { createVariableDefPlugin } from '@decipad/editor-components';
 
 interface PluginOptions {
   computer: Computer;
-  events?: ClientEventContextType;
   interactions?: Subject<UserInteraction>;
 }
 
-export const plugins = ({
-  computer,
-  events = noopPromise,
-  interactions,
-}: PluginOptions) =>
+export const plugins = ({ computer, interactions }: PluginOptions) =>
   createMyPlugins(
     [
       // basic blocks
@@ -219,8 +211,6 @@ export const plugins = ({
       createDeserializeDocxPlugin(),
       createDeserializeMdPlugin(),
       createJuicePlugin({}),
-
-      createUserEventPlugin(events),
 
       // shortcuts
       createSelectionShortcutPlugin(),

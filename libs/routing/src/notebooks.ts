@@ -2,8 +2,31 @@ import { booleanParser, route, stringParser } from 'typesafe-routes';
 import { descriptiveIdParser } from './shared/descriptive-id';
 import { SECRET_URL_PARAM } from './shared/secret';
 
+if (typeof window !== 'undefined') {
+  ((
+    history: History & { onpushstate?: (data: { state: unknown }) => void }
+  ) => {
+    const { pushState } = history;
+
+    // eslint-disable-next-line no-param-reassign
+    history.pushState = (state, unused, url) => {
+      if (typeof history.onpushstate === 'function') {
+        history.onpushstate({ state });
+      }
+
+      const event = new CustomEvent('beforereplace', {
+        detail: { history, state, unused, url },
+      });
+
+      window.dispatchEvent(event);
+
+      return pushState.call(history, state, unused, url);
+    };
+  })(window.history);
+}
+
 const notebook = route(
-  `/:notebook/:tab?&:${SECRET_URL_PARAM}?&:embed?&:scenario?&:alias?`,
+  `/:notebook/:tab?&:${SECRET_URL_PARAM}?&:embed?&:scenario?&:alias?&:FilterStartDate?&:FilterInterval?&:FilterLastPeriod?`,
   {
     notebook: descriptiveIdParser,
     tab: stringParser,
@@ -11,6 +34,9 @@ const notebook = route(
     alias: stringParser,
     [SECRET_URL_PARAM]: stringParser,
     embed: booleanParser,
+    FilterStartDate: stringParser,
+    FilterInterval: stringParser,
+    FilterLastPeriod: stringParser,
   },
   {}
 );

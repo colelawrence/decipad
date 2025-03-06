@@ -10,7 +10,7 @@ import {
 } from '@decipad/ui';
 import type { FC, ReactNode } from 'react';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { useWorkspaceDatasets } from '../hooks';
+import { useDataLake, useWorkspaceDatasets } from '../hooks';
 import { ImportElementSource } from '@decipad/editor-types';
 import { UpgradeWarningBlock } from '@decipad/editor-components';
 import { IntegrationList } from './IntegrationList';
@@ -237,7 +237,11 @@ const Preview: FC<ConnectionProps> = (props) => {
       <span style={{ flexGrow: '1' }} />
       <Loading info={props.info} />
       {createPortal(
-        !(props.runner.type === 'code' || props.runner.type === 'mySql') && (
+        !(
+          props.runner.type === 'code' ||
+          props.runner.type === 'mySql' ||
+          props.runner.type === 'datalake'
+        ) && (
           <PortalledPreview
             {...props}
             // varNameInput={
@@ -393,13 +397,17 @@ export const Integrations: FC<IntegrationProps> = (props) => {
   const [search, setSearch] = useState('');
   const [setSidebar] = useNotebookMetaData((s) => [s.setSidebar]);
 
+  const { dataLake } = useDataLake(props.workspaceId, {
+    staleTimeMs: 1000 * 5,
+  });
+
   const integrations = useMemo(
     () =>
       IntegrationList.filter(
         (i) =>
           search.length === 0 || i.title.toLowerCase().indexOf(search) !== -1
-      ),
-    [search]
+      ).filter((i) => i.type !== 'datalake' || dataLake != null),
+    [search, dataLake]
   );
 
   const dataSets = useWorkspaceDatasets(props.workspaceId);

@@ -95,7 +95,8 @@ export type SubMenuKey =
   | 'color-scheme_multicolor'
   | 'addvalue'
   | 'chart-variant'
-  | 'value2';
+  | 'value2'
+  | 'size';
 
 export type ColorSchemeUniqueName = keyof typeof colorSchemes;
 

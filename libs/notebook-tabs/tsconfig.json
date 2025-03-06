@@ -15,6 +15,7 @@
     { "path": "../language-interfaces" },
     { "path": "../utils" },
     { "path": "../number" },
-    { "path": "../import" }
+    { "path": "../import" },
+    { "path": "../client-events" }
   ]
 }

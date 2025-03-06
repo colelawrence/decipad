@@ -37,32 +37,24 @@ export function unshareWithUser<
 
     const user = loadUser(context);
     if (resourceType.humanName === 'notebook') {
-      await track(
-        context.event,
-        {
-          event: `Removed Notebook Collaborator`,
-          userId: user?.id,
-          properties: {
-            notebook_id: args.id,
-            removed_userId: args.userId,
-          },
+      track(context.event, {
+        event: `Removed Notebook Collaborator`,
+        userId: user?.id,
+        properties: {
+          notebook_id: args.id,
+          removed_userId: args.userId,
         },
-        context
-      );
+      });
     }
     if (resourceType.humanName === 'workspace') {
-      await track(
-        context.event,
-        {
-          event: `Removed Workspace Seat`,
-          userId: user?.id,
-          properties: {
-            workspace_id: args.id,
-            removed_userId: args.userId,
-          },
+      track(context.event, {
+        event: `Removed Workspace Seat`,
+        userId: user?.id,
+        properties: {
+          workspace_id: args.id,
+          removed_userId: args.userId,
         },
-        context
-      );
+      });
     }
     return resourceType.toGraphql(updatedRecord);
   };

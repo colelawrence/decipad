@@ -320,7 +320,7 @@ const UnmemoedConnectionTable: FC<ConnectionTableProps> = (props) => {
   }
 
   return (
-    <TableWrapper>
+    <TableWrapper padLeft={props.type === 'static'}>
       <StyledTable contentEditable={false}>
         <TableHeader {...props} />
         <tbody>

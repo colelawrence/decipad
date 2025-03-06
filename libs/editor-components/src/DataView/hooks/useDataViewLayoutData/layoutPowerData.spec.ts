@@ -115,6 +115,7 @@ describe('layoutPowerData', () => {
         {
           "aggregationExpression": "count(unique((filter(TableName, TableName.Column1 == "A")).Column1))",
           "aggregationResult": undefined,
+          "aggregationVariableName": "Column1",
           "children": [],
           "collapsible": false,
           "elementType": "group",
@@ -126,6 +127,7 @@ describe('layoutPowerData', () => {
         },
         {
           "aggregationExpression": "count(unique(TableName.Column1))",
+          "aggregationVariableName": "Column1",
           "children": [],
           "elementType": "smartrow",
           "global": true,
@@ -229,6 +231,7 @@ describe('layoutPowerData', () => {
         {
           "aggregationExpression": "count(unique((filter(TableName, TableName.Column1 == "A")).Column1))",
           "aggregationResult": undefined,
+          "aggregationVariableName": "Column1",
           "children": [],
           "collapsible": false,
           "elementType": "group",
@@ -240,6 +243,7 @@ describe('layoutPowerData', () => {
         },
         {
           "aggregationExpression": "count(unique(TableName.Column1))",
+          "aggregationVariableName": "Column1",
           "children": [],
           "elementType": "smartrow",
           "global": true,
@@ -295,9 +299,11 @@ describe('layoutPowerData', () => {
         {
           "aggregationExpression": "count(unique((filter(TableName, TableName.Column1 == "A")).Column1))",
           "aggregationResult": undefined,
+          "aggregationVariableName": "Column1",
           "children": [
             {
               "aggregationExpression": "sum((filter(TableName, TableName.Column1 == "A")).Column2)",
+              "aggregationVariableName": "Column2Column1A",
               "children": [],
               "elementType": "smartrow",
               "global": false,
@@ -323,6 +329,7 @@ describe('layoutPowerData', () => {
         {
           "aggregationExpression": "count(unique((filter(TableName, TableName.Column1 == "B")).Column1))",
           "aggregationResult": undefined,
+          "aggregationVariableName": "Column1",
           "children": [
             {
               "aggregationExpression": "sum((filter(filter(TableName, TableName.Column1 == "B"), (filter(TableName, TableName.Column1 == "B")).Column2 == 2)).Column2)",
@@ -337,6 +344,7 @@ describe('layoutPowerData', () => {
                   "s": 1n,
                 },
               },
+              "aggregationVariableName": "Column2Column1B",
               "children": [],
               "collapsible": false,
               "elementType": "group",
@@ -363,9 +371,11 @@ describe('layoutPowerData', () => {
         },
         {
           "aggregationExpression": "count(unique(TableName.Column1))",
+          "aggregationVariableName": "Column1",
           "children": [
             {
               "aggregationExpression": "sum(TableName.Column2)",
+              "aggregationVariableName": "Column2",
               "children": [],
               "elementType": "smartrow",
               "global": true,

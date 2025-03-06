@@ -1,112 +1,100 @@
 /* eslint-disable no-console */
-import type {
-  AnalyticsSettings,
-  IdentifyParams,
-  TrackParams,
-} from '@segment/analytics-node';
-import { Analytics as AnalyticsClient } from '@segment/analytics-node';
-import type { CoreAnalytics } from '@segment/analytics-core';
+import { PostHogOptions, PostHog } from 'posthog-node';
 import { analytics } from '@decipad/backend-config';
-import type { APIGatewayProxyEventV2 } from 'aws-lambda';
-import type { Callback } from '@segment/analytics-node/dist/types/app/dispatch-emit';
+import type { APIGatewayProxyEventV2, ScheduledEvent } from 'aws-lambda';
 import { DevAnalyticsClient } from './DevAnalyticsClient';
+import EventEmitter from 'node:events';
 
-const { secretKey } = analytics();
+const { posthogApiKey } = analytics();
 
-type MyTrackParams = Omit<TrackParams, 'userId' | 'anonymousId'> & {
-  userId?: string;
-  anonymousId?: string;
+export type TMyAnalyticsClient = EventEmitter & {
+  identify: (
+    userId: string,
+    params: Record<string | number, unknown>
+  ) => unknown;
+  recordProperty: (key: string, value: string) => unknown;
+  page: (url: string) => unknown;
+  track: (event: string, properties: Record<string, unknown>) => unknown;
+  closeAndFlush: (timeout?: number) => Promise<unknown>;
+  flush: () => Promise<unknown>;
 };
+const createAnalyticsClient = (client?: PostHog): TMyAnalyticsClient => {
+  if (!client) {
+    return new DevAnalyticsClient();
+  }
+  class MyAnalyticsClient extends EventEmitter implements TMyAnalyticsClient {
+    private readonly client: PostHog;
+    private userId: string | undefined;
+    private properties: Record<string, unknown> = {};
 
-type MyIdentify =
-  | { userId: string; anonymousId?: undefined }
-  | { userId?: undefined; anonymousId: string };
-
-interface CloseAndFlushOptions {
-  timeout?: number;
-}
-
-interface TMyAnalyticsClient
-  extends Pick<CoreAnalytics, 'identify' | 'page' | 'track'> {
-  recordProperty(key: string, value: string): void;
-  myIdentify(identify: MyIdentify): void;
-  flush: () => Promise<void>;
-  closeAndFlush: (options: CloseAndFlushOptions) => Promise<void>;
-}
-
-const createAnalyticsClient = (settings: AnalyticsSettings) => {
-  const Base = settings.writeKey ? AnalyticsClient : DevAnalyticsClient;
-
-  class MyAnalyticsClient extends Base implements TMyAnalyticsClient {
-    page(...args: unknown[]) {
-      return super.page(...args);
-    }
-    private myRecordedProperties: Record<string, string> = {};
-
-    public recordProperty(key: string, value: string) {
-      this.myRecordedProperties[key] = value;
+    constructor(c: PostHog) {
+      super();
+      this.client = c;
     }
 
-    private myRecordedIdentify: MyIdentify = { anonymousId: 'unknown' };
-
-    public myIdentify(identify: MyIdentify) {
-      this.myRecordedIdentify = identify;
+    page(url: string) {
+      return this.client.capture({
+        distinctId: this.userId ?? 'unknown',
+        event: '$pageview',
+        properties: { $current_url: url, ...this.properties },
+      });
     }
 
-    track(message: MyTrackParams, callback?: (err?: unknown) => unknown) {
-      if (!message.properties) {
-        // eslint-disable-next-line no-param-reassign
-        message.properties = {};
-      }
-      Object.assign(message, this.myRecordedIdentify);
-      Object.assign(message.properties, this.myRecordedProperties);
-
-      console.debug('MyAnalyticsClient: tracking', message);
-
-      super.track(message as TrackParams, callback);
+    track(event: string, properties: Record<string, unknown>) {
+      return this.client.capture({
+        distinctId: this.userId ?? 'unknown',
+        event,
+        properties: { ...this.properties, ...properties },
+      });
     }
 
-    identify(params: IdentifyParams, callback?: Callback | undefined): void {
-      if (!params.traits) {
-        // eslint-disable-next-line no-param-reassign
-        params.traits = {};
-      }
-      Object.assign(params.traits, this.myRecordedProperties);
-      return super.identify(params, callback);
+    identify(userId: string, params: Record<string, unknown>) {
+      this.userId = userId;
+      return this.client.identify({ distinctId: userId, properties: params });
     }
-    closeAndFlush(options?: CloseAndFlushOptions) {
-      return super.closeAndFlush(options);
+
+    recordProperty(key: string, value: string) {
+      this.properties[key] = value;
     }
-    flush() {
-      return super.flush();
+
+    async closeAndFlush(timeout?: number) {
+      await this.flush();
+      await this.client.shutdown(timeout);
+    }
+
+    async flush() {
+      await this.client.flush();
     }
   }
 
-  return new MyAnalyticsClient(settings);
+  return new MyAnalyticsClient(client);
 };
 
 const clientForEvent = new WeakMap<
-  APIGatewayProxyEventV2,
+  APIGatewayProxyEventV2 | ScheduledEvent,
   TMyAnalyticsClient
 >();
 
-const analyticsSettings = (): AnalyticsSettings => ({
-  writeKey: secretKey,
-  maxEventsInBatch: 1,
-  maxRetries: 1,
+const analyticsSettings = (): PostHogOptions => ({
+  flushAt: 1,
+  flushInterval: 1,
+  host: 'https://eu.i.posthog.com',
 });
 
-export const analyticsClient = (event: APIGatewayProxyEventV2) => {
+export const analyticsClient = (
+  event: APIGatewayProxyEventV2 | ScheduledEvent
+) => {
   let client = clientForEvent.get(event);
   if (!client) {
-    const settings = analyticsSettings();
-    console.log('using analytics settings', settings);
-    client = createAnalyticsClient(settings);
+    let posthog: PostHog | undefined;
+    if (posthogApiKey) {
+      console.log('hae posthogApiKey', posthogApiKey);
+      posthog = new PostHog(posthogApiKey, analyticsSettings());
+    }
+    client = createAnalyticsClient(posthog);
     if (event && typeof event === 'object') {
       clientForEvent.set(event, client);
-      if (client instanceof AnalyticsClient) {
-        client.once('deregister', () => clientForEvent.delete(event));
-      }
+      client.once('deregister', () => clientForEvent.delete(event));
     }
   }
   return client;

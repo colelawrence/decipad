@@ -1,6 +1,7 @@
 /* eslint-disable complexity */
 import {
   PlotDefaultColorScheme,
+  PlotSize,
   markTypes,
   markTypesThatCanFlip,
 } from '@decipad/editor-types';
@@ -12,6 +13,7 @@ import { FC, useCallback, useEffect, useMemo, useState } from 'react';
 import _ from 'lodash';
 import {
   Add,
+  ArrowVertical,
   BarChart,
   Brush,
   Hashtag,
@@ -73,6 +75,8 @@ export const PlotParams = ({
   setShowDataLabel,
   startFromZero,
   setStartFromZero,
+  size,
+  setSize,
   groupByX,
   setGroupByX,
   lineVariant,
@@ -786,6 +790,29 @@ export const PlotParams = ({
                 onChange={onToggleStartFromZero}
               />
             )}
+
+            <MenuList
+              key="size"
+              open={open === 'size'}
+              onChangeOpen={onChangeOpen('size')}
+              itemTrigger={
+                <TriggerMenuItem
+                  icon={<ArrowVertical />}
+                  selectedPreview={size}
+                >
+                  Size
+                </TriggerMenuItem>
+              }
+            >
+              {(['small', 'medium', 'large'] as PlotSize[]).map((s) => {
+                const menuName = s.charAt(0).toUpperCase() + s.slice(1);
+                return (
+                  <MenuItem key={s} onSelect={() => setSize(s)}>
+                    <div css={constMenuMinWidth}>{menuName}</div>
+                  </MenuItem>
+                );
+              })}
+            </MenuList>
           </>
         )}
       </MenuList>

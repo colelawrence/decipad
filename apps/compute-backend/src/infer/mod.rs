@@ -11,7 +11,7 @@ pub fn infer_single(value: &str) -> DeciType {
 
 pub fn infer_column(column: &ParsedColumn) -> Result<DeciType, String> {
     if column.value.len() == 0 {
-        return Err("Need length".to_string());
+        return Ok(DeciType::Number);
     }
 
     let mut rows_iter = column.value.iter();

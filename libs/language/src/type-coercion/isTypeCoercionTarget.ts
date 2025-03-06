@@ -1,6 +1,6 @@
 import { singular } from 'pluralize';
 
-const typeCoercionTargetList = ['table'] as const;
+const typeCoercionTargetList = ['table', 'number', 'string'] as const;
 
 export type TypeCoercionTarget = typeof typeCoercionTargetList[number];
 

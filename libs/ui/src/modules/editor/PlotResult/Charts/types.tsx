@@ -24,7 +24,12 @@ export interface PieChartProps
   extends WithAxisLabels,
     Pick<
       ChartProps,
-      'table' | 'xColumnName' | 'yColumnNames' | 'colorScheme' | 'isExporting'
+      | 'table'
+      | 'xColumnName'
+      | 'yColumnNames'
+      | 'colorScheme'
+      | 'isExporting'
+      | 'size'
     > {
   readonly arcVariant?: PlotArcVariant;
   readonly showDataLabel?: boolean;
@@ -33,7 +38,12 @@ export interface PieChartProps
 export interface RadarChartProps
   extends Pick<
     ChartProps,
-    'table' | 'xColumnName' | 'yColumnNames' | 'colorScheme' | 'isExporting'
+    | 'table'
+    | 'xColumnName'
+    | 'yColumnNames'
+    | 'colorScheme'
+    | 'isExporting'
+    | 'size'
   > {
   readonly grid?: boolean;
 }
@@ -49,6 +59,7 @@ export interface AreaChartProps
       | 'stackOffset'
       | 'lineVariant'
       | 'isExporting'
+      | 'size'
     > {
   readonly orientation?: PlotOrientation;
   readonly grid?: boolean;
@@ -66,6 +77,7 @@ export interface ScatterChartProps
       | 'colorScheme'
       | 'sizeColumnName'
       | 'isExporting'
+      | 'size'
     > {
   readonly orientation?: PlotOrientation;
   readonly grid?: boolean;
@@ -78,7 +90,12 @@ export interface LineChartProps
   extends WithAxisLabels,
     Pick<
       ChartProps,
-      'table' | 'xColumnName' | 'yColumnNames' | 'colorScheme' | 'isExporting'
+      | 'table'
+      | 'xColumnName'
+      | 'yColumnNames'
+      | 'colorScheme'
+      | 'isExporting'
+      | 'size'
     > {
   readonly lineVariant?: PlotLineVariant;
   readonly orientation?: PlotOrientation;
@@ -91,7 +108,12 @@ export interface BarChartProps
   extends WithAxisLabels,
     Pick<
       ChartProps,
-      'table' | 'xColumnName' | 'yColumnNames' | 'colorScheme' | 'isExporting'
+      | 'table'
+      | 'xColumnName'
+      | 'yColumnNames'
+      | 'colorScheme'
+      | 'isExporting'
+      | 'size'
     > {
   readonly barVariant?: PlotBarVariant;
   readonly orientation?: PlotOrientation;
@@ -104,7 +126,12 @@ export interface ComboChartProps
   extends WithAxisLabels,
     Pick<
       ChartProps,
-      'table' | 'xColumnName' | 'yColumnNames' | 'colorScheme' | 'isExporting'
+      | 'table'
+      | 'xColumnName'
+      | 'yColumnNames'
+      | 'colorScheme'
+      | 'isExporting'
+      | 'size'
     > {
   readonly yColumnChartType?: string[];
   readonly orientation?: 'horizontal' | 'vertical';
@@ -122,10 +149,30 @@ export interface BarLabelProps {
 export interface FunnelChartProps
   extends Pick<
     ChartProps,
-    'table' | 'xColumnName' | 'yColumnNames' | 'colorScheme' | 'isExporting'
+    | 'table'
+    | 'xColumnName'
+    | 'yColumnNames'
+    | 'colorScheme'
+    | 'isExporting'
+    | 'size'
   > {
   readonly orientation?: PlotOrientation;
   readonly mirrorYAxis?: boolean;
   readonly grid?: boolean;
   readonly showDataLabel?: boolean;
 }
+
+interface CustomTickPayloadProps {
+  x?: number;
+  y?: number;
+  fill?: string;
+  value?: any;
+  offset?: number;
+}
+
+export type CustomTickProps = {
+  x: number;
+  y: number;
+  stroke: string;
+  payload: CustomTickPayloadProps;
+};

@@ -87,7 +87,7 @@ const wrapperStyles = css(
   hoverTransitionStyles('all')
 );
 
-interface WidgetWrapperProps {
+type WidgetWrapperProps = {
   readonly children: ReactNode;
   readonly readOnly?: boolean;
   readonly selected?: boolean;
@@ -95,7 +95,7 @@ interface WidgetWrapperProps {
   readonly maxWidth?: boolean;
   readonly css?: SerializedStyles;
   readonly className?: string;
-}
+} & React.HTMLAttributes<HTMLDivElement>;
 
 export const WidgetWrapper = ({
   children,
@@ -105,7 +105,8 @@ export const WidgetWrapper = ({
   maxWidth = true,
   css: customCss,
   className,
-}: WidgetWrapperProps & { css?: SerializedStyles }) => {
+  ...props
+}: WidgetWrapperProps) => {
   // Resize observer
   const [height, setHeight] = useState(initialFontSizeHeight);
   const [resizeObserver] = useState(
@@ -145,6 +146,7 @@ export const WidgetWrapper = ({
       className={className}
       data-testid="widget-editor"
       aria-roledescription="column-content"
+      {...props}
     >
       {children}
     </div>

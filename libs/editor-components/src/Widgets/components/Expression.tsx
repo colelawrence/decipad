@@ -8,12 +8,12 @@ import type { SerializedType } from '@decipad/language-interfaces';
 import { useSelected } from 'slate-react';
 import { getNodeString, getParentNode } from '@udecode/plate-common';
 import { useComputer, useNodePath } from '@decipad/editor-hooks';
-import { useContext, useRef, useEffect, useMemo } from 'react';
+import { useRef, useEffect, useMemo } from 'react';
 import { useIsEditorReadOnly } from '@decipad/react-contexts';
 import { formatError } from '@decipad/format';
 import { docs } from '@decipad/routing';
 import { useDelayedTrue } from '@decipad/react-utils';
-import { ClientEventsContext } from '@decipad/client-events';
+import { analytics } from '@decipad/client-events';
 import { useVariableEditorContext } from './VariableEditorContext';
 
 const getPlaceHolder = (type: SerializedType | undefined) => {
@@ -55,7 +55,6 @@ export const Expression: PlateComponent = ({
     () => path && getParentNode<VariableDefinitionElement>(editor, path)?.[0],
     [editor, path]
   );
-  const userEvents = useContext(ClientEventsContext);
   const isReadOnly = useIsEditorReadOnly();
 
   const computer = useComputer();
@@ -94,24 +93,17 @@ export const Expression: PlateComponent = ({
     if (nodeText !== oldStr.current && !focused) {
       oldStr.current = nodeText;
       if (parent && parent.variant !== 'slider') {
-        userEvents({
-          segmentEvent: {
-            type: 'action',
-            action: 'widget value updated',
-            props: {
-              variant: parent.variant,
-              isReadOnly,
-            },
-          },
-          gaEvent: {
-            category: 'widget',
-            action: 'widget value updated',
-            label: parent.variant,
+        analytics.track({
+          type: 'action',
+          action: 'widget value updated',
+          props: {
+            variant: parent.variant,
+            isReadOnly,
           },
         });
       }
     }
-  }, [focused, isReadOnly, nodeText, parent, userEvents]);
+  }, [focused, isReadOnly, nodeText, parent]);
 
   return (
     <div {...attributes}>

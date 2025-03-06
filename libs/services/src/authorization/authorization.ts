@@ -23,7 +23,6 @@ export type IsAuthorizedParams = {
   minimumPermissionType: PermissionType;
   resource?: string;
   resources?: string[];
-
   ignorePadPublic?: boolean;
 };
 

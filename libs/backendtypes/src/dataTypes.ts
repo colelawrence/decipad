@@ -699,6 +699,43 @@ export interface LogRecord extends TableRecordBase {
   expiresAt: number;
 }
 
+export interface DataLakeDataConnectionBase {
+  connectionId: string;
+  state: 'pending' | 'ready' | 'inactive';
+  syncState: 'idle' | 'syncing' | 'synced' | 'error';
+  lastSyncedAt?: number;
+  lastSyncError?: string;
+}
+
+export interface DataLakeCrmDataConnection extends DataLakeDataConnectionBase {
+  realm: 'crm';
+  source: 'hubspot';
+}
+
+export interface DataLakeTimeTrackingDataConnection
+  extends DataLakeDataConnectionBase {
+  realm: 'timetracking';
+  source: 'harvest';
+}
+
+export interface DataLakeAccountingDataConnection
+  extends DataLakeDataConnectionBase {
+  realm: 'accounting';
+  source: 'xero';
+}
+
+export type DataLakeDataConnection =
+  | DataLakeCrmDataConnection
+  | DataLakeTimeTrackingDataConnection
+  | DataLakeAccountingDataConnection; // add others as needed
+
+export interface DatalakeRecord extends TableRecordBase {
+  _version: number;
+  state: 'pending' | 'ready' | 'inactive';
+  credentials?: string;
+  connections?: DataLakeDataConnection[];
+}
+
 type UpdateParams<T> = Parameters<ArcTable<T>['update']>[0];
 type UpdateOutput = DynamoDB.DocumentClient.UpdateItemOutput;
 
@@ -776,6 +813,7 @@ export interface DataTables extends EnhancedDataTables {
   collabs: DataTable<CollabRecord>;
   connections: DataTable<ConnectionRecord>;
   docsync: VersionedDataTable<DocSyncRecord>;
+  datalakes: VersionedDataTable<DatalakeRecord>;
   docsyncsnapshots: DataTable<DocSyncSnapshotRecord>;
   allowlist: DataTable<AllowListRecord>;
   superadminusers: DataTable<SuperAdminUserRecord>;
@@ -805,7 +843,8 @@ export type ConcreteRecord =
   | LogRecord
   | SecretRecord
   | WorkspaceSubscriptionRecord
-  | ResourceUsageRecord;
+  | ResourceUsageRecord
+  | DatalakeRecord;
 
 export type TableRecord = VirtualRecord | ConcreteRecord;
 
@@ -934,12 +973,13 @@ export type VersionedDataTable<T extends VersionedTableRecord> =
   DataTable<T> & {
     withLock: (
       id: string,
-      fn: (record: T | undefined) => PromiseOrType<T>
+      fn: (record: T | undefined) => PromiseOrType<Omit<T, '_version'>>
     ) => Promise<T>;
   };
 
 export interface VersionedDataTables {
   docsync: VersionedDataTable<DocSyncRecord>;
+  datalakes: VersionedDataTable<DatalakeRecord>;
 }
 
 /* Lambda */

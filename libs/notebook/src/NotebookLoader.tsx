@@ -11,8 +11,6 @@ import { useNotebookWarning } from './useNotebookWarning';
 import type { NotebookProps } from './types';
 import { useLocalBackupNotice } from './useLocalBackupNotice';
 import { TabEditorComponent } from '@decipad/editor';
-import { useNotebookRoute } from '@decipad/routing';
-import { OutsideTabHiddenLanguageElements } from './OutsideTabHiddenLanguageElements';
 import { useEditorEvents } from './useEditorEvents';
 
 type NotebookLoaderProps = Omit<
@@ -35,7 +33,6 @@ export const NotebookLoader: FC<NotebookLoaderProps> = ({
   const [
     notebookLoadedPromise,
     initEditor,
-    controller,
     editor,
     computer,
     loadedFromRemote,
@@ -47,7 +44,6 @@ export const NotebookLoader: FC<NotebookLoaderProps> = ({
       [
         s.notebookLoadedPromise,
         s.initEditor,
-        s.controller,
         s.editor,
         s.computer,
         s.loadedFromRemote,
@@ -133,8 +129,6 @@ export const NotebookLoader: FC<NotebookLoaderProps> = ({
     throw lastValueFrom(computer.results);
   }
 
-  const { tabId } = useNotebookRoute();
-
   if (editor) {
     return (
       <Suspense fallback={<EditorPlaceholder />}>
@@ -148,14 +142,7 @@ export const NotebookLoader: FC<NotebookLoaderProps> = ({
             loaded={loaded}
             controller={readOrSuspendEditor.read()}
             readOnly={readOnly}
-          >
-            {workspaceId && controller && (
-              <OutsideTabHiddenLanguageElements
-                controller={controller}
-                tabId={tabId}
-              />
-            )}
-          </TabEditorComponent>
+          ></TabEditorComponent>
         </div>
       </Suspense>
     );

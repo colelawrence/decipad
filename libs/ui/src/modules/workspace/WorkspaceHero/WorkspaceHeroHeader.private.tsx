@@ -2,10 +2,10 @@ import { useCanUseDom, usePromise } from '@decipad/react-utils';
 import { docs } from '@decipad/routing';
 import styled from '@emotion/styled';
 import { useSession } from 'next-auth/react';
-import { useCallback, useContext, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Button, SearchBar, HelpMenu } from '../../../shared';
 import { Add, Users } from '../../../icons';
-import { ClientEventsContext } from '@decipad/client-events';
+import { analytics } from '@decipad/client-events';
 import { cssVar } from '../../../primitives';
 import { PermissionType } from 'libs/ui/src/types';
 import { useToast } from '@decipad/toast';
@@ -27,7 +27,6 @@ export const WorkspaceHeroHeader: React.FC<WorkspaceHeroHeaderProps> = ({
   >();
   const { status: sessionStatus } = useSession();
   const canUseDom = useCanUseDom();
-  const clientEvent = useContext(ClientEventsContext);
 
   const innerCreateNotebook = useCallback(() => {
     setCreateNotebookPromise(onCreateNotebook?.());
@@ -65,13 +64,11 @@ export const WorkspaceHeroHeader: React.FC<WorkspaceHeroHeaderProps> = ({
             href={membersHref}
             type="tertiaryAlt"
             onClick={() => {
-              clientEvent({
-                segmentEvent: {
-                  type: 'action',
-                  action: 'Invite Team Button Clicked',
-                  props: {
-                    analytics_source: 'frontend',
-                  },
+              analytics.track({
+                type: 'action',
+                action: 'Invite Team Button Clicked',
+                props: {
+                  analytics_source: 'frontend',
                 },
               });
             }}

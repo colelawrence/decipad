@@ -24,6 +24,22 @@ pub struct Csv {
     pub is_first_header_row: bool,
 }
 
+fn get_column_types(
+    parsed_columns: &Vec<ParsedColumn>,
+    import_options: &ImportOptions,
+) -> Vec<DeciType> {
+    parsed_columns
+        .iter()
+        .map(|col| {
+            import_options
+                .column_types
+                .as_ref()
+                .and_then(|t| t.get(&col.name).copied())
+                .unwrap_or_else(|| infer_column(col).expect("to be defined"))
+        })
+        .collect::<Vec<_>>()
+}
+
 impl Csv {
     pub fn parse(
         &self,
@@ -33,16 +49,7 @@ impl Csv {
         let csv = csv.as_ref();
 
         let parsed_csv = csv_to_parsed(&csv, self.is_first_header_row);
-        let column_types = parsed_csv
-            .iter()
-            .map(|col| {
-                import_options
-                    .column_types
-                    .as_ref()
-                    .and_then(|t| t.get(&col.name).copied())
-                    .unwrap_or_else(|| infer_column(col).expect("to be defined"))
-            })
-            .collect::<Vec<_>>();
+        let column_types = get_column_types(&parsed_csv, import_options);
 
         let mut injected_result_names: Vec<String> = Vec::new();
         let mut injested_result: Vec<DeciResult> = Vec::new();
@@ -252,4 +259,17 @@ fn test_without_first_header_row() {
 
     assert_eq!(columns[0].value, vec!["1948", "1967"]);
     assert_eq!(columns[1].value, vec!["Porsche", "Ford"]);
+}
+
+#[test]
+fn test_empty_csv_inference() {
+    let first_column = ParsedColumn {
+        name: "A".to_string(),
+        value: vec![],
+    };
+
+    let column_types = get_column_types(&vec![first_column], &ImportOptions { column_types: None });
+
+    assert_eq!(column_types.len(), 1);
+    assert_eq!(column_types[0], DeciType::Number);
 }

@@ -40,39 +40,27 @@ export function update<
       });
     }
 
-    await track(
-      context.event,
-      {
-        userId: context.user?.id,
-        event: `${resourceType.humanName} updated`,
-      },
-      context
-    );
+    track(context.event, {
+      userId: context.user?.id,
+      event: `${resourceType.humanName} updated`,
+    });
 
     if (
       (oldRecord as MaybePublic).isPublic &&
       !(updatedRecord as MaybePublic).isPublic
     ) {
-      await track(
-        context.event,
-        {
-          userId: context.user?.id,
-          event: `${resourceType.humanName} made private`,
-        },
-        context
-      );
+      track(context.event, {
+        userId: context.user?.id,
+        event: `${resourceType.humanName} made private`,
+      });
     } else if (
       !(oldRecord as MaybePublic).isPublic &&
       (updatedRecord as MaybePublic).isPublic
     ) {
-      await track(
-        context.event,
-        {
-          userId: context.user?.id,
-          event: `${resourceType.humanName} made public`,
-        },
-        context
-      );
+      track(context.event, {
+        userId: context.user?.id,
+        event: `${resourceType.humanName} made public`,
+      });
     }
 
     return graphqlReturn;

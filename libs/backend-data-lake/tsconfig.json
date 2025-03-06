@@ -1,0 +1,20 @@
+{
+  "extends": "../../tsconfig.json",
+  "include": [
+    "src",
+    "src/*/__fixtures__/*.json",
+    "scripts",
+    "src/**/*.sql",
+    "src/**/*.json"
+  ],
+  "compilerOptions": {
+    "lib": ["esnext"]
+  },
+  "references": [
+    { "path": "../backendtypes" },
+    { "path": "../services" },
+    { "path": "../backend-resources" },
+    { "path": "../backend-utils" },
+    { "path": "../backend-external-db" }
+  ]
+}

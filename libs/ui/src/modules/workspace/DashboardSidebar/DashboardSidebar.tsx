@@ -26,6 +26,7 @@ import { Drawer } from 'vaul';
 import useMediaQuery from '../../../hooks/useMediaQuery';
 import { WorkspaceAccount } from '../WorkspaceAccount/WorkspaceAccount';
 import { WorkspaceNavigation } from '../WorkspaceNavigation/WorkspaceNavigation';
+import { isFlagEnabled } from '@decipad/feature-flags';
 
 type DashboardSidebarProps = {
   readonly name: string | undefined;
@@ -143,6 +144,9 @@ export const DashboardSidebar = ({
                   activeWorkspace={activeWorkspace}
                   showAdminSettings={showAdminSettings}
                   showArchive={showArchive}
+                  showDataLakeSettings={
+                    showAdminSettings && isFlagEnabled('DATA_LAKE')
+                  }
                 />
                 <Styled.Separator />
                 <WorkspaceAccount />
@@ -176,6 +180,7 @@ export const DashboardSidebar = ({
         activeWorkspace={activeWorkspace}
         showAdminSettings={showAdminSettings}
         showArchive={showArchive}
+        showDataLakeSettings={showAdminSettings && isFlagEnabled('DATA_LAKE')}
       />
       <Styled.Separator />
       <WorkspaceAccount />

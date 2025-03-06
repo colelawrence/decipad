@@ -9,3 +9,7 @@ export * from './TranslatePaths';
 export * from './types';
 export * from './actions';
 export * from './integrations';
+export * from './Reporter';
+
+export * from './params/types';
+export * from './params/getPeriodComparison';

@@ -535,9 +535,9 @@ export class Notebook {
 
     // check topbar title also updated
     await expect(async () => {
-      expect(await this.page.getByText(title.substring(0, 20)).count()).toEqual(
-        2
-      );
+      expect(
+        await this.page.getByTestId('notebook-name-topbar').textContent()
+      ).toContain(title.substring(0, 20));
     }).toPass();
   }
 
@@ -946,6 +946,23 @@ export class Notebook {
       .getByTestId('widget-editor')
       .filter({ hasText: widgetName })
       .getByTestId('result-widget')
+      .innerText();
+  }
+
+  /**
+   * Get Result Widget Display Value Option
+   *
+   * **Usage**
+   *
+   * ```js
+   * await notebook.getResultWidgetValue('Hello')
+   * ```
+   */
+  async getMetricWidgetValue(widgetName: string) {
+    return this.page
+      .getByTestId('widget-editor')
+      .filter({ hasText: widgetName })
+      .getByTestId('metric-widget')
       .innerText();
   }
 

@@ -16,7 +16,7 @@ import {
   ELEMENT_SMART_REF,
   MARK_MAGICNUMBER,
 } from '@decipad/editor-types';
-import { assert, last } from '@decipad/utils';
+import { assert, generatedNames, last } from '@decipad/utils';
 import { nanoid } from 'nanoid';
 import { Point } from 'slate';
 import {
@@ -105,6 +105,8 @@ export const insertSmartRef = (
 
   let safeBlockId = blockId;
 
+  const getAvailableIdentifier = computer.getAvailableIdentifier.bind(computer);
+
   // Convert expression to block ID
   if (!safeBlockId) {
     assert(!!expression);
@@ -112,6 +114,7 @@ export const insertSmartRef = (
     const tabEditor = editor as MyTabEditor;
     safeBlockId = convertExpressionToSmartRef(tabEditor.rootEditor, {
       expression,
+      variableName: getAvailableIdentifier(variableName ?? generatedNames(), 1),
     });
   }
 

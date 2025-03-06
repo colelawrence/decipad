@@ -20,6 +20,7 @@ import {
 } from '../helpers';
 import { chartAxisFontStyles, tooltipCursorStyle } from './styles';
 import { RadarChartProps } from './types';
+import { calculateChartHeight } from '../helpers/calculateChartHeight';
 
 export const RadarChart = ({
   table,
@@ -27,6 +28,7 @@ export const RadarChart = ({
   yColumnNames,
   colorScheme,
   grid,
+  size = 'medium',
 }: RadarChartProps) => {
   const [isDarkTheme] = useThemeFromStore();
   const renderTooltip = useMemo(
@@ -45,7 +47,10 @@ export const RadarChart = ({
     : scheme.light_mode_colors;
 
   return (
-    <ResponsiveContainer width={'100%'} height={chartHeight}>
+    <ResponsiveContainer
+      width={'100%'}
+      height={calculateChartHeight(size, chartHeight)}
+    >
       <ReRadarChart data={table} margin={defaultChartMargins}>
         {grid && (
           <>

@@ -9,3 +9,4 @@ export * from './VariableDef';
 export * from './Tabs';
 export * from './DataTab';
 export * from './DataTabChild';
+export * from './Metrics';

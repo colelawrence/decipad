@@ -1,0 +1,67 @@
+{
+  "sourceType": "hubspot",
+  "realm": "crm",
+  "displayName": "Hubspot",
+  "description": "Hubspot is a CRM platform that allows you to manage your customer relationships and sales pipeline.",
+  "icon": "https://connectors.airbyte.com/files/metadata/airbyte/source-hubspot/latest/icon.svg",
+  "configSchema": {
+    "type": "object",
+    "properties": {
+      "required": ["credentials"],
+      "credentials": {
+        "title": "Type of credentials",
+        "description": "Choose the type of credentials you want to use to connect to Hubspot.",
+        "anyOf": [
+          {
+            "type": "object",
+            "title": "Private App Credentials",
+            "required": ["access_token", "credentials_title"],
+            "properties": {
+              "credentials_title": {
+                "title": "Type of credentials",
+                "enum": ["Private App Credentials"]
+              },
+              "access_token": {
+                "type": "string",
+                "title": "Access Token",
+                "description": "The access token of your Hubspot app."
+              }
+            }
+          },
+          {
+            "type": "object",
+            "title": "OAuth Credentials",
+            "required": [
+              "credentials_title",
+              "client_id",
+              "client_secret",
+              "refresh_token"
+            ],
+            "properties": {
+              "credentials_title": {
+                "title": "Type of credentials",
+                "enum": ["OAuth Credentials"]
+              },
+              "client_id": {
+                "type": "string",
+                "title": "Client ID",
+                "description": "The client ID of your Hubspot app."
+              },
+              "client_secret": {
+                "type": "string",
+                "title": "Client Secret",
+                "description": "The client secret of your Hubspot app."
+              },
+              "refresh_token": {
+                "type": "string",
+                "title": "Refresh Token",
+                "description": "The refresh token of your Hubspot app."
+              }
+            }
+          }
+        ]
+      }
+    }
+  },
+  "configInstructionsMarkdown": "To connect to Hubspot, you need to provide an API key. You can get this from the Hubspot API settings page."
+}

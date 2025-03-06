@@ -6,6 +6,7 @@ import { FC } from 'react';
 import { Warning } from '../../../icons';
 import { CodeVariable } from '../CodeVariable/CodeVariable';
 import { cssVar } from '../../../primitives';
+import { noop } from 'lodash';
 
 export type SmartRefProps = {
   readonly symbolName?: string;
@@ -16,6 +17,7 @@ export type SmartRefProps = {
   readonly hasPreviousContent?: boolean;
   readonly hasNextContent?: boolean;
   readonly decoration?: SmartRefDecoration;
+  readonly onGoToDefinition?: () => void;
 };
 
 export const SmartRef: FC<SmartRefProps> = ({
@@ -27,6 +29,7 @@ export const SmartRef: FC<SmartRefProps> = ({
   hasPreviousContent,
   hasNextContent,
   decoration,
+  onGoToDefinition = noop,
 }: SmartRefProps) => {
   const [tableName, columnName] = isTableIdentifier(symbolName);
 
@@ -39,7 +42,7 @@ export const SmartRef: FC<SmartRefProps> = ({
       <CodeVariable
         defBlockId={defBlockId}
         isSelected={isSelected}
-        provideVariableDefLink
+        provideVariableDefLink={!decoration} // don't provide link when Variable is cell
         tableName={tableName} // maybe undefined
         columnName={columnName} // maybe undefined
         isInitialized={isInitialized}
@@ -49,6 +52,7 @@ export const SmartRef: FC<SmartRefProps> = ({
             <Warning />
           ) : undefined
         }
+        onGoToDefinition={onGoToDefinition}
       >
         {columnName || symbolName}
       </CodeVariable>

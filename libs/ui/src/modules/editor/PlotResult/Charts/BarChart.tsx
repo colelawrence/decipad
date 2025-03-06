@@ -22,6 +22,8 @@ import {
 } from '../helpers';
 import { tooltipCursorStyle } from './styles';
 import { BarChartProps } from './types';
+import { calculateChartHeight } from '../helpers/calculateChartHeight';
+import { customTick } from '../Components/CustomTick';
 
 const radiusSize = 4;
 export const roundedEndsHorizontal = [
@@ -52,6 +54,7 @@ export const BarChart = ({
   setXAxisLabel,
   setYAxisLabel,
   isExporting,
+  size = 'medium',
 }: BarChartProps) => {
   const stackId = barVariant && barVariant !== 'grouped' ? '1' : undefined;
   const [isDarkTheme] = useThemeFromStore();
@@ -93,29 +96,28 @@ export const BarChart = ({
     ]
   );
 
-  const yxAxis = useMemo(
-    () =>
-      verticalAxis({
-        startFromZero,
-        xColumnName,
-        xAxisLabel,
-        setXAxisLabel,
-        yAxisLabel,
-        setYAxisLabel,
-        tickFormatter,
-        isExporting,
-      }),
-    [
-      setXAxisLabel,
-      setYAxisLabel,
+  const yxAxis = useMemo(() => {
+    return verticalAxis({
       startFromZero,
-      xAxisLabel,
       xColumnName,
+      xAxisLabel,
+      setXAxisLabel,
       yAxisLabel,
+      setYAxisLabel,
       tickFormatter,
+      customTick,
       isExporting,
-    ]
-  );
+    });
+  }, [
+    setXAxisLabel,
+    setYAxisLabel,
+    startFromZero,
+    xAxisLabel,
+    xColumnName,
+    yAxisLabel,
+    tickFormatter,
+    isExporting,
+  ]);
 
   const maxAbsoluteValue = useMemo(() => {
     return yColumnNames.reduce((maxAcc, columnName) => {
@@ -166,7 +168,10 @@ export const BarChart = ({
         : roundedEndsVertical
       : [0, 0, 0, 0];
   return (
-    <ResponsiveContainer width={'100%'} height={chartHeight}>
+    <ResponsiveContainer
+      width={'100%'}
+      height={calculateChartHeight(size, chartHeight)}
+    >
       <ReBarChart
         data={table}
         margin={defaultChartMargins}

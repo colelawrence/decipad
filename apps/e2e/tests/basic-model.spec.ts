@@ -43,6 +43,8 @@ test('Creating a basic model', async ({ testUser }) => {
     await createTable(page);
 
     await addColumn(page);
+    // eslint-disable-next-line playwright/no-wait-for-timeout
+    await page.waitForTimeout(Timeouts.tableDelay);
     await addColumn(page);
 
     await renameColumn(page, 0, 'Index');

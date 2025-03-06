@@ -9,8 +9,8 @@ export const EmptyDataSet: FC = () => {
       <div>
         <DataSet />
       </div>
-      <p>No selected data sets</p>
-      <p>When you select a dataset or CSV they will show up here</p>
+      <p>No data set to preview</p>
+      <p>Query a data set or upload a CSV</p>
     </EmptyDataSetStyled>
   );
 };

@@ -4,15 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { notebooks } from '@decipad/routing';
 import { useRouteParams } from 'typesafe-routes/react-router';
 
-export interface UseTabNavigateResult {
-  navigateToTab: (tabId: string) => void;
-  changeNotebookTitle: (newTitle: string) => void;
-  tab?: string;
-  tabs: ReturnType<typeof useTabs>;
-  embed?: boolean;
-}
-
-export const useTabNavigate = (isReadOnly: boolean): UseTabNavigateResult => {
+export const useTabNavigate = (isReadOnly: boolean) => {
   const tabs = useTabs(isReadOnly);
   const routeParams = useRouteParams(notebooks({}).notebook);
   const nav = useNavigate();
@@ -20,6 +12,7 @@ export const useTabNavigate = (isReadOnly: boolean): UseTabNavigateResult => {
   const defaultTabId = tabs.at(0)?.id;
 
   const notebookNav = notebooks({}).notebook;
+
   const go = useCallback(
     (params: Partial<Parameters<typeof notebookNav>[0]>, replace = false) => {
       nav(`${notebookNav({ ...routeParams, ...params }).$}`, { replace });
@@ -34,8 +27,11 @@ export const useTabNavigate = (isReadOnly: boolean): UseTabNavigateResult => {
   }, [defaultTabId, go, routeParams.tab]);
 
   const navigateToTab = useCallback(
-    (tabId: string) => {
-      go({ tab: tabId });
+    (
+      tabId: string,
+      params: Partial<Parameters<typeof notebookNav>[0]> = {}
+    ) => {
+      go({ tab: tabId, ...params });
     },
     [go]
   );
@@ -60,8 +56,9 @@ export const useTabNavigate = (isReadOnly: boolean): UseTabNavigateResult => {
       ...routeParams,
       tabs,
       navigateToTab,
+      navigateTo: go,
       changeNotebookTitle,
     }),
-    [changeNotebookTitle, navigateToTab, routeParams, tabs]
+    [changeNotebookTitle, go, navigateToTab, routeParams, tabs]
   );
 };

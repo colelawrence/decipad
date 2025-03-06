@@ -29,4 +29,5 @@ export const plotParams = () =>
     flipTable: z.boolean().optional(),
     groupByX: z.boolean().optional(),
     showDataLabel: z.boolean().optional(),
+    size: z.enum(['small', 'medium', 'large']).optional(),
   });

@@ -1,10 +1,15 @@
 /* eslint decipad/css-prop-named-variable: 0 */
 import { css } from '@emotion/react';
 import { FC, ReactNode } from 'react';
-import { cssVar } from '../../../primitives';
+import { cssVar, gridShiftScreenQuery } from '../../../primitives';
 
 const formulasDrawerStyles = css({
   gridColumn: '3 / span 1',
+
+  [gridShiftScreenQuery]: {
+    gridColumn: '2 / span 1',
+  },
+
   border: `1px solid ${cssVar('borderDefault')}`,
   borderRadius: '8px',
   margin: '8px 0',

@@ -68,3 +68,4 @@ export {
 } from './utils';
 export { unnestTableRows } from './tools/unnestTableRows';
 export { captureException, setErrorReporter } from './reporting';
+export { getIdentifiedBlock } from './testUtils';

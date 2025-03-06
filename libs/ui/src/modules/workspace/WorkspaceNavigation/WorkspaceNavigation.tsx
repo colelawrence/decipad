@@ -1,7 +1,7 @@
 /* eslint decipad/css-prop-named-variable: 0 */
-import { FC, useContext, useMemo, useState } from 'react';
+import { FC, useMemo, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { ClientEventsContext } from '@decipad/client-events';
+import { analytics } from '@decipad/client-events';
 import {
   CreateSectionMutation,
   ShallowWorkspaceFragment,
@@ -14,6 +14,7 @@ import {
   Archive,
   ArrowDiagonalTopRight,
   Chat,
+  Database,
   Docs,
   Ellipsis,
   Folder,
@@ -48,6 +49,7 @@ import { useCurrentWorkspaceStore } from '@decipad/react-contexts';
 interface WorkspaceNavigationProps {
   readonly activeWorkspace: ShallowWorkspaceFragment;
   readonly showAdminSettings: boolean;
+  readonly showDataLakeSettings: boolean;
   readonly showArchive: boolean;
   readonly onDeleteSection: (sectionId: string) => void;
   readonly onCreateSection: (
@@ -64,6 +66,7 @@ export const WorkspaceNavigation = ({
   onCreateSection,
   onUpdateSection,
   showAdminSettings = false,
+  showDataLakeSettings = true,
   showArchive = true,
   onShowFeedback,
 }: WorkspaceNavigationProps): ReturnType<FC> => {
@@ -86,7 +89,6 @@ export const WorkspaceNavigation = ({
 
   const location = useLocation();
   const { setIsUpgradeWorkspaceModalOpen } = useCurrentWorkspaceStore();
-  const clientEvent = useContext(ClientEventsContext);
 
   const customerPortalLink = useMemo(
     () =>
@@ -169,6 +171,20 @@ export const WorkspaceNavigation = ({
                 <Settings2 />
               </Styled.IconWrapper>
               <Styled.TextWrapper>Settings and members</Styled.TextWrapper>
+            </Styled.ItemWrapper>
+          </NavigationItem>
+        )}
+
+        {showDataLakeSettings && (
+          <NavigationItem
+            href={activeWorkspaceRoute.dataLake({}).$}
+            key="data-lake-settings"
+          >
+            <Styled.ItemWrapper>
+              <Styled.IconWrapper>
+                <Database />
+              </Styled.IconWrapper>
+              <Styled.TextWrapper>Data Lake settings</Styled.TextWrapper>
             </Styled.ItemWrapper>
           </NavigationItem>
         )}
@@ -301,13 +317,11 @@ export const WorkspaceNavigation = ({
         <NavigationItem
           key="templates"
           onClick={() => {
-            clientEvent({
-              segmentEvent: {
-                type: 'action',
-                action: 'Templates Button Clicked',
-                props: {
-                  analytics_source: 'frontend',
-                },
+            analytics.track({
+              type: 'action',
+              action: 'Templates Button Clicked',
+              props: {
+                analytics_source: 'frontend',
               },
             });
             window.open('http://www.decipad.com/templates', '_blank');
@@ -337,13 +351,11 @@ export const WorkspaceNavigation = ({
         <NavigationItem
           key={'feedback'}
           onClick={() => {
-            clientEvent({
-              segmentEvent: {
-                type: 'action',
-                action: 'Feedback Button Clicked',
-                props: {
-                  analytics_source: 'frontend',
-                },
+            analytics.track({
+              type: 'action',
+              action: 'Feedback Button Clicked',
+              props: {
+                analytics_source: 'frontend',
               },
             });
             onShowFeedback();

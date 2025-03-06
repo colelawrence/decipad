@@ -1,6 +1,4 @@
-import { useContext } from 'react';
 /* eslint-disable react-hooks/rules-of-hooks */
-import { ClientEventsContext } from '@decipad/client-events';
 import type { PlateComponent, SlashCommand } from '@decipad/editor-types';
 import { ELEMENT_PARAGRAPH, useMyEditorRef } from '@decipad/editor-types';
 import { SlashCommandsMenu } from '@decipad/ui';
@@ -12,6 +10,7 @@ import { useSlashMenu } from './useSlashMenu';
 import { Paragraph } from '../text/Paragraph';
 import styled from '@emotion/styled';
 import { useComputer } from '@decipad/editor-hooks';
+import { analytics } from '@decipad/client-events';
 
 export const InteractiveParagraph: PlateComponent = ({
   children,
@@ -22,7 +21,6 @@ export const InteractiveParagraph: PlateComponent = ({
 
   const editor = useMyEditorRef();
   const computer = useComputer();
-  const clientEvent = useContext(ClientEventsContext);
   const [isDarkTheme] = useThemeFromStore();
 
   // slash commands menu
@@ -50,12 +48,10 @@ export const InteractiveParagraph: PlateComponent = ({
                 getAvailableIdentifier:
                   computer.getAvailableIdentifier.bind(computer),
               });
-            clientEvent({
-              segmentEvent: {
-                type: 'action',
-                action: 'slash command',
-                props: { command },
-              },
+            analytics.track({
+              type: 'action',
+              action: 'slash command',
+              props: { command },
             });
           }}
           search={search}

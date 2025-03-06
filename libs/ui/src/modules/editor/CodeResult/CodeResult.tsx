@@ -21,6 +21,7 @@ import TextResult from '../TextResult/TextResult';
 import { memo, useMemo } from 'react';
 import { isColumn, isTable } from '@decipad/computer-utils';
 import { TrendResult } from '../TrendResult/TrendResult';
+import { ConditionalResult } from '../ConditionalResult/ConditionalResult';
 
 // Simple result components
 
@@ -187,7 +188,11 @@ function UnmemoedCodeResult<T extends SerializedTypeKind>(
     return <></>;
   }
 
-  return <ResultComponent {...props} />;
+  return (
+    <ConditionalResult kind={type.kind}>
+      <ResultComponent {...props} />
+    </ConditionalResult>
+  );
 }
 
 export const CodeResult = memo(UnmemoedCodeResult);

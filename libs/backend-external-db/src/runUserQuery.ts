@@ -4,6 +4,8 @@ import { createDatabaseClient } from './createDatabaseClient';
 import { rowsToColumns } from './rowsToColumns';
 import { knexRawResponseParser } from './types';
 
+const MAX_COL_SIZE = 10000;
+
 const parseResponse = (resp: unknown, clientConfig: Knex.Config): unknown => {
   switch (clientConfig.client) {
     case 'pg':
@@ -19,6 +21,21 @@ const parseResponse = (resp: unknown, clientConfig: Knex.Config): unknown => {
   return resp;
 };
 
+const validateResponse = (resp: unknown): unknown => {
+  if (resp && typeof resp === 'object') {
+    Object.values(resp).forEach((value) => {
+      if (Array.isArray(value)) {
+        if (value.length > MAX_COL_SIZE) {
+          throw Boom.badData(
+            `Result has too much data. Please use a WHERE or a LIMIT clause to filter the result.`
+          );
+        }
+      }
+    });
+  }
+  return resp;
+};
+
 export const runUserQuery = async (url: string, query: string) => {
   const [client, clientConfig] = createDatabaseClient(url);
   let response;
@@ -29,5 +46,5 @@ export const runUserQuery = async (url: string, query: string) => {
   } finally {
     await client.destroy();
   }
-  return parseResponse(response, clientConfig);
+  return validateResponse(parseResponse(response, clientConfig));
 };

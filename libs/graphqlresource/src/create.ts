@@ -39,18 +39,14 @@ export function create<
     }
 
     if (resourceType.humanName === 'notebook') {
-      await track(
-        context.event,
-        {
-          userId: user.id,
-          event: 'Notebook Created',
-          properties: {
-            analytics_source: 'backend',
-            notebook_id: newRecord.id,
-          },
+      await track(context.event, {
+        userId: user.id,
+        event: 'Notebook Created',
+        properties: {
+          analytics_source: 'backend',
+          notebook_id: newRecord.id,
         },
-        context
-      );
+      });
     }
     return resourceType.toGraphql(newRecord);
   };

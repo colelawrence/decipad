@@ -27,6 +27,7 @@ interface SliceToGroupProps {
   indent?: number;
   expandedGroups?: string[] | boolean;
   aggregationExpression?: string;
+  aggregationVariableName?: string;
   generateGroups: GenerateGroups;
   generateSmartRow: GenerateSmartRow;
 }
@@ -50,6 +51,7 @@ export const sliceToGroup = async ({
   indent = 0,
   expandedGroups,
   aggregationExpression,
+  aggregationVariableName,
   generateGroups,
   generateSmartRow,
 }: SliceToGroupProps): Promise<DataGroup> => {
@@ -108,5 +110,6 @@ export const sliceToGroup = async ({
     collapsible,
     aggregationResult,
     aggregationExpression,
+    aggregationVariableName,
   };
 };

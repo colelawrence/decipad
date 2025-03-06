@@ -11,65 +11,32 @@ import {
   useInsideLayoutContext,
   useIsEditorReadOnly,
 } from '@decipad/react-contexts';
-import {
-  useComputer,
-  useEditElement,
-  useExpressionResult,
-  useMetricAggregation,
-} from '@decipad/editor-hooks';
-import { getExprRef } from '@decipad/computer';
+import { useComputer, useEditElement } from '@decipad/editor-hooks';
 
 export const Metric: PlateComponent = ({ attributes, element, children }) => {
   assertElementType(element, ELEMENT_METRIC);
-  const {
-    blockId,
-    aggregation: aggregationId,
-    comparisonBlockId,
-    comparisonAggregation: comparisonAggregationId,
-  } = element;
 
   const computer = useComputer();
   const insideLayout = useInsideLayoutContext();
   const readOnly = useIsEditorReadOnly();
   const onEdit = useEditElement(element);
 
-  const { aggregation } = useMetricAggregation({ blockId, aggregationId });
-  const { aggregation: comparisonAggregation } = useMetricAggregation({
-    blockId: comparisonBlockId,
-    aggregationId: comparisonAggregationId,
-  });
+  const mainResultId = element.id;
+  const trendResultId = `${element.id}-trend`;
 
-  const blockRef = getExprRef(blockId);
-  const comparisonBlockRef = getExprRef(comparisonBlockId);
+  const mainResult = computer.getBlockIdResult$.use(mainResultId)?.result;
 
-  const expression = aggregation?.expression(blockRef, { sum: '' }) ?? blockRef;
-  const comparisonExpresison =
-    comparisonAggregation?.expression(comparisonBlockRef, { sum: '' }) ??
-    comparisonBlockRef;
-
-  /**
-   * Optimization: `computer.getBlockIdResult$` produces a result much faster
-   * than `useExpressionResult` does. Use it instead if the main value does not
-   * use an aggregation.
-   */
-  const unaggregatedMainResult =
-    computer.getBlockIdResult$.use(blockId)?.result;
-  const aggregatedMainResult = useExpressionResult(expression, {
-    enabled: !!aggregation,
-  });
-  const mainResult = aggregation
-    ? aggregatedMainResult
-    : unaggregatedMainResult;
-
-  const trendResult = useExpressionResult(
-    `trend([${comparisonExpresison}, ${expression}])`
-  );
+  const trendResult = computer.getBlockIdResult$.use(trendResultId)?.result;
 
   const { color: defaultColor } = useEditorStylesContext();
-
   const { color: elementColor = 'auto' } = element;
+  const { trendColor: elementTrendColor = 'trend' } = element;
 
   const color = elementColor === 'auto' ? defaultColor : elementColor;
+  const trendColor =
+    elementTrendColor === 'auto' ? defaultColor : elementTrendColor;
+
+  // TODO: conditional result still needs to render the slate children.
 
   return (
     <DraggableBlock
@@ -85,6 +52,7 @@ export const Metric: PlateComponent = ({ attributes, element, children }) => {
         comparisonDescription={element.comparisonDescription}
         formatting={element.formatting}
         color={color as AvailableSwatchColor}
+        trendColor={trendColor as AvailableSwatchColor | 'trend'}
         maxWidth={!insideLayout}
         fullHeight={insideLayout}
         onClickEdit={onEdit}
