@@ -6,6 +6,7 @@ import {
   TextAndIconButton,
   SegmentButtons,
   StatusLine,
+  VoidBlock,
 } from '@decipad/ui';
 import { useResourceUsage } from '@decipad/react-contexts';
 import { Play } from 'libs/ui/src/icons/Play';
@@ -48,14 +49,16 @@ export const CodeConnection: FC<ConnectionProps> = (props) => {
             ]}
           />
         </header>
-        <CodeEditor
-          lang="javascript"
-          code={code}
-          setCode={(newCode) => {
-            runner.setOptions({ runner: { code: newCode } });
-            setCode(newCode);
-          }}
-        />
+        <VoidBlock dontPreventDefault>
+          <CodeEditor
+            lang="javascript"
+            code={code}
+            setCode={(newCode) => {
+              runner.setOptions({ runner: { code: newCode } });
+              setCode(newCode);
+            }}
+          />
+        </VoidBlock>
         <footer>
           <StatusLine type="javascript" logs={props.info} />
         </footer>

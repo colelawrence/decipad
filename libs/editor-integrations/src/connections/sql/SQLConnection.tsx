@@ -8,6 +8,7 @@ import {
   OptionsList,
   StatusLine,
   TextAndIconButton,
+  VoidBlock,
 } from '@decipad/ui';
 import { ExternalProvider } from '@decipad/graphql-client';
 import { Play } from 'libs/ui/src/icons';
@@ -93,14 +94,16 @@ export const SQLConnection: FC<ConnectionProps> = (props) => {
             <Play />
           </TextAndIconButton>
         </StyledHeader>
-        <CodeEditor
-          code={query}
-          setCode={(q) => {
-            runner.setOptions({ runner: { query: q } });
-            setQuery(q);
-          }}
-          lang="sql"
-        />
+        <VoidBlock dontPreventDefault>
+          <CodeEditor
+            code={query}
+            setCode={(q) => {
+              runner.setOptions({ runner: { query: q } });
+              setQuery(q);
+            }}
+            lang="sql"
+          />
+        </VoidBlock>
         <footer>
           <StatusLine type="javascript" logs={props.info} />
         </footer>

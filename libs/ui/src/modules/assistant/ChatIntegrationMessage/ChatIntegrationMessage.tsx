@@ -27,7 +27,13 @@ import {
 } from '@decipad/import';
 import { useToast } from '@decipad/toast';
 import type { Result } from '@decipad/language-interfaces';
-import { Button, CodeEditor, InputField, Tooltip } from '../../../shared';
+import {
+  Button,
+  CodeEditor,
+  InputField,
+  Tooltip,
+  VoidBlock,
+} from '../../../shared';
 import { ChatMarkdownRenderer } from '../ChatMarkdownRenderer/ChatMarkdownRenderer';
 import { SecretInput } from './SecretInput';
 
@@ -323,13 +329,15 @@ const Integration = ({
           </button>
         </div>
         {showCode && (
-          <CodeEditor
-            code={tempCode}
-            setCode={(code) => {
-              setTempCode(code);
-            }}
-            lang="javascript"
-          />
+          <VoidBlock dontPreventDefault>
+            <CodeEditor
+              code={tempCode}
+              setCode={(code) => {
+                setTempCode(code);
+              }}
+              lang="javascript"
+            />
+          </VoidBlock>
         )}
       </div>
       <form css={formStyles}>
