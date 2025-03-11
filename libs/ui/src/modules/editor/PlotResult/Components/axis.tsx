@@ -148,6 +148,7 @@ export const horizontalAxis = ({
   startFromZero,
   xColumnName,
   tickFormatter,
+  customTick,
   xAxisOffset = 0,
   yAxisOffset = 0,
   xAxisLabel,
@@ -181,6 +182,7 @@ export const horizontalAxis = ({
     {...propsForMirroredAxis({ xAxisOffset, yAxisOffset })}
     {...propsForNumberAxis({ tickFormatter, startFromZero })}
     {...propsForAllAxis}
+    tick={customTick}
   />,
 ];
 

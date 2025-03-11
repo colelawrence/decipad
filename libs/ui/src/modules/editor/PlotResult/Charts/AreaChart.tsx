@@ -13,7 +13,6 @@ import { renderGrid } from '../Components/grid';
 import {
   calculateGrowth,
   chartHeight,
-  defaultChartMargins,
   renderLineLabel,
   renderLineTooltipWithData,
   renderPieLegend,
@@ -23,6 +22,7 @@ import { activeDotStyle, tooltipCursorStyle } from './styles';
 import { AreaChartProps } from './types';
 import { calculateChartHeight } from '../helpers/calculateChartHeight';
 import { customTick } from '../Components/CustomTick';
+import { useChartMargins } from '../hooks/useChartMargins';
 
 export const AreaChart = ({
   table,
@@ -69,6 +69,7 @@ export const AreaChart = ({
         yAxisLabel,
         setYAxisLabel,
         tickFormatter,
+        customTick,
         isExporting,
       }),
     [
@@ -116,6 +117,14 @@ export const AreaChart = ({
   const colors = isDarkTheme
     ? scheme.dark_mode_colors
     : scheme.light_mode_colors;
+
+  const dynamicChartMargins = useChartMargins({
+    table,
+    yColumnNames,
+    xColumnName,
+    orientation,
+  });
+
   return (
     <ResponsiveContainer
       width={'100%'}
@@ -131,7 +140,7 @@ export const AreaChart = ({
     >
       <ReAreaChart
         data={table}
-        margin={defaultChartMargins}
+        margin={dynamicChartMargins}
         layout={orientation}
         stackOffset={stackOffset}
       >

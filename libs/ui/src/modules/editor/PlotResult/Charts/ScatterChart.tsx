@@ -93,7 +93,10 @@ export const ScatterChart = ({
         }
       }}
     >
-      <ReScatterChart margin={defaultChartMargins} layout={orientation}>
+      <ReScatterChart
+        margin={{ ...defaultChartMargins, left: 0, right: 0 }}
+        layout={orientation}
+      >
         {grid && renderGrid('line-scatter-1')}
         <Tooltip
           content={renderTooltip}

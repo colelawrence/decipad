@@ -21,13 +21,14 @@ export const customTick = ({ x, y, payload }: CustomTickProps) => {
 
   return (
     <Text
-      textAnchor="end"
+      textAnchor="start"
       verticalAnchor="middle"
       fontSize={11}
       style={{
         fill: cssVar('textDisabled'),
       }}
-      {...{ x, y }}
+      x={x + 16} // Distance from the axis
+      y={y}
     >
       {_value}
     </Text>

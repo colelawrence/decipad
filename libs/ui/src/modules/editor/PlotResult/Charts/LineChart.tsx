@@ -15,7 +15,6 @@ import { plotBorder } from '../Components/styles';
 import {
   calculateGrowth,
   chartHeight,
-  defaultChartMargins,
   renderLineLabel,
   renderLineTooltipWithData,
   renderPieLegend,
@@ -24,6 +23,7 @@ import { activeDotStyle, tooltipCursorStyle } from './styles';
 import { LineChartProps } from './types';
 import { calculateChartHeight } from '../helpers/calculateChartHeight';
 import { customTick } from '../Components/CustomTick';
+import { useChartMargins } from '../hooks/useChartMargins';
 
 export const LineChart = ({
   table,
@@ -68,6 +68,7 @@ export const LineChart = ({
         yAxisLabel,
         setYAxisLabel,
         isExporting,
+        customTick,
       }),
     [
       setXAxisLabel,
@@ -112,6 +113,14 @@ export const LineChart = ({
   const colors = isDarkTheme
     ? scheme.dark_mode_colors
     : scheme.light_mode_colors;
+
+  const dynamicChartMargins = useChartMargins({
+    table,
+    yColumnNames,
+    xColumnName,
+    orientation,
+  });
+
   return (
     <ResponsiveContainer
       width={'100%'}
@@ -127,7 +136,7 @@ export const LineChart = ({
     >
       <ComposedChart
         data={table}
-        margin={defaultChartMargins}
+        margin={dynamicChartMargins}
         layout={orientation}
       >
         <defs>

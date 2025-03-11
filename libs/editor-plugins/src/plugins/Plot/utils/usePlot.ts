@@ -277,6 +277,7 @@ export const usePlot = (element: PlotElement): UsePlotReturn => {
       setLabelColumnName,
       ...mergedElement,
       setShape: setMarkType,
+      sourceType,
     }),
     [
       tableNames,
@@ -304,6 +305,7 @@ export const usePlot = (element: PlotElement): UsePlotReturn => {
       setBarVariant,
       setLabelColumnName,
       mergedElement,
+      sourceType,
     ]
   );
 

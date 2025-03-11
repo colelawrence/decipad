@@ -12,7 +12,6 @@ import { horizontalAxis, verticalAxis } from '../Components/axis';
 import {
   calculateGrowth,
   chartHeight,
-  defaultChartMargins,
   renderFunnelLabel,
   renderLineTooltipWithData,
   renderShapeLabel,
@@ -22,6 +21,7 @@ import { tooltipCursorStyle } from './styles';
 import { FunnelChartProps } from './types';
 import { calculateChartHeight } from '../helpers/calculateChartHeight';
 import { customTick } from '../Components/CustomTick';
+import { useChartMargins } from '../hooks/useChartMargins';
 
 export const FunnelChart = ({
   table,
@@ -98,6 +98,7 @@ export const FunnelChart = ({
         startFromZero: true,
         xAxisOffset: -barGap,
         reverseY: mirrorYAxis,
+        customTick,
       }),
     [barGap, mirrorYAxis, xColumnName]
   );
@@ -134,6 +135,14 @@ export const FunnelChart = ({
 
   const radiusFor = (): [number, number, number, number] =>
     orientation === 'horizontal' ? roundedEndsHorizontal : roundedEndsVertical;
+
+  const dynamicChartMargins = useChartMargins({
+    table,
+    yColumnNames,
+    xColumnName,
+    orientation,
+  });
+
   return (
     <ResponsiveContainer
       width={'100%'}
@@ -150,9 +159,9 @@ export const FunnelChart = ({
       <ComposedChart
         data={table}
         margin={{
-          ...defaultChartMargins,
+          ...dynamicChartMargins,
           ...(orientation === 'horizontal'
-            ? { left: -barGap, right: -barGap }
+            ? { left: -barGap, right: dynamicChartMargins.right - barGap }
             : { top: -barGap, bottom: -barGap }),
         }}
         layout={orientation}

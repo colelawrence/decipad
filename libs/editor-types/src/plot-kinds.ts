@@ -55,6 +55,7 @@ export type PlotParams = BasePlotProps & {
   readonly setMirrorYAxis: (mirror: boolean) => void;
   readonly setGroupByX: (group: boolean) => void;
   readonly setLabelColumnName: (value: string) => void;
+  readonly sourceType?: SerializedType;
 };
 
 export const defaultPlotParams: Pick<

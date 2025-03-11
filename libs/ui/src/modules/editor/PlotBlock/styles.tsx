@@ -4,8 +4,8 @@ import { p14Regular } from 'libs/ui/src/primitives';
 export const plotTitleStyles = css({
   position: 'absolute',
   zIndex: 9,
-  right: 18,
-  top: 18,
+  right: 2,
+  top: 2,
   button: {
     float: 'right',
   },
@@ -13,6 +13,8 @@ export const plotTitleStyles = css({
 
 export const plotBlockStyles = css({
   display: 'grid',
+  '&:hover .chart-settings-button': { opacity: 1 },
+  '.chart-settings-button': { opacity: 0 },
 });
 
 export const plotStyles = css({

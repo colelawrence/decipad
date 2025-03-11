@@ -14,7 +14,6 @@ import { RadiusProps } from '../Components/types';
 import {
   calculateGrowth,
   chartHeight,
-  defaultChartMargins,
   renderLineTooltipWithData,
   renderPieLegend,
   renderShapeLabel,
@@ -24,6 +23,7 @@ import { tooltipCursorStyle } from './styles';
 import { BarChartProps } from './types';
 import { calculateChartHeight } from '../helpers/calculateChartHeight';
 import { customTick } from '../Components/CustomTick';
+import { useChartMargins } from '../hooks/useChartMargins';
 
 const radiusSize = 4;
 export const roundedEndsHorizontal = [
@@ -82,6 +82,7 @@ export const BarChart = ({
         yAxisLabel,
         setYAxisLabel,
         tickFormatter,
+        customTick,
         isExporting,
       }),
     [
@@ -136,6 +137,13 @@ export const BarChart = ({
     }, 0);
   }, [table, yColumnNames]);
 
+  const dynamicChartMargins = useChartMargins({
+    table,
+    yColumnNames,
+    xColumnName,
+    orientation,
+  });
+
   const renderBarLabel = useMemo(
     () =>
       renderShapeLabel({
@@ -174,7 +182,7 @@ export const BarChart = ({
     >
       <ReBarChart
         data={table}
-        margin={defaultChartMargins}
+        margin={dynamicChartMargins}
         layout={orientation}
         barGap={2}
         stackOffset={

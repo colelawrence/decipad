@@ -9,7 +9,7 @@ import {
 import { assertElementType } from '@decipad/editor-utils';
 import { useIsEditorReadOnly } from '@decipad/react-contexts';
 import { useToast } from '@decipad/toast';
-import { Invisible, PlotBlock } from '@decipad/ui';
+import { ConditionalResult, Invisible, PlotBlock } from '@decipad/ui';
 import { useMemo } from 'react';
 import { usePlot } from './utils/usePlot';
 import { useTableFlip } from './utils/useTableFlip';
@@ -101,16 +101,18 @@ const Plot: PlateComponent = ({ attributes, element, children }) => {
       blockKind="plot"
       slateAttributes={attributes}
     >
-      {plot != null && (
-        <PlotBlock
-          readOnly={readOnly}
-          plotParams={plotParams}
-          result={result}
-          title={element.title}
-          onTitleChange={onTitleChange}
-          chartUuid={chartUuid}
-        />
-      )}
+      <ConditionalResult kind={plot.plotParams.sourceType?.kind || ''}>
+        {plot != null && (
+          <PlotBlock
+            readOnly={readOnly}
+            plotParams={plotParams}
+            result={result}
+            title={element.title}
+            onTitleChange={onTitleChange}
+            chartUuid={chartUuid}
+          />
+        )}
+      </ConditionalResult>
       {/** dont remove */}
       <Invisible>{children}</Invisible>
     </DraggableBlock>

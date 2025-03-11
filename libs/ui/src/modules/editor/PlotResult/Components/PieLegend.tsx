@@ -2,6 +2,7 @@
 import { JellyBeans } from 'libs/ui/src/shared';
 import { legendStyles, quarterCircleStyle } from './styles';
 import { PieLegendProps } from './types';
+import { defaultChartMargins } from '../helpers';
 
 export const PieLegend = ({ payload, wrapperStyle }: PieLegendProps) => {
   if (!Array.isArray(payload)) {
@@ -9,7 +10,13 @@ export const PieLegend = ({ payload, wrapperStyle }: PieLegendProps) => {
   }
 
   return (
-    <div style={{ ...wrapperStyle, ...legendStyles }}>
+    <div
+      style={{
+        ...wrapperStyle,
+        ...legendStyles,
+        marginRight: defaultChartMargins.right * -1, // Grow under the vertical axis space
+      }}
+    >
       <JellyBeans
         noMultiline={true}
         beans={payload

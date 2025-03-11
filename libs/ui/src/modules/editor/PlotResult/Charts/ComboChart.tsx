@@ -14,7 +14,6 @@ import { renderGrid } from '../Components/grid';
 import {
   calculateGrowth,
   chartHeight,
-  defaultChartMargins,
   renderLineLabel,
   renderLineTooltipWithData,
   renderPieLegend,
@@ -25,6 +24,7 @@ import { activeDotStyle, tooltipCursorStyle } from './styles';
 import { ComboChartProps } from './types';
 import { calculateChartHeight } from '../helpers/calculateChartHeight';
 import { customTick } from '../Components/CustomTick';
+import { useChartMargins } from '../hooks/useChartMargins';
 
 export const ComboChart = ({
   table,
@@ -68,6 +68,7 @@ export const ComboChart = ({
         setXAxisLabel,
         yAxisLabel,
         setYAxisLabel,
+        customTick,
         isExporting,
       }),
     [
@@ -143,6 +144,14 @@ export const ComboChart = ({
 
   const radiusFor = (): [number, number, number, number] =>
     orientation === 'horizontal' ? roundedEndsHorizontal : roundedEndsVertical;
+
+  const dynamicChartMargins = useChartMargins({
+    table,
+    yColumnNames,
+    xColumnName,
+    orientation,
+  });
+
   return (
     <ResponsiveContainer
       width={'100%'}
@@ -158,7 +167,7 @@ export const ComboChart = ({
     >
       <ComposedChart
         data={table}
-        margin={defaultChartMargins}
+        margin={dynamicChartMargins}
         layout={orientation}
       >
         {grid && renderGrid('combo-chart')}

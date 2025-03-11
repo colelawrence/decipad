@@ -44,7 +44,7 @@ export const formatNumbersForCharts = (value: number) => {
 
 export const defaultChartMargins = {
   top: 1,
-  right: 1,
+  right: 100,
   bottom: 1,
   left: 1,
 };
@@ -478,7 +478,7 @@ export const renderLineLabel = ({ width, height }: RechartLabelProps) => {
   };
 };
 
-const calculateTextWidth = ({
+export const calculateTextWidth = ({
   text,
   fontSize,
 }: calculateTextWithProps): number => {

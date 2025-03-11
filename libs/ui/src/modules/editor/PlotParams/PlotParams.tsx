@@ -468,7 +468,11 @@ export const PlotParams = ({
         styles={css({ width: '290px' })}
         dataTestid="chart-settings-menu"
         trigger={
-          <button css={buttonStyles} data-testid="chart-settings-button">
+          <button
+            css={buttonStyles}
+            className="chart-settings-button"
+            data-testid="chart-settings-button"
+          >
             <span css={iconStyles}>{<Settings />}</span>
           </button>
         }
