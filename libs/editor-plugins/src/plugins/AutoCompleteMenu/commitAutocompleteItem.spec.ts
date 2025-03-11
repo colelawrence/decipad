@@ -12,7 +12,7 @@ beforeEach(() => {
 });
 
 const selection = (point: BasePoint) => ({ anchor: point, focus: point });
-it('inserts the item, surrounded by spaces as necessary', () => {
+it('inserts the item, without adding spaces', () => {
   editor.children = [
     {
       type: ELEMENT_CODE_LINE,
@@ -34,10 +34,10 @@ it('inserts the item, surrounded by spaces as necessary', () => {
     }
   );
 
-  expect(getNodeString(editor)).toMatchInlineSnapshot(`"hi + INSERTED *"`);
+  expect(getNodeString(editor)).toMatchInlineSnapshot(`"hi + INSERTED*"`);
   expect(editor.selection?.anchor).toMatchInlineSnapshot(`
     {
-      "offset": 14,
+      "offset": 13,
       "path": [
         0,
         0,
@@ -68,10 +68,10 @@ it('removes spaces at the beginning of the line', () => {
     }
   );
 
-  expect(getNodeString(editor)).toMatchInlineSnapshot(`"INSERTED "`);
+  expect(getNodeString(editor)).toMatchInlineSnapshot(`"INSERTED"`);
   expect(editor.selection?.anchor).toMatchInlineSnapshot(`
     {
-      "offset": 9,
+      "offset": 8,
       "path": [
         0,
         0,
@@ -102,10 +102,10 @@ it('removes spaces after parens', () => {
     }
   );
 
-  expect(getNodeString(editor)).toMatchInlineSnapshot(`"fun(INSERTED "`);
+  expect(getNodeString(editor)).toMatchInlineSnapshot(`"fun(INSERTED"`);
   expect(editor.selection?.anchor).toMatchInlineSnapshot(`
     {
-      "offset": 13,
+      "offset": 12,
       "path": [
         0,
         0,

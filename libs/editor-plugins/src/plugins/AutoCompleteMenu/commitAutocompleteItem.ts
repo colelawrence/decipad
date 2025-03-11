@@ -4,6 +4,7 @@ import { insertNodes, setSelection } from '@decipad/editor-utils';
 import {
   deleteText,
   getEditorString,
+  getPointAfter,
   getPointBefore,
   getStartPoint,
   hasNode,
@@ -33,16 +34,24 @@ export const commitAutocompleteItem = (
     toInsert += ' ';
   }
 
-  toInsert += item.name;
-
-  let moveCursorBack;
-  if (item.kind !== 'function') {
-    toInsert += ' ';
-    moveCursorBack = false;
-  } else {
+  // Don't convert functions to smart refs
+  if (item.kind === 'function' || item.autocompleteGroup === 'function') {
+    toInsert += item.name;
     toInsert += '()';
-    moveCursorBack = true;
+    insertText(editor, toInsert);
+
+    // Move cursor to before the closing parenthesis
+    if (editor.selection?.focus) {
+      const pointToMoveTo = getPointBefore(editor, editor.selection.focus, {
+        distance: 1,
+        unit: 'character',
+      });
+      setSelection(editor, { anchor: pointToMoveTo, focus: pointToMoveTo });
+    }
+    return;
   }
+
+  toInsert += item.name;
 
   if (!item.blockId) {
     insertText(editor, toInsert);
@@ -60,16 +69,15 @@ export const commitAutocompleteItem = (
       decoration,
       children: [{ text: '' }],
     };
-    insertNodes(editor, [smartRef, { text: ' ' }]);
-  }
+    insertNodes(editor, [smartRef]);
 
-  // Move cursor to before the closing parenthesis
-  if (editor.selection?.focus && moveCursorBack) {
-    const pointToMoveTo = getPointBefore(editor, editor.selection.focus, {
-      distance: 1,
-      unit: 'character',
-    });
-    setSelection(editor, { anchor: pointToMoveTo, focus: pointToMoveTo });
+    // Move cursor after the smart ref
+    if (editor.selection) {
+      const point = getPointAfter(editor, editor.selection.focus);
+      if (point) {
+        setSelection(editor, { anchor: point, focus: point });
+      }
+    }
   }
 };
 
