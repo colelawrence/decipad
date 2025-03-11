@@ -2,19 +2,15 @@
 import { PlateComponentAttributes } from '@decipad/editor-types';
 import { css } from '@emotion/react';
 import { FC, HTMLAttributes, forwardRef } from 'react';
-import { componentCssVars, cssVar, p12Medium } from '../../../primitives';
+import { componentCssVars, cssVar } from '../../../primitives';
 import {
-  firstTdPaddingLeft,
   innerTablesNoBottomBorderStyles,
   innerTablesNoTopBorderStyles,
   tdBaseStyles,
   tdHorizontalPadding,
 } from '../../../styles/table';
 import { CursorState } from '@decipad/react-contexts';
-import { tableRowCounter } from '../../../utils';
 import { useMergedRef } from '../../../hooks';
-
-const lineNumberWidth = '22px';
 
 const tdPlaceholderStyles = css({
   // Show line numbers on the first cell of each row.
@@ -27,27 +23,6 @@ const tdPlaceholderStyles = css({
     height: '100%',
     display: 'grid',
     alignItems: 'center',
-  },
-
-  '&:first-of-type': {
-    paddingLeft: firstTdPaddingLeft,
-    '--td-placeholder-width': `${firstTdPaddingLeft}px`,
-    '--td-no-padding-left': '0px',
-  },
-
-  '&:first-of-type::before': {
-    ...p12Medium,
-    backgroundColor: 'transparent',
-
-    counterIncrement: tableRowCounter,
-    content: `counter(${tableRowCounter})`,
-
-    position: 'absolute',
-    right: `calc(100% - ${lineNumberWidth})`,
-    top: '50%',
-    transform: 'translateY(-50%)',
-    fontVariantNumeric: 'tabular-nums',
-    userSelect: 'none',
   },
 });
 

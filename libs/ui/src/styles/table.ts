@@ -14,8 +14,6 @@ export const tdMaxWidth = 240;
 export const tdVerticalPadding = 10;
 export const tdHorizontalPadding = 12;
 
-export const firstTdPaddingLeft = 34;
-
 export const smartRowHorizontalPadding = 5;
 
 export const cellLeftPaddingStyles = css({
@@ -100,7 +98,7 @@ export const innerTablesNoBottomBorderStyles = {
 /**
  * Used when you want a full width element, but want it to initially appear centered.
  */
-export const leftPadding = `calc((${slimBlockWidth}px - ${cssVar(
+export const leftPadding = `calc((${slimBlockWidth + 8}px - ${cssVar(
   'editorWidth'
 )}) / -2)`;
 
