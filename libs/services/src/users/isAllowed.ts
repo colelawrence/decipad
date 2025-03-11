@@ -7,7 +7,15 @@ const protectedUrlBases = once(
 );
 
 const allowedDomains = once(
-  () => new Set(['decipad.com', 'n1n.co', 'inbox.testmail.app'])
+  () =>
+    new Set([
+      'decipad.com',
+      'n1n.co',
+      'inbox.testmail.app',
+      'caravellaw.com',
+      'brieflylegal.com',
+      'yld.io',
+    ])
 );
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars

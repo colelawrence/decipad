@@ -1,10 +1,10 @@
 import {
+  SubscriptionPlan,
   useCreateNotebookMutation,
   useCreateSectionMutation,
   useCreateWorkspaceMutation,
   useDeleteSectionMutation,
   useDeleteWorkspaceMutation,
-  useGetSubscriptionsPlansQuery,
   useGetWorkspacesWithSharedNotebooksQuery,
   useImportNotebookMutation,
   useRenameWorkspaceMutation,
@@ -163,20 +163,12 @@ const Workspace: FC = () => {
     [allWorkspaces, workspaceId]
   );
 
-  const [subscriptionPlans] = useGetSubscriptionsPlansQuery();
-
-  const getWorkspacePlan = useCallback(
-    (workspacePlan: string | undefined | null) => {
-      const plans = subscriptionPlans.data?.getSubscriptionsPlans ?? [];
-
-      return plans.find((p) => p?.key === workspacePlan);
-    },
-    [subscriptionPlans.data?.getSubscriptionsPlans]
-  );
-
   const currentSubscriptionPlan = useMemo(() => {
-    return getWorkspacePlan(currentWorkspace?.plan);
-  }, [currentWorkspace, getWorkspacePlan]);
+    return {
+      ...currentWorkspace?.workspaceSubscription,
+      key: currentWorkspace?.workspaceSubscription?.id,
+    };
+  }, [currentWorkspace]);
 
   const hasFreeWorkspaceSlot = useMemo(
     () => allWorkspaces.filter((w) => !w.isPremium).length < 1,
@@ -291,7 +283,7 @@ const Workspace: FC = () => {
                   <WorkspaceHero
                     name={currentWorkspace.name}
                     isPremium={!!currentWorkspace.isPremium}
-                    planName={currentSubscriptionPlan?.title ?? ''}
+                    planName={currentSubscriptionPlan?.id ?? ''}
                     membersCount={currentWorkspace.membersCount ?? 1}
                     onCreateNotebook={handleCreateNotebook}
                     aiCreditsLeft={ai.quotaLimit - ai.usage}
@@ -414,7 +406,9 @@ const Workspace: FC = () => {
                   <EditMembersModal
                     onClose={() => navigate(currentWorkspaceRoute.$)}
                     currentWorkspace={currentWorkspace}
-                    currentSubscriptionPlan={currentSubscriptionPlan}
+                    currentSubscriptionPlan={
+                      currentSubscriptionPlan as SubscriptionPlan
+                    }
                   />
                 </LazyRoute>
               </RequirePaidPlanRoute>
