@@ -15,6 +15,7 @@ import {
   textWidth,
 } from './time-series-styles';
 import { getChildAtLevel } from './utils';
+import { isElement } from '@udecode/plate-common';
 
 type TimeSeriesBodyProps = {
   uniqueFirstCategorical: string[];
@@ -55,7 +56,7 @@ export const TimeSeriesBody = ({
                     rowSpan={uniqueFirstCategorical.length}
                     data-sticky
                   >
-                    {path && (
+                    {path && isElement(numericColumn) && (
                       <TimeSeriesColumnHeader
                         element={numericColumn}
                         attributes={{

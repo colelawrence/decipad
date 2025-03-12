@@ -51,7 +51,14 @@ export const TimeSeries: PlateComponent<{ variableName: string }> = ({
   assertElementType(element, ELEMENT_TIME_SERIES);
 
   const readOnly = useIsEditorReadOnly();
-  const [_caption, theadElement] = element.children;
+  const [_caption, theadElementOriginal] = element.children;
+
+  const theadElement = {
+    ...theadElementOriginal,
+    // Remote empty children 🤷‍♂️
+    // We should understand why they are there and prevent them from being created in the first place
+    children: theadElementOriginal.children.filter((x) => !!x.type),
+  };
 
   const editor = useMyEditorRef();
   const computer = useComputer();

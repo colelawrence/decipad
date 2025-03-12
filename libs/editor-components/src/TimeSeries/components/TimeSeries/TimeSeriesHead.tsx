@@ -5,6 +5,7 @@ import { Path } from 'slate';
 import { TimeSeriesColumnHeader } from '../TimeSeriesColumnHeader';
 import { stickyLeftColumn, stickySecondLeftColumn } from './time-series-styles';
 import { css } from '@emotion/react';
+import { isElement } from '@udecode/plate-common';
 
 type TimeSeriesHeadProps = {
   categoricalColumns: TimeSeriesHeader[];
@@ -27,7 +28,8 @@ export const TimeSeriesHead = ({
       <tr>
         {categoricalColumns?.map(
           (header, index) =>
-            path && (
+            path &&
+            isElement(header) && (
               <TableHeadSimple
                 css={[
                   stickyLeftColumn,
@@ -42,20 +44,22 @@ export const TimeSeriesHead = ({
                 key={header.label}
                 style={{ zIndex: index ? 2 : 1 }}
               >
-                <TimeSeriesColumnHeader
-                  element={header}
-                  attributes={{
-                    'data-slate-node': 'element',
-                    'data-slate-void': true,
-                    ref: undefined,
-                  }}
-                  overridePath={[...path, 1, index]}
-                  showDelete={
-                    // Show delete only when is the last column and no numerical columns added yet.
-                    categoricalColumns.length - 1 === index &&
-                    !numericalColumns.length
-                  }
-                />
+                {
+                  <TimeSeriesColumnHeader
+                    element={header}
+                    attributes={{
+                      'data-slate-node': 'element',
+                      'data-slate-void': true,
+                      ref: undefined,
+                    }}
+                    overridePath={[...path, 1, index]}
+                    showDelete={
+                      // Show delete only when is the last column and no numerical columns added yet.
+                      categoricalColumns.length - 1 === index &&
+                      !numericalColumns.length
+                    }
+                  />
+                }
               </TableHeadSimple>
             )
         )}
