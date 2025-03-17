@@ -1,8 +1,7 @@
-/* eslint-disable @typescript-eslint/no-unused-vars  */
-/* eslint-disable unused-imports/no-unused-vars */ import { thirdParty } from '@decipad/backend-config';
+import { thirdParty } from '@decipad/backend-config';
 import Boom from '@hapi/boom';
 import axios from 'axios';
-import handle from '../handle';
+import { Handler } from '@decipad/backendtypes';
 
 const { apiKey } = thirdParty().unsplash;
 
@@ -10,7 +9,7 @@ type RequestBody = {
   url: string;
 };
 
-export const handler = handle(async (event) => {
+export const unsplashTrackingHandler: Handler = async (event) => {
   const { body: requestBodyRaw } = event;
   let requestBodyString: string;
 
@@ -53,4 +52,4 @@ export const handler = handle(async (event) => {
     },
     body: JSON.stringify({ ok: true }),
   };
-});
+};

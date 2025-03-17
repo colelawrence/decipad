@@ -1,30 +1,30 @@
-/* eslint-disable @typescript-eslint/no-unused-vars  */
-/* eslint-disable unused-imports/no-unused-vars */ import { thirdParty } from '@decipad/backend-config';
+import { thirdParty } from '@decipad/backend-config';
 import { expectAuthenticated } from '@decipad/services/authentication';
 import Boom from '@hapi/boom';
 import axios from 'axios';
-import handle from '../handle';
+import { Handler } from '@decipad/backendtypes';
 
-const { apiKey } = thirdParty().giphy;
+const { apiKey } = thirdParty().unsplash;
 
 type RequestBody = {
   prompt: string;
 };
 
-interface GiphyImage {
-  images: {
-    fixed_height: {
-      url: string;
+interface UnsplashImage {
+  urls: {
+    small: string;
+  };
+  links: {
+    download_location: string;
+  };
+  user: {
+    name: string;
+    links: {
+      html: string;
     };
   };
-  url: string;
-  user?: {
-    username: string;
-    profile_url: string;
-  };
 }
-
-export const handler = handle(async (event) => {
+export const stockHandler: Handler = async (event) => {
   await expectAuthenticated(event);
 
   const { body: requestBodyRaw } = event;
@@ -45,7 +45,7 @@ export const handler = handle(async (event) => {
     throw Boom.badData('Request body is not valid JSON');
   }
   if (typeof requestBody.prompt !== 'string') {
-    throw Boom.badData('Request body has wrong format. Expected a `prompt`');
+    throw Boom.badData('Request body has wrong format. Expected `prompt`');
   }
 
   const { prompt } = requestBody;
@@ -54,14 +54,14 @@ export const handler = handle(async (event) => {
 
   try {
     const response = await axios.get(
-      `https://api.giphy.com/v1/gifs/search?api_key=${apiKey}&q=${prompt}&limit=50`
+      `https://api.unsplash.com/search/photos?client_id=${apiKey}&query=${prompt}&per_page=50`
     );
 
-    images = response.data.data.map((img: GiphyImage) => ({
-      url: img.images.fixed_height.url,
-      user: img.user && img.user.username ? img.user.username : 'Giphy',
-      userProfile:
-        img.user && img.user.profile_url ? img.user.profile_url : img.url,
+    images = response.data.results.map((img: UnsplashImage) => ({
+      url: img.urls.small,
+      user: img.user.name,
+      userProfile: `${img.user.links.html}?utm_source=decipad&utm_medium=referral`,
+      trackUrl: img.links.download_location,
     }));
   } catch (error) {
     throw Boom.internal('Error fetching images', error);
@@ -80,4 +80,4 @@ export const handler = handle(async (event) => {
       images,
     }),
   };
-});
+};

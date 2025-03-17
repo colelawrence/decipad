@@ -56,21 +56,13 @@ any /api/notebook/:action
 any /api/datalakes/*
 
 # AI endpoints
-any /api/ai/generate-sql
-any /api/ai/rewrite-paragraph
-any /api/ai/generate-fetch-js
-any /api/ai/complete-column
-post /api/ai/feedback
-post /api/ai/names/:padid
+any /api/ai/*
 
 # Feature Feedback
 post /api/feature/feedback
 
 # Image endpoints
-any /api/image/generate
-any /api/image/gif
-any /api/image/stock
-any /api/image/unsplash/tracking
+any /api/image/*
 
 # Server-side rendering
 # get /n/:notebookid

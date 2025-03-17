@@ -3,8 +3,8 @@
 import Boom from '@hapi/boom';
 import { thirdParty } from '@decipad/backend-config';
 import { expectAuthenticated } from '@decipad/services/authentication';
-import handle from '../handle';
 import { resourceusage } from '@decipad/services';
+import { Handler } from '@decipad/backendtypes';
 
 const openai = new OpenAI({
   apiKey: thirdParty().openai.apiKey,
@@ -17,7 +17,7 @@ type RequestBody = {
   workspaceId: string;
 };
 
-export const handler = handle(async (event) => {
+export const generateFetchHandler: Handler = async (event) => {
   const [{ user }] = await expectAuthenticated(event);
 
   const { body: requestBodyRaw } = event;
@@ -121,4 +121,4 @@ User response example: ${requestBody.exampleRes}
       usage,
     }),
   };
-});
+};

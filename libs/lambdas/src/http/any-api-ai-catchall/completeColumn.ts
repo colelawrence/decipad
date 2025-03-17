@@ -4,10 +4,10 @@ import { OpenAI } from 'openai';
 import Boom from '@hapi/boom';
 import { thirdParty } from '@decipad/backend-config';
 import zip from 'lodash.zip';
-import handle from '../handle';
 import { captureException } from '@decipad/backend-trace';
 import { expectAuthenticated } from '@decipad/services/authentication';
 import { resourceusage } from '@decipad/services';
+import { Handler } from '@decipad/backendtypes';
 
 const openai = new OpenAI({
   apiKey: thirdParty().openai.apiKey,
@@ -30,7 +30,7 @@ type RequestBody = {
   workspaceId: string;
 };
 
-export const handler = handle(async (event) => {
+export const completeColumnHandler: Handler = async (event) => {
   const [{ user }] = await expectAuthenticated(event);
   const { body: requestBodyRaw } = event;
   let requestBodyString: string;
@@ -217,4 +217,4 @@ export const handler = handle(async (event) => {
       usage,
     }),
   };
-});
+};

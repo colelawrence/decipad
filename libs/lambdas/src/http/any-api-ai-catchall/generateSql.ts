@@ -5,11 +5,11 @@ import Boom from '@hapi/boom';
 import { resource } from '@decipad/backend-resources';
 import { getAuthenticatedUser } from '@decipad/services/authentication';
 import { thirdParty } from '@decipad/backend-config';
-import handle from '../handle';
-import type { ExternalDataSourceRecord } from '../../types';
-import { getSchemaString } from './getSchemaString';
 import { resourceusage } from '@decipad/services';
 import { captureException } from '@decipad/backend-trace';
+import { Handler } from '@decipad/backendtypes';
+import type { ExternalDataSourceRecord } from '../../types';
+import { getSchemaString } from './getSchemaString';
 
 const openai = new OpenAI({
   apiKey: thirdParty().openai.apiKey,
@@ -30,7 +30,7 @@ type Body = {
   workspaceId: string;
 };
 
-export const handler = handle(async (event) => {
+export const generateSqlHandler: Handler = async (event) => {
   const rawRequestBody = event.body;
   if (!event.isBase64Encoded || !rawRequestBody) {
     throw Boom.internal('Invalid request body.');
@@ -124,4 +124,4 @@ User schema: ${schemaString}
       usage,
     }),
   };
-});
+};

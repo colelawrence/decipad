@@ -3,10 +3,10 @@
 import Boom from '@hapi/boom';
 import { thirdParty } from '@decipad/backend-config';
 import { expectAuthenticated } from '@decipad/services/authentication';
-import handle from '../handle';
 import type { ChatCompletion } from 'openai/resources';
 import { resourceusage } from '@decipad/services';
 import { captureException } from '@decipad/backend-trace';
+import { Handler } from '@decipad/backendtypes';
 
 const openai = new OpenAI({
   apiKey: thirdParty().openai.apiKey,
@@ -18,7 +18,7 @@ type RequestBody = {
   workspaceId: string;
 };
 
-export const handler = handle(async (event) => {
+export const rewriteParagraphHandler: Handler = async (event) => {
   const [{ user }] = await expectAuthenticated(event);
 
   const { body: requestBodyRaw } = event;
@@ -115,4 +115,4 @@ User paragraph: ${requestBody.paragraph}`,
       usage,
     }),
   };
-});
+};

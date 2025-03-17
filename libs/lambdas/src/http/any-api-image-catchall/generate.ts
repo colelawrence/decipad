@@ -1,17 +1,14 @@
-/* eslint-disable @typescript-eslint/no-unused-vars  */
-/* eslint-disable unused-imports/no-unused-vars */
+import Replicate from 'replicate';
+import Boom from '@hapi/boom';
 import { thirdParty } from '@decipad/backend-config';
 import { resourceusage } from '@decipad/services';
 import {
   expectAuthenticated,
   getAuthenticatedUser,
 } from '@decipad/services/authentication';
-
 import { track } from '@decipad/backend-analytics';
 import { ReplicateModels } from '@decipad/shared-config';
-import Boom from '@hapi/boom';
-import Replicate from 'replicate';
-import handle from '../handle';
+import { Handler } from '@decipad/backendtypes';
 
 const { apiKey } = thirdParty().replicate;
 
@@ -27,7 +24,7 @@ type RequestBody = {
 
 let model = ReplicateModels[0];
 
-export const handler = handle(async (event) => {
+export const generateHandler: Handler = async (event) => {
   await expectAuthenticated(event);
   const user = await getAuthenticatedUser(event);
 
@@ -114,4 +111,4 @@ export const handler = handle(async (event) => {
       images: output,
     }),
   };
-});
+};
