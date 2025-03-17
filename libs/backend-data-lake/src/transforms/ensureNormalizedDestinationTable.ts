@@ -7,7 +7,7 @@ import { googleBigQueryRootClient } from '../utils/googleBigQueryRootClient';
 import { getLocalTargetTableName } from '../utils/getTargetTableName';
 import { getLocalSourceTableName } from '../utils/getSourceTableName';
 
-const createNormalizedTable = async (
+const createOrReplaceNormalizedTable = async (
   connection: BigQuery,
   fullTargetDataSetId: string,
   realm: DataRealm,
@@ -51,7 +51,7 @@ const createNormalizedTable = async (
   );
   try {
     await connection.query(
-      `CREATE MATERIALIZED VIEW ${fullTargetTableName} OPTIONS(max_staleness = INTERVAL "4" HOUR, allow_non_incremental_definition = true) AS ${transformSql} `
+      `CREATE OR REPLACE MATERIALIZED VIEW ${fullTargetTableName} OPTIONS(max_staleness = INTERVAL "4" HOUR, allow_non_incremental_definition = true) AS ${transformSql} `
     );
     console.warn(`Created materialized view ${fullTargetTableName}`);
   } catch (err) {
@@ -69,19 +69,7 @@ export const ensureNormalizedDestinationTable = async (
 ) => {
   const connection = await googleBigQueryRootClient();
 
-  console.warn(
-    `Dropping materialized view ${fullTargetDataSetId}.${getLocalTargetTableName(
-      realm,
-      entityName
-    )}`
-  );
-  await connection.query(
-    `DROP MATERIALIZED VIEW IF EXISTS \`${fullTargetDataSetId}.${getLocalTargetTableName(
-      realm,
-      entityName
-    )}\``
-  );
-  return createNormalizedTable(
+  return createOrReplaceNormalizedTable(
     connection,
     fullTargetDataSetId,
     realm,
