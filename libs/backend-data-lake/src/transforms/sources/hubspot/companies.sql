@@ -26,7 +26,7 @@ SELECT
   properties_hs_date_entered_lead as DateEnteredLead,
   properties_hs_created_by_user_id as CreatedByUserId,
   properties_first_contact_createdate as FirstContactCreatedate,
-  properties_hs_date_entered_customer as DateEnteredCustomer,
+  properties_hs_v2_date_entered_customer as DateEnteredCustomer,
   properties_hs_date_entered_opportunity as DateEnteredOpportunity,
   properties_hs_last_sales_activity_date as LastSalesActivityDate,
   properties_hs_last_sales_activity_type as LastSalesActivityType,

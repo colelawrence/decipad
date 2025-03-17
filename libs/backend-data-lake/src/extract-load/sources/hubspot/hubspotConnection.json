@@ -550,7 +550,7 @@
               },
               "properties_hs_num_blockers": { "type": ["null", "number"] },
               "properties_recent_deal_amount": { "type": ["null", "number"] },
-              "properties_hs_date_entered_customer": {
+              "properties_hs_v2_date_entered_customer": {
                 "format": "date-time",
                 "type": ["null", "string"]
               },
@@ -1577,10 +1577,6 @@
                 "type": ["null", "string"]
               },
               "properties_degree": { "type": ["null", "string"] },
-              "properties_hs_date_entered_customer": {
-                "format": "date-time",
-                "type": ["null", "string"]
-              },
               "properties_hs_latest_source": { "type": ["null", "string"] },
               "properties_hs_v2_date_entered_customer": {
                 "format": "date-time",
