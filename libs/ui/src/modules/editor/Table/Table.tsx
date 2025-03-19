@@ -73,15 +73,28 @@ const nestedStyles = css({
 });
 
 const readOnlyTableStyles = css({
+  left: 0,
   height: 'auto',
   width: '100%',
-  marginBottom: '12px',
+  marginTop: 8,
+  marginBottom: 12,
+
+  '> thead > tr > th': {
+    borderTop: regularBorder,
+    borderBottom: regularBorder,
+  },
+  '> thead > tr > th + th': {
+    borderLeft: regularBorder,
+  },
+
   '> thead > tr > th:first-of-type, > tbody:not(thead + tbody) > tr:first-of-type > td:first-of-type':
     {
+      borderLeft: regularBorder,
       borderTopLeftRadius: borderRadius,
     },
   '> thead > tr > th:last-of-type, > tbody:not(thead + tbody) > tr:first-of-type > td:last-of-type':
     {
+      borderRight: regularBorder,
       borderTopRightRadius: borderRadius,
     },
   '> tbody > tr:last-of-type > td:first-of-type': {
