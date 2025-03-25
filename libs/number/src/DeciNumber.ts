@@ -417,6 +417,13 @@ export class DeciNumber implements TDeciNumber {
   }
 }
 
+export const getDeciNumber = (n: unknown): TDeciNumber => {
+  if (n instanceof DeciNumber) {
+    return n;
+  }
+  throw new Error(`Could not convert ${n} of type ${typeof n} to DeciNumber`);
+};
+
 export const UNDEFINED = N(undefined);
 export const ZERO = N(0);
 export const ONE = N(1);

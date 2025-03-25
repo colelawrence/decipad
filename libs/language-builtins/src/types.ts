@@ -1,6 +1,11 @@
 // eslint-disable-next-line no-restricted-imports
 import type { ContextUtils, Type } from '@decipad/language-types';
-import type { AST, FormulaGroup, Value } from '@decipad/language-interfaces';
+import type {
+  AST,
+  FormulaGroup,
+  Value,
+  Type as TypeType,
+} from '@decipad/language-interfaces';
 import type { PromiseOrType } from '@decipad/utils';
 
 export type CallBuiltinFunctor = (
@@ -30,7 +35,7 @@ export type Functor = (
   types: Type[],
   values: AST.Expression[],
   utils: BuiltinContextUtils
-) => Type | Promise<Type>;
+) => TypeType | Promise<TypeType>;
 
 export type Evaluator = (
   args: Value.Value[],
@@ -77,7 +82,7 @@ export interface FullBuiltinSpec extends GenericBuiltinSpec {
     types: Type[],
     values: AST.Expression[],
     utils: BuiltinContextUtils
-  ) => PromiseOrType<Type>;
+  ) => PromiseOrType<TypeType>;
   toMathML?: (args: string[]) => string;
 }
 

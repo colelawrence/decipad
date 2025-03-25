@@ -19,7 +19,7 @@ export async function narrowTypes(
   t1: Type,
   t2: Type,
   mutSymbols = new Map<string, Type>(),
-  errorPath: ('column' | 'range')[] = []
+  errorPath: ('column' | 'range' | 'metric')[] = []
 ): Promise<Type> {
   if (t1.errorCause) return t1;
   if (t2.errorCause) return t2;
@@ -125,6 +125,24 @@ export async function narrowTypes(
 
         return produce(t1, (type) => {
           type.cellType = narrowedCell;
+        });
+      }
+
+      case 'metric': {
+        const s2 = s2UnknownType as SerializedTypes.Metric;
+
+        if (s1.granularity !== s2.granularity) {
+          return t2.expected(s1.granularity);
+        }
+
+        const narrowedValue = await narrowTypes(
+          getDefined(t1.metricValueType),
+          getDefined(t2.metricValueType),
+          mutSymbols,
+          [...errorPath, 'metric']
+        );
+        return produce(t1, (type) => {
+          type.metricValueType = narrowedValue;
         });
       }
 

@@ -24,6 +24,10 @@ export type ResultColumn = ResultGenerator;
 export type ResultMaterializedColumn = OneResult[];
 export type ResultRow = OneResult[];
 export type ResultTable = Array<ResultColumn>;
+export type ResultMetric = [
+  ResultColumn | ResultMaterializedColumn,
+  ResultColumn | ResultMaterializedColumn
+];
 export type ResultTree = Value.Tree;
 export type ResultMaterializedTable = ResultMaterializedColumn[];
 export type ResultUnknown = symbol;
@@ -47,7 +51,8 @@ export type OneMaterializedResult =
   | ResultMaterializedTable
   | ResultUnknown
   | ResultFunction
-  | ResultTrend;
+  | ResultTrend
+  | ResultMetric;
 
 export type OneResult =
   | ResultNumber
@@ -63,7 +68,8 @@ export type OneResult =
   | ResultMaterializedTable
   | ResultUnknown
   | ResultFunction
-  | ResultTrend;
+  | ResultTrend
+  | ResultMetric;
 
 export interface ResultMetadataColumn {
   labels?: Promise<Array<Array<string>>> | undefined;
@@ -93,6 +99,8 @@ export type Result<T extends SerializedTypeKind = SerializedTypeKind> = {
     ? ResultMaterializedColumn
     : T extends 'table'
     ? ResultTable
+    : T extends 'metric'
+    ? ResultMetric
     : T extends 'materialized-table'
     ? ResultMaterializedTable
     : T extends 'row'

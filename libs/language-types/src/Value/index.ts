@@ -26,7 +26,7 @@ export * from './Function';
 export * from './Unknown';
 export * from './ValueGenerator';
 export * from './WriteSerializedColumn';
-
+export * from './Metric';
 export * from './defaultValue';
 export * from './sortValue';
 

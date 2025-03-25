@@ -22,6 +22,7 @@ import { memo, useMemo } from 'react';
 import { isColumn, isTable } from '@decipad/computer-utils';
 import { TrendResult } from '../TrendResult/TrendResult';
 import { ConditionalResult } from '../ConditionalResult/ConditionalResult';
+import { MetricResult } from '../MetricResult/MetricResult';
 
 // Simple result components
 
@@ -37,6 +38,9 @@ const InlineTableResult: CodeResultComponentType<'table'> = () => (
 );
 const InlineTreeResult: CodeResultComponentType<'tree'> = () => (
   <span>Tree</span>
+);
+const InlineMetricResult: CodeResultComponentType<'metric'> = () => (
+  <span>Metric</span>
 );
 
 // Result matchers
@@ -137,6 +141,15 @@ const getResultMatchers = (): ResultMatcher[] => [
   {
     component: TrendResult,
     match: ({ type }) => type.kind === 'trend',
+  },
+  {
+    component: MetricResult,
+    match: ({ type, variant }) => type.kind === 'metric' && variant === 'block',
+  },
+  {
+    component: InlineMetricResult,
+    match: ({ type, variant }) =>
+      type.kind === 'metric' && variant === 'inline',
   },
 ];
 

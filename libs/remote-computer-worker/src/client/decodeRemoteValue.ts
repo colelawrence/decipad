@@ -28,6 +28,7 @@ export const decodeRemoteValue = async (
     case 'range':
     case 'string':
     case 'date':
+    case 'metric':
       return valueDecoder(type)(buffer, offset);
     // these following types are held in the remoteValueStore
     case 'table':

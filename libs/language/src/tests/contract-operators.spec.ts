@@ -15,7 +15,7 @@ describe('contract operators', () => {
           "columnTypes": null,
           "date": null,
           "delegatesIndexTo": undefined,
-          "errorCause": [Error: Inference Error: expected-but-got : {"errType":"expected-but-got","expectedButGot":["boolean",{"node":null,"errorCause":null,"type":"number","unit":null,"numberFormat":null,"numberError":null,"date":null,"rangeOf":null,"indexName":null,"indexedBy":null,"cellType":null,"atParentIndex":null,"columnTypes":null,"columnNames":null,"rowIndexName":null,"rowCellTypes":null,"rowCellNames":null,"functionness":false,"pending":false,"nothingness":false,"anythingness":false,"symbol":null}]}],
+          "errorCause": [Error: Inference Error: expected-but-got : {"errType":"expected-but-got","expectedButGot":["boolean",{"node":null,"errorCause":null,"type":"number","unit":null,"numberFormat":null,"numberError":null,"date":null,"rangeOf":null,"indexName":null,"indexedBy":null,"cellType":null,"atParentIndex":null,"columnTypes":null,"columnNames":null,"rowIndexName":null,"rowCellTypes":null,"rowCellNames":null,"functionness":false,"pending":false,"nothingness":false,"anythingness":false,"metricness":false,"symbol":null}]}],
           "functionArgNames": undefined,
           "functionBody": undefined,
           "functionName": undefined,
@@ -23,6 +23,9 @@ describe('contract operators', () => {
           "functionness": false,
           "indexName": null,
           "indexedBy": null,
+          "metricGranularity": undefined,
+          "metricValueType": undefined,
+          "metricness": false,
           "node": {
             "args": [
               {
@@ -75,6 +78,9 @@ describe('contract operators', () => {
                       "functionness": false,
                       "indexName": null,
                       "indexedBy": null,
+                      "metricGranularity": undefined,
+                      "metricValueType": undefined,
+                      "metricness": false,
                       "node": null,
                       "nothingness": false,
                       "numberError": null,

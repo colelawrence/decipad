@@ -1,4 +1,7 @@
-import type { SerializedType } from '@decipad/language-interfaces';
+import type {
+  SerializedType,
+  SerializedTypes,
+} from '@decipad/language-interfaces';
 import { getDefined } from '@decipad/utils';
 import {
   Type,
@@ -15,6 +18,7 @@ import {
   impossible,
   row,
   trend,
+  metric,
 } from './Type';
 import { InferError } from '../InferError';
 
@@ -130,6 +134,18 @@ export function serializeType(type: Type | SerializedType): SerializedType {
         trendOf: serializeType(type.trendOf),
       };
     }
+    if (type.metricness) {
+      return {
+        kind: 'metric',
+        granularity: getDefined(
+          type.metricGranularity,
+          'metric should have a granularity'
+        ),
+        valueType: serializeType(
+          getDefined(type.metricValueType, 'metric should have a value type')
+        ) as SerializedTypes.Number,
+      };
+    }
     if (type.errorCause) {
       return {
         kind: 'type-error',
@@ -182,6 +198,8 @@ export function deserializeType(type: Type | SerializedType): Type {
             type.indexedBy,
             type.atParentIndex
           );
+        case 'metric':
+          return metric(type.granularity, deserializeType(type.valueType));
         case 'materialized-table':
         case 'table': {
           const { columnTypes, columnNames, delegatesIndexTo } = type;

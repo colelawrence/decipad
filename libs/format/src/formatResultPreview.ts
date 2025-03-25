@@ -68,6 +68,9 @@ export function formatResultPreview({ type, value }: Result.Result): string {
     case 'trend':
       return 'trend';
 
+    case 'metric':
+      return 'metric';
+
     case 'type-error': {
       return Format.formatError('en-US', type.errorCause);
     }

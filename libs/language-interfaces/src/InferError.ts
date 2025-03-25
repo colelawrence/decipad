@@ -118,6 +118,6 @@ export type ErrSpec = {
 
 export interface IInferError extends Error {
   spec: ErrSpec;
-  pathToError: ('range' | 'column')[];
+  pathToError: ('range' | 'column' | 'metric')[];
   url: string;
 }

@@ -316,6 +316,10 @@ export const snapshotType = (type: Type | SerializedType): string => {
       return `trend<${snapshotType(type.trendOf)}>`;
     }
 
+    case 'metric': {
+      return `metric<${snapshotType(type.valueType)}>`;
+    }
+
     case 'type-error': {
       return `InferError ${type.errorCause.errType}`;
     }

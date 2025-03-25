@@ -544,16 +544,9 @@ sync-after-connect
 docsyncsnapshots-changes
 chat-agent-message
 
-@search
-availabilityZoneCount 1
-instanceCount 1
-instanceType t3.small.search
-volumeSize 50
-
 @plugins
 s3
 custom-domain
-nasa-gcn/architect-plugin-search
 nasa-gcn/architect-functions-search
 
 @aws

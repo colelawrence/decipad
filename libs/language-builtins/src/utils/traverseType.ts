@@ -1,5 +1,8 @@
 // eslint-disable-next-line no-restricted-imports
-import { type SerializedType } from '@decipad/language-interfaces';
+import {
+  SerializedTypes,
+  type SerializedType,
+} from '@decipad/language-interfaces';
 import { produce } from '@decipad/utils';
 
 // eslint-disable-next-line complexity
@@ -39,6 +42,12 @@ export function traverseType(
       const { trendOf } = type;
       return produce(type, (t) => {
         t.trendOf = traverseType(trendOf, fn);
+      });
+    }
+    case 'metric': {
+      const { valueType } = type;
+      return produce(type, (t) => {
+        t.valueType = traverseType(valueType, fn) as SerializedTypes.Number;
       });
     }
 

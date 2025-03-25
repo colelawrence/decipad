@@ -20,6 +20,7 @@ import { Range } from '../Value/Range';
 import { Row } from '../Value/Row';
 import { Tree } from '../Value/Tree';
 import { Trend } from '../Value';
+import { Metric } from '../Value/Metric';
 
 // eslint-disable-next-line complexity
 export const resultToValue = (result: Result.Result): Value.Value => {
@@ -168,5 +169,35 @@ export const resultToValue = (result: Result.Result): Value.Value => {
 
     case 'trend':
       return getInstanceof(value, Trend);
+
+    case 'metric': {
+      const dateGranularity = (result.type as SerializedTypes.Metric)
+        .granularity;
+      const dataValueType = (result.type as SerializedTypes.Metric).valueType;
+      const [dates, values] = value as Result.ResultMetric;
+      return Metric.from(
+        resultToValue({
+          type: {
+            kind: 'column',
+            cellType: {
+              kind: 'date',
+              date: dateGranularity,
+            },
+            indexedBy: null,
+            atParentIndex: null,
+          },
+          value: dates,
+        }) as Value.ColumnLikeValue,
+        resultToValue({
+          type: {
+            kind: 'column',
+            cellType: dataValueType,
+            indexedBy: null,
+            atParentIndex: null,
+          },
+          value: values,
+        }) as Value.ColumnLikeValue
+      );
+    }
   }
 };

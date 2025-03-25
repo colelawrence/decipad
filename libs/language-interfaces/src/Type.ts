@@ -59,6 +59,11 @@ export interface Type {
   // Set to true when it can be anything. Used for narrowing when you don't care about the insides of composite types
   anythingness: boolean;
 
+  // Set to true when the type is a metric
+  metricness: boolean;
+  metricGranularity: Time.Specificity | undefined;
+  metricValueType: Type | undefined;
+
   // Associates the type to a symbol
   symbol: string | null;
 
@@ -79,6 +84,7 @@ export interface Type {
   isFunction(): Promise<Type>;
   isTable(): Promise<Type>;
   isTableOrRow(): Promise<Type>;
+  isMetric(): Promise<Type>;
   reduced(): Promise<Type>;
   reducedToLowest(): Promise<Type>;
   withAtParentIndex(): Promise<Type>;

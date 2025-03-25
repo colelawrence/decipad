@@ -69,6 +69,8 @@ export function formatTypeInner(
       return '<tree>';
     case 'trend':
       return `<trend<${formatType(locale, type.trendOf)}>>`;
+    case 'metric':
+      return `<metric<${formatType(locale, type.valueType)}>>`;
     case 'type-error':
       return `Error: ${Format.formatError(locale, type.errorCause)}`;
   }

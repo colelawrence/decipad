@@ -39,6 +39,7 @@ type Kind =
   | 'row'
   | 'tree'
   | 'trend'
+  | 'metric'
   | 'date'
   | 'range'
   | 'pending'

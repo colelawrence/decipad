@@ -10,6 +10,7 @@ import { singular } from '@decipad/language-units';
 import { columnToTable } from './columnToTable';
 import { treeToTable } from './treeToTable';
 import type { TRealm } from '../scopedRealm';
+import { metricToTable } from './metricToTable';
 
 const normalizeTarget = (target: string) => singular(target.toLowerCase());
 
@@ -32,6 +33,9 @@ export const coerceType = async (
     }
     if (!(await source.isTree()).errorCause) {
       return treeToTable.type(realm, source);
+    }
+    if (!(await source.isMetric()).errorCause) {
+      return metricToTable.type(realm, source);
     }
   }
   const sourceSerType = serializeType(source);

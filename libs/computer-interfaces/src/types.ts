@@ -162,6 +162,7 @@ export type ResultType = Result.Result<
   | 'materialized-table'
   | 'tree'
   | 'trend'
+  | 'metric'
   | 'row'
   | 'date'
   | 'range'

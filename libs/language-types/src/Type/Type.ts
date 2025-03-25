@@ -76,6 +76,11 @@ export class Type implements TypeInterface {
   // Set to true when it can be anything. Used for narrowing when you don't care about the insides of composite types
   anythingness = false;
 
+  // metric
+  metricness = false;
+  metricGranularity: Time.Specificity | undefined;
+  metricValueType: Type | undefined;
+
   // Associates the type to a symbol
   symbol: string | null = null;
 
@@ -209,6 +214,10 @@ export class Type implements TypeInterface {
     return isRange(this);
   }
 
+  async isMetric(): Promise<Type> {
+    return isMetric(this);
+  }
+
   async getRangeOf(): Promise<Type> {
     return getRangeOf(this);
   }
@@ -301,6 +310,14 @@ export const table = ({
     t.columnTypes = columnTypes;
     t.columnNames = columnNames;
     t.rowCount = rowCount;
+  });
+};
+
+export const metric = (granularity: Time.Specificity, valueType: Type) => {
+  return produce(new Type(), (t) => {
+    t.metricness = true;
+    t.metricGranularity = granularity;
+    t.metricValueType = valueType;
   });
 };
 
@@ -598,6 +615,14 @@ export const isRange = checker(async (me: Type) => {
 export const getRangeOf = checker(
   async (me: Type) => me.rangeOf ?? me.expected('range')
 );
+
+export const isMetric = checker(async (me: Type) => {
+  if (me.metricness) {
+    return me;
+  } else {
+    return me.expected('metric');
+  }
+});
 
 export const sameRangenessAs = checker(async (me: Type, other: Type) => {
   if (me.rangeOf != null && other.rangeOf != null) {

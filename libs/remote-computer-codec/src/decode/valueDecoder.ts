@@ -12,6 +12,7 @@ import type { RecursiveDecoder, ValueDecoder } from './types';
 import { decodeTable } from './decodeTable';
 import { decodeColumn } from './decodeColumn';
 import { decodeTrend } from './decodeTrend';
+import { decodeMetric } from './decodeMetric';
 
 const decodeNothing: RecursiveDecoder = (_, __, offset) => [Unknown, offset];
 
@@ -103,6 +104,7 @@ export const decoders: Record<SerializedType['kind'], RecursiveDecoder> = {
   'materialized-table': decodeTable,
   'materialized-column': decodeColumn,
   column: decodeColumn,
+  metric: decodeMetric,
 };
 
 export const valueDecoder = (type: SerializedType): ValueDecoder => {

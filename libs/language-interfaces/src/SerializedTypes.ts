@@ -14,7 +14,7 @@ export type SerializedType =
   | Tree
   | MaterializedTable
   | Row
-
+  | Metric
   // Non-groups
   | Number
   | Boolean
@@ -55,6 +55,12 @@ export type Table = {
   columnTypes: SerializedType[];
   readonly columnNames: string[];
   readonly rowCount?: number;
+} & Common;
+
+export type Metric = {
+  readonly kind: 'metric';
+  readonly granularity: Time.Specificity;
+  readonly valueType: Number;
 } & Common;
 
 export type Tree = {

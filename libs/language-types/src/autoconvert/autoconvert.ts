@@ -42,7 +42,7 @@ async function autoconvertArgument(
           const expanded = expander(n);
           return NumberValue.fromValue(expanded);
         }
-        throw new Error('panic: unreachable');
+        return value;
       },
       [[1]]
     );

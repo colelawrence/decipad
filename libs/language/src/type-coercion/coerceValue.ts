@@ -10,6 +10,7 @@ import { columnToTable } from './columnToTable';
 import { treeToTable } from './treeToTable';
 import type { TRealm } from '../scopedRealm';
 import { isDeciNumberInput, N } from '@decipad/number';
+import { metricToTable } from './metricToTable';
 
 const normalizeTarget = (target: string) => singular(target.toLowerCase());
 
@@ -30,8 +31,11 @@ export const coerceValue = async (
     if (!(await sourceType.isTable()).errorCause) {
       return sourceValue;
     }
+    if (!(await sourceType.isMetric()).errorCause) {
+      return metricToTable.value(realm, sourceValue);
+    }
     throw new RuntimeError(
-      `Don't know how to convert non-column or non-tree value to ${target}`
+      `Don't know how to convert non-column, non-tree, or non-metric value to ${target}`
     );
   }
   if (target === 'number') {
