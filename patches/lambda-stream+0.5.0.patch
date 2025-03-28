@@ -1,0 +1,33 @@
+diff --git a/node_modules/lambda-stream/dist/index.js b/node_modules/lambda-stream/dist/index.js
+index d1ab97d..bd24a08 100644
+--- a/node_modules/lambda-stream/dist/index.js
++++ b/node_modules/lambda-stream/dist/index.js
+@@ -1,7 +1,7 @@
+ 'use strict';
+ Object.defineProperty(exports, "__esModule", { value: true });
+ exports.ResponseStream = exports.streamifyResponse = exports.isInAWS = void 0;
+-const ResponseStream_1 = require("./ResponseStream");
++const {ResponseStream} = require("./ResponseStream");
+ function isInAWS() {
+     return (
+     // @ts-ignore
+@@ -33,13 +33,14 @@ function streamifyResponse(handler) {
+     }
+ }
+ exports.streamifyResponse = streamifyResponse;
++exports.ResponseStream = ResponseStream;
+ function patchArgs(argList) {
+-    if (!(argList[1] instanceof ResponseStream_1.ResponseStream)) {
+-        const responseStream = new ResponseStream_1.ResponseStream();
++    const responseStream = argList[1];
++    if (typeof responseStream !== 'object' || responseStream === null || typeof responseStream.write !== 'function') {
++        console.log('patching args 2', argList);
++        const responseStream = new ResponseStream();
+         argList.splice(1, 0, responseStream);
+     }
+     return argList[1];
+ }
+-var ResponseStream_2 = require("./ResponseStream");
+-Object.defineProperty(exports, "ResponseStream", { enumerable: true, get: function () { return ResponseStream_2.ResponseStream; } });
+ //# sourceMappingURL=index.js.map
+\ No newline at end of file

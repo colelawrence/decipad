@@ -229,7 +229,7 @@ function getSessionTokens(event: AuthRequest): SessionTokenResult[] {
       tokens.push({ token: cookies[cookieName] });
     }
   }
-  for (const headerName of ['authorization', 'Authorizatiion']) {
+  for (const headerName of ['authorization', 'Authorization']) {
     let value = event.headers?.[headerName];
     value = Array.isArray(value) ? value[0] : value;
     if (!value) {

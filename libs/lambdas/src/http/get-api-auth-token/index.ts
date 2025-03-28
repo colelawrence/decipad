@@ -30,6 +30,9 @@ const purposes: Record<string, Partial<JWTEncodeParams>> = {
   pubsub: {
     maxAge: 24 * 60 * 60, // 24 hours
   },
+  ai: {
+    maxAge: 24 * 60 * 60, // 24 hours
+  },
 };
 
 function credentialHasUserOrSecret(cred: AuthResult): boolean {

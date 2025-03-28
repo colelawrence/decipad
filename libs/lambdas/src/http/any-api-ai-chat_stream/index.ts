@@ -1,11 +1,12 @@
 /* eslint-disable camelcase */
-import { streamifyResponse } from 'lambda-stream';
+import { ResponseStream, streamifyResponse } from 'lambda-stream';
 import { CoreMessage, streamText } from 'ai';
 import { createOpenAI } from '@ai-sdk/openai';
 import { getDefined } from '@decipad/utils';
 import { enhanceResponseStream } from './enhanceResponseStream';
-import { badRequest, notFound } from '@hapi/boom';
+import { badRequest, boomify, notFound } from '@hapi/boom';
 import { HttpResponseStream } from './HttpResponseStream';
+import { expectAuthenticated } from '@decipad/services/authentication';
 
 const providers = {
   openai: () =>
@@ -15,6 +16,17 @@ const providers = {
         'OPENAI_API_KEY is not defined'
       ),
     }),
+};
+
+const replyWithError = (responseStream: ResponseStream, _error: Error) => {
+  const err = boomify(_error);
+  const httpResponseMetadata = err.output.payload;
+  responseStream = HttpResponseStream.from(
+    responseStream,
+    httpResponseMetadata
+  );
+  responseStream.write(`3:${JSON.stringify(err.output.payload.message)}\n`);
+  responseStream.end();
 };
 
 // Declare awslambda as a global object
@@ -39,6 +51,7 @@ export const handler = streamifyResponse(async (event, responseStream) => {
   );
 
   try {
+    await expectAuthenticated(event);
     // get provider
     const providerName = event.queryStringParameters?.provider;
     const providerConstructor =
@@ -73,8 +86,7 @@ export const handler = streamifyResponse(async (event, responseStream) => {
       messages,
       onError: ({ error }) => {
         console.error(error);
-        responseStream.write(`3:${JSON.stringify(error)}\n`);
-        responseStream.end();
+        replyWithError(responseStream, error as Error);
       },
     });
 
@@ -84,9 +96,6 @@ export const handler = streamifyResponse(async (event, responseStream) => {
     );
   } catch (error) {
     console.error(error);
-    httpResponseMetadata.statusCode = 500;
-    httpResponseMetadata.statusMessage = 'Internal Server Error';
-    responseStream.write(`3:${JSON.stringify((error as Error).message)}\n`);
-    responseStream.end();
+    replyWithError(responseStream, error as Error);
   }
 });
