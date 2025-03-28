@@ -1,3 +1,5 @@
+/* eslint-disable no-console */
+/* eslint-disable no-param-reassign */
 module.exports = {
   deploy: {
     start: async ({ cloudformation, stage }) => {
@@ -10,9 +12,9 @@ module.exports = {
       console.log(`Custom domain: stage = ${stage}, custom domain = ${customDomain}`);
       if (customDomain) {
         console.log(`Configuring domain name in deploy: ${customDomain}`);
-        console.log('custom domain = ' + customDomain);
-        console.log('certificate ARN = ' + CertificateArn);
-        console.log('hosted zone id = ' + HostedZoneId);
+        console.log(`custom domain = ${  customDomain}`);
+        console.log(`certificate ARN = ${  CertificateArn}`);
+        console.log(`hosted zone id = ${  HostedZoneId}`);
         cloudformation.Resources.HTTP.Properties.Domain = {
           DomainName: customDomain,
           CertificateArn,

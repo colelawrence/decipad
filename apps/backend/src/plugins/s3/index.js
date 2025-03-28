@@ -39,11 +39,7 @@ const options = {
 };
 
 function pkg({
-  arc,
   cloudformation,
-  stage = 'staging',
-  inventory,
-  createFunction,
 }) {
   // no changes
   return cloudformation;

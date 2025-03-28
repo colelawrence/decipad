@@ -56,6 +56,8 @@ any /api/notebook/:action
 any /api/datalakes/*
 
 # AI endpoints
+GET /api/ai/chat
+ANY /api/ai/chat-stream
 any /api/ai/*
 
 # Feature Feedback
@@ -544,9 +546,14 @@ sync-after-connect
 docsyncsnapshots-changes
 chat-agent-message
 
+
+@lambda-urls
+any /api/ai/chat-stream
+
 @plugins
 s3
 custom-domain
+lambda-urls
 nasa-gcn/architect-functions-search
 
 @aws
