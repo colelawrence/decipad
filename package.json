@@ -484,7 +484,7 @@
     "csstype": "3.1.1",
     "data-urls": "5.0.0",
     "debug": "^4.4.0",
-    "dependency-cruiser": "^16.6.0",
+    "dependency-cruiser": "^16.10.0",
     "diff": "7.0.0",
     "esbuild": "0.25.0",
     "eslint": "8.57.0",
