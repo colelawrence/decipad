@@ -534,7 +534,7 @@
     "vitest": "^1.6.0",
     "vitest-canvas-mock": "^0.3.3",
     "vitest-fetch-mock": "^0.4.2",
-    "webpack": "5.96.1",
+    "webpack": "5.98.0",
     "webpack-bundle-analyzer": "^4.10.0",
     "worker-loader": "^3.0.8",
     "ws": "8.18.0"
