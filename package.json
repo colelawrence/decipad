@@ -552,7 +552,7 @@
     "@types/unist": "3.0.0",
     "tar": "6.2.1",
     "express": "4.21.0",
-    "axios": "1.7.4",
+    "axios": "1.8.2",
     "postcss": "8.4.39",
     "semver": "7.6.2",
     "graphql": "^16.9.0",
