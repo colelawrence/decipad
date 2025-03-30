@@ -506,7 +506,7 @@
     "husky": "9.1.1",
     "jsdom": "^25.0.1",
     "lines-and-columns": "^2.0.4",
-    "lint-staged": "15.2.7",
+    "lint-staged": "15.5.0",
     "node-watch": "0.7.3",
     "npm-check": "^6.0.1",
     "npm-run-all2": "7.0.1",
