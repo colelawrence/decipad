@@ -101,7 +101,7 @@
     "@aws-sdk/lib-dynamodb": "^3.778.0",
     "@aws-sdk/s3-presigned-post": "^3.777.0",
     "@aws-sdk/s3-request-presigner": "^3.777.0",
-    "@babel/preset-react": "^7.25.7",
+    "@babel/preset-react": "^7.26.3",
     "@chakra-ui/css-reset": "2.3.0",
     "@codemirror/lang-javascript": "^6.2.0",
     "@codemirror/lang-sql": "^6.8.0",
