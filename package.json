@@ -558,7 +558,7 @@
     "graphql": "^16.9.0",
     "phin": "3.7.1",
     "got": "14.4.1",
-    "jose": "5.9.3",
+    "jose": "5.10.0",
     "ws": "8.18.0",
     "webpack-dev-middleware": "5.3.4",
     "http-proxy-middleware": "3.0.3",
