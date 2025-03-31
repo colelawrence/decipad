@@ -6459,13 +6459,23 @@
     zod "^3.22.4"
     zod-to-json-schema "^3.22.3"
 
-"@langchain/openai@>=0.1.0 <0.4.0", "@langchain/openai@^0.3.12":
+"@langchain/openai@>=0.1.0 <0.4.0":
   version "0.3.12"
   resolved "https://registry.yarnpkg.com/@langchain/openai/-/openai-0.3.12.tgz#b92c2934c824d9a564b332ff4785cb49628ae673"
   integrity sha512-z8y0zdKovjY6bB0D3D+K99bPAN+wFRQcrWDfHfX7yVmYwq1O8GOIzQgCBth0vbhbzeuaJ4dz3+oqN/4Q2PCpHg==
   dependencies:
     js-tiktoken "^1.0.12"
     openai "^4.71.0"
+    zod "^3.22.4"
+    zod-to-json-schema "^3.22.3"
+
+"@langchain/openai@^0.5.2":
+  version "0.5.2"
+  resolved "https://registry.yarnpkg.com/@langchain/openai/-/openai-0.5.2.tgz#c7d4acb2ebc1bc8478730e58868936f29d4ac11f"
+  integrity sha512-XYsWKdy2V5/KwRk9MRDIMqmFDJdIaaP+aRLJftM0NFMg3fS+3dHy9lpTZLod5KNU+RB2odZua6Z981crM2siZA==
+  dependencies:
+    js-tiktoken "^1.0.12"
+    openai "^4.87.3"
     zod "^3.22.4"
     zod-to-json-schema "^3.22.3"
 
@@ -23636,10 +23646,10 @@ open@^8.0.0, open@^8.0.4, open@^8.0.9, open@^8.4.0:
     is-docker "^2.1.1"
     is-wsl "^2.2.0"
 
-openai@^4.71.0, openai@^4.72.0:
-  version "4.72.0"
-  resolved "https://registry.yarnpkg.com/openai/-/openai-4.72.0.tgz#61630553157a0c9bb1c304b1dd4d2f90e9ec4cf7"
-  integrity sha512-hFqG9BWCs7L7ifrhJXw7mJXmUBr7d9N6If3J9563o0jfwVA4wFANFDDaOIWFdgDdwgCXg5emf0Q+LoLCGszQYA==
+openai@^4.71.0, openai@^4.72.0, openai@^4.87.3:
+  version "4.90.0"
+  resolved "https://registry.yarnpkg.com/openai/-/openai-4.90.0.tgz#2a6e3069aba410b43e5da064b05abcd330f1f3fc"
+  integrity sha512-YCuHMMycqtCg1B8G9ezkOF0j8UnBWD3Al/zYaelpuXwU1yhCEv+Y4n9G20MnyGy6cH4GsFwOMrgstQ+bgG1PtA==
   dependencies:
     "@types/node" "^18.11.18"
     "@types/node-fetch" "^2.6.4"
