@@ -150,7 +150,7 @@
     "@react-email/preview": "0.0.2",
     "@react-email/render": "1.0.1",
     "@react-email/section": "0.0.2",
-    "@react-email/text": "^0.0.2",
+    "@react-email/text": "^0.1.0",
     "@rjsf/core": "^5.23.1",
     "@rjsf/utils": "^5.23.1",
     "@rjsf/validator-ajv8": "^5.23.1",
