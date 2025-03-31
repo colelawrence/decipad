@@ -8400,10 +8400,10 @@
   resolved "https://registry.yarnpkg.com/@sec-ant/readable-stream/-/readable-stream-0.4.1.tgz#60de891bb126abfdc5410fdc6166aca065f10a0c"
   integrity sha512-831qok9r2t8AlxLko40y2ebgSDhenenCatLVeW/uBtnHPyhHOvG0C7TvfgecV+wHzIm5KUICgzmVpWS+IMEAeg==
 
-"@segment/analytics-core@1.8.0":
-  version "1.8.0"
-  resolved "https://registry.yarnpkg.com/@segment/analytics-core/-/analytics-core-1.8.0.tgz#7189b79c21b8c41ec7d3dd10b158a756b034f206"
-  integrity sha512-6CrccsYRY33I3mONN2ZW8SdBpbLtu1Ict3xR+n0FemYF5RB/jG7pW6jOvDXULR8kuYMzMmGOP4HvlyUmf3qLpg==
+"@segment/analytics-core@1.8.1":
+  version "1.8.1"
+  resolved "https://registry.yarnpkg.com/@segment/analytics-core/-/analytics-core-1.8.1.tgz#e9c24cd161ff6d6cfd6ac592c0ed29be680c92be"
+  integrity sha512-EYcdBdhfi1pOYRX+Sf5orpzzYYFmDHTEu6+w0hjXpW5bWkWct+Nv6UJg1hF4sGDKEQjpZIinLTpQ4eioFM4KeQ==
   dependencies:
     "@lukeed/uuid" "^2.0.0"
     "@segment/analytics-generic-utils" "1.2.0"
@@ -8417,13 +8417,13 @@
   dependencies:
     tslib "^2.4.1"
 
-"@segment/analytics-next@1.76.0":
-  version "1.76.0"
-  resolved "https://registry.yarnpkg.com/@segment/analytics-next/-/analytics-next-1.76.0.tgz#38bc7db53360d3af87b566bb10dd7a3c5c5bb262"
-  integrity sha512-4n4vMvX0+bfypFWuu/UJNenT/Gv2+04SsjvnQL1eBd1hngKBV56EkCW+PCJyFRQQ7BnzHgWF4mY+vOPkdoke3A==
+"@segment/analytics-next@1.79.0":
+  version "1.79.0"
+  resolved "https://registry.yarnpkg.com/@segment/analytics-next/-/analytics-next-1.79.0.tgz#55e1a7577854b0975c9ceefd1869c10eca2294bd"
+  integrity sha512-56k8WV8W/LK1pnhSj68sogatsicxQ6FBfA8nR9lRYcdRQkJ+l3zv3m5AZVVhiV5J75DKSpxWsVZwJ1DtVtIRNw==
   dependencies:
     "@lukeed/uuid" "^2.0.0"
-    "@segment/analytics-core" "1.8.0"
+    "@segment/analytics-core" "1.8.1"
     "@segment/analytics-generic-utils" "1.2.0"
     "@segment/analytics.js-video-plugins" "^0.2.1"
     "@segment/facade" "^3.4.9"
