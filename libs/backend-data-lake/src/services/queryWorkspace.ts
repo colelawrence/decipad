@@ -1,13 +1,14 @@
 import { badData, badRequest, notFound } from '@hapi/boom';
 import { getDataLakeConnection } from '../utils/getDataLakeConnection';
 import { prepareForJSON, rowsToColumns } from '@decipad/backend-external-db';
-import { getDataLake } from './getDataLake';
+import { getDataLake, getEnrichedDataLake } from './getDataLake';
 import { getSourceTransform } from '../transforms/sources/getSourceTransform';
 import { once } from '@decipad/utils';
 import { z } from 'zod';
 import { getBigQueryProjectId } from '../utils/getBigQueryProjectId';
 import { dataLakeId } from '../utils/dataLakeId';
 import { DataLakeDataConnection } from '@decipad/backendtypes';
+import { fakeFullDatalakeRecord } from '../routes/fakeFullDatalakeRecord';
 
 const createQueryRequestBodyParser = once(() =>
   z.object({
@@ -59,9 +60,15 @@ const _queryWorkspace = async (
   time: Date,
   query: string
 ) => {
-  const lake = await getDataLake(workspaceId, {
-    enrichConnections: false,
-  });
+  const overrideWorkspaceId = process.env.DATALAKE_OVERRIDE_DECI_WORKSPACE_ID;
+  const lake = overrideWorkspaceId
+    ? await getEnrichedDataLake(
+        overrideWorkspaceId,
+        fakeFullDatalakeRecord(overrideWorkspaceId)
+      )
+    : await getDataLake(workspaceId, {
+        enrichConnections: false,
+      });
   if (!lake) {
     throw notFound('Data lake not found');
   }

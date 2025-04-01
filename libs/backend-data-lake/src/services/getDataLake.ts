@@ -1,7 +1,7 @@
 import tables from '@decipad/tables';
 import { dataLakeId } from '../utils/dataLakeId';
 import { availableConnections } from '../extract-load/availableConnections';
-import { DataLakeDataConnection } from '@decipad/backendtypes';
+import { DataLakeDataConnection, DatalakeRecord } from '@decipad/backendtypes';
 import {
   ExtractSourceDefinition,
   getExtractSourceDef,
@@ -11,6 +11,7 @@ import { airbyteClient } from '../extract-load/airByteClient';
 import { AirbyteSyncStatus } from '../extract-load/types';
 import { findConnection } from '../extract-load/findConnection';
 import { notFound } from '@hapi/boom';
+import { fakeFullDatalakeRecord } from '../routes/fakeFullDatalakeRecord';
 
 export type EnrichedDataLakeDataConnection = DataLakeDataConnection &
   ExtractSourceDefinition & {
@@ -29,7 +30,9 @@ const enrichConnection = async (
     connection.source
   );
   if (!extractLoadConnection) {
-    throw notFound('Extract load connection not found');
+    throw notFound(
+      `Extract load connection not found for ${connection.source} in workspace ${workspaceId}`
+    );
   }
   const syncStatus = await airbyteClient().getSyncStatus(
     extractLoadConnection.connectionId
@@ -53,22 +56,11 @@ export interface GetDataLakeOptions {
   enrichConnections?: boolean;
 }
 
-export const getDataLake = async (
+export const getEnrichedDataLake = async (
   workspaceId: string,
+  lake: DatalakeRecord,
   { enrichConnections: enrichConnectionsOption = true }: GetDataLakeOptions = {}
 ) => {
-  const data = await tables();
-  let lake = await data.datalakes.get({ id: dataLakeId(workspaceId) });
-  if (!lake) {
-    return undefined;
-  }
-  if (lake.state === 'ready' && !lake.credentials) {
-    lake = {
-      ...lake,
-      state: 'pending',
-    };
-    await data.datalakes.put(lake);
-  }
   return {
     state: lake.state,
     connections: enrichConnectionsOption
@@ -76,4 +68,29 @@ export const getDataLake = async (
       : lake.connections ?? [],
     availableConnections: availableConnections({ exclude: lake.connections }),
   };
+};
+
+export const getDataLake = async (
+  workspaceId: string,
+  options: GetDataLakeOptions = {}
+) => {
+  const overrideWorkspaceId = process.env.DATALAKE_OVERRIDE_DECI_WORKSPACE_ID;
+  let lake: DatalakeRecord | undefined;
+  const data = await tables();
+  if (overrideWorkspaceId) {
+    lake = fakeFullDatalakeRecord(overrideWorkspaceId);
+  } else {
+    lake = await data.datalakes.get({ id: dataLakeId(workspaceId) });
+  }
+  if (!lake) {
+    return undefined;
+  }
+  if (lake.state === 'ready' && !lake.credentials && !overrideWorkspaceId) {
+    lake = {
+      ...lake,
+      state: 'pending',
+    };
+    await data.datalakes.put(lake);
+  }
+  return getEnrichedDataLake(overrideWorkspaceId ?? workspaceId, lake, options);
 };

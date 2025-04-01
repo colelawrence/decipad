@@ -97,6 +97,7 @@ class AirbyteClient implements IAirbyteClient {
   private async request(method: string, path: string, body?: object) {
     const token = await this.getToken();
     const { airbyteUrl } = datalakeConfig();
+    console.log('AIRBYTE URL', airbyteUrl);
     const encodedBody =
       (method !== 'GET' && body && JSON.stringify(body)) || undefined;
     console.warn('encodedBody', encodedBody);

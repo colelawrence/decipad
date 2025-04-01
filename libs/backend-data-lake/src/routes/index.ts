@@ -1,4 +1,10 @@
-import { badRequest, notFound, unauthorized } from '@hapi/boom';
+import {
+  badRequest,
+  forbidden,
+  internal,
+  notFound,
+  unauthorized,
+} from '@hapi/boom';
 import { resource } from '@decipad/backend-resources';
 import type { PermissionType, User } from '@decipad/backendtypes';
 import { parseBody } from '@decipad/backend-utils';
@@ -67,12 +73,8 @@ export const routes = (): Route[] => [
     method: 'GET',
     path: '/api/datalakes/:workspaceId',
     handler: async (_, user, params) => {
-      const { workspaceId } = params;
-      if (typeof workspaceId !== 'string') {
-        throw badRequest('Invalid workspaceId');
-      }
-      await protectWorkspace(user, workspaceId);
-
+      const { workspaceId: _workspaceId } = params;
+      const workspaceId = await protectWorkspace(user, _workspaceId);
       const dataLake = await getDataLake(workspaceId);
       if (!dataLake) {
         throw notFound('Data lake not found');
@@ -102,14 +104,8 @@ export const routes = (): Route[] => [
     method: 'POST',
     path: '/api/datalakes/:workspaceId/connections',
     handler: async (req, user, params) => {
-      const { workspaceId } = params;
-      if (typeof workspaceId !== 'string') {
-        throw badRequest('Invalid workspaceId');
-      }
-      if (typeof workspaceId !== 'string') {
-        throw badRequest('Invalid workspaceId');
-      }
-      await protectWorkspace(user, workspaceId, 'ADMIN');
+      const { workspaceId: _workspaceId } = params;
+      const workspaceId = await protectWorkspace(user, _workspaceId, 'ADMIN');
 
       const { source, connectionConfig } = await parseBody(req);
       await createConnection(
@@ -129,21 +125,22 @@ export const routes = (): Route[] => [
       const { notebookId } = requestBody;
 
       const [, workspaceId] = await protectNotebook(user, notebookId, 'READ');
-      return queryWorkspace(workspaceId, requestBody);
+
+      const overrideWorkspaceId =
+        process.env.DATALAKE_OVERRIDE_DECI_WORKSPACE_ID ?? workspaceId;
+
+      return queryWorkspace(overrideWorkspaceId, requestBody);
     },
   },
   {
     method: 'GET',
     path: '/api/datalakes/:workspaceId/connections/:sourceType/health',
     handler: async (_, user, params) => {
-      const { workspaceId, sourceType } = params;
-      if (typeof workspaceId !== 'string') {
-        throw badRequest('Invalid workspaceId');
-      }
+      const { workspaceId: _workspaceId, sourceType } = params;
+      const workspaceId = await protectWorkspace(user, _workspaceId, 'ADMIN');
       if (typeof sourceType !== 'string') {
         throw badRequest('Invalid sourceType');
       }
-      await protectWorkspace(user, workspaceId, 'ADMIN');
       await checkConnection(workspaceId, getSource(sourceType));
       return { ok: true };
     },
@@ -167,7 +164,7 @@ export const routes = (): Route[] => [
       const { secret } = req.queryStringParameters ?? {};
       if (typeof secret !== 'string') {
         // we throw an internal error so that we get notified, because this would signal a problem with the webhook configuration
-        throw badRequest('No secret');
+        throw internal('No secret');
       }
 
       // validate if the secret is correct
@@ -194,7 +191,7 @@ export const routes = (): Route[] => [
 
       // validate if the secret is correct
       if (secret !== datalake().webhookSecret) {
-        throw badRequest('Invalid secret');
+        throw forbidden('Invalid secret');
       }
 
       const body = await parseBody(req);

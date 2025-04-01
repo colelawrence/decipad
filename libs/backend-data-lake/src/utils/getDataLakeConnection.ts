@@ -5,11 +5,16 @@ import { datalake as datalakeConfig } from '@decipad/backend-config';
 import { getDefined } from '@decipad/utils';
 import { dataLakeId } from './dataLakeId';
 import { parseBigQueryCredentials } from './parseBigQueryCredentials';
+import { fakeFullDatalakeRecord } from '../routes/fakeFullDatalakeRecord';
 
 export const getDataLakeConnection = async (workspaceId: string) => {
   const data = await tables();
-  const dataSetId = dataLakeId(workspaceId);
-  const lake = await data.datalakes.get({ id: dataSetId });
+  const overrideWorkspaceId = process.env.DATALAKE_OVERRIDE_DECI_WORKSPACE_ID;
+  const effectiveWorkspaceId = overrideWorkspaceId ?? workspaceId;
+  const dataSetId = dataLakeId(effectiveWorkspaceId);
+  const lake = overrideWorkspaceId
+    ? fakeFullDatalakeRecord(effectiveWorkspaceId)
+    : await data.datalakes.get({ id: dataSetId });
   if (!lake) {
     throw notFound(`Data lake for workspace ${workspaceId} not found`);
   }
