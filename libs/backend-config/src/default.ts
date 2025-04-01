@@ -40,6 +40,8 @@ const defaultEnvValues = {
   JWT_SECRET: 'catwalklrjqwr92309endasjkdn023eqhjdskajhaskj',
 
   OPENAI_API_KEY: 'ask the dev team',
+  GOOGLE_VERTEX_API_KEY: 'ask the dev team',
+  DEEPINFRA_API_KEY: 'ask the dev team',
   GIPHY_API_KEY: 'ask the dev team',
   UNSPLASH_API_KEY: 'ask the dev team',
   REPLICATE_API_KEY: 'ask the dev team',

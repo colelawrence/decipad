@@ -93,6 +93,10 @@ function env(name: SupportedEnvKey): string {
       return valueOrDefault(name, process.env.JWT_SECRET);
     case 'OPENAI_API_KEY':
       return valueOrDefault(name, process.env.OPENAI_API_KEY);
+    case 'DEEPINFRA_API_KEY':
+      return valueOrDefault(name, process.env.DEEPINFRA_API_KEY);
+    case 'GOOGLE_VERTEX_API_KEY':
+      return valueOrDefault(name, process.env.GOOGLE_VERTEX_API_KEY);
     case 'GIPHY_API_KEY':
       return valueOrDefault(name, process.env.GIPHY_API_KEY);
     case 'UNSPLASH_API_KEY':

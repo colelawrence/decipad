@@ -65,6 +65,8 @@ jobs:
           NEXTAUTH_URL: 'https://dev.decipad.com/api/auth'
           JWT_SECRET: '${{secrets.JWT_SECRET}}'
           OPENAI_API_KEY: '${{secrets.OPENAI_API_KEY}}'
+          GOOGLE_VERTEX_API_KEY: '${{secrets.GOOGLE_VERTEX_API_KEY}}'
+          DEEPINFRA_API_KEY: '${{secrets.DEEPINFRA_API_KEY}}'
           GIPHY_API_KEY: '${{secrets.GIPHY_API_KEY}}'
           UNSPLASH_API_KEY: '${{secrets.UNSPLASH_API_KEY}}'
           REPLICATE_API_KEY: '${{secrets.REPLICATE_API_KEY}}'

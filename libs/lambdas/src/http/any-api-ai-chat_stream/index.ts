@@ -2,6 +2,8 @@
 import { ResponseStream, streamifyResponse } from 'lambda-stream';
 import { CoreMessage, streamText } from 'ai';
 import { createOpenAI } from '@ai-sdk/openai';
+import { createDeepInfra } from '@ai-sdk/deepinfra';
+import { createVertex } from '@ai-sdk/google-vertex';
 import { getDefined } from '@decipad/utils';
 import { enhanceResponseStream } from './enhanceResponseStream';
 import { badRequest, boomify, notFound } from '@hapi/boom';
@@ -15,6 +17,27 @@ const providers = {
         process.env.OPENAI_API_KEY,
         'OPENAI_API_KEY is not defined'
       ),
+    }),
+  deepinfra: () =>
+    createDeepInfra({
+      apiKey: getDefined(
+        process.env.DEEPINFRA_API_KEY,
+        'DEEPINFRA_API_KEY is not defined'
+      ),
+    }),
+  googleVertex: () =>
+    createVertex({
+      googleAuthOptions: {
+        credentials: JSON.parse(
+          Buffer.from(
+            getDefined(
+              process.env.GOOGLE_VERTEX_API_KEY,
+              'GOOGLE_VERTEX_API_KEY is not defined'
+            ),
+            'base64'
+          ).toString('utf-8')
+        ),
+      },
     }),
 };
 
