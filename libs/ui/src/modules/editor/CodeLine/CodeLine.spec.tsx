@@ -1,11 +1,10 @@
 import { beforeAll, afterAll, vi, describe, it, expect } from 'vitest';
-import { act, render } from '@testing-library/react';
+import { render } from '@testing-library/react';
 import createFetch from 'vitest-fetch-mock';
 import { SessionProvider } from 'next-auth/react';
 import { ComponentProps } from 'react';
 import { runCode } from '../../../test-utils';
 import { CodeLine } from './CodeLine';
-import { timeout } from '@decipad/testutils';
 
 let tabularProps: ComponentProps<typeof CodeLine>;
 let typeErrorProps: ComponentProps<typeof CodeLine>;
@@ -50,20 +49,29 @@ describe('CodeLine', () => {
 
   describe('when result is tabular', () => {
     it('should render the expanded result', async () => {
-      const { getByRole } = render(<CodeLine {...tabularProps} highlight />);
-      // wait for the table to render
-      await timeout(1000);
-      expect(getByRole('table')).toBeVisible();
+      const { findByRole } = render(<CodeLine {...tabularProps} highlight />);
+
+      // Wait for the button to be available
+      const button = await findByRole('button');
+      button.click(); // Show table result
+
+      // Wait for the table to become visible after clicking
+      const table = await findByRole('table');
+      expect(table).toBeVisible();
     });
 
     it('should not render the result inline', async () => {
-      const { getByRole, getAllByRole, findAllByRole } = render(
+      const { getAllByRole, findAllByRole, findByRole } = render(
         <SessionProvider>
           <CodeLine {...tabularProps} highlight />
         </SessionProvider>
       );
-      // wait for the table to render
-      await act(() => timeout(1000));
+      // Wait for the button to be available
+      const button = await findByRole('button');
+      button.click(); // Show table result
+
+      // Wait for the table to become visible after clicking
+      const table = await findByRole('table');
 
       const queryInlineResultElement = async () =>
         (await findAllByRole('status')).find(
@@ -72,7 +80,7 @@ describe('CodeLine', () => {
 
       expect(getAllByRole('status')).toHaveLength(1);
       expect(await queryInlineResultElement()).toBe(undefined);
-      expect(getByRole('table')).toBeVisible();
+      expect(table).toBeVisible();
     });
   });
 

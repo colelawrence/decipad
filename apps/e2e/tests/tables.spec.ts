@@ -474,6 +474,7 @@ test('Testing tables created from formulas', async ({ testUser }) => {
       .fill(
         'Table = {Name = ["A", "B", "C", "D"] \n Values = [Unnamed1, Unnamed2, Unnamed3, Unnamed4]}'
       );
+    await testUser.page.getByTestId('code-line').getByRole('button').click(); // Show table result
 
     const expectResults = [
       { result: 'A', searchText: 'text-result:A' },

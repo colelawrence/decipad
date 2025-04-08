@@ -170,6 +170,7 @@ const styles = (size: 'fit' | 'normal', variantHover: boolean) =>
       flexDirection: 'row',
       alignItems: 'center',
       padding: '4px',
+      userSelect: 'none',
     },
     size === 'normal' && { height: 32, padding: 14 },
     variantHover && {

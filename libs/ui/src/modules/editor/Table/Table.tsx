@@ -33,6 +33,7 @@ const tableBaseStyles = css({
   display: 'inline-table',
   'tr td': {
     borderBottom: regularBorder,
+    background: cssVar('backgroundMain'),
   },
   td: {
     borderLeft: regularBorder,
@@ -77,7 +78,7 @@ const readOnlyTableStyles = css({
   height: 'auto',
   width: '100%',
   marginTop: 8,
-  marginBottom: 12,
+  marginBottom: 4,
 
   '> thead > tr > th': {
     borderTop: regularBorder,

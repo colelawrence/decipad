@@ -41,6 +41,8 @@ import {
   isTabularType,
 } from '../../../utils';
 import { bubbleColors } from '../../../utils/bubbleColors';
+import { hideOnPrint } from 'libs/ui/src/styles/editor-layout';
+import { TableButton } from '../TableButton/TableButton';
 
 const { lineHeight } = codeBlock;
 
@@ -235,6 +237,7 @@ export const CodeLine: FC<CodeLineProps> = ({
   element,
 }) => {
   const [grabbing, setGrabbing] = useState(false);
+  const [showResult, setShowResult] = useState(false); // TODO Use element.showResult instead to save the state to the element.
   // refactor before merge
   const { color: tableColor } = useContext(TableStyleContext);
   const { color: defaultColor } = useEditorStylesContext();
@@ -299,6 +302,20 @@ export const CodeLine: FC<CodeLineProps> = ({
           {placeholder}
         </span>
       )}
+
+      {!inline && !isEmpty && expanded && (
+        <div
+          css={[inlineStyles(insideLayout), tableButtonStyles, hideOnPrint]}
+          contentEditable={false}
+        >
+          <TableButton
+            setState={() => setShowResult((r) => !r)}
+            isInState={!showResult}
+            captions={['Show data', 'Hide data']}
+            isExpandButton
+          />
+        </div>
+      )}
       {!isEmpty && (
         <div
           css={[
@@ -315,7 +332,11 @@ export const CodeLine: FC<CodeLineProps> = ({
           {inline}
         </div>
       )}
-      {!isEmpty && expanded}
+      {!isEmpty && showResult && (
+        <div style={{ gridColumn: 'span 2' }} contentEditable={false}>
+          {expanded}
+        </div>
+      )}
     </div>
   );
 };
@@ -400,3 +421,8 @@ export function useResultInfo({
     errored: result.type.kind === 'type-error',
   };
 }
+
+const tableButtonStyles = css({
+  alignSelf: 'end',
+  marginTop: -1, // avoid layout shift when the button appears
+});

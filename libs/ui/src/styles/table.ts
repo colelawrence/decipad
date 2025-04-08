@@ -27,6 +27,7 @@ export const tableParentStyles = css({
   table: {
     width: '100%',
   },
+  background: cssVar('backgroundMain'),
 });
 
 export const importTableDragHandleStyles = css({
