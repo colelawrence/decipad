@@ -168,7 +168,7 @@
     "@stripe/react-stripe-js": "^2.9.0",
     "@stripe/stripe-js": "^5.10.0",
     "@swc/plugin-emotion": "^7.0.0",
-    "@tanstack/react-query": "^5.60.5",
+    "@tanstack/react-query": "^5.74.4",
     "@testing-library/jest-dom": "^6.6.2",
     "@testing-library/react-hooks": "^8.0.1",
     "@types/debug": "^4.1.8",
