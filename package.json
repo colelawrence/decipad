@@ -235,7 +235,7 @@
     "@xzar90/react-router-hash-link": "6.0.4",
     "add": "^2.0.6",
     "adm-zip": "^0.5.10",
-    "ai": "^4.2.6",
+    "ai": "^4.3.9",
     "apollo-server-lambda": "3.13.0",
     "aws-lambda": "1.0.7",
     "axios": "^1.7.4",
