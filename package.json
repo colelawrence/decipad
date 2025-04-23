@@ -439,7 +439,7 @@
     "@percy/playwright": "^1.0.4",
     "@svgr/cli": "^8.1.0",
     "@svgr/webpack": "8.1.0",
-    "@testing-library/react": "16.2.0",
+    "@testing-library/react": "16.3.0",
     "@testing-library/user-event": "14.6.1",
     "@types/adm-zip": "^0.5.0",
     "@types/architect__functions": "3.13.7",
