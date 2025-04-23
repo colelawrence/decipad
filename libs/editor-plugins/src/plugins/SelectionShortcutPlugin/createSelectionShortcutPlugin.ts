@@ -15,7 +15,6 @@ import {
   copySelectedBlocks,
 } from '@udecode/plate-selection';
 import type { MyGenericEditor } from '@decipad/editor-types';
-import assert from 'assert';
 import { dequal } from '@decipad/utils';
 
 /**
@@ -85,8 +84,6 @@ export const createSelectionShortcutPlugin = createOnKeyDownPluginFactory({
         return;
       }
 
-      assert(selection);
-
       const wholeBlockSelection: BaseSelection = {
         anchor: getStartPoint(editor, [selection.anchor.path[0]]),
         focus: getEndPoint(editor, [selection.anchor.path[0]]),
@@ -94,7 +91,10 @@ export const createSelectionShortcutPlugin = createOnKeyDownPluginFactory({
 
       if (isCollapsed(selection) && !dequal(wholeBlockSelection, selection)) {
         const entry = getNodeEntry(editor, selection.anchor.path);
-        assert(entry != null, 'Node must be defined under selection');
+        if (entry == null) {
+          console.error('Node must be defined under selection');
+          return;
+        }
 
         const [node] = entry;
         const path = [...selection.anchor.path];
