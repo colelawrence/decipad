@@ -24884,15 +24884,15 @@ postgres-range@^1.1.1:
   resolved "https://registry.yarnpkg.com/postgres-range/-/postgres-range-1.1.4.tgz#a59c5f9520909bcec5e63e8cf913a92e4c952863"
   integrity sha512-i/hbxIE9803Alj/6ytL7UHQxRvZkI9O4Sy+J3HGc4F4oo/2eQAjTSNJ0bfxyse3bH0nuVesCk+3IRLaMtG3H6w==
 
-posthog-js@^1.212.1:
-  version "1.212.1"
-  resolved "https://registry.yarnpkg.com/posthog-js/-/posthog-js-1.212.1.tgz#4e48f7009bbf86edca85345e4b83bcb5892e8c96"
-  integrity sha512-1tpF/V5TrEB2MjSQnG9OxHWWXYuXg8Wg/wngU4vfRDVJudne0oQs4Lrkjcrf7/Mq6pNxgF8lVACh5cTnrT0hRA==
+posthog-js@^1.236.5:
+  version "1.236.6"
+  resolved "https://registry.yarnpkg.com/posthog-js/-/posthog-js-1.236.6.tgz#f4d73d25773f4e4bafd7632717c97b27bd9f1b7c"
+  integrity sha512-IX4fkn3HCK+ObdHr/AuWd+Ks7bgMpRpOQB93b5rDJAWkG4if4xFVUn5pgEjyCNeOO2GM1ECnp08q9tYNYEfwbA==
   dependencies:
     core-js "^3.38.1"
     fflate "^0.4.8"
     preact "^10.19.3"
-    web-vitals "^4.2.0"
+    web-vitals "^4.2.4"
 
 posthog-node@^4.8.1:
   version "4.8.1"
@@ -29687,7 +29687,7 @@ web-vitals@3.5.0:
   resolved "https://registry.yarnpkg.com/web-vitals/-/web-vitals-3.5.0.tgz#3a5571f00743ecd059394b61e0adceec7fac2634"
   integrity sha512-f5YnCHVG9Y6uLCePD4tY8bO/Ge15NPEQWtvm3tPzDKygloiqtb4SVqRHBcrIAqo2ztqX5XueqDn97zHF0LdT6w==
 
-web-vitals@^4.2.0:
+web-vitals@^4.2.4:
   version "4.2.4"
   resolved "https://registry.yarnpkg.com/web-vitals/-/web-vitals-4.2.4.tgz#1d20bc8590a37769bd0902b289550936069184b7"
   integrity sha512-r4DIlprAGwJ7YM11VZp4R884m0Vmgr6EAKe3P+kO0PPj3Unqyvv59rczf6UiGcb9Z8QxZVcqKNwv/g0WNdWwsw==
