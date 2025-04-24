@@ -21168,10 +21168,10 @@ lambda-runtimes@~2.0.1:
   resolved "https://registry.yarnpkg.com/lambda-runtimes/-/lambda-runtimes-2.0.1.tgz#0e41df08ec58884d18933c6f1d936bc56d40456d"
   integrity sha512-tGKWIhG90kvagFG4m0MWUZHKllj4OchvsSbXnXS7VsrwEsJPr2ZIG7MMfQ6pHtqRPAyx1z8YSzJCQMJZYcVYRw==
 
-lambda-stream@^0.5.0:
-  version "0.5.0"
-  resolved "https://registry.yarnpkg.com/lambda-stream/-/lambda-stream-0.5.0.tgz#7387359dabfa6161176fcade85eab34a4f52e5a3"
-  integrity sha512-AaMXqUM+GcJ2OpNF2LI78jzbZ84rSckH+uKfstMQFqXDn+ZBLIkJgkUk+L0fuCGzw+LP5VToUxJKDfAbtLXSGw==
+lambda-stream@^0.6.0:
+  version "0.6.0"
+  resolved "https://registry.yarnpkg.com/lambda-stream/-/lambda-stream-0.6.0.tgz#d6051a96f483c8f96a4739b9bf33c058e7f577d9"
+  integrity sha512-S625+Jdil56zFOtfBt5r0snP8SIBY7fXn7pLKXQ8C6u9A5kNSuEWcEVC05QoDkvBLjMhwBeIUwVU6PoOB7ll5w==
 
 langchain@^0.3.5:
   version "0.3.5"
