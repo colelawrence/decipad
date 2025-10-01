@@ -126,7 +126,7 @@ export default function adaptReqRes(handle: NextApiHandler) {
         url,
         query,
         headers,
-      };
+      } as Partial<NextApiRequest> as NextApiRequest;
 
       const newRes = {
         end: (buf: string | Buffer) => {
@@ -215,18 +215,17 @@ export default function adaptReqRes(handle: NextApiHandler) {
       };
 
       try {
-        handle(
-          newReq as unknown as NextApiRequest,
-          newRes as NextApiResponse
-        ).catch((err) => {
-          console.error('caught', err);
-          const boomed = boomify(err as Error);
-          resolve({
-            ...boomed.output,
-            body: stringify(boomed.output.payload),
-            headers: { 'Content-Type': 'application/json' },
-          });
-        });
+        (handle(newReq, newRes as NextApiResponse) as Promise<void>).catch(
+          (err: unknown) => {
+            console.error('caught', err);
+            const boomed = boomify(err as Error);
+            resolve({
+              ...boomed.output,
+              body: stringify(boomed.output.payload),
+              headers: { 'Content-Type': 'application/json' },
+            });
+          }
+        );
       } catch (err) {
         // eslint-disable-next-line no-console
         console.error('caught', err);

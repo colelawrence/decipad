@@ -78,11 +78,6 @@ export async function createTestWorkspaceSubscription(
     payment_status: 'paid',
     customer_details: {
       email: user.email!,
-      address: null,
-      name: user.name,
-      phone: null,
-      tax_ids: null,
-      tax_exempt: null,
     },
     metadata: {
       key: subscriptionType,

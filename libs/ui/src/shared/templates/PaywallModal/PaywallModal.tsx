@@ -3,12 +3,8 @@ import { ComponentProps, useMemo, useState } from 'react';
 import { useStripePlans } from '@decipad/react-utils';
 import * as Styled from './styles';
 import { SubscriptionPlansList } from './SubscriptionPlansList';
-import { useClient } from 'urql';
-import { GetStripeCheckoutSessionInfoDocument } from '@decipad/graphql-client';
 import { getDefined } from '@decipad/utils';
 import { useUserId } from './useUserId';
-import { pay } from '@decipad/routing';
-import { useNavigate } from 'react-router-dom';
 
 type PaywallModalProps = Omit<ComponentProps<typeof Modal>, 'children'> & {
   workspaceId: string;
@@ -38,17 +34,15 @@ export const PaywallModal: React.FC<PaywallModalProps> = ({
 
   const [selectedPlan, setSelectedPlan] = useState(DEFAULT_SELECTED_PLAN);
 
-  const client = useClient();
-
   const userId = useUserId();
-  const navigate = useNavigate();
 
   const selectPlanInfo = useMemo(() => {
     return getDefined(plans.find((p) => p?.key === selectedPlan));
   }, [selectedPlan, plans]);
 
-  const fetchBillingInfo = async (pId: string, resourceId: string) => {
+  const fetchBillingInfo = async (_pId: string, _resourceId: string) => {
     // Stripe is disabled, show error message
+    // eslint-disable-next-line no-alert
     alert(
       'Payment processing is currently disabled. Please contact support for assistance.'
     );

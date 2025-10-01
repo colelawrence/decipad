@@ -30,15 +30,6 @@ export const Login: FC = () => {
             try {
               setPage({ kind: 'email-sent', email });
               const loc = new URL(window.location.toString());
-              console.log(
-                'Debug - redirectAfterLogin:',
-                searchParams.get('redirectAfterLogin')
-              );
-              console.log('Debug - loc:', loc.toString());
-              console.log(
-                'Debug - callbackUrl:',
-                searchParams.get('redirectAfterLogin') ?? loc.toString()
-              );
               const resp = await signIn(
                 'email',
                 {

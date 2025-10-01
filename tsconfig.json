@@ -17,7 +17,7 @@
     "esModuleInterop": true,
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
-    "lib": ["esnext"],
+    "lib": ["esnext", "dom", "dom.iterable", "es6"],
     "allowJs": false,
     "isolatedModules": true,
     "forceConsistentCasingInFileNames": true,

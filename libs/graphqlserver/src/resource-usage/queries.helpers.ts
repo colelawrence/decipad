@@ -35,15 +35,16 @@ export const getResourceUsage = async (
 
 export const updateExtraAiAllowance = async (
   consumer: 'users' | 'workspaces',
-  consumerId: string,
-  paymentMethodId: string,
-  user: User
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  _consumerId: string,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  _paymentMethodId: string,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  _user: User
 ) => {
   if (consumer === 'users') {
     throw new Error('Not implemented: we only do this on workspace level');
   }
-
-  const workspaceId = consumerId;
 
   // Stripe is disabled, throw error
   throw new Error('Payment processing is currently disabled');

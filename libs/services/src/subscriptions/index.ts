@@ -297,7 +297,7 @@ export async function createWorkspaceSubscription({
     id: subscriptionId,
     workspace_id: workspace.id,
     clientReferenceId: client_reference_id,
-    paymentStatus: payment_status,
+    paymentStatus: payment_status ?? 'unknown',
     credits: validMetadata.credits,
     queries: validMetadata.queries,
     editors: validMetadata.editors,

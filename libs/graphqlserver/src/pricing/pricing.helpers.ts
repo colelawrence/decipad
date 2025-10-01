@@ -1,8 +1,5 @@
 import { limits, plans } from '@decipad/backend-config';
-import type {
-  CheckoutSessionInfo,
-  SubscriptionPlan,
-} from '@decipad/backendtypes';
+import type { SubscriptionPlan } from '@decipad/backendtypes';
 import type { QueryResolvers } from '@decipad/graphqlserver-types';
 import Boom from '@hapi/boom';
 
@@ -27,8 +24,6 @@ export const getPlansForSubscriptions: QueryResolvers['getSubscriptionsPlans'] =
         title: plans().freePlanName,
         seats: 1,
         queries: limits().maxQueries.free,
-        editors: limits().maxCollabEditors.free,
-        readers: limits().maxCollabReaders.free,
         storage: limits().storage.free,
         description:
           'The perfect starting point. All our unique modeling features, free forever.',

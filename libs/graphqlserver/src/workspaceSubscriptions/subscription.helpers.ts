@@ -95,21 +95,30 @@ export const findSubscriptionByWorkspaceId = async (
 };
 
 export const updateStripeIfNeeded = async (
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   _event: APIGatewayProxyEventV2,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   _subs: WorkspaceSubscription,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   _newQuantity: number,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   _workspaceId: string
 ) => {
   // Stripe is disabled, no-op
 };
 
-export const cancelStripeSubscription = async (_subscriptionId: ID) => {
+export const cancelStripeSubscription = async (
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  _subscriptionId: ID
+) => {
   // Stripe is disabled, no-op
   return null;
 };
 
 export const cancelSubscriptionFromWorkspaceId = async (
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   _event: APIGatewayProxyEventV2,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   _workspaceId: ID
 ) => {
   // Stripe is disabled, no-op
