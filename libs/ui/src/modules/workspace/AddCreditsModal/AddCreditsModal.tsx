@@ -1,12 +1,9 @@
-import { useMemo } from 'react';
 import styled from '@emotion/styled';
-import { Elements } from '@stripe/react-stripe-js';
 import {
   useGetCreditsPlansQuery,
   useGetNotebookMetaQuery,
 } from '@decipad/graphql-client';
 import { useNotebookRoute } from '@decipad/routing';
-import { env } from '@decipad/client-env';
 import { Modal } from '../../../shared';
 import { cssVar, p14Regular, p18Medium } from '../../../primitives';
 import { AddCreditsPaymentComponent } from './AddCreditsPaymentComponent';
@@ -36,23 +33,19 @@ const WrapperAddCreditsModal: React.FC<AddCreditsModalProps> = ({
   );
 };
 
-interface StripeDialogueProps {
+interface PaymentDialogueProps {
   resourceId?: string;
   closeAction: () => void;
   planCredits?: number;
 }
 
-const StripeDialogue = ({
+const PaymentDialogue = ({
   resourceId,
   closeAction,
   planCredits = 0,
-}: StripeDialogueProps) => {
-  const stripePromise = useMemo(async () => {
-    const { loadStripe } = await import('@stripe/stripe-js');
-    return loadStripe(env.VITE_STRIPE_API_KEY);
-  }, []);
+}: PaymentDialogueProps) => {
   return (
-    <Elements stripe={stripePromise}>
+    <>
       {resourceId && (
         <AddCreditsPaymentComponent
           resourceId={resourceId}
@@ -66,7 +59,7 @@ const StripeDialogue = ({
           credits={planCredits}
         />
       )}
-    </Elements>
+    </>
   );
 };
 
@@ -100,11 +93,11 @@ export const AddCreditsModal: React.FC<AddCreditsModalProps> = ({
               <p css={p14Regular}>{plan?.description}</p>
             </ModalWrapper>
             <StripeWrapper>
-              <StripeDialogue
+              <PaymentDialogue
                 resourceId={resourceId}
                 closeAction={closeAction}
                 planCredits={plan?.credits}
-              ></StripeDialogue>
+              ></PaymentDialogue>
             </StripeWrapper>
           </>
         );

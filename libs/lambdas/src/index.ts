@@ -1,1 +1,1 @@
-export { handler as stripeWebhookHandler } from './http/post-api-stripe-webhook';
+// Stripe webhook handler removed - payment processing disabled

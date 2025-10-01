@@ -82,7 +82,10 @@ Before you begin, ensure you have the following installed:
 3.  **Set up environment variables:**
     ```bash
     cp .env.example .env.local
+    # Create backend environment file
+    touch apps/backend/.env
     # Edit .env.local with your actual API keys and secrets
+    # IMPORTANT: Set NEXTAUTH_URL and DECI_APP_URL_BASE to http://localhost:3000 in apps/backend/.env
     ```
 
 ### Running the Application

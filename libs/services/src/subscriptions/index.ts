@@ -1,5 +1,5 @@
 /* eslint-disable camelcase */
-import { thirdParty, limits } from '@decipad/backend-config';
+import { limits } from '@decipad/backend-config';
 import type {
   PermissionType,
   WorkspaceRecord,
@@ -11,14 +11,8 @@ import type {
 } from '@decipad/graphqlserver-types';
 import tables from '@decipad/tables';
 import Boom from '@hapi/boom';
-import { Stripe } from 'stripe';
 import { z } from 'zod';
 import { create } from '../workspaces/create';
-
-const { secretKey, apiVersion, subscriptionsProdId } = thirdParty().stripe;
-const stripe = new Stripe(secretKey, {
-  apiVersion,
-});
 
 const PLANS: Record<SubscriptionPlansNames, number> = {
   free: 0,
@@ -150,25 +144,13 @@ export async function canUserBeInvitedWithPermission(
       return nrOfCollaborators < maxEditorFreePlan;
     }
 
-    const subsPlan = (
-      await stripe.prices.list({
-        product: subscriptionsProdId,
-        active: true,
-        type: 'recurring',
-      })
-    ).data.find((plan) => plan.metadata.key === wsPlan);
-
-    // if it is a free subscription, no need to throw an error if the plan doesn't exist
-    if (!subsPlan) {
-      return false;
-    }
-
+    // Stripe is disabled, use default limits
     if (permissionType === 'WRITE') {
       // according to requirements, the owner of the notebook counts as an editor
-      return nrOfCollaborators < Number(subsPlan.metadata.editors) - 1;
+      return nrOfCollaborators < limits().maxCollabEditors.free - 1;
     }
 
-    return nrOfCollaborators < Number(subsPlan.metadata.readers);
+    return nrOfCollaborators < limits().maxCollabReaders.free;
   }
 
   return true;
@@ -246,10 +228,11 @@ export type StripeMetadata = z.infer<typeof metadataValidator>;
 
 type StripeOptions = {
   metadata: unknown;
-} & Pick<
-  Stripe.Checkout.Session,
-  'client_reference_id' | 'payment_status' | 'customer_details' | 'subscription'
->;
+  client_reference_id: string | null;
+  payment_status: string | null;
+  customer_details: { email?: string } | null;
+  subscription: string | { id: string } | null;
+};
 
 /**
  * Used for testing.

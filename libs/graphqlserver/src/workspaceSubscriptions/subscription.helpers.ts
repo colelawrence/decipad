@@ -1,18 +1,11 @@
 import tables from '@decipad/tables';
-import { Stripe } from 'stripe';
-import { limits, plans, thirdParty } from '@decipad/backend-config';
+import { limits, plans } from '@decipad/backend-config';
 import type { ID } from '@decipad/backendtypes';
-import { track } from '@decipad/backend-analytics';
 import type { APIGatewayProxyEventV2 } from 'aws-lambda';
 import type {
   SubscriptionPaymentStatus,
   WorkspaceSubscription,
 } from '@decipad/graphqlserver-types';
-
-const { secretKey, apiVersion, subscriptionsProdId } = thirdParty().stripe;
-const stripe = new Stripe(secretKey, {
-  apiVersion,
-});
 
 export const getWorkspaceSubscription = async (
   workspaceId: string
@@ -41,29 +34,20 @@ export const getWorkspaceSubscription = async (
     };
   }
 
-  // Retroactively populating limits for the current PRO plan - TODO: get rid of this in the future
+  // Stripe is disabled, use default limits
   const isProPlan =
     (await data.workspaces.get({ id: workspaceId }))?.plan === plans().pro;
-  const subsPlans = (
-    await stripe.prices.list({
-      product: subscriptionsProdId,
-      active: true,
-      type: 'recurring',
-    })
-  ).data;
-
-  const proPlan = subsPlans.find((plan) => plan.metadata.isDefault === 'true');
 
   if (!workspaceSubs.credits && isProPlan) {
-    workspaceSubs.credits = Number(proPlan?.metadata.credits) || 0;
+    workspaceSubs.credits = limits().maxCredits.pro;
   }
 
   if (!workspaceSubs.queries && isProPlan) {
-    workspaceSubs.queries = Number(proPlan?.metadata.queries) || 0;
+    workspaceSubs.queries = limits().maxQueries.pro;
   }
 
   if (!workspaceSubs.storage && isProPlan) {
-    workspaceSubs.storage = Number(proPlan?.metadata.storage) || 0;
+    workspaceSubs.storage = limits().storage.pro;
   }
 
   // Just in case.
@@ -111,78 +95,22 @@ export const findSubscriptionByWorkspaceId = async (
 };
 
 export const updateStripeIfNeeded = async (
-  event: APIGatewayProxyEventV2,
-  subs: WorkspaceSubscription,
-  newQuantity: number,
-  workspaceId: string
+  _event: APIGatewayProxyEventV2,
+  _subs: WorkspaceSubscription,
+  _newQuantity: number,
+  _workspaceId: string
 ) => {
-  const data = await tables();
-  const subscription = await stripe.subscriptions.retrieve(subs.id);
-
-  const workspace = await data.workspaces.get({ id: workspaceId });
-  const workspacePlan = workspace?.plan || 'pro';
-  let previousQuantity;
-
-  if (subscription.items.data.length === 0) {
-    throw new Error('Subscription has no items');
-  }
-
-  if (workspace?.isPremium) {
-    const planSubsInfo = subscription.items.data[0];
-    previousQuantity = planSubsInfo?.quantity || 0;
-    const subscriptionItemID = planSubsInfo?.id || '';
-
-    await stripe.subscriptionItems.update(subscriptionItemID, {
-      quantity: newQuantity,
-    });
-
-    await track(event, {
-      event: 'update Stripe subscription seats',
-      properties: {
-        stripeSubscriptionId: subscription.id,
-        previousQuantity: previousQuantity?.toString(),
-        newQuantity: newQuantity.toString(),
-        workspaceId,
-        plan: workspacePlan,
-      },
-    });
-  }
+  // Stripe is disabled, no-op
 };
 
-export const cancelStripeSubscription = async (subscriptionId: ID) => {
-  const subscription = await stripe.subscriptions.retrieve(subscriptionId);
-
-  if (!subscription) {
-    throw new Error('Stripe Subscription does not exist');
-  }
-
-  await stripe.subscriptions.cancel(subscriptionId);
-
-  return subscription;
+export const cancelStripeSubscription = async (_subscriptionId: ID) => {
+  // Stripe is disabled, no-op
+  return null;
 };
 
 export const cancelSubscriptionFromWorkspaceId = async (
-  event: APIGatewayProxyEventV2,
-  workspaceId: ID
+  _event: APIGatewayProxyEventV2,
+  _workspaceId: ID
 ) => {
-  const subscription = await findSubscriptionByWorkspaceId(workspaceId);
-
-  if (!subscription) {
-    throw new Error('Stripe Subscription does not exist');
-  }
-
-  const stripeSubscription = await cancelStripeSubscription(subscription.id);
-  const billingEmail = await stripe.customers.retrieve(
-    stripeSubscription.customer.toString() // this is always a string, according to their documentation
-  );
-
-  await track(event, {
-    event: 'Stripe subscription deleted',
-    properties: {
-      id: subscription.id,
-      workspaceId: subscription.id,
-      plan: subscription.workspace?.plan,
-      billingEmail,
-    },
-  });
+  // Stripe is disabled, no-op
 };

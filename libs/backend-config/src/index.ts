@@ -115,18 +115,6 @@ function env(name: SupportedEnvKey): string {
       return valueOrDefault(name, process.env.SENTRY_DSN);
     case 'INTERCOM_SECRET_ID':
       return valueOrDefault(name, process.env.INTERCOM_SECRET_ID);
-    case 'STRIPE_API_KEY':
-      return valueOrDefault(name, process.env.STRIPE_API_KEY);
-    case 'STRIPE_WEBHOOK_SECRET':
-      return valueOrDefault(name, process.env.STRIPE_WEBHOOK_SECRET);
-    case 'STRIPE_SECRET_KEY':
-      return valueOrDefault(name, process.env.STRIPE_SECRET_KEY);
-    case 'STRIPE_EXTRA_CREDITS_PRODUCT_ID':
-      return valueOrDefault(name, process.env.STRIPE_EXTRA_CREDITS_PRODUCT_ID);
-    case 'STRIPE_SUBSCRIPTIONS_PRODUCT_ID':
-      return valueOrDefault(name, process.env.STRIPE_SUBSCRIPTIONS_PRODUCT_ID);
-    case 'VITE_STRIPE_CUSTOMER_PORTAL_LINK':
-      return valueOrDefault(name, process.env.VITE_STRIPE_CUSTOMER_PORTAL_LINK);
     case 'NOTION_CLIENT_ID':
       return valueOrDefault(name, process.env.NOTION_CLIENT_ID);
     case 'NOTION_CLIENT_SECRET':
@@ -394,14 +382,6 @@ export function thirdParty() {
     },
     unsplash: {
       apiKey: env('UNSPLASH_API_KEY'),
-    },
-    stripe: {
-      apiVersion: '2024-11-20.acacia' as const,
-      webhookSecret: env('STRIPE_WEBHOOK_SECRET'),
-      secretKey: env('STRIPE_SECRET_KEY'), // 'sk_test_...
-      apiKey: env('STRIPE_API_KEY'), // 'pk_test_...
-      extraCreditsProdId: env('STRIPE_EXTRA_CREDITS_PRODUCT_ID'), // prod_...
-      subscriptionsProdId: env('STRIPE_SUBSCRIPTIONS_PRODUCT_ID'),
     },
     defaultTokenExpirationSeconds: Number(
       env('DECI_DEFAULT_TOKEN_EXPIRATION_SECONDS')

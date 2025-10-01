@@ -44,4 +44,4 @@ cd apps/backend
 ## Quiet if running for e2e tests
 export ARC_QUIET="${DECI_E2E:-}"
 
-NEXTAUTH_URL=http://localhost:3000 ../../node_modules/.bin/sandbox
+DECI_APP_URL_BASE=http://localhost:3000 NEXTAUTH_URL=http://localhost:3000/api/auth AUTH_URL=http://localhost:3000/api/auth ../../node_modules/.bin/sandbox

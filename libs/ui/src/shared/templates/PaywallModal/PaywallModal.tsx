@@ -48,26 +48,10 @@ export const PaywallModal: React.FC<PaywallModalProps> = ({
   }, [selectedPlan, plans]);
 
   const fetchBillingInfo = async (pId: string, resourceId: string) => {
-    try {
-      await client
-        .query(GetStripeCheckoutSessionInfoDocument, {
-          priceId: pId,
-          workspaceId: resourceId,
-        })
-        .toPromise()
-        .then((result) => {
-          navigate(
-            pay({
-              workspaceId,
-              cs: result.data?.getStripeCheckoutSessionInfo?.clientSecret ?? '',
-              plan: selectPlanInfo.title ?? '',
-              newWorkspace: isCreatingNewWorkspace ? 'newWorkspace' : undefined,
-            }).$
-          );
-        });
-    } catch (error) {
-      console.error('Error fetching billing info:', error);
-    }
+    // Stripe is disabled, show error message
+    alert(
+      'Payment processing is currently disabled. Please contact support for assistance.'
+    );
   };
 
   const canProceed = useMemo(() => {

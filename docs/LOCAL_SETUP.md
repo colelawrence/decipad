@@ -67,19 +67,57 @@ Decipad uses environment variables for all configuration. **Never commit real AP
 # Copy the example environment file
 cp .env.example .env.local
 
+# Create backend environment file
+touch apps/backend/.env
+
 # Edit with your actual values
 # Use your preferred editor (VS Code, vim, nano, etc.)
 code .env.local  # or vim .env.local
+code apps/backend/.env  # Edit backend environment variables
+```
+
+#### Backend Environment Configuration
+
+The backend service requires its own environment file at `apps/backend/.env`. This file is critical for the backend to function properly in local development.
+
+**Create the backend environment file:**
+
+```bash
+# Create the backend .env file
+touch apps/backend/.env
+```
+
+**Essential variables for `apps/backend/.env`:**
+
+```bash
+# CRITICAL: These URLs MUST be set to localhost:3000 for local development
+DECI_APP_URL_BASE=http://localhost:3000
+NEXTAUTH_URL=http://localhost:3000/api/auth
+
+# JWT Secret (generate a strong random string)
+JWT_SECRET=your_strong_jwt_secret_here
+
+# Email configuration (REQUIRED for user login)
+DECI_FROM_EMAIL_ADDRESS=Decipad<info@yourdomain.com>
+MAILERSEND_API_KEY=your_mailersend_api_key
+
+# AWS configuration (for full functionality)
+AWS_REGION=eu-west-2
+AWS_ACCESS_KEY_ID=your_aws_access_key_id
+AWS_SECRET_ACCESS_KEY=your_aws_secret_access_key
 ```
 
 #### Required Environment Variables
 
 For basic local development, you need to configure these essential variables:
 
+> **⚠️ CRITICAL FOR LOCAL DEVELOPMENT**: The `NEXTAUTH_URL` and `DECI_APP_URL_BASE` variables **MUST** be set to `http://localhost:3000` in `apps/backend/.env` for local development to work properly. These URLs are used for authentication callbacks and API routing, and incorrect values will cause login failures and broken functionality.
+
 **Core Application:**
 
 ```bash
-# Application URLs
+# Application URLs - MUST be set to localhost:3000 for local development
+# These variables should be defined in apps/backend/.env
 DECI_APP_URL_BASE=http://localhost:3000
 NEXTAUTH_URL=http://localhost:3000/api/auth
 
@@ -142,6 +180,8 @@ If you just want to explore the codebase without full functionality:
 ```bash
 # Minimal .env.local for basic exploration
 NODE_ENV=development
+# CRITICAL: These URLs MUST be set to localhost:3000 for local development
+# These variables should be defined in apps/backend/.env
 DECI_APP_URL_BASE=http://localhost:3000
 NEXTAUTH_URL=http://localhost:3000/api/auth
 JWT_SECRET=development_jwt_secret_change_in_production

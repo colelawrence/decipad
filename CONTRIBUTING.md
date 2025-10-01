@@ -42,7 +42,9 @@ Before contributing, ensure you have:
 4. **Set up environment variables**:
    ```bash
    cp .env.example .env
-   cp apps/backend/.env.example apps/backend/.env
+   # Create backend environment file
+   touch apps/backend/.env
+   # IMPORTANT: Set NEXTAUTH_URL and DECI_APP_URL_BASE to http://localhost:3000 in apps/backend/.env
    ```
 5. **Start the development server**:
    ```bash

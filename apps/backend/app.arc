@@ -69,8 +69,7 @@ any /api/image/*
 # Server-side rendering
 # get /n/:notebookid
 
-# Stripe endpoints
-post /api/stripe/webhook
+# Stripe endpoints removed - payment processing disabled
 
 @static
 folder public

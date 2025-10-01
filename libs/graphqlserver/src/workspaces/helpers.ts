@@ -1,5 +1,4 @@
-import { Stripe } from 'stripe';
-import { limits, thirdParty } from '@decipad/backend-config';
+import { limits } from '@decipad/backend-config';
 import Boom from '@hapi/boom';
 import { subscriptions } from '@decipad/services';
 import { nanoid } from 'nanoid';
@@ -9,11 +8,6 @@ interface MaybeThrowProps {
   isInternal: boolean;
   hasFreeWorkspace: boolean;
 }
-
-const { secretKey, apiVersion, subscriptionsProdId } = thirdParty().stripe;
-const stripe = new Stripe(secretKey, {
-  apiVersion,
-});
 
 /**
  * A wrapper for slighly complicated logic, that can be easily confused.
@@ -34,21 +28,23 @@ export function maybeThrowForbidden({
 }
 
 export async function getPlanInfoFromStripe(currentPlan: string) {
-  const subsPlan = (
-    await stripe.prices.list({
-      product: subscriptionsProdId,
-      active: true,
-      type: 'recurring',
-    })
-  ).data.find((plan) => plan.metadata.key === currentPlan);
-
-  if (!subsPlan) {
-    throw Boom.failedDependency(
-      `Plan ${currentPlan} does not exist in Stripe. Please check configuration`
-    );
+  // Stripe is disabled, return mock data for free plan
+  if (currentPlan === 'free') {
+    return {
+      metadata: {
+        key: 'free',
+        credits: limits().maxCredits.free.toString(),
+        queries: limits().maxQueries.free.toString(),
+        editors: limits().maxCollabEditors.free.toString(),
+        readers: limits().maxCollabReaders.free.toString(),
+        storage: limits().storage.free.toString(),
+      },
+    };
   }
 
-  return subsPlan;
+  throw Boom.failedDependency(
+    `Plan ${currentPlan} is not available. Payment processing is disabled`
+  );
 }
 
 const nameMappings: Record<

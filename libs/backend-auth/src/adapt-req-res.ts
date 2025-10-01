@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 /* eslint-disable no-param-reassign */
 import type { ParsedUrlQuery } from 'querystring';
 import stringify from 'json-stringify-safe';
@@ -8,6 +9,7 @@ import type {
 import type { NextApiRequest, NextApiResponse, NextApiHandler } from 'next';
 import { boomify } from '@hapi/boom';
 import { TOKEN_COOKIE_NAMES } from '@decipad/services/authentication';
+import { app } from '@decipad/backend-config';
 import { debug } from './debug';
 import { base64Decode } from './utils/base64Decode';
 import { urlDecode } from './utils/urlDecode';
@@ -19,13 +21,47 @@ export interface ReplyBody {
 }
 
 export default function adaptReqRes(handle: NextApiHandler) {
+  console.log('Adapt-req-res Debug - NEXTAUTH_URL:', process.env.NEXTAUTH_URL);
+  console.log('Adapt-req-res Debug - AUTH_URL:', process.env.AUTH_URL);
+  console.log('Adapt-req-res Debug - app().urlBase:', app().urlBase);
+
   return async function respondWithAuth(
     req: APIGatewayProxyEventV2
   ): Promise<APIGatewayProxyResultV2> {
     debug('auth request', req);
     return new Promise((resolve) => {
       const { method, path } = req.requestContext.http;
-      const url = req.rawPath;
+      let url = req.rawPath;
+
+      // Correct the URL port if it's localhost with wrong port
+      try {
+        const urlObj = new URL(url);
+        if (urlObj.hostname === 'localhost') {
+          const configuredBaseUrl = app().urlBase;
+          console.log(
+            'Adapt-req-res Debug - configuredBaseUrl:',
+            configuredBaseUrl
+          );
+          const configuredUrl = new URL(configuredBaseUrl);
+          if (urlObj.port !== configuredUrl.port) {
+            console.log(
+              'Adapt-req-res Debug - Correcting URL port from',
+              urlObj.port,
+              'to',
+              configuredUrl.port
+            );
+            urlObj.port = configuredUrl.port;
+            url = urlObj.toString();
+          }
+        }
+      } catch (e) {
+        console.error(e);
+        // If URL parsing fails, keep the original URL
+        console.log(
+          'Adapt-req-res Debug - Failed to parse URL, keeping original:',
+          url
+        );
+      }
       const pathParts = path.split('/');
       let action = pathParts[pathParts.length - 1];
       const provider = req.pathParameters && req.pathParameters.provider;
@@ -127,6 +163,22 @@ export default function adaptReqRes(handle: NextApiHandler) {
           reply(buf);
         },
         json: (json: Record<string, unknown>) => {
+          // If the json contains a "url" property, ensure its origin matches app().urlBase
+          if (json && typeof json.url === 'string') {
+            try {
+              const urlObj = new URL(json.url);
+              const appUrlBase = app().urlBase;
+              const appOrigin = new URL(appUrlBase).origin;
+              if (urlObj.origin !== appOrigin) {
+                // Change the origin to match app().urlBase, keep the rest of the URL
+                urlObj.protocol = new URL(appUrlBase).protocol;
+                urlObj.host = new URL(appUrlBase).host;
+                json.url = urlObj.toString();
+              }
+            } catch (e) {
+              // If parsing fails, do nothing
+            }
+          }
           reply(json as unknown as ReplyBody);
         },
         send: (buf: string | Buffer) => {
@@ -165,6 +217,27 @@ export default function adaptReqRes(handle: NextApiHandler) {
           return newRes;
         },
         redirect: (redirectUrl: string) => {
+          // Ensure redirectUrl matches the same origin as app().urlBase
+          try {
+            const appUrlBase = app().urlBase;
+            const appOrigin = new URL(appUrlBase).origin;
+            const redirectObj = new URL(redirectUrl, appUrlBase);
+            if (redirectObj.origin !== appOrigin) {
+              console.log(
+                'Adapt-req-res Debug - Correcting redirect URL origin from',
+                redirectObj.origin,
+                'to',
+                appOrigin
+              );
+              // Change the origin to match app().urlBase, keep the rest of the URL
+              redirectObj.protocol = new URL(appUrlBase).protocol;
+              redirectObj.host = new URL(appUrlBase).host;
+              redirectUrl = redirectObj.toString();
+            }
+          } catch (e) {
+            // If parsing fails, do nothing
+            console.error(e);
+          }
           headers.Location = redirectUrl;
           statusCode = 302;
           reply();
@@ -172,7 +245,18 @@ export default function adaptReqRes(handle: NextApiHandler) {
       };
 
       try {
-        handle(newReq as unknown as NextApiRequest, newRes as NextApiResponse);
+        handle(
+          newReq as unknown as NextApiRequest,
+          newRes as NextApiResponse
+        ).catch((err) => {
+          console.error('caught', err);
+          const boomed = boomify(err as Error);
+          resolve({
+            ...boomed.output,
+            body: stringify(boomed.output.payload),
+            headers: { 'Content-Type': 'application/json' },
+          });
+        });
       } catch (err) {
         // eslint-disable-next-line no-console
         console.error('caught', err);
