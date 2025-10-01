@@ -45,6 +45,11 @@ jobs:
         with:
           node-version: 24.x
 
+      - name: Uses wasm-pack
+        uses: jetli/wasm-pack-action@0d096b08b4e5a7de8c28de67e11e945404e9eefa # v0.4.0
+        with:
+          version: 'latest'
+
       - name: Clean install dependencies for Node.js 24
         run: |
           # Remove node_modules and yarn cache to ensure fresh install
@@ -52,11 +57,6 @@ jobs:
           yarn cache clean
           # Install dependencies from scratch
           yarn install --ignore-engines --ignore=apps/docs
-
-      - name: Uses wasm-pack
-        uses: jetli/wasm-pack-action@0d096b08b4e5a7de8c28de67e11e945404e9eefa # v0.4.0
-        with:
-          version: 'latest'
 
       - name: Get installed Playwright version
         id: playwright-version

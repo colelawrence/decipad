@@ -40,6 +40,11 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
 
+      - name: Uses wasm-pack
+        uses: jetli/wasm-pack-action@0d096b08b4e5a7de8c28de67e11e945404e9eefa # v0.4.0
+        with:
+          version: 'latest'
+
       - name: Clean install dependencies for Node.js 24
         env:
           PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: 'true'
@@ -49,11 +54,6 @@ jobs:
           yarn cache clean
           # Install dependencies from scratch
           yarn install --ignore-engines
-
-      - name: Uses wasm-pack
-        uses: jetli/wasm-pack-action@0d096b08b4e5a7de8c28de67e11e945404e9eefa # v0.4.0
-        with:
-          version: 'latest'
 
       - name: Generates wasm files + JS bindings
         id: wasm-generation
