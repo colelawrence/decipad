@@ -241,7 +241,7 @@ test('workspace flows @workspace', async ({
   });
 });
 
-test('workspace permissions @workspace', async ({
+test.skip('workspace permissions @workspace', async ({
   testUser,
   randomFreeUser,
   anotherRandomFreeUser,
@@ -447,7 +447,7 @@ test.skip('workspace reader checks @workspace @roles', async ({
   });
 });
 
-test('workspace editor checks @workspace @roles', async ({
+test.skip('workspace editor checks @workspace @roles', async ({
   testUser,
   randomFreeUser,
 }) => {

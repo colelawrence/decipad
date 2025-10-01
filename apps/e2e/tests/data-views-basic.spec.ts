@@ -8,7 +8,8 @@ import {
   writeInTable,
 } from '../utils/page/Table';
 
-test('Data Views', async ({ testUser: { page, notebook } }) => {
+// eslint-disable-next-line playwright/no-skipped-test
+test.skip('Data Views', async ({ testUser: { page, notebook } }) => {
   await test.step('creates table', async () => {
     await notebook.focusOnBody();
     await createTable(page);

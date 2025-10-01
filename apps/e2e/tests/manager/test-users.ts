@@ -42,13 +42,32 @@ export class User {
   }
 
   async goToWorkspace(workspaceIdOverride: string | null = null) {
+    // eslint-disable-next-line no-console
+    console.log('goToWorkspace', workspaceIdOverride);
     if (workspaceIdOverride) {
       await this.page.goto(`/w/${workspaceIdOverride}`);
     } else {
       await this.page.goto('/');
     }
     await this.page.waitForURL(/\/w\/(.+)/);
-    await this.page.getByTestId('new-notebook').waitFor();
+    // Wait for the page to be fully loaded and the new-notebook button to be visible
+    // eslint-disable-next-line playwright/no-networkidle
+    await this.page.waitForLoadState('networkidle');
+    // Try to find the button by test ID first, fallback to role and text
+    try {
+      await this.page.getByTestId('new-notebook').waitFor({
+        state: 'visible',
+        timeout: 5000,
+      });
+    } catch (err) {
+      // eslint-disable-next-line no-console
+      console.error(err);
+      // Fallback: look for button with "New Notebook" text
+      await this.page.getByRole('button', { name: 'New Notebook' }).waitFor({
+        state: 'visible',
+        timeout: 25000,
+      });
+    }
     const workspaceID = this.page.url().match(/\/w\/(.+)/);
     if (workspaceID) {
       await this.workspace.updateDefaultWorkspaceID(workspaceID[1].toString());
