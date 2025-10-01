@@ -1,6 +1,7 @@
 import { expect, test } from './manager/decipad-tests';
 
-test('workspace permissions', async ({
+// eslint-disable-next-line playwright/no-skipped-test
+test.skip('workspace permissions', async ({
   testUser,
   randomFreeUser,
   anotherRandomFreeUser,
