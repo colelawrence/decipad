@@ -90,7 +90,7 @@ touch apps/backend/.env
 **Essential variables for `apps/backend/.env`:**
 
 ```bash
-# CRITICAL: These URLs MUST be set to localhost:3000 for local development
+# CRITICAL: These URLs MUST be set correctly for local development
 DECI_APP_URL_BASE=http://localhost:3000
 NEXTAUTH_URL=http://localhost:3000/api/auth
 
@@ -111,12 +111,12 @@ AWS_SECRET_ACCESS_KEY=your_aws_secret_access_key
 
 For basic local development, you need to configure these essential variables:
 
-> **⚠️ CRITICAL FOR LOCAL DEVELOPMENT**: The `NEXTAUTH_URL` and `DECI_APP_URL_BASE` variables **MUST** be set to `http://localhost:3000` in `apps/backend/.env` for local development to work properly. These URLs are used for authentication callbacks and API routing, and incorrect values will cause login failures and broken functionality.
+> **⚠️ CRITICAL FOR LOCAL DEVELOPMENT**: The `NEXTAUTH_URL` and `DECI_APP_URL_BASE` variables **MUST** be set correctly in `apps/backend/.env` for local development to work properly. These URLs are used for authentication callbacks and API routing, and incorrect values will cause login failures and broken functionality.
 
 **Core Application:**
 
 ```bash
-# Application URLs - MUST be set to localhost:3000 for local development
+# Application URLs - MUST be set correctly for local development
 # These variables should be defined in apps/backend/.env
 DECI_APP_URL_BASE=http://localhost:3000
 NEXTAUTH_URL=http://localhost:3000/api/auth
@@ -180,7 +180,7 @@ If you just want to explore the codebase without full functionality:
 ```bash
 # Minimal .env.local for basic exploration
 NODE_ENV=development
-# CRITICAL: These URLs MUST be set to localhost:3000 for local development
+# CRITICAL: These URLs MUST be set correctly for local development
 # These variables should be defined in apps/backend/.env
 DECI_APP_URL_BASE=http://localhost:3000
 NEXTAUTH_URL=http://localhost:3000/api/auth

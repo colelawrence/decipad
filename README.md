@@ -85,7 +85,7 @@ Before you begin, ensure you have the following installed:
     # Create backend environment file
     touch apps/backend/.env
     # Edit .env.local with your actual API keys and secrets
-    # IMPORTANT: Set NEXTAUTH_URL and DECI_APP_URL_BASE to http://localhost:3000 in apps/backend/.env
+    # IMPORTANT: Set NEXTAUTH_URL to http://localhost:3000/api/auth and DECI_APP_URL_BASE to http://localhost:3000 in apps/backend/.env
     ```
 
 ### Running the Application

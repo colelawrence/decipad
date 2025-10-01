@@ -105,7 +105,7 @@ cp .env.example .env
 # Create backend environment file
 touch apps/backend/.env
 # Edit .env files with your configuration
-# IMPORTANT: Set NEXTAUTH_URL and DECI_APP_URL_BASE to http://localhost:3000 in apps/backend/.env
+# IMPORTANT: Set NEXTAUTH_URL to http://localhost:3000/api/auth and DECI_APP_URL_BASE to http://localhost:3000 in apps/backend/.env
 ```
 
 ### Step 4: Start Development
