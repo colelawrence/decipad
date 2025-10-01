@@ -559,4 +559,4 @@ nasa-gcn/architect-functions-search
 @aws
 region eu-west-2
 timeout 60
-runtime nodejs24.x
+runtime nodejs18.x
