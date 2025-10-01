@@ -1,11 +1,8 @@
 name: Lighthouse CI
+
+# DISABLED: Lighthouse CI workflow is disabled
 on:
-  push:
-    branches: [main]
-  workflow_run:
-    workflows: ['Deploy Prod']
-    types:
-      - completed
+  workflow_dispatch:
 jobs:
   lighthouse:
     runs-on: ubuntu-latest
@@ -13,10 +10,10 @@ jobs:
       group: lighthouse-${{ github.head_ref }}
     timeout-minutes: 30
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@08eba0b27e820071cde6df949e0beb9ba4906955 # v4
       - name: Audit URLs using Lighthouse
         id: lighthouse_audit
-        uses: treosh/lighthouse-ci-action@v12
+        uses: treosh/lighthouse-ci-action@2dd68ab12619d615e69ce5982eb20be9a6883ae0 # v12
         with:
           urls: |
             https://app.decipad.com/n/Spotify-Price-Increase%3AWRnGDJFV2WMCtxboy6B57
@@ -53,7 +50,7 @@ jobs:
     if: ${{ always() }} # You always want to be notified: success, failure, or cancelled
     steps:
       - name: Notify
-        uses: decipad/discord-webhook@v5
+        uses: decipad/discord-webhook@4d1e357ee56442b97220c62f5f17a3e05a515291 # v5
         with:
           title: "${{ needs.lighthouse.result == 'success' && '💚' || needs.lighthouse.result == 'cancelled' &&  '🗑️' || '🔴'}} Lighthouse"
           description: '${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}'

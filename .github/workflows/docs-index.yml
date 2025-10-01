@@ -17,9 +17,9 @@ jobs:
       cancel-in-progress: true
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@08eba0b27e820071cde6df949e0beb9ba4906955 # v4
       - name: Scrape docs
-        uses: decipad/algolia-docsearch-action@master
+        uses: decipad/algolia-docsearch-action@81d5195edb25a9846fb382400f53105e7e9b25d3 # master
         with:
           algolia_application_id: ${{ secrets.ALGOLIA_APP_ID }}
           algolia_api_key: ${{ secrets.ALGOLIA_API_KEY }}
@@ -33,7 +33,7 @@ jobs:
     if: ${{ failure() && github.ref == 'refs/heads/main' }}
     steps:
       - name: Notify
-        uses: decipad/discord-webhook@v5
+        uses: decipad/discord-webhook@4d1e357ee56442b97220c62f5f17a3e05a515291 # v5
         with:
           github-token: ${{ secrets.github_token }}
           discord-webhook: ${{ secrets.DISCORD_WEBHOOK }}

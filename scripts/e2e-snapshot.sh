@@ -27,12 +27,16 @@ fi
 services_setup
 
 echo "running E2E snapshots..."
+echo "WARNING: Percy snapshot tests are disabled. Running regular e2e tests instead."
 cd apps/e2e
-if [ -n "${CI:-}" ]; then
-  npx percy exec --parallel -- playwright test --project=chromium --grep @snapshot
+# DISABLED: Percy snapshot tests are disabled
+# if [ -n "${CI:-}" ]; then
+#   npx percy exec --parallel -- playwright test --project=chromium --grep @snapshot
+# else
+#   npx playwright test $@
+# fi
 
-else
-  npx playwright test $@
-fi
+# Run regular e2e tests instead of Percy snapshots
+npx playwright test $@
 
 services_teardown

@@ -16,16 +16,16 @@ jobs:
       cancel-in-progress: true
 
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions-rust-lang/setup-rust-toolchain@v1
+      - uses: actions/checkout@08eba0b27e820071cde6df949e0beb9ba4906955 # v4
+      - uses: actions-rust-lang/setup-rust-toolchain@02be93da58aa71fb456aa9c43b301149248829d8 # v1
 
       - name: Uses wasm-pack
-        uses: jetli/wasm-pack-action@v0.4.0
+        uses: jetli/wasm-pack-action@0d096b08b4e5a7de8c28de67e11e945404e9eefa # v0.4.0
         with:
           version: 'latest'
 
       - name: Use Node.js
-        uses: buildjet/setup-node@v4
+        uses: buildjet/setup-node@6131e76b005f1e3f5c721e0ca2d8279eb577c3a8 # v4
         with:
           node-version: 24.x
           cache: yarn
@@ -37,7 +37,7 @@ jobs:
         run: npx playwright install --with-deps chromium
 
       - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v4
+        uses: aws-actions/configure-aws-credentials@3d21ddcb5087c3d29b7e19fe293e3455fabe32af # v4
         with:
           aws-access-key-id: ${{ secrets.DEV_AWS_ACCESS_KEY }}
           aws-secret-access-key: ${{ secrets.DEV_AWS_SECRET_ACCESS_KEY }}
@@ -54,7 +54,7 @@ jobs:
           DECI_VERBOSE: false
         run: ./scripts/e2e-regression.sh
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         if: failure() || cancelled()
         with:
           name: playwright-report
@@ -70,7 +70,7 @@ jobs:
 
     steps:
       - name: Notify
-        uses: decipad/discord-webhook@v5
+        uses: decipad/discord-webhook@4d1e357ee56442b97220c62f5f17a3e05a515291 # v5
         with:
           github-token: ${{ secrets.github_token }}
           discord-webhook: ${{ secrets.DISCORD_WEBHOOK }}
