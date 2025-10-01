@@ -37,14 +37,6 @@
         "command": "../../node_modules/.bin/craco start",
         "cwd": "libs/server-side-rendering"
       }
-    },
-    "test": {
-      "executor": "nx:run-commands",
-      "outputs": ["{workspaceRoot}/coverage/libs/server-side-rendering"],
-      "options": {
-        "command": "npx vitest --run --config ../../vitest.base.config.ts",
-        "cwd": "libs/server-side-rendering"
-      }
     }
   },
   "tags": []

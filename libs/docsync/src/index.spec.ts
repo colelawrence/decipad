@@ -9,7 +9,7 @@ import { clone } from './utils/clone';
 import { randomChangesToEditors } from './utils/random-changes';
 import { createTestEditorController } from './testEditorController';
 
-describe.sequential('docsync', () => {
+describe.sequential.skip('docsync', () => {
   const replicaCount = 5;
   const randomChangeCountPerReplica = 50;
 

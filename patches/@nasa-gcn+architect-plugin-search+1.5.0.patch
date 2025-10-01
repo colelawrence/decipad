@@ -1,8 +1,8 @@
 diff --git a/node_modules/@nasa-gcn/architect-plugin-search/index.js b/node_modules/@nasa-gcn/architect-plugin-search/index.js
-index 025a552..f0cf6fc 100644
+index 919e908..689e807 100644
 --- a/node_modules/@nasa-gcn/architect-plugin-search/index.js
 +++ b/node_modules/@nasa-gcn/architect-plugin-search/index.js
-@@ -577,6 +577,9 @@ function addTransforms(cloudformation, ...transforms) {
+@@ -586,6 +586,9 @@ function addTransforms(cloudformation, ...transforms) {
  var deploy = {
    // @ts-expect-error: The Architect plugins API has no type definitions.
    start({ cloudformation, inventory, arc, stage }) {
@@ -12,7 +12,7 @@ index 025a552..f0cf6fc 100644
      let resources;
      const config = getConfig(arc);
      if (config.availabilityZoneCount) {
-@@ -592,8 +595,13 @@ var deploy = {
+@@ -601,8 +604,13 @@ var deploy = {
    },
    // @ts-expect-error: The Architect plugins API has no type definitions.
    services({ stage, arc }) {
@@ -28,7 +28,7 @@ index 025a552..f0cf6fc 100644
      } else if (arc.search) {
        return services2;
      } else {
-@@ -605,11 +613,11 @@ var deploy = {
+@@ -614,11 +622,11 @@ var deploy = {
      executeSearchRequests(inventory.inv._project.cwd);
    }
  };
@@ -45,7 +45,7 @@ index 025a552..f0cf6fc 100644
  var sandbox = {
    async start({
      // @ts-expect-error: The Architect plugins API has no type definitions.
-@@ -621,13 +629,13 @@ var sandbox = {
+@@ -630,13 +638,13 @@ var sandbox = {
        }
      }
    }) {

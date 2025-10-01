@@ -8,7 +8,8 @@ on:
 
 jobs:
   index:
-    if: ${{ github.event.workflow_run.conclusion == 'success' && github.event_name != 'pull_request' }}
+    # DISABLED: Product discontinued, open-sourcing codebase
+    if: false
     runs-on: ubuntu-latest
     concurrency:
       group: index-docs-alpha-${{ github.head_ref }}

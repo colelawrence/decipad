@@ -4,5 +4,5 @@
   "description": "",
   "main": "eslint-plugin-emotion.js",
   "author": "",
-  "license": "ISC"
+  "license": "MIT"
 }

@@ -36,12 +36,15 @@ export const generateGroups = async ({
   //   aggregations,
   //   parentGroupId,
   // });
-  const nextPreviousColumns = [...previousColumns, tree.value.columns[0]];
+  const nextPreviousColumns = [
+    ...previousColumns,
+    tree.value.columns[0],
+  ].filter(Boolean);
   const nextPreviousColumnTypes = [
     ...previousColumnTypes,
     tree.type.columnTypes[0],
-  ];
-  const nextPreviousFilters = [...previousFilters, filters[0]];
+  ].filter(Boolean);
+  const nextPreviousFilters = [...previousFilters, filters[0]].filter(Boolean);
   const dataGroups = await Promise.all(
     tree.value.children.map(async (child) => {
       const groupId = `${parentGroupId}/${await generateHash(child)}`;

@@ -4,394 +4,173 @@
 
 <h2 align="center">Decipad — Make sense of numbers</h2>
 
-> All the things Deci.
+<p align="center">
+  <strong>The open-source data notebook for developers.</strong>
+  <br />
+  <br />
+  <a href="https://github.com/decipad/decipad/blob/main/LICENSE">
+    <img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="Decipad is released under the MIT license." />
+  </a>
+  <a href="https://github.com/decipad/decipad/actions/workflows/test.yml">
+    <img src="https://github.com/decipad/decipad/actions/workflows/test.yml/badge.svg" alt="Run Tests" />
+  </a>
+  <a href="https://github.com/decipad/decipad/actions/workflows/lint-and-typecheck.yml">
+    <img src="https://github.com/decipad/decipad/actions/workflows/lint-and-typecheck.yml/badge.svg" alt="Lint & Typecheck" />
+  </a>
+</p>
 
-[![Run Tests](https://github.com/decipad/decipad/actions/workflows/test.yml/badge.svg)](https://github.com/decipad/decipad/actions/workflows/test.yml)
-[![Run E2E Tests](https://github.com/decipad/decipad/actions/workflows/test-e2e.yaml/badge.svg)](https://github.com/decipad/decipad/actions/workflows/test-e2e.yaml)
-[![Lint & Typecheck](https://github.com/decipad/decipad/actions/workflows/lint-and-typecheck.yml/badge.svg)](https://github.com/decipad/decipad/actions/workflows/lint-and-typecheck.yml)
-[![Deploy dev](https://github.com/decipad/decipad/actions/workflows/deploy-dev.yml/badge.svg)](https://github.com/decipad/decipad/actions/workflows/deploy-dev.yml)
+Decipad is a low-code notebook that helps you gather data, build interactive models, and share reports. This repository contains the source code for the Decipad application.
 
-In-app developer tools are available by using the konami code.
+## Table of Contents
 
-# TOC
+- [Getting Started](#getting-started)
+  - [Prerequisites](#prerequisites)
+  - [Installation](#installation)
+  - [Running the Application](#running-the-application)
+- [Security](#security)
+  - [Environment Variables](#environment-variables)
+  - [Reporting Vulnerabilities](#reporting-vulnerabilities)
+- [Development](#development)
+  - [Project Structure](#project-structure)
+  - [Important Scripts](#important-scripts)
+- [Deployment](#deployment)
+- [Continuous Integration](#continuous-integration)
+- [Community](#community)
+- [License](#license)
 
-- [Setup](#set-up)
-- [Development cycle](docs/DEVELOPMENT.md)
-- [Feature flags](#feature-flags)
+## Getting Started
 
-## Set up
+Follow these instructions to get Decipad running on your local machine for development and testing purposes.
 
-For you to be able to run Deci locally, you need to have Node.js version 18 installed, at least v18.17.
+### Prerequisites
 
-If you don't already, you can go to [the Node.js official website](https://nodejs.org/en/) to download and run the installer.
+Before you begin, ensure you have the following installed:
 
-After that you will need a Github account. If you don't already have one, you can [signup for one here](https://github.com/join), and then ask someone in the dev team to add you to the team.
+- **Node.js**: Version 24.0.0 or higher. You can download it from the [official Node.js website](https://nodejs.org/en/).
+- **Yarn**: We use Yarn for package management. If you don't have it, you can install it globally via npm:
+  ```bash
+  npm install -g yarn
+  ```
+- **Rust and wasm-pack**: Some parts of Decipad are written in Rust and compiled to WebAssembly.
+  - Install Rust:
+    ```bash
+    curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+    ```
+  - Install wasm-pack:
+    ```bash
+    curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | sh
+    ```
+- **Git**: You'll need Git to clone the repository. You can [download it from the official website](https://git-scm.com/download).
 
-Now you have to choose one of two paths:
+### Installation
 
-\1. You install git and use the command-line.
+1.  **Clone the repository:**
 
-or
+    ```bash
+    git clone https://github.com/decipad/decipad.git
+    cd decipad
+    ```
 
-\2. You install [Github Desktop (which has a nice GUI)](https://desktop.github.com).
+2.  **Install dependencies:**
 
-### Git and command-line
+    ```bash
+    yarn install
+    ```
 
-(Skip this part if you're using Github Desktop).
+    This command will install all the necessary packages for the monorepo.
 
-You will need to have [git](https://git-scm.com) installed on your computer. If you don't already have it, you can [download it and install it form the official website](https://git-scm.com/download).
+3.  **Set up environment variables:**
+    ```bash
+    cp .env.example .env.local
+    # Edit .env.local with your actual API keys and secrets
+    ```
 
-You will also need to run stuff on the command line. Depending on your system (Windows, Mac, or Linux), you will have different solutions for this. Ask the dev team if you're not sure what to do here.
+### Running the Application
 
-## Install
-
-After you're done with the preparation above, you can now choose a folder where you will install Deci. Normally people choose a folder named "dev" or "projects".
-
-### Clone the decipad repo
-
-If you're using the command line, you can install it like this:
+To run the frontend and backend services simultaneously, use the following command:
 
 ```bash
-git clone git@github.com:decipad/decipad.git
+yarn start
 ```
 
-If you're using Github Desktop, clone the decipad repo (which installs it locally).
+This will start the development servers, and a browser window should automatically open with the application.
 
-### Install dependencies
+## Security
 
-We use `yarn` to manage package instalation. If you don't have `yarn` available to your command line, you can install it globally by using:
+### Environment Variables
 
-```bash
-npm install yarn -g
-```
+This project uses environment variables for all sensitive configuration. **Never commit real API keys or secrets to the repository.**
 
-Using the command line, inside your local copy of the decipad repo, you should do:
+1. Copy `.env.example` to `.env.local`
+2. Fill in your actual API keys and secrets
+3. Never commit `.env.local` or any file containing real secrets
 
-```bash
-yarn install
-```
+See [SECURITY.md](SECURITY.md) for detailed security information and best practices.
 
-After dependency upgrades, some existing compilation caches can cause problems. To clean them, you might need to run:
+### Reporting Vulnerabilities
 
-```bash
-yarn clean:all
-```
+If you discover a security vulnerability, please report it responsibly:
 
-### Rust
+1. **DO NOT** create a public GitHub issue
+2. Email security concerns to: [security@decipad.com](mailto:security@decipad.com)
+3. We will respond within 48 hours
 
-We have some Rust code, which needs to be compiled to WASM, this uses two tools.
+## Development
 
-1. Rust Compiler
-2. Wasm-Pack
+This project is a monorepo managed with Nx. All applications and libraries are located in the `apps` and `libs` directories, respectively.
 
-Here is how to install both of them:
+### Project Structure
 
-```sh
-curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs/ | sh
+- `apps/`: Contains the main applications, such as the frontend and backend.
+- `libs/`: Contains shared libraries and modules used across different applications.
 
-curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | sh
-```
+### Important Scripts
 
-This should work, but here is the website for both of these tools, in case you need extra setup:
+Here are some of the most common scripts you'll use during development:
 
-1. https://www.rust-lang.org/tools/install
-2. https://rustwasm.github.io/wasm-pack/installer/
+- **Running tests:**
 
-If there are some errors with missing wasm installation run:
+  ```bash
+  yarn test
+  ```
 
-```sh
-cargo install wasm-pack
-```
+- **Linting files:**
 
-then:
+  ```bash
+  yarn lint
+  ```
 
-```sh
-yarn build:wasm
-```
+- **Formatting code:**
 
-### (Optional) Git hooks
+  ```bash
+  yarn format
+  ```
 
-If you'd like to set up lint and test running before commit, run `yarn husky install`.
-Note that the hooks may behave differently than CI. CI is the authoritative source for lint and test verification.
+- **Building all packages:**
+  ```bash
+  yarn build
+  ```
 
-## AWS local setup
+For more advanced commands and to leverage the full power of Nx, please refer to the [official Nx documentation](https://nx.dev/l/r/getting-started/nx-cli).
 
-For you to be able to develop you will need access to a Deci development AWS user account.
+### Advanced Local Setup
 
-Also, you'll need to install the AWS CLI. Once you have done that, you'll need to generate an access key, which you'll need to introduce when running:
+For detailed instructions on setting up a local development environment, including AWS configuration, environment variables, and debugging, please see our [Local Setup Guide](docs/LOCAL_SETUP.md).
 
-```sh
-aws configure
-```
+## Deployment
 
-If asked for a _AWS region_, use `eu-west-2`.
+For instructions on how to deploy the application to AWS, please refer to our [Deployment Guide](docs/DEPLOYMENT.md).
 
-## Newer MacOS port setup
+## Continuous Integration
 
-In newer MacOS versions (starting from Monterey) Apple runs it’s Airplay Receiver on Port 5000. This directly conflicts with architect running on Port 5000.
+For instructions on how to set up a CI environment similar to our GitHub Actions workflows, please see our [CI Setup Guide](docs/CI.md).
 
-To solve this simply run or add `export ARC_TABLES_PORT=6000`to your .bashrc, .zshrc or equivalent script.
+## Community
 
-## Environment setup
+We welcome contributions from the community! If you're interested in contributing, please take a look at our contributing guidelines (coming soon).
 
-There are `.env.example` files in the root and in individual projects like the `backend`. These need to be copied to `.env` (without `.example`) and filled with secret values, such as your personal AWS access token, or other secrets that are shared among developers but not included in the repository for security reasons.
+All members of our community are expected to follow our [Code of Conduct](docs/CODE_OF_CONDUCT.md).
 
-## Important scripts
+## License
 
-### Nx CLI
-
-The project is currently maintained by the nx cli, the nx cli is the one to use to test, lint, format and run libraries and apps across the project, here are some of the most common nx cli commands you could use in the project:
-
-`nx test <lib>` # Runs jest on a library or an app.
-
-`nx test <lib> --testFile=<filename.ts>` # Runs jest test on a specific file in a specific library or an application.
-
-`nx test <lib> --watch` # Runs jest on a library or an application in watch mode.
-
-`nx lint <lib>` # Runs the linter on an app or a library.
-
-`nx typecheck <lib>` # Runs typescript check on an app or library.
-
-You can even use the nx cli to generate libraries, apps, react components, stories and much more. [Check out nx docs](https://nx.dev/l/r/getting-started/nx-cli)
-
-### Running the project
-
-To run the backend and the frontend, just copy and past the following command in your command line:
-
-```bash
-yarn serve:all
-```
-
-> By default a browser window should open with the auto-login URL.
-> If you want to change the browser, define the `BROWSER` environment variable (in a `.env` file, for instance).
-
-### Testing the project
-
-To run the unit tests for all the monorepos in the project, you can run the following:
-
-```bash
-yarn test
-```
-
-### Running storybook
-
-We use storybook for development and showcasing purposes of all of our components, you can also run storybook by running:
-
-```bash
-nx run ui:storybook
-```
-
-### Running docs
-
-We document Deci by using [Docusaurus](https://docusaurus.io) in [the `apps/docs` folder](apps/docs).
-
-You can start the docs server by running:
-
-```bash
-yarn serve:docs
-```
-
-To contribute with changes, you can edit the documents at [the apps/docs/docs folder](apps/docs/docs).
-
-### Running the end-to-end tests
-
-These tests are powered by playwright and are present in apps/client-e2e.
-
-`cd` to the root of the repo, and run:
-
-```bash
-yarn e2e
-```
-
-### Running individual e2e tests
-
-```bash
-nx play e2e <<test-name-pattern>> [--debug] [--ui]
-```
-
-> Interesting options are `--debug` (to play visually) and `--ui` (start an interactive visual test runner)
-
-> To run the E2E tests individually you will need the local sandbox server running (which you can start with `yarn serve:all:e2e` on a different terminal).
-
-## If your PR deployment failed
-
-You will see a message like this:
-
-```json
-{ "message": "Not Found" }
-```
-
-1. Just run the following command to delete the stack:
-
-   ```bash
-   scripts/aws-delete-stack.sh <PR number>
-   ```
-
-2. Then re-run the deployment github action.
-
-## Persisting the database
-
-To persist the database, you need to set the `ARC_DB_PATH` environment variable to a path where the database can be persisted.
-
-```bash
-export ARC_DB_PATH=/tmp/decipad-db
-```
-
-If you run the sandbox like this, the database will be persisted in the `/tmp/decipad-db` directory. You can remove the database data between server runs by running `rm -rf /tmp/decipad-db`.
-
-## Private deploys and fast client updates
-
-You can deploy your own private instance by following these instructions:
-
-https://www.loom.com/share/a0b33c1071d343fb8a216ef64ad217ea
-
-## Developing new or changing GraphQL queries
-
-Sometimes you may neeed to develop a feature from end to end, or you may want to change or add a Graphql interface. If that's the case, here is what you need to know and do:
-
-The GraphQL API is divided up into separate realms in [`libs/graphqlserver`](libs/graphqlserver). This is mainly to keep things organized, as it's all put together at compile and run time.
-
-You'll need to search and spot the realm you want to add or change something. If there's no suited realm, you can create one. (If you do, don't forget to add it to `libs/graphqlserver/src/modules.ts`).
-
-Then you will need to change or add the typedef with the GraphQL interface and the implement or change the resolvers for that interface.
-
-You should have a server up and running, so that you can manually test your GraphQL server. To do that, you can run:
-
-`yarn serve:all`
-
-or, if you prefer to run things in separate terminal windows, in two separate terminal windows:
-
-```bash
-nx serve backend
-nx serve client
-```
-
-(The `nx serve backend` runs everything you should need in the backend for you: database, queues and respective lambdas, graphQL server, HTTP lambdas and websockets).
-
-Then, you can then head out to your local GraphQL playground ([http://localhost:3000/graphql](http://localhost:3000/graphql)) and test your endpoint manually.
-
-### Adding tests
-
-When changing the Graphql API, you should always add or change the integration tests.
-
-To run all the back-end tests you can run:
-
-```bash
-nx test backend
-```
-
-But if you need to test a specific file you can do:
-
-```bash
-jest apps/backend/tests/<file>.spec.ts --testTimeout=10000
-```
-
-Alternatively, you can watch the file for changes and run the test every time there is a change:
-
-```bash
-jest apps/backend/tests/<file>.spec.ts --testTimeout=10000 --watch
-```
-
-### Generating your GraqphQL client stuffs
-
-If you're also doing client-side stuff that depends on the changes, you will need to run the following commands:
-
-```bash
-yarn build:graphql
-```
-
-This command will build a schema file from your local server schema.
-
-Then you'll need to generate the client-side typescript files:
-
-```bash
-yarn build:graphql:queries
-```
-
-This will generate files in `libs/queries`.
-
-If you need to add or change a query, you need to add or change a file in `libs/queries/src/lib/operations/{mutations,queries}` (depending on whether it's a mutation or a query).
-
-If you add or change a file in `libs/queries/src/lib`, you'll need to re-run the `yarn build:graphql:queries` command to (re)generate the Typescript files.
-
-If you're adding a file to You may also need to `libs/queries/src/lib/operations/{mutations,queries}`, you'll also need to export it in `libs/queries/src/lib/index.ts`, so that the client code may use it.
-
-## Debugging the back-end
-
-We use [debug](https://github.com/debug-js/debug#readme) on our back-end and some of our common libries.
-
-You can enable debug output by either selecting the specific modules you want to debug, or all (watch out for the firehouse of logs!):
-
-All:
-
-```bash
-DEBUG=@decipad/* yarn serve:all
-```
-
-Some:
-
-```bash
-DEBUG=@decipad/backend-search,@decipad/graphqlserver yarn serve:all
-```
-
-Some important back-end debug modules are:
-
-- `@decipad/graphqlserver`
-- `@decipad/tables`
-- `@decipad/backend-auth`
-
-## Adding and bulding icons in the UI
-
-The icons are stored in `libs/ui/src/icons/assets`. You can add new icons by adding an SVG file to this directory.
-In order for icon to correctly inherit the color of the parent component, you need to keep the asset colored "#000".
-
-Once added, to build the icons into React components, run `nx run ui:build-icons`.
-
-## Software Stack
-
-![Software Architecture](docs/software_architecture.png)
-
-## Data Lake
-
-Check out the [Data Lake](docs/DATALAKE.md) documentation for more information on how the data lake works and how to set up a Decipad development environment with it.
-
-## Further resources
-
-- [Development cycle](docs/DEVELOPMENT.md)
-- [Cheat sheet](docs/CHEAT_SHEET.md)
-
-### Documentation for certain areas of the codebase
-
-Some packages (both `apps` and `libs`) and sometimes even subdirectories may contain their own `README` files documenting peculiarities or other noteworthy things about the package or directory contents. Make sure to read them before working extensively in one area.
-
-There is also documentation available for larger areas of the codebase that span more than one package:
-
-- [Code structure](docs/CODE_STRUCTURE.md)
-- [Frontend](docs/FRONTEND.md)
-- [Backend](docs/BACKEND.md)
-- [Auth](docs/AUTH.md)
-- [Sync](docs/SYNC.md)
-- [Data Lake](docs/DATALAKE.md)
-
-# Feature flags
-
-Decipad uses some feature flags (that you can find listed in `libs/feature-flags`) that you can turn on and off to test multiple features. Most are enabled by default in localhost, dev and PR environments.
-
-Within the app, use Cmd+Shift+F to pop up a feature flag switcher with checkboxes.
-
-# Enabling server-side rendering
-
-In dev mode you can enable server-side rendering by:
-
-- Building the server-side lambdas:
-
-```bash
-yarn build:backend:ssr
-```
-
-- Starting the services like this:
-
-```bash
-yarn serve:all:ssr
-```
-
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.

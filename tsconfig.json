@@ -36,7 +36,7 @@
         "libs/backend-code-assistant/src/index.ts"
       ],
       "@decipad/backend-config": ["libs/backend-config/src/index.ts"],
-      "@decipad/shared-config": ["libs/shared-config/src/index.ts"],
+      "@decipad/backend-data-lake": ["libs/backend-data-lake/src/index.ts"],
       "@decipad/backend-external-db": ["libs/backend-external-db/src/index.ts"],
       "@decipad/backend-notebook": ["libs/backend-notebook/src/index.ts"],
       "@decipad/backend-notebook-assistant": [
@@ -55,8 +55,8 @@
       "@decipad/backendtypes": ["libs/backendtypes/src/index.ts"],
       "@decipad/client-cache": ["libs/client-cache/src/index.ts"],
       "@decipad/client-config": ["libs/client-config/src/index.ts"],
-      "@decipad/client-events": ["libs/client-events/src/index.ts"],
       "@decipad/client-env": ["libs/client-env/src/index.ts"],
+      "@decipad/client-events": ["libs/client-events/src/index.ts"],
       "@decipad/column": ["libs/column/src/index.ts"],
       "@decipad/compute-backend-js": ["libs/compute-backend-js/src/index.ts"],
       "@decipad/computer": ["libs/computer/src/index.ts"],
@@ -117,15 +117,15 @@
       "@decipad/kafka-lite": ["libs/kafka-lite/src/index.ts"],
       "@decipad/lambdas": ["libs/lambdas/src/index.ts"],
       "@decipad/language": ["libs/language/src/index.ts"],
+      "@decipad/language-aggregations": [
+        "libs/language-aggregations/src/index.ts"
+      ],
       "@decipad/language-builtins": ["libs/language-builtins/src/index.ts"],
+      "@decipad/language-filters": ["libs/language-filters/src/index.ts"],
       "@decipad/language-interfaces": ["libs/language-interfaces/src/index.ts"],
       "@decipad/language-types": ["libs/language-types/src/index.ts"],
       "@decipad/language-units": ["libs/language-units/src/index.ts"],
       "@decipad/language-utils": ["libs/language-utils/src/index.ts"],
-      "@decipad/language-aggregations": [
-        "libs/language-aggregations/src/index.ts"
-      ],
-      "@decipad/language-filters": ["libs/language-filters/src/index.ts"],
       "@decipad/listener-helper": ["libs/listener-helper/src/index.ts"],
       "@decipad/live-connect": ["libs/live-connect/src/index.ts"],
       "@decipad/message-packer": ["libs/message-packer/src/index.ts"],
@@ -139,27 +139,28 @@
       "@decipad/notebook-tabs": ["libs/notebook-tabs/src/index.ts"],
       "@decipad/number": ["libs/number/src/index.ts"],
       "@decipad/parse": ["libs/parse/src/index.ts"],
+      "@decipad/postmessage-rpc": ["libs/postmessage-rpc/src/index.ts"],
       "@decipad/queries": ["libs/queries/src/index.ts"],
       "@decipad/react-contexts": ["libs/react-contexts/src/index.ts"],
       "@decipad/react-utils": ["libs/react-utils/src/index.ts"],
-      "@decipad/remote-computer-codec": [
-        "libs/remote-computer-codec/src/index.ts"
-      ],
       "@decipad/remote-computer": ["libs/remote-computer/src/index.ts"],
-      "@decipad/remote-computer-worker/worker": [
-        "libs/remote-computer-worker/src/worker/index.ts"
-      ],
-      "@decipad/remote-computer-worker/client": [
-        "libs/remote-computer-worker/src/client/index.ts"
-      ],
       "@decipad/remote-computer-cache/client": [
         "libs/remote-computer-cache/src/client/index.ts"
+      ],
+      "@decipad/remote-computer-cache/server": [
+        "libs/remote-computer-cache/src/server/index.ts"
       ],
       "@decipad/remote-computer-cache/worker": [
         "libs/remote-computer-cache/src/worker/index.ts"
       ],
-      "@decipad/remote-computer-cache/server": [
-        "libs/remote-computer-cache/src/server/index.ts"
+      "@decipad/remote-computer-codec": [
+        "libs/remote-computer-codec/src/index.ts"
+      ],
+      "@decipad/remote-computer-worker/client": [
+        "libs/remote-computer-worker/src/client/index.ts"
+      ],
+      "@decipad/remote-computer-worker/worker": [
+        "libs/remote-computer-worker/src/worker/index.ts"
       ],
       "@decipad/retry": ["libs/retry/src/index.ts"],
       "@decipad/routing": ["libs/routing/src/index.ts"],
@@ -185,6 +186,7 @@
       "@decipad/services/users": ["libs/services/src/users"],
       "@decipad/services/utils": ["libs/services/src/utils"],
       "@decipad/services/workspaces": ["libs/services/src/workspaces"],
+      "@decipad/shared-config": ["libs/shared-config/src/index.ts"],
       "@decipad/slate-yjs": ["libs/slate-yjs/src/index.ts"],
       "@decipad/support": ["libs/support/src/index.ts"],
       "@decipad/sync-connection-lambdas": [
@@ -201,10 +203,7 @@
       "@decipad/y-dynamodb": ["libs/y-dynamodb/src/index.ts"],
       "@decipad/y-indexeddb": ["libs/y-indexeddb/src/index.ts"],
       "@decipad/y-lambdawebsocket": ["libs/y-lambdawebsocket/src/index.ts"],
-      "@decipad/y-websocket": ["libs/y-websocket/src/index.ts"],
-      "@decipad/postmessage-rpc": ["libs/postmessage-rpc/src/index.ts"],
-
-      "@decipad/backend-data-lake": ["libs/backend-data-lake/src/index.ts"]
+      "@decipad/y-websocket": ["libs/y-websocket/src/index.ts"]
     }
   },
   "files": [],

@@ -26,7 +26,7 @@ export const aggregationVariableName = (
   valuePath: Array<Result.OneResult>
 ): string | undefined => {
   try {
-    const fixedColumnNames = columns.map((col) => {
+    const fixedColumnNames = columns.filter(Boolean).map((col) => {
       return fixColumnName(col.name);
     });
 

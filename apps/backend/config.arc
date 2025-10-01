@@ -1,6 +1,6 @@
 @aws
 timeout 60
-runtime nodejs18.x
+runtime nodejs24.x
 
 @arc
 shared false

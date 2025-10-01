@@ -10,6 +10,8 @@ on:
 
 jobs:
   deploy:
+    # DISABLED: Product discontinued, open-sourcing codebase
+    if: false
     name: 🚧 Deploy PR
     timeout-minutes: 90
     runs-on: buildjet-4vcpu-ubuntu-2204
@@ -27,10 +29,9 @@ jobs:
           aws-region: eu-west-2
 
       - uses: actions/checkout@v4
-      - uses: actions-rust-lang/setup-rust-toolchain@v1
-
         with:
           fetch-depth: 0
+      - uses: actions-rust-lang/setup-rust-toolchain@v1
       - uses: nrwl/nx-set-shas@v4
 
       - name: Cache Yarn dependencies and Node modules

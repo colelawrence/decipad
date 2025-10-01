@@ -2,7 +2,7 @@
   "private": true,
   "name": "decipad",
   "version": "2.9.39-beta",
-  "license": "UNLICENSED",
+  "license": "MIT",
   "workspaces": [
     "apps/backend",
     "apps/docs",
@@ -10,7 +10,7 @@
     "libs/ui"
   ],
   "engines": {
-    "node": ">=v18.16.0"
+    "node": ">=v24.0.0"
   },
   "scripts": {
     "start": "yarn serve:all",

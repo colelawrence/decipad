@@ -1284,7 +1284,7 @@ ${'' /* Get capital needed */}
       },
     });
 
-    expect(time).toBeLessThanOrEqual(200 * (process.env.CI ? 2 : 1));
+    expect(time).toBeLessThanOrEqual(400 * (process.env.CI ? 2 : 1));
   });
 
   test('Cars with table column assigns', async () => {

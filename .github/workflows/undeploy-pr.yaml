@@ -6,6 +6,8 @@ on:
 
 jobs:
   undeploy:
+    # DISABLED: Product discontinued, open-sourcing codebase
+    if: false
     runs-on: ubuntu-latest
     concurrency:
       group: 'deploy-pr-${{ github.event.pull_request.number }}'

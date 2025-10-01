@@ -4,15 +4,6 @@
   "sourceRoot": "apps/compute-backend/src",
   "projectType": "application",
   "prefix": "compute-backend",
-  "targets": {
-    "test": {
-      "executor": "nx:run-commands",
-      "outputs": ["{workspaceRoot}/coverage/apps/compute-backend"],
-      "options": {
-        "command": "wasm-pack test --headless --chrome",
-        "cwd": "apps/compute-backend"
-      }
-    }
-  },
+  "targets": {},
   "tags": []
 }

@@ -8,7 +8,8 @@ on:
 
 jobs:
   deploy-bot:
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    # DISABLED: Product discontinued, open-sourcing codebase
+    if: false
     runs-on: ubuntu-latest
     concurrency:
       group: deploy-discord-customer-support-bot

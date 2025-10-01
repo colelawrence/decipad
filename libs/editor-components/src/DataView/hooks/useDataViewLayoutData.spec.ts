@@ -320,7 +320,7 @@ describe('layoutPowerData', () => {
             {
               "aggregationExpression": undefined,
               "aggregationResult": undefined,
-              "aggregationVariableName": undefined,
+              "aggregationVariableName": "",
               "children": [],
               "collapsible": false,
               "elementType": "group",
@@ -359,7 +359,7 @@ describe('layoutPowerData', () => {
             {
               "aggregationExpression": undefined,
               "aggregationResult": undefined,
-              "aggregationVariableName": undefined,
+              "aggregationVariableName": "",
               "children": [],
               "collapsible": false,
               "elementType": "group",
@@ -398,7 +398,7 @@ describe('layoutPowerData', () => {
             {
               "aggregationExpression": undefined,
               "aggregationResult": undefined,
-              "aggregationVariableName": undefined,
+              "aggregationVariableName": "",
               "children": [],
               "collapsible": false,
               "elementType": "group",
@@ -517,7 +517,7 @@ describe('layoutPowerData', () => {
             {
               "aggregationExpression": undefined,
               "aggregationResult": undefined,
-              "aggregationVariableName": undefined,
+              "aggregationVariableName": "",
               "children": [],
               "collapsible": false,
               "elementType": "group",

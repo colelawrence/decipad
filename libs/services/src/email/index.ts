@@ -19,7 +19,7 @@ export async function sendEmail({
 }: SendEmailParams): Promise<void> {
   if (!apiKey) {
     // eslint-disable-next-line no-console
-    console.log('skipping email send because no api key');
+    console.warn('skipping email send because no api key');
     return;
   }
   // eslint-disable-next-line no-console

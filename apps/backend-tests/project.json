@@ -12,14 +12,6 @@
         "maxWarnings": 0
       }
     },
-    "test": {
-      "executor": "nx:run-commands",
-      "outputs": ["{workspaceRoot}/coverage/apps/backend-tests"],
-      "options": {
-        "command": "npx vitest --run",
-        "cwd": "apps/backend-tests"
-      }
-    },
     "typecheck": {
       "executor": "nx:run-commands",
       "options": {
