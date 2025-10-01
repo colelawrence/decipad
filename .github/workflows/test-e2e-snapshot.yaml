@@ -27,25 +27,23 @@ jobs:
             node_modules
           key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
 
-      - name: Uses wasm-pack
-        uses: jetli/wasm-pack-action@0d096b08b4e5a7de8c28de67e11e945404e9eefa # v0.4.0
-        with:
-          version: 'latest'
-
       - name: Use Node.js 24.x
         uses: buildjet/setup-node@6131e76b005f1e3f5c721e0ca2d8279eb577c3a8 # v4
         with:
           node-version: 24.x
 
-      - name: Check if node_modules is cached
-        id: cache-check
+      - name: Clean install dependencies for Node.js 24
         run: |
-          if [ -d "node_modules" ]; then
-            echo "restored=true" >> $GITHUB_OUTPUT
-          fi
+          # Remove node_modules and yarn cache to ensure fresh install
+          rm -rf node_modules
+          yarn cache clean
+          # Install dependencies from scratch
+          yarn install --ignore-engines --frozen-lockfile --ignore=apps/docs
 
-      - name: Install Dependencies
-        run: yarn install --ignore-engines --ignore=apps/docs
+      - name: Uses wasm-pack
+        uses: jetli/wasm-pack-action@0d096b08b4e5a7de8c28de67e11e945404e9eefa # v0.4.0
+        with:
+          version: 'latest'
 
       - name: Get installed Playwright version
         id: playwright-version
@@ -125,16 +123,13 @@ jobs:
         with:
           node-version: 24.x
 
-      - name: Check if node_modules is cached
-        id: cache-check
+      - name: Clean install dependencies for Node.js 24
         run: |
-          if [ -d "node_modules" ]; then
-            echo "restored=true" >> $GITHUB_OUTPUT
-          fi
-
-      - name: Install Dependencies
-        run: yarn install --ignore-engines --ignore=apps/docs
-        if: steps.cache-check.outputs.restored != 'true'
+          # Remove node_modules and yarn cache to ensure fresh install
+          rm -rf node_modules
+          yarn cache clean
+          # Install dependencies from scratch
+          yarn install --ignore-engines --frozen-lockfile --ignore=apps/docs
 
       - name: Download blob reports from GitHub Actions Artifacts
         uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4

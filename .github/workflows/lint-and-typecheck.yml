@@ -40,6 +40,16 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
 
+      - name: Clean install dependencies for Node.js 24
+        env:
+          PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: 'true'
+        run: |
+          # Remove node_modules and yarn cache to ensure fresh install
+          rm -rf node_modules
+          yarn cache clean
+          # Install dependencies from scratch
+          yarn install --ignore-engines --frozen-lockfile
+
       - name: Uses wasm-pack
         uses: jetli/wasm-pack-action@0d096b08b4e5a7de8c28de67e11e945404e9eefa # v0.4.0
         with:
@@ -48,19 +58,6 @@ jobs:
       - name: Generates wasm files + JS bindings
         id: wasm-generation
         run: yarn build:wasm
-
-      - name: Check if node_modules is cached
-        id: cache-check
-        run: |
-          if [ -d "node_modules" ]; then
-            echo "restored=true" >> $GITHUB_OUTPUT
-          fi
-
-      - name: Install Dependencies
-        env:
-          PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: 'true'
-        run: yarn install --ignore-engines
-        if: steps.cache-check.outputs.restored != 'true'
 
       - name: Lint
         env:
