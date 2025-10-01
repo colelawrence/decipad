@@ -1,11 +1,10 @@
 // import percySnapshot from '@percy/playwright';
 import type { Page } from '@playwright/test';
 
-const _snapshotsTaken = new Set<string>();
-
 export const snapshot = async (
-  page: Page,
+  _page: Page,
   name: string,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   _options?: { mobile?: boolean; midSize?: boolean }
 ): Promise<void> => {
   // DISABLED: Percy snapshot functionality is disabled

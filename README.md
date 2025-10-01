@@ -5,7 +5,7 @@
 <h2 align="center">Decipad — Make sense of numbers</h2>
 
 <p align="center">
-  <strong>The open-source data notebook for developers.</strong>
+  <strong>The open-source quantitative modeling and data notebook.</strong>
   <br />
   <br />
   <a href="https://github.com/decipad/decipad/blob/main/LICENSE">
