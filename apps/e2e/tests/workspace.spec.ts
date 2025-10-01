@@ -184,9 +184,7 @@ test('workspace operations @workspace', async ({
     await expect(async () => {
       let pads = await workspace.getPadList();
       // eslint-disable-next-line no-unused-expressions, playwright/no-conditional-in-test
-      process.env.CI
-        ? expect(pads).toHaveLength(4)
-        : expect(pads).toHaveLength(15);
+      expect(pads).toHaveLength(4);
 
       pads = await workspace.getPadList();
       const copyIndex = pads.findIndex((pad) =>

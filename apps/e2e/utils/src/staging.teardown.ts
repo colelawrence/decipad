@@ -12,6 +12,11 @@ test.describe('staging teardown', () => {
       ? 'https://dev.decipad.com'
       : `https://${deployName}.decipadstaging.com`;
 
+  if (!stagingURL) {
+    // eslint-disable-next-line no-console
+    console.warn('Staging URL is not set');
+    return;
+  }
   test('clean workspace', async ({ browser }) => {
     // get staging user agent string
     const userAgent = process.env.USER_AGENT_KEY;

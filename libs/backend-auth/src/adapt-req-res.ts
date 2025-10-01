@@ -31,37 +31,7 @@ export default function adaptReqRes(handle: NextApiHandler) {
     debug('auth request', req);
     return new Promise((resolve) => {
       const { method, path } = req.requestContext.http;
-      let url = req.rawPath;
-
-      // Correct the URL port if it's localhost with wrong port
-      try {
-        const urlObj = new URL(url);
-        if (urlObj.hostname === 'localhost') {
-          const configuredBaseUrl = app().urlBase;
-          console.log(
-            'Adapt-req-res Debug - configuredBaseUrl:',
-            configuredBaseUrl
-          );
-          const configuredUrl = new URL(configuredBaseUrl);
-          if (urlObj.port !== configuredUrl.port) {
-            console.log(
-              'Adapt-req-res Debug - Correcting URL port from',
-              urlObj.port,
-              'to',
-              configuredUrl.port
-            );
-            urlObj.port = configuredUrl.port;
-            url = urlObj.toString();
-          }
-        }
-      } catch (e) {
-        console.error(e);
-        // If URL parsing fails, keep the original URL
-        console.log(
-          'Adapt-req-res Debug - Failed to parse URL, keeping original:',
-          url
-        );
-      }
+      const url = req.rawPath;
       const pathParts = path.split('/');
       let action = pathParts[pathParts.length - 1];
       const provider = req.pathParameters && req.pathParameters.provider;
