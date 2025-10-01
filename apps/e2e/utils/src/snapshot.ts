@@ -1,24 +1,24 @@
 // import percySnapshot from '@percy/playwright';
 import type { Page } from '@playwright/test';
 
-const snapshotsTaken = new Set<string>();
+const _snapshotsTaken = new Set<string>();
 
 export const snapshot = async (
   page: Page,
   name: string,
-  options?: { mobile?: boolean; midSize?: boolean }
+  _options?: { mobile?: boolean; midSize?: boolean }
 ): Promise<void> => {
   // DISABLED: Percy snapshot functionality is disabled
+  // eslint-disable-next-line no-console
   console.log(
     `[DISABLED] Snapshot "${name}" would have been taken (Percy disabled)`
   );
-  return;
 
   // Original Percy code (commented out):
-  // if (!process.env.PERCY_TOKEN || snapshotsTaken.has(name)) {
+  // if (!process.env.PERCY_TOKEN || _snapshotsTaken.has(name)) {
   //   return;
   // }
-  // snapshotsTaken.add(name);
+  // _snapshotsTaken.add(name);
 
   // // Wait for the page to stabilize
   // // eslint-disable-next-line playwright/no-wait-for-timeout

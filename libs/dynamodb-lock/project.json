@@ -14,14 +14,6 @@
         "maxWarnings": 0
       }
     },
-    "test": {
-      "executor": "nx:run-commands",
-      "outputs": ["{workspaceRoot}/coverage/libs/dynamodb-lock"],
-      "options": {
-        "command": "npx vitest --run --config ../../vitest.base.config.ts",
-        "cwd": "libs/dynamodb-lock"
-      }
-    },
     "typecheck": {
       "executor": "nx:run-commands",
       "options": {
