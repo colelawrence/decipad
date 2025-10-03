@@ -47,7 +47,7 @@ jobs:
     runs-on: ubuntu-latest
     needs:
       - lighthouse
-    if: ${{ always() }} # You always want to be notified: success, failure, or cancelled
+    if: false
     steps:
       - name: Notify
         uses: decipad/discord-webhook@4d1e357ee56442b97220c62f5f17a3e05a515291 # v5

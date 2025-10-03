@@ -163,7 +163,7 @@ jobs:
     name: Discord Notification for Deploy
     runs-on: ubuntu-latest
     needs: deploy
-    if: ${{ always() }}
+    if: false
     steps:
       - name: Notify
         uses: decipad/discord-webhook@4d1e357ee56442b97220c62f5f17a3e05a515291 # v5
@@ -259,7 +259,7 @@ jobs:
     name: Discord Notification for Staging Tests
     runs-on: ubuntu-latest
     needs: staging-tests
-    if: ${{ failure() && github.ref == 'refs/heads/main' }}
+    if: false
 
     steps:
       - name: Notify
