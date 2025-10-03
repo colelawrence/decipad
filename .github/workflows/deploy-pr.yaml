@@ -40,7 +40,10 @@ jobs:
           path: |
             ~/.cache/yarn
             node_modules
-          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          key: ${{ runner.os }}-yarn-24.x-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-24.x-
+            ${{ runner.os }}-yarn-
 
       - name: Use Node.js ${{ matrix.node-version }}
         uses: buildjet/setup-node@6131e76b005f1e3f5c721e0ca2d8279eb577c3a8 # v4
@@ -196,7 +199,10 @@ jobs:
           path: |
             ~/.cache/yarn
             node_modules
-          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          key: ${{ runner.os }}-yarn-24.x-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-24.x-
+            ${{ runner.os }}-yarn-
 
       - name: Uses wasm-pack
         uses: jetli/wasm-pack-action@0d096b08b4e5a7de8c28de67e11e945404e9eefa # v0.4.0

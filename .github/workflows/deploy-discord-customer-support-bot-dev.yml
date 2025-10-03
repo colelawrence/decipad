@@ -43,7 +43,7 @@ jobs:
         with:
           version: 'latest'
 
-      - name: Install
+      - name: Install dependencies
         env:
           PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: 'true'
         run: yarn install --ignore-engines
