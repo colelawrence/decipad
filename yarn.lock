@@ -7571,6 +7571,11 @@
   resolved "https://registry.yarnpkg.com/@polka/url/-/url-1.0.0-next.24.tgz#58601079e11784d20f82d0585865bb42305c4df3"
   integrity sha512-2LuNTFBIO0m7kKIQvvPHN6UE63VjpmL9rnEEaOOaiSPbZK+zUOYIzBAWcED+3XYzhYsd/0mD57VdxAEqqV52CQ==
 
+"@posthog/core@1.2.2":
+  version "1.2.2"
+  resolved "https://registry.yarnpkg.com/@posthog/core/-/core-1.2.2.tgz#63382e2e208f501b2c22246ccaae55052f77ac1d"
+  integrity sha512-f16Ozx6LIigRG+HsJdt+7kgSxZTHeX5f1JlCGKI1lXcvlZgfsCR338FuMI2QRYXGl+jg/vYFzGOTQBxl90lnBg==
+
 "@prisma/instrumentation@5.22.0":
   version "5.22.0"
   resolved "https://registry.yarnpkg.com/@prisma/instrumentation/-/instrumentation-5.22.0.tgz#c39941046e9886e17bdb47dbac45946c24d579aa"
@@ -24716,11 +24721,12 @@ postgres-range@^1.1.1:
   resolved "https://registry.yarnpkg.com/postgres-range/-/postgres-range-1.1.4.tgz#a59c5f9520909bcec5e63e8cf913a92e4c952863"
   integrity sha512-i/hbxIE9803Alj/6ytL7UHQxRvZkI9O4Sy+J3HGc4F4oo/2eQAjTSNJ0bfxyse3bH0nuVesCk+3IRLaMtG3H6w==
 
-posthog-js@^1.236.5:
-  version "1.236.6"
-  resolved "https://registry.yarnpkg.com/posthog-js/-/posthog-js-1.236.6.tgz#f4d73d25773f4e4bafd7632717c97b27bd9f1b7c"
-  integrity sha512-IX4fkn3HCK+ObdHr/AuWd+Ks7bgMpRpOQB93b5rDJAWkG4if4xFVUn5pgEjyCNeOO2GM1ECnp08q9tYNYEfwbA==
+posthog-js@^1.269.1:
+  version "1.269.1"
+  resolved "https://registry.yarnpkg.com/posthog-js/-/posthog-js-1.269.1.tgz#26d98a95f1af3c81dc674b8ff8553de3edda9d48"
+  integrity sha512-4GrcKQ89uLwBGNtHrhq5QRCzHmPPCxE6i0cDsk4mFMls9iZcsdTpITBNepHbP0Bvn62HZUVAiqGeRlOpy8XeCA==
   dependencies:
+    "@posthog/core" "1.2.2"
     core-js "^3.38.1"
     fflate "^0.4.8"
     preact "^10.19.3"
