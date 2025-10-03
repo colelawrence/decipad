@@ -246,7 +246,7 @@
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.0",
     "copy-to-clipboard": "^3.3.3",
-    "core-js": "3.41.0",
+    "core-js": "3.45.1",
     "cross-fetch": "^4.1.0",
     "date-fns": "4.1.0",
     "deepmerge": "^4.3.1",
