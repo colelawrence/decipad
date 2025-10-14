@@ -10,7 +10,7 @@ local_resource(
 # Build WASM with watch
 local_resource(
     'wasm-build',
-    serve_cmd='mise watch -t build:wasm',
+    serve_cmd='mise run build:wasm',
     resource_deps=['install-deps'],
     labels=['build'],
     allow_parallel=False
