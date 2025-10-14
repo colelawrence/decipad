@@ -15,9 +15,14 @@ NODE_OPTIONS = "--enable-source-maps"
 TILT_PORT = "10500"
 AWS_PROFILE = false
 
+[tasks."install-tools"]
+description = "Install tools"
+run = "mise install"
+
 [tasks."install-deps"]
 description = "Install JavaScript dependencies"
-run = "mise install && yarn install"
+run = "yarn install"
+depends = ["install-tools"]
 sources = ["package.json", "yarn.lock"]
 outputs = ["node_modules/**/*"]
 
@@ -160,6 +165,7 @@ run = "echo 'Cleaned all artifacts and dependencies'"
 [tasks.tilt]
 alias = "up"
 description = "Start Tilt development environment"
+depends = ["install-deps"]
 run = "tilt up"
 
 [tasks."tilt:down"]
