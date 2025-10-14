@@ -17,7 +17,7 @@ AWS_PROFILE = false
 
 [tasks."install-deps"]
 description = "Install JavaScript dependencies"
-run = "yarn install"
+run = "mise install && yarn install"
 sources = ["package.json", "yarn.lock"]
 outputs = ["node_modules/**/*"]
 
