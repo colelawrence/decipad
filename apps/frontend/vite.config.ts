@@ -24,7 +24,7 @@ const serverOptions: UserConfig['server'] = {
   fs: {
     cachedChecks: false,
   },
-  open: !isForTests ? 'http://localhost:3000/w' : undefined,
+  // open: !isForTests ? 'http://localhost:3000/w' : undefined,
   proxy: {
     '/api': {
       target: 'http://localhost:3333',

@@ -4,6 +4,17 @@
 
 <h2 align="center">Decipad — Make sense of numbers</h2>
 
+## Single command to get codebase running with tilt
+
+[Install mise](https://mise.jdx.dev/installing-mise.html) and run the full development environment:
+
+```
+# Run the full development environment
+mise trust
+# Mise uses .env.demo for environment variables, so no env changes necessary
+mise run tilt
+```
+
 <p align="center">
   <strong>The open-source quantitative modeling and data notebook.</strong>
   <br />
@@ -44,23 +55,15 @@ Follow these instructions to get Decipad running on your local machine for devel
 
 ### Prerequisites
 
-Before you begin, ensure you have the following installed:
+Before you begin, you only need to install **mise** - it will handle all other dependencies automatically:
 
-- **Node.js**: Version 24.0.0 or higher. You can download it from the [official Node.js website](https://nodejs.org/en/).
-- **Yarn**: We use Yarn for package management. If you don't have it, you can install it globally via npm:
+- **mise**: A development tool version manager. Install it with:
   ```bash
-  npm install -g yarn
+  curl https://mise.run | sh
+  # or: brew install mise
   ```
-- **Rust and wasm-pack**: Some parts of Decipad are written in Rust and compiled to WebAssembly.
-  - Install Rust:
-    ```bash
-    curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
-    ```
-  - Install wasm-pack:
-    ```bash
-    curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | sh
-    ```
-- **Git**: You'll need Git to clone the repository. You can [download it from the official website](https://git-scm.com/download).
+
+That's it! mise will install Node.js, Rust, wasm-pack, Tilt, and other required tools automatically.
 
 ### Installation
 
@@ -71,13 +74,12 @@ Before you begin, ensure you have the following installed:
     cd decipad
     ```
 
-2.  **Install dependencies:**
+2.  **Trust and install tools:**
 
     ```bash
-    yarn install
+    mise trust
+    mise install    # Installs Node.js, Rust, Yarn, wasm-pack, Tilt, etc.
     ```
-
-    This command will install all the necessary packages for the monorepo.
 
 3.  **Set up environment variables:**
     ```bash
@@ -90,7 +92,15 @@ Before you begin, ensure you have the following installed:
 
 ### Running the Application
 
-To run the frontend and backend services simultaneously, use the following command:
+To start the full development environment with automatic WASM rebuild, frontend, and backend servers:
+
+```bash
+mise run tilt
+```
+
+This starts Tilt, which orchestrates all development services. A browser window will open showing the Tilt dashboard where you can monitor all services.
+
+Alternatively, you can use the old method:
 
 ```bash
 yarn start
@@ -131,28 +141,49 @@ This project is a monorepo managed with Nx. All applications and libraries are l
 
 Here are some of the most common scripts you'll use during development:
 
-- **Running tests:**
+**Using mise (recommended):**
 
-  ```bash
-  yarn test
-  ```
+```bash
+# Start full dev environment (recommended)
+mise run tilt         # or: tilt up
+mise run tilt:down    # Stop all resources
 
-- **Linting files:**
+# Manual development (if not using Tilt)
+mise run serve:backend   # Backend server only
+mise run serve:frontend  # Frontend dev server only
+mise run wasm:watch      # Auto-rebuild WASM on changes
 
-  ```bash
-  yarn lint
-  ```
+# Building
+mise run build           # Build all packages
+mise run build:frontend  # Build frontend only
+mise run build:backend   # Build backend only
+mise run build:wasm      # Build WASM only
 
-- **Formatting code:**
+# Type checking & testing
+mise run typecheck       # Check TypeScript types
+mise run test            # Run all tests
+mise run test:coverage   # Run tests with coverage
+mise run e2e             # Run end-to-end tests
 
-  ```bash
-  yarn format
-  ```
+# Linting & formatting
+mise run lint            # Lint all files
+mise run lint:fix        # Lint and auto-fix
+mise run format          # Format code
+mise run format:check    # Check formatting
 
-- **Building all packages:**
-  ```bash
-  yarn build
-  ```
+# Cleaning
+mise run clean           # Clean build artifacts
+mise run clean:all       # Clean everything including deps
+```
+
+**Using yarn (original):**
+
+```bash
+yarn test       # Run tests
+yarn lint       # Lint files
+yarn format     # Format code
+yarn build      # Build all packages
+```
 
 For more advanced commands and to leverage the full power of Nx, please refer to the [official Nx documentation](https://nx.dev/l/r/getting-started/nx-cli).
 

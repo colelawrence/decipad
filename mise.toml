@@ -1,0 +1,170 @@
+[tools]
+node = "24.2.0"
+rust = "1.81.0"
+"cargo:wasm-pack" = "0.13.1"
+yarn = "1.22.22"
+tilt = "0.35.2"
+
+[env]
+_.path = [
+  "{{config_root}}/node_modules/.bin",
+]
+_.file = { path = "{{config_root}}/.env.demo" }
+NODE_OPTIONS = "--enable-source-maps"
+TILT_PORT = "10500"
+AWS_PROFILE = false
+
+[tasks."install-deps"]
+description = "Install JavaScript dependencies"
+run = "yarn install"
+sources = ["package.json", "yarn.lock"]
+outputs = ["node_modules/**/*"]
+
+[tasks."build:wasm"]
+description = "Build WASM compute backend"
+run = "wasm-pack build apps/compute-backend --out-dir ../../libs/compute-backend-js/src/wasm"
+sources = ["apps/compute-backend/**/*.rs", "apps/compute-backend/Cargo.toml"]
+outputs = ["libs/compute-backend-js/src/wasm/**/*"]
+
+[tasks."build:grammar"]
+description = "Build grammar from Nearley files"
+depends = ["install-deps"]
+run = "cd libs/language/src/grammar/nearley && nearleyc deci-language-grammar.ne | prettier --stdin-filepath grammar.js > deci-language-grammar-generated.js"
+sources = ["libs/language/src/grammar/**/*.ne"]
+outputs = ["libs/language/src/grammar/nearley/deci-language-grammar-generated.js"]
+
+[tasks."build:backend:dev"]
+description = "Build backend for development"
+depends = ["build:wasm"]
+run = "node scripts/build.mjs"
+sources = ["apps/backend/**/*", "libs/**/*", "scripts/build.mjs"]
+outputs = ["apps/backend/public/**/*"]
+
+[tasks."build:backend"]
+description = "Build backend for production"
+depends = ["build:wasm"]
+run = "MINIFY=true node scripts/build.mjs"
+sources = ["apps/backend/**/*", "libs/**/*", "scripts/build.mjs"]
+outputs = ["apps/backend/public/**/*"]
+
+[tasks."build:graphql"]
+description = "Generate GraphQL types"
+depends = ["install-deps"]
+run = "graphql-codegen --config codegen.yml"
+sources = ["codegen.yml", "libs/**/*.graphql", "apps/**/*.graphql"]
+outputs = ["libs/**/*generated*", "apps/**/*generated*"]
+
+[tasks."build:backend:graphql"]
+description = "Build backend GraphQL schema and types"
+depends = ["install-deps"]
+run = "./scripts/hacky-build-graphql.sh && graphql-codegen --config libs/graphqlserver-types/codegen.ts"
+sources = ["libs/graphqlserver-types/**/*"]
+outputs = ["libs/graphqlserver-types/generated/**/*"]
+
+[tasks."build:frontend"]
+description = "Build frontend for production"
+depends = ["install-deps", "build:backend:dev"]
+run = "nx build frontend"
+sources = ["apps/frontend/**/*", "libs/**/*"]
+outputs = ["dist/apps/frontend/**/*"]
+
+[tasks."build:storybook"]
+description = "Build Storybook"
+depends = ["install-deps"]
+run = "nx run ui:build-storybook"
+sources = ["libs/ui/**/*", "storybook/**/*"]
+outputs = ["dist/storybook-static/**/*"]
+
+[tasks.build]
+description = "Build all packages"
+depends = ["build:backend", "build:frontend"]
+run = "echo 'Build complete'"
+
+[tasks."serve:backend"]
+description = "Serve backend development server"
+depends = ["install-deps", "build:backend:dev"]
+run = "nx serve backend"
+
+[tasks."serve:frontend"]
+description = "Serve frontend development server"
+depends = ["install-deps"]
+run = "nx serve frontend"
+
+[tasks."serve:storybook"]
+description = "Serve Storybook"
+depends = ["install-deps"]
+run = "nx run ui:storybook"
+
+[tasks."serve:docs"]
+description = "Serve documentation"
+depends = ["install-deps"]
+run = "nx run docs:serve"
+
+[tasks.typecheck]
+description = "Type check TypeScript files"
+depends = ["install-deps"]
+run = "tsc -b libs/*/tsconfig.json apps/*/tsconfig.json"
+sources = ["libs/**/*.ts", "libs/**/*.tsx", "apps/**/*.ts", "apps/**/*.tsx", "tsconfig.json"]
+
+[tasks.lint]
+description = "Lint all files"
+depends = ["install-deps"]
+run = "nx run-many --target=lint --all"
+sources = ["libs/**/*", "apps/**/*", ".eslintrc*"]
+
+[tasks."lint:fix"]
+description = "Lint and fix all files"
+depends = ["install-deps"]
+run = "eslint --cache --fix --max-warnings 0 'apps/**/*.{js,jsx,ts,tsx}' 'libs/**/*.{js,jsx,ts,tsx}'"
+
+[tasks.format]
+description = "Format code with Prettier"
+depends = ["install-deps"]
+run = "nx format:write"
+
+[tasks."format:check"]
+description = "Check code formatting"
+depends = ["install-deps"]
+run = "nx format:check"
+
+[tasks.test]
+description = "Run all tests"
+depends = ["build:backend:dev"]
+run = "TZ=America/Los_Angeles nx run-many --target=test --all && nx test docs"
+sources = ["libs/**/*", "apps/**/*"]
+
+[tasks."test:coverage"]
+description = "Run tests with coverage"
+depends = ["build:backend:dev"]
+run = "TZ=America/Los_Angeles nx run-many --target=test --all --code-coverage"
+
+[tasks.e2e]
+description = "Run end-to-end tests"
+depends = ["build:backend:dev"]
+run = "./scripts/e2e.sh"
+
+[tasks.clean]
+description = "Clean build artifacts"
+run = "rm -rf dist apps/backend/public libs/*/*.tsbuildinfo apps/*/*.tsbuildinfo libs/*/*/.cache apps/*/*/.cache apps/frontend/node_modules/.vite"
+
+[tasks."clean:deps"]
+description = "Clean node_modules"
+run = "rm -rf node_modules apps/backend/node_modules apps/frontend/node_modules"
+
+[tasks."clean:all"]
+description = "Clean everything"
+depends = ["clean", "clean:deps"]
+run = "echo 'Cleaned all artifacts and dependencies'"
+
+[tasks.tilt]
+alias = "up"
+description = "Start Tilt development environment"
+run = "tilt up"
+
+[tasks."tilt:down"]
+description = "Stop Tilt and clean up resources"
+run = "tilt down"
+
+[tasks."wasm:watch"]
+description = "Watch and rebuild WASM on changes"
+run = "mise watch -t build:wasm"

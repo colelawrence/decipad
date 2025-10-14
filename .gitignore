@@ -328,6 +328,7 @@ performance-results
 # WASM files and JS bindings
 *.wasm
 libs/compute-backend-js/src/wasm
+target
 
 # E2E test artifacts
 
