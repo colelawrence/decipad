@@ -4,6 +4,7 @@ rust = "1.81.0"
 "cargo:wasm-pack" = "0.13.1"
 yarn = "1.22.22"
 tilt = "0.35.2"
+watchexec = "2.3.2"
 
 [env]
 _.path = [
